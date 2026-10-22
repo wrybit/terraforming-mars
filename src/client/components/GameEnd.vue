@@ -155,7 +155,9 @@
               <div class="game-end-winner-scorebreak-player-title">
                 <div :class="'game-end-player ' + getEndGamePlayerRowColorClass(p.color)"><a :href="'player?id='+p.id+'&noredirect'">{{p.name}}</a></div>
               </div>
-              <div v-for="v in p.victoryPointsBreakdown.detailsCards" :key="v.cardName">
+              <!-- Hovering a card shows it at the pointer like in the log (touch: a tap pins it) -->
+              <div v-for="v in p.victoryPointsBreakdown.detailsCards" :key="v.cardName"
+                @mouseenter="cardHovered(v.cardName, $event)" @mousemove="cardMoved" @mouseleave="cardLeft" @click="cardTapped(v.cardName, $event)">
                 <div :class="detailRowClass(v.victoryPoint)">
                   <div class="game-end-column-vp">{{v.victoryPoint}}</div>
                   <div class="game-end-column-text" v-i18n>{{v.cardName}}</div>
@@ -240,6 +242,10 @@
 
         <div class="game_end_block--log">
           <LogPanel :viewModel="participant"/>
+          <!-- Card preview of the victory point details: in the body, so no column (backdrop filter, overflow) holds it -->
+          <Teleport to="body">
+            <LogMessageInspector ref="cardInspector" :viewModel="participant"/>
+          </Teleport>
         </div>
       </div>
     </div>
@@ -283,6 +289,10 @@ import {Timer} from '@/common/Timer';
 import {Color} from '@/common/Color';
 import {CardType} from '@/common/cards/CardType';
 import {getCard} from '@/client/cards/ClientCardManifest';
+import {CardName} from '@/common/cards/CardName';
+import {LogMessage} from '@/common/logs/LogMessage';
+import {LogMessageType} from '@/common/logs/LogMessageType';
+import LogMessageInspector from '@/client/components/logpanel/LogMessageInspector.vue';
 import {GlobalParameter} from '@/common/GlobalParameter';
 import {getGlobalParameterMaximums} from '@/common/boards/GlobalParameterMaximums';
 import {MIN_OXYGEN_LEVEL, MIN_TEMPERATURE, MIN_VENUS_SCALE} from '@/common/constants';
@@ -456,6 +466,7 @@ export default defineComponent({
     };
   },
   components: {
+    LogMessageInspector,
     Board,
     BoardZoomModal,
     TileViewToggle,
@@ -477,6 +488,39 @@ export default defineComponent({
     }
   },
   methods: {
+    // The card of a detail row as a one-card log line: the log's preview (LogMessageInspector) shows it;
+    // undefined for rows that are no card ("Colony VP" and the like)
+    cardMessage(name: string): LogMessage | undefined {
+      if (getCard(name as CardName) === undefined) {
+        return undefined;
+      }
+      return new LogMessage(LogMessageType.DEFAULT, '${0}', [{type: LogMessageDataType.CARD, value: name as CardName}]);
+    },
+    cardInspector(): InstanceType<typeof LogMessageInspector> | undefined {
+      return this.$refs.cardInspector as InstanceType<typeof LogMessageInspector> | undefined;
+    },
+    canHover(): boolean {
+      return window.matchMedia('(hover: hover)').matches;
+    },
+    cardHovered(name: string, event: MouseEvent): void {
+      const message = this.cardMessage(name);
+      if (message !== undefined && this.canHover()) {
+        this.cardInspector()?.preview(message, {x: event.clientX, y: event.clientY});
+      }
+    },
+    cardMoved(event: MouseEvent): void {
+      this.cardInspector()?.follow({x: event.clientX, y: event.clientY});
+    },
+    cardLeft(): void {
+      this.cardInspector()?.hidePreview();
+    },
+    // Touch devices have no hover: a tap pins the card at the finger until the next tap
+    cardTapped(name: string, event: MouseEvent): void {
+      const message = this.cardMessage(name);
+      if (message !== undefined && !this.canHover()) {
+        this.cardInspector()?.pinPreview(message, {x: event.clientX, y: event.clientY});
+      }
+    },
     isWinner(player: PublicPlayerModel): boolean {
       return this.winners.some((winner) => winner.color === player.color);
     },
