@@ -21,7 +21,7 @@
               <i :class="'resource_icon resource_icon--' + option.resource"></i>
               <span class="trade-select__stock">{{ stockOf(option.resource) }}</span>
               <span v-if="exchange !== undefined" class="trade-select__rate">
-                <span class="button-count button-count--megacredits">{{ rateOf(option.resource, true).price }}</span>
+                <TradeTileValue :value="valueOf(option.resource, true)"/>
                 <span :class="'trade-select__change trade-select__change--' + rateOf(option.resource, true).mood">{{ rateOf(option.resource, true).change }}</span>
               </span>
             </button>
@@ -42,7 +42,7 @@
               <i :class="'resource_icon resource_icon--' + resource"></i>
               <span class="trade-select__stock">{{ stockOf(resource) }}</span>
               <span v-if="exchange !== undefined" class="trade-select__rate">
-                <span class="button-count button-count--megacredits">{{ rateOf(resource, false).price }}</span>
+                <TradeTileValue :value="valueOf(resource, false)"/>
                 <span :class="'trade-select__change trade-select__change--' + rateOf(resource, false).mood">{{ rateOf(resource, false).change }}</span>
               </span>
             </button>
@@ -84,6 +84,8 @@ import {isPricedTrade, pairGiveLimit, tradeRate} from '@/common/inputs/tradeRate
 import {Resource} from '@/common/Resource';
 import {ExchangeModel} from '@/common/dune/smugglingExchange';
 import ExchangeChart from '@/client/components/dune/ExchangeChart.vue';
+import TradeTileValue from '@/client/components/dune/TradeTileValue.vue';
+import {tileValue, TileValue} from '@/client/components/dune/exchangeValue';
 import {Mood, rateChange} from '@/client/components/dune/exchangeChart';
 import {translateText} from '@/client/directives/i18n';
 
@@ -104,6 +106,7 @@ export default defineComponent({
     AmountConverter,
     AmountSlider,
     ExchangeChart,
+    TradeTileValue,
     TabPanelFooterSlot,
   },
   props: {
@@ -199,19 +202,28 @@ export default defineComponent({
     },
   },
   methods: {
-    // Rate of a tile on the exchange: price in Solari and the change to the generation before (Solari: fixed)
-    rateOf(resource: Resource, selling: boolean): {price: number, change: string, mood: Mood} {
+    // Change of a tile's rate to the generation before (Solari: fixed)
+    rateOf(resource: Resource, selling: boolean): {change: string, mood: Mood} {
       const board = selling ? this.exchange?.sell : this.exchange?.buy;
       if (board === undefined) {
-        return {price: 1, change: '', mood: 'normal'};
+        return {change: '', mood: 'normal'};
       }
-      const price = board.history[board.history.length - 1][resource];
       if (resource === Resource.MEGACREDITS) {
-        return {price, change: translateText('fixed'), mood: 'normal'};
+        return {change: translateText('fixed'), mood: 'normal'};
       }
       const {delta, mood} = rateChange(board, resource, selling);
       const change = delta > 0 ? '▲' + delta : delta < 0 ? '▼' + (-delta) : '–';
-      return {price, change, mood};
+      return {change, mood};
+    },
+    // Value under a tile: in the good of the other side (pay with / get), Solari as the coin (Jens, 22 Oct 2026)
+    valueOf(resource: Resource, selling: boolean): TileValue {
+      const exchange = this.exchange;
+      if (exchange === undefined) {
+        return {amount: 1, currency: undefined};
+      }
+      const sell = exchange.sell.history[exchange.sell.history.length - 1];
+      const buy = exchange.buy.history[exchange.buy.history.length - 1];
+      return tileValue(resource, selling, selling ? this.get : this.give, sell, buy);
     },
     resourceName(resource: Resource): string {
       return RESOURCE_NAMES[resource];

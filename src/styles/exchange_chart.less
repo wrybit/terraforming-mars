@@ -27,6 +27,17 @@
     --exchange-tile: 38px;
     --exchange-gap: 3px;
 
+    // Values in another good ("0,33" and its symbol) stay inside the narrow tile
+    .trade-tile-value {
+      padding: 0 1px 0 2px;
+      font-size: 10px;
+    }
+
+    .trade-select__resource .trade-tile-value .resource_icon {
+      width: 12px;
+      height: 12px;
+    }
+
     .trade-select__resource .resource_icon {
       width: 26px;
       height: 26px;
@@ -176,7 +187,37 @@
   }
 }
 
-// Rate under each tile: the coin with the rate, the change to the last generation below it
+// Value in another good (TradeTileValue.vue): a dark pill as high as the coin, the number and that good's symbol.
+// Narrow enough for the tile (52 px, on phones 38 px): small type, tight spacing (Jens, 22 Oct 2026)
+.trade-tile-value {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  max-width: 100%;
+  height: 24px;
+  padding: 0 2px 0 4px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.35);
+  box-shadow: inset 0 0 0 1px rgba(255, 253, 248, 0.18);
+  color: #fffdf8;
+  font-family: Prototype, sans-serif;
+  font-size: 11px;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+// Its symbol small; the full chain is stronger than the tile icon sizes of the exchange above (also on phones)
+.trade-select--exchange .trade-select__exchange .trade-select__resource .trade-tile-value .resource_icon {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  background-size: contain;
+}
+
+// Rate under each tile: the coin or the value in the other good, the change to the last generation below it
 .trade-select__rate {
   display: flex;
   flex-direction: column;
