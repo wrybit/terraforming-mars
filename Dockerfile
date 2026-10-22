@@ -36,6 +36,11 @@ RUN npm ci --production --prefer-offline
 # Target image
 FROM node:${NODE_VERSION}
 
+# Production mode of the server (ServeAsset.ts): the compressed builds (.br/.gz) are served and assets are revalidated
+# by ETag. Without it main.js went out uncompressed (1.07 MB instead of 137 kB) and every card image was downloaded
+# again whenever a card appeared (Cache-Control: max-age=0, no ETag).
+ENV NODE_ENV=production
+
 WORKDIR /usr/src/app
 
 # Add user tfm
