@@ -353,7 +353,6 @@
   "Tleilaxu Spy: agendas of ${0}": "特莱拉克苏间谍：${0}的议程",
   "holds these agendas:": "持有这些议程：",
   "Your CHOAM contracts cost you no fee: 0 instead of 1 M€.": "你的宇联公司合同免手续费：0 而非 1 索拉里。",
-  "When another player closes a contract, gain 1 M€.": "其他玩家达成合同时，你获得 1 索拉里。",
   "Lower your smuggling suspicion 2 steps.": "你的走私嫌疑降低 2 级。",
   "Take the cheapest ware on display at the bazaar for free.": "免费获得集市上最便宜的在售商品。",
   "Increase your M€ production 2 steps. Take the cheapest ware on display at the bazaar for free.": "你的索拉里产量提升 2 级。免费获得集市上最便宜的在售商品。",
@@ -362,7 +361,6 @@
   "A bribe costs you 4 M€ less.": "你的贿赂便宜 4 索拉里。",
   "Thumper: the worm moves up to ${0} space(s), whatever the vegetation": "震地器：无论植被多少，沙虫最多移动 ${0} 格",
   "Effect: Your CHOAM contracts cost you no fee: 0 instead of 1 M€.": "效果： 你的宇联公司合同免手续费：0 而非 1 索拉里。",
-  "Effect: When another player closes a contract, gain 1 M€.": "效果： 其他玩家达成合同时，你获得 1 索拉里。",
   "Effect: When one of your tiles becomes the war field, 1 Sardaukar defends it for free.": "效果： 你的板块成为战场时，1 名萨多卡免费守卫它。",
   "Effect: A bribe costs you 4 M€ less.": "效果： 你的贿赂便宜 4 索拉里。"
 }

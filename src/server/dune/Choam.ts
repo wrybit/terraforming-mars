@@ -92,12 +92,6 @@ export function acceptOffer(game: IGame, data: ChoamData, buyer: IPlayer, offer:
   buyer.stock.deduct(Resource.MEGACREDITS, feeOf(buyer));
   seller.stock.deduct(Resource.MEGACREDITS, Math.min(seller.megaCredits, feeOf(seller)));
   game.log('${0} accepted the CHOAM contract of ${1}', (b) => b.player(buyer).player(seller));
-  // CHOAM Directorate: 1 M€ for every contract other players close
-  for (const player of game.players) {
-    if (player !== buyer && player !== seller && player.tableau.has(CardName.CHOAM_DIRECTORATE)) {
-      player.stock.add(Resource.MEGACREDITS, 1, {log: true});
-    }
-  }
 }
 
 function acceptInputs(player: IPlayer, data: ChoamData): Array<SelectOption> {

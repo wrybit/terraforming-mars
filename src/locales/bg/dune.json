@@ -353,7 +353,6 @@
   "Tleilaxu Spy: agendas of ${0}": "Тлейлаксу шпионин: замислите на ${0}",
   "holds these agendas:": "държи тези замисли:",
   "Your CHOAM contracts cost you no fee: 0 instead of 1 M€.": "Вашите договори на CHOAM са без такса: 0 вместо 1 солари.",
-  "When another player closes a contract, gain 1 M€.": "Когато друг играч сключи договор, получете 1 солари.",
   "Lower your smuggling suspicion 2 steps.": "Намалете подозрението си за контрабанда с 2 степени.",
   "Take the cheapest ware on display at the bazaar for free.": "Вземете безплатно най-евтината изложена стока на базара.",
   "Increase your M€ production 2 steps. Take the cheapest ware on display at the bazaar for free.": "Увеличете производството си на солари с 2 степени. Вземете безплатно най-евтината изложена стока на базара.",
@@ -362,7 +361,6 @@
   "A bribe costs you 4 M€ less.": "Подкупът ви струва с 4 солари по-малко.",
   "Thumper: the worm moves up to ${0} space(s), whatever the vegetation": "Чукало: червеят се движи до ${0} поле(та), независимо от растителността",
   "Effect: Your CHOAM contracts cost you no fee: 0 instead of 1 M€.": "Ефект: Вашите договори на CHOAM са без такса: 0 вместо 1 солари.",
-  "Effect: When another player closes a contract, gain 1 M€.": "Ефект: Когато друг играч сключи договор, получете 1 солари.",
   "Effect: When one of your tiles becomes the war field, 1 Sardaukar defends it for free.": "Ефект: Когато ваша плочка стане бойното поле, 1 сардаукар я защитава безплатно.",
   "Effect: A bribe costs you 4 M€ less.": "Ефект: Подкупът ви струва с 4 солари по-малко."
 }

@@ -348,7 +348,6 @@
   "Tleilaxu Spy: agendas of ${0}": "Tleilaxu-spion: agendaene til ${0}",
   "holds these agendas:": "har disse agendaene:",
   "Your CHOAM contracts cost you no fee: 0 instead of 1 M€.": "CHOAM-kontraktene dine koster deg ingen avgift: 0 i stedet for 1 solari.",
-  "When another player closes a contract, gain 1 M€.": "Når en annen spiller inngår en kontrakt, får du 1 solari.",
   "Lower your smuggling suspicion 2 steps.": "Senk smuglermistanken din med 2 trinn.",
   "Take the cheapest ware on display at the bazaar for free.": "Ta den billigste utlagte varen i basaren gratis.",
   "Increase your M€ production 2 steps. Take the cheapest ware on display at the bazaar for free.": "Øk solariproduksjonen din med 2 trinn. Ta den billigste utlagte varen i basaren gratis.",
@@ -357,7 +356,6 @@
   "A bribe costs you 4 M€ less.": "En bestikkelse koster deg 4 solari mindre.",
   "Thumper: the worm moves up to ${0} space(s), whatever the vegetation": "Dunker: ormen flytter opptil ${0} felt, uansett vegetasjon",
   "Effect: Your CHOAM contracts cost you no fee: 0 instead of 1 M€.": "Effekt: CHOAM-kontraktene dine koster deg ingen avgift: 0 i stedet for 1 solari.",
-  "Effect: When another player closes a contract, gain 1 M€.": "Effekt: Når en annen spiller inngår en kontrakt, får du 1 solari.",
   "Effect: When one of your tiles becomes the war field, 1 Sardaukar defends it for free.": "Effekt: Når en av brikkene dine blir krigsfeltet, forsvarer 1 sardaukar den gratis.",
   "Effect: A bribe costs you 4 M€ less.": "Effekt: En bestikkelse koster deg 4 solari mindre."
 }

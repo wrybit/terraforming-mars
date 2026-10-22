@@ -352,7 +352,6 @@
   "Tleilaxu Spy: agendas of ${0}": "Тлейлаксуанський шпигун: плани ${0}",
   "holds these agendas:": "тримає ці плани:",
   "Your CHOAM contracts cost you no fee: 0 instead of 1 M€.": "Ваші контракти CHOAM без збору: 0 замість 1 соларія.",
-  "When another player closes a contract, gain 1 M€.": "Коли інший гравець укладає контракт, отримайте 1 соларій.",
   "Lower your smuggling suspicion 2 steps.": "Знизьте свою підозру в контрабанді на 2 ступені.",
   "Take the cheapest ware on display at the bazaar for free.": "Безкоштовно візьміть найдешевший виставлений товар базару.",
   "Increase your M€ production 2 steps. Take the cheapest ware on display at the bazaar for free.": "Збільште виробництво соларіїв на 2 ступені. Безкоштовно візьміть найдешевший виставлений товар базару.",
@@ -361,7 +360,6 @@
   "A bribe costs you 4 M€ less.": "Хабар коштує вам на 4 соларії менше.",
   "Thumper: the worm moves up to ${0} space(s), whatever the vegetation": "Калатало: черв'як проходить до ${0} кл., незалежно від рослинності",
   "Effect: Your CHOAM contracts cost you no fee: 0 instead of 1 M€.": "Ефект: Ваші контракти CHOAM без збору: 0 замість 1 соларія.",
-  "Effect: When another player closes a contract, gain 1 M€.": "Ефект: Коли інший гравець укладає контракт, отримайте 1 соларій.",
   "Effect: When one of your tiles becomes the war field, 1 Sardaukar defends it for free.": "Ефект: Коли один із ваших тайлів стає полем війни, 1 сардаукар безкоштовно його захищає.",
   "Effect: A bribe costs you 4 M€ less.": "Ефект: Хабар коштує вам на 4 соларії менше."
 }

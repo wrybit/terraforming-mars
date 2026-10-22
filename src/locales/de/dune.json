@@ -347,7 +347,6 @@
   "Tleilaxu Spy: agendas of ${0}": "Tleilaxu-Spion: Agenden von ${0}",
   "holds these agendas:": "hält diese Agenden:",
   "Your CHOAM contracts cost you no fee: 0 instead of 1 M€.": "Deine CHOAM-Kontrakte kosten dich keine Gebühr: 0 statt 1 Solari.",
-  "When another player closes a contract, gain 1 M€.": "Wenn ein anderer Spieler einen Kontrakt abschließt, erhältst du 1 Solari.",
   "Lower your smuggling suspicion 2 steps.": "Senke deinen Schmuggel-Verdacht um 2 Stufen.",
   "Take the cheapest ware on display at the bazaar for free.": "Nimm dir die günstigste ausliegende Ware des Basars kostenlos.",
   "Increase your M€ production 2 steps. Take the cheapest ware on display at the bazaar for free.": "Erhöhe deine Solari-Produktion um 2 Stufen. Nimm dir die günstigste ausliegende Ware des Basars kostenlos.",
@@ -356,7 +355,6 @@
   "A bribe costs you 4 M€ less.": "Eine Bestechung kostet dich 4 Solari weniger.",
   "Thumper: the worm moves up to ${0} space(s), whatever the vegetation": "Klopfer: der Wurm zieht bis zu ${0} Feld(er), egal wie viel Vegetation",
   "Effect: Your CHOAM contracts cost you no fee: 0 instead of 1 M€.": "EFFEKT: Deine CHOAM-Kontrakte kosten dich keine Gebühr: 0 statt 1 Solari.",
-  "Effect: When another player closes a contract, gain 1 M€.": "EFFEKT: Wenn ein anderer Spieler einen Kontrakt abschließt, erhältst du 1 Solari.",
   "Effect: When one of your tiles becomes the war field, 1 Sardaukar defends it for free.": "EFFEKT: Wenn eines deiner Plättchen zum Kriegsfeld wird, verteidigt es 1 Sardaukar kostenlos.",
   "Effect: A bribe costs you 4 M€ less.": "EFFEKT: Eine Bestechung kostet dich 4 Solari weniger."
 }

@@ -352,7 +352,6 @@
   "Tleilaxu Spy: agendas of ${0}": "틀레이락스 첩자: ${0}의 안건",
   "holds these agendas:": "이(가) 가진 안건:",
   "Your CHOAM contracts cost you no fee: 0 instead of 1 M€.": "자신의 CHOAM 계약에는 수수료가 없습니다: 1 대신 0 솔라리.",
-  "When another player closes a contract, gain 1 M€.": "다른 플레이어가 계약을 성사시키면 1 솔라리를 얻습니다.",
   "Lower your smuggling suspicion 2 steps.": "밀수 의심을 2단계 낮춥니다.",
   "Take the cheapest ware on display at the bazaar for free.": "시장에 진열된 가장 싼 상품을 무료로 가져옵니다.",
   "Increase your M€ production 2 steps. Take the cheapest ware on display at the bazaar for free.": "솔라리 생산량을 2단계 올립니다. 시장에 진열된 가장 싼 상품을 무료로 가져옵니다.",
@@ -361,7 +360,6 @@
   "A bribe costs you 4 M€ less.": "뇌물 비용이 4 솔라리 줄어듭니다.",
   "Thumper: the worm moves up to ${0} space(s), whatever the vegetation": "썸퍼: 식생과 관계없이 모래벌레는 최대 ${0}칸 이동합니다",
   "Effect: Your CHOAM contracts cost you no fee: 0 instead of 1 M€.": "지속 효과: 자신의 CHOAM 계약에는 수수료가 없습니다: 1 대신 0 솔라리.",
-  "Effect: When another player closes a contract, gain 1 M€.": "지속 효과: 다른 플레이어가 계약을 성사시키면 1 솔라리를 얻습니다.",
   "Effect: When one of your tiles becomes the war field, 1 Sardaukar defends it for free.": "지속 효과: 자신의 타일이 전장이 되면 사다우카 1명이 무료로 방어합니다.",
   "Effect: A bribe costs you 4 M€ less.": "지속 효과: 뇌물 비용이 4 솔라리 줄어듭니다."
 }

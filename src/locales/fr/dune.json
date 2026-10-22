@@ -348,7 +348,6 @@
   "Tleilaxu Spy: agendas of ${0}": "Espion tleilaxu : intrigues de ${0}",
   "holds these agendas:": "détient ces intrigues :",
   "Your CHOAM contracts cost you no fee: 0 instead of 1 M€.": "Vos contrats CHOAM ne vous coûtent aucuns frais : 0 au lieu de 1 Solari.",
-  "When another player closes a contract, gain 1 M€.": "Quand un autre joueur conclut un contrat, gagnez 1 Solari.",
   "Lower your smuggling suspicion 2 steps.": "Réduisez vos soupçons de contrebande de 2 niveaux.",
   "Take the cheapest ware on display at the bazaar for free.": "Prenez gratuitement la marchandise la moins chère exposée au bazar.",
   "Increase your M€ production 2 steps. Take the cheapest ware on display at the bazaar for free.": "Augmentez votre production de Solari de 2 niveaux. Prenez gratuitement la marchandise la moins chère exposée au bazar.",
@@ -357,7 +356,6 @@
   "A bribe costs you 4 M€ less.": "Un pot-de-vin vous coûte 4 Solari de moins.",
   "Thumper: the worm moves up to ${0} space(s), whatever the vegetation": "Marteleur : le ver avance jusqu'à ${0} case(s), quelle que soit la végétation",
   "Effect: Your CHOAM contracts cost you no fee: 0 instead of 1 M€.": "Effet : Vos contrats CHOAM ne vous coûtent aucuns frais : 0 au lieu de 1 Solari.",
-  "Effect: When another player closes a contract, gain 1 M€.": "Effet : Quand un autre joueur conclut un contrat, gagnez 1 Solari.",
   "Effect: When one of your tiles becomes the war field, 1 Sardaukar defends it for free.": "Effet : Quand l'une de vos tuiles devient le champ de bataille, 1 Sardaukar la défend gratuitement.",
   "Effect: A bribe costs you 4 M€ less.": "Effet : Un pot-de-vin vous coûte 4 Solari de moins."
 }

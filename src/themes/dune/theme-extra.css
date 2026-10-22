@@ -787,12 +787,6 @@ html.theme-dune .card-container.card-choam-directorate .card-effect-box-row > .c
   height: 42px;
 }
 
-/* The second effect pays out when another player closes a contract: their CHOAM sign with the red outline of the
-   other cards that name an opponent */
-html.theme-dune .card-container.card-choam-directorate .card-content > .card-rows ~ .card-rows .card-effect-box-row > .card-effect-box-content:first-child [class*="card-text-size"] {
-  box-shadow: 0 0 0 2px #fffdf8, 0 0 0 4px #c0301c;
-}
-
 html.theme-dune .card-container.card-worm-rider .card-effect-box-row > .card-effect-box-content:first-child [class*="card-text-size"] {
   background-image: url(graphics/token-worm.svg);
 }

@@ -352,7 +352,6 @@
   "Tleilaxu Spy: agendas of ${0}": "トレイラクスのスパイ：${0}のアジェンダ",
   "holds these agendas:": "が持つアジェンダ：",
   "Your CHOAM contracts cost you no fee: 0 instead of 1 M€.": "あなたのCHOAM契約は手数料がかからない：1ではなく0ソラリ。",
-  "When another player closes a contract, gain 1 M€.": "他のプレイヤーが契約を成立させるたび、1ソラリを得る。",
   "Lower your smuggling suspicion 2 steps.": "密輸の疑惑を2段階下げる。",
   "Take the cheapest ware on display at the bazaar for free.": "バザールに並ぶ最も安い商品を無料で得る。",
   "Increase your M€ production 2 steps. Take the cheapest ware on display at the bazaar for free.": "ソラリ生産を2段階上げる。バザールに並ぶ最も安い商品を無料で得る。",
@@ -361,7 +360,6 @@
   "A bribe costs you 4 M€ less.": "賄賂のコストが4ソラリ安くなる。",
   "Thumper: the worm moves up to ${0} space(s), whatever the vegetation": "サンパー：植生に関係なく、ワームは最大${0}マス進む",
   "Effect: Your CHOAM contracts cost you no fee: 0 instead of 1 M€.": "効果：あなたのCHOAM契約は手数料がかからない：1ではなく0ソラリ。",
-  "Effect: When another player closes a contract, gain 1 M€.": "効果：他のプレイヤーが契約を成立させるたび、1ソラリを得る。",
   "Effect: When one of your tiles becomes the war field, 1 Sardaukar defends it for free.": "効果：あなたのタイルが戦場になったとき、サーダカー1人が無料で守る。",
   "Effect: A bribe costs you 4 M€ less.": "効果：賄賂のコストが4ソラリ安くなる。"
 }

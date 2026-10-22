@@ -350,7 +350,6 @@
   "Tleilaxu Spy: agendas of ${0}": "Tleilaxu-vakooja: pelaajan ${0} agendat",
   "holds these agendas:": "pitää näitä agendoja:",
   "Your CHOAM contracts cost you no fee: 0 instead of 1 M€.": "CHOAM-sopimuksistasi ei peritä maksua: 0 solaria 1:n sijaan.",
-  "When another player closes a contract, gain 1 M€.": "Kun toinen pelaaja solmii sopimuksen, saat 1 solarin.",
   "Lower your smuggling suspicion 2 steps.": "Laske salakuljetusepäilyäsi 2 askelta.",
   "Take the cheapest ware on display at the bazaar for free.": "Ota basaarin halvin esillä oleva tavara ilmaiseksi.",
   "Increase your M€ production 2 steps. Take the cheapest ware on display at the bazaar for free.": "Nosta solarituotantoasi 2 askelta. Ota basaarin halvin esillä oleva tavara ilmaiseksi.",
@@ -359,7 +358,6 @@
   "A bribe costs you 4 M€ less.": "Lahjus maksaa sinulle 4 solaria vähemmän.",
   "Thumper: the worm moves up to ${0} space(s), whatever the vegetation": "Jyskytin: mato liikkuu enintään ${0} ruutua kasvillisuudesta riippumatta",
   "Effect: Your CHOAM contracts cost you no fee: 0 instead of 1 M€.": "VAIKUTUS: CHOAM-sopimuksistasi ei peritä maksua: 0 solaria 1:n sijaan.",
-  "Effect: When another player closes a contract, gain 1 M€.": "VAIKUTUS: Kun toinen pelaaja solmii sopimuksen, saat 1 solarin.",
   "Effect: When one of your tiles becomes the war field, 1 Sardaukar defends it for free.": "VAIKUTUS: Kun jostakin laatastasi tulee sotakenttä, 1 sardaukar puolustaa sitä ilmaiseksi.",
   "Effect: A bribe costs you 4 M€ less.": "VAIKUTUS: Lahjus maksaa sinulle 4 solaria vähemmän."
 }
