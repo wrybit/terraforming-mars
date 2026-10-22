@@ -131,11 +131,19 @@ html.tm-mobile .devtools-player {
 
 // DevTools tab in dark violet, first in the tab bar: a tool, not part of the game (Jens, 21 Oct 2026).
 // Violet above hue 262 stays out of the Dune recolouring (src/themes/dune/colors.json), so it looks the same there.
-.or-tab.or-tab--devtools,
-.or-tab.or-tab--devtools.or-tab--active {
-  background: #2c1846;
-  border-color: #452a68;
+@devtools-tab: #2c1846;
+@devtools-panel: #1a0f2a;
+@devtools-border: #452a68;
+
+.or-tab.or-tab--devtools {
+  background: @devtools-tab;
+  border-color: @devtools-border;
   color: #f2ecfa;
+}
+
+// Active: the surface of the panel below, so tab and panel are one piece (Jens, 22 Oct 2026)
+.or-tab.or-tab--devtools.or-tab--active {
+  background: @devtools-panel;
 }
 
 .or-tab.or-tab--devtools:not(.or-tab--active) {
@@ -143,9 +151,11 @@ html.tm-mobile .devtools-player {
 }
 
 // The panel below the tab in the same violet, darker; doubled class against the tones of the action tabs (or_tab_tones.less)
+// Border colour via the variable and only the background colour: the gap under the docked tab (or_options_tabs.less)
+// keeps its transparent top border and drawn line, otherwise a line runs between tab and panel
 html .or-tab-panel.or-tab-panel--devtools.or-tab-panel--devtools {
-  border-color: #452a68;
-  background: #1a0f2a;
+  --or-tab-panel-border: @devtools-border;
+  background-color: @devtools-panel;
 }
 
 .devtools__title {

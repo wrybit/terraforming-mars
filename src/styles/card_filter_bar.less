@@ -63,6 +63,13 @@
   }
 }
 
+// Active tab above a box that starts with the filter row: the tab fades into the darker glass of the row, so tab
+// and row meet without a colour edge (Jens, 22 Oct 2026). Gradient over the tone surface of the tab; the accent
+// line on top is an inset shadow and stays above it. Not with open DevTools: they hide the row (devtools.less).
+.or-tabs:has(+ .or-tab-panel:not(.or-tab-panel--devtools) :is(.choice-block > .card-filter-bar, .hand-cards-panel > .card-filter-bar:first-child)) .or-tab.or-tab--active {
+  background-image: linear-gradient(to bottom, transparent, @card-filter-row-background);
+}
+
 // Inside a choice grid the row and the hint span all columns
 .choice-block > .card-filter-bar,
 .choice-block > .card-filter-empty {
