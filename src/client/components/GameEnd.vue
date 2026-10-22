@@ -183,6 +183,11 @@
                   <div class="game-end-column-text" v-i18n="[v.tag]">Most tags on the ${0} track</div>
                 </div>
               </div>
+              <!-- Agendas as a group of their own, set off by an empty row like milestones and awards -->
+              <div v-if="(p.victoryPointsBreakdown.detailsSchemes ?? []).length > 0" class="game-end-column-row">
+                <div class="game-end-column-vp">&nbsp;</div>
+                <div class="game-end-column-text">&nbsp;</div>
+              </div>
               <div v-for="v in p.victoryPointsBreakdown.detailsSchemes ?? []" :key="v.agenda">
                 <div :class="detailRowClass(v.victoryPoint)">
                   <div class="game-end-column-vp">{{v.victoryPoint}}</div>
