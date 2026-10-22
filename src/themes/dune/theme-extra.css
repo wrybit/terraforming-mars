@@ -717,13 +717,39 @@ html.theme-dune .card-container .card-content .card-row > .card-item-container:h
 
 /* Pictures for cards that only have text (Jens 21 Oct 2026): the worm on the Thumper, the protection shield of the
    player overview on Protected Habitats (graphics/protect-shield.svg, colours of players_table.less) */
-html.theme-dune .card-container:is(.card-thumper, .card-protected-habitats, .card-invention-contest, .card-business-contacts) .card-content > .card-rows:last-of-type::after {
+html.theme-dune .card-container:is(.card-thumper, .card-protected-habitats, .card-invention-contest, .card-business-contacts, .card-land-claim) .card-content > .card-rows:last-of-type::after {
   content: "";
   display: block;
   width: 64px;
   height: 64px;
   margin: 8px auto 0;
   background: url(graphics/token-worm.svg) center / contain no-repeat;
+}
+
+/* Land Claim: a plain sand tile (the empty space of Arrakis) with a red player cube on it – the marker that reserves
+   the space (Jens 22 Oct 2026). The tile is the picture below the text, the cube lies on its middle as ::before
+   (the real cube from the sprite sheet of the board, red row, iso view). */
+html.theme-dune .card-container.card-land-claim .card-content > .card-rows:last-of-type {
+  position: relative;
+}
+
+html.theme-dune .card-container.card-land-claim .card-content > .card-rows:last-of-type::after {
+  width: 64px;
+  height: 74px;
+  margin-top: 14px;
+  background-image: url(graphics/tile-empty.svg);
+}
+
+html.theme-dune .card-container.card-land-claim .card-content > .card-rows:last-of-type::before {
+  /* Sheet: 11 columns × 9 rows of 180 px cells (playerCubeSprite.ts); a 44 px cell holds an 18 px cube */
+  content: "";
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  width: 44px;
+  height: 44px;
+  transform: translateX(-50%);
+  background: url(../../player-cube/sprite.webp) -440px 0 / 484px 396px no-repeat;
 }
 
 /* Look at the top cards, keep some, discard the others: the cards drawn (scripts/make-card-choice.py) */
@@ -1069,7 +1095,7 @@ html.theme-dune .card-container .card-content .card-text-size--M.card-text-upper
    (CardRenderData.vue joins their rows); the word stays in the text for screen readers */
 html.theme-dune .card-container .card-content .card-special.card-or {
   width: auto !important;
-  margin: 0 6px !important;
+  margin: 0 10px !important;
   padding: 0 !important;
   font-size: 0 !important;
 }
@@ -1077,6 +1103,12 @@ html.theme-dune .card-container .card-content .card-special.card-or {
 html.theme-dune .card-container .card-content .card-special.card-or::before {
   content: "/";
   font: 700 20px Ubuntu, sans-serif;
+}
+
+/* Words in the picture row ("steal", "Bribe :") keep room to the icons beside them; without it they touched the
+   glowing outlines (Jens 22 Oct 2026, Hired Raiders) */
+html.theme-dune .card-container .card-content .card-row > .card-item-container > .card-text-size--M {
+  margin: 0 6px;
 }
 
 /* Emphasis: rules like "1 VP per …" and notes, 11 bold without capitals (was 9 to 14 px in capitals); the somewhat
