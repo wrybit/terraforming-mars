@@ -704,7 +704,21 @@ html.theme-dune .card-container .card-content .card-row > .card-item-container {
 html.theme-dune .card-container .card-content .card-row:has(> .card-item-container > [class*="card-text-size"]) {
   flex-wrap: wrap;
   justify-content: center;
-  row-gap: 4px;
+  /* At least 10 px between the lines once zoomed (×1.2, .card-rows): the second line reads as its own option and the
+     icons do not touch (Jens 23 Oct 2026, Hired Raiders) */
+  row-gap: 9px;
+}
+
+/* Red outlines glow about 4 px beyond their icon (four 1 px drop shadows, cards_v2.less): the 10 px count from the
+   glow, so such rows add it on both lines */
+html.theme-dune .card-container .card-content .card-row:has(> .card-item-container > [class*="card-text-size"]):has(.red-outline) {
+  row-gap: 16px;
+}
+
+/* The description below is a group of its own: it keeps more room to such rows than their lines to each other
+   (:has cannot nest, so both conditions sit on the rows) */
+html.theme-dune .card-container .card-content > .card-rows:has(.card-row > .card-item-container > [class*="card-text-size"]):has(.red-outline) ~ .card-description {
+  margin-top: 22px;
 }
 
 html.theme-dune .card-container .card-content .card-row > .card-item-container:has(> [class*="card-text-size"]) {
@@ -1122,12 +1136,6 @@ html.theme-dune .card-container .card-content .card-special.card-or {
 html.theme-dune .card-container .card-content .card-special.card-or::before {
   content: "/";
   font: 700 20px Ubuntu, sans-serif;
-}
-
-/* A picture row that wraps (alternatives joined in one row, CardRenderData.vue) keeps room between its lines, so the
-   second line reads as its own option and the glowing outlines do not touch (Jens 23 Oct 2026, Hired Raiders) */
-html.theme-dune .card-container .card-content .card-row {
-  row-gap: 12px;
 }
 
 /* Words in the picture row ("steal", "Bribe :") keep room to the icons beside them; without it they touched the
