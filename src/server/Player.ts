@@ -14,7 +14,7 @@ import {ICorporationCard} from './cards/corporation/ICorporationCard';
 import {IGame} from './IGame';
 import {Game} from './Game';
 import {Payment, PaymentOptions, DEFAULT_PAYMENT_VALUES} from '../common/inputs/Payment';
-import {SpendableResource, SPENDABLE_RESOURCES, SpendableCardResource, CARD_FOR_SPENDABLE_RESOURCE} from '../common/inputs/Spendable';
+import {SpendableResource, SPENDABLE_RESOURCES, SPENDABLE_CARD_RESOURCES, SpendableCardResource, CARD_FOR_SPENDABLE_RESOURCE} from '../common/inputs/Spendable';
 import {IAward} from './awards/IAward';
 import {ICard, isIActionCard, IActionCard} from './cards/ICard';
 import {IMilestone} from './milestones/IMilestone';
@@ -339,7 +339,7 @@ export class Player implements IPlayer {
     }
     if (this.preservationProgram === true && inActionPhase && isFirstTrThisGeneration) {
       steps--;
-      this.game.log('${0} for ${1} is blocking 1 TR', (b) => b.cardName(CardName.PRESERVATION_PROGRAM).player(this));
+      this.game.log('${0} for ${1} is blocking 1:i:tr:', (b) => b.cardName(CardName.PRESERVATION_PROGRAM).player(this));
       this.preservationProgram = false;
       if (steps === 0) {
         return;
@@ -352,9 +352,9 @@ export class Player implements IPlayer {
       if (opts.log === true) {
         if (opts.from !== undefined) {
           const from = opts.from;
-          this.game.log('${0} gained ${1} TR from ${2}', (b) => b.player(this).number(steps).from(from));
+          this.game.log('${0} gained ${1}:i:tr: from ${2}', (b) => b.player(this).number(steps).from(from));
         } else {
-          this.game.log('${0} gained ${1} TR', (b) => b.player(this).number(steps));
+          this.game.log('${0} gained ${1}:i:tr:', (b) => b.player(this).number(steps));
         }
       }
       for (const cardOwner of this.game.playersInGenerationOrder) {
@@ -381,7 +381,7 @@ export class Player implements IPlayer {
   public decreaseTerraformRating(steps: number = 1, opts: {log?: boolean} = {}) {
     this.terraformRating -= steps;
     if (opts.log === true) {
-      this.game.log('${0} lost ${1} TR', (b) => b.player(this).number(steps));
+      this.game.log('${0} lost ${1}:i:tr:', (b) => b.player(this).number(steps));
     }
   }
 
@@ -426,7 +426,6 @@ export class Player implements IPlayer {
       }
     }
 
-    // The pathfindersExpansion test is just an optimization for non-Pathfinders games.
     if (attacker !== this && this.playedCards.has(CardName.PRIVATE_SECURITY)) {
       return false;
     }
@@ -536,9 +535,10 @@ export class Player implements IPlayer {
       }
 
       if (options?.log ?? true) {
-        this.game.log('${0} removed ${1} resource(s) from ${2}\'s ${3}', (b) =>
+        this.game.log('${0} removed ${1}${2} from ${3}\'s ${4}', (b) =>
           b.player(options?.removingPlayer ?? this)
             .number(amountRemoved)
+            .cardResource(card.resourceType)
             .player(this)
             .card(card));
       }
@@ -837,26 +837,19 @@ export class Player implements IPlayer {
       this.defer(this.spendHeat(payment.heat));
     }
 
-    const removeResourcesOnCard = (name: CardName, count: number) => {
+    for (const resource of SPENDABLE_CARD_RESOURCES) {
+      const count = payment[resource];
       if (count === 0) {
-        return;
+        continue;
       }
+      const name = CARD_FOR_SPENDABLE_RESOURCE[resource];
       const card = this.playedCards.get(name);
       if (card === undefined) {
         throw new Error('Card ' + name + ' not found');
       }
       // TODO(kberg): I suggest not logging this. Or do something fuller.
       this.removeResourceFrom(card, count, {log: true});
-    };
-
-    removeResourcesOnCard(CardName.PSYCHROPHILES, payment.microbes);
-    removeResourcesOnCard(CardName.DIRIGIBLES, payment.floaters);
-    removeResourcesOnCard(CardName.LUNA_ARCHIVES, payment.lunaArchivesScience);
-    removeResourcesOnCard(CardName.SPIRE, payment.spireScience);
-    removeResourcesOnCard(CardName.CARBON_NANOSYSTEMS, payment.graphene);
-    removeResourcesOnCard(CardName.SOYLENT_SEEDLING_SYSTEMS, payment.seeds);
-    removeResourcesOnCard(CardName.AURORAI, payment.auroraiData);
-    removeResourcesOnCard(CardName.KUIPER_COOPERATIVE, payment.kuiperAsteroids);
+    }
 
     if (payment.megacredits > 0 || payment.steel > 0 || payment.titanium > 0) {
       PathfindersExpansion.addToSolBank(this);
@@ -990,17 +983,7 @@ export class Player implements IPlayer {
   }
 
   public playActionCard(): PlayerInput {
-    return new SelectCard<ICard & IActionCard>(
-      'Perform an action from a played card',
-      'Take action',
-      this.getPlayableActionCards(),
-      {selectBlueCardAction: true})
-      .andThen(([card]) => {
-        this.game.log('${0} used ${1} action', (b) => b.player(this).card(card));
-        this.inCardContext(card.name, () => this.defer(card.action(this)));
-        this.actionsThisGeneration.add(card.name);
-        return undefined;
-      });
+    return this.selectCardAction('Perform an action from a played card', this.getPlayableActionCards());
   }
 
   private getPlayCeoOPGAction(): PlayerInput | undefined {
@@ -1008,8 +991,12 @@ export class Player implements IPlayer {
     if (cards.length === 0) {
       return undefined;
     }
-    return new SelectCard<ICeoCard & IActionCard>(
-      'Use CEO once per game action',
+    return this.selectCardAction('Use CEO once per game action', cards);
+  }
+
+  private selectCardAction(title: string, cards: Array<ICard & IActionCard>): PlayerInput {
+    return new SelectCard<ICard & IActionCard>(
+      title,
       'Take action',
       cards,
       {selectBlueCardAction: true})
@@ -1303,7 +1290,7 @@ export class Player implements IPlayer {
     }
 
     const pharmacyUnion = this.tableau.get(CardName.PHARMACY_UNION);
-    if ((pharmacyUnion?.resourceCount ?? 0 > 0) && this.tags.cardHasTag(card, Tag.SCIENCE)) {
+    if ((pharmacyUnion?.resourceCount ?? 0) > 0 && this.tags.cardHasTag(card, Tag.SCIENCE)) {
       trSource.tr = (trSource.tr ?? 0) + 1;
     }
 
@@ -1345,21 +1332,18 @@ export class Player implements IPlayer {
    * Returns the most you can spend if the given reserved units are excluded.
    */
   private maxSpendable(reserveUnits: Units = Units.EMPTY): Payment {
-    return {
+    const payment: Payment = {
+      ...Payment.EMPTY,
       megacredits: this.megaCredits - reserveUnits.megacredits,
       steel: this.steel - reserveUnits.steel,
       titanium: this.titanium - reserveUnits.titanium,
       plants: this.plants - reserveUnits.plants,
       heat: this.availableHeat() - reserveUnits.heat,
-      floaters: this.getSpendable('floaters'),
-      microbes: this.getSpendable('microbes'),
-      lunaArchivesScience: this.getSpendable('lunaArchivesScience'),
-      spireScience: this.getSpendable('spireScience'),
-      seeds: this.getSpendable('seeds'),
-      auroraiData: this.getSpendable('auroraiData'),
-      graphene: this.getSpendable('graphene'),
-      kuiperAsteroids: this.getSpendable('kuiperAsteroids'),
     };
+    for (const resource of SPENDABLE_CARD_RESOURCES) {
+      payment[resource] = this.getSpendable(resource);
+    }
+    return payment;
   }
 
   public canSpend(payment: Payment, reserveUnits?: Units): boolean {
@@ -1494,26 +1478,15 @@ export class Player implements IPlayer {
    * Set up a player taking their next action.
    *
    * This method indicates the available actions by setting the `waitingFor` attribute of this player.
-   *
-   * saveBeforeTakingAction when true, the game state is saved. Default is `true`. This
-   * should only be false in testing and when this method is called during game deserialization. In other
-   * words, don't set this value unless you know what you're doing.
    */
-  // @ts-ignore saveBeforeTakingAction is unused at the moment.
-  public takeAction(saveBeforeTakingAction: boolean = true): void {
+  public takeAction(): void {
     this.game.drainQueue(() => {
       const game = this.game;
 
       // Fork: vor jeder Aktion speichern, nicht nur vor der ersten des Zuges – ein Server-Update
       // setzt sonst alle Spieler an den Zuganfang zurueck (Undo braucht dieselben Speicherpunkte)
       game.save();
-      // if (saveBeforeTakingAction) game.save();
 
-
-      // Autopass is disabled.
-      // if (this.autopass) {
-      //   this.passOption().cb();
-      // }
       const headStartIsInEffect = this.headStartIsInEffect();
       this.game.inDoubleDown = false;
 
@@ -1524,7 +1497,7 @@ export class Player implements IPlayer {
 
           const selectPrelude = PreludesExpansion.selectPreludeToPlay(this, this.preludeCardsInHand);
 
-          this.setWaitingFor(selectPrelude, this.runWhenEmpty(() => {
+          this.setWaitingFor(selectPrelude, () => game.drainQueue(() => {
             this.incrementActionsTaken();
             if (this.preludeCardsInHand.length === 0 && !this.headStartIsInEffect()) {
               game.playerIsFinishedTakingActions();
@@ -1593,7 +1566,7 @@ export class Player implements IPlayer {
           orOptions.options.push(this.passOption());
         }
 
-        this.setWaitingFor(orOptions, this.runWhenEmpty(() => {
+        this.setWaitingFor(orOptions, () => game.drainQueue(() => {
           if (this.pendingInitialActions.length === 0) {
             this.incrementActionsTaken();
           }
@@ -1605,7 +1578,7 @@ export class Player implements IPlayer {
 
       // Starting point for "Cancel" (actionStart.ts): kept before the action menu is shown
       rememberActionStart(this);
-      this.setWaitingFor(this.getActions(), this.runWhenEmpty(() => {
+      this.setWaitingFor(this.getActions(), () => game.drainQueue(() => {
         this.incrementActionsTaken();
         this.takeAction();
       }));
@@ -2031,16 +2004,5 @@ export class Player implements IPlayer {
     const cb = typeof(input) === 'function' ? input : () => input;
     const action = new SimpleDeferredAction(this, cb, priority);
     this.game.defer(action);
-  }
-
-  public runWhenEmpty(cb: () => void): () => void {
-    const f = () => {
-      if (this.game.deferredActions.length === 0) {
-        cb();
-        return;
-      }
-      this.game.deferredActions.runAll(() => f());
-    };
-    return f;
   }
 }
