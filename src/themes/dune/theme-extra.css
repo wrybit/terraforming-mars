@@ -717,7 +717,7 @@ html.theme-dune .card-container .card-content .card-row > .card-item-container:h
 
 /* Pictures for cards that only have text (Jens 21 Oct 2026): the worm on the Thumper, the protection shield of the
    player overview on Protected Habitats (graphics/protect-shield.svg, colours of players_table.less) */
-html.theme-dune .card-container:is(.card-thumper, .card-protected-habitats, .card-invention-contest, .card-business-contacts, .card-land-claim, .card-ceo\'s-favorite-project) .card-content > .card-rows:last-of-type::after {
+html.theme-dune .card-container:is(.card-thumper, .card-protected-habitats, .card-invention-contest, .card-business-contacts, .card-land-claim, .card-ceo\'s-favorite-project, .card-eccentric-sponsor) .card-content > .card-rows:last-of-type::after {
   content: "";
   display: block;
   width: 64px;
@@ -733,6 +733,14 @@ html.theme-dune .card-container.card-ceo\'s-favorite-project .card-content > .ca
   height: 88px;
   margin-top: 14px;
   background-image: url(graphics/resource-onto-card.svg);
+}
+
+/* Eccentric Sponsor: a card from the hand is played for 25 less (Jens 23 Oct 2026, scripts/make-play-from-hand.py) */
+html.theme-dune .card-container.card-eccentric-sponsor .card-content > .card-rows:last-of-type::after {
+  width: 170px;
+  height: 76px;
+  margin-top: 16px;
+  background-image: url(graphics/play-from-hand-discount.svg);
 }
 
 /* Land Claim: a plain sand tile (the empty space of Arrakis) with a red player cube on it – the marker that reserves
