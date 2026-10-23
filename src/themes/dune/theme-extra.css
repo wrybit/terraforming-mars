@@ -1116,6 +1116,12 @@ html.theme-dune .card-container .card-content .card-special.card-or::before {
   font: 700 20px Ubuntu, sans-serif;
 }
 
+/* A picture row that wraps (alternatives joined in one row, CardRenderData.vue) keeps room between its lines, so the
+   second line reads as its own option and the glowing outlines do not touch (Jens 23 Oct 2026, Hired Raiders) */
+html.theme-dune .card-container .card-content .card-row {
+  row-gap: 12px;
+}
+
 /* Words in the picture row ("steal", "Bribe :") keep room to the icons beside them; without it they touched the
    glowing outlines (Jens 22 Oct 2026, Hired Raiders) */
 html.theme-dune .card-container .card-content .card-row > .card-item-container > .card-text-size--M {
