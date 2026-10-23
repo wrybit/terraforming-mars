@@ -380,7 +380,7 @@
   "${0} gained 1:r:mc: for playing ${1}, which has exactly 1 tag.": "${0} kapott 1:r:mc:-tet, mert kijásztotta a(z) ${1} kártyát, ami csak 1 ikonnal rendelkezik.",
   "${0} gained ${1}:i:tr:": "${0} szerzett ${1}:i:tr:-t.",
   "${0} lost ${1}:i:tr:": "${0} elveszített ${1}:i:tr:-t.",
-  "${0} removed ${1}${2} from ${3}'s ${4}": "${0} eltávolított ${1}${2} a(z) ${4} kártyáról.",
+  "${0} removed ${1}${2} from ${3}'s ${4}": "${0} eltávolított ${1}${2} erőforrást ${3} ${4} kártyájáról.",
   "${0} spent 1:r:corruption: to block an attack by ${1}": "${0} elköltött 1:r:corruption:-t ${1} támadásának kivédéséhez.",
   "${0} spent 1:cr:fighter: on ${1} to block an attack by ${2}": "${0} elköltött 1:cr:fighter:-t a(z) ${1} kártyáról ${2} támadásának kivédéséhez.",
   "For the rest of this generation, ${0} will gain ${1}": "A generáció végéig ${0} ${1}-t fog kapni.",

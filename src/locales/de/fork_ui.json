@@ -268,7 +268,7 @@
   "Select how many of your ${0} wild tags count as microbe tags (the rest count as power tags)": "Wähle, wie viele deiner ${0} Joker-Symbole als Mikroben-Symbole zählen (der Rest zählt als Energie-Symbole)",
   "Select a resource to spend.": "Wähle eine Ressource zum Ausgeben.",
   "${0} selected no cards.": "${0} hat keine Karten gewählt.",
-  "${0} gains ${1} TR instead of ${2} due to the Reds ruling policy": "${0} erhält ${1} TW statt ${2} wegen der Regierungspolitik der Reds",
+  "${0} gains ${1}:i:tr: instead of ${2} due to the Reds ruling policy": "${0} erhält ${1}:i:tr: statt ${2} wegen der Regierungspolitik der Reds",
   "Steal a resource": "Stiehl eine Ressource",
   "Select how to pay to replay the event": "Wähle, wie du das erneute Ausspielen des Ereignisses bezahlst",
   "Select card to add microbe": "Wähle eine Karte für die Mikrobe",

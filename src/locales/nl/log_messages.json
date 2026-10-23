@@ -283,7 +283,7 @@
     "raise the habitat rate": "habitat-waarde verhogen",
     "raise temperature 1 step": "temperatuur 1 stap verhogen",
     "${0} increased ${1} colony track ${2} step(s)": "${0} verhoogde ${1} koloniespoor ${2} stap(pen)",
-    "${0} decreased ${1} colony track 1 step": "${0} verlaagde ${1} koloniespoor ${2} stap(pen)",
+    "${0} decreased ${1} colony track 1 step": "${0} verlaagde het koloniespoor van ${1} met 1 stap",
     "Unable to perform undo operation. Error retrieving game from database. Please try again.": "Kan bewerking ongedaan maken niet uitvoeren. Fout bij het ophalen van het spel uit de database. Probeer het opnieuw.",
   "${0} revealed no cards": "${0} heeft geen kaarten onthuld",
   "${0} played ${1} to find a Turmoil card but none were found.": "${0} speelde ${1} om een Turmoil-kaart te vinden, maar er werd geen gevonden.",

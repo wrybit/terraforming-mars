@@ -165,7 +165,7 @@
   "Journalism": "Újságírás",
   "Oxygen requirements are ±3": "Az oxigénfeltételek ±3",
   "${0} sued ${1} who had 0 MC.": "${0} beperelte ${1} játékost, akinek 0 M€-je volt.",
-  "${0} removed ${1} floaters from ${2} to gain ${3} ${4}": "${0} eltávolított ${1} lebegőt innen: ${2}, és kapott ${3} ${4}",
+  "${0} removed ${1}:cr:floater: from ${2} to gain ${3}${4}": "${0} eltávolított ${1}:cr:floater: innen: ${2}, és kapott ${3}${4}",
   "${0} discarded ${1}, ending its bonus for this generation": "${0} eldobta: ${1}, így a bónusza ebben a generációban megszűnik",
   "Card": "Kártya",
   "Start page": "Kezdőlap",
@@ -498,7 +498,7 @@
   "Select how many of your ${0} wild tags count as microbe tags (the rest count as power tags)": "Válaszd ki, hány ${0} dzsóker ikonod számít mikroba ikonnak (a többi energia ikonnak számít)",
   "Select a resource to spend.": "Válaszd ki az elköltendő erőforrást.",
   "${0} selected no cards.": "${0} nem választott kártyát.",
-  "${0} gains ${1} TR instead of ${2} due to the Reds ruling policy": "${0} ${1} TR-t kap ${2} helyett a kormányzó Vörösök politikája miatt",
+  "${0} gains ${1}:i:tr: instead of ${2} due to the Reds ruling policy": "${0} ${1}:i:tr: kap ${2} helyett a kormányzó Vörösök politikája miatt",
   "Steal a resource": "Erőforrás ellopása",
   "Select how to pay to replay the event": "Válaszd ki, hogyan fizetsz az esemény újrajátszásáért",
   "Select card to add microbe": "Válaszd ki a kártyát, amelyre mikrobát teszel",
@@ -1066,5 +1066,9 @@
   "Only you can see this line in the log": "Ezt a naplósort csak te látod",
   "AI insight: click to reveal": "MI-infó: kattints a felfedéshez",
   "Click to hide again": "Kattints újra az elrejtéshez",
-  "Select boards to be randomly chosen": "Válaszd ki a sorsolandó táblákat"
+  "Select boards to be randomly chosen": "Válaszd ki a sorsolandó táblákat",
+  "${0} blackmailed ${1} and was paid 2:r:corruption:.": "${0} megzsarolta ${1} játékost, és 2:r:corruption: kapott.",
+  "${0} gained ${1}:i:tr: from ${2}": "${0} ${1}:i:tr: kapott ettől: ${2}",
+  "${0} gained ${1}:r:mc: from ${2} ocean(s)": "${0} ${1}:r:mc: kapott ${2} óceán után",
+  "${0} sued ${1} who had 0:r:mc:.": "${0} beperelte ${1} játékost, akinek 0:r:mc: volt."
 }

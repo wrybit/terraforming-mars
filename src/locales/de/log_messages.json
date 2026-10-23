@@ -227,7 +227,7 @@
   "${0} copied ${1} production with ${2}": "${0} hat die Produktion von ${1} mit ${2} kopiert",
   "${0} used ${1} action with ${2}": "${0} hat mit ${2} eine Aktion von ${1} genutzt",
   "${0} is the new chairman and gains ${1}:i:tr:": "${0} ist der neue Vorsitzende und erhält ${1}:i:tr:",
-  "A neutral delegate is the new chairman.": "Ein neutraler Deligierter ist der neue Vorsitzende.",
+  "A neutral delegate is the new chairman.": "Ein neutraler Delegierter ist der neue Vorsitzende.",
   "Greens are in power in the first generation.": "DIE GRÜNEN sind in der ersten Generation an der Macht.",
   "Resolving global event ${0}": "Schließe globales Ereignis ${0} ab",
   "A neutral delegate was added to the ${0} party": "Ein neutraler Delegierter wurde der Partei ${0} hinzugefügt.",
@@ -487,6 +487,6 @@
   "${0} decreased ${1} colony track 1 step": "${0} senkte ${1}-Koloniewertung um 1 Schritt",
   "${0} kept ${1} project cards": "${0} behielt ${1} Projektkarten",
   "Unable to perform undo operation. Error retrieving game from database. Please try again.": "Konnte Aktion nicht rückgängig machen. Es trat ein Fehler beim Laden des Spieles aus der Datenbank auf. Bitte versuche es noch einmal.",
-  "${0} removed ${1} floaters from ${2} to gain ${3} ${4}": "${0} entfernte ${1} Schweber von ${2}, um ${3} ${4} zu erhalten",
+  "${0} removed ${1}:cr:floater: from ${2} to gain ${3}${4}": "${0} entfernte ${1}:cr:floater: von ${2}, um ${3}${4} zu erhalten",
   "${0} discarded ${1}, ending its bonus for this generation": "${0} warf ${1} ab, der Bonus endet für diese Generation"
 }
