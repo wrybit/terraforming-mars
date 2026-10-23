@@ -14,7 +14,6 @@
     <g v-for="track in tracks" :key="track.key" :class="['arrakis-scales__track', 'arrakis-scales__track--' + track.key, {'arrakis-scales__track--full': track.art.full}]">
       <template v-if="track.art.full">
         <!-- Loaded: halo, the whole band in its gradient, solid white edges, a slow shine and the check in the middle -->
-        <path class="arrakis-scales__halo arrakis-scales__pulse" :style="motion(track.key + '-halo', 2.2)" :d="track.art.band" :stroke="track.glow" :filter="glowUrl"/>
         <g :filter="glowUrl">
           <path v-for="(piece, index) in track.art.fill" :key="'fill' + index" class="arrakis-scales__piece" :d="piece.path"
             :stroke="scaleColour(track.key, piece.share)" :stroke-width="FULL_WIDTH"/>
@@ -39,17 +38,6 @@
             :stroke="scaleColour(track.key, piece.share)" :stroke-width="FILL_WIDTH"/>
         </g>
       </template>
-      <g v-if="track.art.check !== undefined" class="arrakis-scales__breathe" :style="motion(track.key + '-check', 2.4)">
-        <path class="arrakis-scales__check arrakis-scales__check--shadow" :d="checkPath(track.art.check)"/>
-        <path class="arrakis-scales__check" :d="checkPath(track.art.check)" :filter="glowUrl"/>
-      </g>
-      <g v-if="track.art.capsule !== undefined" :transform="`rotate(${track.art.capsule.rotation} ${track.art.capsule.x} ${track.art.capsule.y})`">
-        <g class="arrakis-scales__breathe" :style="motion(track.key + '-capsule', 2.4)">
-          <rect class="arrakis-scales__capsule" :x="track.art.capsule.x - 18" :y="track.art.capsule.y - 11.55" width="36" height="23.1" rx="11.55"
-            :stroke="scaleColour(track.key, track.art.capsule.share)" :filter="glowUrl"/>
-          <text class="arrakis-scales__value" :x="track.art.capsule.x" :y="track.art.capsule.y">{{ track.art.capsule.text }}</text>
-        </g>
-      </g>
       <image class="arrakis-scales__symbol" :href="track.symbol" :x="track.symbolAt.x - SYMBOL / 2" :y="track.symbolAt.y - SYMBOL / 2" :width="SYMBOL" :height="SYMBOL" :filter="glowUrl"
         :transform="`rotate(${track.symbolRotation} ${track.symbolAt.x} ${track.symbolAt.y})`"/>
       <text class="arrakis-scales__name">
@@ -57,6 +45,28 @@
       </text>
     </g>
   </svg>
+  <!-- Halo, check and value capsule move on their own layers (ArrakisMotionPart.vue): animated inside the SVG they redrew
+       the whole SVG in every frame -->
+  <div class="arrakis-motion-layer" aria-hidden="true">
+    <template v-for="track in tracks" :key="track.key">
+      <ArrakisMotionPart v-if="track.art.full" motionClass="arrakis-scales__pulse" :motion="motion(track.key + '-halo', 2.2)" v-bind="BOARD_BOX">
+        <path class="arrakis-scales__halo" :d="track.art.band" :stroke="track.glow" :filter="glowUrl"/>
+      </ArrakisMotionPart>
+      <ArrakisMotionPart v-if="track.art.check !== undefined" motionClass="arrakis-scales__breathe" :motion="motion(track.key + '-check', 2.4)"
+        v-bind="boxAround(track.art.check, CHECK_BOX)">
+        <path class="arrakis-scales__check arrakis-scales__check--shadow" :d="checkPath(track.art.check)"/>
+        <path class="arrakis-scales__check" :d="checkPath(track.art.check)" :filter="glowUrl"/>
+      </ArrakisMotionPart>
+      <ArrakisMotionPart v-if="track.art.capsule !== undefined" motionClass="arrakis-scales__breathe" :motion="motion(track.key + '-capsule', 2.4)"
+        v-bind="boxAround(track.art.capsule, CAPSULE_BOX)">
+        <g :transform="`rotate(${track.art.capsule.rotation} ${track.art.capsule.x} ${track.art.capsule.y})`">
+          <rect class="arrakis-scales__capsule" :x="track.art.capsule.x - 18" :y="track.art.capsule.y - 11.55" width="36" height="23.1" rx="11.55"
+            :stroke="scaleColour(track.key, track.art.capsule.share)" :filter="glowUrl"/>
+          <text class="arrakis-scales__value" :x="track.art.capsule.x" :y="track.art.capsule.y">{{ track.art.capsule.text }}</text>
+        </g>
+      </ArrakisMotionPart>
+    </template>
+  </div>
   <!-- Particles from the sand to the value, each with its own size, path, pace, colour and blink -->
   <ArrakisParticles :particles="particles"/>
 </template>
@@ -65,10 +75,11 @@
 import {defineComponent, PropType} from 'vue';
 import {LARGE_SCALES, SCALE_BAND, STANDARD_SCALES, ScaleGeometry, arcPath, pointAt, scaleColour, scaleLabels} from './arrakisScales';
 import {FILL_WIDTH, FULL_WIDTH, FlowPath, GHOST_WIDTH, SCALE_GLOW, ScaleArt, ScaleKey, ScaleValues, scaleArt} from './arrakisScaleArt';
-import {MotionStyle, desync, whiteTo} from './arrakisMotion';
+import {BOARD_BOX, MotionBox, MotionStyle, boxAround, desync, whiteTo} from './arrakisMotion';
 import {themedAsset} from '@/client/theme/themeDisplay';
 import {prefersReducedMotion} from '@/client/utils/motion';
 import ArrakisParticles, {ParticleFlow} from './ArrakisParticles.vue';
+import ArrakisMotionPart from './ArrakisMotionPart.vue';
 
 type Track = {
   key: ScaleKey,
@@ -85,6 +96,9 @@ type Track = {
 
 // Size of the scale symbols in board pixels
 const SYMBOL = 42;
+// Boxes of the breathing parts (board px): the turned value capsule (36 × 23) and the check, each with its glow
+const CAPSULE_BOX = 60;
+const CHECK_BOX = 32;
 // Ids of the filter and text paths per instance: the board is drawn twice (column and zoom view), and a reference to
 // an id inside a hidden copy would draw nothing
 let instances = 0;
@@ -93,6 +107,7 @@ export default defineComponent({
   name: 'ArrakisScales',
   components: {
     ArrakisParticles,
+    ArrakisMotionPart,
   },
   props: {
     // The large Arrakis pins its markers on the bigger circle of the large map (globs.less .global-numbers--large)
@@ -119,6 +134,15 @@ export default defineComponent({
     },
     SYMBOL(): number {
       return SYMBOL;
+    },
+    BOARD_BOX(): MotionBox {
+      return BOARD_BOX;
+    },
+    CAPSULE_BOX(): number {
+      return CAPSULE_BOX;
+    },
+    CHECK_BOX(): number {
+      return CHECK_BOX;
     },
     SCALE_BAND(): number {
       return SCALE_BAND;
@@ -168,6 +192,7 @@ export default defineComponent({
     },
   },
   methods: {
+    boxAround,
     scaleColour,
     whiteTo,
     pathId(key: string): string {

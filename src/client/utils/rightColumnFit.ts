@@ -140,6 +140,56 @@ function fitMarsHeight(column: HTMLElement, block: HTMLElement, board: HTMLEleme
   return true;
 }
 
+// What one fit wrote, and what it depended on. A game update draws the board anew and its observer reports a change,
+// although mostly nothing the fit depends on changed: then the last result is set again at once, without measuring
+// every part of the board (overflowScale, centerMars) – that was about a third of each update (Jens, 23 Oct 2026).
+type FitResult = {
+  key: string,
+  steps: Array<string>,
+  fitZoom: string,
+  wideZoom: string,
+  blockHeight: string,
+  translate: string,
+  minHeight: string | null,
+  maxHeight: string | null,
+};
+const lastFits = new WeakMap<HTMLElement, FitResult>();
+
+function setAttribute(element: Element, name: string, value: string | null): void {
+  if (value === null) {
+    element.removeAttribute(name);
+  } else {
+    element.setAttribute(name, value);
+  }
+}
+
+function applyFit(column: HTMLElement, block: HTMLElement | null, board: HTMLElement | null, result: FitResult): void {
+  column.classList.add(...result.steps);
+  column.style.setProperty(BOARD_FIT_ZOOM_VARIABLE, result.fitZoom);
+  column.style.setProperty(BOARD_WIDE_ZOOM_VARIABLE, result.wideZoom);
+  setAttribute(column, MARS_MIN_HEIGHT_ATTRIBUTE, result.minHeight);
+  setAttribute(column, MARS_MAX_HEIGHT_ATTRIBUTE, result.maxHeight);
+  if (block !== null) {
+    block.style.height = result.blockHeight;
+  }
+  if (board !== null) {
+    board.style.translate = result.translate;
+  }
+}
+
+function recordFit(column: HTMLElement, block: HTMLElement | null, board: HTMLElement | null, key: string): void {
+  lastFits.set(column, {
+    key,
+    steps: STEPS.filter((step) => column.classList.contains(step)),
+    fitZoom: column.style.getPropertyValue(BOARD_FIT_ZOOM_VARIABLE),
+    wideZoom: column.style.getPropertyValue(BOARD_WIDE_ZOOM_VARIABLE),
+    blockHeight: block?.style.height ?? '',
+    translate: board?.style.translate ?? '',
+    minHeight: column.getAttribute(MARS_MIN_HEIGHT_ATTRIBUTE),
+    maxHeight: column.getAttribute(MARS_MAX_HEIGHT_ATTRIBUTE),
+  });
+}
+
 function fit(column: HTMLElement): void {
   column.classList.remove(...STEPS);
   column.style.setProperty(BOARD_FIT_ZOOM_VARIABLE, '1');
@@ -155,9 +205,20 @@ function fit(column: HTMLElement): void {
   // Zoom at which the board becomes as wide as the reference's content box (both measured in the same zoom space)
   const board = column.querySelector<HTMLElement>('.board-cont');
   const reference = widthReference(column);
-  const widenZoom = board !== null && reference !== undefined ?
-    contentBox(reference).width / board.getBoundingClientRect().width :
-    1;
+  const boardRect = board?.getBoundingClientRect();
+  const referenceBox = reference === undefined ? undefined : contentBox(reference);
+  const widenZoom = boardRect !== undefined && referenceBox !== undefined ? referenceBox.width / boardRect.width : 1;
+
+  // Everything the fit depends on, measured at zoom 1: the same as last time → the same result. Scroll sizes catch
+  // board parts that stick out (outer spaces, labels), the block's top the room for the drag handle.
+  const key = [available, window.innerHeight, referenceBox?.left, referenceBox?.width, boardRect?.width, boardRect?.height,
+    board?.scrollWidth, board?.scrollHeight, block?.getBoundingClientRect().top, column.getAttribute(MARS_HEIGHT_ATTRIBUTE),
+    column.closest(FIXED_LAYOUT_SELECTOR) !== null].join('|');
+  const last = lastFits.get(column);
+  if (last !== undefined && last.key === key) {
+    applyFit(column, block, board, last);
+    return;
+  }
   column.style.setProperty(BOARD_WIDE_ZOOM_VARIABLE, String(widenZoom));
 
   // User-chosen Mars height (fixed layout only); otherwise the levels decide
@@ -191,6 +252,7 @@ function fit(column: HTMLElement): void {
       centerMars(board, reference);
     }
   }
+  recordFit(column, block, board, key);
 }
 
 // Drag handle target for the Mars card (RowResizeHandle.vue); the column refits right away on every change,

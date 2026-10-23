@@ -1,5 +1,8 @@
 <template>
   <div v-show="isVisible()" class="other_player_panel">
+    <!-- The content only while the panel is open: closed it held about 1000 nodes per player that every game update
+         went through (Jens, 23 Oct 2026) -->
+    <template v-if="isVisible()">
     <div :class="'player_translucent_bg_color_' + player.color" class="other_player_header">
       <div class="player_name">{{ player.name }} <span v-i18n>played cards</span></div>
       <AppButton size="big" type="close" @click="hideMe" :disableOnServerBusy="false" align="right" />
@@ -29,6 +32,7 @@
             </div>
         </div>
     </div>
+    </template>
   </div>
 </template>
 

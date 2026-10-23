@@ -68,3 +68,14 @@ export function particles(seed: number, spread: ParticleSpread): Array<Particle>
 export function whiteTo(colour: string, share: number): string {
   return `color-mix(in oklab, ${colour} ${Math.round(share * 100)}%, #fff)`;
 }
+
+/** Box of an animated part in board px (ArrakisMotionPart.vue) */
+export type MotionBox = {x: number, y: number, width: number, height: number};
+
+/** The whole 720 px board space: for glows along a band, which only fade (nothing scales around a centre) */
+export const BOARD_BOX: MotionBox = {x: 0, y: 0, width: 720, height: 720};
+
+/** Square box of `size` board px centred on `at`: a breathing part scales around that centre */
+export function boxAround(at: {x: number, y: number}, size: number): MotionBox {
+  return {x: at.x - size / 2, y: at.y - size / 2, width: size, height: size};
+}

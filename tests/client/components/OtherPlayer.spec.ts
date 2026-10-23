@@ -24,4 +24,25 @@ describe('OtherPlayer', () => {
     });
     expect(wrapper.exists()).to.be.true;
   });
+
+  it('renders its content only while open', () => {
+    const mountWith = (visible: boolean) => shallowMount(OtherPlayer, {
+      ...globalConfig,
+      global: {
+        ...globalConfig.global,
+        mixins: [{
+          methods: {
+            getVisibilityState: () => visible,
+            setVisibilityState: () => {},
+          },
+        }],
+      },
+      props: {
+        player: fakePublicPlayerModel(),
+        playerIndex: 0,
+      },
+    });
+    expect(mountWith(false).find('.other_player_cont').exists()).to.be.false;
+    expect(mountWith(true).find('.other_player_cont').exists()).to.be.true;
+  });
 });

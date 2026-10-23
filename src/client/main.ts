@@ -8,6 +8,7 @@ import {getPreferences} from '@/client/utils/PreferencesManager';
 import i18nPlugin from '@/client/plugins/i18n.plugin';
 import {startOauth} from '@/client/oauth';
 import {installOverlayScrollbars} from '@/client/utils/overlayScrollbars';
+import {installAmbientMotion} from '@/client/utils/ambientMotion';
 const PlayerInputFactory = defineAsyncComponent(() => import(/* webpackChunkName: "player-input" */ '@/client/components/PlayerInputFactory.vue'));
 
 declare global {
@@ -50,6 +51,8 @@ async function bootstrap() {
   }
 
   app.mount('#app');
+  // Endless decorative animations on a shared 30 Hz clock, paused while idle (ambientMotion.ts)
+  installAmbientMotion();
   installOverlayScrollbars();
 
   window.onload = startOauth;

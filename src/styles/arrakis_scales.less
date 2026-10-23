@@ -6,12 +6,24 @@
   pointer-events: none;
 }
 
-// Particle layer (ArrakisParticles.vue) right after its SVG: same static position and the same 720 px board space
-.arrakis-particles {
+// Particle layer (ArrakisParticles.vue) and the layer of the moving parts (ArrakisMotionPart.vue) right after their SVG:
+// same static position and the same 720 px board space
+.arrakis-particles,
+.arrakis-motion-layer {
   position: absolute;
   width: 720px;
   height: 720px;
   pointer-events: none;
+}
+
+// A moving part: its own small layer, placed in board px; its SVG may draw beyond the box (glow, breathing)
+.arrakis-motion-part {
+  position: absolute;
+}
+
+.arrakis-motion-part__art {
+  display: block;
+  overflow: visible;
 }
 
 // Every dot starts at the top left corner; its Web Animation moves it along the path. Hidden until it runs.

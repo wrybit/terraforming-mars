@@ -16,27 +16,40 @@
     <image :transform="at(layout.icon)" href="assets/themes/dune/graphics/tile-spicefield.svg"
       :x="-ICON_SIZE / 2" :y="-ICON_SIZE / 2" :width="ICON_SIZE" :height="ICON_SIZE"/>
     <template v-if="complete">
-      <path class="arrakis-spice__glow arrakis-scales__pulse" :style="motion('spice-glow', 2.2)" :d="barPath" :stroke-width="(BAR_HEIGHT + 8.66) * row.scale" :filter="glowUrl"/>
       <path class="arrakis-spice__rim" :d="barPath" :stroke-width="(BAR_HEIGHT + 2.16) * row.scale"/>
       <path class="arrakis-spice__bar" :d="barPath" :stroke-width="BAR_HEIGHT * row.scale"/>
       <text class="arrakis-spice__done" :style="{fontSize: 9.38 * row.scale + 'px', letterSpacing: 1.44 * row.scale + 'px'}"><textPath :href="'#' + textPathId" startOffset="50%" text-anchor="middle" dominant-baseline="central">{{ doneText }}</textPath></text>
-      <g :transform="at(layout.check)">
-        <g class="arrakis-scales__breathe" :style="motion('spice-check', 2.4)">
-          <path class="arrakis-spice__cell arrakis-spice__cell--check" :d="hexagon(CHECK_HEX)" :fill="gradientUrl" :filter="glowUrl"/>
-          <path class="arrakis-spice__tick" d="M -5.05 0 l 3.54 3.54 l 6.57 -7.07"/>
-        </g>
-      </g>
     </template>
     <template v-else>
       <g v-for="(cell, index) in cells" :key="'cell' + index" :transform="at(cell.distance)">
         <path v-if="cell.filled" class="arrakis-spice__cell" :d="hexagon(CELL_WIDTH)" :fill="gradientUrl" :filter="glowUrl"/>
-        <!-- The next open field blinks softly: that is where it goes on -->
-        <path v-else :class="['arrakis-spice__cell', 'arrakis-spice__cell--open', {'arrakis-spice__cell--next arrakis-spice__blink': cell.next}]"
-          :style="cell.next ? motion('spice-next', 1.6) : undefined" :d="hexagon(CELL_WIDTH)"/>
+        <!-- The next open field blinks softly on its own layer (below) -->
+        <path v-else-if="!cell.next" class="arrakis-spice__cell arrakis-spice__cell--open" :d="hexagon(CELL_WIDTH)"/>
       </g>
       <text class="arrakis-spice__count" :transform="at(layout.count)" x="0" y="0.72">{{ count }}<tspan class="arrakis-spice__max">/{{ fields }}</tspan></text>
     </template>
   </svg>
+  <!-- Glow of the full bar, its check and the next open field move on their own layers (ArrakisMotionPart.vue):
+       animated inside the SVG they redrew the whole SVG in every frame -->
+  <div class="arrakis-motion-layer" aria-hidden="true">
+    <template v-if="complete">
+      <ArrakisMotionPart motionClass="arrakis-scales__pulse" :motion="motion('spice-glow', 2.2)" v-bind="BOARD_BOX">
+        <path class="arrakis-spice__glow" :d="barPath" :stroke-width="(BAR_HEIGHT + 8.66) * row.scale" :filter="glowUrl"/>
+      </ArrakisMotionPart>
+      <ArrakisMotionPart motionClass="arrakis-scales__breathe" :motion="motion('spice-check', 2.4)" v-bind="boxAround(point(layout.check), CHECK_HEX * 1.8 * row.scale)">
+        <g :transform="at(layout.check)">
+          <path class="arrakis-spice__cell arrakis-spice__cell--check" :d="hexagon(CHECK_HEX)" :fill="gradientUrl" :filter="glowUrl"/>
+          <path class="arrakis-spice__tick" d="M -5.05 0 l 3.54 3.54 l 6.57 -7.07"/>
+        </g>
+      </ArrakisMotionPart>
+    </template>
+    <ArrakisMotionPart v-else-if="nextCell !== undefined" motionClass="arrakis-spice__blink" :motion="motion('spice-next', 1.6)"
+      v-bind="boxAround(point(nextCell.distance), CELL_WIDTH * 1.6 * row.scale)">
+      <g :transform="at(nextCell.distance)">
+        <path class="arrakis-spice__cell arrakis-spice__cell--open arrakis-spice__cell--next" :d="hexagon(CELL_WIDTH)"/>
+      </g>
+    </ArrakisMotionPart>
+  </div>
   <!-- Full bar: particles stream from left to right, each with its own pace and blink. Otherwise sparks rise from every
        filled cell, each on its own clock. -->
   <ArrakisParticles :particles="particles"/>
@@ -44,11 +57,12 @@
 
 <script lang="ts">
 import {defineComponent} from 'vue';
-import {BAR_HEIGHT, CELL_WIDTH, CHECK_HEX, ICON_SIZE, SpiceLayout, SpiceRow, hexagon, onSpiceArc, spiceArc, spiceLayout, spiceRow} from './arrakisSpiceFields';
-import {MotionStyle, desync, seededRandom, whiteTo} from './arrakisMotion';
+import {BAR_HEIGHT, CELL_WIDTH, CHECK_HEX, ICON_SIZE, SpiceLayout, SpiceRow, hexagon, onSpiceArc, spiceArc, spiceLayout, spicePoint, spiceRow} from './arrakisSpiceFields';
+import {BOARD_BOX, MotionBox, MotionStyle, boxAround, desync, seededRandom, whiteTo} from './arrakisMotion';
 import {translateTextWithParams} from '@/client/directives/i18n';
 import {prefersReducedMotion} from '@/client/utils/motion';
 import ArrakisParticles, {ParticleFlow} from './ArrakisParticles.vue';
+import ArrakisMotionPart from './ArrakisMotionPart.vue';
 
 type Cell = {distance: number, filled: boolean, next: boolean, index: number};
 type Spark = {dx: number, radius: number, colourShare: number, rise: number, duration: number, riseBegin: number, fadeBegin: number};
@@ -62,6 +76,7 @@ export default defineComponent({
   name: 'ArrakisSpiceFields',
   components: {
     ArrakisParticles,
+    ArrakisMotionPart,
   },
   props: {
     large: {
@@ -90,6 +105,9 @@ export default defineComponent({
     },
     CHECK_HEX(): number {
       return CHECK_HEX;
+    },
+    BOARD_BOX(): MotionBox {
+      return BOARD_BOX;
     },
     BAR_HEIGHT(): number {
       return BAR_HEIGHT;
@@ -134,6 +152,10 @@ export default defineComponent({
     },
     doneText(): string {
       return translateTextWithParams('All ${0} spice fields', [String(this.fields)]).toLocaleUpperCase();
+    },
+    // The open field where it goes on: it blinks
+    nextCell(): Cell | undefined {
+      return this.cells.find((cell) => cell.next);
     },
     cells(): Array<Cell> {
       return this.layout.cells.map((distance, index) => ({distance, index, filled: index < this.count, next: index === this.count}));
@@ -189,6 +211,10 @@ export default defineComponent({
   },
   methods: {
     hexagon,
+    boxAround,
+    point(distance: number): {x: number, y: number} {
+      return spicePoint(this.row, distance);
+    },
     whiteTo,
     at(distance: number): string {
       return onSpiceArc(this.row, distance);
