@@ -1547,17 +1547,20 @@ a.create-game-summary-chip:hover {
     overflow-y: visible;
   }
 
+  // Docked to the bottom edge like the action bar of the game (Jens, 23 Oct 2026): a floating card left a strip of
+  // page visible below it on phones; the bar fills that edge and keeps the home indicator room inside
   .create-game-create-float {
     .frosted-surface();
     display: flex;
     position: fixed;
-    right: @create-game-page-padding;
-    bottom: calc(@create-game-create-bottom + env(safe-area-inset-bottom, 0px));
-    left: @create-game-page-padding;
+    right: 0;
+    bottom: 0;
+    left: 0;
     z-index: 5;
-    padding: 10px;
-    border: 1px solid @create-game-line;
-    border-radius: @create-game-radius;
+    padding: 10px @create-game-page-padding calc(10px + env(safe-area-inset-bottom, 0px));
+    border: 0;
+    border-top: 1px solid @create-game-line;
+    border-radius: 0;
     background: @create-game-surface-strong;
     box-shadow: .create-game-float-shadow(-1)[@shadow], 0 0 0 1px rgba(255, 255, 255, 0.06);
 
