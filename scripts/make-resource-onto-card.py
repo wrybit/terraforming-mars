@@ -9,8 +9,8 @@ from pathlib import Path
 
 GRAPHICS = Path(__file__).resolve().parent.parent / 'assets/themes/dune/graphics'
 INK = '#1d140c'
-# Ring around the plus: the dark blue of the card back (res-card.svg), not white
-PLUS_RING = '#1a1d3a'
+# Ring around the plus in the colour of the card face, so it separates plus and resource without shining white
+PLUS_RING = '#ede5d1'
 WIDTH, HEIGHT = 112, 68
 
 
