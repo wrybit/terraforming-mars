@@ -18,7 +18,7 @@ const ACTIVITY_EVENTS = ['pointerdown', 'pointermove', 'keydown', 'wheel', 'touc
 
 const TICK_MILLISECONDS = 1000 / AMBIENT_FRAMES_PER_SECOND;
 // The DOM timing type, named via the effect so eslint knows it
-type EffectTiming = ReturnType<AnimationEffect['getComputedTiming']>;
+type AnimationTiming = ReturnType<AnimationEffect['getComputedTiming']>;
 
 let lastActivity = 0;
 let paused = false;
@@ -32,7 +32,7 @@ function supported(): boolean {
   return typeof document !== 'undefined' && typeof document.getAnimations === 'function';
 }
 
-function isEndless(timing: EffectTiming | undefined): boolean {
+function isEndless(timing: AnimationTiming | undefined): boolean {
   return timing?.iterations === Infinity;
 }
 
@@ -45,7 +45,8 @@ function isTurnMarker(animation: Animation): boolean {
  * (start time + delay + n ticks) on the grid of the document timeline. `timing` is read beforehand: reading it brings
  * the styles up to date, writing outdates them, so many animations are read first and written after.
  */
-export function alignToClock(animation: Animation, timing: EffectTiming | undefined = animation.effect?.getComputedTiming()): void {
+export function alignToClock(animation: Animation, timing: AnimationTiming | undefined = animation.effect?.getComputedTiming(),
+  retryWhenReady: boolean = true): void {
   const effect = animation.effect;
   if (effect === null || timing === undefined) {
     return;
@@ -62,8 +63,10 @@ export function alignToClock(animation: Animation, timing: EffectTiming | undefi
   const startTime = animation.startTime;
   if (startTime === null) {
     // Just started or resumed: the start time is set with the next frame
-    if (animation.pending) {
-      animation.ready.then(() => alignToClock(animation, timing)).catch(() => {});
+    // Only once: an animation whose element is not rendered (e.g. a hidden mobile tab) can stay pending after ready
+    // resolves – retrying again would loop in microtasks and freeze the page (Arrakis 91 on phones)
+    if (animation.pending && retryWhenReady) {
+      animation.ready.then(() => alignToClock(animation, timing, false)).catch(() => {});
     }
     return;
   }
@@ -76,7 +79,7 @@ export function alignToClock(animation: Animation, timing: EffectTiming | undefi
   }
 }
 
-function pauseAnimation(animation: Animation, timing: EffectTiming | undefined): void {
+function pauseAnimation(animation: Animation, timing: AnimationTiming | undefined): void {
   animation.pause();
   pausedHere.add(animation);
   // A turn marker must not freeze half faded out: back to its first keyframe

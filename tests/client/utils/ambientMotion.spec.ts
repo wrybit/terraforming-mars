@@ -38,6 +38,21 @@ describe('ambientMotion', () => {
     expect(Math.abs(aligned / TICK - Math.round(aligned / TICK))).to.be.lessThan(1e-9);
   });
 
+  it('waits for a pending animation only once', async () => {
+    const {animation} = fakeAnimation(null, 3000);
+    let readyReads = 0;
+    Object.defineProperty(animation, 'pending', {value: true});
+    Object.defineProperty(animation, 'ready', {get: () => {
+      readyReads++;
+      return Promise.resolve(animation);
+    }});
+    alignToClock(animation);
+    for (let i = 0; i < 5; i++) {
+      await Promise.resolve();
+    }
+    expect(readyReads).to.eq(1);
+  });
+
   it('leaves a not yet started animation alone', () => {
     const {animation} = fakeAnimation(null, 3000);
     alignToClock(animation);
