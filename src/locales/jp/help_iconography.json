@@ -155,9 +155,9 @@
   "Standard Mode (:tag:mars:): you win if every global parameter is maxed before time runs out.": "標準モード（:tag:mars:）：時間切れまでにすべてのグローバルパラメーターが最大になれば勝利です。",
   ":expansion:venus: This includes Venus if Venus Next is included.": ":expansion:venus: 金星拡張を使用する場合は金星も含みます。",
   ":expansion:themoon: This includes Moon tracks if The Moon is included with Moon track completion required.": ":expansion:themoon: ムーン拡張を使用し、月トラックの完成を必須にした場合は月トラックも含みます。",
-  "63 TR Mode (:icon:tr:): you win if your TR is 63 or higher when time runs out.": "TR63モード（:icon:tr:）：時間切れの時点でTRが63以上なら勝利です。",
-  "63 TR Mode (:icon:tr:): placing greenery during the final greenery conversion can still raise oxygen and your TR. That TR counts toward your score, but not toward winning.": "TR63モード（:icon:tr:）：最後の緑地変換で配置した緑地でも、酸素とTRを上げることができます。そのTRは得点には数えますが、勝利判定には数えません。",
-  "63 TR Mode only (:icon:tr:): an extra standard project, Buffer Gas, is available. Spend 16 M€ to increase your TR 1 step.": "TR63モードのみ（:icon:tr:）：追加の標準プロジェクト「緩衝ガス」が使えます。16 M€を支払い、TR+1段階。",
+  "63 TR Mode (:i:tr:): you win if your TR is 63 or higher when time runs out.": "TR63モード（:i:tr:）：時間切れの時点でTRが63以上なら勝利です。",
+  "63 TR Mode (:i:tr:): placing greenery during the final greenery conversion can still raise oxygen and your TR. That TR counts toward your score, but not toward winning.": "TR63モード（:i:tr:）：最後の緑地変換で配置した緑地でも、酸素とTRを上げることができます。そのTRは得点には数えますが、勝利判定には数えません。",
+  "63 TR Mode only (:i:tr:): an extra standard project, Buffer Gas, is available. Spend 16 M€ to increase your TR 1 step.": "TR63モードのみ（:i:tr:）：追加の標準プロジェクト「緩衝ガス」が使えます。16 M€を支払い、TR+1段階。",
   ":expansion:venus: Venus Next: Standard Mode (:tag:mars:) also requires Venus to be maxed to win.": ":expansion:venus: 金星：標準モード（:tag:mars:）では、勝利には金星も最大にする必要があります。",
   ":expansion:prelude: Prelude: play 12 generations instead of 14.": ":expansion:prelude: プレリュード：14世代ではなく12世代プレイします。",
   ":expansion:colony: Colonies: decrease your M€ production 2 steps at the start of the game. One extra colony tile is dealt, and you choose one colony tile to remove from the game.": ":expansion:colony: コロニー：ゲーム開始時にM€産出を2段階下げます。コロニータイルを1枚多く配り、そのうち1枚を選んでゲームから除外します。",
@@ -165,7 +165,7 @@
   ":expansion:agendas: Agendas: The alternative ruling bonus takes 1 TR from you if your TR is higher than 20.": ":expansion:agendas: 追加議題：代替の与党ボーナスは、TRが20より高いと1 TRを失わせます。",
   ":expansion:themoon: The Moon:": ":expansion:themoon: ムーン：",
   "Standard Mode (:tag:mars:), with the option to require Moon track completion, also requires the Moon tracks to be maxed to win, and you play 2 more generations.": "標準モード（:tag:mars:）で月トラックの完成を必須にするオプションでは、勝利には月トラックも最大にする必要があり、2世代多くプレイします。",
-  "63 TR Mode (:icon:tr:): no changes.": "TR63モード（:icon:tr:）：変更なし。",
+  "63 TR Mode (:i:tr:): no changes.": "TR63モード（:i:tr:）：変更なし。",
   ":expansion:ares: Ares Extreme: Standard Mode (:tag:mars:) also requires you to remove all unprotected hazards to win. With World Government Terraforming, you may remove an unprotected hazard instead of raising a global parameter.": ":expansion:ares: アレス・エクストリーム：標準モード（:tag:mars:）では、勝利には保護されていない災害タイルをすべて除去する必要もあります。世界政府の介入では、グローバルパラメーターを上げる代わりに、保護されていない災害タイルを1枚除去できます。",
   "Adapted from [Terraforming Mars: solo rules summary](https://github.com/MartianZoo/player-resources/blob/main/solo-rules-summary.md)": "出典：[Terraforming Mars：ソロルールのまとめ](https://github.com/MartianZoo/player-resources/blob/main/solo-rules-summary.md)"
 }

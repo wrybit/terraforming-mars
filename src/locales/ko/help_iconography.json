@@ -156,9 +156,9 @@
   "Standard Mode (:tag:mars:): you win if every global parameter is maxed before time runs out.": "표준 모드 (:tag:mars:): 시간이 다 되기 전에 모든 행성 지표가 최대에 도달하면 승리합니다.",
   ":expansion:venus: This includes Venus if Venus Next is included.": ":expansion:venus: 비너스 넥스트를 사용하면 금성도 포함됩니다.",
   ":expansion:themoon: This includes Moon tracks if The Moon is included with Moon track completion required.": ":expansion:themoon: 달 트랙 완성이 필수인 상태로 달 확장을 사용하면 달 트랙도 포함됩니다.",
-  "63 TR Mode (:icon:tr:): you win if your TR is 63 or higher when time runs out.": "63 TR 모드 (:icon:tr:): 시간이 다 되었을 때 테라포밍 등급이 63 이상이면 승리합니다.",
-  "63 TR Mode (:icon:tr:): placing greenery during the final greenery conversion can still raise oxygen and your TR. That TR counts toward your score, but not toward winning.": "63 TR 모드 (:icon:tr:): 마지막 녹지 전환으로 녹지를 놓아도 산소와 테라포밍 등급이 오를 수 있습니다. 그 TR은 점수에는 포함되지만 승리 판정에는 포함되지 않습니다.",
-  "63 TR Mode only (:icon:tr:): an extra standard project, Buffer Gas, is available. Spend 16 M€ to increase your TR 1 step.": "63 TR 모드 전용 (:icon:tr:): 추가 일반 프로젝트인 버퍼 가스를 사용할 수 있습니다. 16 M€를 지불하여 테라포밍 등급을 1단계 올립니다.",
+  "63 TR Mode (:i:tr:): you win if your TR is 63 or higher when time runs out.": "63 TR 모드 (:i:tr:): 시간이 다 되었을 때 테라포밍 등급이 63 이상이면 승리합니다.",
+  "63 TR Mode (:i:tr:): placing greenery during the final greenery conversion can still raise oxygen and your TR. That TR counts toward your score, but not toward winning.": "63 TR 모드 (:i:tr:): 마지막 녹지 전환으로 녹지를 놓아도 산소와 테라포밍 등급이 오를 수 있습니다. 그 TR은 점수에는 포함되지만 승리 판정에는 포함되지 않습니다.",
+  "63 TR Mode only (:i:tr:): an extra standard project, Buffer Gas, is available. Spend 16 M€ to increase your TR 1 step.": "63 TR 모드 전용 (:i:tr:): 추가 일반 프로젝트인 버퍼 가스를 사용할 수 있습니다. 16 M€를 지불하여 테라포밍 등급을 1단계 올립니다.",
   ":expansion:venus: Venus Next: Standard Mode (:tag:mars:) also requires Venus to be maxed to win.": ":expansion:venus: 비너스 넥스트: 표준 모드 (:tag:mars:)에서는 승리하려면 금성도 최대에 도달해야 합니다.",
   ":expansion:prelude: Prelude: play 12 generations instead of 14.": ":expansion:prelude: 서곡: 14세대 대신 12세대를 플레이합니다.",
   ":expansion:colony: Colonies: decrease your M€ production 2 steps at the start of the game. One extra colony tile is dealt, and you choose one colony tile to remove from the game.": ":expansion:colony: 개척기지: 게임 시작 시 M€ 생산력을 2단계 낮춥니다. 위성 타일을 1개 더 공개하고, 그중 하나를 골라 게임에서 제거합니다.",
@@ -166,7 +166,7 @@
   ":expansion:agendas: Agendas: The alternative ruling bonus takes 1 TR from you if your TR is higher than 20.": ":expansion:agendas: 의제: 대체 집권 보너스로, 테라포밍 등급이 20보다 높으면 1 TR을 잃습니다.",
   ":expansion:themoon: The Moon:": ":expansion:themoon: 달:",
   "Standard Mode (:tag:mars:), with the option to require Moon track completion, also requires the Moon tracks to be maxed to win, and you play 2 more generations.": "표준 모드 (:tag:mars:)에서 달 트랙 완성 필수 옵션을 사용하면, 승리하려면 달 트랙도 최대에 도달해야 하며 2세대를 더 플레이합니다.",
-  "63 TR Mode (:icon:tr:): no changes.": "63 TR 모드 (:icon:tr:): 변경 없음.",
+  "63 TR Mode (:i:tr:): no changes.": "63 TR 모드 (:i:tr:): 변경 없음.",
   ":expansion:ares: Ares Extreme: Standard Mode (:tag:mars:) also requires you to remove all unprotected hazards to win. With World Government Terraforming, you may remove an unprotected hazard instead of raising a global parameter.": ":expansion:ares: 아레스 익스트림: 표준 모드 (:tag:mars:)에서는 승리하려면 보호되지 않은 위험 타일을 모두 제거해야 합니다. 세계정부 테라포밍 때 행성 지표를 올리는 대신 보호되지 않은 위험 타일 하나를 제거할 수 있습니다.",
   "Adapted from [Terraforming Mars: solo rules summary](https://github.com/MartianZoo/player-resources/blob/main/solo-rules-summary.md)": "출처: [Terraforming Mars: 솔로 규칙 요약](https://github.com/MartianZoo/player-resources/blob/main/solo-rules-summary.md)"
 }
