@@ -50,6 +50,9 @@ const CAST_SHADOW_STEPS = 6;
 const spriteCell = computed(() => props.animated ? undefined : spriteCellOf(props.color, props.view, props.size, props.spin));
 
 const spriteStyle = computed(() => ({
+  // The box size directly in px: Safari zooms px from custom properties twice inside a CSS zoom (player_cube_sprite.less)
+  'width': props.size + 'px',
+  'height': props.size + 'px',
   '--cube-size': props.size + 'px',
   '--sprite-image': `url(${PLAYER_CUBE_SPRITE_URL})`,
   '--sprite-cell-factor': String(SPRITE_CELL_FACTOR),
