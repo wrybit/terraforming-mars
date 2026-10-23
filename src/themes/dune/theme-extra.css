@@ -717,13 +717,22 @@ html.theme-dune .card-container .card-content .card-row > .card-item-container:h
 
 /* Pictures for cards that only have text (Jens 21 Oct 2026): the worm on the Thumper, the protection shield of the
    player overview on Protected Habitats (graphics/protect-shield.svg, colours of players_table.less) */
-html.theme-dune .card-container:is(.card-thumper, .card-protected-habitats, .card-invention-contest, .card-business-contacts, .card-land-claim) .card-content > .card-rows:last-of-type::after {
+html.theme-dune .card-container:is(.card-thumper, .card-protected-habitats, .card-invention-contest, .card-business-contacts, .card-land-claim, .card-ceo\'s-favorite-project) .card-content > .card-rows:last-of-type::after {
   content: "";
   display: block;
   width: 64px;
   height: 64px;
   margin: 8px auto 0;
   background: url(graphics/token-worm.svg) center / contain no-repeat;
+}
+
+/* CEO's Favorite Project: a resource with a plus goes onto a card that already holds one (Jens 23 Oct 2026,
+   scripts/make-resource-onto-card.py) */
+html.theme-dune .card-container.card-ceo\'s-favorite-project .card-content > .card-rows:last-of-type::after {
+  width: 146px;
+  height: 88px;
+  margin-top: 14px;
+  background-image: url(graphics/resource-onto-card.svg);
 }
 
 /* Land Claim: a plain sand tile (the empty space of Arrakis) with a red player cube on it – the marker that reserves
