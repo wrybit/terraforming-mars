@@ -10,6 +10,8 @@
 @active-player-outline-period: 1.4s;
 // "Active" status in the player bar (PlayerStatus.vue)
 @active-player-status-outline-width: 2px;
+// Corner radius of the status box (players_overview.less, players_table.less): the border runs around it outside
+@active-player-status-radius: 4px;
 @active-player-status-dot-size: 10px;
 @active-player-status-dot-glow: 6px;
 
@@ -36,22 +38,21 @@
   }
 }
 
-// Blink only the border color – with opacity the text in the status would blink too
-@keyframes active-player-outline-color-blink {
-  0%,
-  100% {
-    outline-color: @active-player-outline-color;
-  }
-
-  50% {
-    outline-color: fade(@active-player-outline-color, 15%);
-  }
-}
-
-// "Active" status: red border and blinking red dot before the time
+// "Active" status: red border and blinking red dot before the time. The border is a layer of its own that only fades
+// (opacity 1 → 0.15, as the colour did before): blinking its colour had to be painted anew in every frame. Fading the
+// whole box would make the text blink too.
 .player-action-status-container--active {
-  outline: @active-player-status-outline-width solid @active-player-outline-color;
-  animation: active-player-outline-color-blink @active-player-outline-period ease-in-out infinite;
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: -@active-player-status-outline-width;
+    border: @active-player-status-outline-width solid @active-player-outline-color;
+    border-radius: @active-player-status-radius + @active-player-status-outline-width;
+    pointer-events: none;
+    animation: active-player-outline-blink @active-player-outline-period ease-in-out infinite;
+  }
 
   .player-status-timer {
     display: flex;
@@ -93,7 +94,7 @@
 // Anyone who enabled "reduce motion" in the system gets static markers
 @media (prefers-reduced-motion: reduce) {
   .player-home--acting::after,
-  .player-action-status-container--active,
+  .player-action-status-container--active::after,
   .player-action-status-container--active .player-status-timer::before {
     animation: none;
   }
