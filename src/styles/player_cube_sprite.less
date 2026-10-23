@@ -7,19 +7,23 @@
     display: none;
   }
 
+  // Only percentages and unitless numbers below: Safari applies the zoom of the large board (BoardZoomModal, CSS zoom)
+  // a second time to px lengths that come from custom properties, so the picture grew past its cell and showed a large
+  // cut-out of the sheet (Jens, 23 Oct 2026, iPhone). The box itself gets its px size inline (PlayerCube.vue).
   &::before {
-    --sprite-cell: calc(var(--cube-size) * var(--sprite-cell-factor));
-
     content: "";
     position: absolute;
     left: 50%;
     top: 50%;
-    width: var(--sprite-cell);
-    height: var(--sprite-cell);
+    width: calc(var(--sprite-cell-factor) * 100%);
+    height: calc(var(--sprite-cell-factor) * 100%);
     transform: translate(-50%, -50%);
     background-image: var(--sprite-image);
     background-repeat: no-repeat;
-    background-size: calc(var(--sprite-cell) * var(--sprite-columns)) calc(var(--sprite-cell) * var(--sprite-rows));
-    background-position: calc(var(--sprite-cell) * var(--sprite-column) * -1) calc(var(--sprite-cell) * var(--sprite-row) * -1);
+    // The sheet is columns × rows cells; a cell is the pseudo element: position c / (n − 1) puts cell c in it
+    background-size: calc(var(--sprite-columns) * 100%) calc(var(--sprite-rows) * 100%);
+    background-position:
+      calc(var(--sprite-column) / (var(--sprite-columns) - 1) * 100%)
+      calc(var(--sprite-row) / (var(--sprite-rows) - 1) * 100%);
   }
 }
