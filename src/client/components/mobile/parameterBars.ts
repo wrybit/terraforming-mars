@@ -1,6 +1,7 @@
 import * as c from '@/common/constants';
 import {BoardName} from '@/common/boards/BoardName';
 import {getGlobalParameterMaximums} from '@/common/boards/GlobalParameterMaximums';
+import {getGlobalParameterTracks, GlobalParameterThreshold, GlobalParameterTrackBonus} from '@/common/boards/GlobalParameterTracks';
 
 /* Bonus threshold on a parameter bar. */
 export type ParameterBonus = {
@@ -39,33 +40,24 @@ type BarSpec = Omit<ParameterBar, 'percent' | 'done' | 'bonuses' | 'steps'> & {
 type BonusSpec = Omit<ParameterBonus, 'percent'>;
 type TrackBonuses = {temperature: ReadonlyArray<BonusSpec>, oxygen: ReadonlyArray<BonusSpec>, venus: ReadonlyArray<BonusSpec>};
 
-// Bonuses printed on the tracks, per map (mirrors src/server/boards/GlobalParameterTracks.ts)
-const HEAT_1: BonusSpec = {at: c.TEMPERATURE_BONUS_FOR_HEAT_1, kind: 'heat', title: 'Heat'};
-const HEAT_2: BonusSpec = {at: c.TEMPERATURE_BONUS_FOR_HEAT_2, kind: 'heat', title: 'Heat'};
-const OCEAN: BonusSpec = {at: c.TEMPERATURE_FOR_OCEAN_BONUS, kind: 'ocean', title: 'Ocean'};
-const VENUS_CARD: BonusSpec = {at: c.VENUS_LEVEL_FOR_CARD_BONUS, kind: 'card', title: 'Cards'};
-
-const STANDARD_BONUSES: TrackBonuses = {
-  temperature: [HEAT_1, HEAT_2, OCEAN],
-  oxygen: [{at: c.OXYGEN_LEVEL_FOR_TEMPERATURE_BONUS, kind: 'temperature', title: 'Temperature'}],
-  venus: [VENUS_CARD, {at: c.VENUS_LEVEL_FOR_TR_BONUS, kind: 'tr', title: 'Terraform Rating'}],
+// Bonuses printed on the tracks, per map (same data the server grants them from)
+const BONUS_KINDS: Record<GlobalParameterTrackBonus, Pick<BonusSpec, 'kind' | 'title'>> = {
+  heatproduction: {kind: 'heat', title: 'Heat'},
+  ocean: {kind: 'ocean', title: 'Ocean'},
+  temperature: {kind: 'temperature', title: 'Temperature'},
+  plant: {kind: 'plant', title: 'Plants'},
+  drawcard: {kind: 'card', title: 'Cards'},
+  colony: {kind: 'colony', title: 'Colony'},
+  tr: {kind: 'tr', title: 'Terraform Rating'},
 };
 
-const AMAZONIS_BONUSES: TrackBonuses = {
-  temperature: [HEAT_1, HEAT_2, {at: c.TEMPERATURE_BONUS_FOR_PLANT, kind: 'plant', title: 'Plants'}, OCEAN],
-  oxygen: [
-    {at: c.OXYGEN_LEVEL_FOR_AMAZONIS_CARD_BONUS, kind: 'card', title: 'Cards'},
-    {at: c.OXYGEN_LEVEL_FOR_AMAZONIS_TEMPERATURE_BONUS, kind: 'temperature', title: 'Temperature'},
-  ],
-  venus: [
-    VENUS_CARD,
-    {at: c.VENUS_LEVEL_FOR_AMAZONIS_COLONY_BONUS, kind: 'colony', title: 'Colony'},
-    {at: c.VENUS_LEVEL_FOR_AMAZONIS_TR_BONUS, kind: 'tr', title: 'Terraform Rating'},
-  ],
-};
+function toBonusSpecs(thresholds: ReadonlyArray<GlobalParameterThreshold>): Array<BonusSpec> {
+  return thresholds.map((threshold) => ({at: threshold.value, ...BONUS_KINDS[threshold.bonus]}));
+}
 
 function trackBonuses(boardName: BoardName): TrackBonuses {
-  return boardName === BoardName.AMAZONIS_PLANITIA ? AMAZONIS_BONUSES : STANDARD_BONUSES;
+  const tracks = getGlobalParameterTracks(boardName);
+  return {temperature: toBonusSpecs(tracks.temperature), oxygen: toBonusSpecs(tracks.oxygen), venus: toBonusSpecs(tracks.venus)};
 }
 
 function toPercent(value: number, min: number, max: number): number {

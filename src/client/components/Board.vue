@@ -21,7 +21,7 @@
             </div>
 
             <!-- Scale bonuses as chips outside the scales (the board picture has none of its own) -->
-            <MarsScaleBonuses :temperature="temperature" :oxygen="oxygen_level" :venus="expansions.venus ? venusScaleLevel : undefined"/>
+            <MarsScaleBonuses :temperature="temperature" :oxygen="oxygen_level" :venus="expansions.venus ? venusScaleLevel : undefined" :board-name="boardName" :large="isLargeBoard"/>
 
             <div class="global-numbers-oxygen">
                 <div :class="getScaleCSS(lvl)" v-for="(lvl, idx) in getValuesForParameter('oxygen')" :key="idx" v-flash="lvl.isActive ? flashKeys.globalParameter('oxygen') : undefined">{{ lvl.strValue }}</div>

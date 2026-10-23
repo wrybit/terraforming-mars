@@ -37,4 +37,5 @@ export const BONUS_ICON = {
   greenery: 'hex_green.png',
   city: 'tags/city.png',
   ocean: 'tiles/ocean.png',
+  colony: 'tiles/colony.png',
 } as const;
