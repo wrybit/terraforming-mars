@@ -23,8 +23,8 @@
             </div>
 
             <!-- Scale bonuses as chips outside the scales (the board picture has none of its own) -->
-            <MarsScaleBonuses :temperature="temperature" :oxygen="oxygen_level" :venus="expansions.venus ? venusScaleLevel : undefined"
-              :geometry="arrakisGeometry" :hideComplete="isArrakis" :amazonis="isArrakis && amazonisTracks" :maximums="globalParameterMaximums"/>
+            <MarsScaleBonuses :temperature="temperature" :oxygen="oxygen_level" :venus="expansions.venus ? venusScaleLevel : undefined" :board-name="boardName" :large="isLargeBoard"
+              :geometry="arrakisGeometry" :hideComplete="isArrakis"/>
 
             <div class="global-numbers-oxygen">
                 <div :class="getScaleCSS(lvl)" v-for="(lvl, idx) in getValuesForParameter('oxygen')" :key="idx" v-flash="lvl.isActive ? flashKeys.globalParameter('oxygen') : undefined">{{ lvl.strValue }}</div>
@@ -360,7 +360,7 @@
 <script lang="ts">
 import {defineComponent} from 'vue';
 import * as constants from '@/common/constants';
-import {getGlobalParameterMaximums, hasAmazonisTracks} from '@/common/boards/GlobalParameterMaximums';
+import {getGlobalParameterMaximums} from '@/common/boards/GlobalParameterMaximums';
 import BoardSpace from '@/client/components/BoardSpace.vue';
 import MarsScaleBonuses from '@/client/components/board/MarsScaleBonuses.vue';
 import ArrakisScales from '@/client/components/board/ArrakisScales.vue';
@@ -544,10 +544,6 @@ export default defineComponent({
     // Both Arrakis boards of the Dune theme (common/dune/arrakisLayout.ts)
     isArrakis(): boolean {
       return isArrakisBoard(this.boardName);
-    },
-    // Arrakis 91 has the tracks of Amazonis Planitia: its chips show their bonuses
-    amazonisTracks(): boolean {
-      return hasAmazonisTracks(this.boardName);
     },
     // Arrakis turns its scales further up than Mars (arrakisScales.ts): the bonus chips follow its circle
     arrakisGeometry(): ScaleGeometry | undefined {

@@ -235,7 +235,7 @@
   "Journalism": "언론",
   "Oxygen requirements are ±3": "산소 조건 ±3",
   "${0} sued ${1} who had 0 MC.": "${0}이(가) M€가 0인 ${1}을(를) 고소했습니다.",
-  "${0} removed ${1} floaters from ${2} to gain ${3} ${4}": "${0}이(가) ${2}에서 부양체 자원 ${1}개를 제거하여 ${3} ${4} 획득",
+  "${0} removed ${1}:cr:floater: from ${2} to gain ${3}${4}": "${0}이(가) ${2}에서 ${1}:cr:floater:를 제거하여 ${3}${4} 획득",
   "${0} discarded ${1}, ending its bonus for this generation": "${0}이(가) ${1}을(를) 버려 이번 세대 보너스가 종료됨",
   "MATHS": "수학",
   "Bank": "은행",
@@ -567,7 +567,7 @@
   "Select how many of your ${0} wild tags count as microbe tags (the rest count as power tags)": "만능 태그 ${0}개 중 미생물 태그로 셀 개수 선택 (나머지는 전기 태그)",
   "Select a resource to spend.": "소비할 자원 선택.",
   "${0} selected no cards.": "${0}은(는) 카드를 선택하지 않았습니다.",
-  "${0} gains ${1} TR instead of ${2} due to the Reds ruling policy": "적색당 집권 정책으로 ${0}은(는) TR을 ${2} 대신 ${1} 얻습니다",
+  "${0} gains ${1}:i:tr: instead of ${2} due to the Reds ruling policy": "적색당 집권 정책으로 ${0}은(는) ${2} 대신 ${1}:i:tr:를 얻습니다",
   "Steal a resource": "자원 훔치기",
   "Select how to pay to replay the event": "사건 재추진 비용 지불 방법 선택",
   "Select card to add microbe": "미생물을 추가할 카드 선택",
@@ -1132,5 +1132,12 @@
   "Click to hide again": "다시 클릭하여 숨기기",
   "Delta": "델타",
   "Select boards to be randomly chosen": "무작위로 고를 보드를 선택하세요",
-  "paid for the card": "카드 비용"
+  "paid for the card": "카드 비용",
+  "${0} blackmailed ${1} and was paid 2:r:corruption:.": "${0}이(가) ${1}을(를) 협박하여 2:r:corruption:를 받았습니다.",
+  "${0} for ${1} is blocking 1:i:tr:": "${1}의 ${0} 효과로 1:i:tr: 상승이 막혔습니다",
+  "${0} gained ${1}:i:tr: from ${2}": "${0}이(가) ${2}에서 ${1}:i:tr:를 얻었습니다",
+  "${0} gained ${1}:r:mc: from ${2} ocean(s)": "${0}이(가) 해양 타일 ${2}개로 ${1}:r:mc:를 얻었습니다",
+  "${0} spent ${1}:r:steel: and gained ${2}:r:heat:": "${0}이(가) ${1}:r:steel:를 소비하여 ${2}:r:heat:를 얻었습니다",
+  "${0} sued ${1} who had 0:r:mc:.": "${0}이(가) 0:r:mc:를 가진 ${1}을(를) 고소했습니다.",
+  "All players lose 1:i:tr:.": "모든 플레이어가 1:i:tr:를 잃습니다."
 }

@@ -117,7 +117,7 @@
   "Journalism": "Journalismi",
   "Oxygen requirements are ±3": "Happivaatimukset ovat ±3",
   "${0} sued ${1} who had 0 MC.": "${0} haastoi oikeuteen pelaajan ${1}, jolla oli 0 M€.",
-  "${0} removed ${1} floaters from ${2} to gain ${3} ${4}": "${0} poisti ${1} kelluketta kortilta ${2} saadakseen ${3} ${4}",
+  "${0} removed ${1}:cr:floater: from ${2} to gain ${3}${4}": "${0} poisti ${1}:cr:floater: kortilta ${2} saadakseen ${3}${4}",
   "${0} discarded ${1}, ending its bonus for this generation": "${0} hylkäsi kortin ${1}, mikä päättää sen bonuksen tältä sukupolvelta",
   "MATHS": "MATEMATIIKKA",
   "Bank": "Pankki",
@@ -352,7 +352,7 @@
   "Select how many of your ${0} wild tags count as microbe tags (the rest count as power tags)": "Valitse, montako ${0} jokerisymbolistasi lasketaan mikrobisymboleiksi (loput energiasymboleiksi)",
   "Select a resource to spend.": "Valitse käytettävä resurssi.",
   "${0} selected no cards.": "${0} ei valinnut kortteja.",
-  "${0} gains ${1} TR instead of ${2} due to the Reds ruling policy": "${0} saa ${1} MKL:ää ${2} sijaan Reds-puolueen hallintopolitiikan vuoksi",
+  "${0} gains ${1}:i:tr: instead of ${2} due to the Reds ruling policy": "${0} saa ${1}:i:tr: ${2} sijaan Reds-puolueen hallintopolitiikan vuoksi",
   "Steal a resource": "Varasta resurssi",
   "Select how to pay to replay the event": "Valitse, miten maksat tapahtuman uudelleenpelaamisen",
   "Select card to add microbe": "Valitse kortti, jolle lisätään mikrobi",
@@ -890,5 +890,7 @@
   "AI insight: click to reveal": "Tekoälyn tieto: napsauta näyttääksesi",
   "Click to hide again": "Napsauta piilottaaksesi uudelleen",
   "Select boards to be randomly chosen": "Valitse pelilaudat, joista arvotaan",
-  "paid for the card": "maksettu kortista"
+  "paid for the card": "maksettu kortista",
+  "${0} gained ${1}:r:mc: from ${2} ocean(s)": "${0} sai ${1}:r:mc: ${2} valtameren ansiosta",
+  "${0} sued ${1} who had 0:r:mc:.": "${0} haastoi oikeuteen pelaajan ${1}, jolla oli 0:r:mc:."
 }

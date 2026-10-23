@@ -50,13 +50,13 @@ export class CorporateBlackmail extends Card implements IProjectCard {
   public override bespokePlay(player: IPlayer) {
     function megacreditConsequence(blackmailedPlayer: IPlayer) {
       blackmailedPlayer.stock.steal(Resource.MEGACREDITS, 10, player);
-      player.game.log('${0} blackmailed ${1} and was paid 10 M€.', (b) => b.player(player).player(blackmailedPlayer));
+      player.game.log('${0} blackmailed ${1} and was paid 10:r:mc:.', (b) => b.player(player).player(blackmailedPlayer));
     }
 
     function corruptionConsequence(blackmailedPlayer: IPlayer) {
       UnderworldExpansion.loseCorruption(blackmailedPlayer, 2);
       UnderworldExpansion.gainCorruption(player, 2);
-      player.game.log('${0} blackmailed ${1} and took 2 corruption.', (b) => b.player(player).player(blackmailedPlayer));
+      player.game.log('${0} blackmailed ${1} and was paid 2:r:corruption:.', (b) => b.player(player).player(blackmailedPlayer));
     }
 
     return new SelectPlayer(this.targets(player), 'Select player to blackmail', 'blackmail')

@@ -119,7 +119,7 @@
   "Journalism": "Journalisme",
   "Oxygen requirements are ±3": "Les prérequis d'oxygène sont de ±3",
   "${0} sued ${1} who had 0 MC.": "${0} a poursuivi ${1}, qui avait 0 M€.",
-  "${0} removed ${1} floaters from ${2} to gain ${3} ${4}": "${0} a retiré ${1} flotteurs de ${2} pour gagner ${3} ${4}",
+  "${0} removed ${1}:cr:floater: from ${2} to gain ${3}${4}": "${0} a retiré ${1}:cr:floater: de ${2} pour gagner ${3}${4}",
   "${0} discarded ${1}, ending its bonus for this generation": "${0} a défaussé ${1}, mettant fin à son bonus pour cette génération",
   "Bank": "Banque",
   "Card": "Carte",
@@ -419,7 +419,7 @@
   "Select how many of your ${0} wild tags count as microbe tags (the rest count as power tags)": "Sélectionnez combien de vos ${0} badges Joker comptent comme badges Microbe (les autres comptent comme badges Énergie)",
   "Select a resource to spend.": "Sélectionnez une ressource à dépenser.",
   "${0} selected no cards.": "${0} n'a sélectionné aucune carte.",
-  "${0} gains ${1} TR instead of ${2} due to the Reds ruling policy": "${0} gagne ${1} NT au lieu de ${2} à cause de la politique des Rouges au pouvoir",
+  "${0} gains ${1}:i:tr: instead of ${2} due to the Reds ruling policy": "${0} gagne ${1}:i:tr: au lieu de ${2} à cause de la politique des Rouges au pouvoir",
   "Steal a resource": "Volez une ressource",
   "Select how to pay to replay the event": "Choisissez comment payer pour rejouer l'évènement",
   "Select card to add microbe": "Sélectionnez la carte où ajouter le microbe",
@@ -943,5 +943,7 @@
   "AI insight: click to reveal": "Info IA : cliquez pour révéler",
   "Click to hide again": "Cliquez pour masquer à nouveau",
   "Select boards to be randomly chosen": "Sélectionnez les plateaux à tirer au sort",
-  "paid for the card": "payé pour la carte"
+  "paid for the card": "payé pour la carte",
+  "${0} gained ${1}:r:mc: from ${2} ocean(s)": "${0} a gagné ${1}:r:mc: grâce à ${2} océan(s)",
+  "${0} sued ${1} who had 0:r:mc:.": "${0} a poursuivi ${1}, qui avait 0:r:mc:."
 }

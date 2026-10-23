@@ -13,10 +13,10 @@
     "${0} converted plants into a greenery": "${0} 用植物放置森林板块",
     "${0} increased Venus scale ${1} step(s)" : "${0} 增加提升改造度 ${1} 级",
 
-    "${0} spent ${1} M€ to trade with ${2}": "${0} 花了 ${1} M€,在 ${2} 进行贸易",
+    "${0} spent ${1}:r:mc: to trade with ${2}": "${0} 花了 ${1}:r:mc:,在 ${2} 进行贸易",
     "${0} spent ${1}:r:energy: to trade with ${2}": "${0} 花了 ${1}:r:energy:,在 ${2} 进行贸易",
     "${0} spent ${1}:r:titanium: to trade with ${2}": "${0} 花了 ${1}:r:titanium:,在 ${2} 进行贸易",
-    "${0} spent 1 floater to trade with ${1}": "${0} 花了 1 云资源,在 ${1} 进行贸易",
+    "${0} spent 1:cr:floater: to trade with ${1}": "${0} 花了 1:cr:floater:,在 ${1} 进行贸易",
     "${0} used ${1} standard project": "${0} 执行了标准行动 - ${1} ",
     "${0} built a colony on ${1}": "${0} 在 ${1} 上建立了殖民地",
     "${0} bought ${1} card(s)": "${0} 购买了 ${1} 张计划卡",
@@ -25,10 +25,10 @@
     "${0} acted as World Government and increased oxygen level": "${0} 作为世界政府,提升了氧气浓度",
     "${0} acted as World Government and increased temperature": "${0} 作为世界政府,提升了火星温度",
     "${0} loses ${1} resource(s) on ${2} by ${3}": "${0} 被 ${3} 的行动导致 在 ${2} 上失去了 ${1} 资源 ",
-    "${0} received ${1} M€ from ${2} owner (${3})": "${0} 获得 ${1} M€ 从 ${2} 拥有者(${3})",
+    "${0} received ${1}:r:mc: from ${2} owner (${3})": "${0} 获得 ${1}:r:mc: 从 ${2} 拥有者(${3})",
     "${0} copied ${1} production with ${2}": "${0} 用 ${2} 复制 ${1} 的产量 ",
     "${0} used ${1} action with ${2}": "${0} 用 ${2} 执行 ${1} 行动 ",
-    "${0} is the new chairman and gains ${1} TR" : "${0} 成为了新的议会主席,并获得1点改造度(TR) (${1}) 提升",
+    "${0} is the new chairman and gains ${1}:i:tr:" : "${0} 成为了新的议会主席,并获得 ${1}:i:tr: 提升",
 
     "${0} gained ${1}${2}": "${0} 获得了 ${1}${2}",
     "titanium":"钛",
@@ -57,7 +57,7 @@
     "${0}'s ${1} production ${2} by ${3} by ${4}": "${0}的${1}产量被${4}${2}${3}",
     "${0} spent 1 ${1} to gain 7 M€":"${0} 花费 1 ${1} 以获得7 M€",
 
-    "${0} removed ${1} resource(s) from ${2}'s ${3}": "${0} 从 ${2}的 ${3} 移除了 ${1} 资源",
+    "${0} removed ${1}${2} from ${3}'s ${4}": "${0} 从 ${3}的 ${4} 移除了 ${1}${2}",
 
     "${0} drew ${1}":"${0} 摸了 ${1}",
     "${0} sold ${1} patents":"${0} 卖了 ${1} 张专利牌",
@@ -80,7 +80,7 @@
     "Drew and discarded ${0} to place a ${1}":"摸取并弃置 ${0} 来放置 ${1}",
     "${0} increased ${1} colony track ${2} step(s)": "${0} 提升 ${1} 殖民地贸易收入 ${2} 点",
     "${0} kept ${1} project cards": "${0} 保留了 ${1} 张牌",
-    "${0} removed ${1} floaters to gain ${2} titanium": "${0} 移除了 ${1} 个云资源并获得 ${2} 个钛",
+    "${0} removed ${1}:cr:floater: to gain ${2}:r:titanium:": "${0} 移除了 ${1}:cr:floater: 并获得 ${2}:r:titanium:",
     "${0} removed an asteroid resource to increase Venus scale 1 step": "${0} 移除 1 个小行星资源并提升金星改造度 1 级",
     "asteroid(s)": "小行星",
     "raise temperature 1 step": "提升温度 1 级",

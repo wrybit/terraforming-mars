@@ -163,9 +163,9 @@
   "Standard Mode (:tag:mars:): you win if every global parameter is maxed before time runs out.": "标准模式（:tag:mars:）：如果在时间耗尽前所有全球参数都达到最大值，你获胜。",
   ":expansion:venus: This includes Venus if Venus Next is included.": ":expansion:venus: 如果使用金星扩，也包括金星。",
   ":expansion:themoon: This includes Moon tracks if The Moon is included with Moon track completion required.": ":expansion:themoon: 如果使用月亮扩并要求完成月球轨道，也包括月球轨道。",
-  "63 TR Mode (:icon:tr:): you win if your TR is 63 or higher when time runs out.": "63 TR 模式（:icon:tr:）：如果时间耗尽时你的 TR 达到 63 或以上，你获胜。",
-  "63 TR Mode (:icon:tr:): placing greenery during the final greenery conversion can still raise oxygen and your TR. That TR counts toward your score, but not toward winning.": "63 TR 模式（:icon:tr:）：终局森林转换时放置森林仍可提升氧气和你的 TR。这些 TR 计入得分，但不计入胜利判定。",
-  "63 TR Mode only (:icon:tr:): an extra standard project, Buffer Gas, is available. Spend 16 M€ to increase your TR 1 step.": "仅限 63 TR 模式（:icon:tr:）：可使用一个额外的标准项目：缓冲气体。花费 16 M€ 提升你的 TR 1 级。",
+  "63 TR Mode (:i:tr:): you win if your TR is 63 or higher when time runs out.": "63 TR 模式（:i:tr:）：如果时间耗尽时你的 TR 达到 63 或以上，你获胜。",
+  "63 TR Mode (:i:tr:): placing greenery during the final greenery conversion can still raise oxygen and your TR. That TR counts toward your score, but not toward winning.": "63 TR 模式（:i:tr:）：终局森林转换时放置森林仍可提升氧气和你的 TR。这些 TR 计入得分，但不计入胜利判定。",
+  "63 TR Mode only (:i:tr:): an extra standard project, Buffer Gas, is available. Spend 16 M€ to increase your TR 1 step.": "仅限 63 TR 模式（:i:tr:）：可使用一个额外的标准项目：缓冲气体。花费 16 M€ 提升你的 TR 1 级。",
   ":expansion:venus: Venus Next: Standard Mode (:tag:mars:) also requires Venus to be maxed to win.": ":expansion:venus: 金星扩：标准模式（:tag:mars:）获胜还需要金星达到最大值。",
   ":expansion:prelude: Prelude: play 12 generations instead of 14.": ":expansion:prelude: 前序：进行 12 个时代而非 14 个。",
   ":expansion:colony: Colonies: decrease your M€ production 2 steps at the start of the game. One extra colony tile is dealt, and you choose one colony tile to remove from the game.": ":expansion:colony: 殖民地：开局时你的 M€ 产能降低 2 级。额外翻开 1 个殖民地板块，然后你选择 1 个殖民地板块移出游戏。",
@@ -173,7 +173,7 @@
   ":expansion:agendas: Agendas: The alternative ruling bonus takes 1 TR from you if your TR is higher than 20.": ":expansion:agendas: 议会扩：如果你的 TR 高于 20，替代执政奖励会扣除你 1 TR。",
   ":expansion:themoon: The Moon:": ":expansion:themoon: 月亮扩：",
   "Standard Mode (:tag:mars:), with the option to require Moon track completion, also requires the Moon tracks to be maxed to win, and you play 2 more generations.": "标准模式（:tag:mars:）若启用必须完成月球轨道的选项，获胜还需要月球轨道达到最大值，并且你多进行 2 个时代。",
-  "63 TR Mode (:icon:tr:): no changes.": "63 TR 模式（:icon:tr:）：无变化。",
+  "63 TR Mode (:i:tr:): no changes.": "63 TR 模式（:i:tr:）：无变化。",
   ":expansion:ares: Ares Extreme: Standard Mode (:tag:mars:) also requires you to remove all unprotected hazards to win. With World Government Terraforming, you may remove an unprotected hazard instead of raising a global parameter.": ":expansion:ares: Ares 极限：标准模式（:tag:mars:）获胜还需要你移除所有未受保护的危险板块。进行世界政府改造时，你可以移除一个未受保护的危险板块，代替提升一项全球参数。",
   "Adapted from [Terraforming Mars: solo rules summary](https://github.com/MartianZoo/player-resources/blob/main/solo-rules-summary.md)": "改编自 [Terraforming Mars：单人规则摘要](https://github.com/MartianZoo/player-resources/blob/main/solo-rules-summary.md)"
 }
