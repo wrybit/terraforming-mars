@@ -8,7 +8,6 @@ export interface AndThen<T> {
 }
 
 export interface IDeferredAction <T = undefined> extends AndThen<T> {
-  queueId: number;
   player: IPlayer;
   priority: Priority;
   // Card whose effect queued this action (DeferredActionsQueue sets this when queueing)
@@ -17,8 +16,6 @@ export interface IDeferredAction <T = undefined> extends AndThen<T> {
 }
 
 export abstract class DeferredAction<T = undefined> implements IDeferredAction<T> {
-  // The position in the queue. Do not set directly.
-  public queueId: number = -1;
   public sourceCard: CardName | undefined = undefined;
   constructor(
     public player: IPlayer,
