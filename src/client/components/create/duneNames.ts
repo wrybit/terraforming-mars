@@ -1,11 +1,11 @@
 // Names for players left without a name in a Dune game (Jens, 24 Oct 2026): people of the Dune novels instead of the
-// colour names of Mars, the same for humans and AI. Proper names, so they stay the same in every language.
+// colour names of Mars, the same for humans and AI. One short name each (Jessica, not Lady Jessica), proper names, so they stay the same in every language.
 export const DUNE_NAMES: ReadonlyArray<string> = [
-  'Paul Atreides', 'Leto Atreides', 'Lady Jessica', 'Alia Atreides', 'Gurney Halleck', 'Duncan Idaho',
-  'Thufir Hawat', 'Wellington Yueh', 'Stilgar', 'Chani', 'Liet-Kynes', 'Jamis',
-  'Harah', 'Otheym', 'Korba', 'Vladimir Harkonnen', 'Feyd-Rautha', 'Glossu Rabban',
-  'Piter de Vries', 'Shaddam IV', 'Irulan', 'Count Fenring', 'Lady Margot', 'Gaius Helen Mohiam',
-  'Esmar Tuek', 'Staban Tuek', 'Shadout Mapes', 'Leto II', 'Ghanima', "Farad'n",
+  'Paul', 'Leto', 'Jessica', 'Alia', 'Gurney', 'Duncan',
+  'Thufir', 'Yueh', 'Stilgar', 'Chani', 'Liet', 'Jamis',
+  'Harah', 'Otheym', 'Korba', 'Vladimir', 'Feyd', 'Rabban',
+  'Piter', 'Shaddam', 'Irulan', 'Fenring', 'Margot', 'Mohiam',
+  'Esmar', 'Staban', 'Mapes', 'Wensicia', 'Ghanima', "Farad'n",
 ];
 
 /**
