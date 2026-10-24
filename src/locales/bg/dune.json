@@ -465,9 +465,15 @@
   "Pacts: one open offer per player for 2 generations; on a deal both pay 1 Solari": "Пактове: една отворена оферта на играч за 2 поколения; при сделка двамата плащат по 1 солари",
   "Every move raises the envy of the great houses by 1": "Всяко действие повишава завистта на великите домове с 1",
   "Tribute (10 Solari, Industrial Center owner 7) lowers the envy by 1": "Данъкът (10 солари, собственикът на контрабандния пазар 7) намалява завистта с 1",
-  "End of generation: 0 to 2 are free, from 3 on TR is lost and the grudge is over (back to 0)": "Край на поколението: 0 до 2 са без наказание, от 3 се губи влияние и злобата отминава (обратно на 0)",
-  "At 5 CHOAM is closed until a tribute lowers the envy": "При 5 CHOAM е затворен, докато данък не намали завистта",
   "Supply and demand: every 3 units all players sell net lower the next selling rate by 1, every 3 bought raise the next buying rate by 1": "Търсене и предлагане: всеки 3 единици, продадени нетно от всички играчи, свалят следващия курс за продажба с 1, всеки 3 купени вдигат следващия курс за покупка с 1",
   "Selling": "Продажба",
-  "Trade now": "Търгувай"
+  "Trade now": "Търгувай",
+  "Concord": "Съгласие",
+  "Whispers": "Шушукане",
+  "Distrust": "Недоверие",
+  "Grudge": "Злоба",
+  "Enmity": "Вражда",
+  "Ostracism": "Остракизъм",
+  "End of generation: concord, whispers and distrust cost nothing, from grudge on TR is lost; then back to concord": "Край на поколението: съгласие, шушукане и недоверие не струват нищо, от злоба се губи влияние; след това обратно към съгласие",
+  "At ostracism CHOAM is closed until a tribute lowers the envy": "При остракизъм CHOAM е затворен, докато данък не намали завистта"
 }

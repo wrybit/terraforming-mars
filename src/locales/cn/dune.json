@@ -465,9 +465,15 @@
   "Pacts: one open offer per player for 2 generations; on a deal both pay 1 Solari": "盟约：每名玩家可有一个公开报价，保留 2 个世代；成交时双方各付 1 索拉里",
   "Every move raises the envy of the great houses by 1": "每次行动使各大家族的嫉恨提高 1",
   "Tribute (10 Solari, Industrial Center owner 7) lowers the envy by 1": "贡金（10 索拉里，走私者市场所有者 7）使嫉恨降低 1",
-  "End of generation: 0 to 2 are free, from 3 on TR is lost and the grudge is over (back to 0)": "世代结束：0 到 2 无事，从 3 起失去影响力，之后怨气消散（回到 0）",
-  "At 5 CHOAM is closed until a tribute lowers the envy": "达到 5 时 CHOAM 关闭，直到贡金降低嫉恨",
   "Supply and demand: every 3 units all players sell net lower the next selling rate by 1, every 3 bought raise the next buying rate by 1": "供求：所有玩家每净卖出 3 个单位，下一世代卖出价降低 1；每净买入 3 个，下一世代买入价提高 1",
   "Selling": "卖出",
-  "Trade now": "交易"
+  "Trade now": "交易",
+  "Concord": "和睦",
+  "Whispers": "窃语",
+  "Distrust": "猜忌",
+  "Grudge": "怨恨",
+  "Enmity": "敌意",
+  "Ostracism": "放逐",
+  "End of generation: concord, whispers and distrust cost nothing, from grudge on TR is lost; then back to concord": "世代结束：和睦、窃语和猜忌无代价，从怨恨起失去影响力；之后回到和睦",
+  "At ostracism CHOAM is closed until a tribute lowers the envy": "放逐时 CHOAM 关闭，直到贡金降低嫉恨"
 }

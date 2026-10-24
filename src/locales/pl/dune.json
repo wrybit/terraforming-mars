@@ -462,9 +462,15 @@
   "Pacts: one open offer per player for 2 generations; on a deal both pay 1 Solari": "Pakty: jedna otwarta oferta na gracza przez 2 pokolenia; przy wymianie obaj płacą 1 solar",
   "Every move raises the envy of the great houses by 1": "Każda akcja zwiększa zawiść wielkich rodów o 1",
   "Tribute (10 Solari, Industrial Center owner 7) lowers the envy by 1": "Trybut (10 solarów, właściciel targu przemytników 7) obniża zawiść o 1",
-  "End of generation: 0 to 2 are free, from 3 on TR is lost and the grudge is over (back to 0)": "Koniec pokolenia: 0 do 2 bez kary, od 3 traci się Wpływ, potem uraza mija (powrót do 0)",
-  "At 5 CHOAM is closed until a tribute lowers the envy": "Przy 5 CHOAM jest zamknięty, aż trybut obniży zawiść",
   "Supply and demand: every 3 units all players sell net lower the next selling rate by 1, every 3 bought raise the next buying rate by 1": "Popyt i podaż: każde 3 jednostki sprzedane netto przez wszystkich graczy obniżają następny kurs sprzedaży o 1, każde 3 kupione podnoszą następny kurs zakupu o 1",
   "Selling": "Sprzedaż",
-  "Trade now": "Handluj"
+  "Trade now": "Handluj",
+  "Concord": "Zgoda",
+  "Whispers": "Szepty",
+  "Distrust": "Nieufność",
+  "Grudge": "Uraza",
+  "Enmity": "Wrogość",
+  "Ostracism": "Wykluczenie",
+  "End of generation: concord, whispers and distrust cost nothing, from grudge on TR is lost; then back to concord": "Koniec pokolenia: zgoda, szepty i nieufność nic nie kosztują, od urazy traci się Wpływ; potem powrót do zgody",
+  "At ostracism CHOAM is closed until a tribute lowers the envy": "Przy wykluczeniu CHOAM jest zamknięty, aż trybut obniży zawiść"
 }

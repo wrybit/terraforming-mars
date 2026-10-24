@@ -456,9 +456,15 @@
   "Pacts: one open offer per player for 2 generations; on a deal both pay 1 Solari": "Pakte: ein offenes Angebot je Spieler für 2 Generationen; beim Tausch zahlen beide 1 Solari",
   "Every move raises the envy of the great houses by 1": "Jede Aktion erhöht die Missgunst der großen Häuser um 1",
   "Tribute (10 Solari, Industrial Center owner 7) lowers the envy by 1": "Tribut (10 Solari, Besitzer des Schmugglermarkts 7) senkt die Missgunst um 1",
-  "End of generation: 0 to 2 are free, from 3 on TR is lost and the grudge is over (back to 0)": "Generationsende: 0 bis 2 sind frei, ab 3 geht Einfluss verloren, danach ist der Groll verraucht (zurück auf 0)",
-  "At 5 CHOAM is closed until a tribute lowers the envy": "Bei 5 ist CHOAM zu, bis ein Tribut die Missgunst senkt",
   "Supply and demand: every 3 units all players sell net lower the next selling rate by 1, every 3 bought raise the next buying rate by 1": "Angebot und Nachfrage: je 3 Einheiten, die alle Spieler netto verkaufen, senken den nächsten Verkaufskurs um 1, je 3 gekaufte heben den nächsten Kaufkurs um 1",
   "Selling": "Verkaufen",
-  "Trade now": "Handeln"
+  "Trade now": "Handeln",
+  "Concord": "Eintracht",
+  "Whispers": "Getuschel",
+  "Distrust": "Argwohn",
+  "Grudge": "Groll",
+  "Enmity": "Feindschaft",
+  "Ostracism": "Ächtung",
+  "End of generation: concord, whispers and distrust cost nothing, from grudge on TR is lost; then back to concord": "Generationsende: Eintracht, Getuschel und Argwohn kosten nichts, ab Groll geht Einfluss verloren; danach zurück auf Eintracht",
+  "At ostracism CHOAM is closed until a tribute lowers the envy": "Bei Ächtung ist CHOAM zu, bis ein Tribut die Missgunst senkt"
 }

@@ -464,9 +464,15 @@
   "Pacts: one open offer per player for 2 generations; on a deal both pay 1 Solari": "협약: 플레이어당 열린 제안 1개, 2세대 유지. 거래 시 양쪽이 1 솔라리 지불",
   "Every move raises the envy of the great houses by 1": "모든 행동은 대가문들의 시기를 1 올립니다",
   "Tribute (10 Solari, Industrial Center owner 7) lowers the envy by 1": "공물 (10 솔라리, 밀수꾼 시장 소유자 7)은 시기를 1 낮춥니다",
-  "End of generation: 0 to 2 are free, from 3 on TR is lost and the grudge is over (back to 0)": "세대 종료: 0~2는 무사, 3부터 영향력을 잃고 원한은 사라집니다 (0으로)",
-  "At 5 CHOAM is closed until a tribute lowers the envy": "5가 되면 공물로 시기를 낮출 때까지 CHOAM이 닫힙니다",
   "Supply and demand: every 3 units all players sell net lower the next selling rate by 1, every 3 bought raise the next buying rate by 1": "수요와 공급: 모든 플레이어가 순판매한 3개마다 다음 판매 시세가 1 내려가고, 순구매한 3개마다 다음 구매 시세가 1 올라갑니다",
   "Selling": "판매",
-  "Trade now": "거래하기"
+  "Trade now": "거래하기",
+  "Concord": "화합",
+  "Whispers": "수군거림",
+  "Distrust": "불신",
+  "Grudge": "원한",
+  "Enmity": "적대",
+  "Ostracism": "추방",
+  "End of generation: concord, whispers and distrust cost nothing, from grudge on TR is lost; then back to concord": "세대 종료: 화합, 수군거림, 불신은 대가가 없고, 원한부터 영향력을 잃습니다. 이후 화합으로",
+  "At ostracism CHOAM is closed until a tribute lowers the envy": "추방 상태에서는 공물로 시기를 낮출 때까지 CHOAM이 닫힙니다"
 }

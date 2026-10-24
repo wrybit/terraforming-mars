@@ -217,11 +217,23 @@ html.tm-mobile .dune-fit {
 .dune-smuggling__step--5 { .dune-smuggling-step(#5e1c16, #b8322a); }
 
 .dune-smuggling__level {
-  font-size: 18px;
+  max-width: 100%;
+  font-size: 15px;
   font-weight: bold;
+  line-height: 1.15;
+  text-align: center;
+  overflow-wrap: anywhere;
+  hyphens: auto;
 }
 
-// The loss at the end of the generation with the influence icon; 0 to 2 are free
+// Narrow (phone): the names of the steps smaller, so six fit in one row
+@container (max-width: 480px) {
+  .dune-smuggling__level {
+    font-size: 11px;
+  }
+}
+
+// The loss at the end of the generation with the influence icon; the first three steps are free (empty line)
 .dune-smuggling__penalty {
   display: inline-flex;
   align-items: center;

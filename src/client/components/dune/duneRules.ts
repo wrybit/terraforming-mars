@@ -68,7 +68,7 @@ export const CHOAM_RULES: ReadonlyArray<DuneRule> = [
   {picture: 'choam', text: 'Privilege: each generation the emperor pays 1.5 times the normal worth for one good, only to the first'},
   {sign: 'tap', text: 'Pacts: one open offer per player for 2 generations; on a deal both pay 1 Solari'},
   {sign: 'levels', text: 'Every move raises the envy of the great houses by 1'},
-  {sign: 'flag', text: 'End of generation: 0 to 2 are free, from 3 on TR is lost and the grudge is over (back to 0)'},
-  {sign: 'hidden', text: 'At 5 CHOAM is closed until a tribute lowers the envy'},
+  {sign: 'flag', text: 'End of generation: concord, whispers and distrust cost nothing, from grudge on TR is lost; then back to concord'},
+  {sign: 'hidden', text: 'At ostracism CHOAM is closed until a tribute lowers the envy'},
   {sign: 'shield', text: 'Tribute (10 Solari, Industrial Center owner 7) lowers the envy by 1'},
 ];

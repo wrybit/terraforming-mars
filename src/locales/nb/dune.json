@@ -458,9 +458,15 @@
   "Pacts: one open offer per player for 2 generations; on a deal both pay 1 Solari": "Pakter: ett åpent tilbud per spiller i 2 generasjoner; ved bytte betaler begge 1 solari",
   "Every move raises the envy of the great houses by 1": "Hver handling øker misunnelsen til de store husene med 1",
   "Tribute (10 Solari, Industrial Center owner 7) lowers the envy by 1": "Tributt (10 solari, eier av smuglermarkedet 7) senker misunnelsen med 1",
-  "End of generation: 0 to 2 are free, from 3 on TR is lost and the grudge is over (back to 0)": "Slutt på generasjonen: 0 til 2 er gratis, fra 3 tapes innflytelse og naget er over (tilbake til 0)",
-  "At 5 CHOAM is closed until a tribute lowers the envy": "Ved 5 er CHOAM stengt til en tributt senker misunnelsen",
   "Supply and demand: every 3 units all players sell net lower the next selling rate by 1, every 3 bought raise the next buying rate by 1": "Tilbud og etterspørsel: hver 3 enheter alle spillerne selger netto senker neste salgskurs med 1, hver 3 kjøpte hever neste kjøpskurs med 1",
   "Selling": "Selge",
-  "Trade now": "Handle"
+  "Trade now": "Handle",
+  "Concord": "Enighet",
+  "Whispers": "Hvisking",
+  "Distrust": "Mistro",
+  "Grudge": "Nag",
+  "Enmity": "Fiendskap",
+  "Ostracism": "Utstøtelse",
+  "End of generation: concord, whispers and distrust cost nothing, from grudge on TR is lost; then back to concord": "Slutt på generasjonen: enighet, hvisking og mistro koster ingenting, fra nag tapes innflytelse; deretter tilbake til enighet",
+  "At ostracism CHOAM is closed until a tribute lowers the envy": "Ved utstøtelse er CHOAM stengt til en tributt senker misunnelsen"
 }

@@ -461,9 +461,15 @@
   "Pacts: one open offer per player for 2 generations; on a deal both pay 1 Solari": "Sopimukset: yksi avoin tarjous pelaajaa kohden 2 sukupolven ajan; kaupassa kumpikin maksaa 1 solarin",
   "Every move raises the envy of the great houses by 1": "Jokainen toiminto nostaa suurten sukujen kateutta 1:llä",
   "Tribute (10 Solari, Industrial Center owner 7) lowers the envy by 1": "Vero (10 solaria, salakuljettajien torin omistajalle 7) laskee kateutta 1:llä",
-  "End of generation: 0 to 2 are free, from 3 on TR is lost and the grudge is over (back to 0)": "Sukupolven loppu: 0–2 ovat vapaita, 3:sta alkaen menetetään arvovaltaa ja kauna haihtuu (takaisin 0:aan)",
-  "At 5 CHOAM is closed until a tribute lowers the envy": "5:ssä CHOAM on kiinni, kunnes vero laskee kateutta",
   "Supply and demand: every 3 units all players sell net lower the next selling rate by 1, every 3 bought raise the next buying rate by 1": "Kysyntä ja tarjonta: jokainen 3 yksikköä, jotka kaikki pelaajat myyvät nettona, laskee seuraavaa myyntikurssia 1:llä, jokainen 3 ostettua nostaa seuraavaa ostokurssia 1:llä",
   "Selling": "Myynti",
-  "Trade now": "Käy kauppaa"
+  "Trade now": "Käy kauppaa",
+  "Concord": "Sopu",
+  "Whispers": "Kuiskailu",
+  "Distrust": "Epäluulo",
+  "Grudge": "Kauna",
+  "Enmity": "Vihamielisyys",
+  "Ostracism": "Hylkiminen",
+  "End of generation: concord, whispers and distrust cost nothing, from grudge on TR is lost; then back to concord": "Sukupolven loppu: sopu, kuiskailu ja epäluulo eivät maksa mitään, kaunasta alkaen menetetään arvovaltaa; sitten takaisin sopuun",
+  "At ostracism CHOAM is closed until a tribute lowers the envy": "Hylkimisen aikana CHOAM on kiinni, kunnes vero laskee kateutta"
 }

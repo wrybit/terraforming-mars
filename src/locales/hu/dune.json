@@ -462,9 +462,15 @@
   "Pacts: one open offer per player for 2 generations; on a deal both pay 1 Solari": "Paktumok: játékosonként egy nyitott ajánlat 2 generációig; cserekor mindkét fél 1 solarit fizet",
   "Every move raises the envy of the great houses by 1": "Minden akció 1-gyel növeli a nagy házak irigységét",
   "Tribute (10 Solari, Industrial Center owner 7) lowers the envy by 1": "Az adó (10 solari, a csempészpiac tulajdonosának 7) 1-gyel csökkenti az irigységet",
-  "End of generation: 0 to 2 are free, from 3 on TR is lost and the grudge is over (back to 0)": "Generáció vége: 0 és 2 között büntetlen, 3-tól befolyás vész el, majd elszáll a harag (vissza 0-ra)",
-  "At 5 CHOAM is closed until a tribute lowers the envy": "5-nél a CHOAM zárva, amíg egy adó nem csökkenti az irigységet",
   "Supply and demand: every 3 units all players sell net lower the next selling rate by 1, every 3 bought raise the next buying rate by 1": "Kereslet és kínálat: minden 3 egység, amit a játékosok összesen nettó eladnak, 1-gyel csökkenti a következő eladási árat, minden 3 vett 1-gyel növeli a következő vételi árat",
   "Selling": "Eladás",
-  "Trade now": "Kereskedés"
+  "Trade now": "Kereskedés",
+  "Concord": "Egyetértés",
+  "Whispers": "Sutyorgás",
+  "Distrust": "Bizalmatlanság",
+  "Grudge": "Neheztelés",
+  "Enmity": "Ellenségeskedés",
+  "Ostracism": "Kiközösítés",
+  "End of generation: concord, whispers and distrust cost nothing, from grudge on TR is lost; then back to concord": "Generáció vége: az egyetértés, a sutyorgás és a bizalmatlanság ingyenes, a neheztelés fokától befolyás vész el; utána vissza egyetértésre",
+  "At ostracism CHOAM is closed until a tribute lowers the envy": "Kiközösítéskor a CHOAM zárva, amíg egy adó nem csökkenti az irigységet"
 }

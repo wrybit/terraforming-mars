@@ -464,9 +464,15 @@
   "Pacts: one open offer per player for 2 generations; on a deal both pay 1 Solari": "Пакти: одна відкрита пропозиція на гравця на 2 покоління; під час угоди обидва платять 1 соларій",
   "Every move raises the envy of the great houses by 1": "Кожна дія підвищує заздрість великих домів на 1",
   "Tribute (10 Solari, Industrial Center owner 7) lowers the envy by 1": "Данина (10 соларіїв, власник ринку контрабандистів 7) знижує заздрість на 1",
-  "End of generation: 0 to 2 are free, from 3 on TR is lost and the grudge is over (back to 0)": "Кінець покоління: 0–2 безкарні, з 3 втрачається вплив, потім образа минає (назад до 0)",
-  "At 5 CHOAM is closed until a tribute lowers the envy": "На 5 CHOAM закрито, доки данина не знизить заздрість",
   "Supply and demand: every 3 units all players sell net lower the next selling rate by 1, every 3 bought raise the next buying rate by 1": "Попит і пропозиція: кожні 3 одиниці, продані всіма гравцями нетто, знижують наступний курс продажу на 1, кожні 3 куплені підвищують наступний курс купівлі на 1",
   "Selling": "Продати",
-  "Trade now": "Обміняти"
+  "Trade now": "Обміняти",
+  "Concord": "Злагода",
+  "Whispers": "Шепіт",
+  "Distrust": "Недовіра",
+  "Grudge": "Образа",
+  "Enmity": "Ворожнеча",
+  "Ostracism": "Остракізм",
+  "End of generation: concord, whispers and distrust cost nothing, from grudge on TR is lost; then back to concord": "Кінець покоління: злагода, шепіт і недовіра нічого не коштують, з образи втрачається вплив; потім назад до злагоди",
+  "At ostracism CHOAM is closed until a tribute lowers the envy": "При остракізмі CHOAM закрито, доки данина не знизить заздрість"
 }

@@ -452,9 +452,15 @@
   "Pacts: one open offer per player for 2 generations; on a deal both pay 1 Solari": "Pacten: één open aanbod per speler voor 2 generaties; bij de ruil betalen beiden 1 Solari",
   "Every move raises the envy of the great houses by 1": "Elke actie verhoogt de afgunst van de grote huizen met 1",
   "Tribute (10 Solari, Industrial Center owner 7) lowers the envy by 1": "Schatting (10 Solari, eigenaar van de smokkelmarkt 7) verlaagt de afgunst met 1",
-  "End of generation: 0 to 2 are free, from 3 on TR is lost and the grudge is over (back to 0)": "Einde van de generatie: 0 tot 2 zijn vrij, vanaf 3 gaat invloed verloren en is de wrok verdwenen (terug naar 0)",
-  "At 5 CHOAM is closed until a tribute lowers the envy": "Bij 5 is CHOAM dicht tot een schatting de afgunst verlaagt",
   "Supply and demand: every 3 units all players sell net lower the next selling rate by 1, every 3 bought raise the next buying rate by 1": "Vraag en aanbod: elke 3 eenheden die alle spelers netto verkopen verlagen de volgende verkoopkoers met 1, elke 3 gekochte verhogen de volgende inkoopkoers met 1",
   "Selling": "Verkopen",
-  "Trade now": "Handelen"
+  "Trade now": "Handelen",
+  "Concord": "Eendracht",
+  "Whispers": "Gefluister",
+  "Distrust": "Wantrouwen",
+  "Grudge": "Wrok",
+  "Enmity": "Vijandschap",
+  "Ostracism": "Verbanning",
+  "End of generation: concord, whispers and distrust cost nothing, from grudge on TR is lost; then back to concord": "Einde van de generatie: eendracht, gefluister en wantrouwen kosten niets, vanaf wrok gaat invloed verloren; daarna terug naar eendracht",
+  "At ostracism CHOAM is closed until a tribute lowers the envy": "Bij verbanning is CHOAM dicht tot een schatting de afgunst verlaagt"
 }

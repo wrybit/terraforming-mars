@@ -464,9 +464,15 @@
   "Pacts: one open offer per player for 2 generations; on a deal both pay 1 Solari": "盟約：プレイヤーごとに公開オファー1つ、2世代有効。成立時は双方1ソラリを払う",
   "Every move raises the envy of the great houses by 1": "どの行動も大家の妬みを1上げる",
   "Tribute (10 Solari, Industrial Center owner 7) lowers the envy by 1": "貢ぎ物（10ソラリ、密輸市場の所有者は7）で妬みが1下がる",
-  "End of generation: 0 to 2 are free, from 3 on TR is lost and the grudge is over (back to 0)": "世代終了：0〜2は無事、3以上で影響力を失い、恨みは消える（0に戻る）",
-  "At 5 CHOAM is closed until a tribute lowers the envy": "5になると、貢ぎ物で妬みを下げるまでCHOAMは閉ざされる",
   "Supply and demand: every 3 units all players sell net lower the next selling rate by 1, every 3 bought raise the next buying rate by 1": "需要と供給：全プレイヤーの純売却3つごとに次の売値が1下がり、純購入3つごとに次の買値が1上がる",
   "Selling": "売る",
-  "Trade now": "取引する"
+  "Trade now": "取引する",
+  "Concord": "協調",
+  "Whispers": "ひそひそ話",
+  "Distrust": "疑念",
+  "Grudge": "恨み",
+  "Enmity": "敵意",
+  "Ostracism": "追放",
+  "End of generation: concord, whispers and distrust cost nothing, from grudge on TR is lost; then back to concord": "世代終了：協調、ひそひそ話、疑念は無償、恨みからは影響力を失う。その後、協調に戻る",
+  "At ostracism CHOAM is closed until a tribute lowers the envy": "追放になると、貢ぎ物で妬みを下げるまでCHOAMは閉ざされる"
 }

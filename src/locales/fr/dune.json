@@ -457,9 +457,15 @@
   "Pacts: one open offer per player for 2 generations; on a deal both pay 1 Solari": "Pactes : une offre ouverte par joueur pendant 2 générations ; à l'échange chacun paie 1 Solari",
   "Every move raises the envy of the great houses by 1": "Chaque action augmente de 1 la rancœur des grandes maisons",
   "Tribute (10 Solari, Industrial Center owner 7) lowers the envy by 1": "Le tribut (10 Solari, propriétaire du marché des contrebandiers 7) réduit la rancœur de 1",
-  "End of generation: 0 to 2 are free, from 3 on TR is lost and the grudge is over (back to 0)": "Fin de génération : 0 à 2 sont gratuits, à partir de 3 on perd de l'influence et la rancœur s'éteint (retour à 0)",
-  "At 5 CHOAM is closed until a tribute lowers the envy": "À 5, la CHOAM est fermée jusqu'à ce qu'un tribut réduise la rancœur",
   "Supply and demand: every 3 units all players sell net lower the next selling rate by 1, every 3 bought raise the next buying rate by 1": "Offre et demande : chaque 3 unités vendues net par l'ensemble des joueurs baissent de 1 le prochain cours de vente, chaque 3 achetées montent de 1 le prochain cours d'achat",
   "Selling": "Vendre",
-  "Trade now": "Échanger"
+  "Trade now": "Échanger",
+  "Concord": "Concorde",
+  "Whispers": "Murmures",
+  "Distrust": "Méfiance",
+  "Grudge": "Rancune",
+  "Enmity": "Inimitié",
+  "Ostracism": "Ostracisme",
+  "End of generation: concord, whispers and distrust cost nothing, from grudge on TR is lost; then back to concord": "Fin de génération : concorde, murmures et méfiance ne coûtent rien, dès la rancune on perd de l'influence ; puis retour à la concorde",
+  "At ostracism CHOAM is closed until a tribute lowers the envy": "À l'ostracisme, la CHOAM est fermée jusqu'à ce qu'un tribut réduise la rancœur"
 }
