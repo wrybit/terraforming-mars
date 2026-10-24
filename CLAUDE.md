@@ -135,6 +135,8 @@ Good wiki pages:
 
 Custom i18n via `src/client/directives/i18n.ts` with `v-i18n` directive. Translation files in `src/locales/`. Strings are matched by exact text content. See the wiki's [Translations](https://github.com/terraforming-mars/terraforming-mars/wiki/Translations) page for the contributor workflow.
 
+**Fork rule: no dash as punctuation in visible texts.** Never use an en/em dash (–, —) as a sentence break in any visible text (UI, log, card texts, help, mockups/prototypes); use a comma instead (or a colon/period where that reads better). Number ranges (6–8) and minus signs (−2) are fine.
+
 **Fork rule: translate in the same change.** Every visible text that is added or reworded (Vue templates, `message()`/log texts, card texts, titles, placeholders, alerts) gets its translation in **all 16 languages** in the same commit — no English-only texts, no later translation rounds.
 
 - The English text is the key; there is no English entry (except overrides in `src/locales/en/overrides.json`).
