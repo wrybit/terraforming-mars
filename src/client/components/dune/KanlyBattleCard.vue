@@ -5,7 +5,7 @@
        outlined row, without a line of its own (Jens, 19 Oct 2026). With "added" (slider of the send input) the own new Sardaukar show lighter and count
        in the forecast. -->
   <div :class="['kanly-battle', {'kanly-battle--none': forecast === undefined || battle === undefined}]" data-test="kanly-battle">
-    <ArrakisHex v-if="battle !== undefined" class="kanly-battle__hex" :spaceId="battle.spaceId" :space="space" :board="board"/>
+    <ArrakisHex v-if="battle !== undefined" ref="hex" class="kanly-battle__hex" data-flash-shape="hex" :spaceId="battle.spaceId" :space="space" :board="board"/>
     <div v-else class="kanly-battle__hex kanly-battle__hex--empty arrakis-hex arrakis-hex--erg">
       <img :src="icon" alt="">
     </div>
@@ -71,15 +71,22 @@ import BoardCube from '@/client/components/common/BoardCube.vue';
 import PlayerChip from './PlayerChip.vue';
 import {KanlyForce, KanlyForecast, SARDAUKAR_ICON, kanlyForecast} from './kanlyForecast';
 import {duneGraphic} from './duneGraphic';
+import {kanlyAlertState} from './kanlyAlert';
+import {flashElement} from '@/client/utils/changeFlashAnimation';
 
 // More Sardaukar than this show as cubes up to the limit; the number beside always tells the whole
 const MAXIMUM_ICONS = 6;
 // Edge of a Sardaukar cube in px: larger than on the board, the cubes are the content of the row
 const CUBE_SIZE = 20;
+// Wait before the alert flash, until the opened Kanly tab has its final layout
+const ALERT_SETTLE_MS = 450;
 
 export default defineComponent({
   name: 'KanlyBattleCard',
   components: {ArrakisHex, BoardCube, PlayerChip},
+  setup() {
+    return {kanlyAlertState};
+  },
   props: {
     kanly: {
       type: Object as PropType<KanlyModel>,
@@ -137,6 +144,26 @@ export default defineComponent({
     // Sardaukar badge on the empty tile while there is no battle
     icon(): string {
       return duneGraphic(SARDAUKAR_ICON);
+    },
+  },
+  watch: {
+    // The Kanly tab opened because the viewer is attacked (kanlyAlert.ts): the war field tile flashes in red hexagons.
+    // The ring is placed where the tile is when the flash starts, so it waits until the freshly opened tab has settled;
+    // the tab may draw the card anew meanwhile, then the card that is still on the page flashes.
+    'kanlyAlertState.pending': {
+      immediate: true,
+      handler(pending: boolean) {
+        if (!pending || this.battle === undefined) {
+          return;
+        }
+        setTimeout(() => {
+          const hex = (this.$refs.hex as {$el?: HTMLElement} | undefined)?.$el;
+          if (kanlyAlertState.pending && hex?.isConnected === true) {
+            kanlyAlertState.pending = false;
+            flashElement(hex, 0, 'loss');
+          }
+        }, ALERT_SETTLE_MS);
+      },
     },
   },
   methods: {

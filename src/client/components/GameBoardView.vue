@@ -104,6 +104,8 @@ import MoonBoard from '@/client/components/moon/MoonBoard.vue';
 import PlanetsBoard from '@/client/components/pathfinders/PlanetsBoard.vue';
 import {TileView} from './board/TileView';
 import {highlightBoardSpace} from '@/client/utils/highlightBoardSpace';
+import {selectBoardTab} from '@/client/components/boardTabs/boardTabState';
+import {claimKanlyAlert, isAttacked, kanlyAlertKey, kanlyAlertState} from '@/client/components/dune/kanlyAlert';
 
 export default defineComponent({
   name: 'GameBoardView',
@@ -180,6 +182,20 @@ export default defineComponent({
     },
   },
   watch: {
+    // Kanly on the viewer's tile: open the Kanly tab once per battle, its tile flashes there (kanlyAlert.ts)
+    'game.dune.kanly.battle': {
+      immediate: true,
+      handler() {
+        const battle = this.game.dune?.kanly?.battle;
+        if (battle === undefined || !isAttacked(this.game.dune?.kanly, this.viewerColor)) {
+          return;
+        }
+        if (claimKanlyAlert(kanlyAlertKey(this.game.spectatorId, this.game.generation, battle.spaceId))) {
+          kanlyAlertState.pending = true;
+          selectBoardTab('kanly');
+        }
+      },
+    },
     // Placing tiles: board enlarged via button in the space selection, small again after confirming (placementZoom.ts)
     // immediate: the space selection may be mounted before the board (e.g. when reloading the page)
     'placementZoom.requested': {
