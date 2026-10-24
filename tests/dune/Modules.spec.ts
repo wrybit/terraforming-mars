@@ -14,7 +14,8 @@ import {TileType} from '../../src/common/TileType';
 import {Phase} from '../../src/common/Phase';
 import {DuneExpansion} from '../../src/server/dune/DuneExpansion';
 import {battleTargets, garrisonOf, resolveBattle, OPEN_KANLY_COST} from '../../src/server/dune/Kanly';
-import {chargeSuspicion, exchangeOf, moveExchange, suspicionOf, suspicionPenalty} from '../../src/server/dune/Smuggling';
+import {chargeSuspicion, exchangeOf, moveExchange, privilegeOf, prophecyOf, suspicionOf, suspicionPenalty} from '../../src/server/dune/Smuggling';
+import {PRIVILEGE_TITLE, PROPHECY_BUY_TITLE, PROPHECY_SELL_TITLE, SMUGGLE_TITLE} from '../../src/common/dune/duneActionTitles';
 import {returnOffers} from '../../src/server/dune/Choam';
 import {SCHEMES_TITLE, agendaPoints, reductionStep, schemeValue, schemesVictoryPoints} from '../../src/server/dune/Schemes';
 import {SCHEME_AGENDAS, schemeAgenda} from '../../src/common/dune/schemeAgendas';
@@ -44,18 +45,19 @@ function option(input: OrOptions, prefix: string): PlayerInput {
   return found;
 }
 
-/** The smuggling tab: one choice with the trade and the bribe */
-function smugglingTab(player: TestPlayer): OrOptions {
-  return cast(option(tabActions(player), 'Smuggling'), OrOptions);
+/** The CHOAM tab: guild, prophecy, privilege, pacts and tribute in one choice (Jens 24 Oct 2026) */
+function choamTab(player: TestPlayer): OrOptions {
+  const tab = tabActions(player).options.find((candidate) => titleOf(candidate) === 'CHOAM');
+  if (tab === undefined) {
+    throw new Error('no CHOAM tab');
+  }
+  return cast(tab, OrOptions);
 }
+
+const smugglingTab = choamTab;
 
 function smuggleTrade(player: TestPlayer): SelectTrade {
-  return cast(smugglingTab(player).options.find((candidate) => candidate instanceof SelectTrade), SelectTrade);
-}
-
-/** The CHOAM tab: making an offer, accepting and withdrawing */
-function choamTab(player: TestPlayer): OrOptions {
-  return cast(option(tabActions(player), 'CHOAM contracts'), OrOptions);
+  return cast(option(choamTab(player), SMUGGLE_TITLE), SelectTrade);
 }
 
 function pick(input: PlayerInput): void {
@@ -177,22 +179,22 @@ describe('Dune modules B, D, E, F', () => {
       expect(() => market.process({type: 'trade', give: Resource.TITANIUM, giveAmount: 1, get: Resource.MEGACREDITS, getAmount: 5})).to.throw();
     });
 
-    it('costs TR from suspicion 2 at the end of the generation and resets the marker; 1 stays', () => {
-      expect([0, 1, 2, 3, 4].map(suspicionPenalty)).deep.eq([0, 0, 1, 2, 3]);
+    it('costs TR from envy 3 at the end of the generation and resets the marker; 2 stays', () => {
+      expect([0, 1, 2, 3, 4, 5].map(suspicionPenalty)).deep.eq([0, 0, 0, 1, 2, 3]);
       const smuggling = game.duneData!.smuggling!;
-      smuggling.suspicion[player1.id] = 3;
-      smuggling.suspicion[player2.id] = 1;
+      smuggling.suspicion[player1.id] = 4;
+      smuggling.suspicion[player2.id] = 2;
       const tr = [player1.terraformRating, player2.terraformRating];
       chargeSuspicion(game, smuggling);
       expect([player1.terraformRating, player2.terraformRating]).deep.eq([tr[0] - 2, tr[1]]);
-      expect([suspicionOf(smuggling, player1), suspicionOf(smuggling, player2)]).deep.eq([0, 1]);
+      expect([suspicionOf(smuggling, player1), suspicionOf(smuggling, player2)]).deep.eq([0, 2]);
     });
 
     it('lowers the suspicion by a bribe paid in the smuggling tab', () => {
       const smuggling = game.duneData!.smuggling!;
       smuggling.suspicion[player1.id] = 3;
       player1.megaCredits = 10;
-      const bribe = cast(option(smugglingTab(player1), 'Bribe the officials'), SelectPayment);
+      const bribe = cast(option(smugglingTab(player1), 'Tribute to the great houses'), SelectPayment);
       expect(bribe.amount).eq(10);
       bribe.process({type: 'payment', payment: Payment.of({megacredits: 10})}, player1);
       expect(suspicionOf(smuggling, player1)).eq(2);
@@ -201,27 +203,27 @@ describe('Dune modules B, D, E, F', () => {
       expect(DuneExpansion.actions(player1)).is.undefined;
     });
 
-    it('offers only the bribe at suspicion 4, the top of the track', () => {
-      game.duneData!.smuggling!.suspicion[player1.id] = 4;
+    it('offers only the tribute at envy 5, the top of the track', () => {
+      game.duneData!.smuggling!.suspicion[player1.id] = 5;
       player1.titanium = 5;
       player1.megaCredits = 10;
       expect(smugglingTab(player1).options.map((input) => input.type)).deep.eq(['payment']);
     });
 
-    it('treats a 5 from the former track as the top and lowers it to 3 with a bribe', () => {
+    it('caps a level above the track at the top and lowers it to 4 with a tribute', () => {
       const smuggling = game.duneData!.smuggling!;
-      smuggling.suspicion[player1.id] = 5;
+      smuggling.suspicion[player1.id] = 6;
       player1.megaCredits = 10;
-      expect(suspicionOf(smuggling, player1)).eq(4);
-      const bribe = cast(option(smugglingTab(player1), 'Bribe the officials'), SelectPayment);
+      expect(suspicionOf(smuggling, player1)).eq(5);
+      const bribe = cast(option(smugglingTab(player1), 'Tribute to the great houses'), SelectPayment);
       bribe.process({type: 'payment', payment: Payment.of({megacredits: 10})}, player1);
-      expect(suspicionOf(smuggling, player1)).eq(3);
+      expect(suspicionOf(smuggling, player1)).eq(4);
     });
 
-    it('has no smuggling tab without anything to do', () => {
-      game.duneData!.smuggling!.suspicion[player1.id] = 4;
+    it('has no CHOAM tab without anything to do', () => {
+      game.duneData!.smuggling!.suspicion[player1.id] = 5;
       player1.megaCredits = 0;
-      expect(DuneExpansion.tabActions(player1).map(titleOf).some((title) => title.startsWith('Smuggling'))).is.false;
+      expect(DuneExpansion.tabActions(player1).map(titleOf).some((title) => title === 'CHOAM')).is.false;
     });
   });
 
@@ -244,10 +246,14 @@ describe('Dune modules B, D, E, F', () => {
       player2.titanium = 2;
       player2.megaCredits = 1;
       // The other player accepts in the same tab; the offerer may withdraw instead
-      expect(choamTab(player1).options.map(titleOf)).deep.eq(['CHOAM: withdraw offer 0']);
+      const pacts = choamTab(player1).options.map(titleOf).filter((title) => title.startsWith('CHOAM: withdraw offer') || title.startsWith('CHOAM: accept'));
+      expect(pacts).deep.eq(['CHOAM: withdraw offer 0']);
+      // Making and accepting an offer raise the envy like every CHOAM move
+      expect(suspicionOf(game.duneData!.smuggling!, player1)).eq(1);
       cast(option(choamTab(player2), 'CHOAM: accept offer 0'), SelectOption).cb(undefined);
       expect([player2.heat, player2.titanium, player2.megaCredits]).deep.eq([3, 0, 0]);
       expect([player1.titanium, player1.megaCredits]).deep.eq([2, 2]);
+      expect(suspicionOf(game.duneData!.smuggling!, player2)).eq(1);
 
       // An offer stands for 2 generations: still there at the end of the first, back at the end of the second
       choam.offers.push({seller: player1.id, give: Resource.STEEL, giveAmount: 2, want: Resource.PLANTS, wantAmount: 1,
@@ -269,6 +275,80 @@ describe('Dune modules B, D, E, F', () => {
       cast(option(choamTab(player1), 'CHOAM: withdraw offer 0'), SelectOption).cb(undefined);
       expect([player1.steel, player1.megaCredits]).deep.eq([4, 2]);
       expect(choam.offers).deep.eq([]);
+    });
+  });
+
+  describe('CHOAM: one module (Jens 24 Oct 2026)', () => {
+    it('switches on both halves with the former smuggling id alone', () => {
+      const [other] = testGame(2, {theme: 'dune', boardName: BoardName.ARRAKIS_61, duneModules: ['smuggling']});
+      expect(other.duneData?.smuggling).is.not.undefined;
+      expect(other.duneData?.choam).is.not.undefined;
+      expect(other.duneData?.smuggling?.exchange?.next).is.not.undefined;
+    });
+
+    it('closes every move but the tribute at envy 5', () => {
+      const smuggling = game.duneData!.smuggling!;
+      smuggling.suspicion[player1.id] = 5;
+      player1.titanium = 6;
+      player1.megaCredits = 20;
+      expect(choamTab(player1).options.map((input) => input.type)).deep.eq(['payment']);
+    });
+
+    it('delivers the privilege once: 1.5 times the normal worth, envy +1, then nobody else', () => {
+      const smuggling = game.duneData!.smuggling!;
+      const privilege = privilegeOf(game, smuggling);
+      privilege.good = Resource.TITANIUM;
+      privilege.amount = 2;
+      privilege.pay = 15;
+      player1.titanium = 2;
+      player2.titanium = 2;
+      cast(option(choamTab(player1), PRIVILEGE_TITLE), SelectOption).cb(undefined);
+      expect([player1.titanium, player1.megaCredits]).deep.eq([0, 15]);
+      expect(privilege.takenBy).eq(player1.id);
+      expect(suspicionOf(smuggling, player1)).eq(1);
+      expect(choamTab(player2).options.map(titleOf)).not.includes(PRIVILEGE_TITLE);
+      // A new one comes with the next generation
+      moveExchange(game, smuggling);
+      expect(smuggling.privilege?.takenBy).is.undefined;
+      expect(smuggling.privilege?.generation).eq(game.generation + 1);
+    });
+
+    it('places a sell prophecy, binds the goods and pays rate plus bet premium when the rate reaches the limit', () => {
+      const smuggling = game.duneData!.smuggling!;
+      player1.titanium = 3;
+      const sell = cast(option(choamTab(player1), PROPHECY_SELL_TITLE), SelectTrade);
+      // Limits outside 6 … 8 are refused
+      expect(() => sell.process({type: 'trade', give: Resource.TITANIUM, giveAmount: 3, get: Resource.MEGACREDITS, getAmount: 5})).to.throw();
+      sell.process({type: 'trade', give: Resource.TITANIUM, giveAmount: 3, get: Resource.MEGACREDITS, getAmount: 7});
+      expect(player1.titanium).eq(0);
+      expect(suspicionOf(smuggling, player1)).eq(1);
+      expect(prophecyOf(smuggling).orders).has.length(1);
+      // The forecast reaches 7: at the end of the generation it comes true at that rate, premium 3 × (7 − 5)
+      const exchange = exchangeOf(smuggling);
+      exchange.next = {sell: {...exchange.sell[0], titanium: 7}, buy: {...exchange.buy[0], titanium: 7}};
+      player1.megaCredits = 0;
+      moveExchange(game, smuggling);
+      expect(player1.megaCredits).eq(3 * 7 + 6);
+      expect(prophecyOf(smuggling).orders).deep.eq([]);
+    });
+
+    it('places a buy prophecy and gives back what the rate stays below the limit; withdrawing returns half', () => {
+      const smuggling = game.duneData!.smuggling!;
+      player1.megaCredits = 20;
+      cast(option(choamTab(player1), PROPHECY_BUY_TITLE), SelectTrade)
+        .process({type: 'trade', give: Resource.MEGACREDITS, giveAmount: 3, get: Resource.STEEL, getAmount: 4});
+      expect(player1.megaCredits).eq(8);
+      const exchange = exchangeOf(smuggling);
+      exchange.next = {sell: {...exchange.sell[0], steel: 2}, buy: {...exchange.buy[0], steel: 2}};
+      moveExchange(game, smuggling);
+      expect([player1.steel, player1.megaCredits]).deep.eq([4, 8 + 4]);
+
+      cast(option(choamTab(player1), PROPHECY_BUY_TITLE), SelectTrade)
+        .process({type: 'trade', give: Resource.MEGACREDITS, giveAmount: 3, get: Resource.STEEL, getAmount: 3});
+      expect(player1.megaCredits).eq(3);
+      const id = prophecyOf(smuggling).orders[0].id;
+      cast(option(choamTab(player1), 'CHOAM: withdraw prophecy ' + id), SelectOption).cb(undefined);
+      expect(player1.megaCredits).eq(3 + 4);
     });
   });
 

@@ -42,7 +42,8 @@
     "Underworld 2",
     "Venus Next",
     "Virtual",
-    "[ solo"
+    "[ solo",
+    "normal ${0}"
   ],
   "cn": [
     "${0} AI",
@@ -95,7 +96,8 @@
     "Tabs",
     "Terraforming Mars",
     "Tharsis Tholus",
-    "Version"
+    "Version",
+    "normal ${0}"
   ],
   "es": [
     "${0} AI",
@@ -127,7 +129,8 @@
     "Tharsis Tholus",
     "Underworld 2",
     "Venus Next",
-    "Virtual"
+    "Virtual",
+    "normal ${0}"
   ],
   "fi": [
     "${0} AI",
@@ -206,6 +209,7 @@
     "arabia terra",
     "influence ${0} (+${1})",
     "iv. Turmoil",
+    "normal ${0}",
     "t. cimmeria",
     "terra cimmeria nova",
     "utopia planitia",
@@ -397,6 +401,8 @@
     "Pavonis Mons",
     "Prelude 2",
     "Preludes",
+    "Privilege",
+    "Privilege G${0}",
     "Processor",
     "Server",
     "Shai-Hulud",

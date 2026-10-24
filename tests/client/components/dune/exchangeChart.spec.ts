@@ -34,8 +34,8 @@ describe('exchangeChart', () => {
 
   it('distance from the base price', () => {
     // Steel sells for 1 instead of 2: one below normal, bad when you give it
-    expect(rateDeviation(sell, Resource.STEEL, true)).deep.eq({delta: -1, mood: 'bad'});
-    expect(rateDeviation({normal: NORMAL_BUY, history: [{...NORMAL_BUY, steel: 3}]}, Resource.STEEL, false)).deep.eq({delta: -1, mood: 'good'});
-    expect(rateDeviation({normal: NORMAL_BUY, history: [NORMAL_BUY]}, Resource.HEAT, false)).deep.eq({delta: 0, mood: 'normal'});
+    expect(rateDeviation(sell, Resource.STEEL, true)).deep.eq({delta: -1, mood: 'bad', peak: false});
+    expect(rateDeviation({normal: NORMAL_BUY, history: [{...NORMAL_BUY, steel: 3}]}, Resource.STEEL, false)).deep.eq({delta: -1, mood: 'good', peak: false});
+    expect(rateDeviation({normal: NORMAL_BUY, history: [NORMAL_BUY]}, Resource.HEAT, false)).deep.eq({delta: 0, mood: 'normal', peak: false});
   });
 });

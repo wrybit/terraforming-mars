@@ -1,13 +1,15 @@
 <template>
-  <!-- Rates of one board of the smuggling exchange above its resource tiles (exchangeChart.ts, Jens 20 Oct 2026):
-       per resource a thin white line from the current generation (bottom, next to the tile) up into older ones, which
-       fade out. Green or red area and point: the rate is better or worse for you than normal (dashed). Solari stay on
-       their straight line. The generation stands in front with a short tick. Lines and areas stretch with the column
-       (non-scaling strokes), the points are HTML so they stay round. -->
+  <!-- Rates of one board of the CHOAM exchange above its resource tiles (exchangeChart.ts, Jens 20 and 24 Oct 2026):
+       per resource a thin white line from older generations (top, fading out) down to the current one, which is
+       outlined as a band; below it, after a gap, the forecast of the next generation (dashed line, open ring). Green or
+       red area and point: the rate is better or worse for you than normal (dashed). Solari stay on their straight line.
+       Lines and areas stretch with the column (non-scaling strokes), the points are HTML so they stay round. -->
   <div class="exchange-chart" aria-hidden="true">
+    <div class="exchange-chart__band" :style="{top: chart.bandTop + 'px'}"></div>
     <div class="exchange-chart__generations" :style="{height: height + 'px'}">
-      <span v-for="row in chart.rows" :key="row.generation" class="exchange-chart__generation"
-        :class="{'exchange-chart__generation--now': row.generation === generation}" :style="{top: row.top + 'px'}">G{{ row.generation }}</span>
+      <span v-for="row in chart.rows" :key="row.generation"
+        :class="['exchange-chart__generation', {'exchange-chart__generation--now': row.kind === 'now', 'exchange-chart__generation--next': row.kind === 'next'}]"
+        :style="{top: row.top + 'px'}">G{{ row.generation }}</span>
     </div>
     <div class="exchange-chart__columns">
       <div v-for="column in chart.columns" :key="column.resource" class="exchange-chart__column" :style="{height: height + 'px'}">
@@ -16,10 +18,14 @@
           <polygon v-for="(area, index) in column.areas" :key="index" :points="area.points"
             :class="'exchange-chart__area exchange-chart__area--' + area.mood"/>
           <polyline class="exchange-chart__line" :points="column.line"/>
+          <polyline v-if="column.forecast !== undefined" class="exchange-chart__line exchange-chart__line--forecast" :points="column.forecast.line"/>
         </svg>
         <span v-for="(point, index) in column.points" :key="index"
           :class="['exchange-chart__point', 'exchange-chart__point--' + point.mood, {'exchange-chart__point--current': point.current}]"
           :style="{left: point.x + '%', top: point.y + 'px'}"></span>
+        <span v-if="column.forecast !== undefined"
+          :class="['exchange-chart__point', 'exchange-chart__point--forecast', 'exchange-chart__point--' + column.forecast.point.mood]"
+          :style="{left: column.forecast.point.x + '%', top: column.forecast.point.y + 'px'}"></span>
       </div>
     </div>
   </div>

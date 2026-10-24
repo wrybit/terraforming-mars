@@ -1,4 +1,4 @@
-import {ExchangeModel} from './smugglingExchange';
+import {ExchangeGood, ExchangeModel, ExchangeSide} from './smugglingExchange';
 import {Color} from '../Color';
 import {BoardName} from '../boards/BoardName';
 import {Resource} from '../Resource';
@@ -70,22 +70,51 @@ export type KanlyModel = {
 };
 
 /**
- * Top of the suspicion track (module E): 0–4; levels from 2 on cost TR at the end of the generation, after which the
- * marker drops back to 0 (Jens, 19 Oct 2026)
+ * Top of the envy track of CHOAM (formerly suspicion): 0–5; levels from 3 on cost TR at the end of the generation,
+ * after which the marker drops back to 0; at 5 every CHOAM move but the tribute is closed (Jens 19 Oct 2026; one more
+ * free step since 24 Oct 2026, now that every CHOAM move raises it)
  */
-export const MAX_SUSPICION = 4;
-export const COSTLY_SUSPICION = 2;
+export const MAX_SUSPICION = 5;
+export const COSTLY_SUSPICION = 3;
 
-/** TR lost at the end of the generation for a suspicion level: 0 and 1 free, 2 → 1, 3 → 2, 4 → 3 */
+/** TR lost at the end of the generation for an envy level: 0 to 2 free, 3 → 1, 4 → 2, 5 → 3 */
 export function suspicionPenalty(level: number): number {
   return Math.max(0, level - COSTLY_SUSPICION + 1);
 }
 
+/** The emperor's privilege of a generation (server/dune/Privilege.ts) */
+export type PrivilegeModel = {
+  generation: number,
+  good: ExchangeGood,
+  amount: number,
+  /** What the emperor pays (1.5 × the normal worth) */
+  pay: number,
+  /** Normal worth of the goods at the guild */
+  worth: number,
+  /** Who delivered it this generation */
+  takenBy: Color | undefined,
+};
+
+/** One of the viewer's own open prophecies (server/dune/Prophecy.ts) */
+export type ProphecyModel = {
+  id: number,
+  side: ExchangeSide,
+  good: ExchangeGood,
+  amount: number,
+  limit: number,
+  /** Bet premium if it comes true (sell orders only) */
+  premium: number,
+};
+
+/** CHOAM: the exchange, the envy track, the privilege and the viewer's prophecies (the data keeps its old name) */
 export type SmugglingModel = {
-  /** Every player's level and what a bribe costs them (cards and the smugglers' market lower it) */
+  /** Every player's envy level and what a tribute costs them (cards and the smugglers' market lower it) */
   suspicion: ReadonlyArray<{color: Color, level: number, bribeCost: number}>,
-  /** Rates of the exchange, every generation so far (common/dune/smugglingExchange.ts) */
+  /** Rates of the exchange, every generation so far and the forecast (common/dune/smugglingExchange.ts) */
   exchange: ExchangeModel,
+  privilege: PrivilegeModel,
+  /** The viewer's own open prophecies; empty for spectators */
+  orders: ReadonlyArray<ProphecyModel>,
 };
 
 export type ChoamOfferModel = {

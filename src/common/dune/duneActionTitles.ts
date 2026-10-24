@@ -35,16 +35,26 @@ export const SPY_VIEW_TITLE = 'Tleilaxu Spy: agendas of ${0}';
 export const CHOAM_OFFER_TITLE = 'CHOAM: make an offer';
 export const CHOAM_ACCEPT_TITLE = 'CHOAM: accept a contract';
 /**
- * The CHOAM tab of the action menu (Jens, 19 Oct 2026): every player's offers, making one's own, accepting the others'.
- * Its accept and withdraw choices carry the offer's place in the list of open offers as first value.
+ * The CHOAM tab of the action menu (Jens 19 and 24 Oct 2026): one tab with the five moves of the module – guild,
+ * prophecy, privilege, pacts, tribute (ChoamExchangeInput.vue finds each by its title). Accept and withdraw of an offer
+ * carry its place in the list of open offers as first value.
  */
-export const CHOAM_TITLE = 'CHOAM contracts';
+export const CHOAM_TITLE = 'CHOAM';
 export const CHOAM_ACCEPT_OFFER_TITLE = 'CHOAM: accept offer ${0}';
 export const CHOAM_WITHDRAW_TITLE = 'CHOAM: withdraw offer ${0}';
 
-/** Moving spice and the black market in one trade, one action tab named like the module (Jens, 19 Oct 2026) */
-export const SMUGGLE_TITLE = 'Smuggling';
-/** Former separate moves, now the one smuggling trade */
+/** Guild: any resource for another at the rates of the day, moving spice included */
+export const SMUGGLE_TITLE = 'CHOAM: trade with the guild';
+/** Former separate moves, now the one guild trade */
 export const SMUGGLE_SPICE_TITLE = SMUGGLE_TITLE;
 export const BLACK_MARKET_TITLE = SMUGGLE_TITLE;
-export const BRIBE_TITLE = 'Bribe the officials: ${0} M€, suspicion −1';
+export const BRIBE_TITLE = 'Tribute to the great houses: ${0} M€, envy −1';
+
+/** Prophecy: an order with a limit, as a trade (server/dune/Prophecy.ts) */
+export const PROPHECY_SELL_TITLE = 'CHOAM: prophesy a sale';
+export const PROPHECY_BUY_TITLE = 'CHOAM: prophesy a purchase';
+/** Taking back one own prophecy; its id is the first value */
+export const PROPHECY_WITHDRAW_TITLE = 'CHOAM: withdraw prophecy ${0}';
+
+/** Privilege: deliver what the emperor asks for this generation */
+export const PRIVILEGE_TITLE = 'CHOAM: deliver the privilege';

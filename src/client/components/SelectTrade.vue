@@ -22,7 +22,7 @@
               <span class="trade-select__stock">{{ stockOf(option.resource) }}</span>
               <span v-if="exchange !== undefined" class="trade-select__rate">
                 <TradeTileValue :value="valueOf(option.resource, true)"/>
-                <span :class="'trade-select__change trade-select__change--' + rateOf(option.resource, true).mood">{{ rateOf(option.resource, true).change }}</span>
+                <span :class="['trade-select__change', 'trade-select__change--' + rateOf(option.resource, true).mood, {'trade-select__change--peak': rateOf(option.resource, true).peak}]">{{ rateOf(option.resource, true).change }}</span>
               </span>
             </button>
           </div>
@@ -43,7 +43,7 @@
               <span class="trade-select__stock">{{ stockOf(resource) }}</span>
               <span v-if="exchange !== undefined" class="trade-select__rate">
                 <TradeTileValue :value="valueOf(resource, false)"/>
-                <span :class="'trade-select__change trade-select__change--' + rateOf(resource, false).mood">{{ rateOf(resource, false).change }}</span>
+                <span :class="['trade-select__change', 'trade-select__change--' + rateOf(resource, false).mood, {'trade-select__change--peak': rateOf(resource, false).peak}]">{{ rateOf(resource, false).change }}</span>
               </span>
             </button>
           </div>
@@ -203,17 +203,18 @@ export default defineComponent({
   },
   methods: {
     // Distance of a tile's rate from its base price as + / − (Solari: fixed)
-    rateOf(resource: Resource, selling: boolean): {change: string, mood: Mood} {
+    // A peak (3 or more in the player's favour) stands out (Jens, 24 Oct 2026)
+    rateOf(resource: Resource, selling: boolean): {change: string, mood: Mood, peak: boolean} {
       const board = selling ? this.exchange?.sell : this.exchange?.buy;
       if (board === undefined) {
-        return {change: '', mood: 'normal'};
+        return {change: '', mood: 'normal', peak: false};
       }
       if (resource === Resource.MEGACREDITS) {
-        return {change: translateText('fixed'), mood: 'normal'};
+        return {change: translateText('fixed'), mood: 'normal', peak: false};
       }
-      const {delta, mood} = rateDeviation(board, resource, selling);
+      const {delta, mood, peak} = rateDeviation(board, resource, selling);
       const change = delta > 0 ? '+' + delta : delta < 0 ? '−' + (-delta) : '–';
-      return {change, mood};
+      return {change, mood, peak};
     },
     // Value under a tile: in the good of the other side (pay with / get), Solari as the coin (Jens, 22 Oct 2026)
     valueOf(resource: Resource, selling: boolean): TileValue {

@@ -1,7 +1,7 @@
 <template>
-  <!-- Smuggling & suspicion (Dune module E): the suspicion track 0–4 with every player's marker -->
+  <!-- Envy of the great houses (CHOAM, formerly suspicion): the track 0–4 with every player's marker -->
   <div class="dune-smuggling" data-test="dune-smuggling">
-    <ol class="dune-smuggling__track">
+    <ol class="dune-smuggling__track" :style="{'--dune-track-steps': LEVELS.length}">
       <li v-for="level in LEVELS" :key="level" :class="['dune-smuggling__step', 'dune-smuggling__step--' + level]">
         <span class="dune-smuggling__level">{{ level }}</span>
         <!-- What the step costs at the end of the generation: the influence icon next to the loss (Jens, 19 Oct 2026) -->
@@ -14,7 +14,6 @@
         </span>
       </li>
     </ol>
-    <p v-if="!compact" class="dune-board__hint">{{ $t('Move spice: up to 5 titanium per deal at the current spice rate. Exchange: the rates change every generation – sell high, buy low. Each raises suspicion by 1; a bribe (10 M€, Industrial Center owner 7) lowers it. End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0.') }}</p>
   </div>
 </template>
 
@@ -41,7 +40,7 @@ export default defineComponent({
       type: Array as PropType<ReadonlyArray<PublicPlayerModel>>,
       required: true,
     },
-    // Without the rules text (smuggling tab of the action menu, SmuggleInput.vue)
+    // Without the rules text (CHOAM tab of the action menu, ChoamExchangeInput.vue)
     compact: {
       type: Boolean,
       default: false,

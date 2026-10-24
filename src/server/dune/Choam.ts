@@ -1,5 +1,5 @@
 import {IGame} from '../IGame';
-import {CHOAM_ACCEPT_OFFER_TITLE, CHOAM_ACCEPT_TITLE, CHOAM_OFFER_TITLE, CHOAM_TITLE, CHOAM_WITHDRAW_TITLE} from '../../common/dune/duneActionTitles';
+import {CHOAM_ACCEPT_OFFER_TITLE, CHOAM_ACCEPT_TITLE, CHOAM_OFFER_TITLE, CHOAM_WITHDRAW_TITLE} from '../../common/dune/duneActionTitles';
 import {IPlayer} from '../IPlayer';
 import {PlayerId} from '../../common/Types';
 import {ALL_RESOURCES, Resource} from '../../common/Resource';
@@ -12,7 +12,9 @@ import {ChoamModel} from '../../common/dune/DuneModel';
 import {RESOURCE_LABEL} from './resourceLabels';
 import {CardName} from '../../common/cards/CardName';
 
-// Module D – CHOAM contracts (claude/dune-erweiterung-konzept.md): open trade between players, every step a normal action.
+// Pacts of the CHOAM module (claude/dune-erweiterung-konzept.md; formerly module D, the CHOAM contracts): open trade
+// between players, every step a normal action. Making and accepting an offer raise the envy of the great houses by 1
+// like every CHOAM move (`then` of the choices, ChoamExchange.ts; Jens 24 Oct 2026).
 // 1. Offer: the offered goods leave the tableau and lie on the own place of the CHOAM exchange, together with the
 //    wish (kind and amount up to 30; the offer itself up to the whole stock – Jens, 19 Oct 2026). At most 1 open
 //    offer per player.
@@ -59,7 +61,7 @@ export function maxOffers(player: IPlayer): number {
  * Making an offer: one trade input with both sides (what leaves the stock, what is wished in return), its own tab
  * of the action menu (Jens, 19 Oct 2026). Undefined while the player may not make another offer.
  */
-export function offerInput(player: IPlayer, data: ChoamData): SelectTrade | undefined {
+export function offerInput(player: IPlayer, data: ChoamData, then: () => void = () => {}): SelectTrade | undefined {
   if (data.offers.filter((offer) => offer.seller === player.id).length >= maxOffers(player)) {
     return undefined;
   }
@@ -75,6 +77,7 @@ export function offerInput(player: IPlayer, data: ChoamData): SelectTrade | unde
       expires: player.game.generation + CHOAM_OFFER_GENERATIONS - 1});
     player.game.log('${0} offers ${1} ${2} for ${3} ${4} at the CHOAM exchange', (b) => b.player(player)
       .number(trade.giveAmount).string(RESOURCE_LABEL[trade.give]).number(trade.getAmount).string(RESOURCE_LABEL[trade.get]));
+    then();
     return undefined;
   });
 }
@@ -103,7 +106,7 @@ export function acceptOffer(game: IGame, data: ChoamData, buyer: IPlayer, offer:
   game.log('${0} accepted the CHOAM contract of ${1}', (b) => b.player(buyer).player(seller));
 }
 
-function acceptInputs(player: IPlayer, data: ChoamData): Array<SelectOption> {
+function acceptInputs(player: IPlayer, data: ChoamData, then: () => void): Array<SelectOption> {
   const game = player.game;
   return data.offers
     .filter((offer) => offer.seller !== player.id && canAccept(player, offer))
@@ -111,16 +114,20 @@ function acceptInputs(player: IPlayer, data: ChoamData): Array<SelectOption> {
       .number(offer.giveAmount).string(RESOURCE_LABEL[offer.give]).number(offer.wantAmount).string(RESOURCE_LABEL[offer.want])), 'Accept')
       .andThen(() => {
         acceptOffer(game, data, player, offer);
+        then();
         return undefined;
       }));
 }
 
-/** CHOAM actions of the Dune group of the action menu: only the AI accepts offers there (each valued on a game copy) */
-export function choamActions(player: IPlayer, data: ChoamData): Array<PlayerInput> {
+/**
+ * CHOAM actions of the Dune group of the action menu: only the AI accepts offers there (each valued on a game copy).
+ * `then` follows an accepted offer (the envy, ChoamExchange.ts).
+ */
+export function choamActions(player: IPlayer, data: ChoamData, then: () => void = () => {}): Array<PlayerInput> {
   if (player.aiLevel === undefined) {
     return [];
   }
-  const accepts = acceptInputs(player, data);
+  const accepts = acceptInputs(player, data, then);
   return accepts.length === 0 ? [] : [new OrOptions(...accepts).setTitle(CHOAM_ACCEPT_TITLE)];
 }
 
@@ -132,17 +139,14 @@ export function withdrawOffer(player: IPlayer, data: ChoamData, offer: ChoamOffe
 }
 
 /**
- * The CHOAM tab of the action menu for a player (Jens, 19 Oct 2026): making an offer, accepting each offer of another
- * player that can be paid, withdrawing each own offer. The client shows them as one list with a line per player
- * (ChoamInput.vue); accept and withdraw name the offer by its place in the list. Not for the AI.
+ * Pacts in the CHOAM tab (ChoamExchange.ts, PactsPane.vue; Jens 19 Oct 2026): making an offer, accepting each offer
+ * of another player that can be paid, withdrawing each own offer. Accept and withdraw name the offer by its place in
+ * the list. `then` follows making and accepting an offer (the envy); `closed` (envy at the top) leaves only withdrawing.
  */
-export function choamTabActions(player: IPlayer, data: ChoamData): Array<PlayerInput> {
-  if (player.aiLevel !== undefined) {
-    return [];
-  }
+export function pactChoices(player: IPlayer, data: ChoamData, then: () => void, closed: boolean): Array<PlayerInput> {
   const game = player.game;
   const choices: Array<PlayerInput> = [];
-  const offer = offerInput(player, data);
+  const offer = closed ? undefined : offerInput(player, data, then);
   if (offer !== undefined) {
     choices.push(offer);
   }
@@ -152,14 +156,15 @@ export function choamTabActions(player: IPlayer, data: ChoamData): Array<PlayerI
         withdrawOffer(player, data, open);
         return undefined;
       }));
-    } else if (canAccept(player, open)) {
+    } else if (!closed && canAccept(player, open)) {
       choices.push(new SelectOption(message(CHOAM_ACCEPT_OFFER_TITLE, (b) => b.number(index)), 'Accept').andThen(() => {
         acceptOffer(game, data, player, open);
+        then();
         return undefined;
       }));
     }
   });
-  return choices.length === 0 ? [] : [new OrOptions(...choices).setTitle(CHOAM_TITLE)];
+  return choices;
 }
 
 /** End of generation: offers nobody accepted and whose time is up go back, without a fee; the others stay */

@@ -37,15 +37,6 @@ export const SCHEMES_RULES: ReadonlyArray<DuneRule> = [
   {sign: 'hidden', text: 'The others never see your agendas'},
 ];
 
-export const SMUGGLING_RULES: ReadonlyArray<DuneRule> = [
-  {picture: 'special-smugglers-market', text: 'Move spice: up to 5 titanium per deal at the current spice rate'},
-  {picture: 'coin', text: 'Exchange: the rates change every generation – sell high, buy low'},
-  {sign: 'levels', text: 'Every deal raises the suspicion by 1'},
-  {sign: 'shield', text: 'A bribe (10 M€, Industrial Center owner 7) lowers it by 1'},
-  {sign: 'flag', text: 'End of generation: 0 and 1 are free, from 2 on TR is lost and the marker drops back to 0'},
-  {sign: 'hidden', text: 'At 4 all trading stops until a bribe lowers it'},
-];
-
 // Shai-Hulud: what the worm does to the spaces it crosses
 const WORM_EFFECT_RULES: ReadonlyArray<DuneRule> = [
   {picture: 'tile-small-spicefield', text: 'Spice field: +1 spice for each adjacent tile of a player'},
@@ -69,12 +60,15 @@ export function wormRules(layout: ArrakisLayout): ReadonlyArray<DuneRule> {
   ];
 }
 
-// CHOAM contracts (Jens, 19 Oct 2026: as a short list like the other modules)
+// CHOAM (Jens 24 Oct 2026: smuggling and the CHOAM contracts as one module, as a short list like the other modules)
 export const CHOAM_RULES: ReadonlyArray<DuneRule> = [
-  {picture: 'choam', text: 'Offer (action): goods leave your stock, with a wish of up to 30 in return'},
-  {sign: 'keep', text: 'At most 1 open offer per player (Guild Bank card: 2)'},
-  {sign: 'tap', text: 'Accept (action): first come, first harvested'},
-  {picture: 'coin', text: 'On a deal seller and buyer each pay 1 Solari to the bank'},
-  {sign: 'leave', text: 'Withdraw (action): the goods come back, no fee'},
-  {sign: 'enter', text: 'An offer stands for 2 generations; if nobody takes it, it returns without a fee'},
+  {picture: 'coin', text: 'Guild: the rates change every generation, the next one is known in advance'},
+  {sign: 'slide', text: 'Supply and demand: every 3 units all players sell net lower the next selling rate by 1, every 3 bought raise the next buying rate by 1'},
+  {sign: 'die', text: 'Prophecy: name a rate, it comes true when the new rates reach it; withdrawing gives back half, at game end it is lost'},
+  {picture: 'choam', text: 'Privilege: each generation the emperor pays 1.5 times the normal worth for one good, only to the first'},
+  {sign: 'tap', text: 'Pacts: one open offer per player for 2 generations; on a deal both pay 1 Solari'},
+  {sign: 'levels', text: 'Every move raises the envy of the great houses by 1'},
+  {sign: 'flag', text: 'End of generation: 0 to 2 are free, from 3 on TR is lost and the grudge is over (back to 0)'},
+  {sign: 'hidden', text: 'At 5 CHOAM is closed until a tribute lowers the envy'},
+  {sign: 'shield', text: 'Tribute (10 Solari, Industrial Center owner 7) lowers the envy by 1'},
 ];

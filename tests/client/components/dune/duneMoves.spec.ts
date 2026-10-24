@@ -34,7 +34,7 @@ describe('duneMoves', () => {
   it('finds a move through the action menu and the module group', () => {
     expect(movePath(menu, [{title: RECRUIT_TITLE}])).deep.eq([1, 1]);
     expect(movePath(menu, [{title: BAZAAR_WARE_TITLE, value: 'Spice'}])).deep.eq([1, 0, 1]);
-    expect(movePath(menu, [{title: 'Bribe the officials'}])).deep.eq([1, 2]);
+    expect(movePath(menu, [{title: 'Tribute to the great houses'}])).deep.eq([1, 2]);
   });
 
   it('reports a move that is not offered', () => {

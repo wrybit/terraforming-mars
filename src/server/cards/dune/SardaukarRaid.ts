@@ -27,7 +27,7 @@ export class SardaukarRaid extends Card implements IProjectCard {
           // outline, then the 4 Solari you gain; who is hit says the description in red (cardTextMarkup.ts)
           b.minus().tr(1, {all}).nbsp.megacredits(4);
         }),
-        description: 'Every opponent with suspicion 3 or more loses 1 TR. Gain 4 M€.',
+        description: 'Every opponent with envy 3 or more loses 1 TR. Gain 4 M€.',
       },
     });
   }

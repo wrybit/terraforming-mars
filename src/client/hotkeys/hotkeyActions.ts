@@ -69,7 +69,6 @@ export const HOTKEY_ACTIONS: ReadonlyArray<HotkeyAction> = [
   {id: 'tab-trade', group: 'tabs-expansion', label: 'Trade', keys: ['KeyH'], expansion: 'colonies'},
   // Dune action tabs continue the context row like Delegate and Trade (Jens, 19 Oct 2026)
   {id: 'tab-choam', group: 'tabs-expansion', label: 'CHOAM', keys: ['KeyG'], expansion: 'dune'},
-  {id: 'tab-smuggling', group: 'tabs-expansion', label: 'Smuggling', keys: ['KeyH'], expansion: 'dune'},
   // Board tabs above the right column, in their order on the right-hand home row; the view of Mars / Moon below
   {id: 'board-mars', group: 'board', label: 'Mars', keys: ['KeyJ']},
   {id: 'board-moon', group: 'board', label: 'Moon', keys: ['KeyK'], expansion: 'moon'},

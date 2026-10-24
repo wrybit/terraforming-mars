@@ -18,7 +18,7 @@ export class SmugglerNetwork extends Card implements IProjectCard {
       metadata: {
         cardNumber: 'E10',
         renderData: CardRenderer.builder((b) => {
-          b.effect('A bribe costs you 4 M€ less.', (eb) => eb.text('bribe').startEffect.megacredits(-4));
+          b.effect('A tribute costs you 4 M€ less.', (eb) => eb.text('tribute').startEffect.megacredits(-4));
         }),
       },
     });

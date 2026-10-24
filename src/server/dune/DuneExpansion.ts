@@ -13,8 +13,9 @@ import {BazaarData, bazaarModel, bazaarTabActions, buyInput, initializeBazaar, s
 import {WormData, distanceInput, rollWorm, wormChooser, wormModel, wormStart} from './Worm';
 import {levyInput} from './WormLevy';
 import {KanlyData, initializeKanly, kanlyActions, kanlyModel, resolveBattle} from './Kanly';
-import {SmugglingData, chargeSuspicion, initializeSmuggling, moveExchange, smugglingActions, smugglingModel, smugglingTabActions} from './Smuggling';
-import {ChoamData, choamActions, choamModel, choamTabActions, initializeChoam, returnOffers} from './Choam';
+import {SmugglingData, chargeSuspicion, initializeSmuggling, moveExchange, smugglingModel} from './Smuggling';
+import {ChoamData, choamModel, initializeChoam, returnOffers} from './Choam';
+import {choamExchangeActions, choamExchangeTabActions, choamParts} from './ChoamExchange';
 import {SchemesData, initializeSchemes, reductionStep, schemesModel, scoringAgenda} from './Schemes';
 import {Phase} from '../../common/Phase';
 
@@ -42,7 +43,8 @@ export type DuneResume = {
 type GenerationEndStep = (game: IGame, data: DuneData, next: () => void) => void;
 
 // Order at the end of a generation: the battle first (its tile may then meet the worm), then the worm, the schemes
-// (TR is final now), suspicion and finally the CHOAM offers nobody took
+// (TR is final now), then CHOAM: the envy, new rates with the prophecies and a new privilege, and finally the offers
+// nobody took
 const GENERATION_END_STEPS: ReadonlyArray<GenerationEndStep> = [
   (game, data, next) => {
     if (data.kanly !== undefined) {
@@ -53,16 +55,12 @@ const GENERATION_END_STEPS: ReadonlyArray<GenerationEndStep> = [
   wormStep,
   (game, data, next) => (data.schemes === undefined ? next() : reductionStep(game, data.schemes, next)),
   (game, data, next) => {
-    if (data.smuggling !== undefined) {
-      chargeSuspicion(game, data.smuggling);
-      // The exchange sets the rates of the next generation
-      moveExchange(game, data.smuggling);
-    }
-    next();
-  },
-  (game, data, next) => {
-    if (data.choam !== undefined) {
-      returnOffers(game, data.choam);
+    const parts = choamParts(data);
+    if (parts !== undefined) {
+      chargeSuspicion(game, parts.smuggling);
+      // The forecast becomes the rates of the next generation; prophecies come true; a new privilege
+      moveExchange(game, parts.smuggling);
+      returnOffers(game, parts.choam);
     }
     next();
   },
@@ -120,10 +118,10 @@ export class DuneExpansion {
     if (modules.includes('kanly')) {
       data.kanly = initializeKanly();
     }
-    if (modules.includes('smuggling')) {
-      data.smuggling = initializeSmuggling();
-    }
-    if (modules.includes('choam')) {
+    // CHOAM: smuggling and the CHOAM contracts are one module now (Jens 24 Oct 2026); the old id 'smuggling' of
+    // saved settings switches on the whole module too
+    if (modules.includes('choam') || modules.includes('smuggling')) {
+      data.smuggling = initializeSmuggling(rng);
       data.choam = initializeChoam();
     }
     if (modules.includes('schemes')) {
@@ -231,8 +229,7 @@ export class DuneExpansion {
     }
     const options: Array<PlayerInput> = [
       ...(data.kanly === undefined ? [] : kanlyActions(player, data.kanly)),
-      ...(data.smuggling === undefined ? [] : smugglingActions(player, data.smuggling)),
-      ...(data.choam === undefined ? [] : choamActions(player, data.choam)),
+      ...choamExchangeActions(player, data),
     ];
     if (options.length === 0) {
       return undefined;
@@ -250,8 +247,7 @@ export class DuneExpansion {
       return [];
     }
     return [
-      ...(data.choam === undefined ? [] : choamTabActions(player, data.choam)),
-      ...(data.smuggling === undefined ? [] : smugglingTabActions(player, data.smuggling)),
+      ...choamExchangeTabActions(player, data),
       ...(data.bazaar === undefined ? [] : bazaarTabActions(player, data.bazaar)),
     ];
   }
@@ -273,12 +269,14 @@ export class DuneExpansion {
     if (data === undefined) {
       return undefined;
     }
+    // A game with only one of the two former halves of CHOAM shows the whole module (no random numbers drawn)
+    choamParts(data);
     return {
       board: arrakisLayout(game.gameOptions.boardName).board,
       bazaar: data.bazaar === undefined ? undefined : bazaarModel(game, data.bazaar, viewer),
       worm: data.worm === undefined ? undefined : wormModel(game, data.worm),
       kanly: data.kanly === undefined ? undefined : kanlyModel(game, data.kanly),
-      smuggling: data.smuggling === undefined ? undefined : smugglingModel(game, data.smuggling),
+      smuggling: data.smuggling === undefined ? undefined : smugglingModel(game, data.smuggling, viewer),
       choam: data.choam === undefined ? undefined : choamModel(game, data.choam),
       schemes: data.schemes === undefined ? undefined : schemesModel(game, data.schemes, viewer),
     };

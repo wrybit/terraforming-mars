@@ -1,0 +1,462 @@
+// CHOAM tab of the action menu (ChoamExchangeInput.vue and its panes; Jens 24 Oct 2026,
+// _mockups/dune/choam/choam-prototyp.html): quiet info text, boxes with dividers for forms and lists, the delivered
+// privilege as one box, and the forecast row of the exchange chart.
+@import (reference) "./variables.less";
+
+@choam-edge: #b0652e;
+@choam-sand: #e6cfa6;
+@choam-quiet: #b9a585;
+@choam-white: #fffdf8;
+@choam-good: #49c24a;
+@choam-bad: #e0503c;
+@choam-divider: rgba(255, 255, 255, 0.07);
+
+// Info is plain quiet text: no background, no border, nothing that looks clickable (Jens 24 Oct 2026)
+.choam-info {
+  margin: 0;
+  color: @choam-quiet;
+  font-size: 14px;
+  line-height: 1.5;
+  text-align: center;
+
+  img {
+    width: 18px;
+    height: 18px;
+    vertical-align: -4px;
+  }
+}
+
+.choam-info--left {
+  text-align: left;
+}
+
+.choam-info--block {
+  line-height: 1.6;
+}
+
+// The sentence on top of each pane: what you can do there
+.choam-lead {
+  max-width: 46em;
+  margin: 0 auto 14px;
+  color: #d8c29c;
+  font-size: 15px;
+}
+
+.choam-closed {
+  padding: 40px 0;
+  font-size: 15px;
+}
+
+// Boxes: forms and lists each in their own box, rows divided by thin lines (law of common region)
+.choam-card {
+  padding: 12px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.choam-card__title {
+  margin: 0 0 6px;
+  color: @choam-sand;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.choam-order {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+}
+
+.choam-order__top {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 240px;
+  gap: 14px;
+  align-items: stretch;
+}
+
+@container (max-width: 620px) {
+  .choam-order__top {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.choam-form__row {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  padding: 10px 0;
+
+  & + & {
+    border-top: 1px solid @choam-divider;
+  }
+}
+
+.choam-form__label {
+  color: @choam-quiet;
+  font-size: 14px;
+}
+
+.choam-form__control {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-start;
+  min-width: 0;
+
+  .amount-slider-plain {
+    width: 100%;
+  }
+}
+
+.choam-form__goods.trade-select__resources {
+  justify-content: flex-start;
+
+  .trade-select__resource {
+    width: 48px;
+  }
+}
+
+// Sell / buy as a small switch
+.exchange-order__sides {
+  display: inline-flex;
+  padding: 3px;
+  border: 1px solid @choam-edge;
+  border-radius: 999px;
+  background: #1c100a;
+}
+
+.exchange-order__side {
+  min-width: 84px;
+  height: 28px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: @choam-sand;
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: default;
+  }
+}
+
+.exchange-order__side--on {
+  background: rgba(240, 162, 74, 0.25);
+  box-shadow: inset 0 0 0 1px #f0a24a;
+  color: @choam-white;
+}
+
+.exchange-order__verb {
+  color: @choam-sand;
+  font-weight: 700;
+}
+
+.exchange-order__condition {
+  display: inline-flex;
+  gap: 3px;
+  align-items: center;
+  color: @choam-white;
+  font-family: Prototype, sans-serif;
+  font-size: 18px;
+
+  img {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+// What the prophecy brings
+.choam-result {
+  display: flex;
+  flex-direction: column;
+}
+
+.choam-result__big {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin: 4px 0 12px;
+  color: #6fd26f;
+  font-family: Prototype, sans-serif;
+  font-size: 34px;
+  line-height: 1;
+
+  img {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+.choam-result__list {
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid @choam-divider;
+  list-style: none;
+
+  li {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 7px 0;
+    border-bottom: 1px solid @choam-divider;
+    color: @choam-quiet;
+    font-size: 13px;
+  }
+
+  b {
+    display: inline-flex;
+    gap: 4px;
+    align-items: center;
+    color: @choam-white;
+    font-family: Prototype, sans-serif;
+    font-size: 16px;
+    font-weight: normal;
+  }
+
+  img {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.choam-result__status {
+  margin: auto 0 0;
+  padding-top: 10px;
+  font-size: 13px;
+}
+
+.choam-result__status--yes {
+  color: #8fc98f;
+}
+
+.choam-result__status--no {
+  color: @choam-quiet;
+}
+
+// Lists of open offers and prophecies: one row each, the move on the right
+.choam-open__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  padding: 8px 0;
+  font-size: 15px;
+
+  & + & {
+    border-top: 1px solid @choam-divider;
+  }
+
+  .choam-input__move {
+    margin-left: auto;
+  }
+}
+
+.choam-open__note {
+  display: inline-flex;
+  gap: 3px;
+  align-items: center;
+  color: @choam-quiet;
+  font-size: 13px;
+
+  img {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+// The delivered privilege: asked → delivered → received, and who took it
+.choam-done {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+
+  .choam-card__title {
+    margin: 0;
+  }
+
+  .choam-info {
+    margin-top: -4px;
+  }
+}
+
+.choam-done__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.choam-done__by {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  color: @choam-quiet;
+  font-size: 13px;
+}
+
+.choam-done__flow {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 0;
+}
+
+.choam-done__part {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  min-width: 110px;
+}
+
+.choam-done__label {
+  color: @choam-quiet;
+  font-size: 13px;
+}
+
+.choam-done__value {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  color: @choam-white;
+  font-family: Prototype, sans-serif;
+  font-size: 26px;
+
+  img {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+.choam-done__part--gain .choam-done__value {
+  color: #6fd26f;
+}
+
+.choam-done__arrow {
+  margin-top: 18px;
+  color: @choam-quiet;
+  font-size: 22px;
+}
+
+.choam-privilege {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: center;
+}
+
+// A privilege nobody took yet: a small green dot in the switch
+.smuggle-input__news {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: @choam-good;
+  box-shadow: 0 0 0 3px rgba(73, 194, 74, 0.3);
+}
+
+// A peak (3 or more in the player's favour) stands out on the tile
+.trade-select__change--peak {
+  padding: 0 4px;
+  border-radius: 6px;
+  background: @choam-good;
+  color: #2b1608;
+  font-weight: 700;
+}
+
+// Exchange chart: the current generation outlined (no label), the forecast row below dashed rings (Jens 24 Oct 2026)
+.exchange-chart {
+  position: relative;
+}
+
+.exchange-chart__band {
+  position: absolute;
+  z-index: 1;
+  right: -4px;
+  left: 0;
+  height: 20px;
+  transform: translateY(-50%);
+  border: 1.5px solid rgba(255, 253, 248, 0.75);
+  border-radius: 10px;
+  background: rgba(255, 253, 248, 0.07);
+  pointer-events: none;
+}
+
+.exchange-chart__generation.exchange-chart__generation--next {
+  color: @choam-sand;
+  font-style: italic;
+}
+
+.exchange-chart__line.exchange-chart__line--forecast {
+  stroke-dasharray: 3, 3;
+  stroke-opacity: 0.9;
+}
+
+.exchange-chart__point.exchange-chart__point--forecast {
+  width: 11px;
+  height: 11px;
+  border: 2px solid #fff8ea;
+  background: #2a170e;
+
+  &.exchange-chart__point--good {
+    border-color: @choam-good;
+    box-shadow: none;
+  }
+
+  &.exchange-chart__point--bad {
+    border-color: @choam-bad;
+    box-shadow: none;
+  }
+}
+
+// Five moves in the switch: narrower buttons when room gets short, and on the phone the switch leaves the box edge
+// and wraps inside the box, so no move is cut off (Jens 24 Oct 2026)
+@container (max-width: 760px) {
+  .choam-exchange .smuggle-input__mode {
+    min-width: 0;
+    padding: 0 12px;
+  }
+}
+
+@container (max-width: 560px) {
+  .choam-exchange .smuggle-input__modes {
+    position: static;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2px;
+    margin-bottom: 12px;
+    transform: none;
+    border-radius: 18px;
+    white-space: normal;
+  }
+
+  .choam-exchange .smuggle-input__mode {
+    height: 32px;
+    padding: 0 10px;
+    font-size: 14px;
+  }
+
+  .choam-exchange .smuggle-input__move {
+    padding-top: 10px;
+  }
+}
+
+// Phone: the label of a form row above its control, so the goods and sliders get the full width
+@container (max-width: 560px) {
+  .choam-form__row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+  }
+}

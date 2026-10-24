@@ -26,7 +26,7 @@ describe('hotkeyStore', () => {
   it('lets Dune share the keys of the other expansions, but not with each other or the base tabs', () => {
     // Dune never meets Moon or Colonies in one game: both tabs on K, the dispatcher tries them in turn
     expect(actionsForKeys(['KeyK'])).to.deep.equal(['board-moon', 'board-bazaar']);
-    expect(actionsForKeys(['KeyH'])).to.deep.equal(['tab-trade', 'tab-smuggling']);
+    expect(actionsForKeys(['KeyH'])).to.deep.equal(['tab-trade']);
     expect(duplicateBindings().size).to.equal(0);
     setBinding('board-worm', ['KeyK']);
     expect(Array.from(duplicateBindings()).sort()).to.deep.equal(['board-bazaar', 'board-worm']);

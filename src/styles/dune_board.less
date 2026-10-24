@@ -183,7 +183,8 @@ html.tm-mobile .dune-fit {
 // Smuggling: track 0–4 (DuneModel.ts MAX_SUSPICION), each step tinted warmer than the one before
 .dune-smuggling__track {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  // One row for every step of the track, however many (SmugglingPanel.vue sets the count; Jens 24 Oct 2026)
+  grid-template-columns: repeat(var(--dune-track-steps, 6), minmax(0, 1fr));
   gap: 6px;
   margin: 0;
   padding: 0;
@@ -209,17 +210,18 @@ html.tm-mobile .dune-fit {
 }
 
 .dune-smuggling__step--0 { .dune-smuggling-step(#4a3a2a, #a28a68); }
-.dune-smuggling__step--1 { .dune-smuggling-step(#5a4220, #c99a3a); }
-.dune-smuggling__step--2 { .dune-smuggling-step(#6a3a18, #e0822f); }
-.dune-smuggling__step--3 { .dune-smuggling-step(#6a2a16, #d2582b); }
-.dune-smuggling__step--4 { .dune-smuggling-step(#5e1c16, #b8322a); }
+.dune-smuggling__step--1 { .dune-smuggling-step(#51402a, #b4924a); }
+.dune-smuggling__step--2 { .dune-smuggling-step(#5a4220, #c99a3a); }
+.dune-smuggling__step--3 { .dune-smuggling-step(#6a3a18, #e0822f); }
+.dune-smuggling__step--4 { .dune-smuggling-step(#6a2a16, #d2582b); }
+.dune-smuggling__step--5 { .dune-smuggling-step(#5e1c16, #b8322a); }
 
 .dune-smuggling__level {
   font-size: 18px;
   font-weight: bold;
 }
 
-// The loss at the end of the generation with the influence icon; 0 and 1 are free
+// The loss at the end of the generation with the influence icon; 0 to 2 are free
 .dune-smuggling__penalty {
   display: inline-flex;
   align-items: center;

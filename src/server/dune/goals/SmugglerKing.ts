@@ -6,7 +6,7 @@ export class SmugglerKing extends BaseMilestone {
   constructor() {
     super(
       'Smuggler King',
-      'Make 3 smuggling deals',
+      'Make 3 guild trades',
       3);
   }
 

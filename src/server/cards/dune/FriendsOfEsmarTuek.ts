@@ -25,10 +25,10 @@ export class FriendsOfEsmarTuek extends Card implements IProjectCard {
       metadata: {
         cardNumber: 'E11',
         renderData: CardRenderer.builder((b) => {
-          b.text('Lower your smuggling suspicion 2 steps.', {size: Size.SMALL}).br;
+          b.text('Lower your envy 2 steps.', {size: Size.SMALL}).br;
           b.titanium(3);
         }),
-        description: 'Lower your suspicion by 2. Gain 3 titanium.',
+        description: 'Lower your envy by 2. Gain 3 titanium.',
       },
     });
   }

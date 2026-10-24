@@ -21,8 +21,8 @@ export const DUNE_MODULE_DETAIL: Record<DuneModule, string> = {
   worm: 'Worm marker · end of generation',
   kanly: 'Sardaukar · one battle per generation',
   schemes: '24 secret agendas · 3/5/8 VP',
-  choam: 'Trade between players',
-  smuggling: 'Spice for M€ · suspicion track',
+  choam: 'Guild · prophecy · privilege · pacts · tribute',
+  smuggling: 'Guild · prophecy · privilege · pacts · tribute',
   goals: '7 milestones · 7 awards for random draws',
 };
 

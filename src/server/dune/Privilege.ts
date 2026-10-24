@@ -1,0 +1,72 @@
+import {IGame} from '../IGame';
+import {IPlayer} from '../IPlayer';
+import {PlayerId} from '../../common/Types';
+import {Random} from '../../common/utils/Random';
+import {Resource} from '../../common/Resource';
+import {SelectOption} from '../inputs/SelectOption';
+import {EXCHANGE_GOODS, ExchangeGood, NORMAL_SELL, PRIVILEGE_FACTOR} from '../../common/dune/smugglingExchange';
+import {PRIVILEGE_TITLE} from '../../common/dune/duneActionTitles';
+import {PrivilegeModel} from '../../common/dune/DuneModel';
+import {RESOURCE_LABEL} from './resourceLabels';
+
+// Privilege of the CHOAM module (Jens 24 Oct 2026, _mockups/dune/choam/choam-prototyp.html): every generation the
+// emperor asks for one good and pays 1.5 times its normal worth – but only to the first who delivers (an action).
+// Whoever took it is shown with what was asked, delivered and paid; nobody took it at the end of the generation: it
+// lapses, and the next generation brings a new one.
+
+export type PrivilegeData = {
+  generation: number,
+  good: ExchangeGood,
+  amount: number,
+  pay: number,
+  takenBy?: PlayerId,
+};
+
+/**
+ * A new privilege: a good chance picks, about 10 Solari of normal worth (2 to 6 units). Without `rng` (games saved
+ * before the privilege, on first look) the generation picks it, so showing the game never draws random numbers.
+ */
+export function newPrivilege(generation: number, rng?: Random): PrivilegeData {
+  const index = rng === undefined ? generation % EXCHANGE_GOODS.length : Math.floor(rng.next() * EXCHANGE_GOODS.length);
+  const good = EXCHANGE_GOODS[index];
+  const amount = Math.max(2, Math.min(6, Math.ceil(10 / NORMAL_SELL[good])));
+  return {generation, good, amount, pay: Math.ceil(NORMAL_SELL[good] * amount * PRIVILEGE_FACTOR)};
+}
+
+export function canDeliver(player: IPlayer, privilege: PrivilegeData): boolean {
+  return privilege.takenBy === undefined && player.stock.get(privilege.good) >= privilege.amount;
+}
+
+export function deliverInput(player: IPlayer, privilege: PrivilegeData, then: () => void): SelectOption | undefined {
+  if (!canDeliver(player, privilege)) {
+    return undefined;
+  }
+  return new SelectOption(PRIVILEGE_TITLE, 'Deliver').andThen(() => {
+    player.stock.deduct(privilege.good, privilege.amount, {log: true});
+    player.stock.add(Resource.MEGACREDITS, privilege.pay, {log: true});
+    privilege.takenBy = player.id;
+    player.game.log('${0} delivered ${1} ${2} to the emperor for ${3} M€',
+      (b) => b.player(player).number(privilege.amount).string(RESOURCE_LABEL[privilege.good]).number(privilege.pay));
+    then();
+    return undefined;
+  });
+}
+
+/** End of a generation: the old privilege lapses, the next generation gets a new one */
+export function renewPrivilege(game: IGame, privilege: PrivilegeData | undefined): PrivilegeData {
+  if (privilege !== undefined && privilege.takenBy === undefined) {
+    game.log('Nobody used the privilege of the emperor');
+  }
+  return newPrivilege(game.generation + 1, game.rng);
+}
+
+export function privilegeModel(game: IGame, privilege: PrivilegeData): PrivilegeModel {
+  return {
+    generation: privilege.generation,
+    good: privilege.good,
+    amount: privilege.amount,
+    pay: privilege.pay,
+    worth: NORMAL_SELL[privilege.good] * privilege.amount,
+    takenBy: privilege.takenBy === undefined ? undefined : game.getPlayerById(privilege.takenBy).color,
+  };
+}

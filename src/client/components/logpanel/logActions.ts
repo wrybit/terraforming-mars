@@ -118,6 +118,11 @@ const EFFECT_LINES = new Set([
   '${0} smuggled spice past the Empire',
   '${0} traded on the black market',
   '${0} bribed the officials',
+  // CHOAM since 24 Oct 2026 (dune/Smuggling.ts, Privilege.ts, Prophecy.ts)
+  '${0} traded with the guild',
+  '${0} paid tribute to the great houses',
+  '${0} delivered ${1} ${2} to the emperor for ${3} M€',
+  '${0} withdrew a prophecy: ${1} of ${2} back',
   '${0} accepted the CHOAM contract of ${1}',
   '${0} recruited ${1} Sardaukar',
   '${0} takes ${1} from ${2} in the Kanly',

@@ -1,10 +1,9 @@
 import {Component} from 'vue';
 import {PlayerInputModel} from '@/common/models/PlayerInputModel';
 import {PlayerViewModel} from '@/common/models/PlayerModel';
-import {CHOAM_TITLE, MENTAT_TITLE, SCHEMES_TITLE, SMUGGLE_TITLE, SPY_VIEW_TITLE, WORM_TITLE} from '@/common/dune/duneActionTitles';
+import {CHOAM_TITLE, MENTAT_TITLE, SCHEMES_TITLE, SPY_VIEW_TITLE, WORM_TITLE} from '@/common/dune/duneActionTitles';
 import WormMoveInput from './WormMoveInput.vue';
-import SmuggleInput from './SmuggleInput.vue';
-import ChoamInput from './ChoamInput.vue';
+import ChoamExchangeInput from './ChoamExchangeInput.vue';
 import SchemesKeepInput from './SchemesKeepInput.vue';
 import MentatSwapInput from './MentatSwapInput.vue';
 import SpyAgendasInput from './SpyAgendasInput.vue';
@@ -16,11 +15,8 @@ export function duneInputComponent(input: PlayerInputModel, playerView: PlayerVi
   if (input.type === 'or' && title === WORM_TITLE && (playerView.game?.dune?.worm?.choices?.length ?? 0) > 0) {
     return WormMoveInput;
   }
-  if (isSmugglingTab(input)) {
-    return SmuggleInput;
-  }
   if (isChoamTab(input)) {
-    return ChoamInput;
+    return ChoamExchangeInput;
   }
   // House schemes: which agenda to keep, as the agenda cards (SchemesKeepInput.vue)
   if (input.type === 'or' && title === SCHEMES_TITLE && playerView.game?.dune?.schemes !== undefined) {
@@ -42,19 +38,13 @@ function isMentatSwap(input: PlayerInputModel): boolean {
   return input.type === 'or' && (typeof input.title === 'string' ? input.title : input.title?.message) === MENTAT_TITLE;
 }
 
-// The smuggling tab (trade or bribe, SmuggleInput.vue): one choice of the server whose button depends on the chosen
-// move, so the input brings its own button instead of the menu's
-function isSmugglingTab(input: PlayerInputModel): boolean {
-  return input.type === 'or' && (typeof input.title === 'string' ? input.title : input.title?.message) === SMUGGLE_TITLE;
-}
-
-// The CHOAM tab (list of all offers with accept/withdraw, own new offer; ChoamInput.vue): its buttons sit in the lines
-// and the footer button only offers
+// The CHOAM tab (guild, prophecy, privilege, pacts, tribute; ChoamExchangeInput.vue): one choice of the server whose
+// button depends on the chosen move, so the input brings its own button instead of the menu's
 function isChoamTab(input: PlayerInputModel): boolean {
   return input.type === 'or' && (typeof input.title === 'string' ? input.title : input.title?.message) === CHOAM_TITLE;
 }
 
 /** Dune inputs that render their own save button (OrOptions.vue leaves its own out for them) */
 export function duneInputHasOwnButton(input: PlayerInputModel): boolean {
-  return isSmugglingTab(input) || isChoamTab(input) || isMentatSwap(input);
+  return isChoamTab(input) || isMentatSwap(input);
 }

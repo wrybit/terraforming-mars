@@ -13,7 +13,7 @@ import {arrakisLayout} from '@/common/dune/arrakisLayout';
 import {duneGraphic} from '@/client/components/dune/duneGraphic';
 
 // The Dune expansion gets one tab per module of this game (common/dune/DuneModule.ts), in the order of the concept
-// Smuggling and CHOAM have no board tab: they live in their action tabs (SmuggleInput.vue, ChoamInput.vue; Jens 19 Oct 2026)
+// CHOAM has no board tab: it lives in its action tab (ChoamExchangeInput.vue; Jens 19 Oct 2026)
 export const DUNE_BOARD_TABS = ['bazaar', 'worm', 'kanly', 'schemes'] as const;
 export type DuneBoardTabId = typeof DUNE_BOARD_TABS[number];
 export type BoardTabId = 'mars' | 'moon' | 'colonies' | 'turmoil' | 'paths' | 'delta' | DuneBoardTabId;
