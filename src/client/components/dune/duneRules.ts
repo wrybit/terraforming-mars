@@ -11,9 +11,10 @@ export type DuneRule = {picture?: string, sign?: DuneRuleSign, text: string, det
 
 export const BAZAAR_RULES: ReadonlyArray<DuneRule> = [
   {picture: 'special-bazaar', text: '32 wares, each 10 % below its card value'},
-  {sign: 'enter', text: 'Every generation a new ware comes in on the left'},
-  {sign: 'slide', text: 'The others slide right and get cheaper'},
+  {sign: 'enter', text: 'At the start one ware per player lies out from the left'},
+  {sign: 'slide', text: 'Every generation all wares slide right, close the gaps and get cheaper'},
   {sign: 'leave', text: 'Whatever drops out on the right is gone'},
+  {sign: 'enter', text: 'New wares fill every free slot left of the first ware'},
   {sign: 'tap', text: 'Buying is an action: one ware per player and generation'},
   {sign: 'payout', text: 'Bought: pays out at once, then to the discard pile'},
   {picture: 'coin', text: 'The owner of the Commercial District pays 2 Solari less'},

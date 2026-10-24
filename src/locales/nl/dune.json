@@ -234,8 +234,6 @@
   "Bazaar: buy a ware": "Bazaar: koop een waar",
   "Buy this ware": "Deze waar kopen",
   "32 wares, each 10 % below its card value": "32 waren, elk 10 % onder kaartwaarde",
-  "Every generation a new ware comes in on the left": "Elke generatie komt er links een nieuwe bij",
-  "The others slide right and get cheaper": "De rest schuift naar rechts en wordt goedkoper",
   "Whatever drops out on the right is gone": "Wat er rechts uit valt, is weg",
   "Buying is an action: one ware per player and generation": "Kopen is een actie: één waar per speler en generatie",
   "Bought: pays out at once, then to the discard pile": "Gekocht: levert meteen op, dan naar de aflegstapel",
@@ -369,5 +367,8 @@
   "Theme": "Thema",
   "Not available with the Dune theme": "Niet beschikbaar met het thema Dune",
   "Same line as the last move: the die is rolled again": "Dezelfde lijn als de vorige zet: er wordt opnieuw gegooid",
-  "Direction: a die – the same line as the last move (either way) is rolled once more": "Richting: een dobbelsteen – dezelfde lijn als de vorige zet (welke kant ook) wordt één keer opnieuw gegooid"
+  "Direction: a die – the same line as the last move (either way) is rolled once more": "Richting: een dobbelsteen – dezelfde lijn als de vorige zet (welke kant ook) wordt één keer opnieuw gegooid",
+  "At the start one ware per player lies out from the left": "Aan het begin ligt vanaf links één waar per speler",
+  "Every generation all wares slide right, close the gaps and get cheaper": "Elke generatie schuiven alle waren naar rechts, sluiten gaten en worden goedkoper",
+  "New wares fill every free slot left of the first ware": "Nieuwe waren vullen alle vrije plekken links van de eerste waar"
 }

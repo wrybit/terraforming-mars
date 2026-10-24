@@ -94,7 +94,7 @@ export function bazaarPrice(ware: BazaarWare, slot: number, ownsBazaarTile: bool
   return Math.max(0, price);
 }
 
-/** How many wares lie out for this many players: one fewer than players, between 1 and the number of slots */
-export function bazaarWareCount(playerCount: number): number {
-  return Math.min(BAZAAR_SLOT_PRICE_CHANGE.length, Math.max(1, playerCount - 1));
+/** How many wares lie out at the start: one per player, between 1 and the number of slots */
+export function bazaarStartWareCount(playerCount: number): number {
+  return Math.min(BAZAAR_SLOT_PRICE_CHANGE.length, Math.max(1, playerCount));
 }

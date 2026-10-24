@@ -241,8 +241,6 @@
   "Bazaar: buy a ware": "集市：购买一件货物",
   "Buy this ware": "购买这件货物",
   "32 wares, each 10 % below its card value": "32件货物，均比卡牌价值低 10%",
-  "Every generation a new ware comes in on the left": "每世代左侧新增一件货物",
-  "The others slide right and get cheaper": "其余向右移动并变便宜",
   "Whatever drops out on the right is gone": "从右侧移出的即被淘汰",
   "Buying is an action: one ware per player and generation": "购买是一个行动：每位玩家每世代一件",
   "Bought: pays out at once, then to the discard pile": "购得：立即生效，然后进入弃牌堆",
@@ -380,5 +378,8 @@
   "Dune": "沙丘",
   "Not available with the Dune theme": "沙丘主题下不可用",
   "Same line as the last move: the die is rolled again": "与上次移动在同一直线上：重新掷骰",
-  "Direction: a die – the same line as the last move (either way) is rolled once more": "方向：掷骰——若与上次移动在同一直线上（无论哪个方向），重掷一次"
+  "Direction: a die – the same line as the last move (either way) is rolled once more": "方向：掷骰——若与上次移动在同一直线上（无论哪个方向），重掷一次",
+  "At the start one ware per player lies out from the left": "开局时从左起每位玩家摆出一件货物",
+  "Every generation all wares slide right, close the gaps and get cheaper": "每个世代所有货物右移、填补空位并降价",
+  "New wares fill every free slot left of the first ware": "新货物填满第一件货物左侧的所有空位"
 }

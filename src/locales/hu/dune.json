@@ -239,8 +239,6 @@
   "Bazaar: buy a ware": "Bazár: áru vásárlása",
   "Buy this ware": "Ennek az árunak a megvétele",
   "32 wares, each 10 % below its card value": "32 áru, mindegyik 10 %-kal az értéke alatt",
-  "Every generation a new ware comes in on the left": "Minden generációban bal oldalt új áru érkezik",
-  "The others slide right and get cheaper": "A többi jobbra csúszik és olcsóbb lesz",
   "Whatever drops out on the right is gone": "Ami jobbra kiesik, elvész",
   "Buying is an action: one ware per player and generation": "A vásárlás akció: játékosonként és generációnként egy áru",
   "Bought: pays out at once, then to the discard pile": "Megvéve: azonnal hat, majd a dobópakliba kerül",
@@ -377,5 +375,8 @@
   "Dune": "Dűne",
   "Not available with the Dune theme": "A Dűne témával nem érhető el",
   "Same line as the last move: the die is rolled again": "Ugyanaz a vonal, mint az előző lépésnél: újra kell dobni",
-  "Direction: a die – the same line as the last move (either way) is rolled once more": "Irány: kocka – ha ugyanaz a vonal jön ki, mint az előző lépésnél (bármelyik irányban), egyszer újra kell dobni"
+  "Direction: a die – the same line as the last move (either way) is rolled once more": "Irány: kocka – ha ugyanaz a vonal jön ki, mint az előző lépésnél (bármelyik irányban), egyszer újra kell dobni",
+  "At the start one ware per player lies out from the left": "Kezdéskor balról játékosonként egy áru van kirakva",
+  "Every generation all wares slide right, close the gaps and get cheaper": "Minden generációban minden áru jobbra csúszik, bezárja a réseket és olcsóbb lesz",
+  "New wares fill every free slot left of the first ware": "Új áruk töltik ki az első árutól balra lévő összes szabad helyet"
 }

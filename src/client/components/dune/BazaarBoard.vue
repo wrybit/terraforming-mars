@@ -1,6 +1,6 @@
 <template>
   <!-- Board tab "Bazaar" (Dune module A): the five slots from the newest (dearest) to the oldest (cheapest).
-       A ware slides one slot right each generation; one fewer ware than players lies out. -->
+       Each generation the wares slide right and close their gaps; new wares fill the slots left of the first one. -->
   <div class="dune-bazaar" data-test="dune-bazaar">
     <DuneFitBox>
       <ol class="dune-bazaar__slots">

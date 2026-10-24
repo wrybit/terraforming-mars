@@ -15,13 +15,14 @@ import {CardName} from '../../common/cards/CardName';
 import {BazaarModel} from '../../common/dune/DuneModel';
 import {Color} from '../../common/Color';
 import {
-  BAZAAR_SLOT_PRICE_CHANGE, BAZAAR_WARES, BazaarGood, bazaarBasePrice, bazaarPrice, bazaarWare, bazaarWareCount,
+  BAZAAR_SLOT_PRICE_CHANGE, BAZAAR_WARES, BazaarGood, bazaarBasePrice, bazaarPrice, bazaarStartWareCount, bazaarWare,
 } from '../../common/dune/bazaarWares';
 
-// Module A – Bazaar of Arrakeen (claude/dune-erweiterung-konzept.md). Each generation, right after research:
-// 1. the wares slide one slot to the right (cheaper); a ware pushed out on the right is discarded,
-// 2. a new ware is laid out on the free left slot every generation (Jens, 19 Oct 2026: unsold wares must not block the
-//    bazaar), then more from the left until there are at least one fewer than players.
+// Module A – Bazaar of Arrakeen (claude/dune-erweiterung-konzept.md). At the start one ware per player (at most 5)
+// lies out from the left. Each further generation, right after research (Jens, 24 Oct 2026, bazaar prototype):
+// 1. all wares slide one slot to the right (cheaper); a ware pushed out on the right is discarded,
+// 2. gaps close: the wares slide on to the right until they lie side by side,
+// 3. every free slot left of the first ware gets a new ware (all five when the bazaar is empty).
 // During the action phase, buying a ware is an action (Jens, 19 Oct 2026: tap the ware in the bazaar tab); each
 // player buys at most 1 ware per generation. The owner of the bazaar tile pays less.
 // A bought ware pays out at once and goes to the discard pile; nothing is kept for later.
@@ -45,10 +46,15 @@ export type BazaarData = {
 export const BAZAAR_TITLE = 'Bazaar of Arrakeen: buy one ware';
 export {BAZAAR_ACTION_TITLE};
 
-export function initializeBazaar(rng: Random): BazaarData {
+export function initializeBazaar(rng: Random, playerCount: number): BazaarData {
   const deck = BAZAAR_WARES.map((ware) => ware.name);
   inplaceShuffle(deck, rng);
-  return {deck, discard: [], slots: BAZAAR_SLOT_PRICE_CHANGE.map(() => null), buyers: [], bought: []};
+  const data: BazaarData = {deck, discard: [], slots: BAZAAR_SLOT_PRICE_CHANGE.map(() => null), buyers: [], bought: []};
+  const startCount = bazaarStartWareCount(playerCount);
+  for (let slot = 0; slot < startCount; slot++) {
+    data.slots[slot] = drawWare(data, rng) ?? null;
+  }
+  return data;
 }
 
 /** The owner of the Bazaar special tile (Commercial District) pays less */
@@ -65,22 +71,28 @@ function drawWare(data: BazaarData, rng: Random): string | undefined {
   return data.deck.shift();
 }
 
-/** Steps 1 and 2: slide right, then always one new ware on the left and refill up to the player count */
-export function slideAndRefill(data: BazaarData, playerCount: number, rng: Random): void {
+/** Steps 1 to 3 of a new generation: slide right, close the gaps, fill up left of the first ware */
+export function slideAndRefill(data: BazaarData, rng: Random): void {
   // A new generation: the empty slots no longer tell who took their ware
   data.takenBy = undefined;
-  const pushedOut = data.slots[data.slots.length - 1];
+  const slotCount = data.slots.length;
+  const pushedOut = data.slots[slotCount - 1];
   if (pushedOut !== null && pushedOut !== undefined) {
     data.discard.push(pushedOut);
   }
-  data.slots = [null, ...data.slots.slice(0, data.slots.length - 1)];
-  data.slots[0] = drawWare(data, rng) ?? null;
-  const wanted = bazaarWareCount(playerCount);
-  for (let slot = 0; slot < data.slots.length && data.slots.filter((ware) => ware !== null).length < wanted; slot++) {
-    if (data.slots[slot] === null) {
-      data.slots[slot] = drawWare(data, rng) ?? null;
-    }
+  const slid = [null, ...data.slots.slice(0, slotCount - 1)];
+  // Close the gaps against the rightmost ware: it keeps its slot, the others line up to its left
+  const wares = slid.filter((ware): ware is string => ware !== null);
+  const rightmost = slid.findLastIndex((ware) => ware !== null);
+  const packed: Array<string | null> = slid.map(() => null);
+  wares.forEach((ware, index) => {
+    packed[rightmost - wares.length + 1 + index] = ware;
+  });
+  const firstWare = wares.length === 0 ? slotCount : rightmost - wares.length + 1;
+  for (let slot = 0; slot < firstWare; slot++) {
+    packed[slot] = drawWare(data, rng) ?? null;
   }
+  data.slots = packed;
 }
 
 const GOOD_RESOURCE: Partial<Record<BazaarGood, Resource>> = {

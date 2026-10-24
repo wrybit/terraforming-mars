@@ -241,8 +241,6 @@
   "Bazaar: buy a ware": "Базар: купить товар",
   "Buy this ware": "Купить этот товар",
   "32 wares, each 10 % below its card value": "32 товара, каждый на 10 % ниже ценности",
-  "Every generation a new ware comes in on the left": "Каждое поколение слева появляется новый товар",
-  "The others slide right and get cheaper": "Остальные сдвигаются вправо и дешевеют",
   "Whatever drops out on the right is gone": "Выпавшее справа исчезает",
   "Buying is an action: one ware per player and generation": "Покупка — действие: один товар на игрока за поколение",
   "Bought: pays out at once, then to the discard pile": "Куплено: сразу приносит доход, затем в сброс",
@@ -380,5 +378,8 @@
   "Dune": "Дюна",
   "Not available with the Dune theme": "Недоступно с темой «Дюна»",
   "Same line as the last move: the die is rolled again": "Та же линия, что и в прошлый ход: кубик бросают ещё раз",
-  "Direction: a die – the same line as the last move (either way) is rolled once more": "Направление: кубик – если выпала та же линия, что в прошлый ход (в любую сторону), его бросают ещё раз"
+  "Direction: a die – the same line as the last move (either way) is rolled once more": "Направление: кубик – если выпала та же линия, что в прошлый ход (в любую сторону), его бросают ещё раз",
+  "At the start one ware per player lies out from the left": "В начале слева выложено по одному товару на игрока",
+  "Every generation all wares slide right, close the gaps and get cheaper": "Каждое поколение все товары сдвигаются вправо, закрывают пробелы и дешевеют",
+  "New wares fill every free slot left of the first ware": "Новые товары занимают все свободные места слева от первого товара"
 }

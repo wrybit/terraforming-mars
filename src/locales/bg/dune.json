@@ -241,8 +241,6 @@
   "Bazaar: buy a ware": "Базар: купи стока",
   "Buy this ware": "Купи тази стока",
   "32 wares, each 10 % below its card value": "32 стоки, всяка с 10 % под стойността си",
-  "Every generation a new ware comes in on the left": "Всяко поколение отляво идва нова стока",
-  "The others slide right and get cheaper": "Останалите се местят надясно и поевтиняват",
   "Whatever drops out on the right is gone": "Каквото изпадне отдясно, изчезва",
   "Buying is an action: one ware per player and generation": "Купуването е действие: една стока на играч за поколение",
   "Bought: pays out at once, then to the discard pile": "Купена: изплаща се веднага, после в купчината за изхвърляне",
@@ -380,5 +378,8 @@
   "Dune": "Дюн",
   "Not available with the Dune theme": "Недостъпно с темата „Дюн“",
   "Same line as the last move: the die is rolled again": "Същата линия като при последния ход: заровът се хвърля отново",
-  "Direction: a die – the same line as the last move (either way) is rolled once more": "Посока: зар – при същата линия като последния ход (в която и да е посока) се хвърля още веднъж"
+  "Direction: a die – the same line as the last move (either way) is rolled once more": "Посока: зар – при същата линия като последния ход (в която и да е посока) се хвърля още веднъж",
+  "At the start one ware per player lies out from the left": "В началото отляво има по една стока на играч",
+  "Every generation all wares slide right, close the gaps and get cheaper": "Всяко поколение всички стоки се местят надясно, запълват празнините и поевтиняват",
+  "New wares fill every free slot left of the first ware": "Нови стоки запълват всички свободни места вляво от първата стока"
 }

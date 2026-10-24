@@ -11,7 +11,7 @@ import {BAZAAR_TITLE, BazaarData, bazaarModel, buyWare, slideAndRefill} from '..
 import {SelectPayment} from '../../src/server/inputs/SelectPayment';
 import {Payment} from '../../src/common/inputs/Payment';
 import {DuneExpansion} from '../../src/server/dune/DuneExpansion';
-import {BAZAAR_WARES, bazaarBasePrice, bazaarPrice, bazaarWare, bazaarWareCount} from '../../src/common/dune/bazaarWares';
+import {BAZAAR_WARES, bazaarBasePrice, bazaarPrice, bazaarStartWareCount, bazaarWare} from '../../src/common/dune/bazaarWares';
 import {cast} from '../../src/common/utils/utils';
 import {doWait} from '../TestingUtils';
 
@@ -50,10 +50,11 @@ describe('Bazaar of Arrakeen (Dune module A)', () => {
     expect(new Set(BAZAAR_WARES.map((ware) => ware.name)).size).eq(32);
   });
 
-  it('lays out one ware fewer than players, between 1 and 5', () => {
-    expect(bazaarWareCount(1)).eq(1);
-    expect(bazaarWareCount(3)).eq(2);
-    expect(bazaarWareCount(8)).eq(5);
+  it('lays out one ware per player at the start, between 1 and 5', () => {
+    expect(bazaarStartWareCount(1)).eq(1);
+    expect(bazaarStartWareCount(3)).eq(3);
+    expect(bazaarStartWareCount(8)).eq(5);
+    expect(bazaarOf(game).slots.map((ware) => ware !== null)).deep.eq([true, true, true, false, false]);
   });
 
   it('is not part of a game without the module', () => {
@@ -61,38 +62,42 @@ describe('Bazaar of Arrakeen (Dune module A)', () => {
     expect(plain.duneData).is.undefined;
   });
 
-  it('slides the wares right and refills from the left', () => {
+  it('slides the wares right and fills up left of the first ware', () => {
     const bazaar = bazaarOf(game);
-    expect(bazaar.deck).has.length(32);
-    slideAndRefill(bazaar, 3, game.rng);
-    expect(bazaar.slots.slice(0, 2).every((ware) => ware !== null)).is.true;
-    const [first, second] = bazaar.slots;
-    // Nobody bought: the same two wares, one slot further right and cheaper, and still one new ware on the left
-    slideAndRefill(bazaar, 3, game.rng);
-    const third = bazaar.slots[0];
-    expect(third).is.not.null;
-    expect(bazaar.slots.slice(1)).deep.eq([first, second, null, null]);
-    // One bought: again one new ware on the left
-    bazaar.slots[1] = null;
-    slideAndRefill(bazaar, 3, game.rng);
-    expect(bazaar.slots[0]).is.not.null;
-    expect(bazaar.slots[3]).eq(second);
+    bazaar.slots = ['Bene Gesserit Dossier', 'Cistern of Tabr', null, null, null];
+    slideAndRefill(bazaar, game.rng);
+    const [newWare] = bazaar.slots;
+    expect(newWare).is.not.null;
+    expect(bazaar.slots.slice(1)).deep.eq(['Bene Gesserit Dossier', 'Cistern of Tabr', null, null]);
+    // Nobody bought: one new ware each generation until the bazaar is full
+    slideAndRefill(bazaar, game.rng);
+    slideAndRefill(bazaar, game.rng);
+    expect(bazaar.slots.slice(3)).deep.eq(['Bene Gesserit Dossier', 'Cistern of Tabr']);
+    expect(bazaar.slots.every((ware) => ware !== null)).is.true;
+    expect(bazaar.discard).is.empty;
   });
 
-  it('lays out a new ware every generation, even when a ware is left unsold', () => {
+  it('closes the gaps against the rightmost ware and fills all slots left of the first ware', () => {
     const bazaar = bazaarOf(game);
-    slideAndRefill(bazaar, 2, game.rng);
-    expect(bazaar.slots.filter((ware) => ware !== null)).has.length(1);
-    slideAndRefill(bazaar, 2, game.rng);
-    expect(bazaar.slots.filter((ware) => ware !== null)).has.length(2);
-    expect(bazaar.slots[0]).is.not.null;
+    bazaar.slots = ['Bene Gesserit Dossier', null, 'Cistern of Tabr', null, null];
+    slideAndRefill(bazaar, game.rng);
+    expect(bazaar.slots.slice(2)).deep.eq(['Bene Gesserit Dossier', 'Cistern of Tabr', null]);
+    expect(bazaar.slots.slice(0, 2).every((ware) => ware !== null)).is.true;
+  });
+
+  it('fills all five slots when the bazaar is empty', () => {
+    const bazaar = bazaarOf(game);
+    bazaar.slots = [null, null, null, null, null];
+    slideAndRefill(bazaar, game.rng);
+    expect(bazaar.slots.every((ware) => ware !== null)).is.true;
   });
 
   it('discards the ware pushed out on the right', () => {
     const bazaar = bazaarOf(game);
     bazaar.slots = [null, null, null, null, 'Seed Bales'];
-    slideAndRefill(bazaar, 3, game.rng);
+    slideAndRefill(bazaar, game.rng);
     expect(bazaar.discard).deep.eq(['Seed Bales']);
+    expect(bazaar.slots.every((ware) => ware !== null)).is.true;
   });
 
   it('makes the bazaar tile owner pay less', () => {
@@ -138,16 +143,17 @@ describe('Bazaar of Arrakeen (Dune module A)', () => {
     buyWare(player1, bazaar, 1);
     const slots = () => bazaarModel(game, bazaar).slots.map((slot) => slot.takenBy);
     expect(slots()).deep.eq([undefined, player1.color, undefined, undefined, undefined]);
-    slideAndRefill(bazaar, game.players.length, game.rng);
+    slideAndRefill(bazaar, game.rng);
     expect(slots().every((color) => color === undefined)).is.true;
   });
 
-  it('lays out new wares after research and goes straight to the action phase', () => {
+  it('keeps the start wares in generation 1 and goes straight to the action phase', () => {
+    const start = [...bazaarOf(game).slots];
     for (const player of [player1, player2, player3]) {
       game.playerIsFinishedWithResearchPhase(player);
     }
     const bazaar = bazaarOf(game);
-    expect(bazaar.slots.filter((ware) => ware !== null)).has.length(2);
+    expect(bazaar.slots).deep.eq(start);
     expect(bazaar.buyers).is.empty;
     expect(game.phase).eq(Phase.ACTION);
     expect(game.activePlayer).eq(game.first);

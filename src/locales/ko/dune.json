@@ -241,8 +241,6 @@
   "Bazaar: buy a ware": "시장: 상품 구매",
   "Buy this ware": "이 상품 구매",
   "32 wares, each 10 % below its card value": "상품 32개, 각각 카드 가치보다 10% 저렴",
-  "Every generation a new ware comes in on the left": "세대마다 왼쪽에 새 상품 등장",
-  "The others slide right and get cheaper": "나머지는 오른쪽으로 밀리며 싸짐",
   "Whatever drops out on the right is gone": "오른쪽으로 밀려난 상품은 사라짐",
   "Buying is an action: one ware per player and generation": "구매는 행동: 플레이어당 세대마다 한 개",
   "Bought: pays out at once, then to the discard pile": "구매 시 즉시 효과, 이후 버림 더미로",
@@ -379,5 +377,8 @@
   "Dune": "듄",
   "Not available with the Dune theme": "듄 테마에서는 사용할 수 없음",
   "Same line as the last move: the die is rolled again": "지난 이동과 같은 직선: 주사위를 다시 굴립니다",
-  "Direction: a die – the same line as the last move (either way) is rolled once more": "방향: 주사위 – 지난 이동과 같은 직선(어느 쪽이든)이 나오면 한 번 더 굴립니다"
+  "Direction: a die – the same line as the last move (either way) is rolled once more": "방향: 주사위 – 지난 이동과 같은 직선(어느 쪽이든)이 나오면 한 번 더 굴립니다",
+  "At the start one ware per player lies out from the left": "시작 시 왼쪽부터 플레이어당 상품 1개가 놓입니다",
+  "Every generation all wares slide right, close the gaps and get cheaper": "매 세대 모든 상품이 오른쪽으로 밀리고 빈칸을 메우며 저렴해집니다",
+  "New wares fill every free slot left of the first ware": "새 상품이 첫 상품 왼쪽의 빈칸을 모두 채웁니다"
 }

@@ -112,7 +112,7 @@ export class DuneExpansion {
     }
     const data: DuneData = {};
     if (modules.includes('bazaar')) {
-      data.bazaar = initializeBazaar(rng);
+      data.bazaar = initializeBazaar(rng, players.length);
     }
     if (modules.includes('worm')) {
       data.worm = {spaceId: wormStart(rng, layout), path: []};
@@ -140,11 +140,14 @@ export class DuneExpansion {
     }
   }
 
-  /** Between research and the first action of a generation: the bazaar lays out new wares. `then` starts the action phase. */
+  /** Between research and the first action of a generation: the bazaar lays out new wares (in generation 1 the start
+   *  wares already lie out). `then` starts the action phase. */
   public static beforeActionPhase(game: IGame, then: () => void): void {
     const bazaar = game.duneData?.bazaar;
     if (bazaar !== undefined) {
-      slideAndRefill(bazaar, game.players.length, game.rng);
+      if (game.generation > 1) {
+        slideAndRefill(bazaar, game.rng);
+      }
       bazaar.bought = [];
       if (bazaar.slots.some((ware) => ware !== null)) {
         game.log('The bazaar of Arrakeen opens');

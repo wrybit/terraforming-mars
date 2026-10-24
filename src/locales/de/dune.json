@@ -237,8 +237,6 @@
   "Bazaar: buy a ware": "Basar: eine Ware kaufen",
   "Buy this ware": "Diese Ware kaufen",
   "32 wares, each 10 % below its card value": "32 Waren, je 10 % unter Kartenwert",
-  "Every generation a new ware comes in on the left": "Jede Generation kommt links eine neue Ware dazu",
-  "The others slide right and get cheaper": "Die übrigen rücken nach rechts und werden billiger",
   "Whatever drops out on the right is gone": "Was rechts hinausfällt, ist weg",
   "Buying is an action: one ware per player and generation": "Kaufen ist eine Aktion: eine Ware pro Spieler und Generation",
   "Bought: pays out at once, then to the discard pile": "Gekauft: sofort ausgezahlt, dann auf den Ablagestapel",
@@ -372,5 +370,8 @@
   "Theme": "Thema",
   "Not available with the Dune theme": "Mit dem Thema Dune nicht verfügbar",
   "Same line as the last move: the die is rolled again": "Gleiche Linie wie beim letzten Zug: Es wird neu gewürfelt",
-  "Direction: a die – the same line as the last move (either way) is rolled once more": "Richtung: Würfel – dieselbe Linie wie beim letzten Zug (egal in welche Richtung) wird einmal neu gewürfelt"
+  "Direction: a die – the same line as the last move (either way) is rolled once more": "Richtung: Würfel – dieselbe Linie wie beim letzten Zug (egal in welche Richtung) wird einmal neu gewürfelt",
+  "At the start one ware per player lies out from the left": "Zu Beginn liegt von links eine Ware pro Spieler aus",
+  "Every generation all wares slide right, close the gaps and get cheaper": "Jede Generation rücken alle Waren nach rechts, schließen Lücken und werden billiger",
+  "New wares fill every free slot left of the first ware": "Neue Waren füllen alle freien Plätze links der ersten Ware"
 }

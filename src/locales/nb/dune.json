@@ -239,8 +239,6 @@
   "Bazaar: buy a ware": "Basar: kjøp en vare",
   "Buy this ware": "Kjøp denne varen",
   "32 wares, each 10 % below its card value": "32 varer, hver 10 % under kortverdien",
-  "Every generation a new ware comes in on the left": "Hver generasjon kommer en ny vare inn til venstre",
-  "The others slide right and get cheaper": "De andre glir mot høyre og blir billigere",
   "Whatever drops out on the right is gone": "Det som faller ut til høyre, er borte",
   "Buying is an action: one ware per player and generation": "Å kjøpe er en handling: én vare per spiller og generasjon",
   "Bought: pays out at once, then to the discard pile": "Kjøpt: gir utbytte med en gang, så til kastebunken",
@@ -373,5 +371,8 @@
   "Theme": "Tema",
   "Not available with the Dune theme": "Ikke tilgjengelig med Dune-temaet",
   "Same line as the last move: the die is rolled again": "Samme linje som forrige trekk: terningen kastes på nytt",
-  "Direction: a die – the same line as the last move (either way) is rolled once more": "Retning: en terning – samme linje som forrige trekk (uansett vei) kastes én gang til"
+  "Direction: a die – the same line as the last move (either way) is rolled once more": "Retning: en terning – samme linje som forrige trekk (uansett vei) kastes én gang til",
+  "At the start one ware per player lies out from the left": "Ved start ligger det én vare per spiller fra venstre",
+  "Every generation all wares slide right, close the gaps and get cheaper": "Hver generasjon glir alle varer mot høyre, tetter hull og blir billigere",
+  "New wares fill every free slot left of the first ware": "Nye varer fyller alle ledige plasser til venstre for den første varen"
 }
