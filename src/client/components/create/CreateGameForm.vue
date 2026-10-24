@@ -450,6 +450,7 @@ import CollapsibleSection from '@/client/components/create/CollapsibleSection.vu
 import {cardPoolChanged, expansionOptionsChanged, milestonesChanged} from '@/client/components/create/changedFromDefault';
 import {ColumnCount, currentColumnCount, placementOf, SettingsCard, watchColumnCount} from '@/client/components/create/createGameColumns';
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
+import {drawDuneNames, withoutDrawnDuneNames} from '@/client/components/create/duneNames';
 import {describeFailure, failureFromResponse, failureOf, fetchOrFail, RequestFailedError} from '@/client/utils/requestFailure';
 import {AI_SUPPORTED_EXPANSIONS, aiUnsupportedReasons} from '@/common/ai/aiSupport';
 import {DUNE_BOARD, DUNE_BOARDS, Theme, isDuneBoard, themeAllowsExpansion} from '@/common/theme/Theme';
@@ -1257,6 +1258,10 @@ export default defineComponent({
       }
     },
     getPlayerNamePlaceholder(index: number): string {
+      // Dune: an empty name becomes a random person of the novels when the game is created
+      if (this.theme === 'dune') {
+        return translateText('Random');
+      }
       return translateTextWithParams('Player ${0} name', [String(index + 1)]);
     },
     updateCustomCorporations(customCorporations: Array<CardName>) {
@@ -1387,7 +1392,13 @@ export default defineComponent({
       // Set player name automatically if not entered
       const isSoloMode = this.playersCount === 1;
 
+      // Dune: seats without a name get a person of the novels, humans and AI alike (duneNames.ts)
+      const duneNames = this.theme === 'dune' ?
+        drawDuneNames(players.filter((player) => player.name === '').length, players.map((player) => player.name)) : [];
       players.forEach((player) => {
+        if (player.name === '' && duneNames.length > 0) {
+          player.name = duneNames.shift() as string;
+        }
         if (player.name === '') {
           if (isSoloMode) {
             player.name = this.$t('You');
@@ -1453,7 +1464,10 @@ export default defineComponent({
       if (newGameConfig === undefined) {
         return;
       }
-      createGameSettingsStorage.save(newGameConfig);
+      // Dune: the drawn names stay out of the remembered settings, so the next game draws anew
+      createGameSettingsStorage.save(this.theme === 'dune' ?
+        {...newGameConfig, players: withoutDrawnDuneNames(newGameConfig.players, this.players.map((player) => player.name))} :
+        newGameConfig);
       const onSuccess = (json: any) => {
         if (json.players.length === 1) {
           window.location.href = 'player?id=' + json.players[0].id;
