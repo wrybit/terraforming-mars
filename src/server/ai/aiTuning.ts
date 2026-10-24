@@ -104,6 +104,8 @@ export type AiTuning = {
   measuredActionWeight: number,
   /** Upper limit of the measured action income per generation in M€ (measuredCardIncome.ts); the measurement assumed full stocks. */
   measuredActionCap: number,
+  /** Weight of the discount an event gives the next card (Indentured Workers; nextCardDiscount.ts); 0 = off. */
+  nextCardDiscount: number,
   /** Requirement outlook of a card missing tags: base − step × missing tags (requirementOutlook.ts). */
   tagOutlookBase: number,
   tagOutlookStep: number,
@@ -344,6 +346,7 @@ export const BASELINE_TUNING: AiTuning = {
   liveOutlook: 0,
   measuredActionWeight: 0,
   measuredActionCap: 99,
+  nextCardDiscount: 0,
   tagOutlookBase: 0.85,
   tagOutlookStep: 0.15,
   // Round 109: money now only (0) +1.74 (z +2.80) against one generation of income; two generations −0.70.
@@ -835,6 +838,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Round 132: check of round 131's adoption (back to 1) and one step further.
   buyMargin1: {buyMargin: 1},
   buyMarginMinus2: {buyMargin: -2},
+  // Round 133: events that make the next card cheaper (Indentured Workers) – the copy never played a second card.
+  nextCardDiscount05: {nextCardDiscount: 0.5},
+  nextCardDiscount08: {nextCardDiscount: 0.8},
   buyStrictest: {buyMargin: 3},
   buyMargin2: {buyMargin: 2},
   buyMargin5: {buyMargin: 5},
