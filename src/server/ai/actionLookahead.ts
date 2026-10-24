@@ -19,6 +19,7 @@ import {isTracingDecision, traceOptions} from './decisionTrace';
 import {describeResponse} from './decisionLabels';
 import {tuningOf} from './aiTuning';
 import {RolloutEntry, RolloutPolicy, rolloutMeans} from './rolloutSearch';
+import {isStandardProject, standardProjectPenalty} from './standardProjectRestraint';
 import {triggerOrderAdjustments} from './triggerOrder';
 import {playPreferences} from './bgaPolicy';
 import {handReadinessMap} from './handReadiness';
@@ -499,6 +500,16 @@ export function chooseAction(menu: OrOptions, player: IPlayer, options: Lookahea
     for (const {candidate, outcome} of tried) {
       if (isPass(menu, candidate.response)) {
         outcome.value -= penalty;
+      }
+    }
+  }
+
+  // standardProjectRestraint: hand cards first, standard projects stay available later in the generation.
+  const standardPenalty = standardProjectPenalty(player, tried.some(({candidate}) => playedHandCard(candidate.response, player) !== undefined));
+  if (standardPenalty > 0) {
+    for (const {candidate, outcome} of tried) {
+      if (isStandardProject(menu, candidate.response)) {
+        outcome.value -= standardPenalty;
       }
     }
   }
