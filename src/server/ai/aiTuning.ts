@@ -349,7 +349,8 @@ export const BASELINE_TUNING: AiTuning = {
   measuredActionWeight: 0,
   measuredActionCap: 99,
   nextCardDiscount: 0,
-  standardProjectRestraint: 0,
+  // Round 135: 2 M€ +1.33 VP (z +1.84), cards played +0.44 – adopted; 5 M€ cards +0.85 (z +2.82) at −0.27 VP.
+  standardProjectRestraint: 2,
   tagOutlookBase: 0.85,
   tagOutlookStep: 0.15,
   // Round 109: money now only (0) +1.74 (z +2.80) against one generation of income; two generations −0.70.
@@ -848,6 +849,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   standardRestraint2: {standardProjectRestraint: 2},
   standardRestraint5: {standardProjectRestraint: 5},
   standardRestraint10: {standardProjectRestraint: 10},
+  // Round 136: check of round 135's adoption and the steps around it.
+  noStandardRestraint: {standardProjectRestraint: 0},
+  standardRestraint3: {standardProjectRestraint: 3},
   buyStrictest: {buyMargin: 3},
   buyMargin2: {buyMargin: 2},
   buyMargin5: {buyMargin: 5},

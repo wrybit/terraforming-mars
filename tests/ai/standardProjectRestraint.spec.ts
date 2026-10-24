@@ -7,8 +7,14 @@ import {standardProjectPenalty} from '../../src/server/ai/standardProjectRestrai
 describe('AI standard project restraint', () => {
   afterEach(() => clearPlayerTunings());
 
-  it('is off in the baseline', () => {
+  it('gives up 2 M€ in the baseline (round 135)', () => {
     const [, player] = testGame(2);
+    expect(standardProjectPenalty(player, true)).to.eq(2);
+  });
+
+  it('is off without the rule', () => {
+    const [, player] = testGame(2);
+    setPlayerTuning(player.id, 'noStandardRestraint');
     expect(standardProjectPenalty(player, true)).to.eq(0);
   });
 
