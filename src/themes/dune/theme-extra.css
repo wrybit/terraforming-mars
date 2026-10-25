@@ -859,10 +859,14 @@ html.theme-dune .card-container.card-worm-rider .card-effect-box-row > .card-eff
   background-image: url(graphics/token-worm.svg);
 }
 
-/* The tribute to the great houses: their Landsraad sign, as on the envy track (Jens 25 Oct 2026; before the smuggler
-   with a coin, from the time of bribes) */
+/* The tribute: a Solari coin in front of the CHOAM sign, "payment to CHOAM" (variant 1 of
+   _mockups/dune/karten/schmugglernetz-varianten.html, Jens 25 Oct 2026) */
 html.theme-dune .card-container.card-smuggler-network .card-effect-box-row > .card-effect-box-content:first-child [class*="card-text-size"] {
-  background-image: url(graphics/res-landsraad.svg);
+  width: 48px;
+  height: 46px;
+  background:
+    url(graphics/res-solari.svg) right bottom / 24px 24px no-repeat,
+    url(graphics/choam.svg) left top / 40px 40px no-repeat;
 }
 
 /* Dune Stabiliser: its greenery is a special tile, the planting in the yellow border of the special tiles – on the
