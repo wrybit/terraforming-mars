@@ -486,5 +486,6 @@
   "left": "links",
   "top left": "linksboven",
   "Shai-Hulud moves ${0} space(s), ${1} decides with ${2} TR": "Shai-Hulud trekt ${0} veld(en), ${1} beslist met ${2} invloed",
-  "Shai-Hulud moves ${0} space(s), ${1} decides with ${2}": "Shai-Hulud trekt ${0} veld(en), ${1} beslist met ${2}"
+  "Shai-Hulud moves ${0} space(s), ${1} decides with ${2}": "Shai-Hulud trekt ${0} veld(en), ${1} beslist met ${2}",
+  "G${0} · in your stock: ${1} of ${2}": "G${0} · in je voorraad: ${1} van ${2}"
 }

@@ -6,8 +6,8 @@
 @exchange-bad: #e0503c;
 @exchange-line: #fff8ea;
 @exchange-muted: #a8916f;
-// Room in front of the columns for the generation; the tiles below keep the same room, so columns and tiles align
-@exchange-label-width: 32px;
+// Room in front of the columns for the generation (wide enough for "G12 →"); the tiles below keep the same room, so columns and tiles align
+@exchange-label-width: 38px;
 
 // The sides measure their own width for the tile size below
 .trade-select--exchange .trade-select__side {
@@ -87,7 +87,7 @@
   width: @exchange-label-width;
 }
 
-// Generation in front with a short tick, not running through the chart
+// Generation in front, no line through the chart; only the current one points at its row with an arrow (Jens 25 Oct 2026)
 .exchange-chart__generation {
   position: absolute;
   right: 2px;
@@ -99,18 +99,15 @@
   font-size: 11px;
   line-height: 1;
   white-space: nowrap;
-
-  &::after {
-    content: '';
-    width: 6px;
-    height: 1.5px;
-    background: currentColor;
-  }
 }
 
 .exchange-chart__generation--now {
   color: #fff3dc;
   font-weight: bold;
+
+  &::after {
+    content: '→';
+  }
 }
 
 // Older generations fade out towards the top

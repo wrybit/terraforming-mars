@@ -493,5 +493,6 @@
   "left": "a la izquierda",
   "top left": "arriba a la izquierda",
   "Shai-Hulud moves ${0} space(s), ${1} decides with ${2} TR": "Shai-Hulud avanza ${0} casilla(s), lo decide ${1} con ${2} de influencia",
-  "Shai-Hulud moves ${0} space(s), ${1} decides with ${2}": "Shai-Hulud avanza ${0} casilla(s), lo decide ${1} con ${2}"
+  "Shai-Hulud moves ${0} space(s), ${1} decides with ${2}": "Shai-Hulud avanza ${0} casilla(s), lo decide ${1} con ${2}",
+  "G${0} · in your stock: ${1} of ${2}": "G${0} · en tu reserva: ${1} de ${2}"
 }

@@ -491,5 +491,6 @@
   "left": "à gauche",
   "top left": "en haut à gauche",
   "Shai-Hulud moves ${0} space(s), ${1} decides with ${2} TR": "Shai-Hulud avance de ${0} case(s), ${1} en décide avec ${2} d'influence",
-  "Shai-Hulud moves ${0} space(s), ${1} decides with ${2}": "Shai-Hulud avance de ${0} case(s), ${1} en décide avec ${2}"
+  "Shai-Hulud moves ${0} space(s), ${1} decides with ${2}": "Shai-Hulud avance de ${0} case(s), ${1} en décide avec ${2}",
+  "G${0} · in your stock: ${1} of ${2}": "G${0} · dans ta réserve : ${1} sur ${2}"
 }

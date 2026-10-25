@@ -495,3 +495,48 @@
   line-height: 1.4;
   text-align: left;
 }
+
+// Privilege pane: this generation's privilege, then the next one as a small box below (Jens 25 Oct 2026)
+.choam-privilege-pane {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  align-items: center;
+}
+
+.choam-upcoming {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+  min-width: 220px;
+  padding: 10px 18px;
+
+  .choam-card__title {
+    margin: 0;
+  }
+}
+
+.choam-upcoming__wish {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.choam-upcoming__value {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  color: @choam-white;
+  font-family: Prototype, sans-serif;
+  font-size: 18px;
+
+  img {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+.choam-upcoming__arrow {
+  color: @choam-quiet;
+}

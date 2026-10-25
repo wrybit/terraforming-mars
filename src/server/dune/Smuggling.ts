@@ -38,6 +38,8 @@ export type SmugglingData = {
   exchange?: ExchangeData,
   /** The emperor's privilege of this generation; games from before it get one on first use */
   privilege?: PrivilegeData,
+  /** The privilege of the next generation, drawn ahead so players can prepare (Jens 25 Oct 2026) */
+  nextPrivilege?: PrivilegeData,
   /** Prophecies (orders) of all players */
   prophecy?: ProphecyData,
 };
@@ -54,6 +56,7 @@ export function initializeSmuggling(rng?: Random, generation = 1): SmugglingData
     suspicion: {},
     exchange: initializeExchange(rng),
     privilege: rng === undefined ? undefined : newPrivilege(generation, rng),
+    nextPrivilege: rng === undefined ? undefined : newPrivilege(generation + 1, rng),
     prophecy: initializeProphecy(),
   };
 }
@@ -73,6 +76,15 @@ export function prophecyOf(data: SmugglingData): ProphecyData {
 export function privilegeOf(game: IGame, data: SmugglingData): PrivilegeData {
   data.privilege ??= newPrivilege(game.generation);
   return data.privilege;
+}
+
+/** The privilege of the next generation; games from before the preview get one picked by the generation */
+export function nextPrivilegeOf(game: IGame, data: SmugglingData): PrivilegeData {
+  const generation = privilegeOf(game, data).generation + 1;
+  if (data.nextPrivilege?.generation !== generation) {
+    data.nextPrivilege = newPrivilege(generation);
+  }
+  return data.nextPrivilege;
 }
 
 /** Prices of the current generation: what one given unit brings (sell) and what one received unit costs (buy) */
@@ -264,7 +276,9 @@ export function moveExchange(game: IGame, data: SmugglingData, generation: numbe
   advanceExchange(exchange, game.rng);
   game.log('The guild sets new rates');
   fulfilOrders(game, prophecyOf(data), currentRates(exchange.sell), currentRates(exchange.buy));
-  data.privilege = renewPrivilege(game, generation);
+  // The previewed privilege comes true, the one after it is drawn now
+  data.privilege = renewPrivilege(game, generation, data.nextPrivilege);
+  data.nextPrivilege = newPrivilege(generation + 1, game.rng);
 }
 
 /** Start of a generation: the exchange moves once. A game saved after the move at the old generation end (before
@@ -296,6 +310,7 @@ export function smugglingModel(game: IGame, data: SmugglingData, viewer?: IPlaye
       buy: {normal: {...NORMAL_BUY}, history: exchange.buy, next: forecast?.buy},
     },
     privilege: privilegeModel(game, privilegeOf(game, data)),
+    nextPrivilege: privilegeModel(game, nextPrivilegeOf(game, data)),
     orders: prophecyModel(prophecyOf(data), viewer),
   };
 }

@@ -38,7 +38,8 @@
               :onsave="answerTo(guildIndex)" :showsave="false" :showtitle="false" :exchange="smuggling.exchange"/>
             <ProphecyPane v-else-if="chosen === 'prophecy'" ref="prophecy" :playerView="playerView" :options="options"
               :exchange="smuggling.exchange" :orders="smuggling.orders" @withdraw="choose" @ready="prophecyReady = $event"/>
-            <PrivilegePane v-else-if="chosen === 'privilege'" :playerView="playerView" :privilege="smuggling.privilege" :exchange="smuggling.exchange"/>
+            <PrivilegePane v-else-if="chosen === 'privilege'" :playerView="playerView" :privilege="smuggling.privilege" :exchange="smuggling.exchange"
+              :upcoming="smuggling.nextPrivilege"/>
             <PactsPane v-else-if="chosen === 'pacts' && choam !== undefined" ref="pacts" :playerView="playerView" :options="options"
               :choam="choam" :exchange="smuggling.exchange" @choose="choose" @offer="answerOffer"/>
             <template v-else-if="chosen === 'tribute' && tributeInput !== undefined">

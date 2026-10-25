@@ -14,7 +14,7 @@ import {TileType} from '../../src/common/TileType';
 import {Phase} from '../../src/common/Phase';
 import {DuneExpansion} from '../../src/server/dune/DuneExpansion';
 import {battleTargets, garrisonOf, resolveBattle, OPEN_KANLY_COST} from '../../src/server/dune/Kanly';
-import {chargeSuspicion, exchangeOf, moveExchange, openExchange, privilegeOf, prophecyOf, suspicionOf, suspicionPenalty} from '../../src/server/dune/Smuggling';
+import {chargeSuspicion, exchangeOf, moveExchange, nextPrivilegeOf, openExchange, privilegeOf, prophecyOf, suspicionOf, suspicionPenalty} from '../../src/server/dune/Smuggling';
 import {PRIVILEGE_TITLE, PROPHECY_BUY_TITLE, PROPHECY_SELL_TITLE, SMUGGLE_TITLE} from '../../src/common/dune/duneActionTitles';
 import {returnOffers} from '../../src/server/dune/Choam';
 import {SCHEMES_TITLE, agendaPoints, reductionStep, schemeValue, schemesVictoryPoints} from '../../src/server/dune/Schemes';
@@ -185,6 +185,16 @@ describe('Dune modules B, D, E, F', () => {
       expect(exchangeOf(smuggling).sell).has.length(2);
       expect(privilegeOf(game, smuggling).generation).eq(game.generation);
       expect(wishes()).eq(2);
+    });
+
+    it('shows the privilege of the next generation ahead, and that one comes true', () => {
+      const smuggling = game.duneData!.smuggling!;
+      const next = nextPrivilegeOf(game, smuggling);
+      expect(next.generation).eq(game.generation + 1);
+      game.generation++;
+      openExchange(game, smuggling);
+      expect(privilegeOf(game, smuggling)).deep.include({good: next.good, amount: next.amount, pay: next.pay, generation: game.generation});
+      expect(nextPrivilegeOf(game, smuggling).generation).eq(game.generation + 1);
     });
 
     it('always offers spice, even without any, but refuses to give it', () => {

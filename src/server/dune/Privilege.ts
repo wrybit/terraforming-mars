@@ -62,8 +62,8 @@ export function lapsePrivilege(game: IGame, privilege: PrivilegeData | undefined
 }
 
 /** Start of a generation: the emperor names his new wish (Jens 25 Oct 2026: in the log of the new generation) */
-export function renewPrivilege(game: IGame, generation: number): PrivilegeData {
-  const next = newPrivilege(generation, game.rng);
+export function renewPrivilege(game: IGame, generation: number, previewed?: PrivilegeData): PrivilegeData {
+  const next = previewed?.generation === generation ? {...previewed, takenBy: undefined, announced: undefined} : newPrivilege(generation, game.rng);
   announcePrivilege(game, next);
   return next;
 }

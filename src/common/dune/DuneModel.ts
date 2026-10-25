@@ -113,6 +113,8 @@ export type SmugglingModel = {
   /** Rates of the exchange, every generation so far and the forecast (common/dune/smugglingExchange.ts) */
   exchange: ExchangeModel,
   privilege: PrivilegeModel,
+  /** The privilege of the next generation, shown ahead so players can prepare (Jens 25 Oct 2026) */
+  nextPrivilege?: PrivilegeModel,
   /** The viewer's own open prophecies; empty for spectators */
   orders: ReadonlyArray<ProphecyModel>,
 };

@@ -490,5 +490,6 @@
   "left": "links",
   "top left": "links oben",
   "Shai-Hulud moves ${0} space(s), ${1} decides with ${2} TR": "Shai-Hulud zieht ${0} Feld(er), so will es ${1} mit ${2} Einfluss",
-  "Shai-Hulud moves ${0} space(s), ${1} decides with ${2}": "Shai-Hulud zieht ${0} Feld(er), so will es ${1} mit ${2}"
+  "Shai-Hulud moves ${0} space(s), ${1} decides with ${2}": "Shai-Hulud zieht ${0} Feld(er), so will es ${1} mit ${2}",
+  "G${0} · in your stock: ${1} of ${2}": "G${0} · in deinem Vorrat: ${1} von ${2}"
 }
