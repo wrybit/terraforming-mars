@@ -112,6 +112,8 @@ export type AiTuning = {
   cheapFirst: number,
   /** Card bonus of a board space as a drawn card × this (spaceValue.ts); 0 = flat 3 M€. */
   boardCardBonus: number,
+  /** Weight of tags as a stock for later requirements and open tag milestones (tagDemand.ts); 0 = off. */
+  tagDemand: number,
   /** Requirement outlook of a card missing tags: base − step × missing tags (requirementOutlook.ts). */
   tagOutlookBase: number,
   tagOutlookStep: number,
@@ -289,7 +291,9 @@ export const BASELINE_TUNING: AiTuning = {
   // in 300 new games (z +0.3 vs +0.8) – no clear gain, so off again (it costs computing time).
   engineWeight: 0,
   closingWindow: 0,
-  enablerWeight: 0,
+  // Jens' rule (2026-10-25): cards that bring the tags a hand card still needs count more – activated although round
+  // 120 measured only +0.03 VP: the expensive requirement cards have to become playable, not just sit in hand.
+  enablerWeight: 0.5,
   lateBuyFactor: 1,
   // A/B 2026-10-08: hate draft won clearly (z +1.83 over 800 games in two batches),
   // full opponent weight in two-player games too (2P: z +2.01 in 400 games).
@@ -341,7 +345,8 @@ export const BASELINE_TUNING: AiTuning = {
   // Round 138: 12 – cards played +1.76 (z +4.99), VP +0.91 (z +1.25): adopted by the card-throughput rule.
   playPolicyWeight: 12,
   // Round 122 check: without draw engine boost and needs pursuit +1.24 VP (z +1.96), cards played equal – reverted.
-  needsPursuit: 0,
+  // Jens' rule (2026-10-25): moves that bring a hand card closer to its requirement count (round 120: −0.08 VP).
+  needsPursuit: 0.5,
   // Round 123: own drawn cards 2–4 M€ plus half draw engine boost – cards drawn +1.2 (z +3.2), played +0.7 (z +2.4), VP ±0.
   drawEngineBoost: 0.5,
   ownDrawnCardValue: 1,
@@ -360,6 +365,7 @@ export const BASELINE_TUNING: AiTuning = {
   standardProjectRestraint: 2,
   cheapFirst: 0,
   boardCardBonus: 0,
+  tagDemand: 0,
   tagOutlookBase: 0.85,
   tagOutlookStep: 0.15,
   // Round 109: money now only (0) +1.74 (z +2.80) against one generation of income; two generations −0.70.
@@ -869,6 +875,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Card spaces on the board valued like a drawn card instead of 3 M€.
   boardCards05: {boardCardBonus: 0.5},
   boardCards1: {boardCardBonus: 1},
+  // Round 140: building tags while Builder is open, then science/power for later requirements (Jens' rule).
+  tagDemand05: {tagDemand: 0.5},
+  tagDemand1: {tagDemand: 1},
   buyStrictest: {buyMargin: 3},
   buyMargin2: {buyMargin: 2},
   buyMargin5: {buyMargin: 5},
@@ -915,6 +924,7 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   cardIncome05: {measuredCardIncome: 0.5},
   noOwnCardValueEngine: {ownDrawnCardValue: 0, drawEngineBoost: 0},
   noDrawRules: {drawPriority: 0, ownDrawnCardValue: 0, drawEngineBoost: 0},
+  noRequirementHelp: {enablerWeight: 0, needsPursuit: 0},
   cardIncome1: {measuredCardIncome: 1},
   cardIncomeTraits: {measuredCardIncome: 0.5, playerTraitValues: 1},
   // Card understanding fix in one piece (card-understanding audit): measured income of lasting effects and actions,
