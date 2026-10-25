@@ -487,5 +487,11 @@
   "top left": "linksboven",
   "Shai-Hulud moves ${0} space(s), ${1} decides with ${2} TR": "Shai-Hulud trekt ${0} veld(en), ${1} beslist met ${2} invloed",
   "Shai-Hulud moves ${0} space(s), ${1} decides with ${2}": "Shai-Hulud trekt ${0} veld(en), ${1} beslist met ${2}",
-  "G${0} · in your stock: ${1} of ${2}": "G${0} · in je voorraad: ${1} van ${2}"
+  "G${0} · in your stock: ${1} of ${2}": "G${0} · in je voorraad: ${1} van ${2}",
+  "Bound": "Vastgelegd",
+  "Normal rate": "Normale koers",
+  "incl. premium ${0}": "incl. premie ${0}",
+  "pays at most ${0}": "betaalt hoogstens ${0}",
+  "back: ${0} ${1}": "terug: ${0} ${1}",
+  "back: ${0} Solari": "terug: ${0} solari"
 }

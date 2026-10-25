@@ -498,5 +498,11 @@
   "top left": "balra fel",
   "Shai-Hulud moves ${0} space(s), ${1} decides with ${2} TR": "Shai-Hulud ${0} mezőt halad, ${1} dönt ${2} befolyással",
   "Shai-Hulud moves ${0} space(s), ${1} decides with ${2}": "Shai-Hulud ${0} mezőt halad, ${1} dönt a(z) ${2} révén",
-  "G${0} · in your stock: ${1} of ${2}": "${0}. generáció · készleteden: ${1} / ${2}"
+  "G${0} · in your stock: ${1} of ${2}": "${0}. generáció · készleteden: ${1} / ${2}",
+  "Bound": "Lekötve",
+  "Normal rate": "Normál árfolyam",
+  "incl. premium ${0}": "benne ${0} prémium",
+  "pays at most ${0}": "legfeljebb ${0} fizetsz",
+  "back: ${0} ${1}": "vissza: ${0} ${1}",
+  "back: ${0} Solari": "vissza: ${0} solari"
 }

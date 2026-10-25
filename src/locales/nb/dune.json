@@ -494,5 +494,11 @@
   "top left": "opp til venstre",
   "Shai-Hulud moves ${0} space(s), ${1} decides with ${2} TR": "Shai-Hulud flytter ${0} felt, ${1} bestemmer med ${2} innflytelse",
   "Shai-Hulud moves ${0} space(s), ${1} decides with ${2}": "Shai-Hulud flytter ${0} felt, ${1} bestemmer med ${2}",
-  "G${0} · in your stock: ${1} of ${2}": "G${0} · i lageret ditt: ${1} av ${2}"
+  "G${0} · in your stock: ${1} of ${2}": "G${0} · i lageret ditt: ${1} av ${2}",
+  "Bound": "Bundet",
+  "Normal rate": "Normalkurs",
+  "incl. premium ${0}": "inkl. premie ${0}",
+  "pays at most ${0}": "betaler høyst ${0}",
+  "back: ${0} ${1}": "tilbake: ${0} ${1}",
+  "back: ${0} Solari": "tilbake: ${0} solari"
 }

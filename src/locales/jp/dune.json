@@ -434,7 +434,7 @@
   "Commodity": "品物",
   "Rate from": "相場（以上）",
   "Rate up to": "相場（以下）",
-  "If it comes true": "的中すれば",
+  "If it comes true": "的中したら",
   "Bound now": "現在拘束中",
   "Withdrawing brings": "取り下げで戻る",
   "Bet premium in it": "うち賭けのボーナス",
@@ -500,5 +500,11 @@
   "top left": "左上",
   "Shai-Hulud moves ${0} space(s), ${1} decides with ${2} TR": "シャイー・フルードが${0}マス進む。影響力${2}の${1}が決めた",
   "Shai-Hulud moves ${0} space(s), ${1} decides with ${2}": "シャイー・フルードが${0}マス進む。${1}が${2}で決めた",
-  "G${0} · in your stock: ${1} of ${2}": "第${0}世代 · 手持ち：${2}中${1}"
+  "G${0} · in your stock: ${1} of ${2}": "第${0}世代 · 手持ち：${2}中${1}",
+  "Bound": "拘束中",
+  "Normal rate": "通常相場",
+  "incl. premium ${0}": "賞金${0}込み",
+  "pays at most ${0}": "最大${0}支払う",
+  "back: ${0} ${1}": "返却：${1}${0}",
+  "back: ${0} Solari": "返却：${0}ソラリ"
 }

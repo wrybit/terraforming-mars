@@ -492,5 +492,11 @@
   "top left": "en haut à gauche",
   "Shai-Hulud moves ${0} space(s), ${1} decides with ${2} TR": "Shai-Hulud avance de ${0} case(s), ${1} en décide avec ${2} d'influence",
   "Shai-Hulud moves ${0} space(s), ${1} decides with ${2}": "Shai-Hulud avance de ${0} case(s), ${1} en décide avec ${2}",
-  "G${0} · in your stock: ${1} of ${2}": "G${0} · dans ta réserve : ${1} sur ${2}"
+  "G${0} · in your stock: ${1} of ${2}": "G${0} · dans ta réserve : ${1} sur ${2}",
+  "Bound": "Engagé",
+  "Normal rate": "Cours normal",
+  "incl. premium ${0}": "dont prime ${0}",
+  "pays at most ${0}": "paie au plus ${0}",
+  "back: ${0} ${1}": "rendu : ${0} ${1}",
+  "back: ${0} Solari": "rendu : ${0} solaris"
 }

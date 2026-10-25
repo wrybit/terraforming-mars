@@ -540,3 +540,97 @@
 .choam-upcoming__arrow {
   color: @choam-quiet;
 }
+
+// An open prophecy in figures: the order, then bound · normal rate · if it comes true as small labelled columns,
+// withdrawing with what it gives back on the right (Jens 25 Oct 2026)
+.choam-open__row.choam-prophecy {
+  flex-wrap: nowrap;
+  gap: 18px;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.choam-prophecy__order {
+  display: flex;
+  flex: none;
+  // The same width in every row, so the figures of all orders stand in columns (law of alignment)
+  width: 170px;
+  gap: 8px;
+  align-items: center;
+}
+
+.choam-prophecy__figures {
+  display: grid;
+  flex: 1 1 auto;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.choam-prophecy__figure {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: flex-start;
+  min-width: 0;
+}
+
+.choam-prophecy__label {
+  color: @choam-quiet;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.choam-prophecy__value {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+  color: @choam-white;
+  font-size: 16px;
+  font-weight: 700;
+
+  img {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.choam-prophecy__figure--gain .choam-prophecy__value {
+  color: #6fd26f;
+}
+
+.choam-prophecy__hint {
+  color: @choam-quiet;
+  font-size: 12px;
+}
+
+.choam-prophecy__withdraw {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: 2px;
+  align-items: flex-end;
+  margin-left: auto;
+}
+
+// Narrow: the order on top, the figures as a row of three below, withdrawing below them
+@container (max-width: 640px) {
+  .choam-open__row.choam-prophecy {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .choam-prophecy__order {
+    width: auto;
+  }
+
+  .choam-prophecy__figures {
+    flex-basis: 100%;
+  }
+
+  .choam-prophecy__withdraw {
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+  }
+}

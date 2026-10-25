@@ -497,5 +497,11 @@
   "top left": "vasemmalle ylös",
   "Shai-Hulud moves ${0} space(s), ${1} decides with ${2} TR": "Shai-Hulud liikkuu ${0} ruutua, ${1} päättää arvovallalla ${2}",
   "Shai-Hulud moves ${0} space(s), ${1} decides with ${2}": "Shai-Hulud liikkuu ${0} ruutua, ${1} päättää kortilla ${2}",
-  "G${0} · in your stock: ${1} of ${2}": "S${0} · varastossasi: ${1}/${2}"
+  "G${0} · in your stock: ${1} of ${2}": "S${0} · varastossasi: ${1}/${2}",
+  "Bound": "Sidottu",
+  "Normal rate": "Normaalikurssi",
+  "incl. premium ${0}": "sis. palkkion ${0}",
+  "pays at most ${0}": "maksat enintään ${0}",
+  "back: ${0} ${1}": "takaisin: ${0} ${1}",
+  "back: ${0} Solari": "takaisin: ${0} solaria"
 }

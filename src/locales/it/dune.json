@@ -494,5 +494,11 @@
   "top left": "in alto a sinistra",
   "Shai-Hulud moves ${0} space(s), ${1} decides with ${2} TR": "Shai-Hulud avanza di ${0} spazi, decide ${1} con ${2} di influenza",
   "Shai-Hulud moves ${0} space(s), ${1} decides with ${2}": "Shai-Hulud avanza di ${0} spazi, decide ${1} con ${2}",
-  "G${0} · in your stock: ${1} of ${2}": "G${0} · nella tua riserva: ${1} di ${2}"
+  "G${0} · in your stock: ${1} of ${2}": "G${0} · nella tua riserva: ${1} di ${2}",
+  "Bound": "Vincolato",
+  "Normal rate": "Prezzo normale",
+  "incl. premium ${0}": "incl. premio ${0}",
+  "pays at most ${0}": "paghi al massimo ${0}",
+  "back: ${0} ${1}": "rimborso: ${0} ${1}",
+  "back: ${0} Solari": "rimborso: ${0} solari"
 }

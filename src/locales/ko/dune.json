@@ -500,5 +500,11 @@
   "top left": "왼쪽 위",
   "Shai-Hulud moves ${0} space(s), ${1} decides with ${2} TR": "샤이 훌루드가 ${0}칸 이동합니다. 영향력 ${2}의 ${1}이(가) 정했습니다",
   "Shai-Hulud moves ${0} space(s), ${1} decides with ${2}": "샤이 훌루드가 ${0}칸 이동합니다. ${1}이(가) ${2}(으)로 정했습니다",
-  "G${0} · in your stock: ${1} of ${2}": "${0}세대 · 내 보유량: ${2} 중 ${1}"
+  "G${0} · in your stock: ${1} of ${2}": "${0}세대 · 내 보유량: ${2} 중 ${1}",
+  "Bound": "묶임",
+  "Normal rate": "정상 시세",
+  "incl. premium ${0}": "보너스 ${0} 포함",
+  "pays at most ${0}": "최대 ${0} 지불",
+  "back: ${0} ${1}": "반환: ${1} ${0}",
+  "back: ${0} Solari": "반환: ${0} 솔라리"
 }

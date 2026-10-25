@@ -66,13 +66,35 @@
     <div class="choam-card choam-open">
       <h4 class="choam-card__title">{{ $t('Your open prophecies') }}</h4>
       <p v-if="orders.length === 0" class="choam-info choam-info--left">{{ $t('No open prophecy') }}</p>
-      <div v-for="order in orders" :key="order.id" class="choam-open__row">
-        <span class="exchange-order__verb">{{ $t(order.side === 'sell' ? 'Selling' : 'Buying') }}</span>
-        <span class="choam-input__goods"><b>{{ order.amount }}</b><img :src="graphic(order.good)" :alt="$t(label(order.good))"></span>
-        <span class="exchange-order__condition">{{ order.side === 'sell' ? '≥' : '≤' }} {{ order.limit }}<img :src="coin" alt=""></span>
-        <span class="choam-open__note">{{ order.side === 'sell' ? premiumLabel(order.premium) : boundLabel(order.amount * order.limit) }}<img :src="coin" alt=""></span>
-        <AppButton size="small" class="choam-input__move choam-input__move--withdraw" :title="$t('Withdraw')"
-          :disabled="withdrawIndex(order.id) === -1" @click="$emit('withdraw', withdrawIndex(order.id))"/>
+      <!-- Each order in figures (Jens 25 Oct 2026): what it binds, what the same goods are worth at the normal rate,
+           and what it brings when it comes true; below the bound goods what withdrawing gives back -->
+      <div v-for="order in orders" :key="order.id" class="choam-open__row choam-prophecy">
+        <div class="choam-prophecy__order">
+          <span class="exchange-order__verb">{{ $t(order.side === 'sell' ? 'Selling' : 'Buying') }}</span>
+          <span class="choam-input__goods"><b>{{ order.amount }}</b><img :src="graphic(order.good)" :alt="$t(label(order.good))"></span>
+          <span class="exchange-order__condition">{{ order.side === 'sell' ? '≥' : '≤' }} {{ order.limit }}<img :src="coin" alt=""></span>
+        </div>
+        <div class="choam-prophecy__figures">
+          <div class="choam-prophecy__figure">
+            <span class="choam-prophecy__label">{{ $t('Bound') }}</span>
+            <span class="choam-prophecy__value"><template v-if="order.side === 'sell'">{{ order.amount }}<img :src="graphic(order.good)" alt=""></template><template v-else>{{ boundOf(order) }}<img :src="coin" alt=""></template></span>
+          </div>
+          <div class="choam-prophecy__figure">
+            <span class="choam-prophecy__label">{{ $t('Normal rate') }}</span>
+            <span class="choam-prophecy__value">{{ normalWorth(order) }}<img :src="coin" alt=""></span>
+          </div>
+          <div class="choam-prophecy__figure choam-prophecy__figure--gain">
+            <span class="choam-prophecy__label">{{ $t('If it comes true') }}</span>
+            <span v-if="order.side === 'sell'" class="choam-prophecy__value">≥ {{ order.amount * order.limit + order.premium }}<img :src="coin" alt=""></span>
+            <span v-else class="choam-prophecy__value">+{{ order.amount }}<img :src="graphic(order.good)" alt=""></span>
+            <span class="choam-prophecy__hint">{{ order.side === 'sell' ? premiumLabel(order.premium) : savingLabel(order) }}</span>
+          </div>
+        </div>
+        <div class="choam-prophecy__withdraw">
+          <AppButton size="small" class="choam-input__move choam-input__move--withdraw" :title="$t('Withdraw')"
+            :disabled="withdrawIndex(order.id) === -1" @click="$emit('withdraw', withdrawIndex(order.id))"/>
+          <span class="choam-prophecy__hint">{{ refundLabel(order) }}</span>
+        </div>
       </div>
     </div>
   </div>
@@ -89,7 +111,7 @@ import {PlayerViewModel} from '@/common/models/PlayerModel';
 import {SelectTradeResponse} from '@/common/inputs/InputResponse';
 import {PROPHECY_BUY_TITLE, PROPHECY_SELL_TITLE, PROPHECY_WITHDRAW_TITLE} from '@/common/dune/duneActionTitles';
 import {Resource} from '@/common/Resource';
-import {translateTextWithParams} from '@/client/directives/i18n';
+import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 import {RESOURCE_LABEL, choiceIndex, resourceGraphic, titleKey} from './choamGraphics';
 import {duneGraphic} from './duneGraphic';
 import {resourceSnapshot} from '@/client/components/selectPlayerResource';
@@ -232,10 +254,23 @@ export default defineComponent({
       this.amount = Math.min(Math.max(1, this.amount), this.amountMax);
     },
     premiumLabel(premium: number): string {
-      return translateTextWithParams('Premium ${0}', [String(premium)]);
+      return translateTextWithParams('incl. premium ${0}', [String(premium)]);
     },
-    boundLabel(bound: number): string {
-      return translateTextWithParams('Bound ${0}', [String(bound)]);
+    boundOf(order: ProphecyModel): number {
+      return orderBound(order.side, order.amount, order.limit);
+    },
+    /** The same goods at the normal rate of the guild: what selling brings or buying costs without the prophecy */
+    normalWorth(order: ProphecyModel): number {
+      return order.amount * NORMAL_RATES[order.side][order.good];
+    },
+    savingLabel(order: ProphecyModel): string {
+      return translateTextWithParams('pays at most ${0}', [String(this.boundOf(order))]);
+    },
+    refundLabel(order: ProphecyModel): string {
+      const back = orderRefund(this.boundOf(order));
+      return order.side === 'sell' ?
+        translateTextWithParams('back: ${0} ${1}', [String(back), translateText(RESOURCE_LABEL[order.good])]) :
+        translateTextWithParams('back: ${0} Solari', [String(back)]);
     },
     withdrawIndex(id: number): number {
       return choiceIndex(this.options, PROPHECY_WITHDRAW_TITLE, id);

@@ -10,9 +10,10 @@
         <!-- Free steps: nothing to say, the empty line keeps the markers of all steps at the same height -->
         <span v-else class="dune-smuggling__penalty dune-smuggling__penalty--free"></span>
         <span class="dune-smuggling__markers">
-          <!-- Each player's marker as the acrylic cube of their colour, as everywhere on the board -->
+          <!-- Each player's marker as the acrylic cube of their colour, seen from above with its shadow and turned at
+               random per step, like the cubes on the board (Jens 25 Oct 2026) -->
           <BoardCube v-for="entry in at(level)" :key="entry.color" class="dune-smuggling__marker" :color="entry.color"
-            view="slight" :size="16" :spinSeed="'suspicion-' + entry.color" :title="name(entry.color)"/>
+            :size="20" :spinSeed="'suspicion-' + entry.color + '-' + level" :title="name(entry.color)"/>
         </span>
       </li>
     </ol>
