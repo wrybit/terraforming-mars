@@ -54,7 +54,9 @@
         </label>
       </div>
     </div>
-    <WormVegetationBar :vegetation="playerView.game.oxygenLevel" :maximum="maximumVegetation" :thumper="playerView.game.dune?.worm?.thumper === true"/>
+    <WormVegetationBar :vegetation="playerView.game.oxygenLevel" :maximum="maximumVegetation" :thumper="playerView.game.dune?.worm?.thumper === true"
+      :choosable="targets.map((target) => target.distance)" :chosen="chosen === undefined ? undefined : targets[chosen]?.distance"
+      @choose="chooseDistance"/>
     <p class="worm-move__chosen">{{ chosen === undefined ? '' : $t(optionTitle(chosen)) }}</p>
     <!-- What the chosen way does, summed up per player -->
     <p v-if="chosen !== undefined && outcome.length === 0" class="worm-move__outcome worm-move__outcome--none">{{ $t('No gain or loss for anyone on this way.') }}</p>
@@ -313,6 +315,13 @@ export default defineComponent({
     optionTitle(index: number): string | Message {
       const option: PlayerInputModel | undefined = this.playerinput.options[index];
       return option?.title ?? '';
+    },
+    // A distance button below the map: the option whose way is that long
+    chooseDistance(distance: number): void {
+      const index = this.targets.findIndex((target) => target.distance === distance);
+      if (index >= 0) {
+        this.chosen = index;
+      }
     },
     save(): void {
       if (this.chosen !== undefined) {

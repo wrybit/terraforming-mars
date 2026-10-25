@@ -1,6 +1,6 @@
 <template>
   <!-- How far the worm may move (common/dune/wormDistance.ts): the vegetation track as hexes in three groups, above
-       them the distance of each group, the active one in a ring. Placed greeneries fill from the right; the first free
+       them the distance of each group as a round button. Placed greeneries fill from the right; the first free
        hex from the right is outlined, its group gives the distance (Jens, 21 Oct 2026). -->
   <div class="worm-vegetation" data-test="worm-vegetation">
     <div class="worm-vegetation__track">
@@ -10,8 +10,13 @@
         <span class="worm-vegetation__label worm-vegetation__label--track">{{ $t('Oxygen') }}</span>
       </span>
       <div v-for="section in sections" :key="section.distance"
-        :class="['worm-vegetation__section', {'worm-vegetation__section--active': section.distance === distance}]">
-        <span class="worm-vegetation__distance">{{ section.distance }}</span>
+        class="worm-vegetation__section">
+        <!-- The distances are buttons too, for players who pick the number instead of the space on the map (and where
+             two targets share a space after a bounce). Beyond the reach of the worm they are disabled (Jens, 25 Oct 2026) -->
+        <button type="button"
+          :class="['worm-vegetation__distance', {'worm-vegetation__distance--chosen': section.distance === chosen}]"
+          :disabled="!choosable.includes(section.distance)" :aria-pressed="section.distance === chosen"
+          @click="$emit('choose', section.distance)">{{ section.distance }}</button>
         <span class="worm-vegetation__hexes">
           <span v-for="step in section.steps" :key="step.index"
             :class="['worm-vegetation__hex', {'worm-vegetation__hex--front': step.front}]">
@@ -25,7 +30,7 @@
 </template>
 
 <script lang="ts">
-import {defineComponent} from 'vue';
+import {defineComponent, PropType} from 'vue';
 import {THUMPER_DISTANCE, wormDistanceFor, wormDistanceSections} from '@/common/dune/wormDistance';
 import {translateTextWithParams} from '@/client/directives/i18n';
 import {duneGraphic} from './duneGraphic';
@@ -50,7 +55,18 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    /** Distances the player can choose (one per option of the input) */
+    choosable: {
+      type: Array as PropType<ReadonlyArray<number>>,
+      default: () => [],
+    },
+    /** Distance of the chosen way, undefined before a choice */
+    chosen: {
+      type: Number,
+      default: undefined,
+    },
   },
+  emits: ['choose'],
   computed: {
     distance(): number {
       const byVegetation = wormDistanceFor(this.vegetation, this.maximum);
