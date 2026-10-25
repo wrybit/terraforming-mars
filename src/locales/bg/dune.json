@@ -455,8 +455,6 @@
   "Lower your envy by 2. Gain 3 titanium.": "Намали завистта с 2. Получи 3 подправка.",
   "Every opponent with envy 3 or more loses 1 TR. Gain 4 M€.": "Всеки противник със завист 3 или повече губи 1 влияние. Получете 4 солари.",
   "<opp>Every opponent with envy 3 or more</opp> loses 1 TR. Gain 4 M€.": "<opp>Всеки противник със завист 3 или повече</opp> губи 1 влияние. Получете 4 солари.",
-  "A tribute costs you 4 M€ less.": "Данъкът ви струва с 4 солари по-малко.",
-  "Effect: A tribute costs you 4 M€ less.": "Ефект: Данъкът ви струва с 4 солари по-малко.",
   "tribute": "данък",
   "Guild: the rates change every generation, the next one is known in advance": "Гилдия: курсовете се менят всяко поколение, следващите са известни предварително",
   "Prophecy: name a rate, it comes true when the new rates reach it; withdrawing gives back half, at game end it is lost": "Пророчество: определи курс, сбъдва се, когато новите курсове го достигнат; оттеглянето връща половината, в края на играта се губи",
@@ -507,5 +505,7 @@
   "costs ${0} ${1}": "струва ${0} ${1}",
   "costs ${0} Solari": "струва ${0} солари",
   "Privilege: each generation the emperor wants one good and pays 1 Solari per unit more than the guild, only to the first": "Привилегия: всяко поколение императорът иска една стока и плаща с 1 солари на единица повече от Гилдията, само на първия",
-  "The emperor wants a good and pays more than the guild, but only to the first.": "Императорът иска стока и плаща повече от Гилдията, но само на първия."
+  "The emperor wants a good and pays more than the guild, but only to the first.": "Императорът иска стока и плаща повече от Гилдията, но само на първия.",
+  "A tribute to the great houses costs you 4 M€ less.": "Данъкът към великите домове ти струва с 4 солари по-малко.",
+  "Effect: A tribute to the great houses costs you 4 M€ less.": "Ефект: Данъкът към великите домове ти струва с 4 солари по-малко."
 }

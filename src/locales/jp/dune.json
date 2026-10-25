@@ -454,8 +454,6 @@
   "Lower your envy by 2. Gain 3 titanium.": "妬みを2下げる。スパイス3を得る。",
   "Every opponent with envy 3 or more loses 1 TR. Gain 4 M€.": "妬みが3以上の対戦相手はそれぞれ影響力を1失う。4ソラリを得る。",
   "<opp>Every opponent with envy 3 or more</opp> loses 1 TR. Gain 4 M€.": "<opp>妬みが3以上の対戦相手は</opp>それぞれ影響力を1失う。4ソラリを得る。",
-  "A tribute costs you 4 M€ less.": "貢ぎ物のコストが4ソラリ安くなる。",
-  "Effect: A tribute costs you 4 M€ less.": "効果：貢ぎ物のコストが4ソラリ安くなる。",
   "tribute": "貢ぎ物",
   "Guild: the rates change every generation, the next one is known in advance": "ギルド：相場は世代ごとに変わり、次の世代の相場は事前にわかる",
   "Prophecy: name a rate, it comes true when the new rates reach it; withdrawing gives back half, at game end it is lost": "予言：相場を決め、新しい相場が届けば的中する。取り下げると半分が戻り、ゲーム終了時に失効する",
@@ -506,5 +504,7 @@
   "costs ${0} ${1}": "${1}を${0}失う",
   "costs ${0} Solari": "${0}ソラリを失う",
   "Privilege: each generation the emperor wants one good and pays 1 Solari per unit more than the guild, only to the first": "特権：毎世代、皇帝は一つの品を求め、単位あたりギルドより1ソラリ多く払う。最初の一人にだけ",
-  "The emperor wants a good and pays more than the guild, but only to the first.": "皇帝は品を求め、ギルドより高く払う。ただし最初の一人にだけ。"
+  "The emperor wants a good and pays more than the guild, but only to the first.": "皇帝は品を求め、ギルドより高く払う。ただし最初の一人にだけ。",
+  "A tribute to the great houses costs you 4 M€ less.": "大家への貢ぎ物が4ソラリ安くなる。",
+  "Effect: A tribute to the great houses costs you 4 M€ less.": "効果：大家への貢ぎ物が4ソラリ安くなる。"
 }

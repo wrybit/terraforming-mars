@@ -446,8 +446,6 @@
   "Lower your envy by 2. Gain 3 titanium.": "Senke deine Missgunst um 2. Erhalte 3 Spice.",
   "Every opponent with envy 3 or more loses 1 TR. Gain 4 M€.": "Jeder Gegner mit Missgunst 3 oder mehr verliert 1 Einfluss. Erhalte 4 Solari.",
   "<opp>Every opponent with envy 3 or more</opp> loses 1 TR. Gain 4 M€.": "<opp>Jeder Gegner mit Missgunst 3 oder mehr</opp> verliert 1 Einfluss. Erhalte 4 Solari.",
-  "A tribute costs you 4 M€ less.": "Ein Tribut kostet dich 4 Solari weniger.",
-  "Effect: A tribute costs you 4 M€ less.": "EFFEKT: Ein Tribut kostet dich 4 Solari weniger.",
   "tribute": "Tribut",
   "Guild: the rates change every generation, the next one is known in advance": "Gilde: die Kurse ändern sich jede Generation, die nächste ist schon bekannt",
   "Prophecy: name a rate, it comes true when the new rates reach it; withdrawing gives back half, at game end it is lost": "Prophezeiung: einen Kurs festlegen, sie greift, wenn die neuen Kurse ihn erreichen; Zurückziehen gibt die Hälfte zurück, bei Spielende verfällt sie",
@@ -497,5 +495,7 @@
   "costs ${0} ${1}": "kostet ${0} ${1}",
   "costs ${0} Solari": "kostet ${0} Solari",
   "Privilege: each generation the emperor wants one good and pays 1 Solari per unit more than the guild, only to the first": "Privileg: Jede Generation will der Imperator eine Ware und zahlt je Einheit 1 Solari mehr als die Gilde, nur dem Ersten",
-  "The emperor wants a good and pays more than the guild, but only to the first.": "Der Imperator will eine Ware und zahlt mehr als die Gilde, aber nur dem Ersten."
+  "The emperor wants a good and pays more than the guild, but only to the first.": "Der Imperator will eine Ware und zahlt mehr als die Gilde, aber nur dem Ersten.",
+  "A tribute to the great houses costs you 4 M€ less.": "Ein Tribut an die großen Häuser kostet dich 4 Solari weniger.",
+  "Effect: A tribute to the great houses costs you 4 M€ less.": "EFFEKT: Ein Tribut an die großen Häuser kostet dich 4 Solari weniger."
 }

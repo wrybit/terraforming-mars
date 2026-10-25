@@ -451,8 +451,6 @@
   "Lower your envy by 2. Gain 3 titanium.": "Laske kateutta 2:lla. Saat 3 maustetta.",
   "Every opponent with envy 3 or more loses 1 TR. Gain 4 M€.": "Jokainen vastustaja, jonka kateus on 3 tai enemmän, menettää 1 arvovaltaa. Saat 4 solaria.",
   "<opp>Every opponent with envy 3 or more</opp> loses 1 TR. Gain 4 M€.": "<opp>Jokainen vastustaja, jonka kateus on 3 tai enemmän,</opp> menettää 1 arvovaltaa. Saat 4 solaria.",
-  "A tribute costs you 4 M€ less.": "Vero maksaa sinulle 4 solaria vähemmän.",
-  "Effect: A tribute costs you 4 M€ less.": "Vaikutus: Vero maksaa sinulle 4 solaria vähemmän.",
   "tribute": "vero",
   "Guild: the rates change every generation, the next one is known in advance": "Kilta: kurssit muuttuvat joka sukupolvi, seuraava tiedetään etukäteen",
   "Prophecy: name a rate, it comes true when the new rates reach it; withdrawing gives back half, at game end it is lost": "Ennustus: aseta kurssi, se toteutuu, kun uudet kurssit saavuttavat sen; peruminen palauttaa puolet, pelin lopussa se menetetään",
@@ -503,5 +501,7 @@
   "costs ${0} ${1}": "maksaa ${0} ${1}",
   "costs ${0} Solari": "maksaa ${0} solaria",
   "Privilege: each generation the emperor wants one good and pays 1 Solari per unit more than the guild, only to the first": "Etuoikeus: joka sukupolvi keisari haluaa yhden tavaran ja maksaa yksiköltä 1 solarin enemmän kuin Kilta, vain ensimmäiselle",
-  "The emperor wants a good and pays more than the guild, but only to the first.": "Keisari haluaa tavaran ja maksaa enemmän kuin Kilta, mutta vain ensimmäiselle."
+  "The emperor wants a good and pays more than the guild, but only to the first.": "Keisari haluaa tavaran ja maksaa enemmän kuin Kilta, mutta vain ensimmäiselle.",
+  "A tribute to the great houses costs you 4 M€ less.": "Vero suurille suvuille maksaa sinulle 4 solaria vähemmän.",
+  "Effect: A tribute to the great houses costs you 4 M€ less.": "VAIKUTUS: Vero suurille suvuille maksaa sinulle 4 solaria vähemmän."
 }

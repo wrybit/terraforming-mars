@@ -859,9 +859,10 @@ html.theme-dune .card-container.card-worm-rider .card-effect-box-row > .card-eff
   background-image: url(graphics/token-worm.svg);
 }
 
-/* The bribe: the smuggler with a coin (Jens 22 Oct 2026, variant C) */
+/* The tribute to the great houses: their Landsraad sign, as on the envy track (Jens 25 Oct 2026; before the smuggler
+   with a coin, from the time of bribes) */
 html.theme-dune .card-container.card-smuggler-network .card-effect-box-row > .card-effect-box-content:first-child [class*="card-text-size"] {
-  background-image: url(graphics/bribe.svg);
+  background-image: url(graphics/res-landsraad.svg);
 }
 
 /* Dune Stabiliser: its greenery is a special tile, the planting in the yellow border of the special tiles – on the

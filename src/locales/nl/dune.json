@@ -442,8 +442,6 @@
   "Lower your envy by 2. Gain 3 titanium.": "Verlaag je afgunst met 2. Krijg 3 specerij.",
   "Every opponent with envy 3 or more loses 1 TR. Gain 4 M€.": "Elke tegenstander met afgunst 3 of meer verliest 1 invloed. Krijg 4 Solari.",
   "<opp>Every opponent with envy 3 or more</opp> loses 1 TR. Gain 4 M€.": "<opp>Elke tegenstander met afgunst 3 of meer</opp> verliest 1 invloed. Krijg 4 Solari.",
-  "A tribute costs you 4 M€ less.": "Een schatting kost je 4 Solari minder.",
-  "Effect: A tribute costs you 4 M€ less.": "Effect: Een schatting kost je 4 Solari minder.",
   "tribute": "schatting",
   "Guild: the rates change every generation, the next one is known in advance": "Gilde: de koersen veranderen elke generatie, de volgende is al bekend",
   "Prophecy: name a rate, it comes true when the new rates reach it; withdrawing gives back half, at game end it is lost": "Profetie: leg een koers vast, ze komt uit als de nieuwe koersen die bereiken; intrekken geeft de helft terug, aan het einde van het spel vervalt ze",
@@ -493,5 +491,7 @@
   "costs ${0} ${1}": "kost ${0} ${1}",
   "costs ${0} Solari": "kost ${0} solari",
   "Privilege: each generation the emperor wants one good and pays 1 Solari per unit more than the guild, only to the first": "Privilege: elke generatie wil de keizer één goed en betaalt per eenheid 1 solari meer dan het Gilde, alleen aan de eerste",
-  "The emperor wants a good and pays more than the guild, but only to the first.": "De keizer wil een goed en betaalt meer dan het Gilde, maar alleen aan de eerste."
+  "The emperor wants a good and pays more than the guild, but only to the first.": "De keizer wil een goed en betaalt meer dan het Gilde, maar alleen aan de eerste.",
+  "A tribute to the great houses costs you 4 M€ less.": "Een schatting aan de grote huizen kost je 4 solari minder.",
+  "Effect: A tribute to the great houses costs you 4 M€ less.": "EFFECT: Een schatting aan de grote huizen kost je 4 solari minder."
 }

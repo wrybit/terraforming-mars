@@ -448,8 +448,6 @@
   "Lower your envy by 2. Gain 3 titanium.": "Senk misunnelsen med 2. Få 3 krydder.",
   "Every opponent with envy 3 or more loses 1 TR. Gain 4 M€.": "Hver motstander med misunnelse 3 eller mer mister 1 innflytelse. Få 4 solari.",
   "<opp>Every opponent with envy 3 or more</opp> loses 1 TR. Gain 4 M€.": "<opp>Hver motstander med misunnelse 3 eller mer</opp> mister 1 innflytelse. Få 4 solari.",
-  "A tribute costs you 4 M€ less.": "En tributt koster deg 4 solari mindre.",
-  "Effect: A tribute costs you 4 M€ less.": "Effekt: En tributt koster deg 4 solari mindre.",
   "tribute": "tributt",
   "Guild: the rates change every generation, the next one is known in advance": "Gilde: kursene endres hver generasjon, den neste er kjent på forhånd",
   "Prophecy: name a rate, it comes true when the new rates reach it; withdrawing gives back half, at game end it is lost": "Profeti: sett en kurs, den slår til når de nye kursene når den; tilbaketrekking gir halvparten tilbake, ved spillets slutt tapes den",
@@ -500,5 +498,7 @@
   "costs ${0} ${1}": "koster ${0} ${1}",
   "costs ${0} Solari": "koster ${0} solari",
   "Privilege: each generation the emperor wants one good and pays 1 Solari per unit more than the guild, only to the first": "Privilegium: hver generasjon vil keiseren ha én vare og betaler 1 solari mer per enhet enn Gilden, bare til den første",
-  "The emperor wants a good and pays more than the guild, but only to the first.": "Keiseren vil ha en vare og betaler mer enn Gilden, men bare til den første."
+  "The emperor wants a good and pays more than the guild, but only to the first.": "Keiseren vil ha en vare og betaler mer enn Gilden, men bare til den første.",
+  "A tribute to the great houses costs you 4 M€ less.": "En tributt til de store husene koster deg 4 solari mindre.",
+  "Effect: A tribute to the great houses costs you 4 M€ less.": "Effekt: En tributt til de store husene koster deg 4 solari mindre."
 }

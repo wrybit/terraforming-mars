@@ -452,8 +452,6 @@
   "Lower your envy by 2. Gain 3 titanium.": "Obniż zawiść o 2. Zyskaj 3 przyprawy.",
   "Every opponent with envy 3 or more loses 1 TR. Gain 4 M€.": "Każdy przeciwnik z zawiścią 3 lub więcej traci 1 Wpływu. Zyskaj 4 solary.",
   "<opp>Every opponent with envy 3 or more</opp> loses 1 TR. Gain 4 M€.": "<opp>Każdy przeciwnik z zawiścią 3 lub więcej</opp> traci 1 Wpływu. Zyskaj 4 solary.",
-  "A tribute costs you 4 M€ less.": "Trybut kosztuje cię o 4 solary mniej.",
-  "Effect: A tribute costs you 4 M€ less.": "Efekt: Trybut kosztuje cię o 4 solary mniej.",
   "tribute": "trybut",
   "Guild: the rates change every generation, the next one is known in advance": "Gildia: kursy zmieniają się co pokolenie, następne są znane z góry",
   "Prophecy: name a rate, it comes true when the new rates reach it; withdrawing gives back half, at game end it is lost": "Proroctwo: ustal kurs, spełni się, gdy nowe kursy go osiągną; wycofanie zwraca połowę, na koniec gry przepada",
@@ -504,5 +502,7 @@
   "costs ${0} ${1}": "kosztuje ${0} ${1}",
   "costs ${0} Solari": "kosztuje ${0} solari",
   "Privilege: each generation the emperor wants one good and pays 1 Solari per unit more than the guild, only to the first": "Przywilej: co pokolenie imperator chce jednego towaru i płaci za sztukę 1 solari więcej niż Gildia, tylko pierwszemu",
-  "The emperor wants a good and pays more than the guild, but only to the first.": "Imperator chce towaru i płaci więcej niż Gildia, ale tylko pierwszemu."
+  "The emperor wants a good and pays more than the guild, but only to the first.": "Imperator chce towaru i płaci więcej niż Gildia, ale tylko pierwszemu.",
+  "A tribute to the great houses costs you 4 M€ less.": "Trybut dla Wielkich Rodów kosztuje cię 4 solari mniej.",
+  "Effect: A tribute to the great houses costs you 4 M€ less.": "Efekt trwały: Trybut dla Wielkich Rodów kosztuje cię 4 solari mniej."
 }

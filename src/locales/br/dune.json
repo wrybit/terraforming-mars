@@ -450,8 +450,6 @@
   "Lower your envy by 2. Gain 3 titanium.": "Reduza sua inveja em 2. Ganhe 3 especiarias.",
   "Every opponent with envy 3 or more loses 1 TR. Gain 4 M€.": "Cada oponente com inveja 3 ou mais perde 1 de influência. Ganhe 4 solaris.",
   "<opp>Every opponent with envy 3 or more</opp> loses 1 TR. Gain 4 M€.": "<opp>Cada oponente com inveja 3 ou mais</opp> perde 1 de influência. Ganhe 4 solaris.",
-  "A tribute costs you 4 M€ less.": "Um tributo custa 4 solaris a menos.",
-  "Effect: A tribute costs you 4 M€ less.": "Efeito: Um tributo custa 4 solaris a menos.",
   "tribute": "tributo",
   "Guild: the rates change every generation, the next one is known in advance": "Guilda: as cotações mudam a cada geração, a próxima já é conhecida",
   "Prophecy: name a rate, it comes true when the new rates reach it; withdrawing gives back half, at game end it is lost": "Profecia: defina uma cotação, ela se cumpre quando as novas cotações a atingem; retirar devolve metade, no fim do jogo se perde",
@@ -501,5 +499,7 @@
   "costs ${0} ${1}": "custa ${0} ${1}",
   "costs ${0} Solari": "custa ${0} solaris",
   "Privilege: each generation the emperor wants one good and pays 1 Solari per unit more than the guild, only to the first": "Privilégio: a cada geração o imperador quer um bem e paga 1 solari a mais por unidade que a Guilda, só ao primeiro",
-  "The emperor wants a good and pays more than the guild, but only to the first.": "O imperador quer um bem e paga mais que a Guilda, mas só ao primeiro."
+  "The emperor wants a good and pays more than the guild, but only to the first.": "O imperador quer um bem e paga mais que a Guilda, mas só ao primeiro.",
+  "A tribute to the great houses costs you 4 M€ less.": "Um tributo às grandes casas custa 4 solaris a menos.",
+  "Effect: A tribute to the great houses costs you 4 M€ less.": "Efeito: Um tributo às grandes casas custa 4 solaris a menos."
 }

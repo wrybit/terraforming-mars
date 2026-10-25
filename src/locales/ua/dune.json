@@ -454,8 +454,6 @@
   "Lower your envy by 2. Gain 3 titanium.": "Знизь заздрість на 2. Отримай 3 прянощі.",
   "Every opponent with envy 3 or more loses 1 TR. Gain 4 M€.": "Кожен суперник із заздрістю 3 і більше втрачає 1 вплив. Отримайте 4 соларії.",
   "<opp>Every opponent with envy 3 or more</opp> loses 1 TR. Gain 4 M€.": "<opp>Кожен суперник із заздрістю 3 і більше</opp> втрачає 1 вплив. Отримайте 4 соларії.",
-  "A tribute costs you 4 M€ less.": "Данина коштує вам на 4 соларії менше.",
-  "Effect: A tribute costs you 4 M€ less.": "Ефект: данина коштує вам на 4 соларії менше.",
   "tribute": "данина",
   "Guild: the rates change every generation, the next one is known in advance": "Гільдія: курси змінюються щопокоління, наступні відомі заздалегідь",
   "Prophecy: name a rate, it comes true when the new rates reach it; withdrawing gives back half, at game end it is lost": "Пророцтво: встанови курс, воно справдиться, коли нові курси його досягнуть; відкликання повертає половину, наприкінці гри згорає",
@@ -506,5 +504,7 @@
   "costs ${0} ${1}": "коштує ${0} ${1}",
   "costs ${0} Solari": "коштує ${0} соларіїв",
   "Privilege: each generation the emperor wants one good and pays 1 Solari per unit more than the guild, only to the first": "Привілей: кожне покоління імператор хоче один товар і платить за одиницю на 1 соларій більше за Гільдію, лише першому",
-  "The emperor wants a good and pays more than the guild, but only to the first.": "Імператор хоче товар і платить більше за Гільдію, але лише першому."
+  "The emperor wants a good and pays more than the guild, but only to the first.": "Імператор хоче товар і платить більше за Гільдію, але лише першому.",
+  "A tribute to the great houses costs you 4 M€ less.": "Данина Великим Домам коштує тобі на 4 соларії менше.",
+  "Effect: A tribute to the great houses costs you 4 M€ less.": "Ефект: Данина Великим Домам коштує тобі на 4 соларії менше."
 }

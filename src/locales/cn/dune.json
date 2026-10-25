@@ -455,8 +455,6 @@
   "Lower your envy by 2. Gain 3 titanium.": "嫉恨降低 2。获得 3 香料。",
   "Every opponent with envy 3 or more loses 1 TR. Gain 4 M€.": "每名嫉恨达到 3 或以上的对手失去 1 影响力。获得 4 索拉里。",
   "<opp>Every opponent with envy 3 or more</opp> loses 1 TR. Gain 4 M€.": "<opp>每名嫉恨达到 3 或以上的对手</opp>失去 1 影响力。获得 4 索拉里。",
-  "A tribute costs you 4 M€ less.": "你的贡金便宜 4 索拉里。",
-  "Effect: A tribute costs you 4 M€ less.": "效果：你的贡金便宜 4 索拉里。",
   "tribute": "贡金",
   "Guild: the rates change every generation, the next one is known in advance": "公会：汇率每个世代变化，下一世代的已提前公布",
   "Prophecy: name a rate, it comes true when the new rates reach it; withdrawing gives back half, at game end it is lost": "预言：设定价位，新汇率达到时应验；撤回返还一半，游戏结束时作废",
@@ -507,5 +505,7 @@
   "costs ${0} ${1}": "损失 ${0} ${1}",
   "costs ${0} Solari": "损失 ${0} 索拉里",
   "Privilege: each generation the emperor wants one good and pays 1 Solari per unit more than the guild, only to the first": "特权：每世代皇帝求购一种货物，每单位比公会多付 1 索拉里，只给第一个人",
-  "The emperor wants a good and pays more than the guild, but only to the first.": "皇帝求购一种货物，出价高于公会，但只给第一个人。"
+  "The emperor wants a good and pays more than the guild, but only to the first.": "皇帝求购一种货物，出价高于公会，但只给第一个人。",
+  "A tribute to the great houses costs you 4 M€ less.": "向大家族缴纳贡金时少付 4 索拉里。",
+  "Effect: A tribute to the great houses costs you 4 M€ less.": "效果： 向大家族缴纳贡金时少付 4 索拉里。"
 }

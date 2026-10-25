@@ -18,7 +18,8 @@ export class SmugglerNetwork extends Card implements IProjectCard {
       metadata: {
         cardNumber: 'E10',
         renderData: CardRenderer.builder((b) => {
-          b.effect('A tribute costs you 4 M€ less.', (eb) => eb.text('tribute').startEffect.megacredits(-4));
+          // The tribute to the great houses in the CHOAM tab, which lowers the envy (Jens 25 Oct 2026)
+          b.effect('A tribute to the great houses costs you 4 M€ less.', (eb) => eb.text('tribute').startEffect.megacredits(-4));
         }),
       },
     });

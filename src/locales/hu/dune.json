@@ -452,8 +452,6 @@
   "Lower your envy by 2. Gain 3 titanium.": "Csökkentsd az irigységet 2-vel. Kapsz 3 fűszert.",
   "Every opponent with envy 3 or more loses 1 TR. Gain 4 M€.": "Minden legalább 3 irigységgel rendelkező ellenfél 1 befolyást veszít. Kapsz 4 solarit.",
   "<opp>Every opponent with envy 3 or more</opp> loses 1 TR. Gain 4 M€.": "<opp>Minden legalább 3 irigységgel rendelkező ellenfél</opp> 1 befolyást veszít. Kapsz 4 solarit.",
-  "A tribute costs you 4 M€ less.": "Az adó 4 solarival kevesebbe kerül.",
-  "Effect: A tribute costs you 4 M€ less.": "Hatás: Az adó 4 solarival kevesebbe kerül.",
   "tribute": "adó",
   "Guild: the rates change every generation, the next one is known in advance": "Céh: az árfolyamok generációnként változnak, a következő előre ismert",
   "Prophecy: name a rate, it comes true when the new rates reach it; withdrawing gives back half, at game end it is lost": "Prófécia: adj meg egy árfolyamot, beteljesül, ha az új árfolyamok elérik; visszavonáskor a fele jár vissza, a játék végén elvész",
@@ -504,5 +502,7 @@
   "costs ${0} ${1}": "ára ${0} ${1}",
   "costs ${0} Solari": "ára ${0} solari",
   "Privilege: each generation the emperor wants one good and pays 1 Solari per unit more than the guild, only to the first": "Kiváltság: a császár minden generációban egy árut kér, és egységenként 1 solarival többet fizet a Céhnél, csak az elsőnek",
-  "The emperor wants a good and pays more than the guild, but only to the first.": "A császár árut kér, és többet fizet a Céhnél, de csak az elsőnek."
+  "The emperor wants a good and pays more than the guild, but only to the first.": "A császár árut kér, és többet fizet a Céhnél, de csak az elsőnek.",
+  "A tribute to the great houses costs you 4 M€ less.": "A nagy házaknak fizetett adó 4 solarival kevesebbe kerül.",
+  "Effect: A tribute to the great houses costs you 4 M€ less.": "Hatás: A nagy házaknak fizetett adó 4 solarival kevesebbe kerül."
 }
