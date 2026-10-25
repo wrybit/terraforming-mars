@@ -945,5 +945,7 @@
   "Select boards to be randomly chosen": "Sélectionnez les plateaux à tirer au sort",
   "${0} gained ${1}:r:mc: from ${2} ocean(s)": "${0} a gagné ${1}:r:mc: grâce à ${2} océan(s)",
   "${0} sued ${1} who had 0:r:mc:.": "${0} a poursuivi ${1}, qui avait 0:r:mc:.",
-  "paid for the card": "payé pour la carte"
+  "paid for the card": "payé pour la carte",
+  "Prize": "Prix",
+  "Sale": "Vente"
 }

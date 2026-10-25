@@ -147,14 +147,75 @@
   height: @or-tab-icon-size;
 }
 
-// Label next to the icon (TabIconLabels.ts): bold, in the icon's colour; goes first when space runs short
+// Label next to the icon (TabSteps.ts): bold, in the icon's colour; goes first when space runs short
 .or-tab-icon-label {
   margin-left: 6px;
   font-weight: bold;
 }
 
-.or-tabs[data-icon-labels-hidden] .or-tab-icon-label {
+.or-tabs[data-tab-step-icon-labels] .or-tab-icon-label {
   display: none;
+}
+
+// Shorter forms of the labels (OrOptionsTabLabel.vue): hidden until a step of the bar asks for them (TabSteps.ts).
+// The steps add up; later rules win over earlier ones of the same weight, so the order here is the order of the steps.
+.or-tab-label--medium,
+.or-tab-label--compact,
+.or-tab-glyph {
+  display: none;
+}
+
+.or-tab-glyph {
+  --mb-glyph-cut: rgb(var(--ui-surface-rgb)); // covers back lines inside the front shape (MobileGlyph.vue)
+  flex: none;
+  width: 20px;
+  height: 20px;
+
+  .mb-glyph-line {
+    fill: none;
+    stroke: currentColor;
+  }
+
+  .mb-glyph-cover {
+    fill: var(--mb-glyph-cut);
+    stroke: currentColor;
+  }
+}
+
+// Step 2: "Increase the temperature" becomes "Temperature" (Dune: the water store)
+.or-tabs[data-tab-step-medium] .or-tab:has(> .or-tab-label--medium) {
+  > .or-tab-label--full { display: none; }
+  > .or-tab-label--medium { display: block; }
+}
+
+// Step 3: the shortcut keys go; they stay in the tooltip (tabTooltip.ts)
+.or-tabs[data-tab-step-keys] .or-tab .hotkey-keys {
+  display: none;
+}
+
+// Step 4: "All cards" becomes "All"
+.or-tabs[data-tab-step-hand-word] .or-tab--hand:has(> .or-tab-label--compact) {
+  > .or-tab-label--full { display: none; }
+  > .or-tab-label--compact { display: block; }
+}
+
+// Step 5: every tab with a single word shows it
+.or-tabs[data-tab-step-words] .or-tab:has(> .or-tab-label--compact) {
+  > .or-tab-label--full,
+  > .or-tab-label--medium { display: none; }
+  > .or-tab-label--compact { display: block; }
+}
+
+// Step 6: "All" becomes its icon
+.or-tabs[data-tab-step-hand-icon] .or-tab--hand:has(> .or-tab-glyph) {
+  > .or-tab-label { display: none; }
+  > .or-tab-glyph { display: block; }
+}
+
+// Step 7: every tab with an icon shows only the icon; the others keep their word
+.or-tabs[data-tab-step-icons] .or-tab:has(> .or-tab-glyph) {
+  > .or-tab-label { display: none; }
+  > .or-tab-glyph { display: block; }
 }
 
 .or-tab-title {

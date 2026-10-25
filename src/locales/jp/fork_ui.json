@@ -1261,5 +1261,8 @@
   "${0} spent ${1}:r:steel: and gained ${2}:r:heat:": "${0}は${1}:r:steel:を消費し、${2}:r:heat:を獲得",
   "${0} sued ${1} who had 0:r:mc:.": "${0}が${1}を訴えたが、0:r:mc:だった。",
   "All players lose 1:i:tr:.": "全てのプレイヤーは1:i:tr:を失う。",
-  "paid for the card": "カードの支払い"
+  "paid for the card": "カードの支払い",
+  "Prize": "褒賞",
+  "Sale": "売却",
+  "Temp.": "温度"
 }

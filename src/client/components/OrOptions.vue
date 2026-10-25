@@ -7,16 +7,16 @@
     <label v-if="playerinput.warning !== undefined" class="card-warning"><div>({{ $t(playerinput.warning) }})</div></label>
 
     <!-- Action menu: tabs with short label and count of available entries; empty tabs are dimmed but clickable -->
-    <div v-if="asTabs" v-tab-icon-labels class="or-tabs" role="tablist" data-hotkey-tabs>
+    <div v-if="asTabs" v-tab-steps class="or-tabs" role="tablist" data-hotkey-tabs>
       <!-- Hand cards always as the first tab (view only); the first real action stays preselected -->
-      <HandCardsTab :count="handCards.length" :active="handTabActive" @select="handTabActive = true"/>
+      <HandCardsTab :count="handCards.length" :active="handTabActive" compact="All" glyph="hand" @select="handTabActive = true"/>
       <!-- Display order via tabDisplayOrder (pass/end at the end); idx stays the index in displayedOptions.
            The CEO action has no tab of its own: it is part of the "Actions" tab (ceoActions.ts) -->
       <button v-for="idx in visibleTabOrder" :key="idx"
         :data-option-index="idx"
         type="button"
         role="tab"
-        :title="$t(fullTabTitle(tabTitle(idx)))"
+        v-glass-tooltip="tabTooltip($t(fullTabTitle(tabTitle(idx))), tabHotkey(tabTitle(idx), displayedOptions[idx]))"
         :aria-label="$t(shortTabLabel(tabTitle(idx)))"
         :aria-selected="tabActive(idx)"
         :data-hotkey="tabHotkey(tabTitle(idx), displayedOptions[idx])"
@@ -32,7 +32,8 @@
           <OrOptionsTabIcon :icon="tabIcon(tabTitle(idx))!"/>
           <span class="or-tab-icon-label">{{ $t(tabIconLabel(tabIcon(tabTitle(idx))!)) }}</span>
         </template>
-        <span v-else class="or-tab-title">{{ $t(shortTabLabel(tabTitle(idx))) }}</span>
+        <OrOptionsTabLabel v-else :label="$t(shortTabLabel(tabTitle(idx)))" :medium="mediumTabLabel(tabTitle(idx))"
+          :compact="compactTabLabel(tabTitle(idx))" :glyph="actionLook(titleKey(tabTitle(idx)))?.glyph"/>
         <HotkeyKeys v-if="tabHotkey(tabTitle(idx), displayedOptions[idx]) !== undefined" :action="tabHotkey(tabTitle(idx), displayedOptions[idx])"/>
         <span v-if="tabCount(idx) !== undefined" class="or-tab-count">{{ tabCount(idx) }}</span>
       </button>
@@ -176,7 +177,11 @@
 import {defineComponent, inject, provide, shallowRef} from 'vue';
 import {CARD_SECTIONS, CardSectionsFor, TrailingCardSection} from '@/client/components/cardSections';
 import {vDockedTab} from '@/client/directives/DockedTab';
-import {vTabIconLabels} from '@/client/directives/TabIconLabels';
+import {vTabSteps} from '@/client/directives/TabSteps';
+import {glassTooltip as vGlassTooltip} from '@/client/directives/GlassTooltip';
+import OrOptionsTabLabel from '@/client/components/OrOptionsTabLabel.vue';
+import {tabTooltip} from '@/client/components/tabTooltip';
+import {actionLook} from '@/client/components/actionGlyphs';
 import AppButton from '@/client/components/common/AppButton.vue';
 import {isHTMLElement} from '@/client/utils/vueUtils';
 import {PlayerViewModel} from '@/common/models/PlayerModel';
@@ -188,7 +193,7 @@ import TabPanelFooterSlot from '@/client/components/TabPanelFooterSlot.vue';
 import ActionStepChips from '@/client/components/ActionStepChips.vue';
 import {actionStep} from '@/client/components/actionStep';
 import {OR_OPTIONS_AS_TABS} from '@/client/components/orOptionsLayout';
-import {fullTabTitle, shortTabLabel, tabButtonLabel, optionTone, tabButtonCentered, endTabHint, isEndTab, tabDisplayOrder, tabHighlighted, tabIcon, tabIconLabel} from '@/client/components/orOptionsShortLabels';
+import {compactTabLabel, fullTabTitle, mediumTabLabel, shortTabLabel, tabButtonLabel, titleKey, optionTone, tabButtonCentered, endTabHint, isEndTab, tabDisplayOrder, tabHighlighted, tabIcon, tabIconLabel} from '@/client/components/orOptionsShortLabels';
 import {tabIntro, TabIntro} from '@/client/components/tabIntro';
 import TabIntroBlock from '@/client/components/TabIntroBlock.vue';
 import OrOptionsTabIcon from '@/client/components/OrOptionsTabIcon.vue';
@@ -249,7 +254,8 @@ export default defineComponent({
   },
   directives: {
     dockedTab: vDockedTab,
-    tabIconLabels: vTabIconLabels,
+    tabSteps: vTabSteps,
+    glassTooltip: vGlassTooltip,
   },
   components: {
     ActionStepChips,
@@ -257,6 +263,7 @@ export default defineComponent({
     TabIntroBlock,
     AppButton,
     OrOptionsTabIcon,
+    OrOptionsTabLabel,
     HandCardsPanel,
     HandCardsTab,
     MilestoneAwardOptions,
@@ -554,6 +561,11 @@ export default defineComponent({
     choiceBlockStyle,
     shortTabLabel,
     fullTabTitle,
+    mediumTabLabel,
+    compactTabLabel,
+    titleKey,
+    actionLook,
+    tabTooltip,
     tabIcon,
     tabIconLabel,
     tabDisplayOrder,

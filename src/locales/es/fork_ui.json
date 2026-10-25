@@ -2171,5 +2171,7 @@
   "All players lose 1:i:tr:.": "Todos los jugadores pierden 1:i:tr:.",
   "Cards played by ${0} cost 1:r:mc: less this generation": "Las cartas jugadas por ${0} cuestan 1:r:mc: menos esta generación",
   "Neutral player received ${0}:r:mc: from ${1} owner (${2})": "El jugador neutral ha recibido ${0}:r:mc: del propietario de ${1} (${2})",
-  "paid for the card": "pagado por la carta"
+  "paid for the card": "pagado por la carta",
+  "Prize": "Premio",
+  "Sale": "Venta"
 }

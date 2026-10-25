@@ -1836,5 +1836,8 @@
   "All players lose 1:i:tr:.": "Всички играчи губят 1:i:tr:.",
   "Cards played by ${0} cost 1:r:mc: less this generation": "Картите, изиграни от ${0}, струват с 1:r:mc: по-малко в това поколение",
   "Neutral player received ${0}:r:mc: from ${1} owner (${2})": "Неутралният играч получи ${0}:r:mc: от собственика на ${1} (${2})",
-  "paid for the card": "платено за картата"
+  "paid for the card": "платено за картата",
+  "Prize": "Награда",
+  "Sale": "Продажба",
+  "Temp.": "Темп."
 }

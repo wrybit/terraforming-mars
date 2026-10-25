@@ -1872,5 +1872,8 @@
   "All players lose 1:i:tr:.": "所有玩家失去 1:i:tr:。",
   "Cards played by ${0} cost 1:r:mc: less this generation": "本时代 ${0} 打出的卡牌费用减少 1:r:mc:",
   "Neutral player received ${0}:r:mc: from ${1} owner (${2})": "中立玩家从 ${1} 所有者（${2}）处获得 ${0}:r:mc:",
-  "paid for the card": "支付卡牌费用"
+  "paid for the card": "支付卡牌费用",
+  "Prize": "奖项",
+  "Sale": "卖出",
+  "Temp.": "温度"
 }
