@@ -60,6 +60,8 @@
             <LogActionRow v-else :data-log-row="rowKey(section, row)" :row="row" :viewModel="viewModel"/>
             <LogAiRatings v-if="analysisGame && row.type !== 'phase'" :entries="rowRatings(section, row)"/>
           </template>
+          <!-- Terraformed: the banner sits in the log below the newest row, two rows high (Jens, 25 Oct 2026) -->
+          <TerraformedBanner v-if="viewModel.game.isTerraformed && section === sections[sections.length - 1]" :playerId="viewModel.id"/>
         </section>
       </div>
       </div>
@@ -113,6 +115,7 @@ import {logMessageItemCount, needsModalPreview} from '@/client/components/logpan
 import {activeSectionIndex, edgeFadesOf, findScrollContainer, HEADER_SCROLL_GAP, maxScrollTopOf, readingLineOf, scrollContainerTo, ScrollContainer, scrollTopOf} from '@/client/components/logpanel/logScroll';
 import LogMessageComponent from '@/client/components/logpanel/LogMessageComponent.vue';
 import LogActionRow from '@/client/components/logpanel/LogActionRow.vue';
+import TerraformedBanner from '@/client/components/TerraformedBanner.vue';
 import {groupLogMessages, LogAction, LogRow} from '@/client/components/logpanel/logActions';
 import {hasActionSummary} from '@/client/components/logpanel/LogActionEffects.vue';
 import {Color} from '@/common/Color';
@@ -291,6 +294,7 @@ export default defineComponent({
   },
   components: {
     LogFilterBar,
+    TerraformedBanner,
     LogMessageComponent,
     LogActionRow,
     LogMessageInspector,

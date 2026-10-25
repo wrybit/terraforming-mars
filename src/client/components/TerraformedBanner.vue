@@ -7,14 +7,14 @@
 <script lang="ts">
 
 import {defineComponent} from 'vue';
-import {PlayerId} from '@/common/Types';
+import {ParticipantId} from '@/common/Types';
 import {consumeFirstBannerShow} from '@/client/utils/terraformedBannerStorage';
 
 export default defineComponent({
   name: 'TerraformedBanner',
   props: {
     playerId: {
-      type: String as () => PlayerId,
+      type: String as () => ParticipantId,
       required: true,
     },
   },

@@ -6,7 +6,6 @@
           <img src="assets/arrows_left.png">
         </div>
       </div>
-      <TerraformedBanner v-if="playerView.game.isTerraformed" :playerId="playerView.id"/>
     </div>
 </template>
 
@@ -16,7 +15,6 @@ import {ownPlayerIndex} from '@/client/components/overview/ownPlayerIndex';
 import {defineComponent} from 'vue';
 import {PlayerViewModel} from '@/common/models/PlayerModel';
 import PlayerInfo from '@/client/components/overview/PlayerInfo.vue';
-import TerraformedBanner from '@/client/components/TerraformedBanner.vue';
 import {getPreferences, PreferencesManager} from '@/client/utils/PreferencesManager';
 
 export default defineComponent({
@@ -29,7 +27,6 @@ export default defineComponent({
   },
   components: {
     PlayerInfo,
-    TerraformedBanner,
   },
   data() {
     return {
