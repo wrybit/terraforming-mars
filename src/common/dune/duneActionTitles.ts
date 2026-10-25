@@ -48,7 +48,7 @@ export const SMUGGLE_TITLE = 'CHOAM: trade with the guild';
 /** Former separate moves, now the one guild trade */
 export const SMUGGLE_SPICE_TITLE = SMUGGLE_TITLE;
 export const BLACK_MARKET_TITLE = SMUGGLE_TITLE;
-export const BRIBE_TITLE = 'Tribute to the great houses: ${0} M€, envy −1';
+export const BRIBE_TITLE = 'Tribute to the great houses: ${0} M€, envy −${1}';
 
 /** Prophecy: an order with a limit, as a trade (server/dune/Prophecy.ts) */
 export const PROPHECY_SELL_TITLE = 'CHOAM: prophesy a sale';

@@ -390,7 +390,6 @@
   "The great houses vote against ${0} in the Landsraad: −${1} TR": "Suuret suvut äänestävät Landsraadissa pelaajaa ${0} vastaan: −${1} arvovaltaa",
   "The guild sets new rates": "Kilta asettaa uudet kurssit",
   "CHOAM: trade with the guild": "CHOAM: käy kauppaa Killan kanssa",
-  "Tribute to the great houses: ${0} M€, envy −1": "Vero suurille suvuille: ${0} solaria, kateus −1",
   "CHOAM: prophesy a sale": "CHOAM: ennusta myynti",
   "CHOAM: prophesy a purchase": "CHOAM: ennusta osto",
   "CHOAM: withdraw prophecy ${0}": "CHOAM: peru ennustus ${0}",
@@ -410,7 +409,6 @@
   "A generous tribute appeases them.": "Antelias vero leppyttää ne.",
   "The great houses stand against you: CHOAM is closed until you pay tribute": "Suuret suvut ovat sinua vastaan: CHOAM on kiinni, kunnes maksat veron",
   "The houses are well disposed: no tribute needed": "Suvut ovat suopeita: veroa ei tarvita",
-  "Too few Solari: the tribute costs ${0}, you have ${1}": "Liian vähän solaria: vero maksaa ${0}, sinulla on ${1}",
   "Nothing to offer": "Ei mitään tarjottavaa",
   "No offer yet, make one below": "Ei vielä tarjousta, tee se alla",
   "You already have an offer open, withdraw it to make a new one.": "Sinulla on jo avoin tarjous, peru se tehdäksesi uuden.",
@@ -517,5 +515,13 @@
   "If the rate reaches ${0}, you get": "Jos kurssi saavuttaa ${0}, saat",
   "Normal ${0}. Premium: ${1} Solari per unit. If the rate reaches ${2} or better, you get exactly your column, otherwise nothing.": "Normaali ${0}. Palkkio: ${1} Solaria yksiköltä. Jos kurssi saavuttaa ${2} tai paremman, saat täsmälleen pylväsi, muuten et mitään.",
   "Commit to an amount and a rate. If the market reaches the rate, you win your column.": "Sitoudu määrään ja kurssiin. Jos markkina saavuttaa kurssin, voitat pylväsi.",
-  "Prophecy: 2 to 8 units on one rate; once the market reaches it you get exactly your column, premium included; withdrawing gives back half, at game end it is lost": "Ennustus: 2–8 yksikköä yhdelle kurssille; jos markkina saavuttaa sen, saat täsmälleen pylväsi palkkioineen; peruminen palauttaa puolet, pelin lopussa se raukeaa"
+  "Prophecy: 2 to 8 units on one rate; once the market reaches it you get exactly your column, premium included; withdrawing gives back half, at game end it is lost": "Ennustus: 2–8 yksikköä yhdelle kurssille; jos markkina saavuttaa sen, saat täsmälleen pylväsi palkkioineen; peruminen palauttaa puolet, pelin lopussa se raukeaa",
+  "Tribute to the great houses: ${0} M€, envy −${1}": "Vero suurille suvuille: ${0} M€, kateus −${1}",
+  "Each step costs ${0} M€.": "Jokainen porras maksaa ${0} M€.",
+  "Too few M€ for one step: you have ${0} M€": "Liian vähän M€ yhteen portaaseen: sinulla on ${0} M€",
+  "Pay tribute (${0} M€)": "Maksa vero (${0} M€)",
+  "−1 step": "−1 porras",
+  "−${0} steps": "−${0} porrasta",
+  "${0} M€ missing": "puuttuu ${0} M€",
+  "no penalty": "ei rangaistusta"
 }

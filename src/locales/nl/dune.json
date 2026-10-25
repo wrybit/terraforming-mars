@@ -383,7 +383,6 @@
   "The great houses vote against ${0} in the Landsraad: −${1} TR": "De grote huizen stemmen in de Landsraad tegen ${0}: −${1} invloed",
   "The guild sets new rates": "Het Gilde zet nieuwe koersen",
   "CHOAM: trade with the guild": "CHOAM: handelen met het Gilde",
-  "Tribute to the great houses: ${0} M€, envy −1": "Schatting aan de grote huizen: ${0} Solari, afgunst −1",
   "CHOAM: prophesy a sale": "CHOAM: een verkoop profeteren",
   "CHOAM: prophesy a purchase": "CHOAM: een aankoop profeteren",
   "CHOAM: withdraw prophecy ${0}": "CHOAM: profetie ${0} intrekken",
@@ -402,7 +401,6 @@
   "A generous tribute appeases them.": "Een royale schatting stemt ze mild.",
   "The great houses stand against you: CHOAM is closed until you pay tribute": "De grote huizen keren zich tegen je: CHOAM is dicht tot je schatting betaalt",
   "The houses are well disposed: no tribute needed": "De huizen zijn je goedgezind: geen schatting nodig",
-  "Too few Solari: the tribute costs ${0}, you have ${1}": "Te weinig Solari: de schatting kost ${0}, je hebt ${1}",
   "Nothing to offer": "Niets aan te bieden",
   "No offer yet, make one below": "Nog geen aanbod, maak er hieronder een",
   "You already have an offer open, withdraw it to make a new one.": "Je hebt al een open aanbod, trek het in om een nieuw te maken.",
@@ -506,5 +504,13 @@
   "If the rate reaches ${0}, you get": "Haalt de koers ${0}, dan krijg je",
   "Normal ${0}. Premium: ${1} Solari per unit. If the rate reaches ${2} or better, you get exactly your column, otherwise nothing.": "Normaal ${0}. Premie: ${1} Solari per eenheid. Haalt de koers ${2} of beter, dan krijg je precies jouw kolom, anders niets.",
   "Commit to an amount and a rate. If the market reaches the rate, you win your column.": "Leg je vast op een hoeveelheid en een koers. Haalt de markt de koers, dan win je jouw kolom.",
-  "Prophecy: 2 to 8 units on one rate; once the market reaches it you get exactly your column, premium included; withdrawing gives back half, at game end it is lost": "Profetie: 2 tot 8 eenheden op één koers; haalt de markt die, dan krijg je precies jouw kolom, premie inbegrepen; terugtrekken geeft de helft terug, bij het einde vervalt ze"
+  "Prophecy: 2 to 8 units on one rate; once the market reaches it you get exactly your column, premium included; withdrawing gives back half, at game end it is lost": "Profetie: 2 tot 8 eenheden op één koers; haalt de markt die, dan krijg je precies jouw kolom, premie inbegrepen; terugtrekken geeft de helft terug, bij het einde vervalt ze",
+  "Tribute to the great houses: ${0} M€, envy −${1}": "Schatting aan de grote huizen: ${0} M€, afgunst −${1}",
+  "Each step costs ${0} M€.": "Elke trede kost ${0} M€.",
+  "Too few M€ for one step: you have ${0} M€": "Te weinig M€ voor één trede: je hebt ${0} M€",
+  "Pay tribute (${0} M€)": "Schatting betalen (${0} M€)",
+  "−1 step": "−1 trede",
+  "−${0} steps": "−${0} treden",
+  "${0} M€ missing": "${0} M€ tekort",
+  "no penalty": "geen straf"
 }

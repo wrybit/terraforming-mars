@@ -393,7 +393,6 @@
   "The great houses vote against ${0} in the Landsraad: −${1} TR": "大家がランズラードで${0}に反対票を投じる：影響力−${1}",
   "The guild sets new rates": "ギルドが新しい相場を定める",
   "CHOAM: trade with the guild": "CHOAM：ギルドと取引",
-  "Tribute to the great houses: ${0} M€, envy −1": "大家への貢ぎ物：${0}ソラリ、妬み−1",
   "CHOAM: prophesy a sale": "CHOAM：売りを予言する",
   "CHOAM: prophesy a purchase": "CHOAM：買いを予言する",
   "CHOAM: withdraw prophecy ${0}": "CHOAM：予言${0}を取り下げる",
@@ -413,7 +412,6 @@
   "A generous tribute appeases them.": "気前のよい貢ぎ物が彼らをなだめる。",
   "The great houses stand against you: CHOAM is closed until you pay tribute": "大家があなたに敵対している：貢ぎ物を納めるまでCHOAMは閉ざされる",
   "The houses are well disposed: no tribute needed": "大家は好意的だ：貢ぎ物は不要",
-  "Too few Solari: the tribute costs ${0}, you have ${1}": "ソラリが足りない：貢ぎ物は${0}、所持は${1}",
   "Nothing to offer": "出せるものがない",
   "No offer yet, make one below": "まだオファーなし。下で出そう",
   "You already have an offer open, withdraw it to make a new one.": "すでにオファーを出している。新しく出すには取り下げよう。",
@@ -520,5 +518,13 @@
   "If the rate reaches ${0}, you get": "レートが${0}に達すると受け取るもの",
   "Normal ${0}. Premium: ${1} Solari per unit. If the rate reaches ${2} or better, you get exactly your column, otherwise nothing.": "通常${0}。プレミアム：1単位あたり${1}ソラリ。レートが${2}以上に達すればちょうど自分の列を受け取り、そうでなければ何もない。",
   "Commit to an amount and a rate. If the market reaches the rate, you win your column.": "数量とレートを決める。市場がそのレートに達すれば自分の列を獲得する。",
-  "Prophecy: 2 to 8 units on one rate; once the market reaches it you get exactly your column, premium included; withdrawing gives back half, at game end it is lost": "予言：1つのレートに2〜8単位；市場がそのレートに達するとプレミアム込みでちょうど自分の列を受け取る；撤回すると半分が戻り、ゲーム終了時に失効する"
+  "Prophecy: 2 to 8 units on one rate; once the market reaches it you get exactly your column, premium included; withdrawing gives back half, at game end it is lost": "予言：1つのレートに2〜8単位；市場がそのレートに達するとプレミアム込みでちょうど自分の列を受け取る；撤回すると半分が戻り、ゲーム終了時に失効する",
+  "Tribute to the great houses: ${0} M€, envy −${1}": "大家への貢ぎ物：${0} M€、妬み−${1}",
+  "Each step costs ${0} M€.": "1段階ごとに${0} M€。",
+  "Too few M€ for one step: you have ${0} M€": "1段階分にも足りない：所持${0} M€",
+  "Pay tribute (${0} M€)": "貢ぎ物を納める（${0} M€）",
+  "−1 step": "−1段階",
+  "−${0} steps": "−${0}段階",
+  "${0} M€ missing": "${0} M€不足",
+  "no penalty": "罰なし"
 }

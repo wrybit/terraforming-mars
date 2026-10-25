@@ -394,7 +394,6 @@
   "The great houses vote against ${0} in the Landsraad: −${1} TR": "各大家族在兰兹拉德投票反对 ${0}：−${1} 影响力",
   "The guild sets new rates": "公会设定了新汇率",
   "CHOAM: trade with the guild": "CHOAM：与公会交易",
-  "Tribute to the great houses: ${0} M€, envy −1": "向各大家族纳贡：${0} 索拉里，嫉恨 −1",
   "CHOAM: prophesy a sale": "CHOAM：预言一笔卖出",
   "CHOAM: prophesy a purchase": "CHOAM：预言一笔买入",
   "CHOAM: withdraw prophecy ${0}": "CHOAM：撤回预言 ${0}",
@@ -414,7 +413,6 @@
   "A generous tribute appeases them.": "慷慨的贡金能平息他们。",
   "The great houses stand against you: CHOAM is closed until you pay tribute": "各大家族与你为敌：在你缴纳贡金之前，CHOAM 对你关闭",
   "The houses are well disposed: no tribute needed": "各家族对你友善：无需纳贡",
-  "Too few Solari: the tribute costs ${0}, you have ${1}": "索拉里不足：贡金需要 ${0}，你只有 ${1}",
   "Nothing to offer": "没有可提供的东西",
   "No offer yet, make one below": "暂无报价，请在下方发布",
   "You already have an offer open, withdraw it to make a new one.": "你已有一个公开报价，撤回后才能发布新的。",
@@ -521,5 +519,13 @@
   "If the rate reaches ${0}, you get": "若汇率达到${0}，你获得",
   "Normal ${0}. Premium: ${1} Solari per unit. If the rate reaches ${2} or better, you get exactly your column, otherwise nothing.": "正常${0}。奖金：每单位${1} Solari。汇率达到${2}或更好时，你正好获得你的那一列，否则一无所获。",
   "Commit to an amount and a rate. If the market reaches the rate, you win your column.": "确定数量和汇率。市场达到该汇率时，你赢得你的那一列。",
-  "Prophecy: 2 to 8 units on one rate; once the market reaches it you get exactly your column, premium included; withdrawing gives back half, at game end it is lost": "预言：2到8单位押一个汇率；市场达到时你正好获得你的那一列（含奖金）；撤回返还一半，游戏结束时作废"
+  "Prophecy: 2 to 8 units on one rate; once the market reaches it you get exactly your column, premium included; withdrawing gives back half, at game end it is lost": "预言：2到8单位押一个汇率；市场达到时你正好获得你的那一列（含奖金）；撤回返还一半，游戏结束时作废",
+  "Tribute to the great houses: ${0} M€, envy −${1}": "向各大家族纳贡：${0} M€，嫉恨 −${1}",
+  "Each step costs ${0} M€.": "每降一级花费 ${0} M€。",
+  "Too few M€ for one step: you have ${0} M€": "M€ 不足以降一级：你只有 ${0} M€",
+  "Pay tribute (${0} M€)": "缴纳贡金（${0} M€）",
+  "−1 step": "−1 级",
+  "−${0} steps": "−${0} 级",
+  "${0} M€ missing": "还差 ${0} M€",
+  "no penalty": "无惩罚"
 }

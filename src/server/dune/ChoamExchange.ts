@@ -5,7 +5,7 @@ import {CHOAM_TITLE} from '../../common/dune/duneActionTitles';
 import {DuneData} from './DuneExpansion';
 import {ChoamData, choamActions, initializeChoam, pactChoices} from './Choam';
 import {
-  SmugglingData, aiGuildInput, bribePayment, currentSellRates, envyFull, initializeSmuggling, privilegeOf, prophecyOf, raiseEnvy, smuggleInput,
+  SmugglingData, aiGuildInput, bribePayments, currentSellRates, envyFull, initializeSmuggling, privilegeOf, prophecyOf, raiseEnvy, smuggleInput,
   smugglingActions,
 } from './Smuggling';
 import {deliverInput} from './Privilege';
@@ -47,7 +47,7 @@ export function choamExchangeTabActions(player: IPlayer, data: DuneData): Array<
     ...withdrawOrderInputs(player, prophecy, () => {}),
     closed ? undefined : deliverInput(player, privilegeOf(player.game, smuggling), currentSellRates(smuggling), envy),
     ...pactChoices(player, choam, envy, closed),
-    bribePayment(player, smuggling),
+    ...bribePayments(player, smuggling),
   ];
   const offered = choices.filter((choice): choice is PlayerInput => choice !== undefined);
   return offered.length === 0 ? [] : [new OrOptions(...offered).setTitle(CHOAM_TITLE)];

@@ -32,7 +32,11 @@
           <p class="choam-info choam-lead">
             <template v-for="(line, index) in leadLines" :key="index"><br v-if="index > 0">{{ line }}</template>
           </p>
-          <p v-if="closedReason !== undefined" class="choam-info choam-closed" data-test="choam-closed">{{ closedReason }}</p>
+          <!-- What a step costs, a line apart from the story above (Jens 25 Oct 2026) -->
+          <p v-if="chosen === 'tribute' && ownEnvy > 0 && ownBribeCost !== undefined" class="choam-info choam-tribute__cost">
+            <MoneyText :text="stepCostText"/>
+          </p>
+          <p v-if="closedReason !== undefined" class="choam-info choam-closed" data-test="choam-closed"><MoneyText :text="closedReason"/></p>
           <template v-else-if="smuggling !== undefined">
             <SelectTrade v-if="chosen === 'guild' && guildInput !== undefined" ref="trade" :playerView="playerView" :playerinput="guildInput"
               :onsave="answerTo(guildIndex)" :showsave="false" :showtitle="false" :exchange="smuggling.exchange"/>
@@ -43,12 +47,30 @@
             <PactsPane v-else-if="chosen === 'pacts' && choam !== undefined" ref="pacts" :playerView="playerView" :options="options"
               :choam="choam" :exchange="smuggling.exchange" @choose="choose" @offer="answerOffer"/>
             <template v-else-if="chosen === 'tribute' && tributeInput !== undefined">
-              <div v-if="paysInSolari" class="smuggle-input__bribe" data-test="choam-tribute">
-                <AmountSideTile :side="SOLARI" :before="solari" :after="solari - tributeInput.amount" :change="tributeInput.amount" direction="loss"/>
-                <AmountSideTile :side="envySide" :before="ownEnvy" :after="ownEnvy - 1" :change="1" direction="loss"/>
+              <!-- One row per step the envy can go down: steps, the step reached with its penalty, the price. Rows the
+                   player cannot pay for are greyed out and say what is missing (Jens 25 Oct 2026, variant A) -->
+              <div class="choam-tribute" role="radiogroup" data-test="choam-tribute">
+                <button v-for="row in tributeRows" :key="row.steps" type="button" role="radio"
+                  :class="['choam-tribute__row', {'choam-tribute__row--on': row.steps === tributeSteps}]"
+                  :aria-checked="row.steps === tributeSteps" :disabled="row.index === -1" @click="tributeSteps = row.steps">
+                  <span class="choam-tribute__radio"></span>
+                  <span class="choam-tribute__steps">{{ stepsLabel(row.steps) }}</span>
+                  <span class="choam-tribute__arrow">→</span>
+                  <span class="choam-tribute__target">
+                    <span :class="['choam-tribute__level', 'dune-smuggling__step--' + row.level]">
+                      {{ $t(ENVY_LEVEL_NAMES[row.level]) }}
+                      <span v-if="penalty(row.level) > 0" class="dune-smuggling__penalty">−{{ penalty(row.level) }}<img class="dune-smuggling__penalty-icon" :src="INFLUENCE_ICON" alt=""></span>
+                    </span>
+                    <span v-if="penalty(row.level) === 0" class="choam-tribute__free">{{ $t('no penalty') }}</span>
+                  </span>
+                  <span class="choam-tribute__price">
+                    <span class="button-count button-count--megacredits">{{ row.price }}</span>
+                    <span v-if="row.index === -1 && row.missing > 0" class="choam-tribute__missing"><MoneyText :text="missingText(row.missing)"/></span>
+                  </span>
+                </button>
               </div>
-              <!-- Other means of payment (heat for Helion …): the usual payment form -->
-              <SelectPayment v-else ref="payment" :playerView="playerView" :playerinput="tributeInput"
+              <!-- Other means of payment (heat for Helion …): the usual payment form for the chosen steps -->
+              <SelectPayment v-if="!paysInSolari" :key="tributeIndex" ref="payment" :playerView="playerView" :playerinput="tributeInput"
                 :onsave="answerTo(tributeIndex)" :showsave="false" :showtitle="false"/>
             </template>
           </template>
@@ -61,7 +83,7 @@
 
     <TabPanelFooterSlot v-if="showsave">
       <div class="amount-select__actions">
-        <AppButton hotkey="proceed" type="submit" :title="$t(FOOTER[chosen])" :disabled="!canSave" @click="saveData"/>
+        <AppButton hotkey="proceed" type="submit" :title="footerTitle" :disabled="!canSave" @click="saveData"/>
       </div>
     </TabPanelFooterSlot>
   </div>
@@ -73,25 +95,25 @@ import AppButton from '@/client/components/common/AppButton.vue';
 import TabPanelFooterSlot from '@/client/components/TabPanelFooterSlot.vue';
 import SelectTrade from '@/client/components/SelectTrade.vue';
 import SelectPayment from '@/client/components/SelectPayment.vue';
-import AmountSideTile from '@/client/components/amount/AmountSideTile.vue';
-import {AmountSide} from '@/client/components/amount/amountConversion';
+import MoneyText from '@/client/components/common/MoneyText.vue';
 import SmugglingPanel from './SmugglingPanel.vue';
 import DuneRuleCards from './DuneRuleCards.vue';
 import ProphecyPane from './ProphecyPane.vue';
 import PrivilegePane from './PrivilegePane.vue';
 import PactsPane from './PactsPane.vue';
 import {CHOAM_RULES} from './duneRules';
+import {ENVY_LEVEL_NAMES} from './envyLevels';
 import {duneGraphic} from './duneGraphic';
 import {choiceIndex, titleKey} from './choamGraphics';
 import {OrOptionsModel, PlayerInputModel, SelectPaymentModel, SelectTradeModel} from '@/common/models/PlayerInputModel';
 import {PlayerViewModel} from '@/common/models/PlayerModel';
 import {InputResponse, OrOptionsResponse} from '@/common/inputs/InputResponse';
-import {ChoamModel, MAX_SUSPICION, SmugglingModel} from '@/common/dune/DuneModel';
+import {ChoamModel, MAX_SUSPICION, SmugglingModel, suspicionPenalty} from '@/common/dune/DuneModel';
 import {
-  CHOAM_ACCEPT_OFFER_TITLE, CHOAM_OFFER_TITLE, PRIVILEGE_TITLE, PROPHECY_BUY_TITLE, PROPHECY_SELL_TITLE, PROPHECY_WITHDRAW_TITLE, SMUGGLE_TITLE,
+  BRIBE_TITLE, CHOAM_ACCEPT_OFFER_TITLE, CHOAM_OFFER_TITLE, PRIVILEGE_TITLE, PROPHECY_BUY_TITLE, PROPHECY_SELL_TITLE, PROPHECY_WITHDRAW_TITLE, SMUGGLE_TITLE,
 } from '@/common/dune/duneActionTitles';
 import {Payment} from '@/common/inputs/Payment';
-import {Resource} from '@/common/Resource';
+import {Message} from '@/common/logs/Message';
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 
 type Mode = 'guild' | 'prophecy' | 'privilege' | 'pacts' | 'tribute';
@@ -116,13 +138,15 @@ const LEAD: Readonly<Record<Mode, ReadonlyArray<string>>> = {
 
 const FOOTER: Readonly<Record<Mode, string>> = {guild: 'Trade now', prophecy: 'Prophesy', privilege: 'Deliver', pacts: 'Offer', tribute: 'Pay tribute'};
 
-const SOLARI: AmountSide = {kind: 'stock', resource: Resource.MEGACREDITS, perStep: 1};
+const INFLUENCE_ICON = duneGraphic('res-landsraad');
+
+type TributeRow = {steps: number, level: number, price: number, index: number, missing: number};
 
 type SaveForm = {saveData: () => void};
 
 export default defineComponent({
   name: 'ChoamExchangeInput',
-  components: {AppButton, TabPanelFooterSlot, SelectTrade, SelectPayment, AmountSideTile, SmugglingPanel, DuneRuleCards, ProphecyPane, PrivilegePane, PactsPane},
+  components: {AppButton, TabPanelFooterSlot, SelectTrade, SelectPayment, MoneyText, SmugglingPanel, DuneRuleCards, ProphecyPane, PrivilegePane, PactsPane},
   props: {
     playerView: {type: Object as PropType<PlayerViewModel>, required: true},
     playerinput: {type: Object as PropType<OrOptionsModel>, required: true},
@@ -133,7 +157,7 @@ export default defineComponent({
   data() {
     // The guild first when it is possible, otherwise the tribute (envy at the top)
     const guild = this.playerinput.options.some((option) => titleKey(option) === SMUGGLE_TITLE);
-    return {chosen: (guild ? 'guild' : 'tribute') as Mode, prophecyReady: false};
+    return {chosen: (guild ? 'guild' : 'tribute') as Mode, prophecyReady: false, tributeSteps: 1};
   },
   computed: {
     MODES(): typeof MODES {
@@ -142,8 +166,11 @@ export default defineComponent({
     FOOTER(): typeof FOOTER {
       return FOOTER;
     },
-    SOLARI(): AmountSide {
-      return SOLARI;
+    ENVY_LEVEL_NAMES(): typeof ENVY_LEVEL_NAMES {
+      return ENVY_LEVEL_NAMES;
+    },
+    INFLUENCE_ICON(): string {
+      return INFLUENCE_ICON;
     },
     CHOAM_RULES(): typeof CHOAM_RULES {
       return CHOAM_RULES;
@@ -169,20 +196,50 @@ export default defineComponent({
     ownBribeCost(): number | undefined {
       return this.smuggling?.suspicion.find((entry) => entry.color === this.playerView.thisPlayer.color)?.bribeCost;
     },
-    envySide(): AmountSide {
-      return {kind: 'figure', label: 'Envy', icon: duneGraphic('res-landsraad'), perStep: 1, before: this.ownEnvy};
-    },
     guildIndex(): number {
       return choiceIndex(this.options, SMUGGLE_TITLE);
     },
     guildInput(): SelectTradeModel | undefined {
       return this.options[this.guildIndex] as SelectTradeModel | undefined;
     },
+    // The tribute choices of the server, one per number of steps the player can pay for
+    tributeChoices(): Array<{steps: number, index: number}> {
+      return this.options.flatMap((option, index) => {
+        if (option.type !== 'payment' || titleKey(option) !== BRIBE_TITLE) {
+          return [];
+        }
+        const title = option.title as Message;
+        return [{steps: Number(title.data[1]?.value ?? 1), index}];
+      });
+    },
+    tributeRows(): Array<TributeRow> {
+      const cost = this.ownBribeCost ?? 0;
+      return Array.from({length: this.ownEnvy}, (_, offset) => {
+        const steps = offset + 1;
+        const price = steps * cost;
+        return {
+          steps,
+          level: this.ownEnvy - steps,
+          price,
+          index: this.tributeChoices.find((choice) => choice.steps === steps)?.index ?? -1,
+          missing: price - this.solari,
+        };
+      });
+    },
     tributeIndex(): number {
-      return this.options.findIndex((option) => option.type === 'payment');
+      return this.tributeChoices.find((choice) => choice.steps === this.tributeSteps)?.index ?? this.tributeChoices[0]?.index ?? -1;
     },
     tributeInput(): SelectPaymentModel | undefined {
       return this.options[this.tributeIndex] as SelectPaymentModel | undefined;
+    },
+    stepCostText(): string {
+      return translateTextWithParams('Each step costs ${0} M€.', [String(this.ownBribeCost ?? 0)]);
+    },
+    footerTitle(): string {
+      if (this.chosen === 'tribute' && this.tributeInput !== undefined) {
+        return translateTextWithParams('Pay tribute (${0} M€)', [String(this.tributeInput.amount)]);
+      }
+      return translateText(FOOTER[this.chosen]);
     },
     solari(): number {
       return this.playerView.thisPlayer.megacredits;
@@ -202,7 +259,7 @@ export default defineComponent({
         if (this.ownEnvy < 1) {
           return translateText('The houses are well disposed: no tribute needed');
         }
-        return translateTextWithParams('Too few Solari: the tribute costs ${0}, you have ${1}', [String(this.ownBribeCost ?? 0), String(this.solari)]);
+        return translateTextWithParams('Too few M€ for one step: you have ${0} M€', [String(this.solari)]);
       }
       return undefined;
     },
@@ -221,6 +278,15 @@ export default defineComponent({
     },
   },
   methods: {
+    penalty(level: number): number {
+      return suspicionPenalty(level);
+    },
+    stepsLabel(steps: number): string {
+      return steps === 1 ? translateText('−1 step') : translateTextWithParams('−${0} steps', [String(steps)]);
+    },
+    missingText(missing: number): string {
+      return translateTextWithParams('${0} M€ missing', [String(missing)]);
+    },
     // Whether a move has anything to do now (the switch greys out the others)
     possible(mode: Mode): boolean {
       switch (mode) {

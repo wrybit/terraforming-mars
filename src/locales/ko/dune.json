@@ -393,7 +393,6 @@
   "The great houses vote against ${0} in the Landsraad: −${1} TR": "대가문들이 란즈라드에서 ${0}에 반대표를 던집니다: 영향력 −${1}",
   "The guild sets new rates": "길드가 새 시세를 정합니다",
   "CHOAM: trade with the guild": "CHOAM: 길드와 거래",
-  "Tribute to the great houses: ${0} M€, envy −1": "대가문들에 공물: ${0} 솔라리, 시기 −1",
   "CHOAM: prophesy a sale": "CHOAM: 판매를 예언",
   "CHOAM: prophesy a purchase": "CHOAM: 구매를 예언",
   "CHOAM: withdraw prophecy ${0}": "CHOAM: 예언 ${0} 철회",
@@ -413,7 +412,6 @@
   "A generous tribute appeases them.": "넉넉한 공물이 그들을 달랩니다.",
   "The great houses stand against you: CHOAM is closed until you pay tribute": "대가문들이 당신에게 등을 돌렸습니다: 공물을 바칠 때까지 CHOAM이 닫힙니다",
   "The houses are well disposed: no tribute needed": "가문들이 호의적입니다: 공물이 필요 없습니다",
-  "Too few Solari: the tribute costs ${0}, you have ${1}": "솔라리 부족: 공물은 ${0}, 보유 ${1}",
   "Nothing to offer": "제안할 것이 없습니다",
   "No offer yet, make one below": "아직 제안이 없습니다. 아래에서 만드세요",
   "You already have an offer open, withdraw it to make a new one.": "이미 열린 제안이 있습니다. 새로 만들려면 철회하세요.",
@@ -520,5 +518,13 @@
   "If the rate reaches ${0}, you get": "시세가 ${0}에 도달하면 받는 것",
   "Normal ${0}. Premium: ${1} Solari per unit. If the rate reaches ${2} or better, you get exactly your column, otherwise nothing.": "기본 ${0}. 보너스: 단위당 ${1} 솔라리. 시세가 ${2} 이상 좋아지면 정확히 너의 막대만큼 받고, 아니면 아무것도 없다.",
   "Commit to an amount and a rate. If the market reaches the rate, you win your column.": "수량과 시세를 정한다. 시장이 그 시세에 도달하면 너의 막대를 얻는다.",
-  "Prophecy: 2 to 8 units on one rate; once the market reaches it you get exactly your column, premium included; withdrawing gives back half, at game end it is lost": "예언: 한 시세에 2~8단위; 시장이 그 시세에 도달하면 보너스를 포함해 정확히 너의 막대를 받는다; 철회하면 절반을 돌려받고, 게임 종료 시 소멸한다"
+  "Prophecy: 2 to 8 units on one rate; once the market reaches it you get exactly your column, premium included; withdrawing gives back half, at game end it is lost": "예언: 한 시세에 2~8단위; 시장이 그 시세에 도달하면 보너스를 포함해 정확히 너의 막대를 받는다; 철회하면 절반을 돌려받고, 게임 종료 시 소멸한다",
+  "Tribute to the great houses: ${0} M€, envy −${1}": "대가문들에 공물: ${0} M€, 시기 −${1}",
+  "Each step costs ${0} M€.": "단계마다 ${0} M€.",
+  "Too few M€ for one step: you have ${0} M€": "한 단계에도 부족: 보유 ${0} M€",
+  "Pay tribute (${0} M€)": "공물 바치기 (${0} M€)",
+  "−1 step": "−1 단계",
+  "−${0} steps": "−${0} 단계",
+  "${0} M€ missing": "${0} M€ 부족",
+  "no penalty": "벌칙 없음"
 }

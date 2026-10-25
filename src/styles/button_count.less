@@ -108,3 +108,12 @@ each(@button-count-resources, {
 .money-text__coin {
   vertical-align: middle;
 }
+
+// The spaces beside a coin (MoneyText.vue): margins, so they survive the trimming of v-i18n
+.money-text__coin--after-text {
+  margin-left: 0.3em;
+}
+
+.money-text__coin--before-text {
+  margin-right: 0.3em;
+}

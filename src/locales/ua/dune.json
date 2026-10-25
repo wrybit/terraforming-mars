@@ -393,7 +393,6 @@
   "The great houses vote against ${0} in the Landsraad: −${1} TR": "Великі доми голосують у Ландсрааді проти ${0}: −${1} впливу",
   "The guild sets new rates": "Гільдія встановлює нові курси",
   "CHOAM: trade with the guild": "CHOAM: торгувати з Гільдією",
-  "Tribute to the great houses: ${0} M€, envy −1": "Данина великим домам: ${0} соларіїв, заздрість −1",
   "CHOAM: prophesy a sale": "CHOAM: напророкувати продаж",
   "CHOAM: prophesy a purchase": "CHOAM: напророкувати купівлю",
   "CHOAM: withdraw prophecy ${0}": "CHOAM: відкликати пророцтво ${0}",
@@ -413,7 +412,6 @@
   "A generous tribute appeases them.": "Щедра данина їх заспокоює.",
   "The great houses stand against you: CHOAM is closed until you pay tribute": "Великі доми проти тебе: CHOAM закрито, доки не сплатиш данину",
   "The houses are well disposed: no tribute needed": "Доми прихильні до тебе: данина не потрібна",
-  "Too few Solari: the tribute costs ${0}, you have ${1}": "Замало соларіїв: данина коштує ${0}, у тебе ${1}",
   "Nothing to offer": "Нічого запропонувати",
   "No offer yet, make one below": "Пропозиції ще немає, створи нижче",
   "You already have an offer open, withdraw it to make a new one.": "У тебе вже є відкрита пропозиція, відклич її, щоб створити нову.",
@@ -520,5 +518,13 @@
   "If the rate reaches ${0}, you get": "Якщо курс досягне ${0}, ти отримаєш",
   "Normal ${0}. Premium: ${1} Solari per unit. If the rate reaches ${2} or better, you get exactly your column, otherwise nothing.": "Норма ${0}. Премія: ${1} соларі за одиницю. Якщо курс досягне ${2} або краще, ти отримаєш рівно свій стовпчик, інакше нічого.",
   "Commit to an amount and a rate. If the market reaches the rate, you win your column.": "Обери кількість і курс. Якщо ринок досягне курсу, ти виграєш свій стовпчик.",
-  "Prophecy: 2 to 8 units on one rate; once the market reaches it you get exactly your column, premium included; withdrawing gives back half, at game end it is lost": "Пророцтво: 2–8 одиниць на один курс; якщо ринок його досягне, ти отримаєш рівно свій стовпчик разом із премією; відкликання повертає половину, наприкінці гри воно згорає"
+  "Prophecy: 2 to 8 units on one rate; once the market reaches it you get exactly your column, premium included; withdrawing gives back half, at game end it is lost": "Пророцтво: 2–8 одиниць на один курс; якщо ринок його досягне, ти отримаєш рівно свій стовпчик разом із премією; відкликання повертає половину, наприкінці гри воно згорає",
+  "Tribute to the great houses: ${0} M€, envy −${1}": "Данина великим домам: ${0} M€, заздрість −${1}",
+  "Each step costs ${0} M€.": "Кожен щабель коштує ${0} M€.",
+  "Too few M€ for one step: you have ${0} M€": "Замало M€ на один щабель: у тебе ${0} M€",
+  "Pay tribute (${0} M€)": "Сплатити данину (${0} M€)",
+  "−1 step": "−1 щабель",
+  "−${0} steps": "−${0} щаблі",
+  "${0} M€ missing": "бракує ${0} M€",
+  "no penalty": "без покарання"
 }

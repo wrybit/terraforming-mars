@@ -206,40 +206,45 @@ export function smuggleInput(player: IPlayer, data: SmugglingData, onlySpice: bo
     });
 }
 
-/** Tribute for the AI: a plain choice in the Dune group of the action menu */
+/** Tribute for the AI: a plain choice in the Dune group of the action menu, one step at a time */
 function bribeOption(player: IPlayer, data: SmugglingData): SelectOption | undefined {
   const cost = bribeCost(player);
   if (suspicionOf(data, player) < 1 || player.megaCredits < cost) {
     return undefined;
   }
-  return new SelectOption(message(BRIBE_TITLE, (b) => b.number(cost)), 'Pay tribute').andThen(() => {
+  return new SelectOption(message(BRIBE_TITLE, (b) => b.number(cost).number(1)), 'Pay tribute').andThen(() => {
     logTribute(player);
     player.stock.deduct(Resource.MEGACREDITS, cost, {log: true});
-    bribed(player, data);
+    bribed(player, data, 1);
     return undefined;
   });
 }
 
-/** Tribute in the CHOAM tab: paid like any cost, with the usual payment box (before → after) */
-export function bribePayment(player: IPlayer, data: SmugglingData): SelectPayment | undefined {
+/**
+ * Tribute in the CHOAM tab: one choice per number of steps the player can pay for, each step at the tribute price
+ * (Jens 25 Oct 2026: 10 to the next step, 20 for two, 30 for three, in one move). Paid like any cost, with the usual
+ * payment box when other means of payment count.
+ */
+export function bribePayments(player: IPlayer, data: SmugglingData): Array<SelectPayment> {
   const cost = bribeCost(player);
-  if (suspicionOf(data, player) < 1 || !player.canAfford(cost)) {
-    return undefined;
+  const payments: Array<SelectPayment> = [];
+  for (let steps = 1; steps <= suspicionOf(data, player) && player.canAfford(cost * steps); steps++) {
+    payments.push(new SelectPayment(message(BRIBE_TITLE, (b) => b.number(cost * steps).number(steps)), cost * steps, {}).andThen((payment) => {
+      logTribute(player);
+      payWithLog(player, payment);
+      bribed(player, data, steps);
+      return undefined;
+    }));
   }
-  return new SelectPayment(message(BRIBE_TITLE, (b) => b.number(cost)), cost, {}).andThen((payment) => {
-    logTribute(player);
-    payWithLog(player, payment);
-    bribed(player, data);
-    return undefined;
-  });
+  return payments;
 }
 
 function logTribute(player: IPlayer): void {
   player.game.log('${0} paid tribute to the great houses', (b) => b.player(player));
 }
 
-function bribed(player: IPlayer, data: SmugglingData): void {
-  setEnvy(player, data, suspicionOf(data, player) - 1);
+function bribed(player: IPlayer, data: SmugglingData, steps: number): void {
+  setEnvy(player, data, suspicionOf(data, player) - steps);
 }
 
 /** Moves of the Dune group of the action menu: only the AI pays tribute there (from 3 on, where it costs) */

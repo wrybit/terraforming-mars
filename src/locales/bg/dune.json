@@ -394,7 +394,6 @@
   "The great houses vote against ${0} in the Landsraad: −${1} TR": "Великите домове гласуват в Ландсраада срещу ${0}: −${1} влияние",
   "The guild sets new rates": "Гилдията определя нови курсове",
   "CHOAM: trade with the guild": "CHOAM: търговия с Гилдията",
-  "Tribute to the great houses: ${0} M€, envy −1": "Данък за великите домове: ${0} солари, завист −1",
   "CHOAM: prophesy a sale": "CHOAM: пророкувай продажба",
   "CHOAM: prophesy a purchase": "CHOAM: пророкувай покупка",
   "CHOAM: withdraw prophecy ${0}": "CHOAM: оттегли пророчество ${0}",
@@ -414,7 +413,6 @@
   "A generous tribute appeases them.": "Щедър данък ги умилостивява.",
   "The great houses stand against you: CHOAM is closed until you pay tribute": "Великите домове са срещу теб: CHOAM е затворен, докато не платиш данък",
   "The houses are well disposed: no tribute needed": "Домовете са благосклонни: не е нужен данък",
-  "Too few Solari: the tribute costs ${0}, you have ${1}": "Твърде малко солари: данъкът струва ${0}, имаш ${1}",
   "Nothing to offer": "Няма какво да предложиш",
   "No offer yet, make one below": "Още няма оферта, направи я по-долу",
   "You already have an offer open, withdraw it to make a new one.": "Вече имаш отворена оферта, оттегли я, за да направиш нова.",
@@ -521,5 +519,13 @@
   "If the rate reaches ${0}, you get": "Ако курсът достигне ${0}, получаваш",
   "Normal ${0}. Premium: ${1} Solari per unit. If the rate reaches ${2} or better, you get exactly your column, otherwise nothing.": "Нормално ${0}. Премия: ${1} солари за единица. Ако курсът достигне ${2} или по-добре, получаваш точно своя стълб, иначе нищо.",
   "Commit to an amount and a rate. If the market reaches the rate, you win your column.": "Избери количество и курс. Ако пазарът достигне курса, печелиш своя стълб.",
-  "Prophecy: 2 to 8 units on one rate; once the market reaches it you get exactly your column, premium included; withdrawing gives back half, at game end it is lost": "Пророчество: 2 до 8 единици на един курс; ако пазарът го достигне, получаваш точно своя стълб заедно с премията; оттеглянето връща половината, в края на играта изгаря"
+  "Prophecy: 2 to 8 units on one rate; once the market reaches it you get exactly your column, premium included; withdrawing gives back half, at game end it is lost": "Пророчество: 2 до 8 единици на един курс; ако пазарът го достигне, получаваш точно своя стълб заедно с премията; оттеглянето връща половината, в края на играта изгаря",
+  "Tribute to the great houses: ${0} M€, envy −${1}": "Данък за великите домове: ${0} M€, завист −${1}",
+  "Each step costs ${0} M€.": "Всяко ниво струва ${0} M€.",
+  "Too few M€ for one step: you have ${0} M€": "Не стига за едно ниво: имаш ${0} M€",
+  "Pay tribute (${0} M€)": "Плати данък (${0} M€)",
+  "−1 step": "−1 ниво",
+  "−${0} steps": "−${0} нива",
+  "${0} M€ missing": "липсват ${0} M€",
+  "no penalty": "без наказание"
 }

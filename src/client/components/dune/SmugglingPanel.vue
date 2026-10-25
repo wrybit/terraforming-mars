@@ -23,12 +23,13 @@
 
 <script lang="ts">
 import {defineComponent, PropType} from 'vue';
-import {MAX_SUSPICION, SmugglingModel, suspicionPenalty} from '@/common/dune/DuneModel';
+import {SmugglingModel, suspicionPenalty} from '@/common/dune/DuneModel';
 import {PublicPlayerModel} from '@/common/models/PlayerModel';
 import {Color} from '@/common/Color';
 import BoardCube from '@/client/components/common/BoardCube.vue';
 import {duneGraphic} from './duneGraphic';
 import {GRID_COLUMNS, cubeSpots, gridRows} from './trackCubeSpots';
+import {ENVY_LEVELS, ENVY_LEVEL_NAMES} from './envyLevels';
 
 // Room a cube takes (px): the picture of a turned cube with its shadow is about 29 px wide, plus a safe space of 5 px,
 // so two cubes never touch (Jens 25 Oct 2026); the 20 px box of the cube sits in the middle of it
@@ -36,9 +37,8 @@ const CUBE_ROOM = 34;
 const CUBE_INSET = (CUBE_ROOM - 20) / 2;
 
 const INFLUENCE_ICON = duneGraphic('res-landsraad');
-const LEVELS = Array.from({length: MAX_SUSPICION + 1}, (_, level) => level);
-// Names of the steps, from harmony with the houses to being shunned by them (English, translated on display)
-const LEVEL_NAMES: ReadonlyArray<string> = ['Concord', 'Whispers', 'Distrust', 'Grudge', 'Enmity', 'Ostracism'];
+const LEVELS = ENVY_LEVELS;
+const LEVEL_NAMES = ENVY_LEVEL_NAMES;
 
 export default defineComponent({
   name: 'SmugglingPanel',

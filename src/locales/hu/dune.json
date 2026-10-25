@@ -391,7 +391,6 @@
   "The great houses vote against ${0} in the Landsraad: −${1} TR": "A nagy házak a Landsraadban ${0} ellen szavaznak: −${1} befolyás",
   "The guild sets new rates": "A Céh új árfolyamokat szab",
   "CHOAM: trade with the guild": "CHOAM: kereskedés a Céhhel",
-  "Tribute to the great houses: ${0} M€, envy −1": "Adó a nagy házaknak: ${0} solari, irigység −1",
   "CHOAM: prophesy a sale": "CHOAM: eladás megjövendölése",
   "CHOAM: prophesy a purchase": "CHOAM: vétel megjövendölése",
   "CHOAM: withdraw prophecy ${0}": "CHOAM: ${0}. prófécia visszavonása",
@@ -411,7 +410,6 @@
   "A generous tribute appeases them.": "Egy bőkezű adó lecsillapítja őket.",
   "The great houses stand against you: CHOAM is closed until you pay tribute": "A nagy házak ellened fordultak: a CHOAM zárva, amíg adót nem fizetsz",
   "The houses are well disposed: no tribute needed": "A házak jóindulatúak: nincs szükség adóra",
-  "Too few Solari: the tribute costs ${0}, you have ${1}": "Túl kevés solari: az adó ${0}, neked ${1} van",
   "Nothing to offer": "Nincs mit felajánlani",
   "No offer yet, make one below": "Még nincs ajánlat, alább tehetsz egyet",
   "You already have an offer open, withdraw it to make a new one.": "Már van nyitott ajánlatod, vond vissza, hogy újat tehess.",
@@ -518,5 +516,13 @@
   "If the rate reaches ${0}, you get": "Ha az árfolyam eléri a(z) ${0}-t, kapsz",
   "Normal ${0}. Premium: ${1} Solari per unit. If the rate reaches ${2} or better, you get exactly your column, otherwise nothing.": "Normál ${0}. Prémium: ${1} Solari egységenként. Ha az árfolyam eléri a(z) ${2}-t vagy jobbat, pontosan az oszlopodat kapod, különben semmit.",
   "Commit to an amount and a rate. If the market reaches the rate, you win your column.": "Válassz mennyiséget és árfolyamot. Ha a piac eléri az árfolyamot, megnyered az oszlopodat.",
-  "Prophecy: 2 to 8 units on one rate; once the market reaches it you get exactly your column, premium included; withdrawing gives back half, at game end it is lost": "Jóslat: 2–8 egység egy árfolyamra; ha a piac eléri, pontosan az oszlopodat kapod a prémiummal együtt; visszavonáskor a fele jár vissza, a játék végén elvész"
+  "Prophecy: 2 to 8 units on one rate; once the market reaches it you get exactly your column, premium included; withdrawing gives back half, at game end it is lost": "Jóslat: 2–8 egység egy árfolyamra; ha a piac eléri, pontosan az oszlopodat kapod a prémiummal együtt; visszavonáskor a fele jár vissza, a játék végén elvész",
+  "Tribute to the great houses: ${0} M€, envy −${1}": "Adó a nagy házaknak: ${0} M€, irigység −${1}",
+  "Each step costs ${0} M€.": "Minden fokozat ${0} M€.",
+  "Too few M€ for one step: you have ${0} M€": "Egy fokozatra sem elég: neked ${0} M€ van",
+  "Pay tribute (${0} M€)": "Adó fizetése (${0} M€)",
+  "−1 step": "−1 fokozat",
+  "−${0} steps": "−${0} fokozat",
+  "${0} M€ missing": "hiányzik ${0} M€",
+  "no penalty": "nincs büntetés"
 }

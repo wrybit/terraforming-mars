@@ -232,6 +232,17 @@ describe('Dune modules B, D, E, F', () => {
       expect(DuneExpansion.actions(player1)).is.undefined;
     });
 
+    it('offers one tribute per number of steps the player can pay for (Jens 25 Oct 2026)', () => {
+      const smuggling = game.duneData!.smuggling!;
+      smuggling.suspicion[player1.id] = 5;
+      player1.megaCredits = 25;
+      const tributes = smugglingTab(player1).options.filter((input) => titleOf(input).startsWith('Tribute to the great houses'));
+      expect(tributes.map((input) => cast(input, SelectPayment).amount)).deep.eq([10, 20]);
+      cast(tributes[1], SelectPayment).process({type: 'payment', payment: Payment.of({megacredits: 20})}, player1);
+      expect(suspicionOf(smuggling, player1)).eq(3);
+      expect(player1.megaCredits).eq(5);
+    });
+
     it('offers only the tribute at envy 5, the top of the track', () => {
       game.duneData!.smuggling!.suspicion[player1.id] = 5;
       player1.titanium = 5;
@@ -320,7 +331,8 @@ describe('Dune modules B, D, E, F', () => {
       smuggling.suspicion[player1.id] = 5;
       player1.titanium = 6;
       player1.megaCredits = 20;
-      expect(choamTab(player1).options.map((input) => input.type)).deep.eq(['payment']);
+      // Only tributes: one step for 10, two for 20
+      expect(choamTab(player1).options.map((input) => input.type)).deep.eq(['payment', 'payment']);
     });
 
     it('delivers the privilege once: 1 Solari per unit over the guild, at least normal + 1, envy +1, then nobody else', () => {

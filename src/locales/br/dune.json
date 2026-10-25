@@ -390,7 +390,6 @@
   "The great houses vote against ${0} in the Landsraad: −${1} TR": "As grandes casas votam contra ${0} no Landsraad: −${1} de influência",
   "The guild sets new rates": "A Guilda define novas cotações",
   "CHOAM: trade with the guild": "CHOAM: negociar com a Guilda",
-  "Tribute to the great houses: ${0} M€, envy −1": "Tributo às grandes casas: ${0} solaris, inveja −1",
   "CHOAM: prophesy a sale": "CHOAM: profetizar uma venda",
   "CHOAM: prophesy a purchase": "CHOAM: profetizar uma compra",
   "CHOAM: withdraw prophecy ${0}": "CHOAM: retirar a profecia ${0}",
@@ -410,7 +409,6 @@
   "A generous tribute appeases them.": "Um tributo generoso os acalma.",
   "The great houses stand against you: CHOAM is closed until you pay tribute": "As grandes casas estão contra você: a CHOAM está fechada até você pagar tributo",
   "The houses are well disposed: no tribute needed": "As casas são favoráveis a você: nenhum tributo necessário",
-  "Too few Solari: the tribute costs ${0}, you have ${1}": "Poucos solaris: o tributo custa ${0}, você tem ${1}",
   "Nothing to offer": "Nada para oferecer",
   "No offer yet, make one below": "Ainda sem oferta, crie uma abaixo",
   "You already have an offer open, withdraw it to make a new one.": "Você já tem uma oferta aberta, retire-a para criar outra.",
@@ -515,5 +513,13 @@
   "If the rate reaches ${0}, you get": "Se a cotação chegar a ${0}, você recebe",
   "Normal ${0}. Premium: ${1} Solari per unit. If the rate reaches ${2} or better, you get exactly your column, otherwise nothing.": "Normal ${0}. Prêmio: ${1} Solari por unidade. Se a cotação chegar a ${2} ou melhor, você recebe exatamente sua coluna; senão, nada.",
   "Commit to an amount and a rate. If the market reaches the rate, you win your column.": "Defina uma quantidade e uma cotação. Se o mercado chegar à cotação, você ganha sua coluna.",
-  "Prophecy: 2 to 8 units on one rate; once the market reaches it you get exactly your column, premium included; withdrawing gives back half, at game end it is lost": "Profecia: 2 a 8 unidades em uma cotação; se o mercado chegar a ela, você recebe exatamente sua coluna, prêmio incluído; retirar devolve metade, no fim do jogo ela é perdida"
+  "Prophecy: 2 to 8 units on one rate; once the market reaches it you get exactly your column, premium included; withdrawing gives back half, at game end it is lost": "Profecia: 2 a 8 unidades em uma cotação; se o mercado chegar a ela, você recebe exatamente sua coluna, prêmio incluído; retirar devolve metade, no fim do jogo ela é perdida",
+  "Tribute to the great houses: ${0} M€, envy −${1}": "Tributo às grandes casas: ${0} M€, inveja −${1}",
+  "Each step costs ${0} M€.": "Cada nível custa ${0} M€.",
+  "Too few M€ for one step: you have ${0} M€": "Não dá para um nível: você tem ${0} M€",
+  "Pay tribute (${0} M€)": "Pagar tributo (${0} M€)",
+  "−1 step": "−1 nível",
+  "−${0} steps": "−${0} níveis",
+  "${0} M€ missing": "faltam ${0} M€",
+  "no penalty": "sem penalidade"
 }

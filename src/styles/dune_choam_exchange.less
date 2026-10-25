@@ -814,3 +814,125 @@
   padding-top: 12px;
   border-top: 1px solid @choam-divider;
 }
+
+// Tribute (Jens 25 Oct 2026, variant A of _mockups/dune/choam/tribut-stufen.html): the price per step a line below the
+// story, then one row per number of steps – radio, steps, the step reached with its penalty, the price. The rows sit
+// close together and close to the price line, the price line apart from the story (law of proximity).
+.choam-tribute__cost {
+  margin: 8px auto 10px;
+  color: #d8c29c;
+}
+
+.choam-tribute {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.choam-tribute__row {
+  display: grid;
+  grid-template-columns: 16px auto auto 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 12px;
+  border: 1px solid rgba(230, 207, 166, 0.22);
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.18);
+  color: @choam-sand;
+  font: inherit;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    border-color: @choam-edge;
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+}
+
+.choam-tribute__row--on {
+  border-color: #e8964a;
+  background: rgba(232, 150, 74, 0.14);
+  box-shadow: 0 0 8px rgba(232, 150, 74, 0.3);
+}
+
+.choam-tribute__radio {
+  width: 14px;
+  height: 14px;
+  box-sizing: border-box;
+  border: 2px solid @choam-quiet;
+  border-radius: 50%;
+
+  .choam-tribute__row--on & {
+    border-color: #e8964a;
+    background: radial-gradient(#e8964a 40%, transparent 46%);
+  }
+}
+
+.choam-tribute__steps {
+  color: @choam-quiet;
+  white-space: nowrap;
+}
+
+.choam-tribute__target {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+}
+
+.choam-tribute__arrow {
+  color: @choam-quiet;
+}
+
+// The step reached, in the colours of its step on the track (SmugglingPanel.vue)
+.choam-tribute__level {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 8px;
+  border: 1px solid;
+  border-radius: 6px;
+  color: @choam-white;
+  white-space: nowrap;
+
+  .dune-smuggling__penalty {
+    min-height: 0;
+    font-size: 13px;
+  }
+
+  .dune-smuggling__penalty-icon {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.choam-tribute__free {
+  color: #9fd88a;
+  font-size: 13px;
+}
+
+// The price, and below it what is missing, so a greyed row stays as narrow as the others
+.choam-tribute__price {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.choam-tribute__missing {
+  color: #e8a08a;
+  font-size: 12px;
+  white-space: nowrap;
+
+  .money-text__coin {
+    transform: scale(0.8);
+  }
+}
