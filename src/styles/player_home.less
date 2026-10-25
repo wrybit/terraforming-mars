@@ -43,18 +43,14 @@
 }
 
 .terraformed-banner {
-  // Floating instead of in the flow: doesn't push the player bars down.
-  // Centered over the right column (board, left edge from boardColumnPosition.ts), there is room on top there –
-  // centered in the window, the banner would cover the values of the topmost player bar
-  position: fixed;
-  top: 12px;
-  left: calc((var(--board-column-left, 0px) + 100vw) / 2);
-  z-index: 900; // above the page, below the "active player" frame (1000) and dialogs (1100)
-  transform: translateX(-50%);
+  // A row of the log below its newest entry, two rows high (LogPanel.vue; Jens, 25 Oct 2026): it no longer floats
+  // over the board tabs
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 8px 28px;
+  min-height: 56px;
+  margin: 10px 0 4px;
+  padding: 8px 24px;
   border: 2px solid #805700;
   border-radius: 999px;
   background: linear-gradient(to right, #e28c22, #ffcc64, #e28c22);
@@ -63,19 +59,18 @@
   font-family: Prototype, Ubuntu, Sans-Serif;
   font-size: 20px;
   font-weight: bold;
+  text-align: center;
   text-transform: uppercase;
-  white-space: nowrap;
   pointer-events: none; // just a notice, must not catch clicks underneath
 }
 
 .terraformed-banner--animated {
-  animation: slide-down 0.6s ease-out;
+  animation: terraformed-banner-in 0.6s ease-out;
 }
 
-// Stay centered: the animation replaces transform, so translateX(-50%) has to be included
-@keyframes slide-down {
-  from { transform: translate(-50%, -150%); opacity: 0; }
-  to { transform: translate(-50%, 0); opacity: 1; }
+@keyframes terraformed-banner-in {
+  from { transform: translateY(-40%); opacity: 0; }
+  to { transform: none; opacity: 1; }
 }
 
 // text shadows
