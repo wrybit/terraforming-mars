@@ -14,6 +14,9 @@
       <stop offset="1" stop-color="#8a6410"/>
     </linearGradient>
   </defs>
+  <!-- 1 px dark outline outside the gold rim, so the gold keeps its contrast on the light card (Jens 25 Oct 2026):
+       the same outline 2 px wider underneath; the shield on top covers its inner half -->
+  <path d="M32 4C40 8.5 49 10 58 10C58 33 51 52 32 64C13 52 6 33 6 10C15 10 24 8.5 32 4Z" fill="none" stroke="#1d140c" stroke-width="5.5" stroke-linejoin="round"/>
   <path d="M32 4C40 8.5 49 10 58 10C58 33 51 52 32 64C13 52 6 33 6 10C15 10 24 8.5 32 4Z" fill="url(#fill)" stroke="url(#rim)" stroke-width="3.5" stroke-linejoin="round"/>
   <path d="M32 9.5C25.5 12.5 18 14 11 14.3C11.6 32 17 46 32 57Z" fill="#fffdf8" opacity="0.16"/>
 </svg>
