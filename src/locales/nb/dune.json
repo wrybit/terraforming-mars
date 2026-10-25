@@ -484,5 +484,12 @@
   "${0} lost ${1} envy": "Misunnelsen mot ${0} synker med ${1}",
   "${0} gained ${1} Sardaukar": "${0} har ${1} sardaukarer mer i garnisonen",
   "${0} lost ${1} Sardaukar": "${0} har ${1} sardaukarer mindre i garnisonen",
-  "Sardaukar": "Sardaukarer"
+  "Sardaukar": "Sardaukarer",
+  "Shai-Hulud heads (${0}) ${1}": "Shai-Hulud drar mot (${0}) ${1}",
+  "top right": "opp til høyre",
+  "right": "til høyre",
+  "bottom right": "ned til høyre",
+  "bottom left": "ned til venstre",
+  "left": "til venstre",
+  "top left": "opp til venstre"
 }

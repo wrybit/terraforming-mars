@@ -487,5 +487,12 @@
   "${0} lost ${1} envy": "Kateus pelaajaa ${0} kohtaan laskee ${1}",
   "${0} gained ${1} Sardaukar": "Pelaajan ${0} varuskunnassa on ${1} sardaukaria enemmän",
   "${0} lost ${1} Sardaukar": "Pelaajan ${0} varuskunnassa on ${1} sardaukaria vähemmän",
-  "Sardaukar": "Sardaukarit"
+  "Sardaukar": "Sardaukarit",
+  "Shai-Hulud heads (${0}) ${1}": "Shai-Hulud suuntaa kohti (${0}) ${1}",
+  "top right": "oikealle ylös",
+  "right": "oikealle",
+  "bottom right": "oikealle alas",
+  "bottom left": "vasemmalle alas",
+  "left": "vasemmalle",
+  "top left": "vasemmalle ylös"
 }

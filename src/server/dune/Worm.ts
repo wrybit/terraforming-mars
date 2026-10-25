@@ -246,8 +246,18 @@ export function rollWorm(game: IGame, worm: WormData): void {
   if (lastLine !== undefined && worm.direction !== undefined && wormLine(worm.direction) === lastLine) {
     rollDie(game, worm);
   }
-  // Only the roll that counts, once the heading is fixed: no lines for a second roll or a bounce (Jens 25 Oct 2026)
-  game.log('Shai-Hulud stirs: the die shows ${0}', (b) => b.number(worm.roll ?? 1));
+  // Only the heading that counts, once it is fixed (after a second roll or a bounce): the face of the die for that
+  // heading and its name, e.g. "(3) bottom right" (Jens 25 Oct 2026)
+  const face = worm.direction === undefined ? (worm.roll ?? 1) : headingFace(worm.direction);
+  game.log('Shai-Hulud heads (${0}) ${1}', (b) => b.number(face).string(HEADING_NAMES[face - 1]));
+}
+
+/** Names of the headings by die face, clockwise from top right (directionIndex) */
+const HEADING_NAMES = ['top right', 'right', 'bottom right', 'bottom left', 'left', 'top left'];
+
+/** Die face of a heading: the inverse of directionIndex */
+function headingFace(direction: number): number {
+  return direction === 0 ? 6 : direction;
 }
 
 function rollDie(game: IGame, worm: WormData): void {

@@ -490,5 +490,12 @@
   "${0} lost ${1} envy": "${0}への妬みが${1}減る",
   "${0} gained ${1} Sardaukar": "${0}の駐屯軍にサーダカーが${1}人増える",
   "${0} lost ${1} Sardaukar": "${0}の駐屯軍のサーダカーが${1}人減る",
-  "Sardaukar": "サーダカー"
+  "Sardaukar": "サーダカー",
+  "Shai-Hulud heads (${0}) ${1}": "シャイー・フルードの向き：(${0}) ${1}",
+  "top right": "右上",
+  "right": "右",
+  "bottom right": "右下",
+  "bottom left": "左下",
+  "left": "左",
+  "top left": "左上"
 }

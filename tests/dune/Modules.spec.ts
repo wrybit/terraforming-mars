@@ -14,7 +14,7 @@ import {TileType} from '../../src/common/TileType';
 import {Phase} from '../../src/common/Phase';
 import {DuneExpansion} from '../../src/server/dune/DuneExpansion';
 import {battleTargets, garrisonOf, resolveBattle, OPEN_KANLY_COST} from '../../src/server/dune/Kanly';
-import {chargeSuspicion, exchangeOf, moveExchange, privilegeOf, prophecyOf, suspicionOf, suspicionPenalty} from '../../src/server/dune/Smuggling';
+import {chargeSuspicion, exchangeOf, moveExchange, openExchange, privilegeOf, prophecyOf, suspicionOf, suspicionPenalty} from '../../src/server/dune/Smuggling';
 import {PRIVILEGE_TITLE, PROPHECY_BUY_TITLE, PROPHECY_SELL_TITLE, SMUGGLE_TITLE} from '../../src/common/dune/duneActionTitles';
 import {returnOffers} from '../../src/server/dune/Choam';
 import {SCHEMES_TITLE, agendaPoints, reductionStep, schemeValue, schemesVictoryPoints} from '../../src/server/dune/Schemes';
@@ -171,6 +171,17 @@ describe('Dune modules B, D, E, F', () => {
       expect(exchangeOf(smuggling).buy).has.length(3);
     });
 
+    it('moves the exchange once at the start of a new generation, not again after a reload', () => {
+      const smuggling = game.duneData!.smuggling!;
+      openExchange(game, smuggling);
+      expect(exchangeOf(smuggling).sell).has.length(1);
+      game.generation++;
+      openExchange(game, smuggling);
+      openExchange(game, smuggling);
+      expect(exchangeOf(smuggling).sell).has.length(2);
+      expect(privilegeOf(game, smuggling).generation).eq(game.generation);
+    });
+
     it('always offers spice, even without any, but refuses to give it', () => {
       player1.megaCredits = 13;
       player1.titanium = 0;
@@ -308,7 +319,7 @@ describe('Dune modules B, D, E, F', () => {
       expect(suspicionOf(smuggling, player1)).eq(1);
       expect(choamTab(player2).options.map(titleOf)).not.includes(PRIVILEGE_TITLE);
       // A new one comes with the next generation
-      moveExchange(game, smuggling);
+      moveExchange(game, smuggling, game.generation + 1);
       expect(smuggling.privilege?.takenBy).is.undefined;
       expect(smuggling.privilege?.generation).eq(game.generation + 1);
     });

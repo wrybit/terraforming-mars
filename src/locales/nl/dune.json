@@ -477,5 +477,12 @@
   "${0} gained ${1} envy": "De afgunst jegens ${0} stijgt met ${1}",
   "${0} lost ${1} envy": "De afgunst jegens ${0} daalt met ${1}",
   "${0} gained ${1} Sardaukar": "${0} heeft ${1} Sardaukar meer in het garnizoen",
-  "${0} lost ${1} Sardaukar": "${0} heeft ${1} Sardaukar minder in het garnizoen"
+  "${0} lost ${1} Sardaukar": "${0} heeft ${1} Sardaukar minder in het garnizoen",
+  "Shai-Hulud heads (${0}) ${1}": "Shai-Hulud trekt richting (${0}) ${1}",
+  "top right": "rechtsboven",
+  "right": "rechts",
+  "bottom right": "rechtsonder",
+  "bottom left": "linksonder",
+  "left": "links",
+  "top left": "linksboven"
 }

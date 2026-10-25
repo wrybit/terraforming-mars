@@ -13,7 +13,7 @@ import {BazaarData, bazaarModel, bazaarTabActions, buyInput, initializeBazaar, s
 import {WormData, distanceInput, rollWorm, wormChooser, wormModel, wormStart} from './Worm';
 import {levyInput} from './WormLevy';
 import {KanlyData, initializeKanly, kanlyActions, kanlyModel, resolveBattle} from './Kanly';
-import {SmugglingData, chargeSuspicion, initializeSmuggling, moveExchange, smugglingModel} from './Smuggling';
+import {SmugglingData, chargeSuspicion, closeExchange, initializeSmuggling, openExchange, smugglingModel} from './Smuggling';
 import {ChoamData, choamModel, initializeChoam, returnOffers} from './Choam';
 import {choamExchangeActions, choamExchangeTabActions, choamParts} from './ChoamExchange';
 import {SchemesData, initializeSchemes, reductionStep, schemesModel, scoringAgenda} from './Schemes';
@@ -58,8 +58,8 @@ const GENERATION_END_STEPS: ReadonlyArray<GenerationEndStep> = [
     const parts = choamParts(data);
     if (parts !== undefined) {
       chargeSuspicion(game, parts.smuggling);
-      // The forecast becomes the rates of the next generation; prophecies come true; a new privilege
-      moveExchange(game, parts.smuggling);
+      // New rates, prophecies and the new privilege follow at the start of the next generation (beforeActionPhase)
+      closeExchange(game, parts.smuggling);
       returnOffers(game, parts.choam);
     }
     next();
@@ -141,15 +141,19 @@ export class DuneExpansion {
   /** Between research and the first action of a generation: the bazaar lays out new wares (in generation 1 the start
    *  wares already lie out). `then` starts the action phase. */
   public static beforeActionPhase(game: IGame, then: () => void): void {
-    const bazaar = game.duneData?.bazaar;
+    const data = game.duneData;
+    const bazaar = data?.bazaar;
+    // No line "the bazaar opens": it tells nothing the bazaar tab does not show (Jens 25 Oct 2026)
+    if (bazaar !== undefined && game.generation > 1) {
+      slideAndRefill(bazaar, game.rng);
+    }
     if (bazaar !== undefined) {
-      if (game.generation > 1) {
-        slideAndRefill(bazaar, game.rng);
-      }
       bazaar.bought = [];
-      if (bazaar.slots.some((ware) => ware !== null)) {
-        game.log('The bazaar of Arrakeen opens');
-      }
+    }
+    // CHOAM: the guild's new rates, the prophecies and the emperor's wish, in the log of the new generation
+    const parts = data === undefined ? undefined : choamParts(data);
+    if (parts !== undefined) {
+      openExchange(game, parts.smuggling);
     }
     then();
   }

@@ -16,7 +16,7 @@ import {message} from '../logs/MessageBuilder';
 import {COSTLY_SUSPICION, MAX_SUSPICION, SmugglingModel, suspicionPenalty} from '../../common/dune/DuneModel';
 import {CardName} from '../../common/cards/CardName';
 import {payWithLog} from './payWithLog';
-import {PrivilegeData, newPrivilege, privilegeModel, renewPrivilege} from './Privilege';
+import {PrivilegeData, lapsePrivilege, newPrivilege, privilegeModel, renewPrivilege} from './Privilege';
 import {ProphecyData, fulfilOrders, initializeProphecy, prophecyModel} from './Prophecy';
 
 // Exchange, envy and tribute of the CHOAM module (claude/dune-erweiterung-konzept.md; Jens 19–24 Oct 2026). Smuggling
@@ -254,13 +254,31 @@ export function chargeSuspicion(game: IGame, data: SmugglingData): void {
   }
 }
 
-/** End of a generation: new rates (the forecast comes true), then the prophecies, then a new privilege */
-export function moveExchange(game: IGame, data: SmugglingData): void {
+/**
+ * New rates (the forecast comes true), then the prophecies, then a new privilege for `generation`. Since 25 Oct 2026
+ * at the start of the action phase of the new generation, so all of it stands in its log (Jens); no CHOAM move
+ * happens in between, the research phase only.
+ */
+export function moveExchange(game: IGame, data: SmugglingData, generation: number = game.generation): void {
   const exchange = exchangeOf(data);
   advanceExchange(exchange, game.rng);
   game.log('The guild sets new rates');
   fulfilOrders(game, prophecyOf(data), currentRates(exchange.sell), currentRates(exchange.buy));
-  data.privilege = renewPrivilege(game, data.privilege);
+  data.privilege = renewPrivilege(game, generation);
+}
+
+/** Start of a generation: the exchange moves once. A game saved after the move at the old generation end (before
+ *  25 Oct 2026) already has the privilege of this generation and does not move twice. */
+export function openExchange(game: IGame, data: SmugglingData): void {
+  if (privilegeOf(game, data).generation >= game.generation) {
+    return;
+  }
+  moveExchange(game, data, game.generation);
+}
+
+/** End of a generation: the privilege nobody took lapses */
+export function closeExchange(game: IGame, data: SmugglingData): void {
+  lapsePrivilege(game, data.privilege);
 }
 
 export function smugglingModel(game: IGame, data: SmugglingData, viewer?: IPlayer): SmugglingModel {

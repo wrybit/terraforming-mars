@@ -491,5 +491,12 @@
   "${0} lost ${1} envy": "${0} 的嫉恨减少 ${1}",
   "${0} gained ${1} Sardaukar": "${0} 的驻军增加 ${1} 名萨多卡",
   "${0} lost ${1} Sardaukar": "${0} 的驻军减少 ${1} 名萨多卡",
-  "Sardaukar": "萨多卡"
+  "Sardaukar": "萨多卡",
+  "Shai-Hulud heads (${0}) ${1}": "夏胡露的方向：(${0}) ${1}",
+  "top right": "右上",
+  "right": "右",
+  "bottom right": "右下",
+  "bottom left": "左下",
+  "left": "左",
+  "top left": "左上"
 }

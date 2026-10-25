@@ -490,5 +490,12 @@
   "${0} lost ${1} envy": "${0}에 대한 시기가 ${1} 내려갑니다",
   "${0} gained ${1} Sardaukar": "${0}의 주둔군에 사다우카가 ${1}명 늘었습니다",
   "${0} lost ${1} Sardaukar": "${0}의 주둔군에서 사다우카가 ${1}명 줄었습니다",
-  "Sardaukar": "사다우카"
+  "Sardaukar": "사다우카",
+  "Shai-Hulud heads (${0}) ${1}": "샤이 훌루드의 방향: (${0}) ${1}",
+  "top right": "오른쪽 위",
+  "right": "오른쪽",
+  "bottom right": "오른쪽 아래",
+  "bottom left": "왼쪽 아래",
+  "left": "왼쪽",
+  "top left": "왼쪽 위"
 }

@@ -62,8 +62,9 @@ describe('Shai-Hulud (Dune module C)', () => {
     expect(worm.roll).eq(second);
     expect(worm.direction).eq(directionIndex(second));
     // Only the roll that counts reaches the log, once (Jens 25 Oct 2026)
-    const rollLines = game.gameLog.map((message) => formatMessage(message)).filter((line) => line.startsWith('Shai-Hulud stirs'));
-    expect(rollLines).deep.eq(['Shai-Hulud stirs: the die shows ' + second]);
+    const rollLines = game.gameLog.map((message) => formatMessage(message)).filter((line) => line.startsWith('Shai-Hulud heads'));
+    expect(rollLines).has.length(1);
+    expect(rollLines[0]).match(new RegExp('^Shai-Hulud heads \\(' + second + '\\) '));
   });
 
   it('keeps the roll when the line changes, and on the first move', () => {

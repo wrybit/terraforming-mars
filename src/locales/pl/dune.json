@@ -488,5 +488,12 @@
   "${0} lost ${1} envy": "Zawiść wobec ${0} spada o ${1}",
   "${0} gained ${1} Sardaukar": "Garnizon gracza ${0} rośnie o ${1} sardaukarów",
   "${0} lost ${1} Sardaukar": "Garnizon gracza ${0} maleje o ${1} sardaukarów",
-  "Sardaukar": "Sardaukarzy"
+  "Sardaukar": "Sardaukarzy",
+  "Shai-Hulud heads (${0}) ${1}": "Shai-Hulud rusza w kierunku (${0}) ${1}",
+  "top right": "w prawo w górę",
+  "right": "w prawo",
+  "bottom right": "w prawo w dół",
+  "bottom left": "w lewo w dół",
+  "left": "w lewo",
+  "top left": "w lewo w górę"
 }

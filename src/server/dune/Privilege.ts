@@ -52,12 +52,16 @@ export function deliverInput(player: IPlayer, privilege: PrivilegeData, then: ()
   });
 }
 
-/** End of a generation: the old privilege lapses, the next generation gets a new one */
-export function renewPrivilege(game: IGame, privilege: PrivilegeData | undefined): PrivilegeData {
+/** End of a generation: a privilege nobody took lapses */
+export function lapsePrivilege(game: IGame, privilege: PrivilegeData | undefined): void {
   if (privilege !== undefined && privilege.takenBy === undefined) {
     game.log('Nobody used the privilege of the emperor');
   }
-  const next = newPrivilege(game.generation + 1, game.rng);
+}
+
+/** Start of a generation: the emperor names his new wish (Jens 25 Oct 2026: in the log of the new generation) */
+export function renewPrivilege(game: IGame, generation: number): PrivilegeData {
+  const next = newPrivilege(generation, game.rng);
   game.log('The emperor seeks ${0} ${1} for ${2} M€', (b) => b.number(next.amount).string(RESOURCE_LABEL[next.good]).number(next.pay));
   return next;
 }

@@ -482,5 +482,12 @@
   "${0} gained ${1} envy": "${0} gagne ${1} de rancœur",
   "${0} lost ${1} envy": "La rancœur envers ${0} baisse de ${1}",
   "${0} gained ${1} Sardaukar": "${0} a ${1} Sardaukar de plus en garnison",
-  "${0} lost ${1} Sardaukar": "${0} a ${1} Sardaukar de moins en garnison"
+  "${0} lost ${1} Sardaukar": "${0} a ${1} Sardaukar de moins en garnison",
+  "Shai-Hulud heads (${0}) ${1}": "Shai-Hulud se dirige vers (${0}) ${1}",
+  "top right": "en haut à droite",
+  "right": "à droite",
+  "bottom right": "en bas à droite",
+  "bottom left": "en bas à gauche",
+  "left": "à gauche",
+  "top left": "en haut à gauche"
 }

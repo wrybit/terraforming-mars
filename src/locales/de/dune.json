@@ -481,5 +481,12 @@
   "${0} gained ${1} envy": "Die Missgunst gegen ${0} steigt um ${1}",
   "${0} lost ${1} envy": "Die Missgunst gegen ${0} sinkt um ${1}",
   "${0} gained ${1} Sardaukar": "${0} hat ${1} Sardaukar mehr in der Garnison",
-  "${0} lost ${1} Sardaukar": "${0} hat ${1} Sardaukar weniger in der Garnison"
+  "${0} lost ${1} Sardaukar": "${0} hat ${1} Sardaukar weniger in der Garnison",
+  "Shai-Hulud heads (${0}) ${1}": "Shai-Hulud zieht Richtung (${0}) ${1}",
+  "top right": "rechts oben",
+  "right": "rechts",
+  "bottom right": "rechts unten",
+  "bottom left": "links unten",
+  "left": "links",
+  "top left": "links oben"
 }
