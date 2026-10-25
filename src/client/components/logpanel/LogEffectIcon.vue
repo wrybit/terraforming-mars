@@ -6,7 +6,7 @@
   </button>
   <span v-else :title="effect.label !== undefined ? $t(effect.label) : undefined" :class="['log-effect', {'log-effect--production': effect.production, 'log-effect--loss': effect.amount < 0}]">
     <!-- Number, then symbol – the same for every resource, production on a brown area -->
-    <b>{{ effect.amount < 0 ? '−' : '+' }}{{ Math.abs(effect.amount) }}</b>
+    <b>{{ effect.tally === true ? '' : effect.amount < 0 ? '−' : '+' }}{{ Math.abs(effect.amount) }}</b>
     <i :class="['log-effect-icon', 'log-effect-resource--' + effect.resource]"></i>
   </span>
 </template>

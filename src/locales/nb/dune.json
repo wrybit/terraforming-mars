@@ -412,5 +412,6 @@
   "Too few M€ for one step: you have ${0} M€": "For lite M€ til ett trinn: du har ${0} M€",
   "−1 step": "−1 trinn",
   "−${0} steps": "−${0} trinn",
-  "no penalty": "ingen straff"
+  "no penalty": "ingen straff",
+  "${0} fought with ${1} Sardaukar in the Kanly": "${0} kjempet i Kanly med ${1} Sardaukar"
 }

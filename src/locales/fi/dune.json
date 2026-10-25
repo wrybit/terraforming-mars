@@ -416,5 +416,6 @@
   "Too few M€ for one step: you have ${0} M€": "Liian vähän M€ yhteen portaaseen: sinulla on ${0} M€",
   "−1 step": "−1 porras",
   "−${0} steps": "−${0} porrasta",
-  "no penalty": "ei rangaistusta"
+  "no penalty": "ei rangaistusta",
+  "${0} fought with ${1} Sardaukar in the Kanly": "${0} taisteli Kanlyssa ${1} sardaukarilla"
 }

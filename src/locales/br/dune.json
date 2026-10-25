@@ -416,5 +416,6 @@
   "Too few M€ for one step: you have ${0} M€": "Não dá para um nível: você tem ${0} M€",
   "−1 step": "−1 nível",
   "−${0} steps": "−${0} níveis",
-  "no penalty": "sem penalidade"
+  "no penalty": "sem penalidade",
+  "${0} fought with ${1} Sardaukar in the Kanly": "${0} lutou no Kanly com ${1} Sardaukar"
 }

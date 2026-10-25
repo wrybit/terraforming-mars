@@ -420,5 +420,6 @@
   "Too few M€ for one step: you have ${0} M€": "M€ 不足以降一级：你只有 ${0} M€",
   "−1 step": "−1 级",
   "−${0} steps": "−${0} 级",
-  "no penalty": "无惩罚"
+  "no penalty": "无惩罚",
+  "${0} fought with ${1} Sardaukar in the Kanly": "${0} 在决斗中投入了 ${1} 名萨督卡"
 }

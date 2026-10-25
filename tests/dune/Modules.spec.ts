@@ -111,6 +111,9 @@ describe('Dune modules B, D, E, F', () => {
       kanly.battle = {spaceId: space.id, opener: player1.id, troops: {[player1.id]: 3, [player2.id]: 1}};
       resolveBattle(game, kanly);
       expect(space.player).eq(player1);
+      // The forces follow the result line, strongest first (Jens, 25 Oct 2026)
+      const forces = game.gameLog.filter((entry) => entry.message === '${0} fought with ${1} Sardaukar in the Kanly').slice(-2);
+      expect(forces.map((entry) => entry.data[1].value)).deep.eq(['3', '1']);
       expect(kanly.battle).is.undefined;
       expect(kanly.foughtThisGeneration).is.false;
     });

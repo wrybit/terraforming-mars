@@ -417,5 +417,6 @@
   "Too few M€ for one step: you have ${0} M€": "Egy fokozatra sem elég: neked ${0} M€ van",
   "−1 step": "−1 fokozat",
   "−${0} steps": "−${0} fokozat",
-  "no penalty": "nincs büntetés"
+  "no penalty": "nincs büntetés",
+  "${0} fought with ${1} Sardaukar in the Kanly": "${0} ${1} sardaukarral harcolt a Kanlyban"
 }

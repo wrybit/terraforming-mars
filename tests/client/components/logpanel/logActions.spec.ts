@@ -107,6 +107,26 @@ describe('logActions', () => {
     expect(actionAt(rows, 0).effects).deep.eq([{resource: 'tr', amount: 1}]);
   });
 
+  it('never indents a Dune move under the row before it, and shows the Kanly forces as counts', () => {
+    const rows = groupLogMessages([
+      message('${0} used ${1} standard action', player('red'), card(CardName.CONVERT_HEAT)),
+      message('${0} recruited ${1} Sardaukar', player('red'), raw('1')),
+      message('${0} gained ${1} Sardaukar', player('red'), raw('1')),
+      message('${0} holds ${1} in the Kanly', player('red'), raw('16')),
+      message('${0} fought with ${1} Sardaukar in the Kanly', player('red'), raw('3')),
+      message('${0} fought with ${1} Sardaukar in the Kanly', player('blue'), raw('2')),
+    ]);
+    const recruit = rows[1];
+    const holds = rows[2];
+    if (recruit.type !== 'message' || holds.type !== 'message') {
+      throw new Error('expected text lines');
+    }
+    expect(recruit.follows).is.undefined;
+    expect(holds.follows).is.undefined;
+    expect(holds.action?.effects).deep.eq([{resource: 'sardaukar', amount: 3, label: 'Sardaukar', tally: true}]);
+    expect(holds.action?.others).deep.eq([{player: 'blue', effects: [{resource: 'sardaukar', amount: 2, label: 'Sardaukar', tally: true}]}]);
+  });
+
   it('keeps lines that set off effects (bazaar, copied production) as text and puts their effects on the right', () => {
     const rows = groupLogMessages([
       message('${0} bought ${1} at the bazaar for ${2} M€', player('red'), text('Title of Honour'), raw('20')),

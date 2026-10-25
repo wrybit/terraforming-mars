@@ -29,6 +29,8 @@ export type LogEffect = {
   label?: string,
   // Paid to start the action (trade fleet fuel): stays apart from income of the same resource
   cost?: boolean,
+  // A count, not a change (Sardaukar each player fought with in the Kanly): no sign, no gain/loss colour
+  tally?: boolean,
 };
 
 export type LogActionKind = 'card' | 'action' | 'standardProject' | 'milestone' | 'award' | 'pass' | 'endTurn' | 'kept' |
@@ -174,10 +176,30 @@ const EFFECT_LINES = new Set([
   'The worm riders of ${0} follow Shai-Hulud',
   '${0} pays the levy to Shai-Hulud',
   '${0} takes ${1} from ${2} in the Kanly',
+  '${0} holds ${1} in the Kanly',
   'Worm riders of ${0} ride Shai-Hulud',
   'Shai-Hulud tramples a greenery of ${0}',
   'Shai-Hulud damages a special tile of ${0}',
   'Spice blow at ${0}',
+]);
+
+// Effect lines that stand on their own: Dune moves (each costs an action, dune/*.ts) and the Kanly result at the end of
+// the generation. Never indented under the row before, even when the same player made it – otherwise consecutive moves
+// look like consequences of one card (Jens, 25 Oct 2026)
+const STANDALONE_LINES = new Set([
+  '${0} bought ${1} at the bazaar for ${2} M€',
+  '${0} traded with the guild',
+  '${0} paid tribute to the great houses',
+  '${0} made a prophecy',
+  '${0} withdrew a prophecy',
+  '${0} offers ${1} ${2} for ${3} ${4} at the CHOAM exchange',
+  '${0} withdrew the CHOAM offer',
+  '${0} accepted the CHOAM contract of ${1}',
+  '${0} recruited ${1} Sardaukar',
+  '${0} declares Kanly on ${1}',
+  '${0} sent ${1} Sardaukar to the war field',
+  '${0} holds ${1} in the Kanly',
+  '${0} takes ${1} from ${2} in the Kanly',
 ]);
 
 // Lines that only announce what follows as its own message ("drew 1 card(s)", "gained 3 heat"): they join the action row
@@ -437,6 +459,8 @@ export function effectsOf(message: LogMessage): Array<PlayerEffect> {
     return one(effect({resource: 'sardaukar', amount: n, label: 'Sardaukar'}));
   case '${0} lost ${1} Sardaukar':
     return one(effect({resource: 'sardaukar', amount: -n, label: 'Sardaukar'}));
+  case '${0} fought with ${1} Sardaukar in the Kanly':
+    return one(effect({resource: 'sardaukar', amount: n, label: 'Sardaukar', tally: true}));
   case '${0} gained ${1} corruption':
     return one(effect({resource: 'corruption', amount: n}));
   case '${0} spent ${1} corruption':
@@ -498,7 +522,7 @@ export function mergeEffects(effects: ReadonlyArray<LogEffect>): Array<LogEffect
     // Only the same thing adds up: same resource, kind, card it lies on, cause and label
     const same = next.resource !== undefined && merged.find((other) => other.resource === next.resource &&
       Boolean(other.production) === Boolean(next.production) && other.card === next.card && other.cause === next.cause && other.label === next.label &&
-      Boolean(other.cost) === Boolean(next.cost));
+      Boolean(other.cost) === Boolean(next.cost) && Boolean(other.tally) === Boolean(next.tally));
     // An underground token is named twice (excavated, claimed): show it once
     const sameToken = next.token !== undefined && merged.some((other) => other.token === next.token && other.space === next.space);
     if (same) {
@@ -764,7 +788,7 @@ export function groupLogMessages(messages: ReadonlyArray<LogMessage>, context: L
     // A line that sets off effects: a text line that collects the following effects on the right
     if (EFFECT_LINES.has(template)) {
       const action: LogAction = {kind: 'line', player: firstPlayer(message), lead: message, effects: [], others: []};
-      const follows = current !== undefined && current.action.player !== undefined && action.player === current.action.player;
+      const follows = !STANDALONE_LINES.has(template) && current !== undefined && current.action.player !== undefined && action.player === current.action.player;
       const row: LogRow & {type: 'message'} = {type: 'message', message, indexes: [index], action};
       if (follows) {
         row.follows = true;

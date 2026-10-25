@@ -419,5 +419,6 @@
   "Too few M€ for one step: you have ${0} M€": "Замало M€ на один щабель: у тебе ${0} M€",
   "−1 step": "−1 щабель",
   "−${0} steps": "−${0} щаблі",
-  "no penalty": "без покарання"
+  "no penalty": "без покарання",
+  "${0} fought with ${1} Sardaukar in the Kanly": "${0} бився в Канлі з ${1} сардаукарами"
 }

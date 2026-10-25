@@ -408,5 +408,6 @@
   "Too few M€ for one step: you have ${0} M€": "Te weinig M€ voor één trede: je hebt ${0} M€",
   "−1 step": "−1 trede",
   "−${0} steps": "−${0} treden",
-  "no penalty": "geen straf"
+  "no penalty": "geen straf",
+  "${0} fought with ${1} Sardaukar in the Kanly": "${0} vocht in de Kanly met ${1} Sardaukar"
 }

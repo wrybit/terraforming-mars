@@ -10,7 +10,7 @@
     </span>
     <!-- Other players: red area = something was taken from them, green area = they got something -->
     <span v-for="other in action.others" :key="other.player"
-      :class="['log-row-other', isLoss(other.effects) ? 'log-row-other--loss' : 'log-row-other--gain']">
+      :class="['log-row-other', otherClass(other.effects)]">
       <span class="log-row-other-name">{{ playerName(other.player) }}</span>
       <LogEffectIcon v-for="(effect, index) in other.effects" :key="index" :effect="effect" @spaceClicked="$emit('spaceClicked', $event)"/>
     </span>
@@ -44,6 +44,13 @@ export default defineComponent({
     },
     isLoss(effects: ReadonlyArray<LogEffect>): boolean {
       return effects.some((effect) => effect.amount < 0);
+    },
+    // Counts (Kanly forces) are neither taken nor given: a neutral area
+    otherClass(effects: ReadonlyArray<LogEffect>): string {
+      if (effects.every((effect) => effect.tally === true)) {
+        return 'log-row-other--tally';
+      }
+      return this.isLoss(effects) ? 'log-row-other--loss' : 'log-row-other--gain';
     },
   },
 });

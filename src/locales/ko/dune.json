@@ -419,5 +419,6 @@
   "Too few M€ for one step: you have ${0} M€": "한 단계에도 부족: 보유 ${0} M€",
   "−1 step": "−1 단계",
   "−${0} steps": "−${0} 단계",
-  "no penalty": "벌칙 없음"
+  "no penalty": "벌칙 없음",
+  "${0} fought with ${1} Sardaukar in the Kanly": "${0}이(가) 칸리에서 사다우카 ${1}명으로 싸웠습니다"
 }

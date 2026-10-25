@@ -200,10 +200,15 @@ export function resolveBattle(game: IGame, data: KanlyData): void {
   const winner = winnerId === undefined ? undefined : game.getPlayerById(winnerId);
   if (winner === undefined) {
     game.log('${0} holds ${1} in the Kanly', (b) => b.player(owner).space(space));
-    return;
+  } else {
+    space.player = winner;
+    game.log('${0} takes ${1} from ${2} in the Kanly', (b) => b.player(winner).space(space).player(owner));
   }
-  space.player = winner;
-  game.log('${0} takes ${1} from ${2} in the Kanly', (b) => b.player(winner).space(space).player(owner));
+  // Who fought with how many Sardaukar, strongest first: shown on the right of the result line, so everybody can follow
+  // why the tile stayed or changed hands (Jens, 25 Oct 2026)
+  forces.filter((force) => force.sardaukar > 0)
+    .sort((first, second) => second.sardaukar - first.sardaukar)
+    .forEach((force) => game.log('${0} fought with ${1} Sardaukar in the Kanly', (b) => b.player(game.getPlayerById(force.key)).number(force.sardaukar)));
 }
 
 export function kanlyModel(game: IGame, data: KanlyData): KanlyModel {

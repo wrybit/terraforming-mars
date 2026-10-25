@@ -419,5 +419,6 @@
   "Too few M€ for one step: you have ${0} M€": "1段階分にも足りない：所持${0} M€",
   "−1 step": "−1段階",
   "−${0} steps": "−${0}段階",
-  "no penalty": "罰なし"
+  "no penalty": "罰なし",
+  "${0} fought with ${1} Sardaukar in the Kanly": "${0} はカンリーで ${1} 人のサーダカーと戦った"
 }
