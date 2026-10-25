@@ -73,7 +73,8 @@
 
 .choam-order__top {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 240px;
+  // Wide enough for the sum of the prophecy (label | way | value) in one line each
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.8fr);
   gap: 14px;
   align-items: stretch;
 }
@@ -651,5 +652,152 @@
     flex-direction: row;
     gap: 10px;
     align-items: center;
+  }
+}
+
+// Prophecy since 25 Oct 2026 (ProphecyPane.vue): the sum like on paper, label | way | value per line
+.choam-sum__list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 6px 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.choam-sum__line {
+  display: contents;
+  font-size: 14px;
+
+  > span:first-child {
+    white-space: nowrap;
+  }
+
+  b {
+    text-align: right;
+    white-space: nowrap;
+  }
+}
+
+.choam-sum__way {
+  color: @choam-quiet;
+  font-size: 12px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.choam-sum__line--market b,
+.choam-sum__line--market > span:first-child {
+  color: @choam-good;
+}
+
+.choam-sum__line--premium b,
+.choam-sum__line--premium > span:first-child {
+  color: #f0a050;
+}
+
+// The sum below a line, larger: the result stands apart from its parts
+.choam-sum__line--total > * {
+  padding-top: 6px;
+  border-top: 1px solid @choam-divider;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+// Chart of the prophecy (ProphecyChart.vue): grey normal, green what the rate adds, orange the premium
+@prophecy-base: #8a7a62;
+@prophecy-premium: #f0a050;
+
+.choam-chart__keys {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin: 0 0 6px;
+  color: @choam-quiet;
+  font-size: 13px;
+}
+
+.choam-chart__key {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-right: 6px;
+  border-radius: 3px;
+  vertical-align: -1px;
+}
+
+.choam-chart__key--base { background: @prophecy-base; }
+.choam-chart__key--market { background: @choam-good; }
+.choam-chart__key--premium { background: @prophecy-premium; }
+
+.prophecy-chart {
+  display: block;
+  width: 100%;
+  height: auto;
+
+  text {
+    font: 12px system-ui, sans-serif;
+  }
+}
+
+.prophecy-chart__grid {
+  stroke: rgba(255, 255, 255, 0.08);
+}
+
+.prophecy-chart__axis {
+  fill: @choam-quiet;
+}
+
+.prophecy-chart__axis--next {
+  fill: @choam-sand;
+  font-style: italic;
+}
+
+// The forecast rate of the next generation: a quiet band behind its bar
+.prophecy-chart__next {
+  fill: rgba(217, 133, 47, 0.12);
+}
+
+.prophecy-chart__part--base { fill: @prophecy-base; }
+.prophecy-chart__part--market { fill: @choam-good; }
+.prophecy-chart__part--premium { fill: @prophecy-premium; }
+
+.prophecy-chart text.prophecy-chart__value {
+  fill: #1d140e;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.prophecy-chart text.prophecy-chart__value--base {
+  fill: @choam-white;
+}
+
+.prophecy-chart text.prophecy-chart__sum {
+  fill: @prophecy-premium;
+  font-weight: 700;
+}
+
+.prophecy-chart__wait {
+  fill: #6d604e;
+}
+
+.prophecy-chart__normal {
+  stroke: @choam-white;
+  stroke-dasharray: 5 4;
+  stroke-opacity: 0.6;
+}
+
+.prophecy-chart__normal-label {
+  fill: @choam-white;
+}
+
+// Phone: the chart shrinks to half its drawing size, so its numbers are drawn twice as large
+@container (max-width: 560px) {
+  .prophecy-chart text {
+    font-size: 20px;
+  }
+
+  .prophecy-chart text.prophecy-chart__value {
+    font-size: 17px;
   }
 }

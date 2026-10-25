@@ -157,6 +157,7 @@ const EFFECT_LINES = new Set([
   '${0} withdrew a prophecy',
   'Prophecy of ${0} came true: ${1} ${2} sold at ${3}, bet premium ${4}',
   'Prophecy of ${0} came true: ${1} ${2} bought at ${3}',
+  'Prophecy of ${0} came true: ${1} ${2} for ${3} Solari at ${4}, bet premium included',
   '${0} offers ${1} ${2} for ${3} ${4} at the CHOAM exchange',
   '${0} withdrew the CHOAM offer',
   'The CHOAM exchange returns the offer of ${0}',

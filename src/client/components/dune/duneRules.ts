@@ -64,7 +64,7 @@ export function wormRules(layout: ArrakisLayout): ReadonlyArray<DuneRule> {
 export const CHOAM_RULES: ReadonlyArray<DuneRule> = [
   {picture: 'coin', text: 'Guild: the rates change every generation, the next one is known in advance'},
   {sign: 'slide', text: 'Supply and demand: every 3 units all players sell net lower the next selling rate by 1, every 3 bought raise the next buying rate by 1'},
-  {sign: 'die', text: 'Prophecy: name a rate, it comes true when the new rates reach it; withdrawing gives back half, at game end it is lost'},
+  {sign: 'die', text: 'Prophecy: 2 to 8 units, it comes true as soon as the rate is better than normal and pays the full premium on top; withdrawing gives back half, at game end it is lost'},
   {picture: 'choam', text: 'Privilege: each generation the emperor wants one good and pays 1 Solari per unit more than the guild, only to the first'},
   {sign: 'tap', text: 'Pacts: one open offer per player for 2 generations; on a deal both pay 1 Solari'},
   {sign: 'levels', text: 'Every move raises the envy of the great houses by 1'},

@@ -44,7 +44,8 @@
     "Venus Next",
     "Virtual",
     "[ solo",
-    "normal ${0}"
+    "normal ${0}",
+    "normal: ${0}"
   ],
   "cn": [
     "${0} AI",
@@ -69,6 +70,7 @@
     "Arsia Mons",
     "Ascraeus Mons",
     "Astronaut",
+    "Budget",
     "CHOAM",
     "Commit",
     "Dashboard",
@@ -99,7 +101,8 @@
     "Terraforming Mars",
     "Tharsis Tholus",
     "Version",
-    "normal ${0}"
+    "normal ${0}",
+    "normal: ${0}"
   ],
   "es": [
     "${0} AI",
@@ -133,7 +136,8 @@
     "Underworld 2",
     "Venus Next",
     "Virtual",
-    "normal ${0}"
+    "normal ${0}",
+    "normal: ${0}"
   ],
   "fi": [
     "${0} AI",
@@ -184,6 +188,7 @@
     "Architecture",
     "Arsia Mons",
     "Ascraeus Mons",
+    "Budget",
     "CHOAM",
     "Corporations",
     "Ctrl",
@@ -263,6 +268,7 @@
     "AltGr",
     "Arsia Mons",
     "Ascraeus Mons",
+    "Budget",
     "CHOAM",
     "Ctrl",
     "Delta",
@@ -337,6 +343,7 @@
     "Astronaut",
     "Bonus for ${0}",
     "Bonus for ${0}: ${1}",
+    "Budget",
     "CHOAM",
     "Ctrl",
     "Delta",
@@ -390,6 +397,7 @@
     "Ascraeus Mons",
     "Astronaut",
     "Bazaar",
+    "Budget",
     "CHOAM",
     "Ctrl",
     "Dashboard",
@@ -441,6 +449,7 @@
     "AltGr",
     "Arsia Mons",
     "Ascraeus Mons",
+    "Budget",
     "CHOAM",
     "Ctrl",
     "Delta",

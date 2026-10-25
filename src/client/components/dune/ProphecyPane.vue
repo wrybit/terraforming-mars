@@ -1,7 +1,8 @@
 <template>
-  <!-- Prophecy of the CHOAM tab (Jens 24 Oct 2026, _mockups/dune/choam/choam-prototyp.html): three boxes – the order as
-       a form (label | control) on the left, what it brings on the right, the own open orders below. Selling binds the
-       goods, buying the Solari; the bet premium only for selling. -->
+  <!-- Prophecy of the CHOAM tab (Jens 24 and 25 Oct 2026, _mockups/dune/choam/prophezeiung-rechner.html): the order as
+       a form on the left (direction, good, 2 to 8 units; the rate is fixed one step better than normal), the sum for
+       that first better rate on the right, below the chart for every rate the guild can set, then the own open
+       orders. Selling counts the units, buying the Solari (a budget; common/dune/prophecyOutcome.ts). -->
   <div class="choam-order" data-test="choam-prophecy">
     <div class="choam-order__top">
       <div class="choam-card choam-form">
@@ -20,7 +21,7 @@
           <span class="choam-form__label">{{ $t('Commodity') }}</span>
           <div class="choam-form__control">
             <div class="trade-select__resources choam-form__goods">
-              <button v-for="option in GOODS" :key="option" type="button" :disabled="side === 'sell' && stockOf(option) === 0"
+              <button v-for="option in GOODS" :key="option" type="button" :disabled="!canGood(option)"
                 :class="['trade-select__resource', {'trade-select__resource--selected': option === good}]"
                 :title="$t(label(option))" @click="chooseGood(option)">
                 <i :class="'resource_icon resource_icon--' + option"></i>
@@ -30,37 +31,34 @@
           </div>
         </div>
         <div class="choam-form__row">
-          <span class="choam-form__label">{{ $t('Amount') }}</span>
+          <span class="choam-form__label">{{ $t(side === 'sell' ? 'Amount' : 'Budget') }}</span>
           <div class="choam-form__control">
-            <div class="amount-slider-plain"><AmountSlider v-model="amount" :min="1" :max="amountMax"/></div>
-          </div>
-        </div>
-        <div class="choam-form__row">
-          <span class="choam-form__label">{{ $t(side === 'sell' ? 'Rate from' : 'Rate up to') }}</span>
-          <div class="choam-form__control">
-            <div class="amount-slider-plain"><AmountSlider v-model="limit" :min="limits.min" :max="limits.max"/></div>
-            <p class="choam-info choam-info--left">{{ ratesLine }}</p>
+            <div class="amount-slider-plain"><AmountSlider v-model="amount" :min="MIN_UNITS" :max="amountMax" :shownPerStep="side === 'buy' ? normal : 1"/></div>
+            <p class="choam-info choam-info--left">{{ amountLine }}</p>
           </div>
         </div>
       </div>
 
-      <div class="choam-card choam-result">
-        <h4 class="choam-card__title">{{ $t('If it comes true') }}</h4>
-        <div class="choam-result__big">+{{ side === 'sell' ? span : amount }} <img :src="side === 'sell' ? coin : graphic(good)" alt=""></div>
-        <ul class="choam-result__list">
-          <li><span>{{ $t('Bound now') }}</span><b>{{ bound }} <img :src="side === 'sell' ? graphic(good) : coin" alt=""></b></li>
-          <li><span>{{ $t('Withdrawing brings') }}</span><b>{{ refund }} <img :src="side === 'sell' ? graphic(good) : coin" alt=""></b></li>
-          <template v-if="side === 'sell'">
-            <li><span>{{ $t('Bet premium in it') }}</span><b>+{{ premium }} <img :src="coin" alt=""></b></li>
-            <li><span>{{ $t('Sold normally') }}</span><b>{{ amount * todayRate }} <img :src="coin" alt=""></b></li>
-          </template>
-          <template v-else>
-            <li><span>{{ $t('You pay') }}</span><b>{{ span }} <img :src="coin" alt=""></b></li>
-            <li><span>{{ $t('Bought normally') }}</span><b>{{ amount * todayRate }} <img :src="coin" alt=""></b></li>
-          </template>
+      <!-- The sum like on paper: normal, at the first better rate, what the rate adds, the premium, the sum -->
+      <div class="choam-card choam-sum">
+        <h4 class="choam-card__title">{{ sumTitle }}</h4>
+        <ul class="choam-sum__list">
+          <li v-for="line in sumLines" :key="line.label" :class="'choam-sum__line choam-sum__line--' + line.kind">
+            <span>{{ line.label }}</span><span class="choam-sum__way">{{ line.way }}</span><b>{{ line.value }}</b>
+          </li>
         </ul>
-        <p :class="['choam-result__status', comesTrue ? 'choam-result__status--yes' : 'choam-result__status--no']">{{ status }}</p>
+        <p class="choam-info choam-info--left">{{ boundLine }}</p>
       </div>
+    </div>
+
+    <div class="choam-card choam-chart">
+      <h4 class="choam-card__title">{{ $t('What you get, per rate') }}</h4>
+      <div class="choam-chart__keys">
+        <span><i class="choam-chart__key choam-chart__key--base"></i>{{ $t('normal') }}</span>
+        <span><i class="choam-chart__key choam-chart__key--market"></i>{{ $t('more from the rate') }}</span>
+        <span><i class="choam-chart__key choam-chart__key--premium"></i>{{ $t('Bet premium') }}</span>
+      </div>
+      <ProphecyChart :side="side" :good="good" :units="amount" :nextRate="nextRate" :nextGeneration="playerView.game.generation + 1"/>
     </div>
 
     <div class="choam-card choam-open">
@@ -81,13 +79,16 @@
           </div>
           <div class="choam-prophecy__figure">
             <span class="choam-prophecy__label">{{ $t('Normal rate') }}</span>
-            <span class="choam-prophecy__value">{{ normalWorth(order) }}<img :src="coin" alt=""></span>
+            <span v-if="order.budget !== undefined" class="choam-prophecy__value">{{ order.amount }}<img :src="graphic(order.good)" alt=""></span>
+            <span v-else class="choam-prophecy__value">{{ normalWorth(order) }}<img :src="coin" alt=""></span>
           </div>
           <div class="choam-prophecy__figure choam-prophecy__figure--gain">
             <span class="choam-prophecy__label">{{ $t('If it comes true') }}</span>
             <!-- The note right after the icon, so the column keeps two lines like the others (Jens 25 Oct 2026) -->
             <span v-if="order.side === 'sell'" class="choam-prophecy__value">≥ {{ order.amount * order.limit + order.premium }}<img :src="coin" alt="">
               <span class="choam-prophecy__hint">{{ premiumLabel(order.premium) }}</span></span>
+            <span v-else-if="order.budget !== undefined" class="choam-prophecy__value">≥ {{ budgetUnits(order) }}<img :src="graphic(order.good)" alt="">
+              <span class="choam-prophecy__hint">{{ premiumLabel(1) }}</span></span>
             <span v-else class="choam-prophecy__value">+{{ order.amount }}<img :src="graphic(order.good)" alt="">
               <span class="choam-prophecy__hint">{{ savingLabel(order) }}</span></span>
           </div>
@@ -106,7 +107,11 @@
 import {defineComponent, PropType} from 'vue';
 import AppButton from '@/client/components/common/AppButton.vue';
 import AmountSlider from '@/client/components/amount/AmountSlider.vue';
-import {EXCHANGE_GOODS, ExchangeGood, ExchangeModel, ExchangeSide, NORMAL_RATES, bestRate, orderBound, orderLimits, orderPremium, orderRefund} from '@/common/dune/smugglingExchange';
+import {EXCHANGE_GOODS, ExchangeGood, ExchangeModel, ExchangeSide, NORMAL_RATES, orderBound, orderRefund} from '@/common/dune/smugglingExchange';
+import {
+  PROPHECY_MAX_UNITS, PROPHECY_MIN_UNITS, prophecyBudget, prophecyLimit, prophecyOutcome, prophecyPremium,
+} from '@/common/dune/prophecyOutcome';
+import ProphecyChart from './ProphecyChart.vue';
 import {ProphecyModel} from '@/common/dune/DuneModel';
 import {PlayerInputModel, SelectTradeModel} from '@/common/models/PlayerInputModel';
 import {PlayerViewModel} from '@/common/models/PlayerModel';
@@ -122,7 +127,7 @@ const SIDES: ReadonlyArray<ExchangeSide> = ['sell', 'buy'];
 
 export default defineComponent({
   name: 'ProphecyPane',
-  components: {AppButton, AmountSlider},
+  components: {AppButton, AmountSlider, ProphecyChart},
   props: {
     playerView: {type: Object as PropType<PlayerViewModel>, required: true},
     options: {type: Array as PropType<ReadonlyArray<PlayerInputModel>>, required: true},
@@ -131,12 +136,12 @@ export default defineComponent({
   },
   emits: ['withdraw', 'ready'],
   data() {
-    // Selling by default (spice when there is any, else the first good in stock), buying when there is nothing to sell
+    // Selling by default (spice when there is enough, else the first good with enough), buying when nothing can be sold
     const sells = this.options.some((option) => titleKey(option) === PROPHECY_SELL_TITLE);
     const side: ExchangeSide = sells ? 'sell' : 'buy';
-    const inStock = EXCHANGE_GOODS.filter((candidate) => resourceSnapshot(this.playerView.thisPlayer, candidate).stock > 0);
-    const good: ExchangeGood = side === 'sell' && !inStock.includes(Resource.TITANIUM) ? (inStock[0] ?? Resource.TITANIUM) : Resource.TITANIUM;
-    return {side, good, amount: 1, limit: orderLimits(side, good).max};
+    const enough = EXCHANGE_GOODS.filter((candidate) => resourceSnapshot(this.playerView.thisPlayer, candidate).stock >= PROPHECY_MIN_UNITS);
+    const good: ExchangeGood = side === 'sell' && !enough.includes(Resource.TITANIUM) ? (enough[0] ?? Resource.TITANIUM) : Resource.TITANIUM;
+    return {side, good, amount: PROPHECY_MIN_UNITS};
   },
   computed: {
     SIDES(): typeof SIDES {
@@ -148,59 +153,69 @@ export default defineComponent({
     coin(): string {
       return duneGraphic('coin');
     },
-    limits(): {min: number, max: number} {
-      return orderLimits(this.side, this.good);
+    MIN_UNITS(): number {
+      return PROPHECY_MIN_UNITS;
     },
+    limit(): number {
+      return prophecyLimit(this.side, this.good);
+    },
+    normal(): number {
+      return NORMAL_RATES[this.side][this.good];
+    },
+    budget(): number {
+      return prophecyBudget(this.good, this.amount);
+    },
+    // Selling: up to the stock; buying: up to what the Solari pay for at the normal rate; both 2 … 8
     amountMax(): number {
-      return Math.max(1, this.side === 'sell' ? this.stockOf(this.good) : Math.floor(this.playerView.thisPlayer.megacredits / this.limit));
-    },
-    todayRate(): number {
-      const board = this.exchange[this.side];
-      return board.history[board.history.length - 1][this.good];
+      const most = this.side === 'sell' ? this.stockOf(this.good) : Math.floor(this.playerView.thisPlayer.megacredits / NORMAL_RATES.buy[this.good]);
+      return Math.max(PROPHECY_MIN_UNITS, Math.min(PROPHECY_MAX_UNITS, most));
     },
     nextRate(): number | undefined {
       return this.exchange[this.side].next?.[this.good];
     },
-    best(): number {
-      return bestRate(this.side, this.good);
+    unitName(): string {
+      return translateText(RESOURCE_LABEL[this.good]);
     },
-    premium(): number {
-      return orderPremium(this.side, this.good, this.amount, this.limit);
+    amountLine(): string {
+      return this.side === 'sell' ?
+        translateTextWithParams('${0} ${1}, normal ${2} Solari each', [String(this.amount), this.unitName, String(this.normal)]) :
+        translateTextWithParams('${0} Solari, normally ${1} ${2}', [String(this.budget), String(this.amount), this.unitName]);
     },
-    // What the order brings (sell) or costs (buy): at the limit, or at the best rate the exchange can reach
-    span(): string {
-      const sell = this.side === 'sell';
-      const low = sell ? this.amount * this.limit + this.premium : this.amount * this.best;
-      const high = sell ? this.amount * this.best + this.premium : this.amount * this.limit;
-      return low === high ? String(low) : low + '–' + high;
+    sumTitle(): string {
+      return translateTextWithParams('Example: the rate reaches ${0}', [String(this.limit)]);
     },
-    bound(): number {
-      return orderBound(this.side, this.amount, this.limit);
+    // The lines of the sum at the first better rate (common/dune/prophecyOutcome.ts)
+    sumLines(): Array<{kind: string, label: string, way: string, value: string}> {
+      const outcome = prophecyOutcome(this.side, this.good, this.amount, this.limit);
+      if (outcome === undefined) {
+        return [];
+      }
+      const up = translateText('rounded up');
+      if (this.side === 'sell') {
+        return [
+          {kind: 'base', label: translateText('Sold normally'), way: `${this.amount} × ${this.normal}`, value: `${outcome.base} Solari`},
+          {kind: 'market', label: translateText('more from the rate'), way: `${this.amount} × ${this.limit - this.normal}`, value: `+${outcome.market}`},
+          {kind: 'premium', label: translateText('Bet premium'), way: `${this.amount} × 1`, value: `+${outcome.premium}`},
+          {kind: 'total', label: translateText('Sum'), way: '', value: `${outcome.total} Solari`},
+        ];
+      }
+      return [
+        {kind: 'base', label: translateText('Bought normally'), way: `${this.budget} ÷ ${this.normal}`, value: `${outcome.base} ${this.unitName}`},
+        {kind: 'market', label: translateText('more from the rate'), way: `${this.budget} ÷ ${this.limit}, ${up}`, value: `+${outcome.market}`},
+        {kind: 'premium', label: translateText('Bet premium'), way: `${prophecyPremium(this.amount)} Solari ÷ ${this.limit}, ${up}`, value: `+${outcome.premium}`},
+        {kind: 'total', label: translateText('Sum'), way: '', value: `${outcome.total} ${this.unitName}`},
+      ];
     },
-    refund(): number {
-      return orderRefund(this.bound);
-    },
-    comesTrue(): boolean {
-      const next = this.nextRate;
-      return next !== undefined && (this.side === 'sell' ? next >= this.limit : next <= this.limit);
-    },
-    ratesLine(): string {
-      const next = this.nextRate === undefined ? '' : ' · G' + (this.playerView.game.generation + 1) + ': ' + this.nextRate;
-      return translateTextWithParams('today ${0}', [String(this.todayRate)]) + next + ' · ' +
-        translateTextWithParams('normal ${0}', [String(NORMAL_RATES[this.side][this.good])]) + ' · ' +
-        translateTextWithParams('at best ${0}', [String(this.best)]);
-    },
-    status(): string {
-      const next = String(this.playerView.game.generation + 1);
-      return this.comesTrue ? translateTextWithParams('comes true in G${0}', [next]) :
-        translateTextWithParams('G${0}: still waiting · lost at game end', [next]);
+    boundLine(): string {
+      const bound = this.side === 'sell' ? `${this.amount} ${this.unitName}` : `${this.budget} Solari`;
+      return translateTextWithParams('Bound now: ${0} · withdrawing costs half · lost at game end', [bound]);
     },
     available(): boolean {
       return this.input(this.side) !== undefined;
     },
     // Whether the footer button can place the order now (the tab's button is outside this pane)
     ready(): boolean {
-      const enough = this.side === 'sell' ? this.stockOf(this.good) >= this.amount : this.playerView.thisPlayer.megacredits >= this.amount * this.limit;
+      const enough = this.side === 'sell' ? this.stockOf(this.good) >= this.amount : this.playerView.thisPlayer.megacredits >= this.budget;
       return this.available && enough;
     },
   },
@@ -211,15 +226,12 @@ export default defineComponent({
       },
       immediate: true,
     },
-    // A new side or good has new limits and a new most: keep the sliders inside them
+    // A new side or good has a new most: keep the slider inside it
     side(): void {
       this.clamp();
     },
     good(): void {
       this.clamp();
-    },
-    limit(): void {
-      this.amount = Math.min(this.amount, this.amountMax);
     },
   },
   methods: {
@@ -239,27 +251,32 @@ export default defineComponent({
     canSide(side: ExchangeSide): boolean {
       return this.input(side) !== undefined;
     },
+    // Selling needs 2 units in stock, buying the Solari for 2 units at the normal rate
+    canGood(good: ExchangeGood): boolean {
+      return this.side === 'sell' ? this.stockOf(good) >= PROPHECY_MIN_UNITS :
+        this.playerView.thisPlayer.megacredits >= prophecyBudget(good, PROPHECY_MIN_UNITS);
+    },
     chooseSide(side: ExchangeSide): void {
       this.side = side;
-      // Selling needs a good in stock
-      if (side === 'sell' && this.stockOf(this.good) === 0) {
-        this.good = EXCHANGE_GOODS.find((good) => this.stockOf(good) > 0) ?? this.good;
+      if (!this.canGood(this.good)) {
+        this.good = EXCHANGE_GOODS.find((good) => this.canGood(good)) ?? this.good;
       }
-      this.limit = side === 'sell' ? orderLimits(side, this.good).max : orderLimits(side, this.good).min;
     },
     chooseGood(good: ExchangeGood): void {
       this.good = good;
-      this.limit = this.side === 'sell' ? orderLimits(this.side, good).max : orderLimits(this.side, good).min;
     },
     clamp(): void {
-      this.limit = Math.min(this.limits.max, Math.max(this.limits.min, this.limit));
-      this.amount = Math.min(Math.max(1, this.amount), this.amountMax);
+      this.amount = Math.min(Math.max(PROPHECY_MIN_UNITS, this.amount), this.amountMax);
     },
     premiumLabel(premium: number): string {
       return translateTextWithParams('incl. premium ${0}', [String(premium)]);
     },
     boundOf(order: ProphecyModel): number {
-      return orderBound(order.side, order.amount, order.limit);
+      return order.budget ?? orderBound(order.side, order.amount, order.limit);
+    },
+    /** A budget order at its limit: the units it brings at least */
+    budgetUnits(order: ProphecyModel): number {
+      return prophecyOutcome('buy', order.good, order.amount, order.limit)?.total ?? order.amount;
     },
     /** The same goods at the normal rate of the guild: what selling brings or buying costs without the prophecy */
     normalWorth(order: ProphecyModel): number {

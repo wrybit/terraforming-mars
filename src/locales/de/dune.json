@@ -448,7 +448,6 @@
   "<opp>Every opponent with envy 3 or more</opp> loses 1 TR. Gain 4 M€.": "<opp>Jeder Gegner mit Missgunst 3 oder mehr</opp> verliert 1 Einfluss. Erhalte 4 Solari.",
   "tribute": "Tribut",
   "Guild: the rates change every generation, the next one is known in advance": "Gilde: die Kurse ändern sich jede Generation, die nächste ist schon bekannt",
-  "Prophecy: name a rate, it comes true when the new rates reach it; withdrawing gives back half, at game end it is lost": "Prophezeiung: einen Kurs festlegen, sie greift, wenn die neuen Kurse ihn erreichen; Zurückziehen gibt die Hälfte zurück, bei Spielende verfällt sie",
   "Pacts: one open offer per player for 2 generations; on a deal both pay 1 Solari": "Pakte: ein offenes Angebot je Spieler für 2 Generationen; beim Tausch zahlen beide 1 Solari",
   "Every move raises the envy of the great houses by 1": "Jede Aktion erhöht die Missgunst der großen Häuser um 1",
   "Tribute (10 Solari, Industrial Center owner 7) lowers the envy by 1": "Tribut (10 Solari, Besitzer des Schmugglermarkts 7) senkt die Missgunst um 1",
@@ -497,5 +496,19 @@
   "Privilege: each generation the emperor wants one good and pays 1 Solari per unit more than the guild, only to the first": "Privileg: Jede Generation will der Imperator eine Ware und zahlt je Einheit 1 Solari mehr als die Gilde, nur dem Ersten",
   "The emperor wants a good and pays more than the guild, but only to the first.": "Der Imperator will eine Ware und zahlt mehr als die Gilde, aber nur dem Ersten.",
   "A tribute to the great houses costs you 4 M€ less.": "Ein Tribut an die großen Häuser kostet dich 4 Solari weniger.",
-  "Effect: A tribute to the great houses costs you 4 M€ less.": "EFFEKT: Ein Tribut an die großen Häuser kostet dich 4 Solari weniger."
+  "Effect: A tribute to the great houses costs you 4 M€ less.": "EFFEKT: Ein Tribut an die großen Häuser kostet dich 4 Solari weniger.",
+  "Prophecy of ${0} came true: ${1} ${2} for ${3} Solari at ${4}, bet premium included": "Prophezeiung von ${0} erfüllt: ${1} ${2} für ${3} Solari zu ${4}, Wettprämie inklusive",
+  "What you get, per rate": "Was du bekommst, je Kurs",
+  "Rate per unit": "Kurs-Preis pro Einheit",
+  "Solari, incl. premium": "Solari, inkl. Prämie",
+  "${0} for ${1} Solari, incl. premium": "${0} für ${1} Solari, inkl. Prämie",
+  "more from the rate": "mehr durch den Kurs",
+  "Bet premium": "Wettprämie",
+  "${0} ${1}, normal ${2} Solari each": "${0} ${1}, normal je ${2} Solari",
+  "${0} Solari, normally ${1} ${2}": "${0} Solari, normal ${1} ${2}",
+  "Example: the rate reaches ${0}": "Beispiel: der Kurs erreicht ${0}",
+  "rounded up": "aufgerundet",
+  "Bound now: ${0} · withdrawing costs half · lost at game end": "Jetzt gebunden: ${0} · Zurückziehen kostet die Hälfte · verfällt bei Spielende",
+  "waits": "wartet",
+  "Prophecy: 2 to 8 units, it comes true as soon as the rate is better than normal and pays the full premium on top; withdrawing gives back half, at game end it is lost": "Prophezeiung: 2 bis 8 Einheiten, trifft ein, sobald der Kurs besser als normal ist, und bringt die volle Prämie obendrauf; Zurückziehen gibt die Hälfte zurück, bei Spielende verfällt sie"
 }

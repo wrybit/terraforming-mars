@@ -9,6 +9,9 @@ import {message} from '../logs/MessageBuilder';
 import {
   EXCHANGE_GOODS, ExchangeGood, ExchangePrices, ExchangeSide, orderBound, orderLimits, orderPremium, orderRefund,
 } from '../../common/dune/smugglingExchange';
+import {
+  PROPHECY_MAX_UNITS, PROPHECY_MIN_UNITS, prophecyBudget, prophecyLimit, prophecyOutcome,
+} from '../../common/dune/prophecyOutcome';
 import {PROPHECY_BUY_TITLE, PROPHECY_SELL_TITLE, PROPHECY_WITHDRAW_TITLE} from '../../common/dune/duneActionTitles';
 import {ProphecyModel} from '../../common/dune/DuneModel';
 import {RESOURCE_LABEL} from './resourceLabels';
@@ -21,6 +24,9 @@ import {RESOURCE_LABEL} from './resourceLabels';
 // - Withdrawing (an action) gives back only half of what is bound, rounded down; at game end open orders are lost.
 // The answer comes as a trade (SelectTrade, no new input type): selling gives the good (amount) and gets Solari
 // (the limit), buying gives Solari (the limit) and gets the good (amount).
+// Since 25 Oct 2026 (Jens; common/dune/prophecyOutcome.ts): 2 to 8 units, the limit fixed one step better than
+// normal, the full bet premium on both sides; buying binds a budget (the units at the normal rate) and brings as many
+// units as the budget buys at the new rate, rounded up. Orders placed before keep their old way (no `budget`).
 
 export type ProphecyOrder = {
   id: number,
@@ -29,6 +35,8 @@ export type ProphecyOrder = {
   good: ExchangeGood,
   amount: number,
   limit: number,
+  /** Buy orders since 25 Oct 2026: the Solari bound; the order brings what they buy at the new rate */
+  budget?: number,
 };
 
 export type ProphecyData = {
@@ -44,27 +52,37 @@ function isExchangeGood(resource: Resource): resource is ExchangeGood {
   return (EXCHANGE_GOODS as ReadonlyArray<Resource>).includes(resource);
 }
 
-function place(player: IPlayer, data: ProphecyData, side: ExchangeSide, good: ExchangeGood, amount: number, limit: number): void {
-  const range = orderLimits(side, good);
-  if (limit < range.min || limit > range.max) {
-    throw new InputError('The limit must lie between ' + range.min + ' and ' + range.max);
+/** The bound part of an order: goods (selling) or Solari (buying) */
+function boundOf(order: ProphecyOrder): number {
+  return order.budget ?? orderBound(order.side, order.amount, order.limit);
+}
+
+function place(player: IPlayer, data: ProphecyData, side: ExchangeSide, good: ExchangeGood, amount: number): void {
+  if (amount < PROPHECY_MIN_UNITS || amount > PROPHECY_MAX_UNITS) {
+    throw new InputError('A prophecy covers ' + PROPHECY_MIN_UNITS + ' to ' + PROPHECY_MAX_UNITS + ' units');
   }
-  if (side === 'buy' && player.megaCredits < amount * limit) {
+  const budget = side === 'buy' ? prophecyBudget(good, amount) : undefined;
+  if (budget !== undefined && player.megaCredits < budget) {
     throw new InputError('Not enough M€ for this order');
   }
   // Only that a prophecy was made is public, not its rate (Jens 25 Oct 2026); what it binds shows on the right
   player.game.log('${0} made a prophecy', (b) => b.player(player));
-  if (side === 'sell') {
+  if (budget === undefined) {
     player.stock.deduct(good, amount, {log: true});
   } else {
-    player.stock.deduct(Resource.MEGACREDITS, amount * limit, {log: true});
+    player.stock.deduct(Resource.MEGACREDITS, budget, {log: true});
   }
-  data.orders.push({id: data.nextId++, player: player.id, side, good, amount, limit});
+  const order: ProphecyOrder = {id: data.nextId++, player: player.id, side, good, amount, limit: prophecyLimit(side, good)};
+  if (budget !== undefined) {
+    order.budget = budget;
+  }
+  data.orders.push(order);
 }
 
 /** Placing a sell order: one trade, the good and amount given, Solari "got" as the limit */
 export function sellOrderInput(player: IPlayer, data: ProphecyData, then: () => void): SelectTrade | undefined {
-  const give = EXCHANGE_GOODS.filter((good) => player.stock.get(good) >= 1).map((good) => ({resource: good, max: player.stock.get(good)}));
+  const give = EXCHANGE_GOODS.filter((good) => player.stock.get(good) >= PROPHECY_MIN_UNITS)
+    .map((good) => ({resource: good, max: Math.min(PROPHECY_MAX_UNITS, player.stock.get(good))}));
   if (give.length === 0) {
     return undefined;
   }
@@ -73,7 +91,7 @@ export function sellOrderInput(player: IPlayer, data: ProphecyData, then: () => 
     if (!isExchangeGood(trade.give)) {
       throw new InputError('Only goods of the exchange can be sold');
     }
-    place(player, data, 'sell', trade.give, trade.giveAmount, trade.getAmount);
+    place(player, data, 'sell', trade.give, trade.giveAmount);
     then();
     return undefined;
   });
@@ -81,17 +99,18 @@ export function sellOrderInput(player: IPlayer, data: ProphecyData, then: () => 
 
 /** Placing a buy order: one trade, Solari "given" as the limit, the good and amount got */
 export function buyOrderInput(player: IPlayer, data: ProphecyData, then: () => void): SelectTrade | undefined {
-  const cheapest = Math.min(...EXCHANGE_GOODS.map((good) => orderLimits('buy', good).min));
+  const cheapest = Math.min(...EXCHANGE_GOODS.map((good) => prophecyBudget(good, PROPHECY_MIN_UNITS)));
   if (player.megaCredits < cheapest) {
     return undefined;
   }
+  // The client sends the fixed limit as Solari "given" and the units as the good "got"; the server binds the budget
   const maxLimit = Math.max(...EXCHANGE_GOODS.map((good) => orderLimits('buy', good).max));
   return new SelectTrade(PROPHECY_BUY_TITLE, 'Prophesy', [{resource: Resource.MEGACREDITS, max: maxLimit}], [...EXCHANGE_GOODS],
-    Math.floor(player.megaCredits / cheapest)).andThen((trade) => {
+    PROPHECY_MAX_UNITS).andThen((trade) => {
     if (!isExchangeGood(trade.get)) {
       throw new InputError('Only goods of the exchange can be bought');
     }
-    place(player, data, 'buy', trade.get, trade.getAmount, trade.giveAmount);
+    place(player, data, 'buy', trade.get, trade.getAmount);
     then();
     return undefined;
   });
@@ -102,7 +121,7 @@ export function withdrawOrderInputs(player: IPlayer, data: ProphecyData, then: (
   return data.orders.filter((order) => order.player === player.id).map((order) =>
     new SelectOption(message(PROPHECY_WITHDRAW_TITLE, (b) => b.number(order.id)), 'Withdraw').andThen(() => {
       data.orders.splice(data.orders.indexOf(order), 1);
-      const bound = orderBound(order.side, order.amount, order.limit);
+      const bound = boundOf(order);
       const back = orderRefund(bound);
       player.game.log('${0} withdrew a prophecy', (b) => b.player(player));
       player.stock.add(order.side === 'sell' ? order.good : Resource.MEGACREDITS, back, {log: true});
@@ -127,6 +146,13 @@ export function fulfilOrders(game: IGame, data: ProphecyData, sell: ExchangePric
       game.log('Prophecy of ${0} came true: ${1} ${2} sold at ${3}, bet premium ${4}',
         (b) => b.player(player).number(order.amount).string(RESOURCE_LABEL[order.good]).number(rate).number(premium));
       player.stock.add(Resource.MEGACREDITS, order.amount * rate + premium, {log: true});
+    } else if (order.budget !== undefined) {
+      // Budget order: what the budget buys at the new rate plus the premium, each rounded up (prophecyOutcome.ts)
+      const outcome = prophecyOutcome('buy', order.good, order.amount, rate);
+      const units = outcome?.total ?? 0;
+      game.log('Prophecy of ${0} came true: ${1} ${2} for ${3} Solari at ${4}, bet premium included',
+        (b) => b.player(player).number(units).string(RESOURCE_LABEL[order.good]).number(order.budget ?? 0).number(rate));
+      player.stock.add(order.good, units, {log: true});
     } else {
       game.log('Prophecy of ${0} came true: ${1} ${2} bought at ${3}',
         (b) => b.player(player).number(order.amount).string(RESOURCE_LABEL[order.good]).number(rate));
@@ -148,5 +174,6 @@ export function prophecyModel(data: ProphecyData, viewer: IPlayer | undefined): 
   return data.orders.filter((order) => order.player === viewer.id).map((order) => ({
     id: order.id, side: order.side, good: order.good, amount: order.amount, limit: order.limit,
     premium: orderPremium(order.side, order.good, order.amount, order.limit),
+    ...(order.budget === undefined ? {} : {budget: order.budget}),
   }));
 }
