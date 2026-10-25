@@ -71,6 +71,7 @@ export type SerializedGame = {
     turmoil?: SerializedTurmoil;
     undoCount: number;
     underworldData: UnderworldData;
+    terraformedLogged?: boolean;
     venusScaleLevel: number;
     verminInEffect: boolean;
 }

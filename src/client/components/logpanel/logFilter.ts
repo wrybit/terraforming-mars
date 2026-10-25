@@ -120,7 +120,7 @@ export function rowMatches(row: LogRow, filter: LogFilter, me: Color | undefined
   if (!isFilterActive(filter)) {
     return true;
   }
-  if (row.type === 'phase' || row.type === 'research') {
+  if (row.type === 'phase' || row.type === 'research' || row.type === 'terraformed') {
     return false;
   }
   if (row.type === 'message' && filter.options.length > 0) {
