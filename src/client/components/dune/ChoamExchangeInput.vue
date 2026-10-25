@@ -108,7 +108,7 @@ const MODES: ReadonlyArray<{id: Mode, label: string}> = [
 // One sentence per pane: what you can do there (Jens 24 Oct 2026); the tribute tells the story in two
 const LEAD: Readonly<Record<Mode, ReadonlyArray<string>>> = {
   guild: ['Trade goods at once at the guild\'s rate of the day.'],
-  prophecy: ['Name a rate you wish for, once the market reaches it, the trade happens by itself.'],
+  prophecy: ['Commit to an amount and a rate. If the market reaches the rate, you win your column.'],
   privilege: ['The emperor wants a good and pays more than the guild, but only to the first.'],
   pacts: ['Make deals directly with other players.'],
   tribute: ['Your deals stir the envy of the great houses, in the Landsraad they take revenge for it.', 'A generous tribute appeases them.'],

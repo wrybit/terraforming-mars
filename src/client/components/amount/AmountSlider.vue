@@ -14,14 +14,14 @@
           </div>
         </div>
         <div ref="thumbs" class="amount-slider__thumbs">
-          <div class="amount-slider__thumb" :style="{left: percent + '%'}">{{ modelValue * shown }}</div>
+          <div class="amount-slider__thumb" :style="{left: percent + '%'}">{{ label(modelValue) }}</div>
         </div>
       </div>
       <AppButton type="plus" :disabled="modelValue >= max" @click="set(modelValue + 1)" />
     </div>
     <div class="amount-slider-scale">
-      <button type="button" @click="set(min)">{{ min * shown }}</button>
-      <button type="button" @click="set(max)">{{ max * shown }}</button>
+      <button type="button" @click="set(min)">{{ label(min) }}</button>
+      <button type="button" @click="set(max)">{{ label(max) }}</button>
     </div>
   </div>
 </template>
@@ -36,9 +36,14 @@ const props = defineProps<{
   max: number;
   // Shown value per step, e.g. the Solari of one unit when the slider sets a budget in units (ProphecyPane.vue)
   shownPerStep?: number;
+  // Shown text of a value when it is no plain number, e.g. the rate a step stands for (ProphecyPane.vue)
+  display?: (value: number) => string;
 }>();
 
 const shown = computed(() => props.shownPerStep ?? 1);
+function label(value: number): string {
+  return props.display !== undefined ? props.display(value) : String(value * shown.value);
+}
 
 const emit = defineEmits<{
   (event: 'update:modelValue', value: number): void;

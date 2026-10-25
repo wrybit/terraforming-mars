@@ -106,6 +106,8 @@ export type ProphecyModel = {
   premium: number,
   /** Buy orders since 25 Oct 2026: the Solari bound (prophecyOutcome.ts) */
   budget?: number,
+  /** Since 25 Oct 2026, evening: exactly what the order brings when it comes true (its column) */
+  payout?: number,
 };
 
 /** CHOAM: the exchange, the envy track, the privilege and the viewer's prophecies (the data keeps its old name) */

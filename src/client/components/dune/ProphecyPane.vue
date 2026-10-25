@@ -1,7 +1,7 @@
 <template>
-  <!-- Prophecy of the CHOAM tab (Jens 24 and 25 Oct 2026, _mockups/dune/choam/prophezeiung-rechner.html): the order as
-       a form on the left (direction, good, 2 to 8 units; the rate is fixed one step better than normal), the sum for
-       that first better rate on the right, below the chart for every rate the guild can set, then the own open
+  <!-- Prophecy of the CHOAM tab (Jens 25 Oct 2026, _mockups/dune/choam/prophezeiung-layout.html): the order as a form
+       on the left (direction, good, 2 to 8 units, the rate it names), on the right what it brings when the rate is
+       reached and below that a small chart with one column per rate, the own one with a ring; then the own open
        orders. Selling counts the units, buying the Solari (a budget; common/dune/prophecyOutcome.ts). -->
   <div class="choam-order" data-test="choam-prophecy">
     <div class="choam-order__top">
@@ -37,6 +37,13 @@
             <p class="choam-info choam-info--left">{{ amountLine }}</p>
           </div>
         </div>
+        <div class="choam-form__row">
+          <span class="choam-form__label">{{ $t('Wish rate') }}</span>
+          <div class="choam-form__control">
+            <div class="amount-slider-plain"><AmountSlider v-model="rateIndex" :min="0" :max="rates.length - 1" :display="rateText"/></div>
+            <p class="choam-info choam-info--left">{{ rateLine }}</p>
+          </div>
+        </div>
       </div>
 
       <!-- The sum like on paper: normal, at the first better rate, what the rate adds, the premium, the sum -->
@@ -48,17 +55,18 @@
           </li>
         </ul>
         <p class="choam-info choam-info--left">{{ boundLine }}</p>
+        <div class="choam-chart">
+          <h4 class="choam-card__title">{{ $t('What you get, per rate') }}</h4>
+          <div class="choam-chart__keys">
+            <span><i class="choam-chart__key choam-chart__key--base"></i>{{ $t('normal') }}</span>
+            <span><i class="choam-chart__key choam-chart__key--market"></i>{{ $t('Rate') }}</span>
+            <span><i class="choam-chart__key choam-chart__key--premium"></i>{{ $t('Bet premium') }}</span>
+            <span><i class="choam-chart__key choam-chart__key--own"></i>{{ $t('your prophecy') }}</span>
+          </div>
+          <ProphecyChart :side="side" :good="good" :units="amount" :rate="rate" :nextRate="nextRate"
+            :nextGeneration="playerView.game.generation + 1" @pick="pickRate"/>
+        </div>
       </div>
-    </div>
-
-    <div class="choam-card choam-chart">
-      <h4 class="choam-card__title">{{ $t('What you get, per rate') }}</h4>
-      <div class="choam-chart__keys">
-        <span><i class="choam-chart__key choam-chart__key--base"></i>{{ $t('normal') }}</span>
-        <span><i class="choam-chart__key choam-chart__key--market"></i>{{ $t('more from the rate') }}</span>
-        <span><i class="choam-chart__key choam-chart__key--premium"></i>{{ $t('Bet premium') }}</span>
-      </div>
-      <ProphecyChart :side="side" :good="good" :units="amount" :nextRate="nextRate" :nextGeneration="playerView.game.generation + 1"/>
     </div>
 
     <div class="choam-card choam-open">
@@ -85,7 +93,9 @@
           <div class="choam-prophecy__figure choam-prophecy__figure--gain">
             <span class="choam-prophecy__label">{{ $t('If it comes true') }}</span>
             <!-- The note right after the icon, so the column keeps two lines like the others (Jens 25 Oct 2026) -->
-            <span v-if="order.side === 'sell'" class="choam-prophecy__value">≥ {{ order.amount * order.limit + order.premium }}<img :src="coin" alt="">
+            <span v-if="order.payout !== undefined" class="choam-prophecy__value">{{ order.payout }}<img :src="order.side === 'sell' ? coin : graphic(order.good)" alt="">
+              <span class="choam-prophecy__hint">{{ premiumLabel(order.premium) }}</span></span>
+            <span v-else-if="order.side === 'sell'" class="choam-prophecy__value">≥ {{ order.amount * order.limit + order.premium }}<img :src="coin" alt="">
               <span class="choam-prophecy__hint">{{ premiumLabel(order.premium) }}</span></span>
             <span v-else-if="order.budget !== undefined" class="choam-prophecy__value">≥ {{ budgetUnits(order) }}<img :src="graphic(order.good)" alt="">
               <span class="choam-prophecy__hint">{{ premiumLabel(1) }}</span></span>
@@ -109,7 +119,7 @@ import AppButton from '@/client/components/common/AppButton.vue';
 import AmountSlider from '@/client/components/amount/AmountSlider.vue';
 import {EXCHANGE_GOODS, ExchangeGood, ExchangeModel, ExchangeSide, NORMAL_RATES, orderBound, orderRefund} from '@/common/dune/smugglingExchange';
 import {
-  PROPHECY_MAX_UNITS, PROPHECY_MIN_UNITS, prophecyBudget, prophecyLimit, prophecyOutcome, prophecyPremium,
+  PROPHECY_MAX_UNITS, PROPHECY_MIN_UNITS, prophecyBudget, prophecyOutcome, prophecyPremium, prophecyRates,
 } from '@/common/dune/prophecyOutcome';
 import ProphecyChart from './ProphecyChart.vue';
 import {ProphecyModel} from '@/common/dune/DuneModel';
@@ -141,7 +151,8 @@ export default defineComponent({
     const side: ExchangeSide = sells ? 'sell' : 'buy';
     const enough = EXCHANGE_GOODS.filter((candidate) => resourceSnapshot(this.playerView.thisPlayer, candidate).stock >= PROPHECY_MIN_UNITS);
     const good: ExchangeGood = side === 'sell' && !enough.includes(Resource.TITANIUM) ? (enough[0] ?? Resource.TITANIUM) : Resource.TITANIUM;
-    return {side, good, amount: PROPHECY_MIN_UNITS};
+    // rateIndex: the column of the named rate, the first better than normal by default
+    return {side, good, amount: PROPHECY_MIN_UNITS, rateIndex: 0};
   },
   computed: {
     SIDES(): typeof SIDES {
@@ -156,8 +167,16 @@ export default defineComponent({
     MIN_UNITS(): number {
       return PROPHECY_MIN_UNITS;
     },
-    limit(): number {
-      return prophecyLimit(this.side, this.good);
+    rates(): Array<number> {
+      return prophecyRates(this.side, this.good);
+    },
+    // The rate the prophecy names
+    rate(): number {
+      return this.rates[Math.min(this.rateIndex, this.rates.length - 1)];
+    },
+    rateLine(): string {
+      return translateTextWithParams('Normal ${0}. Premium: ${1} Solari per unit. If the rate reaches ${2} or better, you get exactly your column, otherwise nothing.',
+        [String(this.normal), String(Math.abs(this.rate - this.normal)), String(this.rate)]);
     },
     normal(): number {
       return NORMAL_RATES[this.side][this.good];
@@ -182,27 +201,25 @@ export default defineComponent({
         translateTextWithParams('${0} Solari, normally ${1} ${2}', [String(this.budget), String(this.amount), this.unitName]);
     },
     sumTitle(): string {
-      return translateTextWithParams('Example: the rate reaches ${0}', [String(this.limit)]);
+      return translateTextWithParams('If the rate reaches ${0}, you get', [String(this.rate)]);
     },
-    // The lines of the sum at the first better rate (common/dune/prophecyOutcome.ts)
+    // The lines of the sum at the named rate (common/dune/prophecyOutcome.ts)
     sumLines(): Array<{kind: string, label: string, way: string, value: string}> {
-      const outcome = prophecyOutcome(this.side, this.good, this.amount, this.limit);
-      if (outcome === undefined) {
-        return [];
-      }
+      const outcome = prophecyOutcome(this.side, this.good, this.amount, this.rate);
+      const step = Math.abs(this.rate - this.normal);
       const up = translateText('rounded up');
       if (this.side === 'sell') {
         return [
           {kind: 'base', label: translateText('Sold normally'), way: `${this.amount} × ${this.normal}`, value: `${outcome.base} Solari`},
-          {kind: 'market', label: translateText('more from the rate'), way: `${this.amount} × ${this.limit - this.normal}`, value: `+${outcome.market}`},
-          {kind: 'premium', label: translateText('Bet premium'), way: `${this.amount} × 1`, value: `+${outcome.premium}`},
+          {kind: 'market', label: translateText('more from the rate'), way: `${this.amount} × ${step}`, value: `+${outcome.market}`},
+          {kind: 'premium', label: translateText('Bet premium'), way: `${this.amount} × ${step}`, value: `+${outcome.premium}`},
           {kind: 'total', label: translateText('Sum'), way: '', value: `${outcome.total} Solari`},
         ];
       }
       return [
         {kind: 'base', label: translateText('Bought normally'), way: `${this.budget} ÷ ${this.normal}`, value: `${outcome.base} ${this.unitName}`},
-        {kind: 'market', label: translateText('more from the rate'), way: `${this.budget} ÷ ${this.limit}, ${up}`, value: `+${outcome.market}`},
-        {kind: 'premium', label: translateText('Bet premium'), way: `${prophecyPremium(this.amount)} Solari ÷ ${this.limit}, ${up}`, value: `+${outcome.premium}`},
+        {kind: 'market', label: translateText('more from the rate'), way: `${this.budget} ÷ ${this.rate}, ${up}`, value: `+${outcome.market}`},
+        {kind: 'premium', label: translateText('Bet premium'), way: `${prophecyPremium(this.side, this.good, this.amount, this.rate)} ÷ ${this.rate}, ${up}`, value: `+${outcome.premium}`},
         {kind: 'total', label: translateText('Sum'), way: '', value: `${outcome.total} ${this.unitName}`},
       ];
     },
@@ -232,6 +249,10 @@ export default defineComponent({
     },
     good(): void {
       this.clamp();
+    },
+    // Another good or side has other rates: start again at the first better than normal
+    rates(): void {
+      this.rateIndex = 0;
     },
   },
   methods: {
@@ -265,6 +286,13 @@ export default defineComponent({
     chooseGood(good: ExchangeGood): void {
       this.good = good;
     },
+    rateText(index: number): string {
+      return (this.side === 'sell' ? '≥ ' : '≤ ') + this.rates[index];
+    },
+    // A tap on a column of the chart names its rate
+    pickRate(rate: number): void {
+      this.rateIndex = Math.max(0, this.rates.indexOf(rate));
+    },
     clamp(): void {
       this.amount = Math.min(Math.max(PROPHECY_MIN_UNITS, this.amount), this.amountMax);
     },
@@ -274,9 +302,9 @@ export default defineComponent({
     boundOf(order: ProphecyModel): number {
       return order.budget ?? orderBound(order.side, order.amount, order.limit);
     },
-    /** A budget order at its limit: the units it brings at least */
+    /** A budget order of the afternoon of 25 Oct 2026 at its limit: the units it brings at least (1 Solari premium per unit) */
     budgetUnits(order: ProphecyModel): number {
-      return prophecyOutcome('buy', order.good, order.amount, order.limit)?.total ?? order.amount;
+      return Math.ceil((order.budget ?? 0) / order.limit) + Math.ceil(order.amount / order.limit);
     },
     /** The same goods at the normal rate of the guild: what selling brings or buying costs without the prophecy */
     normalWorth(order: ProphecyModel): number {
@@ -304,8 +332,8 @@ export default defineComponent({
         return undefined;
       }
       const response: SelectTradeResponse = this.side === 'sell' ?
-        {type: 'trade', give: this.good, giveAmount: this.amount, get: Resource.MEGACREDITS, getAmount: this.limit} :
-        {type: 'trade', give: Resource.MEGACREDITS, giveAmount: this.limit, get: this.good, getAmount: this.amount};
+        {type: 'trade', give: this.good, giveAmount: this.amount, get: Resource.MEGACREDITS, getAmount: this.rate} :
+        {type: 'trade', give: Resource.MEGACREDITS, giveAmount: this.rate, get: this.good, getAmount: this.amount};
       return {index, response};
     },
   },

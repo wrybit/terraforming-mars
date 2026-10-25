@@ -345,39 +345,45 @@ describe('Dune modules B, D, E, F', () => {
       expect(smuggling.privilege?.generation).eq(game.generation + 1);
     });
 
-    it('places a sell prophecy of 2 to 8 units, limit normal + 1, and pays rate plus the full premium', () => {
+    it('places a sell prophecy on a named rate and pays exactly its column once the rate is reached', () => {
       const smuggling = game.duneData!.smuggling!;
       player1.titanium = 9;
       const sell = cast(option(choamTab(player1), PROPHECY_SELL_TITLE), SelectTrade);
-      // 1 unit is too few
-      expect(() => sell.process({type: 'trade', give: Resource.TITANIUM, giveAmount: 1, get: Resource.MEGACREDITS, getAmount: 6})).to.throw();
-      sell.process({type: 'trade', give: Resource.TITANIUM, giveAmount: 5, get: Resource.MEGACREDITS, getAmount: 6});
+      // 1 unit is too few, the normal rate 5 cannot be named
+      expect(() => sell.process({type: 'trade', give: Resource.TITANIUM, giveAmount: 1, get: Resource.MEGACREDITS, getAmount: 7})).to.throw();
+      expect(() => sell.process({type: 'trade', give: Resource.TITANIUM, giveAmount: 5, get: Resource.MEGACREDITS, getAmount: 5})).to.throw();
+      sell.process({type: 'trade', give: Resource.TITANIUM, giveAmount: 5, get: Resource.MEGACREDITS, getAmount: 7});
       expect(player1.titanium).eq(4);
       expect(suspicionOf(smuggling, player1)).eq(1);
-      expect(prophecyOf(smuggling).orders[0].limit).eq(6);
-      // Spice reaches 8 (normal 5): 5 × 8 = 40 plus the premium of 5
+      expect(prophecyOf(smuggling).orders[0].limit).eq(7);
       const exchange = exchangeOf(smuggling);
-      exchange.next = {sell: {...exchange.sell[0], titanium: 8}, buy: {...exchange.buy[0], titanium: 8}};
       player1.megaCredits = 0;
+      // Spice only reaches 6: nothing yet
+      exchange.next = {sell: {...exchange.sell[0], titanium: 6}, buy: {...exchange.buy[0], titanium: 8}};
+      moveExchange(game, smuggling);
+      expect(player1.megaCredits).eq(0);
+      expect(prophecyOf(smuggling).orders).has.length(1);
+      // Spice reaches 8: exactly the column of 7, 5 × 7 = 35 plus the premium 5 × 2 = 10
+      exchange.next = {sell: {...exchange.sell[0], titanium: 8}, buy: {...exchange.buy[0], titanium: 8}};
       moveExchange(game, smuggling);
       expect(player1.megaCredits).eq(45);
       expect(prophecyOf(smuggling).orders).deep.eq([]);
     });
 
-    it('places a buy prophecy with a budget and brings what it buys at the new rate plus the premium, rounded up', () => {
+    it('places a buy prophecy with a budget on a named rate and brings exactly its column, rounded up', () => {
       const smuggling = game.duneData!.smuggling!;
       player1.megaCredits = 40;
-      // 5 spice at the normal 6: a budget of 30 Solari
+      // 5 spice at the normal 6: a budget of 30 Solari, named rate 4
       cast(option(choamTab(player1), PROPHECY_BUY_TITLE), SelectTrade)
-        .process({type: 'trade', give: Resource.MEGACREDITS, giveAmount: 5, get: Resource.TITANIUM, getAmount: 5});
+        .process({type: 'trade', give: Resource.MEGACREDITS, giveAmount: 4, get: Resource.TITANIUM, getAmount: 5});
       expect(player1.megaCredits).eq(10);
       expect(prophecyOf(smuggling).orders[0].budget).eq(30);
-      // Spice falls to 4: 30 ÷ 4 = 7.5 → 8, premium 5 ÷ 4 = 1.25 → 2
+      // Spice falls to 3: the column of 4, 30 ÷ 4 = 7.5 → 8, premium 5 × 2 = 10 Solari ÷ 4 = 2.5 → 3
       player1.titanium = 0;
       const exchange = exchangeOf(smuggling);
-      exchange.next = {sell: {...exchange.sell[0], titanium: 4}, buy: {...exchange.buy[0], titanium: 4}};
+      exchange.next = {sell: {...exchange.sell[0], titanium: 3}, buy: {...exchange.buy[0], titanium: 3}};
       moveExchange(game, smuggling);
-      expect([player1.titanium, player1.megaCredits]).deep.eq([10, 10]);
+      expect([player1.titanium, player1.megaCredits]).deep.eq([11, 10]);
 
       // Withdrawing gives back half of the budget
       cast(option(choamTab(player1), PROPHECY_BUY_TITLE), SelectTrade)

@@ -707,6 +707,8 @@
 // Chart of the prophecy (ProphecyChart.vue): grey normal, green what the rate adds, orange the premium
 @prophecy-base: #8a7a62;
 @prophecy-premium: #f0a050;
+// The ring of the own column, in the orange of the selected tab
+@choam-accent-ring: #e09a4a;
 
 .choam-chart__keys {
   display: flex;
@@ -730,6 +732,11 @@
 .choam-chart__key--market { background: @choam-good; }
 .choam-chart__key--premium { background: @prophecy-premium; }
 
+.choam-chart__key--own {
+  border: 2px solid @choam-accent-ring;
+  background: none;
+}
+
 .prophecy-chart {
   display: block;
   width: 100%;
@@ -740,12 +747,21 @@
   }
 }
 
-.prophecy-chart__grid {
-  stroke: rgba(255, 255, 255, 0.08);
+.prophecy-chart__baseline {
+  stroke: rgba(255, 255, 255, 0.2);
+}
+
+.prophecy-chart__label {
+  fill: @choam-sand;
 }
 
 .prophecy-chart__axis {
   fill: @choam-quiet;
+}
+
+.prophecy-chart text.prophecy-chart__axis--own {
+  fill: @choam-accent-ring;
+  font-weight: 700;
 }
 
 .prophecy-chart__axis--next {
@@ -753,9 +769,24 @@
   font-style: italic;
 }
 
-// The forecast rate of the next generation: a quiet band behind its bar
-.prophecy-chart__next {
-  fill: rgba(217, 133, 47, 0.12);
+// Each column can be tapped to name its rate; the own one has a ring, the others are pale
+.prophecy-chart__column {
+  cursor: pointer;
+}
+
+.prophecy-chart__column--other {
+  opacity: 0.45;
+}
+
+.prophecy-chart__hit {
+  fill: transparent;
+}
+
+.prophecy-chart__ring {
+  fill: none;
+  stroke: @choam-accent-ring;
+  stroke-width: 2;
+  pointer-events: none;
 }
 
 .prophecy-chart__part--base { fill: @prophecy-base; }
@@ -773,31 +804,13 @@
 }
 
 .prophecy-chart text.prophecy-chart__sum {
-  fill: @prophecy-premium;
+  fill: @choam-white;
   font-weight: 700;
 }
 
-.prophecy-chart__wait {
-  fill: #6d604e;
-}
-
-.prophecy-chart__normal {
-  stroke: @choam-white;
-  stroke-dasharray: 5 4;
-  stroke-opacity: 0.6;
-}
-
-.prophecy-chart__normal-label {
-  fill: @choam-white;
-}
-
-// Phone: the chart shrinks to half its drawing size, so its numbers are drawn twice as large
-@container (max-width: 560px) {
-  .prophecy-chart text {
-    font-size: 20px;
-  }
-
-  .prophecy-chart text.prophecy-chart__value {
-    font-size: 17px;
-  }
+// The chart sits in the sum box below the sum, set off by a line (Jens 25 Oct 2026: small, no long scrolling)
+.choam-sum .choam-chart {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid @choam-divider;
 }
