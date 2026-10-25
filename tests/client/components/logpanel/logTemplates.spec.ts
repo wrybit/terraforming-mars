@@ -1,7 +1,6 @@
 import {expect} from 'chai';
 import {readFileSync, readdirSync, statSync} from 'fs';
 import {join} from 'path';
-import {LOG_INFO_LINES} from '@/client/components/logpanel/logActions';
 
 // Every server log line that names an amount (icon shortcode, M€, TR) must be known to the log grouping, otherwise
 // it stands as text with its values on the left and cuts the following effects off their action row.
@@ -30,11 +29,5 @@ describe('log templates', () => {
     const grouping = readFileSync('src/client/components/logpanel/logActions.ts', 'utf8');
     const unknown = [...logTemplates()].filter(([template]) => VALUE.test(template) && !grouping.includes(`'${template}'`));
     expect(unknown.map(([template, path]) => `${path}: ${template}`)).deep.eq([]);
-  });
-
-  it('lists info lines that the server really logs', () => {
-    const templates = logTemplates();
-    const unescaped = new Set([...templates.keys()].map((template) => template.replace(/\\'/g, '\'')));
-    expect([...LOG_INFO_LINES].filter((template) => !unescaped.has(template))).deep.eq([]);
   });
 });

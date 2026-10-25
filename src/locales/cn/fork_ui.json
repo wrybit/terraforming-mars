@@ -1872,5 +1872,6 @@
   "${0} used the ${1} action to convert ${2}:cr:ware: into ${2}:r:mc:": "${0} 使用 ${1} 行动将 ${2}:cr:ware: 转换为 ${2}:r:mc:",
   "All players lose 1:i:tr:.": "所有玩家失去 1:i:tr:。",
   "Cards played by ${0} cost 1:r:mc: less this generation": "本时代 ${0} 打出的卡牌费用减少 1:r:mc:",
-  "Neutral player received ${0}:r:mc: from ${1} owner (${2})": "中立玩家从 ${1} 所有者（${2}）处获得 ${0}:r:mc:"
+  "Neutral player received ${0}:r:mc: from ${1} owner (${2})": "中立玩家从 ${1} 所有者（${2}）处获得 ${0}:r:mc:",
+  "paid for the card": "支付卡牌费用"
 }

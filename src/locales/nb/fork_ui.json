@@ -1258,5 +1258,6 @@
   "${0} spent 1:cr:fighter: on ${1} to block an attack by ${2}": "${0} brukte 1:cr:fighter: på ${1} for å blokkere et angrep fra ${2}",
   "${0} sued ${1} who had 0:r:mc:.": "${0} saksøkte ${1}, som hadde 0:r:mc:.",
   "${0} used the ${1} action to convert ${2}:cr:ware: into ${2}:r:mc:": "${0} brukte handlingen til ${1} for å konvertere ${2}:cr:ware: til ${2}:r:mc:",
-  "All players lose 1:i:tr:.": "Alle spillere mister 1:i:tr:."
+  "All players lose 1:i:tr:.": "Alle spillere mister 1:i:tr:.",
+  "paid for the card": "betalt for kortet"
 }

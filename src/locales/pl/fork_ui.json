@@ -1688,5 +1688,6 @@
   "${0} spent 1:r:corruption: to block an attack by ${1}": "${0} wydaje 1:r:corruption:, aby zablokować atak gracza ${1}",
   "${0} sued ${1} who had 0:r:mc:.": "${0} pozywa ${1}, który miał 0:r:mc:.",
   "${0} used the ${1} action to convert ${2}:cr:ware: into ${2}:r:mc:": "${0} używa akcji ${1}, aby zamienić ${2}:cr:ware: na ${2}:r:mc:",
-  "All players lose 1:i:tr:.": "Wszyscy gracze tracą 1:i:tr:."
+  "All players lose 1:i:tr:.": "Wszyscy gracze tracą 1:i:tr:.",
+  "paid for the card": "zapłata za kartę"
 }
