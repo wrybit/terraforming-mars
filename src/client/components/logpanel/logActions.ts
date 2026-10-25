@@ -65,6 +65,33 @@ export type LogRow =
 
 const PLAYED_WITH_PAYMENT = '${0} played ${1} [ ${2} ]';
 
+// Since upstream 186dbf78f..92b5335b1 many lines name the resource as an icon shortcode (":r:mc:", ":i:tr:"). Same
+// data positions as before: the new key is read as the old one, which saved games still use. Without this the
+// lines stood as text on the left and cut off the effects that followed from their action row (Jens, 25 Oct 2026)
+const SHORTCODE_TEMPLATES: Record<string, string> = {
+  '${0} gained ${1}:i:tr:': '${0} gained ${1} TR',
+  '${0} gained ${1}:i:tr: from ${2}': '${0} gained ${1} TR from ${2}',
+  '${0} lost ${1}:i:tr:': '${0} lost ${1} TR',
+  '${0} is the new chairman and gains ${1}:i:tr:': '${0} is the new chairman and gains ${1} TR',
+  'All players lose 1:i:tr:.': 'All players lose 1 TR.',
+  '${0} gained 4:r:mc: for playing ${1}, which has no tags.': '${0} gained 4 M€ for playing ${1}, which has no tags.',
+  '${0} gained 1:r:mc: for playing ${1}, which has exactly 1 tag.': '${0} gained 1 M€ for playing ${1}, which has exactly 1 tag.',
+  '${0} gained ${1}:r:mc: from ${2} ocean(s)': '${0} gained ${1} M€ from ${2} ocean(s)',
+  '${0} received ${1}:r:mc: from ${2} owner (${3})': '${0} received ${1} M€ from ${2} owner (${3})',
+  '${0} gained ${1}:r:corruption:': '${0} gained ${1} corruption',
+  '${0} spent ${1}:r:corruption:': '${0} spent ${1} corruption',
+  '${0} fizzled. ${1} gains 15:r:mc:': '${0} fizzled. ${1} gains 15 M€.',
+  '${0} spent ${1}:r:mc: to trade with ${2}': '${0} spent ${1} M€ to trade with ${2}',
+  '${0} spent 1:cr:floater: to trade with ${1}': '${0} spent 1 floater to trade with ${1}',
+  '${0} spent ${1}:cr:data: from ${2} to trade with ${3}': '${0} spent ${1} data from ${2} to trade with ${3}',
+  '${0} automatically removed 3:cr:data: from ${1} to draw a card.': '${0} automatically removed 3 data from ${1} to draw a card.',
+};
+
+// The key the grouping knows a message by
+function templateOf(message: LogMessage): string {
+  return SHORTCODE_TEMPLATES[message.message] ?? message.message;
+}
+
 const STARTERS: Record<string, LogActionKind> = {
   '${0} played ${1}': 'card',
   // Since upstream 973694909 with what was paid ("-3:r:megacredits: -1:r:steel:"): shown as cost icons on the right
@@ -214,7 +241,7 @@ type PlayerEffect = {player: Color, effect: LogEffect};
 
 // One follow-up message as effects, each with the player it affects. Empty: not recognised.
 export function effectsOf(message: LogMessage): Array<PlayerEffect> {
-  const template = message.message;
+  const template = templateOf(message);
   const player = firstPlayer(message);
   const n = amount(message, 1);
   const one = (fields: LogEffect | undefined, who: Color | undefined = player): Array<PlayerEffect> =>
@@ -263,6 +290,11 @@ export function effectsOf(message: LogMessage): Array<PlayerEffect> {
     return one(effect({resource: 'megacredit', amount: n, cause: 'adjacent oceans'}));
   case '${0} received ${1} M€ from ${2} owner (${3})':
     return one(effect({resource: 'megacredit', amount: n, cause: causeAt(message, 2)}));
+  case '${0} gains ${1}:r:mc: for a tile placed next to ${2}':
+  case '${0} gained ${1}:r:mc: by discarding ${2} cards':
+    return one(effect({resource: 'megacredit', amount: n}));
+  case '${0} gained 1:p:mc: from ${1} for the ${2} tag':
+    return one(effect({resource: 'megacredit', amount: 1, production: true, cause: causeAt(message, 1)}));
   case '${0} gained 4 M€ for playing ${1}, which has no tags.':
     return one(effect({resource: 'megacredit', amount: 4}));
   case '${0} gained 1 M€ for playing ${1}, which has exactly 1 tag.':
@@ -374,7 +406,7 @@ function phaseOf(row: LogRow): Phase | undefined {
 
 // What the row of a starting message shows: player, card, name and the cost already known from this message
 function startAction(kind: LogActionKind, message: LogMessage): LogAction | undefined {
-  const template = message.message;
+  const template = templateOf(message);
   const player = firstPlayer(message);
   const action: LogAction = {kind, player, lead: message, effects: [], others: []};
   switch (kind) {
@@ -504,7 +536,7 @@ export function groupLogMessages(messages: ReadonlyArray<LogMessage>, context: L
   };
 
   messages.forEach((message, index) => {
-    const template = message.message;
+    const template = templateOf(message);
     // Card purchase at the start of a generation: one summary row
     if (!actionsStarted && template === '${0} ${1} ${2} card(s)' && value(message, 1) === 'bought') {
       const player = firstPlayer(message);
