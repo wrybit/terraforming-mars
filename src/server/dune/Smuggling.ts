@@ -72,6 +72,11 @@ export function prophecyOf(data: SmugglingData): ProphecyData {
   return data.prophecy;
 }
 
+/** The guild's sell rates of this generation (what the privilege of this generation pays by) */
+export function currentSellRates(data: SmugglingData) {
+  return currentRates(exchangeOf(data).sell);
+}
+
 /** The privilege of this generation; games from before it get one, picked by the generation (no random numbers) */
 export function privilegeOf(game: IGame, data: SmugglingData): PrivilegeData {
   data.privilege ??= newPrivilege(game.generation);
@@ -277,7 +282,7 @@ export function moveExchange(game: IGame, data: SmugglingData, generation: numbe
   game.log('The guild sets new rates');
   fulfilOrders(game, prophecyOf(data), currentRates(exchange.sell), currentRates(exchange.buy));
   // The previewed privilege comes true, the one after it is drawn now
-  data.privilege = renewPrivilege(game, generation, data.nextPrivilege);
+  data.privilege = renewPrivilege(game, generation, currentRates(exchange.sell), data.nextPrivilege);
   data.nextPrivilege = newPrivilege(generation + 1, game.rng);
 }
 
@@ -288,7 +293,7 @@ export function openExchange(game: IGame, data: SmugglingData): void {
   if (privilege.generation >= game.generation) {
     // Generation 1: the start rates are the normal rates, nothing changes; the emperor's first wish is news though
     if (game.generation === 1) {
-      announcePrivilege(game, privilege);
+      announcePrivilege(game, privilege, currentSellRates(data));
     }
     return;
   }
@@ -309,8 +314,9 @@ export function smugglingModel(game: IGame, data: SmugglingData, viewer?: IPlaye
       sell: {normal: {...NORMAL_SELL}, history: exchange.sell, next: forecast?.sell},
       buy: {normal: {...NORMAL_BUY}, history: exchange.buy, next: forecast?.buy},
     },
-    privilege: privilegeModel(game, privilegeOf(game, data)),
-    nextPrivilege: privilegeModel(game, nextPrivilegeOf(game, data)),
+    privilege: privilegeModel(game, privilegeOf(game, data), currentRates(exchange.sell)),
+    // The next privilege pays by the forecast, which supply and demand can still move this generation
+    nextPrivilege: privilegeModel(game, nextPrivilegeOf(game, data), forecast?.sell ?? currentRates(exchange.sell)),
     orders: prophecyModel(prophecyOf(data), viewer),
   };
 }

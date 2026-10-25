@@ -403,7 +403,6 @@
   "Pay tribute": "Payer le tribut",
   "Trade goods at once at the guild's rate of the day.": "Échangez des marchandises tout de suite au cours du jour de la Guilde.",
   "Name a rate you wish for, once the market reaches it, the trade happens by itself.": "Fixez un cours souhaité, quand le marché l'atteint, l'échange se fait tout seul.",
-  "The emperor wants a good and pays a multiple, but only to the first.": "L'empereur veut une marchandise et paie un multiple, mais seulement au premier.",
   "Make deals directly with other players.": "Concluez des échanges directement avec les autres joueurs.",
   "Your deals stir the envy of the great houses, in the Landsraad they take revenge for it.": "Vos affaires attisent la rancœur des grandes maisons, au Landsraad elles s'en vengent.",
   "A generous tribute appeases them.": "Un tribut généreux les apaise.",
@@ -453,7 +452,6 @@
   "tribute": "tribut",
   "Guild: the rates change every generation, the next one is known in advance": "Guilde : les cours changent à chaque génération, la suivante est connue d'avance",
   "Prophecy: name a rate, it comes true when the new rates reach it; withdrawing gives back half, at game end it is lost": "Prophétie : fixez un cours, elle se réalise quand les nouveaux cours l'atteignent ; la retirer rend la moitié, en fin de partie elle est perdue",
-  "Privilege: each generation the emperor pays 1.5 times the normal worth for one good, only to the first": "Privilège : à chaque génération l'empereur paie 1,5 fois la valeur normale d'une marchandise, seulement au premier",
   "Pacts: one open offer per player for 2 generations; on a deal both pay 1 Solari": "Pactes : une offre ouverte par joueur pendant 2 générations ; à l'échange chacun paie 1 Solari",
   "Every move raises the envy of the great houses by 1": "Chaque action augmente de 1 la rancœur des grandes maisons",
   "Tribute (10 Solari, Industrial Center owner 7) lowers the envy by 1": "Le tribut (10 Solari, propriétaire du marché des contrebandiers 7) réduit la rancœur de 1",
@@ -498,5 +496,7 @@
   "incl. premium ${0}": "dont prime ${0}",
   "pays at most ${0}": "paie au plus ${0}",
   "costs ${0} ${1}": "coûte ${0} ${1}",
-  "costs ${0} Solari": "coûte ${0} solaris"
+  "costs ${0} Solari": "coûte ${0} solaris",
+  "Privilege: each generation the emperor wants one good and pays 1 Solari per unit more than the guild, only to the first": "Privilège : à chaque génération, l'empereur veut une marchandise et paie 1 solari de plus par unité que la Guilde, seulement au premier",
+  "The emperor wants a good and pays more than the guild, but only to the first.": "L'empereur veut une marchandise et paie plus que la Guilde, mais seulement au premier."
 }

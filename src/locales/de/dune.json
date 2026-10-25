@@ -402,7 +402,6 @@
   "Pay tribute": "Tribut zahlen",
   "Trade goods at once at the guild's rate of the day.": "Tausche Waren sofort zum Tageskurs der Gilde.",
   "Name a rate you wish for, once the market reaches it, the trade happens by itself.": "Lege einen Wunschkurs fest, erreicht der Markt ihn, wird automatisch gehandelt.",
-  "The emperor wants a good and pays a multiple, but only to the first.": "Der Imperator will eine Ware und zahlt ein Vielfaches, aber nur dem Ersten.",
   "Make deals directly with other players.": "Schließe Tauschgeschäfte direkt mit anderen Spielern.",
   "Your deals stir the envy of the great houses, in the Landsraad they take revenge for it.": "Deine Geschäfte wecken den Neid der großen Häuser, im Landsraad rächen sie sich dafür.",
   "A generous tribute appeases them.": "Ein großzügiger Tribut besänftigt sie.",
@@ -452,7 +451,6 @@
   "tribute": "Tribut",
   "Guild: the rates change every generation, the next one is known in advance": "Gilde: die Kurse ändern sich jede Generation, die nächste ist schon bekannt",
   "Prophecy: name a rate, it comes true when the new rates reach it; withdrawing gives back half, at game end it is lost": "Prophezeiung: einen Kurs festlegen, sie greift, wenn die neuen Kurse ihn erreichen; Zurückziehen gibt die Hälfte zurück, bei Spielende verfällt sie",
-  "Privilege: each generation the emperor pays 1.5 times the normal worth for one good, only to the first": "Privileg: jede Generation zahlt der Imperator für eine Ware das 1,5-Fache des Normalwerts, nur dem Ersten",
   "Pacts: one open offer per player for 2 generations; on a deal both pay 1 Solari": "Pakte: ein offenes Angebot je Spieler für 2 Generationen; beim Tausch zahlen beide 1 Solari",
   "Every move raises the envy of the great houses by 1": "Jede Aktion erhöht die Missgunst der großen Häuser um 1",
   "Tribute (10 Solari, Industrial Center owner 7) lowers the envy by 1": "Tribut (10 Solari, Besitzer des Schmugglermarkts 7) senkt die Missgunst um 1",
@@ -497,5 +495,7 @@
   "incl. premium ${0}": "inkl. Prämie ${0}",
   "pays at most ${0}": "zahlt höchstens ${0}",
   "costs ${0} ${1}": "kostet ${0} ${1}",
-  "costs ${0} Solari": "kostet ${0} Solari"
+  "costs ${0} Solari": "kostet ${0} Solari",
+  "Privilege: each generation the emperor wants one good and pays 1 Solari per unit more than the guild, only to the first": "Privileg: Jede Generation will der Imperator eine Ware und zahlt je Einheit 1 Solari mehr als die Gilde, nur dem Ersten",
+  "The emperor wants a good and pays more than the guild, but only to the first.": "Der Imperator will eine Ware und zahlt mehr als die Gilde, aber nur dem Ersten."
 }

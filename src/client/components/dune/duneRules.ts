@@ -65,7 +65,7 @@ export const CHOAM_RULES: ReadonlyArray<DuneRule> = [
   {picture: 'coin', text: 'Guild: the rates change every generation, the next one is known in advance'},
   {sign: 'slide', text: 'Supply and demand: every 3 units all players sell net lower the next selling rate by 1, every 3 bought raise the next buying rate by 1'},
   {sign: 'die', text: 'Prophecy: name a rate, it comes true when the new rates reach it; withdrawing gives back half, at game end it is lost'},
-  {picture: 'choam', text: 'Privilege: each generation the emperor pays 1.5 times the normal worth for one good, only to the first'},
+  {picture: 'choam', text: 'Privilege: each generation the emperor wants one good and pays 1 Solari per unit more than the guild, only to the first'},
   {sign: 'tap', text: 'Pacts: one open offer per player for 2 generations; on a deal both pay 1 Solari'},
   {sign: 'levels', text: 'Every move raises the envy of the great houses by 1'},
   {sign: 'flag', text: 'End of generation: concord, whispers and distrust cost nothing, from grudge on TR is lost; then back to concord'},

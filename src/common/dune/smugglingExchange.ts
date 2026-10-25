@@ -78,8 +78,17 @@ export function orderBound(side: ExchangeSide, amount: number, limit: number): n
   return side === 'sell' ? amount : amount * limit;
 }
 
-/** Privilege: the emperor pays this times the normal worth of the goods he asks for */
-export const PRIVILEGE_FACTOR = 1.5;
+/**
+ * Privilege: the emperor pays per unit 1 Solari more than the guild's sell rate of that generation, and never less than
+ * normal + 1 – so it always beats both the normal rate and the guild (Jens 25 Oct 2026)
+ */
+export function privilegeRate(good: Resource, sellRate: number): number {
+  return Math.max(sellRate, NORMAL_SELL[good]) + 1;
+}
+
+export function privilegePay(good: Resource, amount: number, sellRate: number): number {
+  return amount * privilegeRate(good, sellRate);
+}
 
 /** One board as the client shows it: the normal rates and every generation's rates, the current one last */
 export type ExchangeBoardModel = {

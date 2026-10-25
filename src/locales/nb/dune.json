@@ -403,7 +403,6 @@
   "Pay tribute": "Betal tributt",
   "Trade goods at once at the guild's rate of the day.": "Bytt varer straks til Gildens dagskurs.",
   "Name a rate you wish for, once the market reaches it, the trade happens by itself.": "Sett en ønsket kurs, når markedet når den, handles det av seg selv.",
-  "The emperor wants a good and pays a multiple, but only to the first.": "Keiseren vil ha en vare og betaler mangedobbelt, men bare til den første.",
   "Make deals directly with other players.": "Gjør byttehandler direkte med andre spillere.",
   "Your deals stir the envy of the great houses, in the Landsraad they take revenge for it.": "Handlene dine vekker misunnelsen til de store husene, i Landsraad hevner de seg.",
   "A generous tribute appeases them.": "En sjenerøs tributt blidgjør dem.",
@@ -454,7 +453,6 @@
   "tribute": "tributt",
   "Guild: the rates change every generation, the next one is known in advance": "Gilde: kursene endres hver generasjon, den neste er kjent på forhånd",
   "Prophecy: name a rate, it comes true when the new rates reach it; withdrawing gives back half, at game end it is lost": "Profeti: sett en kurs, den slår til når de nye kursene når den; tilbaketrekking gir halvparten tilbake, ved spillets slutt tapes den",
-  "Privilege: each generation the emperor pays 1.5 times the normal worth for one good, only to the first": "Privilegium: hver generasjon betaler keiseren 1,5 ganger normalverdien for én vare, bare til den første",
   "Pacts: one open offer per player for 2 generations; on a deal both pay 1 Solari": "Pakter: ett åpent tilbud per spiller i 2 generasjoner; ved bytte betaler begge 1 solari",
   "Every move raises the envy of the great houses by 1": "Hver handling øker misunnelsen til de store husene med 1",
   "Tribute (10 Solari, Industrial Center owner 7) lowers the envy by 1": "Tributt (10 solari, eier av smuglermarkedet 7) senker misunnelsen med 1",
@@ -500,5 +498,7 @@
   "incl. premium ${0}": "inkl. premie ${0}",
   "pays at most ${0}": "betaler høyst ${0}",
   "costs ${0} ${1}": "koster ${0} ${1}",
-  "costs ${0} Solari": "koster ${0} solari"
+  "costs ${0} Solari": "koster ${0} solari",
+  "Privilege: each generation the emperor wants one good and pays 1 Solari per unit more than the guild, only to the first": "Privilegium: hver generasjon vil keiseren ha én vare og betaler 1 solari mer per enhet enn Gilden, bare til den første",
+  "The emperor wants a good and pays more than the guild, but only to the first.": "Keiseren vil ha en vare og betaler mer enn Gilden, men bare til den første."
 }

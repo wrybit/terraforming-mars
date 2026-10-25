@@ -258,17 +258,19 @@ html.tm-mobile .dune-fit {
   height: 20px;
 }
 
+// The free area of a step below its name: the cubes lie spread over it (SmugglingPanel.vue, trackCubeSpots.ts)
 .dune-smuggling__markers {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 3px;
+  position: relative;
+  align-self: stretch;
+  height: 52px;
+  margin: 0 4px;
 }
 
 .dune-smuggling__marker.board-cube-acrylic {
-  position: relative;
+  position: absolute;
   width: 20px;
   height: 20px;
+  margin: 2px;
 }
 
 // House schemes

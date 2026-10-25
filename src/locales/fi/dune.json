@@ -406,7 +406,6 @@
   "Pay tribute": "Maksa vero",
   "Trade goods at once at the guild's rate of the day.": "Vaihda tavaroita heti Killan päivän kurssiin.",
   "Name a rate you wish for, once the market reaches it, the trade happens by itself.": "Aseta toivekurssi, kun markkina saavuttaa sen, kauppa tapahtuu itsestään.",
-  "The emperor wants a good and pays a multiple, but only to the first.": "Keisari haluaa tavaran ja maksaa moninkertaisesti, mutta vain ensimmäiselle.",
   "Make deals directly with other players.": "Tee vaihtokauppoja suoraan muiden pelaajien kanssa.",
   "Your deals stir the envy of the great houses, in the Landsraad they take revenge for it.": "Kauppasi herättävät suurten sukujen kateuden, Landsraadissa ne kostavat sen.",
   "A generous tribute appeases them.": "Antelias vero leppyttää ne.",
@@ -457,7 +456,6 @@
   "tribute": "vero",
   "Guild: the rates change every generation, the next one is known in advance": "Kilta: kurssit muuttuvat joka sukupolvi, seuraava tiedetään etukäteen",
   "Prophecy: name a rate, it comes true when the new rates reach it; withdrawing gives back half, at game end it is lost": "Ennustus: aseta kurssi, se toteutuu, kun uudet kurssit saavuttavat sen; peruminen palauttaa puolet, pelin lopussa se menetetään",
-  "Privilege: each generation the emperor pays 1.5 times the normal worth for one good, only to the first": "Etuoikeus: joka sukupolvi keisari maksaa yhdestä tavarasta 1,5-kertaisen normaaliarvon, vain ensimmäiselle",
   "Pacts: one open offer per player for 2 generations; on a deal both pay 1 Solari": "Sopimukset: yksi avoin tarjous pelaajaa kohden 2 sukupolven ajan; kaupassa kumpikin maksaa 1 solarin",
   "Every move raises the envy of the great houses by 1": "Jokainen toiminto nostaa suurten sukujen kateutta 1:llä",
   "Tribute (10 Solari, Industrial Center owner 7) lowers the envy by 1": "Vero (10 solaria, salakuljettajien torin omistajalle 7) laskee kateutta 1:llä",
@@ -503,5 +501,7 @@
   "incl. premium ${0}": "sis. palkkion ${0}",
   "pays at most ${0}": "maksat enintään ${0}",
   "costs ${0} ${1}": "maksaa ${0} ${1}",
-  "costs ${0} Solari": "maksaa ${0} solaria"
+  "costs ${0} Solari": "maksaa ${0} solaria",
+  "Privilege: each generation the emperor wants one good and pays 1 Solari per unit more than the guild, only to the first": "Etuoikeus: joka sukupolvi keisari haluaa yhden tavaran ja maksaa yksiköltä 1 solarin enemmän kuin Kilta, vain ensimmäiselle",
+  "The emperor wants a good and pays more than the guild, but only to the first.": "Keisari haluaa tavaran ja maksaa enemmän kuin Kilta, mutta vain ensimmäiselle."
 }

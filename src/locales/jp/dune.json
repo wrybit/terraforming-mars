@@ -409,7 +409,6 @@
   "Pay tribute": "貢ぎ物を納める",
   "Trade goods at once at the guild's rate of the day.": "ギルドの本日の相場で、すぐに品物を交換する。",
   "Name a rate you wish for, once the market reaches it, the trade happens by itself.": "希望の相場を決めよう。市場がそこに届けば、取引は自動で行われる。",
-  "The emperor wants a good and pays a multiple, but only to the first.": "皇帝は品物を求め、何倍もの代金を払う。ただし最初の一人だけに。",
   "Make deals directly with other players.": "他のプレイヤーと直接取引する。",
   "Your deals stir the envy of the great houses, in the Landsraad they take revenge for it.": "あなたの取引は大家の妬みを呼び、彼らはランズラードで報復する。",
   "A generous tribute appeases them.": "気前のよい貢ぎ物が彼らをなだめる。",
@@ -460,7 +459,6 @@
   "tribute": "貢ぎ物",
   "Guild: the rates change every generation, the next one is known in advance": "ギルド：相場は世代ごとに変わり、次の世代の相場は事前にわかる",
   "Prophecy: name a rate, it comes true when the new rates reach it; withdrawing gives back half, at game end it is lost": "予言：相場を決め、新しい相場が届けば的中する。取り下げると半分が戻り、ゲーム終了時に失効する",
-  "Privilege: each generation the emperor pays 1.5 times the normal worth for one good, only to the first": "特権：各世代で皇帝は一つの品物に通常価値の1.5倍を払う。最初の一人だけに",
   "Pacts: one open offer per player for 2 generations; on a deal both pay 1 Solari": "盟約：プレイヤーごとに公開オファー1つ、2世代有効。成立時は双方1ソラリを払う",
   "Every move raises the envy of the great houses by 1": "どの行動も大家の妬みを1上げる",
   "Tribute (10 Solari, Industrial Center owner 7) lowers the envy by 1": "貢ぎ物（10ソラリ、密輸市場の所有者は7）で妬みが1下がる",
@@ -506,5 +504,7 @@
   "incl. premium ${0}": "賞金${0}込み",
   "pays at most ${0}": "最大${0}支払う",
   "costs ${0} ${1}": "${1}を${0}失う",
-  "costs ${0} Solari": "${0}ソラリを失う"
+  "costs ${0} Solari": "${0}ソラリを失う",
+  "Privilege: each generation the emperor wants one good and pays 1 Solari per unit more than the guild, only to the first": "特権：毎世代、皇帝は一つの品を求め、単位あたりギルドより1ソラリ多く払う。最初の一人にだけ",
+  "The emperor wants a good and pays more than the guild, but only to the first.": "皇帝は品を求め、ギルドより高く払う。ただし最初の一人にだけ。"
 }

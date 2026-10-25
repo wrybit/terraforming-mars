@@ -410,7 +410,6 @@
   "Pay tribute": "Заплатить дань",
   "Trade goods at once at the guild's rate of the day.": "Обменивайте товары сразу по дневному курсу Гильдии.",
   "Name a rate you wish for, once the market reaches it, the trade happens by itself.": "Назовите желаемый курс, когда рынок его достигнет, сделка пройдёт сама.",
-  "The emperor wants a good and pays a multiple, but only to the first.": "Император хочет товар и платит в несколько раз больше, но только первому.",
   "Make deals directly with other players.": "Заключайте сделки напрямую с другими игроками.",
   "Your deals stir the envy of the great houses, in the Landsraad they take revenge for it.": "Ваши сделки будят зависть великих домов, в Ландсрааде они за это мстят.",
   "A generous tribute appeases them.": "Щедрая дань их умиротворяет.",
@@ -461,7 +460,6 @@
   "tribute": "дань",
   "Guild: the rates change every generation, the next one is known in advance": "Гильдия: курсы меняются каждое поколение, следующие известны заранее",
   "Prophecy: name a rate, it comes true when the new rates reach it; withdrawing gives back half, at game end it is lost": "Пророчество: назовите курс, оно сбудется, когда новые курсы его достигнут; при отзыве возвращается половина, в конце игры сгорает",
-  "Privilege: each generation the emperor pays 1.5 times the normal worth for one good, only to the first": "Привилегия: каждое поколение император платит за один товар в 1,5 раза больше обычной стоимости, только первому",
   "Pacts: one open offer per player for 2 generations; on a deal both pay 1 Solari": "Пакты: одно открытое предложение на игрока на 2 поколения; при сделке оба платят 1 солярий",
   "Every move raises the envy of the great houses by 1": "Каждое действие повышает зависть великих домов на 1",
   "Tribute (10 Solari, Industrial Center owner 7) lowers the envy by 1": "Дань (10 солярий, владелец рынка контрабандистов 7) снижает зависть на 1",
@@ -507,5 +505,7 @@
   "incl. premium ${0}": "вкл. премию ${0}",
   "pays at most ${0}": "платишь не больше ${0}",
   "costs ${0} ${1}": "стоит ${0} ${1}",
-  "costs ${0} Solari": "стоит ${0} солариев"
+  "costs ${0} Solari": "стоит ${0} солариев",
+  "Privilege: each generation the emperor wants one good and pays 1 Solari per unit more than the guild, only to the first": "Привилегия: каждое поколение император хочет один товар и платит за единицу на 1 соларий больше Гильдии, только первому",
+  "The emperor wants a good and pays more than the guild, but only to the first.": "Император хочет товар и платит больше Гильдии, но только первому."
 }

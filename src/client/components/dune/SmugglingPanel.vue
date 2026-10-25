@@ -11,9 +11,10 @@
         <span v-else class="dune-smuggling__penalty dune-smuggling__penalty--free"></span>
         <span class="dune-smuggling__markers">
           <!-- Each player's marker as the acrylic cube of their colour, seen from above with its shadow and turned at
-               random per step, like the cubes on the board (Jens 25 Oct 2026) -->
-          <BoardCube v-for="entry in at(level)" :key="entry.color" class="dune-smuggling__marker" :color="entry.color"
-            :size="20" :spinSeed="'suspicion-' + entry.color + '-' + level" :title="name(entry.color)"/>
+               random per step, like the cubes on the board; spread over the step in cells of their own, so two cubes
+               never overlap (trackCubeSpots.ts; Jens 25 Oct 2026) -->
+          <BoardCube v-for="(entry, index) in at(level)" :key="entry.color" class="dune-smuggling__marker" :color="entry.color"
+            :size="20" :spinSeed="'suspicion-' + entry.color + '-' + level" :title="name(entry.color)" :style="spotStyle(level, index)"/>
         </span>
       </li>
     </ol>
@@ -27,6 +28,10 @@ import {PublicPlayerModel} from '@/common/models/PlayerModel';
 import {Color} from '@/common/Color';
 import BoardCube from '@/client/components/common/BoardCube.vue';
 import {duneGraphic} from './duneGraphic';
+import {SPOT_ROWS, cubeSpots, spotColumns} from './trackCubeSpots';
+
+// Room a turned cube takes (px): a cell leaves the rest of its size for the random place
+const CUBE_ROOM = 24;
 
 const INFLUENCE_ICON = duneGraphic('res-landsraad');
 const LEVELS = Array.from({length: MAX_SUSPICION + 1}, (_, level) => level);
@@ -68,6 +73,18 @@ export default defineComponent({
     },
     at(level: number) {
       return this.smuggling.suspicion.filter((entry) => entry.level === level);
+    },
+    /** Position of a cube in the marker area of its step: its cell plus a random place inside the cell */
+    spotStyle(level: number, index: number): Record<string, string> {
+      const entries = this.at(level);
+      const spot = cubeSpots(entries.map((entry) => entry.color), 'envy-' + level)[index];
+      const columns = spotColumns(entries.length);
+      const cellWidth = `(100% / ${columns})`;
+      const cellHeight = `(100% / ${SPOT_ROWS})`;
+      return {
+        left: `calc(${spot.column} * ${cellWidth} + ${spot.x.toFixed(3)} * max(0px, ${cellWidth} - ${CUBE_ROOM}px))`,
+        top: `calc(${spot.row} * ${cellHeight} + ${spot.y.toFixed(3)} * max(0px, ${cellHeight} - ${CUBE_ROOM}px))`,
+      };
     },
     name(color: Color): string {
       return this.players.find((player) => player.color === color)?.name ?? color;

@@ -320,16 +320,19 @@ describe('Dune modules B, D, E, F', () => {
       expect(choamTab(player1).options.map((input) => input.type)).deep.eq(['payment']);
     });
 
-    it('delivers the privilege once: 1.5 times the normal worth, envy +1, then nobody else', () => {
+    it('delivers the privilege once: 1 Solari per unit over the guild, at least normal + 1, envy +1, then nobody else', () => {
       const smuggling = game.duneData!.smuggling!;
       const privilege = privilegeOf(game, smuggling);
       privilege.good = Resource.TITANIUM;
       privilege.amount = 2;
-      privilege.pay = 15;
       player1.titanium = 2;
       player2.titanium = 2;
+      // The guild pays 7 for spice this generation (normal 5): the emperor 8 per unit
+      const sell = exchangeOf(smuggling).sell;
+      sell[sell.length - 1] = {...sell[sell.length - 1], titanium: 7};
       cast(option(choamTab(player1), PRIVILEGE_TITLE), SelectOption).cb(undefined);
-      expect([player1.titanium, player1.megaCredits]).deep.eq([0, 15]);
+      expect([player1.titanium, player1.megaCredits]).deep.eq([0, 16]);
+      expect(privilege.pay).eq(16);
       expect(privilege.takenBy).eq(player1.id);
       expect(suspicionOf(smuggling, player1)).eq(1);
       expect(choamTab(player2).options.map(titleOf)).not.includes(PRIVILEGE_TITLE);

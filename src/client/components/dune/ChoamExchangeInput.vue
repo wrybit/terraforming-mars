@@ -109,7 +109,7 @@ const MODES: ReadonlyArray<{id: Mode, label: string}> = [
 const LEAD: Readonly<Record<Mode, ReadonlyArray<string>>> = {
   guild: ['Trade goods at once at the guild\'s rate of the day.'],
   prophecy: ['Name a rate you wish for, once the market reaches it, the trade happens by itself.'],
-  privilege: ['The emperor wants a good and pays a multiple, but only to the first.'],
+  privilege: ['The emperor wants a good and pays more than the guild, but only to the first.'],
   pacts: ['Make deals directly with other players.'],
   tribute: ['Your deals stir the envy of the great houses, in the Landsraad they take revenge for it.', 'A generous tribute appeases them.'],
 };

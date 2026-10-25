@@ -398,7 +398,6 @@
   "Pay tribute": "Schatting betalen",
   "Trade goods at once at the guild's rate of the day.": "Ruil goederen direct tegen de dagkoers van het Gilde.",
   "Name a rate you wish for, once the market reaches it, the trade happens by itself.": "Leg een gewenste koers vast, bereikt de markt die, dan wordt er vanzelf gehandeld.",
-  "The emperor wants a good and pays a multiple, but only to the first.": "De keizer wil een goed en betaalt een veelvoud, maar alleen aan de eerste.",
   "Make deals directly with other players.": "Sluit ruilhandel rechtstreeks met andere spelers.",
   "Your deals stir the envy of the great houses, in the Landsraad they take revenge for it.": "Je zaken wekken de afgunst van de grote huizen, in de Landsraad nemen ze daarvoor wraak.",
   "A generous tribute appeases them.": "Een royale schatting stemt ze mild.",
@@ -448,7 +447,6 @@
   "tribute": "schatting",
   "Guild: the rates change every generation, the next one is known in advance": "Gilde: de koersen veranderen elke generatie, de volgende is al bekend",
   "Prophecy: name a rate, it comes true when the new rates reach it; withdrawing gives back half, at game end it is lost": "Profetie: leg een koers vast, ze komt uit als de nieuwe koersen die bereiken; intrekken geeft de helft terug, aan het einde van het spel vervalt ze",
-  "Privilege: each generation the emperor pays 1.5 times the normal worth for one good, only to the first": "Privilege: elke generatie betaalt de keizer voor één goed 1,5 keer de normale waarde, alleen aan de eerste",
   "Pacts: one open offer per player for 2 generations; on a deal both pay 1 Solari": "Pacten: één open aanbod per speler voor 2 generaties; bij de ruil betalen beiden 1 Solari",
   "Every move raises the envy of the great houses by 1": "Elke actie verhoogt de afgunst van de grote huizen met 1",
   "Tribute (10 Solari, Industrial Center owner 7) lowers the envy by 1": "Schatting (10 Solari, eigenaar van de smokkelmarkt 7) verlaagt de afgunst met 1",
@@ -493,5 +491,7 @@
   "incl. premium ${0}": "incl. premie ${0}",
   "pays at most ${0}": "betaalt hoogstens ${0}",
   "costs ${0} ${1}": "kost ${0} ${1}",
-  "costs ${0} Solari": "kost ${0} solari"
+  "costs ${0} Solari": "kost ${0} solari",
+  "Privilege: each generation the emperor wants one good and pays 1 Solari per unit more than the guild, only to the first": "Privilege: elke generatie wil de keizer één goed en betaalt per eenheid 1 solari meer dan het Gilde, alleen aan de eerste",
+  "The emperor wants a good and pays more than the guild, but only to the first.": "De keizer wil een goed en betaalt meer dan het Gilde, maar alleen aan de eerste."
 }

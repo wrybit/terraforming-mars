@@ -409,7 +409,6 @@
   "Pay tribute": "공물 바치기",
   "Trade goods at once at the guild's rate of the day.": "길드의 오늘 시세로 즉시 물품을 교환하세요.",
   "Name a rate you wish for, once the market reaches it, the trade happens by itself.": "원하는 시세를 정하세요. 시장이 도달하면 거래가 자동으로 이루어집니다.",
-  "The emperor wants a good and pays a multiple, but only to the first.": "황제가 물품을 원하며 몇 배를 지불합니다. 단, 첫 번째 사람에게만.",
   "Make deals directly with other players.": "다른 플레이어와 직접 거래하세요.",
   "Your deals stir the envy of the great houses, in the Landsraad they take revenge for it.": "당신의 거래는 대가문들의 시기를 불러일으키고, 그들은 란즈라드에서 복수합니다.",
   "A generous tribute appeases them.": "넉넉한 공물이 그들을 달랩니다.",
@@ -460,7 +459,6 @@
   "tribute": "공물",
   "Guild: the rates change every generation, the next one is known in advance": "길드: 시세는 세대마다 바뀌며 다음 세대 시세는 미리 알 수 있습니다",
   "Prophecy: name a rate, it comes true when the new rates reach it; withdrawing gives back half, at game end it is lost": "예언: 시세를 정하면 새 시세가 도달할 때 적중합니다. 철회 시 절반 반환, 게임 종료 시 소멸",
-  "Privilege: each generation the emperor pays 1.5 times the normal worth for one good, only to the first": "특권: 세대마다 황제가 한 물품에 정상 가치의 1.5배를 지불합니다. 첫 번째 사람에게만",
   "Pacts: one open offer per player for 2 generations; on a deal both pay 1 Solari": "협약: 플레이어당 열린 제안 1개, 2세대 유지. 거래 시 양쪽이 1 솔라리 지불",
   "Every move raises the envy of the great houses by 1": "모든 행동은 대가문들의 시기를 1 올립니다",
   "Tribute (10 Solari, Industrial Center owner 7) lowers the envy by 1": "공물 (10 솔라리, 밀수꾼 시장 소유자 7)은 시기를 1 낮춥니다",
@@ -506,5 +504,7 @@
   "incl. premium ${0}": "보너스 ${0} 포함",
   "pays at most ${0}": "최대 ${0} 지불",
   "costs ${0} ${1}": "${1} ${0} 손실",
-  "costs ${0} Solari": "${0} 솔라리 손실"
+  "costs ${0} Solari": "${0} 솔라리 손실",
+  "Privilege: each generation the emperor wants one good and pays 1 Solari per unit more than the guild, only to the first": "특권: 매 세대 황제는 한 가지 물품을 원하며 길드보다 단위당 1 솔라리를 더 지불합니다. 첫 번째 사람에게만",
+  "The emperor wants a good and pays more than the guild, but only to the first.": "황제는 물품을 원하며 길드보다 더 많이 지불하지만, 첫 번째 사람에게만입니다."
 }

@@ -553,8 +553,9 @@
 .choam-prophecy__order {
   display: flex;
   flex: none;
-  // The same width in every row, so the figures of all orders stand in columns (law of alignment)
-  width: 170px;
+  // The same width in every row, so the figures of all orders stand in columns (law of alignment); never wrapping
+  width: 190px;
+  white-space: nowrap;
   gap: 8px;
   align-items: center;
 }

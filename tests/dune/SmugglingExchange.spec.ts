@@ -3,6 +3,7 @@ import {SeededRandom} from '../../src/common/utils/Random';
 import {
   EXCHANGE_GOODS, ExchangePrices, ExchangeSide, FAVOUR_MAX, FAVOUR_MIN, FAVOUR_SUM_MAX, FAVOUR_SUM_MIN, NORMAL_BUY, NORMAL_SELL,
   bestRate, favourOf, orderLimits, orderPremium, orderRefund,
+  privilegePay, privilegeRate,
 } from '../../src/common/dune/smugglingExchange';
 import {ExchangeData, advanceExchange, forecastOf, initializeExchange, recordTrade} from '../../src/server/dune/SmugglingExchange';
 
@@ -109,5 +110,11 @@ describe('CHOAM exchange', () => {
     expect(orderPremium('sell', 'titanium', 3, 7)).eq(6);
     expect(orderPremium('buy', 'steel', 3, 2)).eq(0);
     expect(orderRefund(5)).eq(2);
+  });
+
+  it('lets the emperor pay 1 more than the guild, never less than normal + 1 (Jens 25 Oct 2026)', () => {
+    // Plasteel: normal 2; guild 3 -> 4, guild 2 -> 3, guild 1 -> still 3
+    expect([privilegeRate('steel', 3), privilegeRate('steel', 2), privilegeRate('steel', 1)]).deep.eq([4, 3, 3]);
+    expect(privilegePay('steel', 5, 3)).eq(20);
   });
 });

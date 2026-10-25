@@ -410,7 +410,6 @@
   "Pay tribute": "缴纳贡金",
   "Trade goods at once at the guild's rate of the day.": "以公会当日汇率立即交换商品。",
   "Name a rate you wish for, once the market reaches it, the trade happens by itself.": "设定期望价位，市场一旦达到，交易自动完成。",
-  "The emperor wants a good and pays a multiple, but only to the first.": "皇帝需要一种商品并支付数倍价钱，但只付给第一个人。",
   "Make deals directly with other players.": "直接与其他玩家达成交易。",
   "Your deals stir the envy of the great houses, in the Landsraad they take revenge for it.": "你的生意激起各大家族的嫉恨，他们会在兰兹拉德报复。",
   "A generous tribute appeases them.": "慷慨的贡金能平息他们。",
@@ -461,7 +460,6 @@
   "tribute": "贡金",
   "Guild: the rates change every generation, the next one is known in advance": "公会：汇率每个世代变化，下一世代的已提前公布",
   "Prophecy: name a rate, it comes true when the new rates reach it; withdrawing gives back half, at game end it is lost": "预言：设定价位，新汇率达到时应验；撤回返还一半，游戏结束时作废",
-  "Privilege: each generation the emperor pays 1.5 times the normal worth for one good, only to the first": "特权：每个世代皇帝以正常价值的 1.5 倍收购一种商品，只付给第一个人",
   "Pacts: one open offer per player for 2 generations; on a deal both pay 1 Solari": "盟约：每名玩家可有一个公开报价，保留 2 个世代；成交时双方各付 1 索拉里",
   "Every move raises the envy of the great houses by 1": "每次行动使各大家族的嫉恨提高 1",
   "Tribute (10 Solari, Industrial Center owner 7) lowers the envy by 1": "贡金（10 索拉里，走私者市场所有者 7）使嫉恨降低 1",
@@ -507,5 +505,7 @@
   "incl. premium ${0}": "含奖金 ${0}",
   "pays at most ${0}": "最多支付 ${0}",
   "costs ${0} ${1}": "损失 ${0} ${1}",
-  "costs ${0} Solari": "损失 ${0} 索拉里"
+  "costs ${0} Solari": "损失 ${0} 索拉里",
+  "Privilege: each generation the emperor wants one good and pays 1 Solari per unit more than the guild, only to the first": "特权：每世代皇帝求购一种货物，每单位比公会多付 1 索拉里，只给第一个人",
+  "The emperor wants a good and pays more than the guild, but only to the first.": "皇帝求购一种货物，出价高于公会，但只给第一个人。"
 }
