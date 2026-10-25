@@ -160,6 +160,29 @@ const TRIGGERS = new Set([
   '${0} removed a:cr:science: from ${1} to draw a card',
   '${0} automatically removed 3 data from ${1} to draw a card.',
   '${0} gained ${1} trade bonus',
+  // The theft itself follows as "stole" with both sides; the line would only repeat it
+  '${0} blackmailed ${1} and was paid 10:r:mc:.',
+  // Nothing gained: the action row already says what was used
+  '${0} gained 0:r:mc: from ${1} action.',
+]);
+
+// Lines whose numbers explain something instead of changing a stock: they stay plain text on the left
+// (tests/client/components/logpanel/logTemplates.spec.ts checks that every log line with values is either here or read)
+export const LOG_INFO_LINES: ReadonlySet<string> = new Set([
+  '${0} for ${1} is blocking 1:i:tr:',
+  'Discarded ${0} cards ${1}',
+  '${0} sued ${1} who had 0:r:mc:.',
+  '${0} cannot remove a:cr:disease: from ${1} to gain 1:i:tr: because of unaffordable Reds policy cost',
+  '${0} cannot turn ${1} face down to gain 3:i:tr: because of unaffordable Reds policy cost',
+  '${0} gains ${1}:i:tr: instead of ${2} due to the Reds ruling policy',
+  'Steel and titanium are worth 1 M€ less, except for ${0}, whose steel and titanium are worth 1 M€ more.',
+  'Cards played by ${0} cost 1:r:mc: less this generation',
+  'The emperor seeks ${0} ${1} for ${2} M€',
+  'A House reached ${0} TR: everybody gives up one agenda',
+  'Shai-Hulud moves ${0} space(s), ${1} decides with ${2} TR',
+  // Commented out on the server, kept for the record
+  '${0} spent 1 ${1} to gain 7 M€',
+  '${0} spent 3 energy to gain 1 TR',
 ]);
 
 // Resource words of the log (lower case, without a plural "(s)") -> icon
@@ -167,6 +190,7 @@ const RESOURCES: Record<string, string> = {
   'm€': 'megacredit', 'megacredits': 'megacredit', 'plant': 'plant', 'plants': 'plant', 'steel': 'steel', 'titanium': 'titanium', 'energy': 'power', 'heat': 'heat',
   'animal': 'animal', 'animals': 'animal', 'microbe': 'microbe', 'microbes': 'microbe', 'floater': 'floater', 'floaters': 'floater',
   'science': 'science', 'asteroid': 'asteroid', 'asteroids': 'asteroid', 'fighter': 'fighter', 'data': 'data', 'camp': 'camp',
+  'disease': 'disease', 'ware': 'ware',
 };
 const TILES: Record<string, string> = {'city tile': 'city', 'greenery tile': 'greenery', 'ocean tile': 'ocean'};
 const TILE_TYPES: Partial<Record<TileType, string>> = {
@@ -289,7 +313,78 @@ export function effectsOf(message: LogMessage): Array<PlayerEffect> {
   case '${0} gained ${1} M€ from ${2} ocean(s)':
     return one(effect({resource: 'megacredit', amount: n, cause: 'adjacent oceans'}));
   case '${0} received ${1} M€ from ${2} owner (${3})':
-    return one(effect({resource: 'megacredit', amount: n, cause: causeAt(message, 2)}));
+    return [...one(effect({resource: 'megacredit', amount: n, cause: causeAt(message, 2)})),
+      ...one(effect({resource: 'megacredit', amount: -n, cause: causeAt(message, 2)}), playerAt(message, 3))];
+  case '${0} placing a tile here costs ${1}:r:mc:':
+    return one(effect({resource: 'megacredit', amount: -n}));
+  case '${0}\'s TR increases ${1} step(s) for removing ${2}':
+    return one(effect({resource: 'tr', amount: n}));
+  case '${0}\'s TR increases 1 step for eliminating dust storms.':
+  case '${0} has no :cr:science: cards and gained 1:i:tr:.':
+    return one(effect({resource: 'tr', amount: 1}));
+  case '${0} has no :cr:fighter: cards and gained 1:r:titanium:.':
+    return one(effect({resource: 'titanium', amount: 1}));
+  case '${0} removed ${1}:cr:floater: to gain ${2}:r:titanium:':
+    return [...one(effect({resource: 'floater', amount: -n})), ...one(effect({resource: 'titanium', amount: amount(message, 2)}))];
+  case '${0} spent ${1}:r:steel: and gained ${2}:r:heat:':
+    return [...one(effect({resource: 'steel', amount: -n})), ...one(effect({resource: 'heat', amount: amount(message, 2)}))];
+  case '${0} spent 1:r:steel: and 1:r:energy: to gain 3:r:plants:.':
+    return [...one(effect({resource: 'steel', amount: -1})), ...one(effect({resource: 'power', amount: -1})), ...one(effect({resource: 'plant', amount: 3}))];
+  case '${0} removed ${1}:cr:data: from ${2} to increase :p:plants: ${3} steps.':
+    return [...one(effect({resource: 'data', amount: -n, card: cardAt(message, 2)})), ...one(effect({resource: 'plant', amount: amount(message, 3), production: true}))];
+  case '${0} removed ${1}:cr:floater: from ${2} to gain ${3}${4}': {
+    const gained = resourceDatum(message, 4).name;
+    return [...one(effect({resource: 'floater', amount: -n, card: cardAt(message, 2)})), ...one(withResource(gained, {amount: amount(message, 3)}))];
+  }
+  case '${0} decreased :p:energy: 1 step to gain 8:r:mc:':
+    return [...one(effect({resource: 'power', amount: -1, production: true})), ...one(effect({resource: 'megacredit', amount: 8}))];
+  case 'Neutral player received ${0}:r:mc: from ${1} owner (${2})':
+    // The insured pays; the neutral player has no row of its own
+    return one(effect({resource: 'megacredit', amount: -amount(message, 0), cause: causeAt(message, 1)}), playerAt(message, 2));
+  case '${0} added a:cr:disease: to ${1} and lost ${2}:r:mc:':
+    return [...one(effect({resource: 'disease', amount: 1, card: cardAt(message, 1)})), ...one(effect({resource: 'megacredit', amount: -amount(message, 2)}))];
+  case '${0} added ${3}:cr:disease: to ${1} and lost ${2}:r:mc:':
+    return [...one(effect({resource: 'disease', amount: amount(message, 3), card: cardAt(message, 1)})), ...one(effect({resource: 'megacredit', amount: -amount(message, 2)}))];
+  case '${0} removed a:cr:disease: from ${1} to gain 1:i:tr:':
+    return [...one(effect({resource: 'disease', amount: -1, card: cardAt(message, 1)})), ...one(effect({resource: 'tr', amount: 1}))];
+  case '${0} turned ${1} face down to gain 3:i:tr:':
+    return one(effect({resource: 'tr', amount: 3}));
+  case '${0} turned ${1} face down to gain 3:i:tr: and lost ${2}:r:mc:':
+    return [...one(effect({resource: 'tr', amount: 3})), ...one(effect({resource: 'megacredit', amount: -amount(message, 2)}))];
+  case '${0} removed 1:cr:microbe: from ${1} to gain 5:r:plants:':
+    return [...one(effect({resource: 'microbe', amount: -1, card: cardAt(message, 1)})), ...one(effect({resource: 'plant', amount: 5}))];
+  case '${0} converted ${1}:r:energy: to :r:heat:':
+    return [...one(effect({resource: 'power', amount: -n})), ...one(effect({resource: 'heat', amount: n}))];
+  case '${0} converted ${1}:r:steel: to :r:titanium:.':
+    return [...one(effect({resource: 'steel', amount: -n})), ...one(effect({resource: 'titanium', amount: n}))];
+  case '${0} spent ${1}:r:energy:':
+  case '${0} spent ${1}:r:energy: to advance on the Delta Project track':
+    return one(effect({resource: 'power', amount: -n}));
+  case '${0} discarded ${1}:r:corruption: and gained ${2}:r:mc:':
+    return [...one(effect({resource: 'corruption', amount: -n})), ...one(effect({resource: 'megacredit', amount: amount(message, 2)}))];
+  case '${0} blackmailed ${1} and was paid 2:r:corruption:.':
+    return [...one(effect({resource: 'corruption', amount: 2})), ...one(effect({resource: 'corruption', amount: -2}), playerAt(message, 1))];
+  case '${0} used the ${1} action to convert ${2}:cr:ware: into ${2}:r:mc:':
+    return [...one(effect({resource: 'ware', amount: -amount(message, 2), card: cardAt(message, 1)})), ...one(effect({resource: 'megacredit', amount: amount(message, 2)}))];
+  case '${0} removed ${1}:cr:microbe: from ${2} to gain ${3}:r:mc:':
+    return [...one(effect({resource: 'microbe', amount: -n, card: cardAt(message, 2)})), ...one(effect({resource: 'megacredit', amount: amount(message, 3)}))];
+  case '${0} sold ${1}:r:steel:':
+    return n === 0 ? [] : [...one(effect({resource: 'steel', amount: -n})), ...one(effect({resource: 'megacredit', amount: 3 * n}))];
+  case '${0} gained +1:p:heat::p:energy:':
+    return [...one(effect({resource: 'heat', amount: 1, production: true})), ...one(effect({resource: 'power', amount: 1, production: true}))];
+  case '${0} spends ${1}:r:mc: for the ${2} mining tiles they own.':
+  case '${0} spends ${1}:r:mc: for the ${2} habitat tiles they own.':
+    return one(effect({resource: 'megacredit', amount: -n}));
+  case '${0} gained 1:r:steel: and 1:r:plants: from ${1}':
+    return [...one(effect({resource: 'steel', amount: 1, cause: causeAt(message, 1)})), ...one(effect({resource: 'plant', amount: 1, cause: causeAt(message, 1)}))];
+  case '${0} spent 1:cr:fighter: on ${1} to block an attack by ${2}':
+    return one(effect({resource: 'fighter', amount: -1, card: cardAt(message, 1)}));
+  case '${0} spent 1:r:corruption: to block an attack by ${1}':
+    return one(effect({resource: 'corruption', amount: -1}));
+  case '${0} spent 6:r:heat: to raise temperature 1 step':
+    return one(effect({resource: 'heat', amount: -6}));
+  case '${0} fulfils the agenda ${1}: ${2} VP':
+    return one(effect({resource: 'scheme', amount: amount(message, 2), label: value(message, 1)}));
   case '${0} gains ${1}:r:mc: for a tile placed next to ${2}':
   case '${0} gained ${1}:r:mc: by discarding ${2} cards':
     return one(effect({resource: 'megacredit', amount: n}));
@@ -520,6 +615,21 @@ function addEffect(action: LogAction, entry: PlayerEffect): void {
   }
 }
 
+// Without an open action (production phase, end of the game) a line with values keeps only who and what card on
+// the left; the values go to the right like in every other row (Jens, 25 Oct 2026)
+function shortLead(message: LogMessage, nameIndex?: number): LogMessage {
+  const player = message.data.find((datum) => datum.type === LogMessageDataType.PLAYER);
+  const cause = nameIndex !== undefined ? message.data[nameIndex] : message.data.find((datum) => datum.type === LogMessageDataType.CARD);
+  const data = [player, cause].filter((datum) => datum !== undefined);
+  return {...message, message: data.length === 2 ? '${0} ${1}' : '${0}', data};
+}
+
+// Lines with values that never belong to the action before them (scoring at the end of the game): always a row of
+// their own, with the name at this data position on the left
+const OWN_ROW_LINES: Readonly<Record<string, number>> = {
+  '${0} fulfils the agenda ${1}: ${2} VP': 1,
+};
+
 // Messages of one generation (without the generation line) -> rows
 // Cards each player has in play: lets older logs (before the server named the cause) still explain corporation effects
 export type LogContext = {tableau?: Partial<Record<Color, ReadonlyArray<CardName>>>};
@@ -590,11 +700,25 @@ export function groupLogMessages(messages: ReadonlyArray<LogMessage>, context: L
       current.indexes.push(index);
       return;
     }
+    const ownRow = OWN_ROW_LINES[template];
+    if (ownRow !== undefined) {
+      current = undefined;
+    }
     const effects = current === undefined ? [] : effectsOf(message);
     if (current !== undefined && effects.length > 0) {
       const action = current.action;
       effects.forEach((entry) => addEffect(action, entry));
       current.indexes.push(index);
+      return;
+    }
+    const ownEffects = current === undefined ? effectsOf(message) : [];
+    if (ownEffects.length > 0 && message.data.some((datum) => datum.type === LogMessageDataType.PLAYER)) {
+      const lead = shortLead(message, ownRow);
+      const action: LogAction = {kind: 'line', player: firstPlayer(message), lead, effects: [], others: []};
+      ownEffects.forEach((entry) => addEffect(action, entry));
+      const row: LogRow & {type: 'message'} = {type: 'message', message: lead, indexes: [index], action};
+      rows.push(row);
+      current = {type: 'action', action, indexes: row.indexes};
       return;
     }
     // A line that sets off effects: a text line that collects the following effects on the right
