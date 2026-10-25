@@ -1260,7 +1260,7 @@ export default defineComponent({
     getPlayerNamePlaceholder(index: number): string {
       // Dune: an empty name becomes a random person of the novels when the game is created
       if (this.theme === 'dune') {
-        return translateText('Random');
+        return translateText('Random name');
       }
       return translateTextWithParams('Player ${0} name', [String(index + 1)]);
     },

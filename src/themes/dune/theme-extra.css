@@ -1524,3 +1524,9 @@ html.theme-dune .board > .board-space > .board-space-type-land:not(.board-space-
 html.theme-dune .mc-icon::after {
   content: none;
 }
+
+/* Empty player name: the placeholder reads as a placeholder (half transparent), not as a typed name.
+   The colour mapping turns the Mars placeholder white into opaque cream (Jens 25 Oct 2026) */
+html.theme-dune .create-game-player-name::placeholder {
+  color: rgba(239, 223, 191, 0.5);
+}
