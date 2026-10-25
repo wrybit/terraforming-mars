@@ -30,8 +30,10 @@ import BoardCube from '@/client/components/common/BoardCube.vue';
 import {duneGraphic} from './duneGraphic';
 import {GRID_COLUMNS, cubeSpots, gridRows} from './trackCubeSpots';
 
-// Room a turned cube takes (px): its slot in the row
-const CUBE_ROOM = 24;
+// Room a cube takes (px): the picture of a turned cube with its shadow is about 29 px wide, plus a safe space of 5 px,
+// so two cubes never touch (Jens 25 Oct 2026); the 20 px box of the cube sits in the middle of it
+const CUBE_ROOM = 34;
+const CUBE_INSET = (CUBE_ROOM - 20) / 2;
 
 const INFLUENCE_ICON = duneGraphic('res-landsraad');
 const LEVELS = Array.from({length: MAX_SUSPICION + 1}, (_, level) => level);
@@ -81,8 +83,8 @@ export default defineComponent({
       const free = `max(0px, 100% - ${entries.length * CUBE_ROOM}px)`;
       const cellWidth = `(100% / ${GRID_COLUMNS})`;
       return {
-        '--row-left': `calc(${spot.shift.toFixed(3)} * ${free} + ${spot.slot * CUBE_ROOM}px)`,
-        '--grid-left': `calc(${spot.column} * ${cellWidth} + ${spot.x.toFixed(3)} * max(0px, ${cellWidth} - ${CUBE_ROOM}px))`,
+        '--row-left': `calc(${spot.shift.toFixed(3)} * ${free} + ${spot.slot * CUBE_ROOM + CUBE_INSET}px)`,
+        '--grid-left': `calc(${spot.column} * ${cellWidth} + ${spot.x.toFixed(3)} * max(0px, ${cellWidth} - ${CUBE_ROOM}px) + ${CUBE_INSET}px)`,
         '--grid-top': `${spot.row * CUBE_ROOM}px`,
         '--spot-y': spot.y.toFixed(3),
       };

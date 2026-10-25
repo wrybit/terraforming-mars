@@ -2,8 +2,8 @@
 // strip of the step, never on top of each other. Two layouts, the CSS picks one by the width (dune_board.less):
 // - row (wide): the box keeps its height, the cubes lie side by side; each gets its own slot of one cube width (in
 //   random order), and the free width of the strip is shared out at random between the gaps;
-// - grid (narrow, phone): 2 columns and as many rows as needed, each cube in a cell of its own, picked at random,
-//   with a random place inside it; from the third cube on the box grows by a row.
+// - grid (narrow, phone): the steps are too narrow for two cubes side by side, so one column with a row per cube,
+//   in random order and at a random place across the width; from the second cube on the box grows by a row.
 // The same step and players always give the same spots, so the cubes do not jump on every update.
 
 export type CubeSpot = {
@@ -18,7 +18,7 @@ export type CubeSpot = {
   y: number,
 };
 
-export const GRID_COLUMNS = 2;
+export const GRID_COLUMNS = 1;
 
 export function gridRows(count: number): number {
   return Math.max(1, Math.ceil(count / GRID_COLUMNS));

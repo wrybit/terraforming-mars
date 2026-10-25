@@ -259,19 +259,19 @@ html.tm-mobile .dune-fit {
 }
 
 // The free strip of a step below its name: the cubes lie spread over it (SmugglingPanel.vue, trackCubeSpots.ts).
-// Wide: one cube high and side by side, so the box keeps its height; narrow (phone): a grid of 2 columns that grows
-// by a row from the third cube on (Jens 25 Oct 2026)
+// Wide: side by side, so the box keeps its height; narrow (phone): one cube per row, the box grows by a row from the
+// second cube on (Jens 25 Oct 2026). Every cube keeps a safe space of 5 px to the others and to the side and bottom
+// edges of the step; upwards it may reach a little over the name and the loss.
 .dune-smuggling__markers {
   position: relative;
   align-self: stretch;
-  // As high as before the spread (Jens 25 Oct 2026: the box must not grow); the cube may reach into the padding
   height: 20px;
   margin: 0 4px;
 }
 
 .dune-smuggling__marker.board-cube-acrylic {
   position: absolute;
-  top: calc(var(--spot-y, 0) * 2px);
+  top: calc(-6px - var(--spot-y, 0) * 4px);
   left: var(--row-left, 0);
   width: 20px;
   height: 20px;
@@ -279,11 +279,11 @@ html.tm-mobile .dune-fit {
 
 @container (max-width: 480px) {
   .dune-smuggling__markers {
-    height: calc(var(--grid-rows, 1) * 24px - 4px);
+    height: calc((var(--grid-rows, 1) - 1) * 34px + 20px);
   }
 
   .dune-smuggling__marker.board-cube-acrylic {
-    top: calc(var(--grid-top, 0px) + var(--spot-y, 0) * 2px);
+    top: calc(var(--grid-top, 0px) - 6px - var(--spot-y, 0) * 4px);
     left: var(--grid-left, 0);
   }
 }
