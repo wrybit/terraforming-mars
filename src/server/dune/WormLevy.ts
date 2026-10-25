@@ -58,6 +58,7 @@ export function levyInput(player: IPlayer, levy: PendingLevy): PlayerInput {
       const units = Math.min(player.stock.get(resource), Math.ceil(levy.owed / worth));
       return new SelectOption(message('${0} ${1}', (b) => b.number(units).string(RESOURCE_LABEL[resource])), 'Pay')
         .andThen(() => {
+          player.game.log('${0} pays the levy to Shai-Hulud', (b) => b.player(player));
           player.stock.deduct(resource, units, {log: true});
           levy.owed -= units * worth;
           return levy.owed > 0 && canPay(player) ? levyInput(player, levy) : undefined;

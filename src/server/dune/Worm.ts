@@ -174,6 +174,7 @@ export function crossSpace(game: IGame, space: Space, spared: ReadonlyArray<Spac
   for (const player of game.players) {
     if (player.tableau.has(CardName.WORM_RIDER) &&
       game.board.getAdjacentSpaces(space).some((adjacent) => adjacent.player?.id === player.id && Board.hasRealTile(adjacent))) {
+      player.game.log('The worm riders of ${0} follow Shai-Hulud', (b) => b.player(player));
       player.stock.add(Resource.TITANIUM, 2, {log: true});
     }
   }
@@ -181,6 +182,7 @@ export function crossSpace(game: IGame, space: Space, spared: ReadonlyArray<Spac
   switch (wormEffectKind(space.tile?.tileType, owner !== undefined)) {
   case 'spice-blow': {
     // Spice blow: +1 spice for each adjacent tile of a player, at most SPICE_BLOW_MAX in total
+    game.log('Spice blow at ${0}', (b) => b.space(space));
     let given = 0;
     for (const adjacent of game.board.getAdjacentSpaces(space)) {
       if (given >= SPICE_BLOW_MAX) {
@@ -191,7 +193,6 @@ export function crossSpace(game: IGame, space: Space, spared: ReadonlyArray<Spac
         given++;
       }
     }
-    game.log('Spice blow at ${0}', (b) => b.space(space));
     return undefined;
   }
   case 'worm-riders':
@@ -213,7 +214,10 @@ export function crossSpace(game: IGame, space: Space, spared: ReadonlyArray<Spac
     game.log('Shai-Hulud tramples a greenery of ${0}', (b) => b.player(owner));
     return takeLevy(owner, Resource.PLANTS);
   case 'domain':
-    owner?.increaseTerraformRating(WORM_DOMAIN_TR, {log: true});
+    if (owner !== undefined) {
+      game.log('Shai-Hulud reaches the worm domain of ${0}', (b) => b.player(owner));
+      owner.increaseTerraformRating(WORM_DOMAIN_TR, {log: true});
+    }
     return undefined;
   case 'damaged':
     if (owner === undefined) {
@@ -240,18 +244,15 @@ export function rollWorm(game: IGame, worm: WormData): void {
   const lastLine = worm.direction === undefined ? undefined : wormLine(worm.direction);
   rollDie(game, worm);
   if (lastLine !== undefined && worm.direction !== undefined && wormLine(worm.direction) === lastLine) {
-    game.log('Same line as the last move: the die is rolled again');
     rollDie(game, worm);
   }
-  if (worm.roll !== undefined && worm.direction !== undefined && worm.direction !== directionIndex(worm.roll)) {
-    game.log('Rock blocks the way: Shai-Hulud bounces off');
-  }
+  // Only the roll that counts, once the heading is fixed: no lines for a second roll or a bounce (Jens 25 Oct 2026)
+  game.log('Shai-Hulud stirs: the die shows ${0}', (b) => b.number(worm.roll ?? 1));
 }
 
 function rollDie(game: IGame, worm: WormData): void {
   worm.roll = game.rng.nextInt(6) + 1;
   worm.direction = wormDirection(game.board, worm.spaceId, worm.roll);
-  game.log('Shai-Hulud stirs: the die shows ${0}', (b) => b.number(worm.roll ?? 1));
 }
 
 export function moveWorm(game: IGame, worm: WormData, distance: number): void {

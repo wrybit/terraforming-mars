@@ -471,5 +471,18 @@
   "At ostracism CHOAM is closed until a tribute lowers the envy": "Ved utstøtelse er CHOAM stengt til en tributt senker misunnelsen",
   "Random name": "Tilfeldig navn",
   "The universal development company of the empire.": "Imperiets universelle utviklingsselskap.",
-  "A seat at CHOAM means wealth and political weight.": "Et sete i CHOAM betyr rikdom og politisk tyngde."
+  "A seat at CHOAM means wealth and political weight.": "Et sete i CHOAM betyr rikdom og politisk tyngde.",
+  "${0} made a prophecy": "${0} kom med en profeti",
+  "${0} withdrew a prophecy": "${0} trakk tilbake en profeti",
+  "The great houses vote against ${0} in the Landsraad": "De store husene stemmer mot ${0} i Landsraad",
+  "Shai-Hulud reaches the worm domain of ${0}": "Shai-Hulud når ormeriket til ${0}",
+  "The worm riders of ${0} follow Shai-Hulud": "Ormerytterne til ${0} følger Shai-Hulud",
+  "${0} pays the levy to Shai-Hulud": "${0} betaler avgiften til Shai-Hulud",
+  "The emperor seeks ${0} ${1} for ${2} M€": "Keiseren søker ${0} ${1} for ${2} solari",
+  "${0} fulfils the agenda ${1}: ${2} VP": "${0} oppfyller agendaen ${1}: ${2} SP",
+  "${0} gained ${1} envy": "Misunnelsen mot ${0} øker med ${1}",
+  "${0} lost ${1} envy": "Misunnelsen mot ${0} synker med ${1}",
+  "${0} gained ${1} Sardaukar": "${0} har ${1} sardaukarer mer i garnisonen",
+  "${0} lost ${1} Sardaukar": "${0} har ${1} sardaukarer mindre i garnisonen",
+  "Sardaukar": "Sardaukarer"
 }

@@ -477,5 +477,18 @@
   "At ostracism CHOAM is closed until a tribute lowers the envy": "추방 상태에서는 공물로 시기를 낮출 때까지 CHOAM이 닫힙니다",
   "Random name": "무작위 이름",
   "The universal development company of the empire.": "제국의 범우주 개발 회사.",
-  "A seat at CHOAM means wealth and political weight.": "CHOAM의 한 자리는 부와 정치적 무게를 뜻합니다."
+  "A seat at CHOAM means wealth and political weight.": "CHOAM의 한 자리는 부와 정치적 무게를 뜻합니다.",
+  "${0} made a prophecy": "${0}이(가) 예언을 했습니다",
+  "${0} withdrew a prophecy": "${0}이(가) 예언을 철회했습니다",
+  "The great houses vote against ${0} in the Landsraad": "대가문들이 랜드스라드에서 ${0}에 반대표를 던집니다",
+  "Shai-Hulud reaches the worm domain of ${0}": "샤이 훌루드가 ${0}의 모래벌레 영역에 도달합니다",
+  "The worm riders of ${0} follow Shai-Hulud": "${0}의 모래벌레 기수가 샤이 훌루드를 따라갑니다",
+  "${0} pays the levy to Shai-Hulud": "${0}이(가) 샤이 훌루드에게 공물을 바칩니다",
+  "The emperor seeks ${0} ${1} for ${2} M€": "황제가 ${2} 솔라리에 ${1} ${0}개를 찾습니다",
+  "${0} fulfils the agenda ${1}: ${2} VP": "${0}이(가) 안건 ${1}을(를) 달성합니다: 승점 ${2}",
+  "${0} gained ${1} envy": "${0}에 대한 시기가 ${1} 오릅니다",
+  "${0} lost ${1} envy": "${0}에 대한 시기가 ${1} 내려갑니다",
+  "${0} gained ${1} Sardaukar": "${0}의 주둔군에 사다우카가 ${1}명 늘었습니다",
+  "${0} lost ${1} Sardaukar": "${0}의 주둔군에서 사다우카가 ${1}명 줄었습니다",
+  "Sardaukar": "사다우카"
 }

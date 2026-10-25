@@ -477,5 +477,18 @@
   "At ostracism CHOAM is closed until a tribute lowers the envy": "追放になると、貢ぎ物で妬みを下げるまでCHOAMは閉ざされる",
   "Random name": "ランダムな名前",
   "The universal development company of the empire.": "帝国の万有開発公社。",
-  "A seat at CHOAM means wealth and political weight.": "CHOAMの席は富と政治的な重みを意味する。"
+  "A seat at CHOAM means wealth and political weight.": "CHOAMの席は富と政治的な重みを意味する。",
+  "${0} made a prophecy": "${0}が予言をしました",
+  "${0} withdrew a prophecy": "${0}が予言を取り下げました",
+  "The great houses vote against ${0} in the Landsraad": "大家がランドスラードで${0}に反対票を投じる",
+  "Shai-Hulud reaches the worm domain of ${0}": "シャイー・フルードが${0}の砂虫の領域に達する",
+  "The worm riders of ${0} follow Shai-Hulud": "${0}の砂虫乗りがシャイー・フルードを追う",
+  "${0} pays the levy to Shai-Hulud": "${0}がシャイー・フルードに貢ぎを払う",
+  "The emperor seeks ${0} ${1} for ${2} M€": "皇帝が${2}ソラリで${1}を${0}求める",
+  "${0} fulfils the agenda ${1}: ${2} VP": "${0}が議題${1}を達成：${2}勝利点",
+  "${0} gained ${1} envy": "${0}への妬みが${1}増える",
+  "${0} lost ${1} envy": "${0}への妬みが${1}減る",
+  "${0} gained ${1} Sardaukar": "${0}の駐屯軍にサーダカーが${1}人増える",
+  "${0} lost ${1} Sardaukar": "${0}の駐屯軍のサーダカーが${1}人減る",
+  "Sardaukar": "サーダカー"
 }

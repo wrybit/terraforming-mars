@@ -80,9 +80,9 @@ function recruitInput(player: IPlayer, data: KanlyData): OrOptions | undefined {
       }
       options.push(new SelectOption(message('${0} Sardaukar for ${1} ${2}', (b) => b.number(count).number(cost).string(RESOURCE_LABEL[resource])), 'Recruit')
         .andThen(() => {
-          player.stock.deduct(resource, cost, {log: true});
-          data.garrison[player.id] = garrisonOf(data, player) + count;
           player.game.log('${0} recruited ${1} Sardaukar', (b) => b.player(player).number(count));
+          player.stock.deduct(resource, cost, {log: true});
+          changeGarrison(player, data, count);
           return undefined;
         }));
     }
@@ -94,8 +94,18 @@ function recruitInput(player: IPlayer, data: KanlyData): OrOptions | undefined {
 export function addSardaukar(player: IPlayer, count: number): void {
   const data = player.game.duneData?.kanly;
   if (data !== undefined) {
-    data.garrison[player.id] = garrisonOf(data, player) + count;
     player.game.log('${0} recruited ${1} Sardaukar', (b) => b.player(player).number(count));
+    changeGarrison(player, data, count);
+  }
+}
+
+/** Sardaukar into or out of the garrison, as a log line of its own: the icon on the right of the move (logActions.ts) */
+function changeGarrison(player: IPlayer, data: KanlyData, change: number): void {
+  data.garrison[player.id] = garrisonOf(data, player) + change;
+  if (change > 0) {
+    player.game.log('${0} gained ${1} Sardaukar', (b) => b.player(player).number(change));
+  } else if (change < 0) {
+    player.game.log('${0} lost ${1} Sardaukar', (b) => b.player(player).number(-change));
   }
 }
 
@@ -104,7 +114,7 @@ function sendTroops(player: IPlayer, data: KanlyData, amount: number): void {
   if (battle === undefined) {
     return;
   }
-  data.garrison[player.id] = garrisonOf(data, player) - amount;
+  changeGarrison(player, data, -amount);
   battle.troops[player.id] = (battle.troops[player.id] ?? 0) + amount;
 }
 
@@ -118,6 +128,7 @@ function openInput(player: IPlayer, data: KanlyData): PlayerInput | undefined {
     return undefined;
   }
   return new SelectSpace(OPEN_KANLY_TITLE, targets).andThen((space) => {
+    player.game.log('${0} declares Kanly on ${1}', (b) => b.player(player).space(space));
     player.stock.deduct(Resource.MEGACREDITS, OPEN_KANLY_COST, {log: true});
     data.battle = {spaceId: space.id, opener: player.id, troops: {}};
     data.foughtThisGeneration = true;
@@ -126,13 +137,17 @@ function openInput(player: IPlayer, data: KanlyData): PlayerInput | undefined {
     }
     // Shield Generator card: 1 Sardaukar defends the owner's tile for free
     const owner = space.player;
-    if (owner !== undefined && owner.tableau.has(CardName.SHIELD_GENERATOR) && data.battle !== undefined) {
-      data.battle.troops[owner.id] = (data.battle.troops[owner.id] ?? 0) + 1;
-      player.game.log('The shield generator of ${0} holds 1 Sardaukar in the war field', (b) => b.player(owner));
+    const shieldOwner = owner !== undefined && owner.tableau.has(CardName.SHIELD_GENERATOR) ? owner : undefined;
+    const battle = data.battle;
+    if (shieldOwner !== undefined) {
+      battle.troops[shieldOwner.id] = (battle.troops[shieldOwner.id] ?? 0) + 1;
     }
-    player.game.log('${0} declares Kanly on ${1}', (b) => b.player(player).space(space));
     return new SelectAmount(KANLY_SEND_TITLE, KANLY_SEND_BUTTON, 1, garrison, true).andThen((amount) => {
       sendTroops(player, data, amount);
+      // After the troops: a text line of its own would cut them off the row of the declaration in the log
+      if (shieldOwner !== undefined) {
+        player.game.log('The shield generator of ${0} holds 1 Sardaukar in the war field', (b) => b.player(shieldOwner));
+      }
       return undefined;
     });
   });
@@ -144,8 +159,8 @@ function joinInput(player: IPlayer, data: KanlyData): PlayerInput | undefined {
     return undefined;
   }
   return new SelectAmount(JOIN_KANLY_TITLE, KANLY_SEND_BUTTON, 1, garrison, true).andThen((amount) => {
-    sendTroops(player, data, amount);
     player.game.log('${0} sent ${1} Sardaukar to the war field', (b) => b.player(player).number(amount));
+    sendTroops(player, data, amount);
     return undefined;
   });
 }

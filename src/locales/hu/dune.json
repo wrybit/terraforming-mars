@@ -475,5 +475,18 @@
   "At ostracism CHOAM is closed until a tribute lowers the envy": "Kiközösítéskor a CHOAM zárva, amíg egy adó nem csökkenti az irigységet",
   "Random name": "Véletlen név",
   "The universal development company of the empire.": "A Birodalom egyetemes fejlesztési társasága.",
-  "A seat at CHOAM means wealth and political weight.": "Egy hely a CHOAM-ban gazdagságot és politikai súlyt jelent."
+  "A seat at CHOAM means wealth and political weight.": "Egy hely a CHOAM-ban gazdagságot és politikai súlyt jelent.",
+  "${0} made a prophecy": "${0} próféciát tett",
+  "${0} withdrew a prophecy": "${0} visszavont egy próféciát",
+  "The great houses vote against ${0} in the Landsraad": "A nagy házak a Landsraadban ${0} ellen szavaznak",
+  "Shai-Hulud reaches the worm domain of ${0}": "Shai-Hulud eléri ${0} féregterületét",
+  "The worm riders of ${0} follow Shai-Hulud": "${0} féreglovasai követik Shai-Huludot",
+  "${0} pays the levy to Shai-Hulud": "${0} megfizeti a sarcot Shai-Huludnak",
+  "The emperor seeks ${0} ${1} for ${2} M€": "A császár ${0} ${1} árut keres ${2} solariért",
+  "${0} fulfils the agenda ${1}: ${2} VP": "${0} teljesíti a(z) ${1} tervet: ${2} GYP",
+  "${0} gained ${1} envy": "${0} iránti irigység ${1} értékkel nő",
+  "${0} lost ${1} envy": "${0} iránti irigység ${1} értékkel csökken",
+  "${0} gained ${1} Sardaukar": "${0} helyőrsége ${1} sardaukarral nő",
+  "${0} lost ${1} Sardaukar": "${0} helyőrsége ${1} sardaukarral csökken",
+  "Sardaukar": "Sardaukarok"
 }

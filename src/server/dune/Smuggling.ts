@@ -15,6 +15,7 @@ import {PlayerInput} from '../PlayerInput';
 import {message} from '../logs/MessageBuilder';
 import {COSTLY_SUSPICION, MAX_SUSPICION, SmugglingModel, suspicionPenalty} from '../../common/dune/DuneModel';
 import {CardName} from '../../common/cards/CardName';
+import {payWithLog} from './payWithLog';
 import {PrivilegeData, newPrivilege, privilegeModel, renewPrivilege} from './Privilege';
 import {ProphecyData, fulfilOrders, initializeProphecy, prophecyModel} from './Prophecy';
 
@@ -94,6 +95,21 @@ export function envyFull(data: SmugglingData, player: IPlayer): boolean {
   return suspicionOf(data, player) >= MAX_SUSPICION;
 }
 
+/**
+ * Sets the envy of a player and logs the change as its own line ("gained/lost N envy"), so the log shows it on the
+ * right of the move that caused it (logActions.ts; Jens 25 Oct 2026)
+ */
+export function setEnvy(player: IPlayer, data: SmugglingData, level: number): void {
+  const before = suspicionOf(data, player);
+  const after = Math.max(0, Math.min(MAX_SUSPICION, level));
+  data.suspicion[player.id] = after;
+  if (after > before) {
+    player.game.log('${0} gained ${1} envy', (b) => b.player(player).number(after - before));
+  } else if (after < before) {
+    player.game.log('${0} lost ${1} envy', (b) => b.player(player).number(before - after));
+  }
+}
+
 /** TR lost at the end of a generation for an envy level */
 export {suspicionPenalty};
 
@@ -113,7 +129,7 @@ export function bribeCost(player: IPlayer): number {
 export function lowerSuspicion(player: IPlayer, steps: number): void {
   const data = player.game.duneData?.smuggling;
   if (data !== undefined) {
-    data.suspicion[player.id] = Math.max(0, suspicionOf(data, player) - steps);
+    setEnvy(player, data, suspicionOf(data, player) - steps);
   }
 }
 
@@ -132,7 +148,7 @@ export function raid(player: IPlayer): void {
 
 /** Every CHOAM move but the tribute: the envy of the great houses rises by 1 */
 export function raiseEnvy(player: IPlayer, data: SmugglingData): void {
-  data.suspicion[player.id] = Math.min(MAX_SUSPICION, suspicionOf(data, player) + 1);
+  setEnvy(player, data, suspicionOf(data, player) + 1);
 }
 
 /**
@@ -161,13 +177,14 @@ export function smuggleInput(player: IPlayer, data: SmugglingData, onlySpice: bo
   // Only the stock and the rate (and limit) of each pair limit the amounts, not the received side
   return new SelectTrade(SMUGGLE_TITLE, 'Trade', give, getOptions, NO_LIMIT, pricing)
     .andThen((trade) => {
+      // The line first: the changes after it land on its right in the log (logActions.ts)
+      player.game.log('${0} traded with the guild', (b) => b.player(player));
       player.stock.deduct(trade.give, trade.giveAmount, {log: true});
       player.stock.add(trade.get, trade.getAmount, {log: true});
       raiseEnvy(player, data);
       // Supply and demand: the trade moves the forecast of the next generation
       recordTrade(exchangeOf(data), trade.give, trade.giveAmount, trade.get, trade.getAmount);
       data.deals = {...data.deals, [player.id]: (data.deals?.[player.id] ?? 0) + 1};
-      player.game.log('${0} traded with the guild', (b) => b.player(player));
       return undefined;
     });
 }
@@ -179,6 +196,7 @@ function bribeOption(player: IPlayer, data: SmugglingData): SelectOption | undef
     return undefined;
   }
   return new SelectOption(message(BRIBE_TITLE, (b) => b.number(cost)), 'Pay tribute').andThen(() => {
+    logTribute(player);
     player.stock.deduct(Resource.MEGACREDITS, cost, {log: true});
     bribed(player, data);
     return undefined;
@@ -192,15 +210,19 @@ export function bribePayment(player: IPlayer, data: SmugglingData): SelectPaymen
     return undefined;
   }
   return new SelectPayment(message(BRIBE_TITLE, (b) => b.number(cost)), cost, {}).andThen((payment) => {
-    player.pay(payment);
+    logTribute(player);
+    payWithLog(player, payment);
     bribed(player, data);
     return undefined;
   });
 }
 
-function bribed(player: IPlayer, data: SmugglingData): void {
-  data.suspicion[player.id] = suspicionOf(data, player) - 1;
+function logTribute(player: IPlayer): void {
   player.game.log('${0} paid tribute to the great houses', (b) => b.player(player));
+}
+
+function bribed(player: IPlayer, data: SmugglingData): void {
+  setEnvy(player, data, suspicionOf(data, player) - 1);
 }
 
 /** Moves of the Dune group of the action menu: only the AI pays tribute there (from 3 on, where it costs) */
@@ -225,9 +247,9 @@ export function chargeSuspicion(game: IGame, data: SmugglingData): void {
   for (const player of game.players) {
     const penalty = suspicionPenalty(suspicionOf(data, player));
     if (penalty > 0) {
-      game.log('The great houses vote against ${0} in the Landsraad: −${1} TR', (b) => b.player(player).number(penalty));
+      game.log('The great houses vote against ${0} in the Landsraad', (b) => b.player(player));
       player.decreaseTerraformRating(penalty, {log: true});
-      data.suspicion[player.id] = 0;
+      setEnvy(player, data, 0);
     }
   }
 }

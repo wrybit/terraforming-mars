@@ -470,5 +470,17 @@
   "At ostracism CHOAM is closed until a tribute lowers the envy": "À l'ostracisme, la CHOAM est fermée jusqu'à ce qu'un tribut réduise la rancœur",
   "Random name": "Nom aléatoire",
   "The universal development company of the empire.": "La compagnie universelle de développement de l'Empire.",
-  "A seat at CHOAM means wealth and political weight.": "Un siège à la CHOAM signifie richesse et poids politique."
+  "A seat at CHOAM means wealth and political weight.": "Un siège à la CHOAM signifie richesse et poids politique.",
+  "${0} made a prophecy": "${0} a fait une prophétie",
+  "${0} withdrew a prophecy": "${0} a retiré une prophétie",
+  "The great houses vote against ${0} in the Landsraad": "Les grandes maisons votent contre ${0} au Landsraad",
+  "Shai-Hulud reaches the worm domain of ${0}": "Shai-Hulud atteint le domaine du ver de ${0}",
+  "The worm riders of ${0} follow Shai-Hulud": "Les chevaucheurs de ver de ${0} suivent Shai-Hulud",
+  "${0} pays the levy to Shai-Hulud": "${0} paie le tribut à Shai-Hulud",
+  "The emperor seeks ${0} ${1} for ${2} M€": "L'empereur cherche ${0} ${1} pour ${2} solaris",
+  "${0} fulfils the agenda ${1}: ${2} VP": "${0} remplit l'agenda ${1} : ${2} PV",
+  "${0} gained ${1} envy": "${0} gagne ${1} de rancœur",
+  "${0} lost ${1} envy": "La rancœur envers ${0} baisse de ${1}",
+  "${0} gained ${1} Sardaukar": "${0} a ${1} Sardaukar de plus en garnison",
+  "${0} lost ${1} Sardaukar": "${0} a ${1} Sardaukar de moins en garnison"
 }

@@ -1164,6 +1164,8 @@ export class Game implements IGame, Logger {
   }
 
   private async gotoEndGame(): Promise<void> {
+    // Dune: the agendas of the House schemes, before the game id (nothing without the Dune expansion)
+    DuneExpansion.logEndOfGame(this);
     // Log id or cloned game id
     if (this.clonedGamedId !== undefined && this.clonedGamedId.startsWith('#')) {
       const clonedGamedId = this.clonedGamedId;

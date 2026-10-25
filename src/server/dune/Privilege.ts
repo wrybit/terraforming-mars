@@ -42,11 +42,11 @@ export function deliverInput(player: IPlayer, privilege: PrivilegeData, then: ()
     return undefined;
   }
   return new SelectOption(PRIVILEGE_TITLE, 'Deliver').andThen(() => {
+    player.game.log('${0} delivered ${1} ${2} to the emperor for ${3} M€',
+      (b) => b.player(player).number(privilege.amount).string(RESOURCE_LABEL[privilege.good]).number(privilege.pay));
     player.stock.deduct(privilege.good, privilege.amount, {log: true});
     player.stock.add(Resource.MEGACREDITS, privilege.pay, {log: true});
     privilege.takenBy = player.id;
-    player.game.log('${0} delivered ${1} ${2} to the emperor for ${3} M€',
-      (b) => b.player(player).number(privilege.amount).string(RESOURCE_LABEL[privilege.good]).number(privilege.pay));
     then();
     return undefined;
   });
@@ -57,7 +57,9 @@ export function renewPrivilege(game: IGame, privilege: PrivilegeData | undefined
   if (privilege !== undefined && privilege.takenBy === undefined) {
     game.log('Nobody used the privilege of the emperor');
   }
-  return newPrivilege(game.generation + 1, game.rng);
+  const next = newPrivilege(game.generation + 1, game.rng);
+  game.log('The emperor seeks ${0} ${1} for ${2} M€', (b) => b.number(next.amount).string(RESOURCE_LABEL[next.good]).number(next.pay));
+  return next;
 }
 
 export function privilegeModel(game: IGame, privilege: PrivilegeData): PrivilegeModel {

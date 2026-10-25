@@ -465,5 +465,17 @@
   "At ostracism CHOAM is closed until a tribute lowers the envy": "Bij verbanning is CHOAM dicht tot een schatting de afgunst verlaagt",
   "Random name": "Willekeurige naam",
   "The universal development company of the empire.": "De universele ontwikkelingsmaatschappij van het Imperium.",
-  "A seat at CHOAM means wealth and political weight.": "Een zetel bij CHOAM betekent rijkdom en politiek gewicht."
+  "A seat at CHOAM means wealth and political weight.": "Een zetel bij CHOAM betekent rijkdom en politiek gewicht.",
+  "${0} made a prophecy": "${0} deed een profetie",
+  "${0} withdrew a prophecy": "${0} trok een profetie in",
+  "The great houses vote against ${0} in the Landsraad": "De grote huizen stemmen in de Landsraad tegen ${0}",
+  "Shai-Hulud reaches the worm domain of ${0}": "Shai-Hulud bereikt het wormdomein van ${0}",
+  "The worm riders of ${0} follow Shai-Hulud": "De wormrijders van ${0} volgen Shai-Hulud",
+  "${0} pays the levy to Shai-Hulud": "${0} betaalt de heffing aan Shai-Hulud",
+  "The emperor seeks ${0} ${1} for ${2} M€": "De keizer zoekt ${0} ${1} voor ${2} solari",
+  "${0} fulfils the agenda ${1}: ${2} VP": "${0} vervult de agenda ${1}: ${2} OP",
+  "${0} gained ${1} envy": "De afgunst jegens ${0} stijgt met ${1}",
+  "${0} lost ${1} envy": "De afgunst jegens ${0} daalt met ${1}",
+  "${0} gained ${1} Sardaukar": "${0} heeft ${1} Sardaukar meer in het garnizoen",
+  "${0} lost ${1} Sardaukar": "${0} heeft ${1} Sardaukar minder in het garnizoen"
 }

@@ -72,11 +72,11 @@ export function offerInput(player: IPlayer, data: ChoamData, then: () => void = 
     return undefined;
   }
   return new SelectTrade(CHOAM_OFFER_TITLE, 'Offer', give, ALL_RESOURCES, MAX_CHOAM_WISH).andThen((trade) => {
+    player.game.log('${0} offers ${1} ${2} for ${3} ${4} at the CHOAM exchange', (b) => b.player(player)
+      .number(trade.giveAmount).string(RESOURCE_LABEL[trade.give]).number(trade.getAmount).string(RESOURCE_LABEL[trade.get]));
     player.stock.deduct(trade.give, trade.giveAmount, {log: true});
     data.offers.push({seller: player.id, give: trade.give, giveAmount: trade.giveAmount, want: trade.get, wantAmount: trade.getAmount,
       expires: player.game.generation + CHOAM_OFFER_GENERATIONS - 1});
-    player.game.log('${0} offers ${1} ${2} for ${3} ${4} at the CHOAM exchange', (b) => b.player(player)
-      .number(trade.giveAmount).string(RESOURCE_LABEL[trade.give]).number(trade.getAmount).string(RESOURCE_LABEL[trade.get]));
     then();
     return undefined;
   });
@@ -96,14 +96,19 @@ export function feeOf(player: IPlayer): number {
 export function acceptOffer(game: IGame, data: ChoamData, buyer: IPlayer, offer: ChoamOffer): void {
   const seller = game.getPlayerById(offer.seller);
   data.offers.splice(data.offers.indexOf(offer), 1);
+  game.log('${0} accepted the CHOAM contract of ${1}', (b) => b.player(buyer).player(seller));
   buyer.stock.deduct(offer.want, offer.wantAmount, {log: true});
   seller.stock.add(offer.want, offer.wantAmount, {log: true});
   buyer.stock.add(offer.give, offer.giveAmount, {log: true});
-  // An offerer without M€ left pays no fee
-  buyer.stock.deduct(Resource.MEGACREDITS, feeOf(buyer));
-  seller.stock.deduct(Resource.MEGACREDITS, Math.min(seller.megaCredits, feeOf(seller)));
+  // The fees in the log too; an offerer without M€ left pays none
+  const sellerFee = Math.min(seller.megaCredits, feeOf(seller));
+  if (feeOf(buyer) > 0) {
+    buyer.stock.deduct(Resource.MEGACREDITS, feeOf(buyer), {log: true});
+  }
+  if (sellerFee > 0) {
+    seller.stock.deduct(Resource.MEGACREDITS, sellerFee, {log: true});
+  }
   data.deals = {...data.deals, [buyer.id]: (data.deals?.[buyer.id] ?? 0) + 1, [seller.id]: (data.deals?.[seller.id] ?? 0) + 1};
-  game.log('${0} accepted the CHOAM contract of ${1}', (b) => b.player(buyer).player(seller));
 }
 
 function acceptInputs(player: IPlayer, data: ChoamData, then: () => void): Array<SelectOption> {
@@ -134,8 +139,8 @@ export function choamActions(player: IPlayer, data: ChoamData, then: () => void 
 /** Withdraw an own open offer: the goods come back, no fee */
 export function withdrawOffer(player: IPlayer, data: ChoamData, offer: ChoamOffer): void {
   data.offers.splice(data.offers.indexOf(offer), 1);
-  player.stock.add(offer.give, offer.giveAmount, {log: true});
   player.game.log('${0} withdrew the CHOAM offer', (b) => b.player(player));
+  player.stock.add(offer.give, offer.giveAmount, {log: true});
 }
 
 /**
@@ -172,8 +177,8 @@ export function returnOffers(game: IGame, data: ChoamData): void {
   const expired = data.offers.filter((offer) => (offer.expires ?? game.generation) <= game.generation);
   for (const offer of expired) {
     const seller = game.getPlayerById(offer.seller);
-    seller.stock.add(offer.give, offer.giveAmount);
     game.log('The CHOAM exchange returns the offer of ${0}', (b) => b.player(seller));
+    seller.stock.add(offer.give, offer.giveAmount, {log: true});
   }
   data.offers = data.offers.filter((offer) => !expired.includes(offer));
 }

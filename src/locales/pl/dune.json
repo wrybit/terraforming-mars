@@ -475,5 +475,18 @@
   "At ostracism CHOAM is closed until a tribute lowers the envy": "Przy wykluczeniu CHOAM jest zamknięty, aż trybut obniży zawiść",
   "Random name": "Losowe imię",
   "The universal development company of the empire.": "Uniwersalne Towarzystwo Rozwoju Imperium.",
-  "A seat at CHOAM means wealth and political weight.": "Miejsce w CHOAM oznacza bogactwo i wpływy polityczne."
+  "A seat at CHOAM means wealth and political weight.": "Miejsce w CHOAM oznacza bogactwo i wpływy polityczne.",
+  "${0} made a prophecy": "${0} wygłasza proroctwo",
+  "${0} withdrew a prophecy": "${0} wycofuje proroctwo",
+  "The great houses vote against ${0} in the Landsraad": "Wielkie Rody głosują w Landsraadzie przeciw ${0}",
+  "Shai-Hulud reaches the worm domain of ${0}": "Shai-Hulud dociera do domeny czerwia gracza ${0}",
+  "The worm riders of ${0} follow Shai-Hulud": "Jeźdźcy czerwi gracza ${0} podążają za Shai-Huludem",
+  "${0} pays the levy to Shai-Hulud": "${0} płaci daninę Shai-Huludowi",
+  "The emperor seeks ${0} ${1} for ${2} M€": "Imperator szuka ${0} ${1} za ${2} solari",
+  "${0} fulfils the agenda ${1}: ${2} VP": "${0} realizuje plan ${1}: ${2} PZ",
+  "${0} gained ${1} envy": "Zawiść wobec ${0} rośnie o ${1}",
+  "${0} lost ${1} envy": "Zawiść wobec ${0} spada o ${1}",
+  "${0} gained ${1} Sardaukar": "Garnizon gracza ${0} rośnie o ${1} sardaukarów",
+  "${0} lost ${1} Sardaukar": "Garnizon gracza ${0} maleje o ${1} sardaukarów",
+  "Sardaukar": "Sardaukarzy"
 }

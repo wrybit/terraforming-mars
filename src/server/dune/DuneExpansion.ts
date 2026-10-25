@@ -252,6 +252,20 @@ export class DuneExpansion {
     ];
   }
 
+  /** Game end, before the final scoring: which agenda each player fulfils (House schemes), now no secret any more */
+  public static logEndOfGame(game: IGame): void {
+    const schemes = game.duneData?.schemes;
+    if (schemes === undefined) {
+      return;
+    }
+    for (const player of game.players) {
+      const agenda = scoringAgenda(player, schemes);
+      if (agenda !== undefined) {
+        game.log('${0} fulfils the agenda ${1}: ${2} VP', (b) => b.player(player).string(agenda.agenda).number(agenda.victoryPoint));
+      }
+    }
+  }
+
   /** Victory points of the modules (House schemes): an own column; the agenda is named only at game end, it is secret before */
   public static calculateVictoryPoints(player: IPlayer, builder: VictoryPointsBreakdownBuilder): void {
     const schemes = player.game.duneData?.schemes;

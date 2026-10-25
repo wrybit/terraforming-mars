@@ -74,6 +74,28 @@ describe('logActions', () => {
     expect(copied.action?.effects).deep.eq([{resource: 'megacredit', amount: 2, production: true}]);
   });
 
+  it('puts the changes of a Dune move on the right of its line: resources, envy, Sardaukar, the other player', () => {
+    const rows = groupLogMessages([
+      message('${0} traded with the guild', player('red')),
+      message('${0} lost ${1}${2}', player('red'), raw('4'), typed(LogMessageDataType.RESOURCE, 'titanium')),
+      message('${0} gained ${1}${2}', player('red'), raw('20'), typed(LogMessageDataType.RESOURCE, 'megacredits')),
+      message('${0} gained ${1} envy', player('red'), raw('1')),
+      message('${0} accepted the CHOAM contract of ${1}', player('blue'), player('red')),
+      message('${0} lost ${1}${2}', player('blue'), raw('20'), typed(LogMessageDataType.RESOURCE, 'megacredits')),
+      message('${0} gained ${1}${2}', player('red'), raw('20'), typed(LogMessageDataType.RESOURCE, 'megacredits')),
+      message('${0} recruited ${1} Sardaukar', player('green'), raw('2')),
+      message('${0} gained ${1} Sardaukar', player('green'), raw('2')),
+    ]);
+    expect(rows.map((row) => row.type)).deep.eq(['message', 'message', 'message']);
+    const [guild, pact, recruit] = rows.map((row) => (row.type === 'message' ? row.action : undefined));
+    expect(guild?.effects).deep.eq([
+      {resource: 'titanium', amount: -4}, {resource: 'megacredit', amount: 20}, {resource: 'envy', amount: 1, label: 'Envy'},
+    ]);
+    expect(pact?.effects).deep.eq([{resource: 'megacredit', amount: -20}]);
+    expect(pact?.others).deep.eq([{player: 'red', effects: [{resource: 'megacredit', amount: 20}]}]);
+    expect(recruit?.effects).deep.eq([{resource: 'sardaukar', amount: 2, label: 'Sardaukar'}]);
+  });
+
   it('reads resource icon data (upstream 2cab7b413) like the older text data', () => {
     const rows = groupLogMessages([
       message('${0} played ${1}', player('red'), card(CardName.ALGAE)),

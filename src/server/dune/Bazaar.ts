@@ -14,6 +14,7 @@ import {message} from '../logs/MessageBuilder';
 import {CardName} from '../../common/cards/CardName';
 import {BazaarModel} from '../../common/dune/DuneModel';
 import {Color} from '../../common/Color';
+import {payWithLog} from './payWithLog';
 import {
   BAZAAR_SLOT_PRICE_CHANGE, BAZAAR_WARES, BazaarGood, bazaarBasePrice, bazaarPrice, bazaarStartWareCount, bazaarWare,
 } from '../../common/dune/bazaarWares';
@@ -175,17 +176,18 @@ export function buyWare(player: IPlayer, data: BazaarData, slot: number, payment
   if (name === null || name === undefined || price === undefined) {
     throw new Error(`No ware in bazaar slot ${slot}`);
   }
+  // The line first: price and content follow it and land on its right in the log (logActions.ts)
+  player.game.log('${0} bought ${1} at the bazaar for ${2} M€', (b) => b.player(player).string(name).number(price));
   if (payment !== undefined) {
-    player.pay(payment);
+    payWithLog(player, payment);
   } else {
-    player.stock.deduct(Resource.MEGACREDITS, price);
+    player.stock.deduct(Resource.MEGACREDITS, price, {log: true});
   }
   data.slots[slot] = null;
   markTaken(data, slot, player);
   data.discard.push(name);
   data.bought = [...(data.bought ?? []), player.id];
   data.purchases = {...data.purchases, [player.id]: (data.purchases?.[player.id] ?? 0) + 1};
-  player.game.log('${0} bought ${1} at the bazaar for ${2} M€', (b) => b.player(player).string(name).number(price));
   payOut(player, name);
 }
 

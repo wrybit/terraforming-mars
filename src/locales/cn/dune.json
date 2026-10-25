@@ -478,5 +478,18 @@
   "At ostracism CHOAM is closed until a tribute lowers the envy": "放逐时 CHOAM 关闭，直到贡金降低嫉恨",
   "Random name": "随机名字",
   "The universal development company of the empire.": "帝国的万有开发公司。",
-  "A seat at CHOAM means wealth and political weight.": "在 CHOAM 占有一席，意味着财富与政治分量。"
+  "A seat at CHOAM means wealth and political weight.": "在 CHOAM 占有一席，意味着财富与政治分量。",
+  "${0} made a prophecy": "${0} 发出了一个预言",
+  "${0} withdrew a prophecy": "${0} 撤回了一个预言",
+  "The great houses vote against ${0} in the Landsraad": "大家族在兰兹拉德投票反对 ${0}",
+  "Shai-Hulud reaches the worm domain of ${0}": "夏胡露抵达 ${0} 的沙虫领地",
+  "The worm riders of ${0} follow Shai-Hulud": "${0} 的驭虫者追随夏胡露",
+  "${0} pays the levy to Shai-Hulud": "${0} 向夏胡露缴纳贡赋",
+  "The emperor seeks ${0} ${1} for ${2} M€": "皇帝以 ${2} 索拉里求购 ${0} ${1}",
+  "${0} fulfils the agenda ${1}: ${2} VP": "${0} 完成议程 ${1}：${2} 胜利点",
+  "${0} gained ${1} envy": "${0} 的嫉恨增加 ${1}",
+  "${0} lost ${1} envy": "${0} 的嫉恨减少 ${1}",
+  "${0} gained ${1} Sardaukar": "${0} 的驻军增加 ${1} 名萨多卡",
+  "${0} lost ${1} Sardaukar": "${0} 的驻军减少 ${1} 名萨多卡",
+  "Sardaukar": "萨多卡"
 }

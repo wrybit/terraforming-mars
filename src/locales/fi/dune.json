@@ -474,5 +474,18 @@
   "At ostracism CHOAM is closed until a tribute lowers the envy": "Hylkimisen aikana CHOAM on kiinni, kunnes vero laskee kateutta",
   "Random name": "Satunnainen nimi",
   "The universal development company of the empire.": "Imperiumin yleismaailmallinen kehitysyhtiö.",
-  "A seat at CHOAM means wealth and political weight.": "Paikka CHOAMissa tarkoittaa vaurautta ja poliittista painoa."
+  "A seat at CHOAM means wealth and political weight.": "Paikka CHOAMissa tarkoittaa vaurautta ja poliittista painoa.",
+  "${0} made a prophecy": "${0} teki ennustuksen",
+  "${0} withdrew a prophecy": "${0} perui ennustuksen",
+  "The great houses vote against ${0} in the Landsraad": "Suuret suvut äänestävät Landsraadissa pelaajaa ${0} vastaan",
+  "Shai-Hulud reaches the worm domain of ${0}": "Shai-Hulud saapuu pelaajan ${0} matoalueelle",
+  "The worm riders of ${0} follow Shai-Hulud": "Pelaajan ${0} matoratsastajat seuraavat Shai-Huludia",
+  "${0} pays the levy to Shai-Hulud": "${0} maksaa veron Shai-Huludille",
+  "The emperor seeks ${0} ${1} for ${2} M€": "Keisari etsii ${0} ${1} hintaan ${2} solaria",
+  "${0} fulfils the agenda ${1}: ${2} VP": "${0} täyttää agendan ${1}: ${2} VP",
+  "${0} gained ${1} envy": "Kateus pelaajaa ${0} kohtaan kasvaa ${1}",
+  "${0} lost ${1} envy": "Kateus pelaajaa ${0} kohtaan laskee ${1}",
+  "${0} gained ${1} Sardaukar": "Pelaajan ${0} varuskunnassa on ${1} sardaukaria enemmän",
+  "${0} lost ${1} Sardaukar": "Pelaajan ${0} varuskunnassa on ${1} sardaukaria vähemmän",
+  "Sardaukar": "Sardaukarit"
 }

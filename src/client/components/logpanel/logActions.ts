@@ -124,7 +124,22 @@ const EFFECT_LINES = new Set([
   '${0} delivered ${1} ${2} to the emperor for ${3} M€',
   '${0} withdrew a prophecy: ${1} of ${2} back',
   '${0} accepted the CHOAM contract of ${1}',
+  // Since 25 Oct 2026 every CHOAM move and its changes (Jens): line first, its changes and the envy on the right.
+  // The prophecy keeps its rate secret until it comes true
+  '${0} made a prophecy',
+  '${0} withdrew a prophecy',
+  'Prophecy of ${0} came true: ${1} ${2} sold at ${3}, bet premium ${4}',
+  'Prophecy of ${0} came true: ${1} ${2} bought at ${3}',
+  '${0} offers ${1} ${2} for ${3} ${4} at the CHOAM exchange',
+  '${0} withdrew the CHOAM offer',
+  'The CHOAM exchange returns the offer of ${0}',
+  'The great houses vote against ${0} in the Landsraad',
   '${0} recruited ${1} Sardaukar',
+  '${0} declares Kanly on ${1}',
+  '${0} sent ${1} Sardaukar to the war field',
+  'Shai-Hulud reaches the worm domain of ${0}',
+  'The worm riders of ${0} follow Shai-Hulud',
+  '${0} pays the levy to Shai-Hulud',
   '${0} takes ${1} from ${2} in the Kanly',
   'Worm riders of ${0} ride Shai-Hulud',
   'Shai-Hulud tramples a greenery of ${0}',
@@ -280,6 +295,15 @@ export function effectsOf(message: LogMessage): Array<PlayerEffect> {
     return one(effect({resource: 'tr', amount: -n}));
   case '${0} is the new chairman and gains ${1} TR':
     return one(effect({resource: 'tr', amount: n}));
+  // Dune (Smuggling.ts setEnvy, Kanly.ts changeGarrison): envy of the great houses and Sardaukar in the garrison
+  case '${0} gained ${1} envy':
+    return one(effect({resource: 'envy', amount: n, label: 'Envy'}));
+  case '${0} lost ${1} envy':
+    return one(effect({resource: 'envy', amount: -n, label: 'Envy'}));
+  case '${0} gained ${1} Sardaukar':
+    return one(effect({resource: 'sardaukar', amount: n, label: 'Sardaukar'}));
+  case '${0} lost ${1} Sardaukar':
+    return one(effect({resource: 'sardaukar', amount: -n, label: 'Sardaukar'}));
   case '${0} gained ${1} corruption':
     return one(effect({resource: 'corruption', amount: n}));
   case '${0} spent ${1} corruption':

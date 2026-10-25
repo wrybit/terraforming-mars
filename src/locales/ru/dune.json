@@ -478,5 +478,18 @@
   "At ostracism CHOAM is closed until a tribute lowers the envy": "При изгнании CHOAM закрыт, пока дань не снизит зависть",
   "Random name": "Случайное имя",
   "The universal development company of the empire.": "Всеобщая компания развития Империи.",
-  "A seat at CHOAM means wealth and political weight.": "Место в CHOAM означает богатство и политический вес."
+  "A seat at CHOAM means wealth and political weight.": "Место в CHOAM означает богатство и политический вес.",
+  "${0} made a prophecy": "${0} сделал(а) пророчество",
+  "${0} withdrew a prophecy": "${0} отозвал(а) пророчество",
+  "The great houses vote against ${0} in the Landsraad": "Великие Дома голосуют в Ландсрааде против ${0}",
+  "Shai-Hulud reaches the worm domain of ${0}": "Шаи-Хулуд достигает владений червя ${0}",
+  "The worm riders of ${0} follow Shai-Hulud": "Наездники ${0} следуют за Шаи-Хулудом",
+  "${0} pays the levy to Shai-Hulud": "${0} платит дань Шаи-Хулуду",
+  "The emperor seeks ${0} ${1} for ${2} M€": "Император ищет ${0} ${1} за ${2} солариев",
+  "${0} fulfils the agenda ${1}: ${2} VP": "${0} выполняет замысел ${1}: ${2} ПО",
+  "${0} gained ${1} envy": "Зависть к ${0} растёт на ${1}",
+  "${0} lost ${1} envy": "Зависть к ${0} снижается на ${1}",
+  "${0} gained ${1} Sardaukar": "В гарнизоне ${0} на ${1} сардаукаров больше",
+  "${0} lost ${1} Sardaukar": "В гарнизоне ${0} на ${1} сардаукаров меньше",
+  "Sardaukar": "Сардаукары"
 }

@@ -49,17 +49,17 @@ function place(player: IPlayer, data: ProphecyData, side: ExchangeSide, good: Ex
   if (limit < range.min || limit > range.max) {
     throw new InputError('The limit must lie between ' + range.min + ' and ' + range.max);
   }
+  if (side === 'buy' && player.megaCredits < amount * limit) {
+    throw new InputError('Not enough M€ for this order');
+  }
+  // Only that a prophecy was made is public, not its rate (Jens 25 Oct 2026); what it binds shows on the right
+  player.game.log('${0} made a prophecy', (b) => b.player(player));
   if (side === 'sell') {
     player.stock.deduct(good, amount, {log: true});
   } else {
-    if (player.megaCredits < amount * limit) {
-      throw new InputError('Not enough M€ for this order');
-    }
     player.stock.deduct(Resource.MEGACREDITS, amount * limit, {log: true});
   }
   data.orders.push({id: data.nextId++, player: player.id, side, good, amount, limit});
-  player.game.log(side === 'sell' ? '${0} prophesies: sell ${1} ${2} at ${3} or more' : '${0} prophesies: buy ${1} ${2} at ${3} or less',
-    (b) => b.player(player).number(amount).string(RESOURCE_LABEL[good]).number(limit));
 }
 
 /** Placing a sell order: one trade, the good and amount given, Solari "got" as the limit */
@@ -104,8 +104,8 @@ export function withdrawOrderInputs(player: IPlayer, data: ProphecyData, then: (
       data.orders.splice(data.orders.indexOf(order), 1);
       const bound = orderBound(order.side, order.amount, order.limit);
       const back = orderRefund(bound);
+      player.game.log('${0} withdrew a prophecy', (b) => b.player(player));
       player.stock.add(order.side === 'sell' ? order.good : Resource.MEGACREDITS, back, {log: true});
-      player.game.log('${0} withdrew a prophecy: ${1} of ${2} back', (b) => b.player(player).number(back).number(bound));
       then();
       return undefined;
     }));
@@ -124,17 +124,17 @@ export function fulfilOrders(game: IGame, data: ProphecyData, sell: ExchangePric
     const player = game.getPlayerById(order.player);
     if (order.side === 'sell') {
       const premium = orderPremium('sell', order.good, order.amount, order.limit);
-      player.stock.add(Resource.MEGACREDITS, order.amount * rate + premium, {log: true});
       game.log('Prophecy of ${0} came true: ${1} ${2} sold at ${3}, bet premium ${4}',
         (b) => b.player(player).number(order.amount).string(RESOURCE_LABEL[order.good]).number(rate).number(premium));
+      player.stock.add(Resource.MEGACREDITS, order.amount * rate + premium, {log: true});
     } else {
+      game.log('Prophecy of ${0} came true: ${1} ${2} bought at ${3}',
+        (b) => b.player(player).number(order.amount).string(RESOURCE_LABEL[order.good]).number(rate));
       player.stock.add(order.good, order.amount, {log: true});
       const back = order.amount * (order.limit - rate);
       if (back > 0) {
         player.stock.add(Resource.MEGACREDITS, back, {log: true});
       }
-      game.log('Prophecy of ${0} came true: ${1} ${2} bought at ${3}',
-        (b) => b.player(player).number(order.amount).string(RESOURCE_LABEL[order.good]).number(rate));
     }
   }
   data.orders = open;
