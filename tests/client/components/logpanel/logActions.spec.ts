@@ -53,6 +53,18 @@ describe('logActions', () => {
     expect(actionAt(rows, 1).effects).deep.eq([]);
   });
 
+  it('reads the icon shortcode lines of upstream as effects, so later effects still join the action row', () => {
+    const rows = groupLogMessages([
+      message('${0} played ${1}', player('red'), card(CardName.ALGAE)),
+      message('${0} gained ${1}:r:mc: from ${2} ocean(s)', player('red'), raw('4'), raw('2')),
+      message('${0} lost ${1}${2} because of ${3}', player('blue'), raw('6'), typed(LogMessageDataType.RESOURCE, 'plants'), player('red')),
+      message('${0} gained ${1}:i:tr:', player('red'), raw('1')),
+    ]);
+    expect(rows).has.length(1);
+    expect(actionAt(rows, 0).effects).deep.eq([{resource: 'megacredit', amount: 4, cause: 'adjacent oceans'}, {resource: 'tr', amount: 1}]);
+    expect(actionAt(rows, 0).others).deep.eq([{player: 'blue', effects: [{resource: 'plant', amount: -6}]}]);
+  });
+
   it('keeps lines that set off effects (bazaar, copied production) as text and puts their effects on the right', () => {
     const rows = groupLogMessages([
       message('${0} bought ${1} at the bazaar for ${2} M€', player('red'), text('Title of Honour'), raw('20')),
