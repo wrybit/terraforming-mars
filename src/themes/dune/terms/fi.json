@@ -267,6 +267,7 @@
     ["~tulivuorialue", "kallioylänkö"]
   ],
   "exact": {
+    "Temp.": "Vesi",
     "Space": "Kilta",
     "Not enough starting M€ for these cards": "Aloitussolarit eivät riitä näihin kortteihin",
     "Not enough M€ left after preludes": "Solarit eivät riitä alkusoittojen jälkeen",

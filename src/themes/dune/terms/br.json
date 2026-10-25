@@ -120,6 +120,7 @@
     ["~asteroide", "meteorito"]
   ],
   "exact": {
+    "Temp.": "Água",
     "Space": "Guilda",
     "Have a terraform rating of 35 (or 26 with Turmoil.)": "Ter uma influência no Landsraad de no mínimo 35.",
     "Not affiliated with FryxGames, Asmodee Digital or Steam in any way.": "Sem qualquer vínculo com FryxGames, Asmodee Digital, Steam, Herbert Properties LLC, Legendary Entertainment."

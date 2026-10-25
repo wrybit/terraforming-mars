@@ -96,6 +96,7 @@
     ["~asteroide", "meteorito"]
   ],
   "exact": {
+    "Temp.": "Agua",
     "Space": "Cofradía",
     "Have a terraform rating of 35 (or 26 with Turmoil.)": "Poseer como mínimo 35 de influencia.",
     "Not affiliated with FryxGames, Asmodee Digital or Steam in any way.": "No afiliado de ninguna manera con FryxGames, Asmodee Digital, Steam, Herbert Properties LLC, Legendary Entertainment."
