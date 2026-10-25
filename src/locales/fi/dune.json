@@ -502,6 +502,6 @@
   "Normal rate": "Normaalikurssi",
   "incl. premium ${0}": "sis. palkkion ${0}",
   "pays at most ${0}": "maksat enintään ${0}",
-  "back: ${0} ${1}": "takaisin: ${0} ${1}",
-  "back: ${0} Solari": "takaisin: ${0} solaria"
+  "costs ${0} ${1}": "maksaa ${0} ${1}",
+  "costs ${0} Solari": "maksaa ${0} solaria"
 }

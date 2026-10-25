@@ -497,6 +497,6 @@
   "Normal rate": "Cours normal",
   "incl. premium ${0}": "dont prime ${0}",
   "pays at most ${0}": "paie au plus ${0}",
-  "back: ${0} ${1}": "rendu : ${0} ${1}",
-  "back: ${0} Solari": "rendu : ${0} solaris"
+  "costs ${0} ${1}": "coûte ${0} ${1}",
+  "costs ${0} Solari": "coûte ${0} solaris"
 }

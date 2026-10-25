@@ -499,6 +499,6 @@
   "Normal rate": "Prezzo normale",
   "incl. premium ${0}": "incl. premio ${0}",
   "pays at most ${0}": "paghi al massimo ${0}",
-  "back: ${0} ${1}": "rimborso: ${0} ${1}",
-  "back: ${0} Solari": "rimborso: ${0} solari"
+  "costs ${0} ${1}": "costa ${0} ${1}",
+  "costs ${0} Solari": "costa ${0} solari"
 }

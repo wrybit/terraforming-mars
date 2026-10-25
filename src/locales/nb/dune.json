@@ -499,6 +499,6 @@
   "Normal rate": "Normalkurs",
   "incl. premium ${0}": "inkl. premie ${0}",
   "pays at most ${0}": "betaler høyst ${0}",
-  "back: ${0} ${1}": "tilbake: ${0} ${1}",
-  "back: ${0} Solari": "tilbake: ${0} solari"
+  "costs ${0} ${1}": "koster ${0} ${1}",
+  "costs ${0} Solari": "koster ${0} solari"
 }

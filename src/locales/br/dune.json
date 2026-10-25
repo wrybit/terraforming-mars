@@ -500,6 +500,6 @@
   "Normal rate": "Cotação normal",
   "incl. premium ${0}": "incl. prêmio ${0}",
   "pays at most ${0}": "paga no máximo ${0}",
-  "back: ${0} ${1}": "volta: ${0} ${1}",
-  "back: ${0} Solari": "volta: ${0} solaris"
+  "costs ${0} ${1}": "custa ${0} ${1}",
+  "costs ${0} Solari": "custa ${0} solaris"
 }

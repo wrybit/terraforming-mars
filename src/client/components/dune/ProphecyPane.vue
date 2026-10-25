@@ -95,7 +95,7 @@
         <div class="choam-prophecy__withdraw">
           <AppButton size="small" class="choam-input__move choam-input__move--withdraw" :title="$t('Withdraw')"
             :disabled="withdrawIndex(order.id) === -1" @click="$emit('withdraw', withdrawIndex(order.id))"/>
-          <span class="choam-prophecy__hint">{{ refundLabel(order) }}</span>
+          <span class="choam-prophecy__hint">{{ withdrawCostLabel(order) }}</span>
         </div>
       </div>
     </div>
@@ -268,11 +268,13 @@ export default defineComponent({
     savingLabel(order: ProphecyModel): string {
       return translateTextWithParams('pays at most ${0}', [String(this.boundOf(order))]);
     },
-    refundLabel(order: ProphecyModel): string {
-      const back = orderRefund(this.boundOf(order));
+    /** What withdrawing costs: the half of the bound goods that does not come back (Jens 25 Oct 2026) */
+    withdrawCostLabel(order: ProphecyModel): string {
+      const bound = this.boundOf(order);
+      const lost = bound - orderRefund(bound);
       return order.side === 'sell' ?
-        translateTextWithParams('back: ${0} ${1}', [String(back), translateText(RESOURCE_LABEL[order.good])]) :
-        translateTextWithParams('back: ${0} Solari', [String(back)]);
+        translateTextWithParams('costs ${0} ${1}', [String(lost), translateText(RESOURCE_LABEL[order.good])]) :
+        translateTextWithParams('costs ${0} Solari', [String(lost)]);
     },
     withdrawIndex(id: number): number {
       return choiceIndex(this.options, PROPHECY_WITHDRAW_TITLE, id);

@@ -503,6 +503,6 @@
   "Normal rate": "Kurs normalny",
   "incl. premium ${0}": "w tym premia ${0}",
   "pays at most ${0}": "płacisz najwyżej ${0}",
-  "back: ${0} ${1}": "zwrot: ${0} ${1}",
-  "back: ${0} Solari": "zwrot: ${0} solari"
+  "costs ${0} ${1}": "kosztuje ${0} ${1}",
+  "costs ${0} Solari": "kosztuje ${0} solari"
 }

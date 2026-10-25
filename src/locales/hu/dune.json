@@ -503,6 +503,6 @@
   "Normal rate": "Normál árfolyam",
   "incl. premium ${0}": "benne ${0} prémium",
   "pays at most ${0}": "legfeljebb ${0} fizetsz",
-  "back: ${0} ${1}": "vissza: ${0} ${1}",
-  "back: ${0} Solari": "vissza: ${0} solari"
+  "costs ${0} ${1}": "ára ${0} ${1}",
+  "costs ${0} Solari": "ára ${0} solari"
 }

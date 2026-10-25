@@ -499,6 +499,6 @@
   "Normal rate": "Precio normal",
   "incl. premium ${0}": "incl. prima ${0}",
   "pays at most ${0}": "pagas como mucho ${0}",
-  "back: ${0} ${1}": "devuelve: ${0} ${1}",
-  "back: ${0} Solari": "devuelve: ${0} solaris"
+  "costs ${0} ${1}": "cuesta ${0} ${1}",
+  "costs ${0} Solari": "cuesta ${0} solaris"
 }
