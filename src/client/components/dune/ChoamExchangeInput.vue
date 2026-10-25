@@ -5,7 +5,11 @@
        says what it is for. At envy 5 (the top) every pane but the tribute says CHOAM is closed. The footer button belongs to
        the chosen move. -->
   <div class="smuggle-input choam-exchange" data-test="choam-exchange">
-    <h3 class="dune-board__title smuggle-input__title"><img class="dune-board__icon" :src="choamIcon" alt="">{{ $t('CHOAM') }}</h3>
+    <!-- Title and claim as one head: what CHOAM is in the story (Jens 25 Oct 2026) -->
+    <header class="choam-head">
+      <h3 class="dune-board__title smuggle-input__title"><img class="dune-board__icon" :src="choamIcon" alt="">{{ $t('CHOAM') }}</h3>
+      <p class="choam-claim">{{ $t('The universal development company of the empire.') }}<br>{{ $t('A seat at CHOAM means wealth and political weight.') }}</p>
+    </header>
     <SmugglingPanel v-if="smuggling !== undefined" :smuggling="smuggling" :players="playerView.players" :compact="true"/>
 
     <section class="smuggle-input__move">
