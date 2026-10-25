@@ -958,6 +958,9 @@ export class Game implements IGame, Logger {
       player.trThisGeneration = 0;
     });
 
+    // Dune: the system sets up the generation before the players play (new rates, the emperor's wish; nothing without Dune)
+    DuneExpansion.startOfGeneration(this);
+
     if (this.gameOptions.draftVariant) {
       this.gotoDraftPhase();
     } else {

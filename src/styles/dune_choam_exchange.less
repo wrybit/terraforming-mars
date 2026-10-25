@@ -562,7 +562,8 @@
 .choam-prophecy__figures {
   display: grid;
   flex: 1 1 auto;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  // The last column holds value and note in one line: more room for it
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.7fr);
   gap: 12px;
 }
 
@@ -588,6 +589,7 @@
   color: @choam-white;
   font-size: 16px;
   font-weight: 700;
+  white-space: nowrap;
 
   img {
     width: 18px;
@@ -602,6 +604,12 @@
 .choam-prophecy__hint {
   color: @choam-quiet;
   font-size: 12px;
+  font-weight: normal;
+  white-space: nowrap;
+}
+
+.choam-prophecy__value .choam-prophecy__hint {
+  margin-left: 4px;
 }
 
 .choam-prophecy__withdraw {
@@ -626,6 +634,16 @@
 
   .choam-prophecy__figures {
     flex-basis: 100%;
+  }
+
+  // On the phone three columns are too narrow for the note: it goes below the value
+  .choam-prophecy__value {
+    flex-wrap: wrap;
+  }
+
+  .choam-prophecy__value .choam-prophecy__hint {
+    flex-basis: 100%;
+    margin-left: 0;
   }
 
   .choam-prophecy__withdraw {

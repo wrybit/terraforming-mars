@@ -138,6 +138,18 @@ export class DuneExpansion {
     }
   }
 
+  /**
+   * Right after the generation line, before research: the setup of the generation stands in the log above the moves of
+   * the players (Jens 25 Oct 2026). CHOAM: the guild's new rates, the prophecies and the emperor's new wish.
+   */
+  public static startOfGeneration(game: IGame): void {
+    const data = game.duneData;
+    const parts = data === undefined ? undefined : choamParts(data);
+    if (parts !== undefined) {
+      openExchange(game, parts.smuggling);
+    }
+  }
+
   /** Between research and the first action of a generation: the bazaar lays out new wares (in generation 1 the start
    *  wares already lie out). `then` starts the action phase. */
   public static beforeActionPhase(game: IGame, then: () => void): void {
@@ -150,7 +162,8 @@ export class DuneExpansion {
     if (bazaar !== undefined) {
       bazaar.bought = [];
     }
-    // CHOAM: the guild's new rates, the prophecies and the emperor's wish, in the log of the new generation
+    // CHOAM: normally done at the start of the generation (startOfGeneration); here only the emperor's first wish in
+    // generation 1 and games saved in the research phase before that step existed (openExchange moves only once)
     const parts = data === undefined ? undefined : choamParts(data);
     if (parts !== undefined) {
       openExchange(game, parts.smuggling);

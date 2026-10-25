@@ -85,9 +85,11 @@
           </div>
           <div class="choam-prophecy__figure choam-prophecy__figure--gain">
             <span class="choam-prophecy__label">{{ $t('If it comes true') }}</span>
-            <span v-if="order.side === 'sell'" class="choam-prophecy__value">≥ {{ order.amount * order.limit + order.premium }}<img :src="coin" alt=""></span>
-            <span v-else class="choam-prophecy__value">+{{ order.amount }}<img :src="graphic(order.good)" alt=""></span>
-            <span class="choam-prophecy__hint">{{ order.side === 'sell' ? premiumLabel(order.premium) : savingLabel(order) }}</span>
+            <!-- The note right after the icon, so the column keeps two lines like the others (Jens 25 Oct 2026) -->
+            <span v-if="order.side === 'sell'" class="choam-prophecy__value">≥ {{ order.amount * order.limit + order.premium }}<img :src="coin" alt="">
+              <span class="choam-prophecy__hint">{{ premiumLabel(order.premium) }}</span></span>
+            <span v-else class="choam-prophecy__value">+{{ order.amount }}<img :src="graphic(order.good)" alt="">
+              <span class="choam-prophecy__hint">{{ savingLabel(order) }}</span></span>
           </div>
         </div>
         <div class="choam-prophecy__withdraw">
