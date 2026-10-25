@@ -20,6 +20,8 @@ export type PrivilegeData = {
   amount: number,
   pay: number,
   takenBy?: PlayerId,
+  /** Its line "the emperor seeks …" is in the log (the first privilege of the game gets it in generation 1) */
+  announced?: boolean,
 };
 
 /**
@@ -62,8 +64,17 @@ export function lapsePrivilege(game: IGame, privilege: PrivilegeData | undefined
 /** Start of a generation: the emperor names his new wish (Jens 25 Oct 2026: in the log of the new generation) */
 export function renewPrivilege(game: IGame, generation: number): PrivilegeData {
   const next = newPrivilege(generation, game.rng);
-  game.log('The emperor seeks ${0} ${1} for ${2} M€', (b) => b.number(next.amount).string(RESOURCE_LABEL[next.good]).number(next.pay));
+  announcePrivilege(game, next);
   return next;
+}
+
+/** The line of the emperor's wish, once per privilege */
+export function announcePrivilege(game: IGame, privilege: PrivilegeData): void {
+  if (privilege.announced === true) {
+    return;
+  }
+  privilege.announced = true;
+  game.log('The emperor seeks ${0} ${1} for ${2} M€', (b) => b.number(privilege.amount).string(RESOURCE_LABEL[privilege.good]).number(privilege.pay));
 }
 
 export function privilegeModel(game: IGame, privilege: PrivilegeData): PrivilegeModel {

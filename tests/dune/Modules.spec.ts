@@ -173,13 +173,18 @@ describe('Dune modules B, D, E, F', () => {
 
     it('moves the exchange once at the start of a new generation, not again after a reload', () => {
       const smuggling = game.duneData!.smuggling!;
+      const wishes = () => game.gameLog.filter((entry) => entry.message.startsWith('The emperor seeks')).length;
+      // Generation 1: no new rates, but the emperor's first wish, once
+      openExchange(game, smuggling);
       openExchange(game, smuggling);
       expect(exchangeOf(smuggling).sell).has.length(1);
+      expect(wishes()).eq(1);
       game.generation++;
       openExchange(game, smuggling);
       openExchange(game, smuggling);
       expect(exchangeOf(smuggling).sell).has.length(2);
       expect(privilegeOf(game, smuggling).generation).eq(game.generation);
+      expect(wishes()).eq(2);
     });
 
     it('always offers spice, even without any, but refuses to give it', () => {

@@ -16,7 +16,7 @@ import {message} from '../logs/MessageBuilder';
 import {COSTLY_SUSPICION, MAX_SUSPICION, SmugglingModel, suspicionPenalty} from '../../common/dune/DuneModel';
 import {CardName} from '../../common/cards/CardName';
 import {payWithLog} from './payWithLog';
-import {PrivilegeData, lapsePrivilege, newPrivilege, privilegeModel, renewPrivilege} from './Privilege';
+import {PrivilegeData, announcePrivilege, lapsePrivilege, newPrivilege, privilegeModel, renewPrivilege} from './Privilege';
 import {ProphecyData, fulfilOrders, initializeProphecy, prophecyModel} from './Prophecy';
 
 // Exchange, envy and tribute of the CHOAM module (claude/dune-erweiterung-konzept.md; Jens 19–24 Oct 2026). Smuggling
@@ -270,7 +270,12 @@ export function moveExchange(game: IGame, data: SmugglingData, generation: numbe
 /** Start of a generation: the exchange moves once. A game saved after the move at the old generation end (before
  *  25 Oct 2026) already has the privilege of this generation and does not move twice. */
 export function openExchange(game: IGame, data: SmugglingData): void {
-  if (privilegeOf(game, data).generation >= game.generation) {
+  const privilege = privilegeOf(game, data);
+  if (privilege.generation >= game.generation) {
+    // Generation 1: the start rates are the normal rates, nothing changes; the emperor's first wish is news though
+    if (game.generation === 1) {
+      announcePrivilege(game, privilege);
+    }
     return;
   }
   moveExchange(game, data, game.generation);
