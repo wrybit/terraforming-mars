@@ -61,8 +61,9 @@ export function tagStockValue(player: IPlayer, tag: Tag): number {
       if (TAG_MILESTONES[milestone.name] !== tag || game.claimedMilestones.some((claimed) => claimed.milestone.name === milestone.name)) {
         continue;
       }
-      const threshold = milestone.thresholdFor?.(game) ?? milestone.threshold;
-      if (threshold - milestone.getScore(player) > 0) {
+      // IMilestone has no plain threshold; milestones without a simple number (thresholdFor missing) are skipped
+      const threshold = milestone.thresholdFor?.(game);
+      if (threshold !== undefined && threshold - milestone.getScore(player) > 0) {
         value += MILESTONE_CHANCE * MILESTONE_POINTS * victoryPointValue(game, player) / threshold;
       }
     }

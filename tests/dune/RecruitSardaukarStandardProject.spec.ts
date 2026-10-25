@@ -9,11 +9,11 @@ import {Payment} from '../../src/common/inputs/Payment';
 describe('Recruit Sardaukar standard project (Dune module F)', () => {
   it('is a standard project only with the Kanly module', () => {
     const [kanlyGame] = testGame(2, {theme: 'dune', boardName: BoardName.ARRAKIS_61, duneModules: ['kanly']});
-    expect(kanlyGame.getStandardProjects().map((card) => card.name)).includes(CardName.RECRUIT_SARDAUKAR_STANDARD_PROJECT);
+    expect(kanlyGame.standardProjects.map((card) => card.name)).includes(CardName.RECRUIT_SARDAUKAR_STANDARD_PROJECT);
     const [otherGame] = testGame(2, {theme: 'dune', boardName: BoardName.ARRAKIS_61, duneModules: ['bazaar']});
-    expect(otherGame.getStandardProjects().map((card) => card.name)).not.includes(CardName.RECRUIT_SARDAUKAR_STANDARD_PROJECT);
+    expect(otherGame.standardProjects.map((card) => card.name)).not.includes(CardName.RECRUIT_SARDAUKAR_STANDARD_PROJECT);
     const [marsGame] = testGame(2);
-    expect(marsGame.getStandardProjects().map((card) => card.name)).not.includes(CardName.RECRUIT_SARDAUKAR_STANDARD_PROJECT);
+    expect(marsGame.standardProjects.map((card) => card.name)).not.includes(CardName.RECRUIT_SARDAUKAR_STANDARD_PROJECT);
   });
 
   it('recruits 1 Sardaukar for 12 M€', () => {
