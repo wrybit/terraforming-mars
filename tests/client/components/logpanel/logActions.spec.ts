@@ -65,6 +65,37 @@ describe('logActions', () => {
     expect(actionAt(rows, 0).others).deep.eq([{player: 'blue', effects: [{resource: 'plant', amount: -6}]}]);
   });
 
+  it('puts the values of card lines on the right and hides lines that only repeat a theft', () => {
+    const rows = groupLogMessages([
+      message('${0} used ${1} action', player('red'), card(CardName.SULPHUR_EATING_BACTERIA)),
+      message('${0} removed ${1}:cr:microbe: from ${2} to gain ${3}:r:mc:', player('red'), raw('2'), card(CardName.SULPHUR_EATING_BACTERIA), raw('6')),
+      message('${0} played ${1}', player('red'), card(CardName.CORPORATE_BLACKMAIL)),
+      message('${3} stole ${1} ${2} from ${0}', player('blue'), raw('10'), text('megacredits'), player('red')),
+      message('${0} blackmailed ${1} and was paid 10:r:mc:.', player('red'), player('blue')),
+    ]);
+    expect(rows).has.length(2);
+    expect(actionAt(rows, 0).effects).deep.eq([
+      {resource: 'microbe', amount: -2, card: CardName.SULPHUR_EATING_BACTERIA}, {resource: 'megacredit', amount: 6},
+    ]);
+    expect(actionAt(rows, 1).effects).deep.eq([{resource: 'megacredit', amount: 10}]);
+    expect(actionAt(rows, 1).others).deep.eq([{player: 'blue', effects: [{resource: 'megacredit', amount: -10}]}]);
+  });
+
+  it('keeps only the player and the name on the left for scoring lines of their own (end of the game)', () => {
+    const rows = groupLogMessages([
+      message('${0} played ${1}', player('blue'), card(CardName.ALGAE)),
+      message('${0} fulfils the agenda ${1}: ${2} VP', player('red'), text('Spice Baron'), raw('5')),
+    ]);
+    expect(actionAt(rows, 0).others).deep.eq([]);
+    const row = rows[1];
+    expect(row.type).eq('message');
+    if (row.type !== 'message') {
+      return;
+    }
+    expect([row.message.message, row.message.data]).deep.eq(['${0} ${1}', [player('red'), text('Spice Baron')]]);
+    expect(row.action?.effects).deep.eq([{resource: 'scheme', amount: 5, label: 'Spice Baron'}]);
+  });
+
   it('keeps lines that set off effects (bazaar, copied production) as text and puts their effects on the right', () => {
     const rows = groupLogMessages([
       message('${0} bought ${1} at the bazaar for ${2} M€', player('red'), text('Title of Honour'), raw('20')),

@@ -527,7 +527,7 @@ each(@players, {
   background-repeat: no-repeat;
 }
 
-@log-effect-resources: megacredit, plant, steel, titanium, power, heat, animal, microbe, floater, science, asteroid, fighter, data, camp, card;
+@log-effect-resources: megacredit, plant, steel, titanium, power, heat, animal, microbe, floater, science, asteroid, fighter, data, camp, card, disease, ware;
 each(@log-effect-resources, {
   .log-effect-resource--@{value} {
     background-image: url("./assets/resources/@{value}.png");
@@ -547,6 +547,8 @@ each(@log-effect-resources, {
 // Dune: Sardaukar of the Kanly and the envy of the great houses (CHOAM sign; the label names it on hover)
 .log-effect-resource--sardaukar { background-image: url("./assets/themes/dune/graphics/res-sardaukar.svg"); }
 .log-effect-resource--envy { background-image: url("./assets/themes/dune/graphics/choam.svg"); }
+// Dune: victory points of a fulfilled agenda (House schemes; the agenda's name on hover)
+.log-effect-resource--scheme { background-image: url("./assets/themes/dune/graphics/res-advisor.svg"); }
 
 @log-effect-moon-rates: habitat, mining, logistic;
 each(@log-effect-moon-rates, {
