@@ -19,6 +19,8 @@ import {isTracingDecision, traceOptions} from './decisionTrace';
 import {describeResponse} from './decisionLabels';
 import {tuningOf} from './aiTuning';
 import {RolloutEntry, RolloutPolicy, rolloutMeans} from './rolloutSearch';
+import {isStandardProject, standardProjectPenalty} from './standardProjectRestraint';
+import {cheapFirstPenalty} from './cheapFirst';
 import {triggerOrderAdjustments} from './triggerOrder';
 import {playPreferences} from './bgaPolicy';
 import {handReadinessMap} from './handReadiness';
@@ -491,6 +493,21 @@ export function chooseAction(menu: OrOptions, player: IPlayer, options: Lookahea
     }
   }
 
+  // cheapFirst: of several playable hand cards the cheap ones go first, like humans do (cheapFirst.ts).
+  if (tuning.cheapFirst > 0) {
+    const playable = new Set<CardName>();
+    for (const {candidate} of tried) {
+      const name = playedHandCard(candidate.response, player);
+      if (name !== undefined) {
+        playable.add(name);
+      }
+    }
+    for (const {candidate, outcome} of tried) {
+      const name = playedHandCard(candidate.response, player);
+      outcome.value -= name === undefined ? 0 : cheapFirstPenalty(player, name, playable);
+    }
+  }
+
   // Passing gives up the rest of the generation while others still act. With the plain value a
   // pass was often within 1 M€ of the best move and the noise picked it (2963 passes with ≥ 25 M€
   // in 1600 night-run games). Money kept is worth less than the moves it could still make now.
@@ -499,6 +516,16 @@ export function chooseAction(menu: OrOptions, player: IPlayer, options: Lookahea
     for (const {candidate, outcome} of tried) {
       if (isPass(menu, candidate.response)) {
         outcome.value -= penalty;
+      }
+    }
+  }
+
+  // standardProjectRestraint: hand cards first, standard projects stay available later in the generation.
+  const standardPenalty = standardProjectPenalty(player, tried.some(({candidate}) => playedHandCard(candidate.response, player) !== undefined));
+  if (standardPenalty > 0) {
+    for (const {candidate, outcome} of tried) {
+      if (isStandardProject(menu, candidate.response)) {
+        outcome.value -= standardPenalty;
       }
     }
   }

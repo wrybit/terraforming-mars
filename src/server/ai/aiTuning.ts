@@ -104,6 +104,16 @@ export type AiTuning = {
   measuredActionWeight: number,
   /** Upper limit of the measured action income per generation in M€ (measuredCardIncome.ts); the measurement assumed full stocks. */
   measuredActionCap: number,
+  /** Weight of the discount an event gives the next card (Indentured Workers; nextCardDiscount.ts); 0 = off. */
+  nextCardDiscount: number,
+  /** M€ a standard project gives up while a hand card is playable (standardProjectRestraint.ts); 0 = off. */
+  standardProjectRestraint: number,
+  /** M€ a card play gives up per M€ above the cheapest playable hand card (cheapFirst.ts); 0 = off. */
+  cheapFirst: number,
+  /** Card bonus of a board space as a drawn card × this (spaceValue.ts); 0 = flat 3 M€. */
+  boardCardBonus: number,
+  /** Weight of tags as a stock for later requirements and open tag milestones (tagDemand.ts); 0 = off. */
+  tagDemand: number,
   /** Requirement outlook of a card missing tags: base − step × missing tags (requirementOutlook.ts). */
   tagOutlookBase: number,
   tagOutlookStep: number,
@@ -281,7 +291,9 @@ export const BASELINE_TUNING: AiTuning = {
   // in 300 new games (z +0.3 vs +0.8) – no clear gain, so off again (it costs computing time).
   engineWeight: 0,
   closingWindow: 0,
-  enablerWeight: 0,
+  // Jens' rule (2026-10-25): cards that bring the tags a hand card still needs count more – activated although round
+  // 120 measured only +0.03 VP: the expensive requirement cards have to become playable, not just sit in hand.
+  enablerWeight: 0.5,
   lateBuyFactor: 1,
   // A/B 2026-10-08: hate draft won clearly (z +1.83 over 800 games in two batches),
   // full opponent weight in two-player games too (2P: z +2.01 in 400 games).
@@ -330,9 +342,11 @@ export const BASELINE_TUNING: AiTuning = {
   policyInSimulation: 1,
   policyModelSet: 0,
   // Round 112: 3 +1.43 (z +2.35; base +1.10, venus +1.76), 6 +1.41 (z +2.00).
-  playPolicyWeight: 3,
+  // Round 138: 12 – cards played +1.76 (z +4.99), VP +0.91 (z +1.25): adopted by the card-throughput rule.
+  playPolicyWeight: 12,
   // Round 122 check: without draw engine boost and needs pursuit +1.24 VP (z +1.96), cards played equal – reverted.
-  needsPursuit: 0,
+  // Jens' rule (2026-10-25): moves that bring a hand card closer to its requirement count (round 120: −0.08 VP).
+  needsPursuit: 0.5,
   // Round 123: own drawn cards 2–4 M€ plus half draw engine boost – cards drawn +1.2 (z +3.2), played +0.7 (z +2.4), VP ±0.
   drawEngineBoost: 0.5,
   ownDrawnCardValue: 1,
@@ -344,6 +358,14 @@ export const BASELINE_TUNING: AiTuning = {
   liveOutlook: 0,
   measuredActionWeight: 0,
   measuredActionCap: 99,
+  nextCardDiscount: 0,
+  // Round 135: 2 M€ +1.33 VP (z +1.84), cards played +0.44 – adopted; 5 M€ cards +0.85 (z +2.82) at −0.27 VP.
+  // Round 136: 5 M€ cards played +0.56 (z +1.67), VP −0.07 – adopted by the card-throughput rule (round 135: +0.85).
+  // Round 137: back to 2 M€ +1.18 VP (z +1.69), cards +0.20 – 2 and 5 play as many cards, 2 scores more.
+  standardProjectRestraint: 2,
+  cheapFirst: 0,
+  boardCardBonus: 0,
+  tagDemand: 0,
   tagOutlookBase: 0.85,
   tagOutlookStep: 0.15,
   // Round 109: money now only (0) +1.74 (z +2.80) against one generation of income; two generations −0.70.
@@ -835,6 +857,27 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Round 132: check of round 131's adoption (back to 1) and one step further.
   buyMargin1: {buyMargin: 1},
   buyMarginMinus2: {buyMargin: -2},
+  // Round 133: events that make the next card cheaper (Indentured Workers) – the copy never played a second card.
+  nextCardDiscount05: {nextCardDiscount: 0.5},
+  nextCardDiscount08: {nextCardDiscount: 0.8},
+  // Round 135: AI 85 M€ on standard projects per game, humans 55 (moneyFlow.py) – hand cards first.
+  standardRestraint2: {standardProjectRestraint: 2},
+  standardRestraint5: {standardProjectRestraint: 5},
+  standardRestraint10: {standardProjectRestraint: 10},
+  // Round 136: check of round 135's adoption and the steps around it.
+  noStandardRestraint: {standardProjectRestraint: 0},
+  standardRestraint3: {standardProjectRestraint: 3},
+  standardRestraint7: {standardProjectRestraint: 7},
+  // Round 139: humans play the cheap cards of a generation first (cost rank 0.18–0.32 vs AI 0.46–0.53, cardPlayProfile.py).
+  cheapFirst01: {cheapFirst: 0.1},
+  cheapFirst025: {cheapFirst: 0.25},
+  cheapFirst05: {cheapFirst: 0.5},
+  // Card spaces on the board valued like a drawn card instead of 3 M€.
+  boardCards05: {boardCardBonus: 0.5},
+  boardCards1: {boardCardBonus: 1},
+  // Round 140: building tags while Builder is open, then science/power for later requirements (Jens' rule).
+  tagDemand05: {tagDemand: 0.5},
+  tagDemand1: {tagDemand: 1},
   buyStrictest: {buyMargin: 3},
   buyMargin2: {buyMargin: 2},
   buyMargin5: {buyMargin: 5},
@@ -881,6 +924,7 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   cardIncome05: {measuredCardIncome: 0.5},
   noOwnCardValueEngine: {ownDrawnCardValue: 0, drawEngineBoost: 0},
   noDrawRules: {drawPriority: 0, ownDrawnCardValue: 0, drawEngineBoost: 0},
+  noRequirementHelp: {enablerWeight: 0, needsPursuit: 0},
   cardIncome1: {measuredCardIncome: 1},
   cardIncomeTraits: {measuredCardIncome: 0.5, playerTraitValues: 1},
   // Card understanding fix in one piece (card-understanding audit): measured income of lasting effects and actions,

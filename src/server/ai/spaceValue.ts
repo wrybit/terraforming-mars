@@ -12,6 +12,7 @@ import {SpaceType} from '../../common/boards/SpaceType';
 import {remainingProductionPhases, victoryPointValue} from './gameProgress';
 import {tuningOf} from './aiTuning';
 import {citySpotPoints} from './citySpotPrior';
+import {drawnCardValue} from './drawPriority';
 import {openingPlan} from './openingPlan';
 import {blockingShare} from './phasePlan';
 import {adoptedOrphanPoints, lonelyGreeneryPoints} from './greeneryRing';
@@ -155,7 +156,11 @@ function baseSpaceValue(space: Space, kind: TileKind, player: IPlayer): number {
   const game = player.game;
   const board = game.board;
   const victoryPoint = victoryPointValue(game);
-  let value = space.bonus.reduce((sum, bonus) => sum + (BONUS_VALUE[bonus] ?? 1), 0);
+  // boardCardBonus: a card from the board counts like a drawn card (drawPriority 8 M€ early) instead of a flat 3 M€ –
+  // humans fight for the card spaces early, the AI weighed a card like 3 M€ of titanium.
+  const cardWeight = tuningOf(player).boardCardBonus;
+  const cardBonus = cardWeight > 0 ? cardWeight * drawnCardValue(player, remainingProductionPhases(game, player)) : BONUS_VALUE[SpaceBonus.DRAW_CARD] ?? 1;
+  let value = space.bonus.reduce((sum, bonus) => sum + (bonus === SpaceBonus.DRAW_CARD ? cardBonus : BONUS_VALUE[bonus] ?? 1), 0);
   const neighbours = board.getAdjacentSpaces(space);
   value += neighbours.filter((neighbour) => Board.isOceanSpace(neighbour)).length * OCEAN_ADJACENCY_VALUE;
 
