@@ -20,6 +20,7 @@ import {describeResponse} from './decisionLabels';
 import {tuningOf} from './aiTuning';
 import {RolloutEntry, RolloutPolicy, rolloutMeans} from './rolloutSearch';
 import {isStandardProject, standardProjectPenalty} from './standardProjectRestraint';
+import {cheapFirstPenalty} from './cheapFirst';
 import {triggerOrderAdjustments} from './triggerOrder';
 import {playPreferences} from './bgaPolicy';
 import {handReadinessMap} from './handReadiness';
@@ -489,6 +490,21 @@ export function chooseAction(menu: OrOptions, player: IPlayer, options: Lookahea
         const name = playedHandCard(candidate.response, player);
         outcome.value += name === undefined ? 0 : preferences.get(name) ?? 0;
       }
+    }
+  }
+
+  // cheapFirst: of several playable hand cards the cheap ones go first, like humans do (cheapFirst.ts).
+  if (tuning.cheapFirst > 0) {
+    const playable = new Set<CardName>();
+    for (const {candidate} of tried) {
+      const name = playedHandCard(candidate.response, player);
+      if (name !== undefined) {
+        playable.add(name);
+      }
+    }
+    for (const {candidate, outcome} of tried) {
+      const name = playedHandCard(candidate.response, player);
+      outcome.value -= name === undefined ? 0 : cheapFirstPenalty(player, name, playable);
     }
   }
 
