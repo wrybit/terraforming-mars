@@ -461,19 +461,37 @@
   }
 }
 
-// Title and claim close together, as one head above the track (law of proximity; Jens 25 Oct 2026)
+// Logo on the left, title and claim beside it: the claim costs no extra height (law of proximity; Jens 25 Oct 2026)
 .choam-head {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 4px;
+  justify-content: center;
+  gap: 14px;
+}
+
+.choam-head__icon.dune-board__icon {
+  flex: none;
+  width: 52px;
+  height: 52px;
+}
+
+.choam-head__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.choam-head__title.dune-board__title {
+  align-self: flex-start;
+  margin: 0;
 }
 
 .choam-claim {
   margin: 0;
   color: @choam-quiet;
-  font-size: 14px;
+  font-size: 13px;
   font-style: italic;
-  line-height: 1.45;
-  text-align: center;
+  line-height: 1.4;
+  text-align: left;
 }
