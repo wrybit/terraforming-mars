@@ -491,5 +491,7 @@
   "bottom right": "ned til høyre",
   "bottom left": "ned til venstre",
   "left": "til venstre",
-  "top left": "opp til venstre"
+  "top left": "opp til venstre",
+  "Shai-Hulud moves ${0} space(s), ${1} decides with ${2} TR": "Shai-Hulud flytter ${0} felt, ${1} bestemmer med ${2} innflytelse",
+  "Shai-Hulud moves ${0} space(s), ${1} decides with ${2}": "Shai-Hulud flytter ${0} felt, ${1} bestemmer med ${2}"
 }

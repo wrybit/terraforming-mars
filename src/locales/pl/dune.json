@@ -495,5 +495,7 @@
   "bottom right": "w prawo w dół",
   "bottom left": "w lewo w dół",
   "left": "w lewo",
-  "top left": "w lewo w górę"
+  "top left": "w lewo w górę",
+  "Shai-Hulud moves ${0} space(s), ${1} decides with ${2} TR": "Shai-Hulud przesuwa się o ${0} pól, decyduje ${1} z wpływem ${2}",
+  "Shai-Hulud moves ${0} space(s), ${1} decides with ${2}": "Shai-Hulud przesuwa się o ${0} pól, decyduje ${1} dzięki ${2}"
 }

@@ -498,5 +498,7 @@
   "bottom right": "右下",
   "bottom left": "左下",
   "left": "左",
-  "top left": "左上"
+  "top left": "左上",
+  "Shai-Hulud moves ${0} space(s), ${1} decides with ${2} TR": "夏胡露移动 ${0} 格，由影响力 ${2} 的 ${1} 决定",
+  "Shai-Hulud moves ${0} space(s), ${1} decides with ${2}": "夏胡露移动 ${0} 格，由 ${1} 用 ${2} 决定"
 }

@@ -491,5 +491,7 @@
   "bottom right": "in basso a destra",
   "bottom left": "in basso a sinistra",
   "left": "a sinistra",
-  "top left": "in alto a sinistra"
+  "top left": "in alto a sinistra",
+  "Shai-Hulud moves ${0} space(s), ${1} decides with ${2} TR": "Shai-Hulud avanza di ${0} spazi, decide ${1} con ${2} di influenza",
+  "Shai-Hulud moves ${0} space(s), ${1} decides with ${2}": "Shai-Hulud avanza di ${0} spazi, decide ${1} con ${2}"
 }

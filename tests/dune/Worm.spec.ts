@@ -175,6 +175,14 @@ describe('Shai-Hulud (Dune module C)', () => {
     expect(maxWormDistance(game)).eq(1);
   });
 
+  it('names in the log who chose the distance and with how much TR', () => {
+    const worm: WormData = {spaceId: WORM_START, path: [], direction: directionIndex(1), chooser: player2.id};
+    player2.setTerraformRating(22);
+    cast(distanceInput(game, worm).options[0], SelectOption).cb(undefined);
+    const lines = game.gameLog.map((message) => formatMessage(message));
+    expect(lines.some((line) => line.startsWith('Shai-Hulud moves') && line.endsWith('decides with 22 TR'))).is.true;
+  });
+
   it('lets the player with the least TR choose, the later one on a tie', () => {
     expect(wormChooser(game)).eq(player2);
     player2.setTerraformRating(25);

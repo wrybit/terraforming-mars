@@ -498,5 +498,7 @@
   "bottom right": "надолу вдясно",
   "bottom left": "надолу вляво",
   "left": "наляво",
-  "top left": "нагоре вляво"
+  "top left": "нагоре вляво",
+  "Shai-Hulud moves ${0} space(s), ${1} decides with ${2} TR": "Шай-Хулуд минава ${0} поле(та), решава ${1} с влияние ${2}",
+  "Shai-Hulud moves ${0} space(s), ${1} decides with ${2}": "Шай-Хулуд минава ${0} поле(та), решава ${1} с ${2}"
 }

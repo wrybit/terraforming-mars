@@ -494,5 +494,7 @@
   "bottom right": "oikealle alas",
   "bottom left": "vasemmalle alas",
   "left": "vasemmalle",
-  "top left": "vasemmalle ylös"
+  "top left": "vasemmalle ylös",
+  "Shai-Hulud moves ${0} space(s), ${1} decides with ${2} TR": "Shai-Hulud liikkuu ${0} ruutua, ${1} päättää arvovallalla ${2}",
+  "Shai-Hulud moves ${0} space(s), ${1} decides with ${2}": "Shai-Hulud liikkuu ${0} ruutua, ${1} päättää kortilla ${2}"
 }

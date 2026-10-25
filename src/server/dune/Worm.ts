@@ -265,9 +265,16 @@ function rollDie(game: IGame, worm: WormData): void {
   worm.direction = wormDirection(game.board, worm.spaceId, worm.roll);
 }
 
-export function moveWorm(game: IGame, worm: WormData, distance: number): void {
+export function moveWorm(game: IGame, worm: WormData, distance: number, chooser?: IPlayer): void {
   const path = wormPath(game.board, worm.spaceId, worm.direction, distance);
-  game.log('Shai-Hulud moves ${0} space(s)', (b) => b.number(path.length));
+  // Who chose and why (Jens 25 Oct 2026): the weakest player with their TR, or the owner of the Thumper card
+  if (chooser === undefined) {
+    game.log('Shai-Hulud moves ${0} space(s)', (b) => b.number(path.length));
+  } else if (worm.thumper === chooser.id) {
+    game.log('Shai-Hulud moves ${0} space(s), ${1} decides with ${2}', (b) => b.number(path.length).player(chooser).cardName(CardName.THUMPER));
+  } else {
+    game.log('Shai-Hulud moves ${0} space(s), ${1} decides with ${2} TR', (b) => b.number(path.length).player(chooser).number(chooser.terraformRating));
+  }
   const levies: Array<PendingLevy> = [];
   for (const space of path) {
     const levy = crossSpace(game, space, worm.spared);
@@ -318,7 +325,7 @@ export function distanceInput(game: IGame, worm: WormData): OrOptions {
     const end = path.length === 0 ? worm.spaceId : path[path.length - 1].id;
     return new SelectOption(message('${0} space(s): to ${1}', (b) => b.number(path.length).rawString(arrakisCoordinate(layoutOf(game.board), end))), 'Move')
       .andThen(() => {
-        moveWorm(game, worm, distance);
+        moveWorm(game, worm, distance, worm.chooser === undefined ? undefined : game.getPlayerById(worm.chooser as IPlayer['id']));
         return undefined;
       });
   });

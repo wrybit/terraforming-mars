@@ -497,5 +497,7 @@
   "bottom right": "오른쪽 아래",
   "bottom left": "왼쪽 아래",
   "left": "왼쪽",
-  "top left": "왼쪽 위"
+  "top left": "왼쪽 위",
+  "Shai-Hulud moves ${0} space(s), ${1} decides with ${2} TR": "샤이 훌루드가 ${0}칸 이동합니다. 영향력 ${2}의 ${1}이(가) 정했습니다",
+  "Shai-Hulud moves ${0} space(s), ${1} decides with ${2}": "샤이 훌루드가 ${0}칸 이동합니다. ${1}이(가) ${2}(으)로 정했습니다"
 }

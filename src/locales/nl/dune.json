@@ -484,5 +484,7 @@
   "bottom right": "rechtsonder",
   "bottom left": "linksonder",
   "left": "links",
-  "top left": "linksboven"
+  "top left": "linksboven",
+  "Shai-Hulud moves ${0} space(s), ${1} decides with ${2} TR": "Shai-Hulud trekt ${0} veld(en), ${1} beslist met ${2} invloed",
+  "Shai-Hulud moves ${0} space(s), ${1} decides with ${2}": "Shai-Hulud trekt ${0} veld(en), ${1} beslist met ${2}"
 }

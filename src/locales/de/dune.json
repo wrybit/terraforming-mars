@@ -488,5 +488,7 @@
   "bottom right": "rechts unten",
   "bottom left": "links unten",
   "left": "links",
-  "top left": "links oben"
+  "top left": "links oben",
+  "Shai-Hulud moves ${0} space(s), ${1} decides with ${2} TR": "Shai-Hulud zieht ${0} Feld(er), so will es ${1} mit ${2} Einfluss",
+  "Shai-Hulud moves ${0} space(s), ${1} decides with ${2}": "Shai-Hulud zieht ${0} Feld(er), so will es ${1} mit ${2}"
 }

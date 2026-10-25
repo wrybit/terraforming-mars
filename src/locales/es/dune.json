@@ -491,5 +491,7 @@
   "bottom right": "abajo a la derecha",
   "bottom left": "abajo a la izquierda",
   "left": "a la izquierda",
-  "top left": "arriba a la izquierda"
+  "top left": "arriba a la izquierda",
+  "Shai-Hulud moves ${0} space(s), ${1} decides with ${2} TR": "Shai-Hulud avanza ${0} casilla(s), lo decide ${1} con ${2} de influencia",
+  "Shai-Hulud moves ${0} space(s), ${1} decides with ${2}": "Shai-Hulud avanza ${0} casilla(s), lo decide ${1} con ${2}"
 }

@@ -495,5 +495,7 @@
   "bottom right": "jobbra le",
   "bottom left": "balra le",
   "left": "balra",
-  "top left": "balra fel"
+  "top left": "balra fel",
+  "Shai-Hulud moves ${0} space(s), ${1} decides with ${2} TR": "Shai-Hulud ${0} mezőt halad, ${1} dönt ${2} befolyással",
+  "Shai-Hulud moves ${0} space(s), ${1} decides with ${2}": "Shai-Hulud ${0} mezőt halad, ${1} dönt a(z) ${2} révén"
 }

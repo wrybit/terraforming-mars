@@ -497,5 +497,7 @@
   "bottom right": "右下",
   "bottom left": "左下",
   "left": "左",
-  "top left": "左上"
+  "top left": "左上",
+  "Shai-Hulud moves ${0} space(s), ${1} decides with ${2} TR": "シャイー・フルードが${0}マス進む。影響力${2}の${1}が決めた",
+  "Shai-Hulud moves ${0} space(s), ${1} decides with ${2}": "シャイー・フルードが${0}マス進む。${1}が${2}で決めた"
 }
