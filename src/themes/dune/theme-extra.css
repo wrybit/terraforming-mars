@@ -582,6 +582,8 @@ html.theme-dune .card-container.card-scroll-area .card-content {
      cannot scroll would still take the wheel and the page would not scroll over the card (Jens 21 Oct 2026) */
   overflow: hidden !important;
   scrollbar-width: none;
+  /* The card has its own scrollbar (CardScrollbar.vue): keep the app's overlay scrollbar away, else two bars show */
+  --overlay-scrollbar: none;
   /* German words are long and the column is narrow: hyphenate instead of large gaps (needs html lang, main.ts) */
   hyphens: auto;
   hyphenate-limit-chars: 8 4 3;
