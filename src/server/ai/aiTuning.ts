@@ -110,6 +110,8 @@ export type AiTuning = {
   standardProjectRestraint: number,
   /** M€ a card play gives up per M€ above the cheapest playable hand card (cheapFirst.ts); 0 = off. */
   cheapFirst: number,
+  /** Card bonus of a board space as a drawn card × this (spaceValue.ts); 0 = flat 3 M€. */
+  boardCardBonus: number,
   /** Requirement outlook of a card missing tags: base − step × missing tags (requirementOutlook.ts). */
   tagOutlookBase: number,
   tagOutlookStep: number,
@@ -356,6 +358,7 @@ export const BASELINE_TUNING: AiTuning = {
   // Round 137: back to 2 M€ +1.18 VP (z +1.69), cards +0.20 – 2 and 5 play as many cards, 2 scores more.
   standardProjectRestraint: 2,
   cheapFirst: 0,
+  boardCardBonus: 0,
   tagOutlookBase: 0.85,
   tagOutlookStep: 0.15,
   // Round 109: money now only (0) +1.74 (z +2.80) against one generation of income; two generations −0.70.
@@ -862,6 +865,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   cheapFirst01: {cheapFirst: 0.1},
   cheapFirst025: {cheapFirst: 0.25},
   cheapFirst05: {cheapFirst: 0.5},
+  // Card spaces on the board valued like a drawn card instead of 3 M€.
+  boardCards05: {boardCardBonus: 0.5},
+  boardCards1: {boardCardBonus: 1},
   buyStrictest: {buyMargin: 3},
   buyMargin2: {buyMargin: 2},
   buyMargin5: {buyMargin: 5},
