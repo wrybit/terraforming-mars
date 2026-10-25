@@ -2,7 +2,8 @@
   <!-- A Kanly move right on the war field card (KanlyBattleCard slot): opens it below the card in the Kanly tab
        (DuneMovePanel.vue, duneMoves.ts); a second tap closes it. A normal app button (AppButton) with the cost as the
        M€ coin inside, like "Buy [2] for (6)" (Jens, 20 Oct 2026). While the move is not offered it is greyed out and
-       the reason stands below it; only for a player. -->
+       the reason stands below it; only for a player. With `actionTab` the move opens its tab of the action menu
+       instead: its input lives in the content, the Kanly tab top right only shows the battle (Jens, 25 Oct 2026). -->
   <div v-if="isPlayer" class="kanly-move">
     <AppButton :title="label" :counts="counts" :disabled="!offered" :disableOnServerBusy="false"
       :class="['kanly-move-button', {'kanly-move-button--open': isOpen}]" @click="toggle"/>
@@ -16,6 +17,7 @@ import {PlayerInputModel} from '@/common/models/PlayerInputModel';
 import {vueRoot} from '@/client/components/vueRoot';
 import AppButton from '@/client/components/common/AppButton.vue';
 import {ButtonCountPart} from '@/client/components/common/buttonCount';
+import {requestActionTab} from '@/client/components/actionTabRequest';
 import {closeMove, isMoveOffered, openDuneMove, openMove} from './duneMoves';
 
 export default defineComponent({
@@ -41,6 +43,11 @@ export default defineComponent({
       type: String,
       default: undefined,
     },
+    // The move has its own tab in the action menu (room for its input): the button opens that tab
+    actionTab: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     isPlayer(): boolean {
@@ -53,7 +60,7 @@ export default defineComponent({
       return isMoveOffered(this.waitingFor, [{title: this.moveTitle}]);
     },
     isOpen(): boolean {
-      return openDuneMove.tab === 'kanly' && openDuneMove.path[0]?.title === this.moveTitle;
+      return !this.actionTab && openDuneMove.tab === 'kanly' && openDuneMove.path[0]?.title === this.moveTitle;
     },
     counts(): ReadonlyArray<ButtonCountPart> {
       return this.cost === undefined ? [] : [{kind: 'megacredits', value: this.cost}];
@@ -61,7 +68,9 @@ export default defineComponent({
   },
   methods: {
     toggle(): void {
-      if (this.isOpen) {
+      if (this.actionTab) {
+        requestActionTab(this.moveTitle);
+      } else if (this.isOpen) {
         closeMove();
       } else {
         openMove('kanly', [{title: this.moveTitle}]);

@@ -2,9 +2,10 @@
   <!-- Kanly (Dune module F): the war field of this generation (always a tile, KanlyBattleCard), every player's garrison
        and the rules as a short list below -->
   <div class="dune-kanly" data-test="dune-kanly">
-    <!-- The moves sit on the war field card, their input opens right below it (Jens, 19 Oct 2026) -->
+    <!-- The moves sit on the war field card; opening Kanly opens its input right below it (Jens, 19 Oct 2026), sending
+         Sardaukar opens its tab of the action menu in the content (Jens, 25 Oct 2026) -->
     <KanlyBattleCard :kanly="kanly" :players="players" :spaces="spaces" :board="board">
-      <KanlyMoveButton v-if="kanly.battle !== undefined" :moveTitle="JOIN_KANLY_TITLE" label="Send Sardaukar" :reason="joinReason"/>
+      <KanlyMoveButton v-if="kanly.battle !== undefined" :moveTitle="JOIN_KANLY_TITLE" label="Send Sardaukar" :reason="joinReason" actionTab/>
       <KanlyMoveButton v-else-if="!kanly.foughtThisGeneration" :moveTitle="OPEN_KANLY_TITLE" label="Open Kanly" :cost="OPEN_KANLY_COST"
         :reason="openReason"/>
     </KanlyBattleCard>

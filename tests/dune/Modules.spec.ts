@@ -100,7 +100,10 @@ describe('Dune modules B, D, E, F', () => {
       amount.cb(2);
       expect(kanly.battle?.troops[player1.id]).eq(2);
       // Only one battle per generation
-      expect(duneActions(player1).options.map(titleOf).some((title) => title.startsWith('Open Kanly'))).is.false;
+      const afterOpening = DuneExpansion.actions(player1);
+      expect(afterOpening === undefined || !cast(afterOpening, OrOptions).options.map(titleOf).some((title) => title.startsWith('Open Kanly'))).is.true;
+      // Sending more Sardaukar has its own action tab (Jens, 25 Oct 2026)
+      expect(tabActions(player1).options.map(titleOf)).includes('Send Sardaukar to the war field');
       kanly.battle!.troops[player2.id] = 2;
       resolveBattle(game, kanly);
       expect(space.player).eq(player2);

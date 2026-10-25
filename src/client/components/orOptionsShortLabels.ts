@@ -25,6 +25,7 @@ const SHORT_LABELS: Readonly<Record<string, string>> = {
   'Use CEO once per game action': 'CEO action',
   // Dune expansion: moves with their own tab (common/dune/duneActionTitles.ts)
   'Bazaar: buy ${0} for ${1} M€': 'Bazaar',
+  'Send Sardaukar to the war field': 'Send Sardaukar',
   'Undo last action': 'Undo',
   // Initial selection (SelectInitialCards, titles from common/inputs/SelectInitialCards.ts)
   'Select corporation': 'Corporation',
@@ -86,6 +87,7 @@ const EXPANSION_TAB_TONES: Readonly<Record<string, OptionTone>> = {
   'Send a delegate in an area (from lobby)': 'colonies',
   'CHOAM': 'dune',
   'Bazaar: buy ${0} for ${1} M€': 'dune',
+  'Send Sardaukar to the war field': 'dune',
 };
 
 // Custom button texts for individual options in the action menu (server delivers e.g. only "Pass");

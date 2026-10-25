@@ -167,10 +167,19 @@ function joinInput(player: IPlayer, data: KanlyData): PlayerInput | undefined {
   });
 }
 
-/** Kanly actions of the action menu */
+/** Kanly actions of the action menu, in the Dune group */
 export function kanlyActions(player: IPlayer, data: KanlyData): Array<PlayerInput> {
-  return [recruitInput(player, data), openInput(player, data), joinInput(player, data)]
+  return [recruitInput(player, data), openInput(player, data)]
     .filter((input): input is PlayerInput => input !== undefined);
+}
+
+/**
+ * Kanly actions with an action tab of their own: sending Sardaukar needs room for its amount, so its input sits in the
+ * content and not in the Kanly tab top right (Jens, 25 Oct 2026)
+ */
+export function kanlyTabActions(player: IPlayer, data: KanlyData): Array<PlayerInput> {
+  const join = joinInput(player, data);
+  return join === undefined ? [] : [join];
 }
 
 /** End of generation: the majority takes the tile over, a tie leaves it with the owner; all troops are spent */

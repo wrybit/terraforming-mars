@@ -12,7 +12,7 @@ import {VictoryPointsBreakdownBuilder} from '../game/VictoryPointsBreakdownBuild
 import {BazaarData, bazaarModel, bazaarTabActions, buyInput, initializeBazaar, slideAndRefill} from './Bazaar';
 import {WormData, distanceInput, rollWorm, wormChooser, wormModel, wormStart} from './Worm';
 import {levyInput} from './WormLevy';
-import {KanlyData, initializeKanly, kanlyActions, kanlyModel, resolveBattle} from './Kanly';
+import {KanlyData, initializeKanly, kanlyActions, kanlyModel, kanlyTabActions, resolveBattle} from './Kanly';
 import {SmugglingData, chargeSuspicion, closeExchange, initializeSmuggling, openExchange, smugglingModel} from './Smuggling';
 import {ChoamData, choamModel, initializeChoam, returnOffers} from './Choam';
 import {choamExchangeActions, choamExchangeTabActions, choamParts} from './ChoamExchange';
@@ -255,7 +255,7 @@ export class DuneExpansion {
   }
 
   /**
-   * Module actions that need room for their input – CHOAM offer, smuggling, buying a bazaar ware – as options of their
+   * Module actions that need room for their input – CHOAM offer, smuggling, buying a bazaar ware, sending Sardaukar – as options of their
    * own in the action menu, so the client shows each as an action tab (Jens, 19 Oct 2026)
    */
   public static tabActions(player: IPlayer): Array<PlayerInput> {
@@ -266,6 +266,7 @@ export class DuneExpansion {
     return [
       ...choamExchangeTabActions(player, data),
       ...(data.bazaar === undefined ? [] : bazaarTabActions(player, data.bazaar)),
+      ...(data.kanly === undefined ? [] : kanlyTabActions(player, data.kanly)),
     ];
   }
 
