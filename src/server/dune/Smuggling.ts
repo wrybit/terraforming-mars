@@ -157,7 +157,7 @@ export function raid(player: IPlayer): void {
     return;
   }
   for (const opponent of player.game.players) {
-    if (opponent !== player && suspicionOf(data, opponent) >= 3) {
+    if (opponent !== player && suspicionOf(data, opponent) >= COSTLY_SUSPICION) {
       opponent.decreaseTerraformRating(1, {log: true});
     }
   }

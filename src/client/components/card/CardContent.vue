@@ -1,10 +1,11 @@
 <template>
   <div class="card-content" :class="corporationClass">
     <CardRequirementsComponent v-if="requirements !== undefined && requirements.length > 0" :requirements="requirements"/>
+    <CardDescription v-if="!isCorporation && hasDescription && leadsWithDescription" :item="metadata.description"/>
     <CardRenderData v-if="firstRow !== undefined" :renderData="firstRow" />
     <CardDescription v-if="isCorporation && hasDescription" :item="metadata.description"/>
     <CardRenderData v-if="remainingRows !== undefined" :renderData="remainingRows" />
-    <CardDescription v-if="!isCorporation && hasDescription" :item="metadata.description"/>
+    <CardDescription v-if="!isCorporation && hasDescription && !leadsWithDescription" :item="metadata.description"/>
     <div :class="'bottom-padding-' + bottomPadding" v-if="bottomPadding"></div>
   </div>
 </template>
@@ -20,6 +21,7 @@ import {CardRequirementDescriptor} from '@/common/cards/CardRequirementDescripto
 import {ICardRenderRoot, isICardRenderRoot, ItemType} from '@/common/cards/render/Types';
 import {activeTheme} from '@/client/theme/applyTheme';
 import {joinAlternativeRows} from './alternativeRows';
+import {isDescription} from '@/common/cards/render/CardRenderDescription';
 
 export default defineComponent({
   name: 'CardContent',
@@ -54,6 +56,10 @@ export default defineComponent({
     hasDescription(): boolean {
       const description = this.metadata.description;
       return description !== undefined && (typeof(description) !== 'string' || description.length > 0);
+    },
+    // The text comes first when it is the only text of the card (CardRenderDescription.lead)
+    leadsWithDescription(): boolean {
+      return isDescription(this.metadata.description) && this.metadata.description.lead === true;
     },
     // Dune: alternatives in one row with a slash instead of OR (alternativeRows.ts); Mars keeps the rows of the card
     rows(): ReadonlyArray<Array<ItemType>> {

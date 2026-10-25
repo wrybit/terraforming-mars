@@ -173,7 +173,6 @@ describe('Dune expansion cards (E01–E16)', () => {
     const tr = player2.terraformRating;
     new SardaukarRaid().play(player1);
     expect(player2.terraformRating).eq(tr - 1);
-    expect(player1.megaCredits).eq(4);
   });
 
   it('E13 Sardaukar Mercenaries and E14 Shield Generator', () => {

@@ -5,6 +5,7 @@
   <CardRenderEffectBoxComponent v-else-if="isEffect(componentData)" :effectData="componentData" />
   <CardRenderTileComponent v-else-if="isTile(componentData)" :item="componentData" />
   <CardDescription v-else-if="isDescription(componentData)" :item="componentData" />
+  <CardEnvyTrack v-else-if="isEnvyTrack(componentData)" :item="componentData" />
   <CardRenderCorpBoxComponent v-else-if="isCorpBox(componentData)" :rows="componentData.rows" :label="corpBoxLabel" />
   <div v-else>n/a</div>
 </template>
@@ -21,6 +22,7 @@ import {
   isICardRenderCorpBoxEffect,
   isICardRenderCorpBoxEffectAction,
   isICardRenderEffect,
+  isICardRenderEnvyTrack,
   isICardRenderItem,
   isICardRenderProductionBox,
   isICardRenderSymbol,
@@ -34,6 +36,7 @@ import CardRenderCorpBoxComponent from '@/client/components/card/CardRenderCorpB
 import CardRenderTileComponent from '@/client/components/card/CardRenderTileComponent.vue';
 import CardDescription from '@/client/components/card/CardDescription.vue';
 import CardRenderSymbolComponent from '@/client/components/card/CardRenderSymbolComponent.vue';
+import CardEnvyTrack from '@/client/components/dune/CardEnvyTrack.vue';
 
 export default defineComponent({
   name: 'CardRowComponent',
@@ -51,6 +54,7 @@ export default defineComponent({
     CardRenderCorpBoxComponent,
     CardRenderTileComponent,
     CardDescription,
+    CardEnvyTrack,
   },
   computed: {
     corpBoxLabel(): string {
@@ -72,6 +76,7 @@ export default defineComponent({
       return typeof componentData === 'string' || componentData instanceof String || isCardRenderDescription(this.componentData);
     },
     isTile: isICardRenderTile,
+    isEnvyTrack: isICardRenderEnvyTrack,
     isProduction: isICardRenderProductionBox,
     isCorpBoxEffect: isICardRenderCorpBoxEffect,
     isCorpBoxAction: isICardRenderCorpBoxAction,

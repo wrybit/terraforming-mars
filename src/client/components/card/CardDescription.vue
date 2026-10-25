@@ -1,8 +1,8 @@
 <template>
   <!-- Marked-up variant is already translated: tm-has-i18n keeps a v-i18n of a parent from translating (and trimming) it again -->
-  <div v-if="parts === undefined" class="card-description" :class="alignClasses">(<span v-i18n>{{ description }}</span>)</div>
+  <div v-if="parts === undefined" class="card-description" :class="alignClasses">{{ open }}<span v-i18n>{{ description }}</span>{{ close }}</div>
   <div v-else class="card-description card-description-split" :class="[alignClasses, compactClass]" tm-has-i18n="true">
-    <div v-if="parts.main.length > 0">(<CardTextSegments :segments="parts.main"/>)</div>
+    <div v-if="parts.main.length > 0">{{ open }}<CardTextSegments :segments="parts.main"/>{{ close }}</div>
     <div v-if="parts.note !== undefined" class="card-asterisk-note">
       <span class="card-asterisk-note-star">*</span>
       <CardTextSegments :segments="parts.note"/>
@@ -79,8 +79,21 @@ export default defineComponent({
           classes.push('card-description-aligned');
         }
         classes.push('card-description-align--' + this.item.align);
+        if (this.item.lead === true) {
+          classes.push('card-description-lead');
+        }
       }
       return classes;
+    },
+    // Parentheses mark an explanation of the icons; a leading text is the only text, so it has none
+    leads(): boolean {
+      return isDescription(this.item) && this.item.lead === true;
+    },
+    open(): string {
+      return this.leads ? '' : '(';
+    },
+    close(): string {
+      return this.leads ? '' : ')';
     },
     description(): string {
       return isDescription(this.item) ? this.item.text : String(this.item);

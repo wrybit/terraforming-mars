@@ -3,7 +3,7 @@ import {CardRenderSymbol} from './CardRenderSymbol';
 import {Size} from '../../../common/cards/render/Size';
 import {CardRenderItemType} from '../../../common/cards/render/CardRenderItemType';
 import {TileType} from '../../../common/TileType';
-import {ICardRenderCorpBoxAction, ICardRenderCorpBoxEffect, ICardRenderCorpBoxEffectAction, ICardRenderEffect, ICardRenderProductionBox, ICardRenderRoot, ICardRenderTile, ItemType, isICardRenderItem, isICardRenderSymbol} from '../../../common/cards/render/Types';
+import {ICardRenderCorpBoxAction, ICardRenderCorpBoxEffect, ICardRenderCorpBoxEffectAction, ICardRenderEffect, ICardRenderEnvyTrack, ICardRenderProductionBox, ICardRenderRoot, ICardRenderTile, ItemType, isICardRenderItem, isICardRenderSymbol} from '../../../common/cards/render/Types';
 import {CardRenderSymbolType} from '../../../common/cards/render/CardRenderSymbolType';
 import {AltSecondaryTag} from '../../../common/cards/render/AltSecondaryTag';
 import {CardResource} from '../../../common/CardResource';
@@ -51,6 +51,11 @@ class CardRenderProductionBox implements ICardRenderProductionBox {
     f(builder);
     return builder.build();
   }
+}
+
+class CardRenderEnvyTrack implements ICardRenderEnvyTrack {
+  public readonly is = 'envy-track';
+  constructor(public readonly hitFrom: number, public readonly influenceLoss: number) {}
 }
 
 class CardRenderTile implements ICardRenderTile {
@@ -601,6 +606,11 @@ abstract class Builder<T> {
   public get br(): this {
     this._data.push([]);
     return this;
+  }
+
+  /** Dune: the envy track, every opponent from step `hitFrom` on loses `influenceLoss` TR */
+  public envyTrack(hitFrom: number, influenceLoss: number): this {
+    return this._appendToRow(new CardRenderEnvyTrack(hitFrom, influenceLoss));
   }
 
   public tile(tile: TileType, hasSymbol: boolean = false, isAres: boolean = false): this {

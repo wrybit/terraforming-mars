@@ -132,4 +132,15 @@ export function isICardRenderItem(item: ItemType): item is ICardRenderItem {
   return typeof(item) !== 'string' && item?.is === 'item';
 }
 
+/** Dune: the envy track on a card, the steps from `hitFrom` on marked as hit, each opponent there loses `influenceLoss` TR */
+export interface ICardRenderEnvyTrack extends CardComponent {
+  readonly is: 'envy-track';
+  hitFrom: number;
+  influenceLoss: number;
+}
+
+export function isICardRenderEnvyTrack(item: ItemType): item is ICardRenderEnvyTrack {
+  return typeof(item) !== 'string' && item?.is === 'envy-track';
+}
+
 export type ItemType = CardComponent | string | undefined;

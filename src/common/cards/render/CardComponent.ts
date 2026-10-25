@@ -7,7 +7,9 @@ export type ComponentType =
   'corp-box-effect-action' |
   'symbol' |
   'item' |
-  'tile';
+  'tile' |
+  // Dune: the envy track with the steps a card hits (client/components/dune/CardEnvyTrack.vue)
+  'envy-track';
 
 export interface CardComponent {
   is: ComponentType;

@@ -1,0 +1,105 @@
+// Envy track on a card (CardEnvyTrack.vue, Sardaukar Raid; canvas RazziaVarianten B2, Jens 25 Oct 2026).
+// Proximity: the steps of a group lie 4 px apart, the two groups 14 px; bracket and icon hang close under their group.
+@card-envy-step-width: 30px;
+@card-envy-step-gap: 4px;
+
+html.theme-dune {
+  .card-envy-track {
+    // Sizes as drawn: the icon rows of a card are zoomed (theme-extra.css --card-row-zoom), the track is not
+    zoom: calc(1 / var(--card-row-zoom, 1.2));
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .card-envy-track__steps {
+    display: flex;
+    gap: @card-envy-step-gap;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .card-envy-track__step {
+    width: @card-envy-step-width;
+    height: 26px;
+    border-radius: 5px;
+    display: grid;
+    place-items: center;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1;
+    color: #fffdf8;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.35);
+  }
+
+  // Free steps: pale sand, they are not hit
+  .card-envy-track__steps--free .card-envy-track__step {
+    background: #e8dbbf;
+    color: #8a7350;
+    text-shadow: none;
+    box-shadow: inset 0 0 0 1px rgba(120, 90, 50, 0.25);
+  }
+
+  // Hit steps in the edge colours of the envy track on the board (dune_board.less)
+  .card-envy-track__step--3 { background: @dune-envy-edge-3; }
+  .card-envy-track__step--4 { background: @dune-envy-edge-4; }
+  .card-envy-track__step--5 { background: @dune-envy-edge-5; }
+
+  .card-envy-track__hit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .card-envy-track__bracket {
+    display: block;
+    width: 100%;
+    height: 18px;
+    fill: none;
+    stroke: #c33; // red of the opponent outline (.red-outline, cards.less)
+    stroke-width: 2.5px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  // Only the icon sits under the middle of the bracket: the minus lies outside the flow, left of it
+  .card-envy-track__loss {
+    position: relative;
+    display: flex;
+    gap: 4px;
+  }
+
+  .card-envy-track__minus {
+    position: absolute;
+    right: calc(100% + 7px);
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1;
+    color: #241608;
+  }
+
+  .card-envy-track__influence {
+    display: block;
+    width: 44px;
+    height: 44px;
+  }
+}
+
+// The leading text stands above the track; the track fills the room below it, in the middle
+html.theme-dune .card-container .card-content:has(> .card-description-lead) {
+  > .card-description-lead {
+    margin-top: 6px;
+  }
+
+  > .card-rows {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-bottom: 14px;
+  }
+}
