@@ -170,6 +170,8 @@ export class Game implements IGame, Logger {
   public pathfindersData: PathfindersData | undefined;
   public underworldData: UnderworldData = UnderworldExpansion.initializeGameWithoutUnderworld();
   public duneData: DuneData | undefined = undefined;
+  // The log line "Mars is terraformed" was written: the log shows the banner exactly there (LogPanel.vue)
+  public terraformedLogged = false;
   public devToolsTiles: Array<SpaceId> = [];
   public inTurmoil: boolean = false;
 
@@ -549,6 +551,7 @@ export class Game implements IGame, Logger {
       tradeEmbargo: this.tradeEmbargo,
       underworldData: this.underworldData,
       duneData: this.duneData,
+      terraformedLogged: this.terraformedLogged,
       devToolsTiles: this.devToolsTiles,
       undoCount: this.undoCount,
       venusScaleLevel: this.venusScaleLevel,
@@ -598,6 +601,14 @@ export class Game implements IGame, Logger {
     return this.claimedMilestones.some(
       (claimedMilestone) => claimedMilestone.milestone.name === milestone.name,
     );
+  }
+
+  // Fork: the moment the last global parameter is reached, once per game (Jens, 25 Oct 2026)
+  private logWhenTerraformed(): void {
+    if (!this.terraformedLogged && this.marsIsTerraformed()) {
+      this.terraformedLogged = true;
+      this.log('Mars is terraformed');
+    }
   }
 
   public marsIsTerraformed(): boolean {
@@ -1275,6 +1286,7 @@ export class Game implements IGame, Logger {
     grantGlobalParameterTrackBonuses(player, 'oxygen', this.oxygenLevel, newOxygenLevel);
 
     this.oxygenLevel = newOxygenLevel;
+    this.logWhenTerraformed();
 
     AresHandler.ifAres(this, (aresData) => {
       AresHandler.onOxygenChange(this, aresData);
@@ -1332,6 +1344,7 @@ export class Game implements IGame, Logger {
     }
 
     this.venusScaleLevel = newValue;
+    this.logWhenTerraformed();
 
     return steps;
   }
@@ -1366,6 +1379,7 @@ export class Game implements IGame, Logger {
     grantGlobalParameterTrackBonuses(player, 'temperature', this.temperature, newTemperature);
 
     this.temperature = newTemperature;
+    this.logWhenTerraformed();
 
     AresHandler.ifAres(this, (aresData) => {
       AresHandler.onTemperatureChange(this, aresData);
@@ -1658,6 +1672,7 @@ export class Game implements IGame, Logger {
     }
 
     this.addTile(player, space, {tileType: TileType.OCEAN});
+    this.logWhenTerraformed();
 
     if (this.phase !== Phase.SOLAR) {
       TurmoilHandler.onGlobalParameterIncrease(player, GlobalParameter.OCEANS);
@@ -1866,6 +1881,8 @@ export class Game implements IGame, Logger {
       game.underworldData = d.underworldData;
     }
     game.duneData = d.duneData;
+    // Games saved before the log line: already terraformed means it is too late to write it at the right place
+    game.terraformedLogged = d.terraformedLogged ?? game.marsIsTerraformed();
     game.devToolsTiles = d.devToolsTiles ?? [];
     DuneExpansion.attach(game);
     game.passedPlayers = new Set<PlayerId>(d.passedPlayers);

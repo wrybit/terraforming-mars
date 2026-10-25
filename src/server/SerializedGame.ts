@@ -73,6 +73,7 @@ export type SerializedGame = {
     undoCount: number;
     underworldData: UnderworldData;
     duneData?: DuneData;
+    terraformedLogged?: boolean;
     devToolsTiles?: Array<SpaceId>;
     venusScaleLevel: number;
     verminInEffect: boolean;

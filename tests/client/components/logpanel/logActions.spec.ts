@@ -96,6 +96,17 @@ describe('logActions', () => {
     expect(row.action?.effects).deep.eq([{resource: 'scheme', amount: 5, label: 'Spice Baron'}]);
   });
 
+  it('puts the terraformed banner where it happened and keeps the action collecting its effects above it', () => {
+    const rows = groupLogMessages([
+      message('${0} played ${1}', player('red'), card(CardName.ALGAE)),
+      message('Mars is terraformed'),
+      message('${0} gained ${1}:i:tr:', player('red'), raw('1')),
+      message('${0} played ${1}', player('blue'), card(CardName.ALGAE)),
+    ]);
+    expect(rows.map((row) => row.type)).deep.eq(['action', 'terraformed', 'action']);
+    expect(actionAt(rows, 0).effects).deep.eq([{resource: 'tr', amount: 1}]);
+  });
+
   it('keeps lines that set off effects (bazaar, copied production) as text and puts their effects on the right', () => {
     const rows = groupLogMessages([
       message('${0} bought ${1} at the bazaar for ${2} M€', player('red'), text('Title of Honour'), raw('20')),

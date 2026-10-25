@@ -48,6 +48,8 @@
           <!-- One row per action (card, action, standard project ...) with its effects; unrecognised messages stay text lines -->
           <template v-for="(row, rowIndex) in visibleRows(section)" :key="rowIndex">
             <div v-if="row.type === 'phase'" class="log-phase-line" aria-hidden="true"></div>
+            <!-- Terraformed: the banner stays where it happened, also after later actions (Jens, 25 Oct 2026) -->
+            <TerraformedBanner v-else-if="row.type === 'terraformed'" :playerId="viewModel.id"/>
             <!-- Analysis game: hovering an AI row shows rating buttons behind its text (touch: double-tap; key I) -->
             <LogMessageComponent v-else-if="row.type === 'message'" :data-log-row="rowKey(section, row)" :message="row.message" :viewModel="viewModel"
               :follows="row.follows === true" :action="row.action" :class="{'log-row--ai-rateable': isRateable(section, row)}"
@@ -60,8 +62,8 @@
             <LogActionRow v-else :data-log-row="rowKey(section, row)" :row="row" :viewModel="viewModel"/>
             <LogAiRatings v-if="analysisGame && row.type !== 'phase'" :entries="rowRatings(section, row)"/>
           </template>
-          <!-- Terraformed: the banner sits in the log below the newest row, two rows high (Jens, 25 Oct 2026) -->
-          <TerraformedBanner v-if="viewModel.game.isTerraformed && section === sections[sections.length - 1]" :playerId="viewModel.id"/>
+          <!-- Games saved before the server logged the moment: the banner below the newest row -->
+          <TerraformedBanner v-if="showsLateTerraformedBanner && section === sections[sections.length - 1]" :playerId="viewModel.id"/>
         </section>
       </div>
       </div>
@@ -116,7 +118,7 @@ import {activeSectionIndex, edgeFadesOf, findScrollContainer, HEADER_SCROLL_GAP,
 import LogMessageComponent from '@/client/components/logpanel/LogMessageComponent.vue';
 import LogActionRow from '@/client/components/logpanel/LogActionRow.vue';
 import TerraformedBanner from '@/client/components/TerraformedBanner.vue';
-import {groupLogMessages, LogAction, LogRow} from '@/client/components/logpanel/logActions';
+import {groupLogMessages, LogAction, LogRow, TERRAFORMED_MESSAGE} from '@/client/components/logpanel/logActions';
 import {hasActionSummary} from '@/client/components/logpanel/LogActionEffects.vue';
 import {Color} from '@/common/Color';
 import {CardName} from '@/common/cards/CardName';
@@ -853,6 +855,11 @@ export default defineComponent({
     },
   },
   computed: {
+    // Terraformed, but the log has no line for the moment (games saved before the server wrote it)
+    showsLateTerraformedBanner(): boolean {
+      return this.viewModel.game.isTerraformed &&
+        !this.sections.some((section) => section.messages.some((message) => message.message === TERRAFORMED_MESSAGE));
+    },
     // Cards in play per player: older logs explain corporation effects with it (logActions addLegacyCauses)
     tableauByPlayer(): Partial<Record<Color, ReadonlyArray<CardName>>> {
       return Object.fromEntries(this.viewModel.players.map((player) => [player.color, player.tableau.map((card) => card.name)]));

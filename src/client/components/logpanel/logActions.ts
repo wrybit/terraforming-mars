@@ -61,7 +61,12 @@ export type LogRow =
   | {type: 'research', entries: Array<{player: Color, amount: number}>, indexes: Array<number>}
   // follows: a consequence of the action row above (same player, e.g. the cards a card let them draw) – indented with ↳
   | {type: 'message', message: LogMessage, indexes: Array<number>, follows?: boolean, action?: LogAction}
-  | {type: 'phase', indexes: Array<number>};
+  | {type: 'phase', indexes: Array<number>}
+  // The moment the planet is terraformed: the banner stands here in the log (LogPanel.vue)
+  | {type: 'terraformed', indexes: Array<number>};
+
+// Logged by the server once, when the last global parameter is reached (Game.ts)
+export const TERRAFORMED_MESSAGE = 'Mars is terraformed';
 
 const PLAYED_WITH_PAYMENT = '${0} played ${1} [ ${2} ]';
 
@@ -677,6 +682,11 @@ export function groupLogMessages(messages: ReadonlyArray<LogMessage>, context: L
 
   messages.forEach((message, index) => {
     const template = templateOf(message);
+    // Terraformed: the banner gets a row of its own; the open action keeps collecting its effects above it
+    if (template === TERRAFORMED_MESSAGE) {
+      rows.push({type: 'terraformed', indexes: [index]});
+      return;
+    }
     // Card purchase at the start of a generation: one summary row
     if (!actionsStarted && template === '${0} ${1} ${2} card(s)' && value(message, 1) === 'bought') {
       const player = firstPlayer(message);
