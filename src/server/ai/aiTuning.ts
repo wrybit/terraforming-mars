@@ -338,7 +338,8 @@ export const BASELINE_TUNING: AiTuning = {
   policyInSimulation: 1,
   policyModelSet: 0,
   // Round 112: 3 +1.43 (z +2.35; base +1.10, venus +1.76), 6 +1.41 (z +2.00).
-  playPolicyWeight: 3,
+  // Round 138: 12 – cards played +1.76 (z +4.99), VP +0.91 (z +1.25): adopted by the card-throughput rule.
+  playPolicyWeight: 12,
   // Round 122 check: without draw engine boost and needs pursuit +1.24 VP (z +1.96), cards played equal – reverted.
   needsPursuit: 0,
   // Round 123: own drawn cards 2–4 M€ plus half draw engine boost – cards drawn +1.2 (z +3.2), played +0.7 (z +2.4), VP ±0.
