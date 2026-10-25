@@ -203,18 +203,20 @@ html.tm-mobile .dune-fit {
   border: 1px solid rgba(228, 210, 174, 0.2);
 }
 
-// The suspicion rises like the heat of the desert: dark warm fills, edges from sand to deep red (variant A, Jens, 19 Oct 2026)
+// The suspicion rises like the heat of the desert: warm fills, edges from sand to deep red (variant A, Jens, 19 Oct 2026).
+// Brighter, with a soft glow in the colour of the step and a drop shadow, so the track stands out from the box (Jens 25 Oct 2026)
 .dune-smuggling-step(@fill, @edge) {
-  background: @fill;
+  background: linear-gradient(180deg, lighten(@fill, 9%), @fill);
   border-color: @edge;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5), 0 0 12px fade(@edge, 30%), inset 0 1px 0 rgba(255, 255, 255, 0.16);
 }
 
-.dune-smuggling__step--0 { .dune-smuggling-step(#4a3a2a, #a28a68); }
-.dune-smuggling__step--1 { .dune-smuggling-step(#51402a, #b4924a); }
-.dune-smuggling__step--2 { .dune-smuggling-step(#5a4220, #c99a3a); }
-.dune-smuggling__step--3 { .dune-smuggling-step(#6a3a18, #e0822f); }
-.dune-smuggling__step--4 { .dune-smuggling-step(#6a2a16, #d2582b); }
-.dune-smuggling__step--5 { .dune-smuggling-step(#5e1c16, #b8322a); }
+.dune-smuggling__step--0 { .dune-smuggling-step(#6b5638, #d8bb8a); }
+.dune-smuggling__step--1 { .dune-smuggling-step(#755a30, #e6bb62); }
+.dune-smuggling__step--2 { .dune-smuggling-step(#80601f, #f2be45); }
+.dune-smuggling__step--3 { .dune-smuggling-step(#91501c, #ff9a3c); }
+.dune-smuggling__step--4 { .dune-smuggling-step(#8e381c, #f8693a); }
+.dune-smuggling__step--5 { .dune-smuggling-step(#80261f, #ec4a3c); }
 
 .dune-smuggling__level {
   max-width: 100%;
