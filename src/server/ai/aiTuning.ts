@@ -114,6 +114,10 @@ export type AiTuning = {
   boardCardBonus: number,
   /** Weight of tags as a stock for later requirements and open tag milestones (tagDemand.ts); 0 = off. */
   tagDemand: number,
+  /** 1: energy-spending cards valued by the energy they can expect, draw value included (energyOutlook.ts); 0 = off. */
+  energyOutlook: number,
+  /** Weight of the opponent's engine advantage in the award swing (awardEngineSwing.ts); 0 = off. */
+  awardEngineSwing: number,
   /** Requirement outlook of a card missing tags: base − step × missing tags (requirementOutlook.ts). */
   tagOutlookBase: number,
   tagOutlookStep: number,
@@ -370,6 +374,8 @@ export const BASELINE_TUNING: AiTuning = {
   cheapFirst: 0.5,
   boardCardBonus: 1,
   tagDemand: 0,
+  energyOutlook: 0,
+  awardEngineSwing: 0,
   tagOutlookBase: 0.85,
   tagOutlookStep: 0.15,
   // Round 109: money now only (0) +1.74 (z +2.80) against one generation of income; two generations −0.70.
@@ -888,6 +894,10 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Round 140: building tags while Builder is open, then science/power for later requirements (Jens' rule).
   tagDemand05: {tagDemand: 0.5},
   tagDemand1: {tagDemand: 1},
+  // Human games: Physics Complex, Development Center, Bio Printing Facility, Hi-Tech Lab played with 0 energy production.
+  energyOutlook: {energyOutlook: 1},
+  // Human games: awards funded with a narrow lead against a stronger engine (more draw/income), then overtaken.
+  awardEngine: {awardEngineSwing: 1},
   buyStrictest: {buyMargin: 3},
   buyMargin2: {buyMargin: 2},
   buyMargin5: {buyMargin: 5},

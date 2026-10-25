@@ -23,6 +23,7 @@ import {cardPrior} from './cardPriors';
 import {isTracingDecision, traceOptions} from './decisionTrace';
 import {spaceName} from './spaceName';
 import {tuningOf} from './aiTuning';
+import {orderResourceTargets, resourceChoiceKind} from './resourceTarget';
 
 // Fast, rule-based answers for inputs the AI cannot try out on a game copy: follow-up questions
 // in the middle of an action (where to place a tile, whom to target, ...). Also used to finish
@@ -63,6 +64,14 @@ function productionToLose(input: SelectProductionToLose, player: IPlayer): Input
 // Gaining a resource of free choice: most valuable first.
 const RESOURCE_PREFERENCE: ReadonlyArray<keyof Units> = ['titanium', 'plants', 'steel', 'megacredits', 'heat', 'energy'];
 
+/** Resource count named in a card-choice title ("Select card to add ${0} ${1}"), 1 when none is given. */
+function resourceAmountOf(input: PlayerInput): number {
+  const title = input.title;
+  const raw = typeof title === 'string' ? /\d+/.exec(title)?.[0] : title.data.find((datum) => Number.isFinite(Number(datum.value)))?.value;
+  const amount = Number(raw ?? 1);
+  return Number.isFinite(amount) && amount > 0 ? amount : 1;
+}
+
 export function quickResponse(input: PlayerInput, player: IPlayer): InputResponse {
   if (input instanceof OrOptions) {
     // Prefer the first real option (usually "do it"), skip undo and "do nothing" options.
@@ -84,7 +93,10 @@ export function quickResponse(input: PlayerInput, player: IPlayer): InputRespons
   if (input instanceof SelectCard) {
     // Cards that score VP (e.g. resource targets) first, then the statistically strongest.
     const candidates = input.cards.filter((_card, index) => input.config.enabled?.[index] !== false);
-    const sorted = [...candidates].sort((a, b) =>
+    // Adding or removing resources: by the VP the step brings or costs (resourceTarget.ts), not by the VP flag.
+    const resourceKind = resourceChoiceKind(titleOf(input));
+    const amount = resourceAmountOf(input);
+    const sorted = resourceKind !== undefined ? orderResourceTargets(candidates, player, resourceKind, amount) : [...candidates].sort((a, b) =>
       (Number(b.victoryPoints !== undefined) - Number(a.victoryPoints !== undefined)) || (cardPrior(b.name) - cardPrior(a.name)));
     // Aufdecken (Public Plans) bringt 1 M€ je Karte und kostet nichts – also alles zeigen statt des Minimums 0.
     const wanted = titleOf(input).includes('reveal') ? input.config.max : input.config.min;
