@@ -373,7 +373,8 @@ export const BASELINE_TUNING: AiTuning = {
   // by the card-throughput rule.
   cheapFirst: 0.5,
   boardCardBonus: 1,
-  tagDemand: 0,
+  // Round 140: 0.5 cards played +0.72 (z +1.87), VP +0.26 – adopted by the card-throughput rule (1: −0.97, cards −0.71).
+  tagDemand: 0.5,
   energyOutlook: 0,
   awardEngineSwing: 0,
   tagOutlookBase: 0.85,
@@ -894,6 +895,7 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Round 140: building tags while Builder is open, then science/power for later requirements (Jens' rule).
   tagDemand05: {tagDemand: 0.5},
   tagDemand1: {tagDemand: 1},
+  noTagDemand: {tagDemand: 0},
   // Human games: Physics Complex, Development Center, Bio Printing Facility, Hi-Tech Lab played with 0 energy production.
   energyOutlook: {energyOutlook: 1},
   // Human games: awards funded with a narrow lead against a stronger engine (more draw/income), then overtaken.

@@ -9,8 +9,9 @@ import {Research} from '../../src/server/cards/base/Research';
 describe('AI tag demand', () => {
   afterEach(() => clearPlayerTunings());
 
-  it('is off in the baseline', () => {
+  it('is off without the rule', () => {
     const [, player] = testGame(2);
+    setPlayerTuning(player.id, 'noTagDemand');
     expect(tagDemandValue(player, new Research())).to.eq(0);
   });
 
