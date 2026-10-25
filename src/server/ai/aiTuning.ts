@@ -351,7 +351,8 @@ export const BASELINE_TUNING: AiTuning = {
   nextCardDiscount: 0,
   // Round 135: 2 M€ +1.33 VP (z +1.84), cards played +0.44 – adopted; 5 M€ cards +0.85 (z +2.82) at −0.27 VP.
   // Round 136: 5 M€ cards played +0.56 (z +1.67), VP −0.07 – adopted by the card-throughput rule (round 135: +0.85).
-  standardProjectRestraint: 5,
+  // Round 137: back to 2 M€ +1.18 VP (z +1.69), cards +0.20 – 2 and 5 play as many cards, 2 scores more.
+  standardProjectRestraint: 2,
   tagOutlookBase: 0.85,
   tagOutlookStep: 0.15,
   // Round 109: money now only (0) +1.74 (z +2.80) against one generation of income; two generations −0.70.
