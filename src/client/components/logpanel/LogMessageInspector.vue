@@ -18,6 +18,7 @@ import {LogMessage} from '@/common/logs/LogMessage';
 import {ViewModel} from '@/common/models/PlayerModel';
 import CardPanel from '@/client/components/logpanel/CardPanel.vue';
 import {LogAction} from '@/client/components/logpanel/logActions';
+import {CursorPosition, floatingPlacement, PanelSize} from '@/client/components/logpanel/floatingPlacement';
 
 defineProps<{
   viewModel: ViewModel;
@@ -31,32 +32,11 @@ const emit = defineEmits<{
 const selectedMessage = ref<LogMessage | undefined>(undefined);
 // Grouped action row of the message, if any: its effects show under the card
 const selectedAction = ref<LogAction | undefined>(undefined);
-// Mouse position in window coordinates; the hover preview sits at the top right of it and follows it
-type CursorPosition = {x: number, y: number};
-type PanelSize = {width: number, height: number};
-
-// Gap between the mouse pointer and the preview's nearest corner
-const CURSOR_GAP = 16;
-// Minimum distance of the preview from the window edges
-const VIEWPORT_MARGIN = 8;
-
 // undefined = pinned by click (touch), otherwise hover preview following the mouse
 const previewPosition = ref<CursorPosition | undefined>(undefined);
 // Measured size of the preview: needed to keep it inside the window (several cards stack upwards)
 const panelSize = ref<PanelSize | undefined>(undefined);
 const cardPanel = ref<InstanceType<typeof CardPanel> | undefined>(undefined);
-
-// Top right of the pointer; if there is no room, flip to the left of it or push it down
-function placement(cursor: CursorPosition, size: PanelSize): {left: number, top: number} {
-  let left = cursor.x + CURSOR_GAP;
-  if (left + size.width > window.innerWidth - VIEWPORT_MARGIN) {
-    left = Math.max(VIEWPORT_MARGIN, cursor.x - CURSOR_GAP - size.width);
-  }
-  const top = Math.min(
-    Math.max(VIEWPORT_MARGIN, cursor.y - CURSOR_GAP - size.height),
-    window.innerHeight - VIEWPORT_MARGIN - size.height);
-  return {left, top: Math.max(VIEWPORT_MARGIN, top)};
-}
 
 const previewStyle = computed(() => {
   const cursor = previewPosition.value;
@@ -68,7 +48,7 @@ const previewStyle = computed(() => {
   if (size === undefined) {
     return {left: '0px', top: '0px', visibility: 'hidden'};
   }
-  const {left, top} = placement(cursor, size);
+  const {left, top} = floatingPlacement(cursor, size);
   return {left: left + 'px', top: top + 'px'};
 });
 

@@ -226,3 +226,23 @@ body {
   height: 500px;
   margin-bottom: 30px;
 }
+
+// Goal card of a milestone, award or agenda row (GoalPreview.vue), floating at the mouse like the log's card preview;
+// fixed because the details sit in a scrolling column, no pointer events so the rows keep the hover
+.goal-preview {
+  position: fixed; // left and top are set by GoalPreview.vue
+  z-index: 100;
+  width: 240px;
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.7));
+  pointer-events: none;
+
+  .dune-schemes__agenda {
+    width: 230px;
+    aspect-ratio: 63 / 88;
+  }
+
+  .ma-block {
+    margin: 0;
+    cursor: default;
+  }
+}

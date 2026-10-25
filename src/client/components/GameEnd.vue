@@ -167,13 +167,16 @@
                 <div class="game-end-column-vp">&nbsp;</div>
                 <div class="game-end-column-text">&nbsp;</div>
               </div>
-              <div v-for="v in p.victoryPointsBreakdown.detailsMilestones" :key="v.message">
+              <!-- Milestones, awards and agendas show their goal card the same way (GoalPreview.vue) -->
+              <div v-for="v in p.victoryPointsBreakdown.detailsMilestones" :key="v.message"
+                @mouseenter="goalHovered(milestoneGoal(v), $event)" @mousemove="goalMoved" @mouseleave="goalLeft" @click="goalTapped(milestoneGoal(v), $event)">
                 <div :class="detailRowClass(v.victoryPoint)">
                   <div class="game-end-column-vp">{{v.victoryPoint}}</div>
                   <div class="game-end-column-text">{{translateMilestoneDetails(v)}}</div>
                 </div>
               </div>
-              <div v-for="v in p.victoryPointsBreakdown.detailsAwards" :key="v.message">
+              <div v-for="v in p.victoryPointsBreakdown.detailsAwards" :key="v.message"
+                @mouseenter="goalHovered(awardGoal(v), $event)" @mousemove="goalMoved" @mouseleave="goalLeft" @click="goalTapped(awardGoal(v), $event)">
                 <div :class="detailRowClass(v.victoryPoint)">
                   <div class="game-end-column-vp">{{v.victoryPoint}}</div>
                   <div class="game-end-column-text">{{translateAwardDetails(v)}}</div>
@@ -190,7 +193,8 @@
                 <div class="game-end-column-vp">&nbsp;</div>
                 <div class="game-end-column-text">&nbsp;</div>
               </div>
-              <div v-for="v in p.victoryPointsBreakdown.detailsSchemes ?? []" :key="v.agenda">
+              <div v-for="v in p.victoryPointsBreakdown.detailsSchemes ?? []" :key="v.agenda"
+                @mouseenter="goalHovered(agendaGoal(p.color, v), $event)" @mousemove="goalMoved" @mouseleave="goalLeft" @click="goalTapped(agendaGoal(p.color, v), $event)">
                 <div :class="detailRowClass(v.victoryPoint)">
                   <div class="game-end-column-vp">{{v.victoryPoint}}</div>
                   <div class="game-end-column-text">{{translateSchemeDetail(v)}}</div>
@@ -245,6 +249,7 @@
           <!-- Card preview of the victory point details: in the body, so no column (backdrop filter, overflow) holds it -->
           <Teleport to="body">
             <LogMessageInspector ref="cardInspector" :viewModel="participant"/>
+            <GoalPreview ref="goalPreview"/>
           </Teleport>
         </div>
       </div>
@@ -293,6 +298,7 @@ import {CardName} from '@/common/cards/CardName';
 import {LogMessage} from '@/common/logs/LogMessage';
 import {LogMessageType} from '@/common/logs/LogMessageType';
 import LogMessageInspector from '@/client/components/logpanel/LogMessageInspector.vue';
+import GoalPreview, {DetailGoal} from '@/client/components/gameend/GoalPreview.vue';
 import {GlobalParameter} from '@/common/GlobalParameter';
 import {getGlobalParameterMaximums} from '@/common/boards/GlobalParameterMaximums';
 import {MIN_OXYGEN_LEVEL, MIN_TEMPERATURE, MIN_VENUS_SCALE} from '@/common/constants';
@@ -480,6 +486,7 @@ export default defineComponent({
     GameEndChartTabs,
     ColumnResizeHandle,
     RowResizeHandle,
+    GoalPreview,
   },
   mounted() {
     document.title = gameDocumentTitle({game: this.game, thisPlayer: this.participant.thisPlayer}, '🏁');
@@ -519,6 +526,41 @@ export default defineComponent({
       const message = this.cardMessage(name);
       if (message !== undefined && !this.canHover()) {
         this.cardInspector()?.pinPreview(message, {x: event.clientX, y: event.clientY});
+      }
+    },
+    goalPreview(): InstanceType<typeof GoalPreview> | undefined {
+      return this.$refs.goalPreview as InstanceType<typeof GoalPreview> | undefined;
+    },
+    // "Claimed ${0} milestone": the milestone is the only argument
+    milestoneGoal(data: MADetail): DetailGoal | undefined {
+      const name = data.messageArgs?.[0];
+      return name === undefined ? undefined : {kind: 'milestone', name};
+    },
+    // "${0} place for ${1} award (funded by ${2})": the award is the second argument
+    awardGoal(data: MADetail): DetailGoal | undefined {
+      const name = data.messageArgs?.[1];
+      return name === undefined ? undefined : {kind: 'award', name};
+    },
+    // The agenda with the player's final value (everybody's agendas are open after the game)
+    agendaGoal(color: Color, data: SchemeDetail): DetailGoal {
+      const agendas = this.game.dune?.schemes?.players.find((entry) => entry.color === color)?.agendas;
+      const agenda = agendas?.find((entry) => entry.name === data.agenda) ?? {name: data.agenda, value: 0, level: data.level};
+      return {kind: 'agenda', agenda};
+    },
+    goalHovered(goal: DetailGoal | undefined, event: MouseEvent): void {
+      if (goal !== undefined && this.canHover()) {
+        this.goalPreview()?.preview(goal, {x: event.clientX, y: event.clientY});
+      }
+    },
+    goalMoved(event: MouseEvent): void {
+      this.goalPreview()?.follow({x: event.clientX, y: event.clientY});
+    },
+    goalLeft(): void {
+      this.goalPreview()?.hide();
+    },
+    goalTapped(goal: DetailGoal | undefined, event: MouseEvent): void {
+      if (goal !== undefined && !this.canHover()) {
+        this.goalPreview()?.pin(goal, {x: event.clientX, y: event.clientY});
       }
     },
     isWinner(player: PublicPlayerModel): boolean {
