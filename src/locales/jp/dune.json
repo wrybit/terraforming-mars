@@ -60,7 +60,6 @@
   "${0} sent ${1} Sardaukar to the war field": "${0}がサーダカー${1}人を戦場へ送りました",
   "${0} holds ${1} in the Kanly": "${0}がカンリーで${1}を守り抜きました",
   "${0} takes ${1} from ${2} in the Kanly": "${0}がカンリーで${2}から${1}を奪いました",
-  "${0} Sardaukar for ${1} ${2}": "サーダカー${0}人（${1} ${2}）",
   "${0} recruited ${1} Sardaukar": "${0}がサーダカー${1}人を徴募しました",
   "A House reached ${0} TR: everybody gives up one agenda": "ある大家が影響力${0}に到達：全員が計略を1つ放棄します",
   "${0} gave up one agenda": "${0}が計略を1つ放棄しました",
@@ -231,8 +230,6 @@
   "CHOAM: withdraw offer ${0}": "CHOAM：オファー${0}を取り下げる",
   "${0} withdrew the CHOAM offer": "${0}がCHOAMのオファーを取り下げた",
   "Your offer": "あなたのオファー",
-  "Recruit: 12 M€, 4 titanium, 6 steel, 5 heat or 6 energy per Sardaukar": "徴募：サーダカー1人につき12ソラリ、スパイス4、プラスチール6、水5または湿気6",
-  "At most 2 Sardaukar per action": "1アクションにつきサーダカー最大2人",
   "Opening a Kanly costs 8 M€ and sends at least 1 Sardaukar": "カンリーの宣言には8ソラリかかり、サーダカーを最低1人送ります",
   "One battle per generation, on an opponent tile": "1世代に1戦、相手のタイルを巡って",
   "End of generation: most Sardaukar on the war field take the tile": "世代の終わり：戦場のサーダカーが最も多い者がタイルを奪う",
@@ -420,5 +417,6 @@
   "−1 step": "−1段階",
   "−${0} steps": "−${0}段階",
   "no penalty": "罰なし",
-  "${0} fought with ${1} Sardaukar in the Kanly": "${0} はカンリーで ${1} 人のサーダカーと戦った"
+  "${0} fought with ${1} Sardaukar in the Kanly": "${0} はカンリーで ${1} 人のサーダカーと戦った",
+  "Recruit: standard project, 12 M€ per Sardaukar": "募集：スタンダードプロジェクト、サーダカー1人につき 12 M€"
 }

@@ -58,7 +58,6 @@
   "${0} sent ${1} Sardaukar to the war field": "${0} hat ${1} Sardaukar aufs Kriegsfeld geschickt",
   "${0} holds ${1} in the Kanly": "${0} hält ${1} im Kanly",
   "${0} takes ${1} from ${2} in the Kanly": "${0} nimmt ${2} im Kanly ${1} ab",
-  "${0} Sardaukar for ${1} ${2}": "${0} Sardaukar für ${1} ${2}",
   "${0} recruited ${1} Sardaukar": "${0} hat ${1} Sardaukar angeworben",
   "A House reached ${0} TR: everybody gives up one agenda": "Ein Haus hat ${0} Einfluss erreicht: Alle geben eine Agenda auf",
   "${0} gave up one agenda": "${0} hat eine Agenda aufgegeben",
@@ -229,8 +228,6 @@
   "CHOAM: withdraw offer ${0}": "CHOAM: Angebot ${0} zurückziehen",
   "${0} withdrew the CHOAM offer": "${0} hat den Pakt zurückgezogen",
   "Your offer": "Dein Angebot",
-  "Recruit: 12 M€, 4 titanium, 6 steel, 5 heat or 6 energy per Sardaukar": "Anwerben: 12 Solari, 4 Spice, 6 Plastahl, 5 Wasser oder 6 Feuchte pro Sardaukar",
-  "At most 2 Sardaukar per action": "Höchstens 2 Sardaukar pro Aktion",
   "Opening a Kanly costs 8 M€ and sends at least 1 Sardaukar": "Kanly eröffnen kostet 8 Solari und schickt mindestens 1 Sardaukar",
   "One battle per generation, on an opponent tile": "Eine Schlacht pro Generation, um ein gegnerisches Plättchen",
   "End of generation: most Sardaukar on the war field take the tile": "Ende der Generation: Die meisten Sardaukar auf dem Kriegsfeld nehmen das Plättchen",
@@ -414,5 +411,6 @@
   "−1 step": "−1 Stufe",
   "−${0} steps": "−${0} Stufen",
   "no penalty": "keine Strafe",
-  "${0} fought with ${1} Sardaukar in the Kanly": "${0} kämpfte mit ${1} Sardaukar im Kanly"
+  "${0} fought with ${1} Sardaukar in the Kanly": "${0} kämpfte mit ${1} Sardaukar im Kanly",
+  "Recruit: standard project, 12 M€ per Sardaukar": "Anwerben: Standard-Projekt, 12 M€ je Sardaukar"
 }

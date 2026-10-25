@@ -74,13 +74,13 @@ describe('Dune modules B, D, E, F', () => {
   });
 
   describe('Kanly (F)', () => {
-    it('recruits Sardaukar with one kind of payment, at most 2 per action', () => {
+    it('recruits only through the standard project – no extra prices in goods, also not for the AI', () => {
       player1.megaCredits = 30;
-      const recruit = cast(option(duneActions(player1), 'Recruit Sardaukar'), OrOptions);
-      expect(recruit.options.map(titleOf)).deep.eq(['1 Sardaukar for 12 M€', '2 Sardaukar for 24 M€']);
-      pick(recruit.options[1]);
-      expect(player1.megaCredits).eq(6);
-      expect(garrisonOf(game.duneData!.kanly!, player1)).eq(2);
+      player1.heat = 20;
+      player1.titanium = 20;
+      const actions = DuneExpansion.actions(player1);
+      const titles = actions instanceof OrOptions ? actions.options.map(titleOf) : [];
+      expect(titles).not.includes('Recruit Sardaukar');
     });
 
     it('lets the majority take the tile over; a tie keeps it with the owner', () => {

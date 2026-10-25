@@ -1,20 +1,16 @@
 import {IGame} from '../IGame';
-import {JOIN_KANLY_TITLE, KANLY_SEND_BUTTON, KANLY_SEND_TITLE, OPEN_KANLY_TITLE, RECRUIT_TITLE} from '../../common/dune/duneActionTitles';
+import {JOIN_KANLY_TITLE, KANLY_SEND_BUTTON, KANLY_SEND_TITLE, OPEN_KANLY_TITLE} from '../../common/dune/duneActionTitles';
 import {battleWinner, isKanlyTargetTile, OPEN_KANLY_COST} from '../../common/dune/kanlyBattle';
 import {IPlayer} from '../IPlayer';
 import {Space} from '../boards/Space';
 import {PlayerId, SpaceId} from '../../common/Types';
 import {Resource} from '../../common/Resource';
-import {OrOptions} from '../inputs/OrOptions';
-import {SelectOption} from '../inputs/SelectOption';
 import {SelectSpace} from '../inputs/SelectSpace';
 import {SelectAmount} from '../inputs/SelectAmount';
 import {PlayerInput} from '../PlayerInput';
-import {message} from '../logs/MessageBuilder';
 import {KanlyModel} from '../../common/dune/DuneModel';
 import {Arrakis61Board} from '../boards/Arrakis61Board';
 import {CardName} from '../../common/cards/CardName';
-import {RESOURCE_LABEL} from './resourceLabels';
 
 // Module F – Kanly, the war field (claude/dune-erweiterung-konzept.md). Battles are dear and rare: at most one per
 // generation, and the one who opens it picks the target – speed beats the biggest army.
@@ -23,7 +19,8 @@ import {RESOURCE_LABEL} from './resourceLabels';
 // 2. Join (action, any number of times): everybody – the owner too – sends Sardaukar from the garrison.
 // 3. End of generation: the most Sardaukar take the tile over (no new placement bonus); on a tie the owner keeps it.
 //    All Sardaukar in the field are spent.
-// Recruiting is a standard action: per Sardaukar one kind of payment, at most 2 per action.
+// Recruiting is the standard project RecruitSardaukarStandardProject: 12 M€ per Sardaukar, the same for everybody –
+// the AI once had extra prices in goods here that human players could not use (Jens, 25 Oct 2026).
 
 export type KanlyData = {
   /** Sardaukar waiting in each player's garrison */
@@ -37,16 +34,8 @@ export type KanlyData = {
   foughtThisGeneration: boolean,
 };
 
-/** Price of one Sardaukar – the player pays one of these */
-export const SARDAUKAR_PRICES: ReadonlyArray<[Resource, number]> = [
-  [Resource.MEGACREDITS, 12],
-  [Resource.TITANIUM, 4],
-  [Resource.STEEL, 6],
-  [Resource.HEAT, 5],
-  [Resource.ENERGY, 6],
-];
-
-export const MAX_RECRUITS_PER_ACTION = 2;
+/** Price of one Sardaukar in M€ (standard project) */
+export const SARDAUKAR_PRICE = 12;
 
 export {OPEN_KANLY_COST};
 
@@ -68,26 +57,6 @@ export function battleTargets(game: IGame, attacker: IPlayer): Array<Space> {
     }
     return isKanlyTargetTile(tile.tileType);
   });
-}
-
-function recruitInput(player: IPlayer, data: KanlyData): OrOptions | undefined {
-  const options: Array<SelectOption> = [];
-  for (const [resource, price] of SARDAUKAR_PRICES) {
-    for (let count = 1; count <= MAX_RECRUITS_PER_ACTION; count++) {
-      const cost = price * count;
-      if (player.stock.get(resource) < cost) {
-        continue;
-      }
-      options.push(new SelectOption(message('${0} Sardaukar for ${1} ${2}', (b) => b.number(count).number(cost).string(RESOURCE_LABEL[resource])), 'Recruit')
-        .andThen(() => {
-          player.game.log('${0} recruited ${1} Sardaukar', (b) => b.player(player).number(count));
-          player.stock.deduct(resource, cost, {log: true});
-          changeGarrison(player, data, count);
-          return undefined;
-        }));
-    }
-  }
-  return options.length === 0 ? undefined : new OrOptions(...options).setTitle(RECRUIT_TITLE);
 }
 
 /**
@@ -169,8 +138,8 @@ function joinInput(player: IPlayer, data: KanlyData): PlayerInput | undefined {
 
 /** Kanly actions of the action menu, in the Dune group */
 export function kanlyActions(player: IPlayer, data: KanlyData): Array<PlayerInput> {
-  return [recruitInput(player, data), openInput(player, data)]
-    .filter((input): input is PlayerInput => input !== undefined);
+  const open = openInput(player, data);
+  return open === undefined ? [] : [open];
 }
 
 /**

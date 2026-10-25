@@ -60,7 +60,6 @@
   "${0} sent ${1} Sardaukar to the war field": "${0} отправил(а) на поле войны сардаукаров: ${1}",
   "${0} holds ${1} in the Kanly": "${0} удерживает ${1} в Канли",
   "${0} takes ${1} from ${2} in the Kanly": "${0} отбирает ${1} у ${2} в Канли",
-  "${0} Sardaukar for ${1} ${2}": "Сардаукары: ${0} за ${1} ${2}",
   "${0} recruited ${1} Sardaukar": "${0} завербовал(а) сардаукаров: ${1}",
   "A House reached ${0} TR: everybody gives up one agenda": "Один из Домов достиг влияния ${0}: все отказываются от одного замысла",
   "${0} gave up one agenda": "${0} отказался(-ась) от одного замысла",
@@ -232,8 +231,6 @@
   "CHOAM: withdraw offer ${0}": "CHOAM: отозвать предложение ${0}",
   "${0} withdrew the CHOAM offer": "${0} отозвал предложение CHOAM",
   "Your offer": "Твоё предложение",
-  "Recruit: 12 M€, 4 titanium, 6 steel, 5 heat or 6 energy per Sardaukar": "Вербовка: 12 соляриев, 4 пряности, 6 пластали, 5 воды или 6 влаги за сардаукара",
-  "At most 2 Sardaukar per action": "Не более 2 сардаукаров за действие",
   "Opening a Kanly costs 8 M€ and sends at least 1 Sardaukar": "Объявить канли стоит 8 соляриев, отправляется минимум 1 сардаукар",
   "One battle per generation, on an opponent tile": "Одна битва за поколение, за тайл противника",
   "End of generation: most Sardaukar on the war field take the tile": "Конец поколения: больше всего сардаукаров на поле войны забирает тайл",
@@ -421,5 +418,6 @@
   "−1 step": "−1 ступень",
   "−${0} steps": "−${0} ступени",
   "no penalty": "без штрафа",
-  "${0} fought with ${1} Sardaukar in the Kanly": "${0} сражался в Канли с ${1} сардаукарами"
+  "${0} fought with ${1} Sardaukar in the Kanly": "${0} сражался в Канли с ${1} сардаукарами",
+  "Recruit: standard project, 12 M€ per Sardaukar": "Найм: стандартный проект, 12 M€ за сардаукара"
 }

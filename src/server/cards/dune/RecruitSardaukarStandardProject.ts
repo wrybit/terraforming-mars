@@ -2,17 +2,16 @@ import {IPlayer} from '../../IPlayer';
 import {CardName} from '../../../common/cards/CardName';
 import {CardRenderer} from '../render/CardRenderer';
 import {StandardProjectCard} from '../StandardProjectCard';
-import {addSardaukar, SARDAUKAR_PRICES} from '../../dune/Kanly';
-import {Resource} from '../../../common/Resource';
+import {addSardaukar, SARDAUKAR_PRICE} from '../../dune/Kanly';
 import {CardResource} from '../../../common/CardResource';
 import {Payment} from '../../../common/inputs/Payment';
 import {payWithLog} from '../../dune/payWithLog';
 
 /** Price in M€ of one Sardaukar (dune/Kanly.ts) */
-const MEGACREDIT_PRICE = SARDAUKAR_PRICES.find(([resource]) => resource === Resource.MEGACREDITS)?.[1] ?? 12;
+const MEGACREDIT_PRICE = SARDAUKAR_PRICE;
 
 // Dune expansion, module F (Kanly): recruiting a Sardaukar as a standard project, so it is found where the other
-// standard projects are (Jens, 19 Oct 2026). Paying with other goods stays in the Dune actions (dune/Kanly.ts).
+// standard projects are (Jens, 19 Oct 2026). The only way to recruit, for human and AI players alike (Jens, 25 Oct 2026).
 export class RecruitSardaukarStandardProject extends StandardProjectCard {
   constructor() {
     super({

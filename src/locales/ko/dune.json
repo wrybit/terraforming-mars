@@ -60,7 +60,6 @@
   "${0} sent ${1} Sardaukar to the war field": "${0}이(가) 사다우카 ${1}명을 전장으로 보냈습니다",
   "${0} holds ${1} in the Kanly": "${0}이(가) 칸리에서 ${1}을(를) 지켜냈습니다",
   "${0} takes ${1} from ${2} in the Kanly": "${0}이(가) 칸리에서 ${2}에게서 ${1}을(를) 빼앗았습니다",
-  "${0} Sardaukar for ${1} ${2}": "사다우카 ${0}명 (${1} ${2})",
   "${0} recruited ${1} Sardaukar": "${0}이(가) 사다우카 ${1}명을 모집했습니다",
   "A House reached ${0} TR: everybody gives up one agenda": "한 가문이 영향력 ${0}에 도달했습니다: 모두 의제 하나를 포기합니다",
   "${0} gave up one agenda": "${0}이(가) 의제 하나를 포기했습니다",
@@ -231,8 +230,6 @@
   "CHOAM: withdraw offer ${0}": "CHOAM: 제안 ${0} 철회",
   "${0} withdrew the CHOAM offer": "${0}이(가) CHOAM 제안을 철회했습니다",
   "Your offer": "내 제안",
-  "Recruit: 12 M€, 4 titanium, 6 steel, 5 heat or 6 energy per Sardaukar": "모집: 사다우카 1명당 12 솔라리, 스파이스 4, 플라스틸 6, 물 5 또는 수분 6",
-  "At most 2 Sardaukar per action": "행동당 사다우카 최대 2명",
   "Opening a Kanly costs 8 M€ and sends at least 1 Sardaukar": "칸리 선포는 8 솔라리가 들며 사다우카를 최소 1명 보냅니다",
   "One battle per generation, on an opponent tile": "세대당 한 번의 전투, 상대 타일을 두고",
   "End of generation: most Sardaukar on the war field take the tile": "세대 종료: 전장에 사다우카가 가장 많은 쪽이 타일을 차지",
@@ -420,5 +417,6 @@
   "−1 step": "−1 단계",
   "−${0} steps": "−${0} 단계",
   "no penalty": "벌칙 없음",
-  "${0} fought with ${1} Sardaukar in the Kanly": "${0}이(가) 칸리에서 사다우카 ${1}명으로 싸웠습니다"
+  "${0} fought with ${1} Sardaukar in the Kanly": "${0}이(가) 칸리에서 사다우카 ${1}명으로 싸웠습니다",
+  "Recruit: standard project, 12 M€ per Sardaukar": "모집: 표준 프로젝트, 사다우카 1명당 12 M€"
 }

@@ -21,8 +21,7 @@ export const BAZAAR_RULES: ReadonlyArray<DuneRule> = [
 ];
 
 export const KANLY_RULES: ReadonlyArray<DuneRule> = [
-  {picture: 'res-sardaukar', text: 'Recruit: 12 M€, 4 titanium, 6 steel, 5 heat or 6 energy per Sardaukar'},
-  {sign: 'tap', text: 'At most 2 Sardaukar per action'},
+  {picture: 'res-sardaukar', text: 'Recruit: standard project, 12 M€ per Sardaukar'},
   {picture: 'coin', text: 'Opening a Kanly costs 8 M€ and sends at least 1 Sardaukar'},
   {sign: 'battle', text: 'One battle per generation, on an opponent tile'},
   {sign: 'flag', text: 'End of generation: most Sardaukar on the war field take the tile'},
