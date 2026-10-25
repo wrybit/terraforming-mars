@@ -363,8 +363,10 @@ export const BASELINE_TUNING: AiTuning = {
   // Round 136: 5 M€ cards played +0.56 (z +1.67), VP −0.07 – adopted by the card-throughput rule (round 135: +0.85).
   // Round 137: back to 2 M€ +1.18 VP (z +1.69), cards +0.20 – 2 and 5 play as many cards, 2 scores more.
   standardProjectRestraint: 2,
-  cheapFirst: 0,
-  boardCardBonus: 0,
+  // Round 139: cheapFirst 0.5 +2.95 VP (z +3.33) – adopted; boardCardBonus 1 cards played +1.10 (z +3.01), VP +0.79 – adopted
+  // by the card-throughput rule.
+  cheapFirst: 0.5,
+  boardCardBonus: 1,
   tagDemand: 0,
   tagOutlookBase: 0.85,
   tagOutlookStep: 0.15,
@@ -872,6 +874,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   cheapFirst01: {cheapFirst: 0.1},
   cheapFirst025: {cheapFirst: 0.25},
   cheapFirst05: {cheapFirst: 0.5},
+  cheapFirst1: {cheapFirst: 1},
+  noCheapFirst: {cheapFirst: 0},
+  noBoardCards: {boardCardBonus: 0},
   // Card spaces on the board valued like a drawn card instead of 3 M€.
   boardCards05: {boardCardBonus: 0.5},
   boardCards1: {boardCardBonus: 1},

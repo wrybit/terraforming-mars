@@ -9,8 +9,9 @@ import {Tardigrades} from '../../src/server/cards/base/Tardigrades';
 describe('AI cheap first', () => {
   afterEach(() => clearPlayerTunings());
 
-  it('is off in the baseline', () => {
+  it('is off without the rule', () => {
     const [, player] = testGame(2);
+    setPlayerTuning(player.id, 'noCheapFirst');
     player.cardsInHand.push(new Research(), new Tardigrades());
     expect(cheapFirstPenalty(player, new Research().name, new Set([new Research().name, new Tardigrades().name]))).to.eq(0);
   });
