@@ -2052,6 +2052,5 @@
   "${0} used the ${1} action to convert ${2}:cr:ware: into ${2}:r:mc:": "${0} usou a ação de ${1} para converter ${2}:cr:ware: em ${2}:r:mc:",
   "All players lose 1:i:tr:.": "Todos os jogadores perdem 1:i:tr:.",
   "Cards played by ${0} cost 1:r:mc: less this generation": "Cartas jogadas por ${0} custam 1:r:mc: a menos nesta geração",
-  "Neutral player received ${0}:r:mc: from ${1} owner (${2})": "O jogador neutro recebeu ${0}:r:mc: do dono de ${1} (${2})",
-  "paid for the card": "pago pela carta"
+  "Neutral player received ${0}:r:mc: from ${1} owner (${2})": "O jogador neutro recebeu ${0}:r:mc: do dono de ${1} (${2})"
 }
