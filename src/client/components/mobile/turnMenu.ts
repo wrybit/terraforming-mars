@@ -7,6 +7,7 @@ import {inputAvailableCount} from '@/client/components/inputAvailableCount';
 import {isUncountedTab} from '@/client/components/uncountedTabs';
 import {displayedOptionIndices} from '@/client/components/orOptionsDisplayed';
 import {GlyphName} from '@/client/components/mobile/mobileGlyphs';
+import {ActionGlyphTone, ActionLook, actionLook} from '@/client/components/actionGlyphs';
 import {endTabHint, fullTabTitle, isEndTab, shortTabLabel, tabButtonLabel, tabButtonTone, tabDisplayOrder, tabHighlighted, titleKey} from '@/client/components/orOptionsShortLabels';
 import {warningDescription} from '@/client/components/warningDescriptions';
 import {tabIntro, TabIntro} from '@/client/components/tabIntro';
@@ -25,7 +26,7 @@ import {isOnRequestTab} from '@/client/components/onRequestTabs';
 export type TurnTileTone = 'success' | 'heat' | 'highlight' | 'danger';
 
 /* Color of the icon tile by game area (classes mb-tile-icon--… in mobile.less). */
-export type TurnTileGlyphTone = 'cards' | 'megacredits' | 'plants' | 'heat' | 'honors' | 'colonies' | 'neutral';
+export type TurnTileGlyphTone = ActionGlyphTone;
 
 /*
  * Actions without their own selection (temperature, greenery, pass, end) ask for confirmation right in the drawer
@@ -76,28 +77,13 @@ export type TurnMenu = {
   onRequest: Array<TurnMenuTile>;
 };
 
-type TileLook = {glyph: GlyphName, glyphTone: TurnTileGlyphTone};
-
-// Icon and color per title key
-const TILE_LOOKS: Readonly<Record<string, TileLook>> = {
-  'Claim a milestone': {glyph: 'milestone', glyphTone: 'honors'},
-  'Convert ${0} plants into greenery': {glyph: 'greenery', glyphTone: 'plants'},
-  'Convert 8 heat into temperature': {glyph: 'temperature', glyphTone: 'heat'},
-  'Convert 6 heat into temperature': {glyph: 'temperature', glyphTone: 'heat'},
-  'Perform an action from a played card': {glyph: 'cardActions', glyphTone: 'cards'},
-  'Play project card': {glyph: 'playCard', glyphTone: 'cards'},
-  'Fund an award (${0} M€)': {glyph: 'award', glyphTone: 'honors'},
-  'Standard projects': {glyph: 'standardProjects', glyphTone: 'megacredits'},
-  'Sell patents': {glyph: 'sellPatents', glyphTone: 'megacredits'},
-  'Trade with a colony tile': {glyph: 'colonyTrade', glyphTone: 'colonies'},
-};
 // Unknown actions (expansions) get a neutral icon so the grid stays uniform
-const DEFAULT_LOOK: TileLook = {glyph: 'more', glyphTone: 'neutral'};
+const DEFAULT_LOOK: ActionLook = {glyph: 'more', glyphTone: 'neutral'};
 const END_TURN = 'End Turn';
 
 function toTile(option: PlayerInputModel, index: number): TurnMenuTile {
   const key = titleKey(option.title);
-  const look: TileLook = TILE_LOOKS[key] ?? DEFAULT_LOOK;
+  const look: ActionLook = actionLook(key) ?? DEFAULT_LOOK;
   const label = shortTabLabel(option.title);
   const count = inputAvailableCount(option);
   // No badge on the trade tabs (uncountedTabs.ts); the detail line still goes by the real count

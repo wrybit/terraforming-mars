@@ -1759,5 +1759,8 @@
   "${0} used the ${1} action to convert ${2}:cr:ware: into ${2}:r:mc:": "${0} использовал действие ${1}, чтобы превратить ${2}:cr:ware: в ${2}:r:mc:",
   "All players lose 1:i:tr:.": "Все игроки теряют 1:i:tr:.",
   "Cards played by ${0} cost 1:r:mc: less this generation": "Карты, сыгранные ${0}, стоят в этом поколении на 1:r:mc: меньше",
-  "Neutral player received ${0}:r:mc: from ${1} owner (${2})": "Нейтральный игрок получил ${0}:r:mc: от владельца ${1} (${2})"
+  "Neutral player received ${0}:r:mc: from ${1} owner (${2})": "Нейтральный игрок получил ${0}:r:mc: от владельца ${1} (${2})",
+  "Prize": "Награда",
+  "Sale": "Продажа",
+  "Temp.": "Темп."
 }

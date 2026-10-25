@@ -1521,5 +1521,7 @@
   "${0} spent 1:r:corruption: to block an attack by ${1}": "${0} besteedde 1:r:corruption: om een aanval van ${1} te blokkeren",
   "${0} sued ${1} who had 0:r:mc:.": "${0} klaagde ${1} aan, die 0:r:mc: had.",
   "${0} used the ${1} action to convert ${2}:cr:ware: into ${2}:r:mc:": "${0} gebruikte de actie van ${1} om ${2}:cr:ware: om te zetten in ${2}:r:mc:",
-  "All players lose 1:i:tr:.": "Alle spelers verliezen 1:i:tr:."
+  "All players lose 1:i:tr:.": "Alle spelers verliezen 1:i:tr:.",
+  "Prize": "Prijs",
+  "Sale": "Verkoop"
 }

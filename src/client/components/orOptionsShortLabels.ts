@@ -40,6 +40,23 @@ const SHORT_LABELS: Readonly<Record<string, string>> = {
   'Place any final greenery from plants': 'Final greenery',
 };
 
+// Shorter labels for a tab bar without room (TabSteps.ts, Jens 25 Oct 2026): first a shorter title, later one word.
+// Values are keys translated in locales/*/; the Dune theme turns "Temperature" into its water store by its terms and
+// "Temp." into its water (src/themes/dune/terms/*.json, exact). Tabs without an entry keep their short label.
+const MEDIUM_LABELS: Readonly<Record<string, string>> = {
+  'Convert 8 heat into temperature': 'Temperature',
+  'Convert 6 heat into temperature': 'Temperature',
+};
+const COMPACT_LABELS: Readonly<Record<string, string>> = {
+  'Play project card': 'Projects',
+  'Fund an award (${0} M€)': 'Prize',
+  'Sell patents': 'Sale',
+  'Convert ${0} plants into greenery': 'Greenery',
+  'Convert 8 heat into temperature': 'Temp.',
+  'Convert 6 heat into temperature': 'Temp.',
+  'Send Sardaukar to the war field': 'Sardaukar',
+};
+
 // Tab label by input type when the title has no short label (WaitingForTabs);
 // the full title is shown there anyway as a heading above the tabs
 const INPUT_TYPE_LABELS: Readonly<Partial<Record<PlayerInputModel['type'], string>>> = {
@@ -65,7 +82,7 @@ const TAB_ICONS: Readonly<Record<string, TabIcon>> = {
   'Pass for this generation': 'end-generation',
 };
 
-// Text next to the icon while the tab bar has room for it (TabIconLabels.ts hides it first when space runs short)
+// Text next to the icon while the tab bar has room for it (TabSteps.ts hides it first when space runs short)
 const TAB_ICON_LABELS: Readonly<Record<TabIcon, string>> = {
   'pass-on': 'Pass turn',
   'end-generation': 'Finish',
@@ -130,6 +147,14 @@ export function shortTabLabel(title: string | Message): string | Message {
   }
   // Parameters (e.g. costs) are preserved
   return {...title, message: SHORT_LABELS[title.message] ?? title.message};
+}
+
+export function mediumTabLabel(title: string | Message): string | undefined {
+  return MEDIUM_LABELS[titleKey(title)];
+}
+
+export function compactTabLabel(title: string | Message): string | undefined {
+  return COMPACT_LABELS[titleKey(title)];
 }
 
 // Full title for the tooltip, also as a copy (see above)
