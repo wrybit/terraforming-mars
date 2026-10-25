@@ -21,7 +21,7 @@
           :class="['smuggle-input__mode', {'smuggle-input__mode--on': mode.id === chosen, 'smuggle-input__mode--blocked': !possible(mode.id)}]"
           :aria-checked="mode.id === chosen" @click="chosen = mode.id">
           {{ $t(mode.label) }}
-          <span v-if="mode.id === 'tribute' && ownBribeCost !== undefined" class="button-count button-count--megacredits">{{ ownBribeCost }}</span>
+          <ButtonCount v-if="mode.id === 'tribute' && ownBribeCost !== undefined" :part="{kind: 'megacredits', value: ownBribeCost, printed: TRIBUTE_PRINTED_COST}"/>
           <!-- A privilege nobody took yet: a small green dot -->
           <span v-if="mode.id === 'privilege' && smuggling?.privilege.takenBy === undefined" class="smuggle-input__news"></span>
         </button>
@@ -32,9 +32,9 @@
           <p class="choam-info choam-lead">
             <template v-for="(line, index) in leadLines" :key="index"><br v-if="index > 0">{{ line }}</template>
           </p>
-          <!-- What a step costs, a line apart from the story above (Jens 25 Oct 2026) -->
-          <p v-if="chosen === 'tribute' && ownEnvy > 0 && ownBribeCost !== undefined" class="choam-info choam-tribute__cost">
-            <MoneyText :text="stepCostText"/>
+          <!-- What a step costs, in the type of the story above and a line apart from it (Jens 25 Oct 2026) -->
+          <p v-if="chosen === 'tribute' && ownEnvy > 0 && ownBribeCost !== undefined" class="choam-info choam-lead choam-tribute__cost">
+            <MoneyText :text="stepCostText" :printed="TRIBUTE_PRINTED_COST"/>
           </p>
           <p v-if="closedReason !== undefined" class="choam-info choam-closed" data-test="choam-closed"><MoneyText :text="closedReason"/></p>
           <template v-else-if="smuggling !== undefined">
@@ -48,7 +48,7 @@
               :choam="choam" :exchange="smuggling.exchange" @choose="choose" @offer="answerOffer"/>
             <template v-else-if="chosen === 'tribute' && tributeInput !== undefined">
               <!-- One row per step the envy can go down: steps, the step reached with its penalty, the price. Rows the
-                   player cannot pay for are greyed out and say what is missing (Jens 25 Oct 2026, variant A) -->
+                   player cannot pay for are only greyed out (Jens 25 Oct 2026, variant A) -->
               <div class="choam-tribute" role="radiogroup" data-test="choam-tribute">
                 <button v-for="row in tributeRows" :key="row.steps" type="button" role="radio"
                   :class="['choam-tribute__row', {'choam-tribute__row--on': row.steps === tributeSteps}]"
@@ -64,8 +64,7 @@
                     <span v-if="penalty(row.level) === 0" class="choam-tribute__free">{{ $t('no penalty') }}</span>
                   </span>
                   <span class="choam-tribute__price">
-                    <span class="button-count button-count--megacredits">{{ row.price }}</span>
-                    <span v-if="row.index === -1 && row.missing > 0" class="choam-tribute__missing"><MoneyText :text="missingText(row.missing)"/></span>
+                    <ButtonCount :part="{kind: 'megacredits', value: row.price, printed: row.steps * TRIBUTE_PRINTED_COST}"/>
                   </span>
                 </button>
               </div>
@@ -83,7 +82,7 @@
 
     <TabPanelFooterSlot v-if="showsave">
       <div class="amount-select__actions">
-        <AppButton hotkey="proceed" type="submit" :title="footerTitle" :disabled="!canSave" @click="saveData"/>
+        <AppButton hotkey="proceed" type="submit" :title="$t(FOOTER[chosen])" :counts="footerCounts" :disabled="!canSave" @click="saveData"/>
       </div>
     </TabPanelFooterSlot>
   </div>
@@ -96,6 +95,8 @@ import TabPanelFooterSlot from '@/client/components/TabPanelFooterSlot.vue';
 import SelectTrade from '@/client/components/SelectTrade.vue';
 import SelectPayment from '@/client/components/SelectPayment.vue';
 import MoneyText from '@/client/components/common/MoneyText.vue';
+import ButtonCount from '@/client/components/common/ButtonCount.vue';
+import {ButtonCountPart} from '@/client/components/common/buttonCount';
 import SmugglingPanel from './SmugglingPanel.vue';
 import DuneRuleCards from './DuneRuleCards.vue';
 import ProphecyPane from './ProphecyPane.vue';
@@ -108,7 +109,7 @@ import {choiceIndex, titleKey} from './choamGraphics';
 import {OrOptionsModel, PlayerInputModel, SelectPaymentModel, SelectTradeModel} from '@/common/models/PlayerInputModel';
 import {PlayerViewModel} from '@/common/models/PlayerModel';
 import {InputResponse, OrOptionsResponse} from '@/common/inputs/InputResponse';
-import {ChoamModel, MAX_SUSPICION, SmugglingModel, suspicionPenalty} from '@/common/dune/DuneModel';
+import {ChoamModel, MAX_SUSPICION, SmugglingModel, TRIBUTE_PRINTED_COST, suspicionPenalty} from '@/common/dune/DuneModel';
 import {
   BRIBE_TITLE, CHOAM_ACCEPT_OFFER_TITLE, CHOAM_OFFER_TITLE, PRIVILEGE_TITLE, PROPHECY_BUY_TITLE, PROPHECY_SELL_TITLE, PROPHECY_WITHDRAW_TITLE, SMUGGLE_TITLE,
 } from '@/common/dune/duneActionTitles';
@@ -140,13 +141,13 @@ const FOOTER: Readonly<Record<Mode, string>> = {guild: 'Trade now', prophecy: 'P
 
 const INFLUENCE_ICON = duneGraphic('res-landsraad');
 
-type TributeRow = {steps: number, level: number, price: number, index: number, missing: number};
+type TributeRow = {steps: number, level: number, price: number, index: number};
 
 type SaveForm = {saveData: () => void};
 
 export default defineComponent({
   name: 'ChoamExchangeInput',
-  components: {AppButton, TabPanelFooterSlot, SelectTrade, SelectPayment, MoneyText, SmugglingPanel, DuneRuleCards, ProphecyPane, PrivilegePane, PactsPane},
+  components: {AppButton, ButtonCount, TabPanelFooterSlot, SelectTrade, SelectPayment, MoneyText, SmugglingPanel, DuneRuleCards, ProphecyPane, PrivilegePane, PactsPane},
   props: {
     playerView: {type: Object as PropType<PlayerViewModel>, required: true},
     playerinput: {type: Object as PropType<OrOptionsModel>, required: true},
@@ -171,6 +172,9 @@ export default defineComponent({
     },
     INFLUENCE_ICON(): string {
       return INFLUENCE_ICON;
+    },
+    TRIBUTE_PRINTED_COST(): number {
+      return TRIBUTE_PRINTED_COST;
     },
     CHOAM_RULES(): typeof CHOAM_RULES {
       return CHOAM_RULES;
@@ -222,7 +226,6 @@ export default defineComponent({
           level: this.ownEnvy - steps,
           price,
           index: this.tributeChoices.find((choice) => choice.steps === steps)?.index ?? -1,
-          missing: price - this.solari,
         };
       });
     },
@@ -235,11 +238,13 @@ export default defineComponent({
     stepCostText(): string {
       return translateTextWithParams('Each step costs ${0} M€.', [String(this.ownBribeCost ?? 0)]);
     },
-    footerTitle(): string {
-      if (this.chosen === 'tribute' && this.tributeInput !== undefined) {
-        return translateTextWithParams('Pay tribute (${0} M€)', [String(this.tributeInput.amount)]);
+    // The tribute's price in the button, with the discount like on a project card
+    footerCounts(): Array<ButtonCountPart> {
+      if (this.chosen !== 'tribute' || this.tributeInput === undefined) {
+        return [];
       }
-      return translateText(FOOTER[this.chosen]);
+      const steps = this.tributeChoices.find((choice) => choice.index === this.tributeIndex)?.steps ?? 1;
+      return [{kind: 'megacredits', value: this.tributeInput.amount, printed: steps * TRIBUTE_PRINTED_COST}];
     },
     solari(): number {
       return this.playerView.thisPlayer.megacredits;
@@ -283,9 +288,6 @@ export default defineComponent({
     },
     stepsLabel(steps: number): string {
       return steps === 1 ? translateText('−1 step') : translateTextWithParams('−${0} steps', [String(steps)]);
-    },
-    missingText(missing: number): string {
-      return translateTextWithParams('${0} M€ missing', [String(missing)]);
     },
     // Whether a move has anything to do now (the switch greys out the others)
     possible(mode: Mode): boolean {

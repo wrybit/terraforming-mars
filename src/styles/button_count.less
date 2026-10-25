@@ -117,3 +117,47 @@ each(@button-count-resources, {
 .money-text__coin--before-text {
   margin-right: 0.3em;
 }
+
+// Discount on a price (ButtonCount.vue `printed`), the geometry of a project card's cost (cards_v2.less, coin 50 px)
+// scaled to the counter coin: the printed coin at 62 % from its left middle, pale and grey; the own coin overlapping it
+// at 27/50; the chevron 12×14 at 23/50, 18/50 over both edges (Jens 25 Oct 2026)
+@discount-coin: 28px;
+
+.button-count-discount {
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+  width: (@discount-coin * 77 / 50);
+  height: @discount-coin;
+  vertical-align: middle;
+
+  .button-count {
+    position: absolute;
+    top: 0;
+    box-sizing: border-box;
+    width: @discount-coin;
+    min-width: 0;
+    height: @discount-coin;
+  }
+}
+
+.button-count-discount__printed {
+  left: 0;
+  transform: scale(0.62);
+  transform-origin: left center;
+  filter: grayscale(70%) brightness(1.1) drop-shadow(0 0 1px black);
+  opacity: 0.85;
+}
+
+.button-count-discount__own {
+  left: (@discount-coin * 27 / 50);
+}
+
+.button-count-discount__chevron {
+  position: absolute;
+  z-index: 3;
+  top: (@discount-coin * 18 / 50);
+  left: (@discount-coin * 23 / 50);
+  width: (@discount-coin * 12 / 50);
+  height: (@discount-coin * 14 / 50);
+}

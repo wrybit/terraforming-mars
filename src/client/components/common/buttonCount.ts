@@ -19,6 +19,8 @@ export type ButtonCountPart = {
   value: number,
   // Income instead of an expense (selling patents): a "+" in front of the M€ graphic
   gain?: boolean,
+  // Price before discounts: shown small and pale with a chevron before the price (like CardCost.vue)
+  printed?: number,
   // Small connecting word in front of the counter ("Buy [3] for [9]"), English key, translated when shown
   word?: string,
 };

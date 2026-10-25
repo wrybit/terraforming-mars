@@ -3,18 +3,22 @@
        The spaces around a coin are margins, not text: v-i18n trims the text nodes of a button ("Pay tribute14") -->
   <template v-for="(part, index) in parts" :key="index">
     <template v-if="part.kind === 'text'">{{ part.text }}</template>
-    <span v-else :class="['button-count', 'button-count--megacredits', 'money-text__coin',
-      {'money-text__coin--after-text': part.spaceBefore, 'money-text__coin--before-text': part.spaceAfter}]">{{ part.value }}</span>
+    <span v-else :class="['money-text__coin', {'money-text__coin--after-text': part.spaceBefore, 'money-text__coin--before-text': part.spaceAfter}]">
+      <ButtonCount :part="{kind: 'megacredits', value: part.value, printed}"/>
+    </span>
   </template>
 </template>
 
 <script setup lang="ts">
 import {computed} from 'vue';
 import {moneyParts} from '@/client/components/common/moneyText';
+import ButtonCount from '@/client/components/common/ButtonCount.vue';
 
 const props = defineProps<{
   // Already translated text
   text: string,
+  // Price before discounts of the amounts in the text: shown like on a project card (ButtonCount.vue)
+  printed?: number,
 }>();
 
 type Part = {kind: 'text', text: string} | {kind: 'coin', value: number, spaceBefore: boolean, spaceAfter: boolean};

@@ -76,6 +76,8 @@ export type KanlyModel = {
  */
 export const MAX_SUSPICION = 5;
 export const COSTLY_SUSPICION = 3;
+/** Printed price of one step of tribute; discounts lower it (server/dune/Smuggling.ts bribeCost) */
+export const TRIBUTE_PRINTED_COST = 10;
 
 /** TR lost at the end of the generation for an envy level: 0 to 2 free, 3 → 1, 4 → 2, 5 → 3 */
 export function suspicionPenalty(level: number): number {

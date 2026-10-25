@@ -818,9 +818,9 @@
 // Tribute (Jens 25 Oct 2026, variant A of _mockups/dune/choam/tribut-stufen.html): the price per step a line below the
 // story, then one row per number of steps – radio, steps, the step reached with its penalty, the price. The rows sit
 // close together and close to the price line, the price line apart from the story (law of proximity).
-.choam-tribute__cost {
+// One line between story and price: the 14 px below the story plus 8 px
+.choam-lead.choam-tribute__cost {
   margin: 8px auto 10px;
-  color: #d8c29c;
 }
 
 .choam-tribute {
@@ -919,20 +919,7 @@
   font-size: 13px;
 }
 
-// The price, and below it what is missing, so a greyed row stays as narrow as the others
 .choam-tribute__price {
   display: inline-flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 2px;
-}
-
-.choam-tribute__missing {
-  color: #e8a08a;
-  font-size: 12px;
-  white-space: nowrap;
-
-  .money-text__coin {
-    transform: scale(0.8);
-  }
+  align-items: center;
 }

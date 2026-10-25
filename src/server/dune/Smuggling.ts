@@ -13,7 +13,7 @@ import {NORMAL_BUY, NORMAL_SELL} from '../../common/dune/smugglingExchange';
 import {ExchangeData, advanceExchange, currentRates, forecastOf, initializeExchange, recordTrade} from './SmugglingExchange';
 import {PlayerInput} from '../PlayerInput';
 import {message} from '../logs/MessageBuilder';
-import {COSTLY_SUSPICION, MAX_SUSPICION, SmugglingModel, suspicionPenalty} from '../../common/dune/DuneModel';
+import {COSTLY_SUSPICION, MAX_SUSPICION, SmugglingModel, TRIBUTE_PRINTED_COST, suspicionPenalty} from '../../common/dune/DuneModel';
 import {CardName} from '../../common/cards/CardName';
 import {payWithLog} from './payWithLog';
 import {PrivilegeData, announcePrivilege, lapsePrivilege, newPrivilege, privilegeModel, renewPrivilege} from './Privilege';
@@ -46,7 +46,7 @@ export type SmugglingData = {
 
 export {MAX_SUSPICION};
 export const MAX_SPICE_PER_DEAL = 5;
-export const BRIBE_COST = 10;
+export const BRIBE_COST = TRIBUTE_PRINTED_COST;
 export const BRIBE_COST_WITH_MARKET = 7;
 /** No upper limit on what a guild trade pays out (the stock limits it) */
 const NO_LIMIT = 9999;
