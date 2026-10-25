@@ -520,9 +520,7 @@
   "Tribute to the great houses: ${0} M€, envy −${1}": "Adó a nagy házaknak: ${0} M€, irigység −${1}",
   "Each step costs ${0} M€.": "Minden fokozat ${0} M€.",
   "Too few M€ for one step: you have ${0} M€": "Egy fokozatra sem elég: neked ${0} M€ van",
-  "Pay tribute (${0} M€)": "Adó fizetése (${0} M€)",
   "−1 step": "−1 fokozat",
   "−${0} steps": "−${0} fokozat",
-  "${0} M€ missing": "hiányzik ${0} M€",
   "no penalty": "nincs büntetés"
 }

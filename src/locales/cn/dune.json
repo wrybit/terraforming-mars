@@ -523,9 +523,7 @@
   "Tribute to the great houses: ${0} M€, envy −${1}": "向各大家族纳贡：${0} M€，嫉恨 −${1}",
   "Each step costs ${0} M€.": "每降一级花费 ${0} M€。",
   "Too few M€ for one step: you have ${0} M€": "M€ 不足以降一级：你只有 ${0} M€",
-  "Pay tribute (${0} M€)": "缴纳贡金（${0} M€）",
   "−1 step": "−1 级",
   "−${0} steps": "−${0} 级",
-  "${0} M€ missing": "还差 ${0} M€",
   "no penalty": "无惩罚"
 }

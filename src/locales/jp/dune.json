@@ -522,9 +522,7 @@
   "Tribute to the great houses: ${0} M€, envy −${1}": "大家への貢ぎ物：${0} M€、妬み−${1}",
   "Each step costs ${0} M€.": "1段階ごとに${0} M€。",
   "Too few M€ for one step: you have ${0} M€": "1段階分にも足りない：所持${0} M€",
-  "Pay tribute (${0} M€)": "貢ぎ物を納める（${0} M€）",
   "−1 step": "−1段階",
   "−${0} steps": "−${0}段階",
-  "${0} M€ missing": "${0} M€不足",
   "no penalty": "罰なし"
 }

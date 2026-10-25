@@ -519,9 +519,7 @@
   "Tribute to the great houses: ${0} M€, envy −${1}": "Vero suurille suvuille: ${0} M€, kateus −${1}",
   "Each step costs ${0} M€.": "Jokainen porras maksaa ${0} M€.",
   "Too few M€ for one step: you have ${0} M€": "Liian vähän M€ yhteen portaaseen: sinulla on ${0} M€",
-  "Pay tribute (${0} M€)": "Maksa vero (${0} M€)",
   "−1 step": "−1 porras",
   "−${0} steps": "−${0} porrasta",
-  "${0} M€ missing": "puuttuu ${0} M€",
   "no penalty": "ei rangaistusta"
 }

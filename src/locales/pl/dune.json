@@ -519,9 +519,7 @@
   "Tribute to the great houses: ${0} M€, envy −${1}": "Trybut dla wielkich rodów: ${0} M€, zawiść −${1}",
   "Each step costs ${0} M€.": "Każdy stopień kosztuje ${0} M€.",
   "Too few M€ for one step: you have ${0} M€": "Za mało M€ na jeden stopień: masz ${0} M€",
-  "Pay tribute (${0} M€)": "Zapłać trybut (${0} M€)",
   "−1 step": "−1 stopień",
   "−${0} steps": "−${0} stopnie",
-  "${0} M€ missing": "brakuje ${0} M€",
   "no penalty": "bez kary"
 }

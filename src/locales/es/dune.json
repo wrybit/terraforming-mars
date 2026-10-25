@@ -516,9 +516,7 @@
   "Tribute to the great houses: ${0} M€, envy −${1}": "Tributo a las grandes casas: ${0} M€, envidia −${1}",
   "Each step costs ${0} M€.": "Cada nivel cuesta ${0} M€.",
   "Too few M€ for one step: you have ${0} M€": "No alcanza para un nivel: tienes ${0} M€",
-  "Pay tribute (${0} M€)": "Pagar tributo (${0} M€)",
   "−1 step": "−1 nivel",
   "−${0} steps": "−${0} niveles",
-  "${0} M€ missing": "faltan ${0} M€",
   "no penalty": "sin castigo"
 }

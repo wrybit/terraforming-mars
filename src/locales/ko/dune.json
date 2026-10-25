@@ -522,9 +522,7 @@
   "Tribute to the great houses: ${0} M€, envy −${1}": "대가문들에 공물: ${0} M€, 시기 −${1}",
   "Each step costs ${0} M€.": "단계마다 ${0} M€.",
   "Too few M€ for one step: you have ${0} M€": "한 단계에도 부족: 보유 ${0} M€",
-  "Pay tribute (${0} M€)": "공물 바치기 (${0} M€)",
   "−1 step": "−1 단계",
   "−${0} steps": "−${0} 단계",
-  "${0} M€ missing": "${0} M€ 부족",
   "no penalty": "벌칙 없음"
 }

@@ -523,9 +523,7 @@
   "Tribute to the great houses: ${0} M€, envy −${1}": "Данък за великите домове: ${0} M€, завист −${1}",
   "Each step costs ${0} M€.": "Всяко ниво струва ${0} M€.",
   "Too few M€ for one step: you have ${0} M€": "Не стига за едно ниво: имаш ${0} M€",
-  "Pay tribute (${0} M€)": "Плати данък (${0} M€)",
   "−1 step": "−1 ниво",
   "−${0} steps": "−${0} нива",
-  "${0} M€ missing": "липсват ${0} M€",
   "no penalty": "без наказание"
 }

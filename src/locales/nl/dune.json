@@ -508,9 +508,7 @@
   "Tribute to the great houses: ${0} M€, envy −${1}": "Schatting aan de grote huizen: ${0} M€, afgunst −${1}",
   "Each step costs ${0} M€.": "Elke trede kost ${0} M€.",
   "Too few M€ for one step: you have ${0} M€": "Te weinig M€ voor één trede: je hebt ${0} M€",
-  "Pay tribute (${0} M€)": "Schatting betalen (${0} M€)",
   "−1 step": "−1 trede",
   "−${0} steps": "−${0} treden",
-  "${0} M€ missing": "${0} M€ tekort",
   "no penalty": "geen straf"
 }
