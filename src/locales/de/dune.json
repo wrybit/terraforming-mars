@@ -63,7 +63,7 @@
   "Accept ${0}: get ${1} ${2} for ${3} ${4}": "${0} annehmen: ${1} ${2} für ${3} ${4} erhalten",
   "Shai-Hulud stirs: the die shows ${0}": "Shai-Hulud regt sich: Der Würfel zeigt ${0}",
   "Open Kanly: choose the war field": "Kanly eröffnen: Kriegsfeld wählen",
-  "${0} declares Kanly on ${1}": "${0} erklärt ${1} Kanly",
+  "${0} declares Kanly on ${1}": "${0} erklärt Kanly auf ${1}",
   "Sardaukar to send to the war field": "Sardaukar, die aufs Kriegsfeld ziehen",
   "Send Sardaukar to the war field": "Sardaukar aufs Kriegsfeld schicken",
   "${0} sent ${1} Sardaukar to the war field": "${0} hat ${1} Sardaukar aufs Kriegsfeld geschickt",

@@ -5,6 +5,8 @@ import {StandardProjectCard} from '../StandardProjectCard';
 import {addSardaukar, SARDAUKAR_PRICES} from '../../dune/Kanly';
 import {Resource} from '../../../common/Resource';
 import {CardResource} from '../../../common/CardResource';
+import {Payment} from '../../../common/inputs/Payment';
+import {payWithLog} from '../../dune/payWithLog';
 
 /** Price in M€ of one Sardaukar (dune/Kanly.ts) */
 const MEGACREDIT_PRICE = SARDAUKAR_PRICES.find(([resource]) => resource === Resource.MEGACREDITS)?.[1] ?? 12;
@@ -30,6 +32,13 @@ export class RecruitSardaukarStandardProject extends StandardProjectCard {
 
   public override canAct(player: IPlayer): boolean {
     return player.game.duneData?.kanly !== undefined && super.canAct(player);
+  }
+
+  /** The row of the standard project first, then its price and the Sardaukar on its right in the log (Jens 25 Oct 2026) */
+  public override payAndExecute(player: IPlayer, payment: Payment): void {
+    this.projectPlayed(player);
+    payWithLog(player, payment);
+    this.actionEssence(player);
   }
 
   actionEssence(player: IPlayer): void {

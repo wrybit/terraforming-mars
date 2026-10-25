@@ -90,11 +90,13 @@ function recruitInput(player: IPlayer, data: KanlyData): OrOptions | undefined {
   return options.length === 0 ? undefined : new OrOptions(...options).setTitle(RECRUIT_TITLE);
 }
 
-/** Sardaukar Mercenaries card: Sardaukar straight into the garrison */
+/**
+ * Sardaukar straight into the garrison (Sardaukar Mercenaries card, recruiting standard project): no line of its own,
+ * the Sardaukar land on the right of the card or standard project row in the log (Jens 25 Oct 2026)
+ */
 export function addSardaukar(player: IPlayer, count: number): void {
   const data = player.game.duneData?.kanly;
   if (data !== undefined) {
-    player.game.log('${0} recruited ${1} Sardaukar', (b) => b.player(player).number(count));
     changeGarrison(player, data, count);
   }
 }
