@@ -1,22 +1,27 @@
-// Spots of the player cubes on one step of the envy track (SmugglingPanel.vue; Jens 25 Oct 2026): spread in x and y
-// over the free area of the step, never on top of each other. The area is split into cells (2 rows, 2 or 3 columns);
-// each cube gets its own cell, picked at random, and a random place inside it. The same step and players always give
-// the same spots, so the cubes do not jump on every update.
+// Spots of the player cubes on one step of the envy track (SmugglingPanel.vue; Jens 25 Oct 2026): spread over the free
+// strip of the step, never on top of each other. Two layouts, the CSS picks one by the width (dune_board.less):
+// - row (wide): the box keeps its height, the cubes lie side by side; each gets its own slot of one cube width (in
+//   random order), and the free width of the strip is shared out at random between the gaps;
+// - grid (narrow, phone): 2 columns and as many rows as needed, each cube in a cell of its own, picked at random,
+//   with a random place inside it; from the third cube on the box grows by a row.
+// The same step and players always give the same spots, so the cubes do not jump on every update.
 
 export type CubeSpot = {
-  // Cell of the cube, counted from the top left of the area
+  // Row: place in the row (0 = leftmost) and the share of the free width left of the cube, 0 … 1
+  slot: number,
+  shift: number,
+  // Grid: cell of the cube and its place inside it, 0 … 1 of the room the cell leaves around the cube
   column: number,
   row: number,
-  // Place inside the cell, 0 … 1 of the room the cell leaves around the cube
   x: number,
+  // Both: place in the height, 0 … 1 of the room left above the cube
   y: number,
 };
 
-export const SPOT_ROWS = 2;
+export const GRID_COLUMNS = 2;
 
-/** Columns of the area: 2 for up to 4 cubes, 3 for more */
-export function spotColumns(count: number): number {
-  return count <= 4 ? 2 : 3;
+export function gridRows(count: number): number {
+  return Math.max(1, Math.ceil(count / GRID_COLUMNS));
 }
 
 // Small seeded random numbers (FNV-1a hash, then xorshift), the same on every client
@@ -34,18 +39,28 @@ function seededRandom(seed: string): () => number {
   };
 }
 
+function shuffled(length: number, random: () => number): Array<number> {
+  const values = Array.from({length}, (_, index) => index);
+  for (let index = values.length - 1; index > 0; index--) {
+    const other = Math.floor(random() * (index + 1));
+    [values[index], values[other]] = [values[other], values[index]];
+  }
+  return values;
+}
+
 /** One spot per key (the player colours of this step, in a fixed order); `seed` names the step */
 export function cubeSpots(keys: ReadonlyArray<string>, seed: string): Array<CubeSpot> {
-  const columns = spotColumns(keys.length);
   const random = seededRandom(seed + ':' + keys.join(','));
-  const cells = Array.from({length: columns * SPOT_ROWS}, (_, index) => index);
-  // Shuffle the cells (Fisher–Yates), then each cube takes the next one
-  for (let index = cells.length - 1; index > 0; index--) {
-    const other = Math.floor(random() * (index + 1));
-    [cells[index], cells[other]] = [cells[other], cells[index]];
-  }
-  return keys.map((_, index) => {
-    const cell = cells[index % cells.length];
-    return {column: cell % columns, row: Math.floor(cell / columns), x: random(), y: random()};
-  });
+  const slots = shuffled(keys.length, random);
+  // Where the free width goes: sorted random cuts, one per cube
+  const shifts = keys.map(() => random()).sort((a, b) => a - b);
+  const cells = shuffled(GRID_COLUMNS * gridRows(keys.length), random);
+  return keys.map((_, index) => ({
+    slot: slots[index],
+    shift: shifts[slots[index]],
+    column: cells[index] % GRID_COLUMNS,
+    row: Math.floor(cells[index] / GRID_COLUMNS),
+    x: random(),
+    y: random(),
+  }));
 }

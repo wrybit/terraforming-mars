@@ -9,7 +9,7 @@
         <span v-if="penalty(level) > 0" class="dune-smuggling__penalty">−{{ penalty(level) }}<img class="dune-smuggling__penalty-icon" :src="INFLUENCE_ICON" alt=""></span>
         <!-- Free steps: nothing to say, the empty line keeps the markers of all steps at the same height -->
         <span v-else class="dune-smuggling__penalty dune-smuggling__penalty--free"></span>
-        <span class="dune-smuggling__markers">
+        <span class="dune-smuggling__markers" :style="{'--grid-rows': gridRows(level)}">
           <!-- Each player's marker as the acrylic cube of their colour, seen from above with its shadow and turned at
                random per step, like the cubes on the board; spread over the step in cells of their own, so two cubes
                never overlap (trackCubeSpots.ts; Jens 25 Oct 2026) -->
@@ -28,9 +28,9 @@ import {PublicPlayerModel} from '@/common/models/PlayerModel';
 import {Color} from '@/common/Color';
 import BoardCube from '@/client/components/common/BoardCube.vue';
 import {duneGraphic} from './duneGraphic';
-import {SPOT_ROWS, cubeSpots, spotColumns} from './trackCubeSpots';
+import {GRID_COLUMNS, cubeSpots, gridRows} from './trackCubeSpots';
 
-// Room a turned cube takes (px): a cell leaves the rest of its size for the random place
+// Room a turned cube takes (px): its slot in the row
 const CUBE_ROOM = 24;
 
 const INFLUENCE_ICON = duneGraphic('res-landsraad');
@@ -74,17 +74,21 @@ export default defineComponent({
     at(level: number) {
       return this.smuggling.suspicion.filter((entry) => entry.level === level);
     },
-    /** Position of a cube in the marker area of its step: its cell plus a random place inside the cell */
+    /** Both layouts of a cube as CSS variables, the CSS picks one by the width (trackCubeSpots.ts, dune_board.less) */
     spotStyle(level: number, index: number): Record<string, string> {
       const entries = this.at(level);
       const spot = cubeSpots(entries.map((entry) => entry.color), 'envy-' + level)[index];
-      const columns = spotColumns(entries.length);
-      const cellWidth = `(100% / ${columns})`;
-      const cellHeight = `(100% / ${SPOT_ROWS})`;
+      const free = `max(0px, 100% - ${entries.length * CUBE_ROOM}px)`;
+      const cellWidth = `(100% / ${GRID_COLUMNS})`;
       return {
-        left: `calc(${spot.column} * ${cellWidth} + ${spot.x.toFixed(3)} * max(0px, ${cellWidth} - ${CUBE_ROOM}px))`,
-        top: `calc(${spot.row} * ${cellHeight} + ${spot.y.toFixed(3)} * max(0px, ${cellHeight} - ${CUBE_ROOM}px))`,
+        '--row-left': `calc(${spot.shift.toFixed(3)} * ${free} + ${spot.slot * CUBE_ROOM}px)`,
+        '--grid-left': `calc(${spot.column} * ${cellWidth} + ${spot.x.toFixed(3)} * max(0px, ${cellWidth} - ${CUBE_ROOM}px))`,
+        '--grid-top': `${spot.row * CUBE_ROOM}px`,
+        '--spot-y': spot.y.toFixed(3),
       };
+    },
+    gridRows(level: number): number {
+      return gridRows(this.at(level).length);
     },
     name(color: Color): string {
       return this.players.find((player) => player.color === color)?.name ?? color;
