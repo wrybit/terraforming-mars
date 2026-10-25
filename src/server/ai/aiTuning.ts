@@ -223,6 +223,8 @@ export type AiTuning = {
   keepAwardStock: number,
   /** > 0: award funding only with a lead of at least this share of the best opponent score (awardFunding.ts). */
   awardFundingLead: number,
+  /** 1: no paid award funding without any lead while award leads still count nothing (awardFunding.ts); 0 = off. */
+  awardPaidEarlyLead: number,
   /**
    * Share of the learned position value (bgaValueModel.ts, two-player games only) in the valuation: 0 = hand-made
    * valuation only, 1 = model only. The model's expected final VP margin is priced like VP now (stateValue.ts).
@@ -497,6 +499,7 @@ export const BASELINE_TUNING: AiTuning = {
   energyAsHeat: 0,
   // Round 76: −0.11 VP (z −0.17), neutral; fixes free award funding at 0 : 0 (tester report).
   awardFundingLead: 0.1,
+  awardPaidEarlyLead: 0,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
@@ -807,6 +810,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   noFollowUpAmounts: {followUpAmounts: 0},
   noAwardLead: {awardFundingLead: 0},
   awardLead20: {awardFundingLead: 0.2},
+  // Human game: paid funding at 0 : 0 in generation 1 (lookahead beat pass by noise).
+  awardPaidEarly: {awardPaidEarlyLead: 1},
   // Control for the opening plan after the cache fix (plans of game copies were shared by tile count).
   noOpeningPlan: {openingPlan: 0},
   // Round 39: selling for milestones and awards −7.0 VP per deal (z −8.4); round 40 tries milestones only.

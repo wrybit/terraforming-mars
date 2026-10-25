@@ -99,7 +99,7 @@ const HAND_LEAD_CONFIDENCE = 0.6;
  * the game: before half the terraforming a lead counts nothing, then it grows to full value
  * at about 75 % (the AI funded awards in generation 1 and later still too early).
  */
-function awardConfidence(progress: number): number {
+export function awardConfidence(progress: number): number {
   return Math.max(0, Math.min(1, (progress - 0.5) / 0.25));
 }
 
