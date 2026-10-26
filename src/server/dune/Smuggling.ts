@@ -267,7 +267,8 @@ export function aiGuildInput(player: IPlayer, data: SmugglingData): SelectTrade 
 
 /**
  * Water at maximum temperature: the AI sells its surplus at the guild for Solari (aiWaterSale.ts), below a penalty
- * like the spice trade. The amount it may offer is limited to the surplus, so a funded water award keeps its lead.
+ * like the spice trade. The amount it may offer is limited to the surplus: water awards and milestones keep what the
+ * opponents can still reach plus a buffer.
  */
 export function aiWaterInput(player: IPlayer, data: SmugglingData): SelectTrade | undefined {
   const surplus = sellableWater(player);
