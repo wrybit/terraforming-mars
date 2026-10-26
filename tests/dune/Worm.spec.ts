@@ -279,6 +279,15 @@ describe('Shai-Hulud (Dune module C)', () => {
     }
   });
 
+  it('lets the worm stay: 0 is always the first choice and keeps it on its space (Jens, 26 Oct 2026)', () => {
+    const worm = wormOf(game);
+    worm.direction = wormDirection(game.board, worm.spaceId, 1);
+    const start = worm.spaceId;
+    expect(wormChoices(game, worm)[0]).deep.eq({distance: 0, path: []});
+    cast(distanceInput(game, worm).options[0], SelectOption).cb(undefined);
+    expect(worm.spaceId).eq(start);
+  });
+
   it('offers each end space once: longer distances that stop at the same space are left out', () => {
     const worm = wormOf(game);
     worm.direction = wormDirection(game.board, worm.spaceId, 1);

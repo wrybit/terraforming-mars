@@ -304,15 +304,16 @@ export function wormDistanceLimit(game: IGame, worm: WormData): number {
 }
 
 /**
- * The distances worth choosing: each one ends on a new space (at the rim or before rock the worm stops early, so longer
- * distances would only repeat the last move). At least one entry, also when the worm cannot move at all.
+ * The distances worth choosing: 0 first – the worm may stay where it is (Jens, 26 Oct 2026) – then each distance that
+ * ends on a new space (at the rim or before rock the worm stops early, so longer distances would only repeat the last
+ * move). Always at least the 0, also when the worm cannot move at all.
  */
 export function wormChoices(game: IGame, worm: WormData): Array<{distance: number, path: Array<Space>}> {
-  const choices: Array<{distance: number, path: Array<Space>}> = [];
+  const choices: Array<{distance: number, path: Array<Space>}> = [{distance: 0, path: []}];
   const max = wormDistanceLimit(game, worm);
   for (let distance = 1; distance <= max; distance++) {
     const path = wormPath(game.board, worm.spaceId, worm.direction, distance);
-    if (choices.length === 0 || path.length > choices[choices.length - 1].path.length) {
+    if (path.length > choices[choices.length - 1].path.length) {
       choices.push({distance, path});
     }
   }

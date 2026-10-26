@@ -9,8 +9,18 @@
         <span class="worm-vegetation__label worm-vegetation__label--distance">{{ $t('Worm path (max.)') }}</span>
         <span class="worm-vegetation__label worm-vegetation__label--track">{{ $t('Oxygen') }}</span>
       </span>
-      <div v-for="section in sections" :key="section.distance"
-        class="worm-vegetation__section">
+      <!-- 0: the worm stays where it is (Jens, 26 Oct 2026); no steps of the track belong to it -->
+      <div class="worm-vegetation__section">
+        <button type="button"
+          :class="['worm-vegetation__distance', {'worm-vegetation__distance--chosen': chosen === 0}]"
+          :disabled="!choosable.includes(0)" :aria-pressed="chosen === 0"
+          @click="$emit('choose', 0)">0</button>
+        <span class="worm-vegetation__hexes worm-vegetation__hexes--none"></span>
+      </div>
+      <template v-for="section in sections" :key="section.distance">
+      <!-- Dashed line between the steps, in the row of the track (Jens, 26 Oct 2026) -->
+      <span class="worm-vegetation__divider" aria-hidden="true"></span>
+      <div class="worm-vegetation__section">
         <!-- The distances are buttons too, for players who pick the number instead of the space on the map (and where
              two targets share a space after a bounce). Beyond the reach of the worm they are disabled (Jens, 25 Oct 2026) -->
         <button type="button"
@@ -24,6 +34,7 @@
           </span>
         </span>
       </div>
+      </template>
     </div>
     <p class="worm-vegetation__caption">{{ caption }}</p>
   </div>

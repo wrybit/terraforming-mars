@@ -13,7 +13,7 @@
         <ArrakisHex v-for="cell in cells" :key="cell.id" :spaceId="cell.id" :space="cell.space" :board="playerView.game.gameOptions.boardName"
           :class="['worm-map__cell', {
             'worm-map__cell--context': cell.role === 'context',
-            'worm-map__cell--way': onChosenWay(cell.id),
+            'worm-map__cell--way': onChosenWay(cell.id) || (cell.role === 'worm' && chosenDistance === 0),
           }]"
           :style="{left: (cell.x - box.left) + 'px', top: (cell.y - box.top) + 'px'}"/>
         <!-- Effect of every space with a tile as a chip, on its own layer so it stays readable on the faded spaces -->
@@ -55,7 +55,7 @@
       </div>
     </div>
     <WormVegetationBar :vegetation="playerView.game.oxygenLevel" :maximum="maximumVegetation" :thumper="playerView.game.dune?.worm?.thumper === true"
-      :choosable="targets.map((target) => target.distance)" :chosen="chosen === undefined ? undefined : targets[chosen]?.distance"
+      :choosable="targets.map((target) => target.distance)" :chosen="chosenDistance"
       @choose="chooseDistance"/>
     <p class="worm-move__chosen">{{ chosen === undefined ? '' : $t(optionTitle(chosen)) }}</p>
     <!-- What the chosen way does, summed up per player -->
@@ -197,10 +197,11 @@ export default defineComponent({
       return {left, top, width: Math.max(...xs) - left + SPACE_WIDTH, height: Math.max(...ys) - top + SPACE_HEIGHT};
     },
     targets(): Array<Target> {
-      return this.ways.map((way, index) => {
+      return this.ways.map((way) => {
         const end = way.length > 0 ? way[way.length - 1] : this.wormSpace;
         const position = end === undefined ? undefined : arrakisSpacePosition(this.layout, end);
-        return {x: (position?.x ?? 0) - this.box.left, y: (position?.y ?? 0) - this.box.top, distance: way.length || index + 1};
+        // 0 = the worm stays: its target is the worm's own space, so a click on the worm chooses it
+        return {x: (position?.x ?? 0) - this.box.left, y: (position?.y ?? 0) - this.box.top, distance: way.length};
       });
     },
     spaceById(): Map<string, SpaceModel> {
@@ -247,6 +248,9 @@ export default defineComponent({
     },
     stageHeight(): number {
       return Math.round(this.box.height * this.scale);
+    },
+    chosenDistance(): number | undefined {
+      return this.chosen === undefined ? undefined : this.targets[this.chosen]?.distance;
     },
     buttonLabel(): string {
       const option = this.chosen === undefined ? undefined : this.playerinput.options[this.chosen];

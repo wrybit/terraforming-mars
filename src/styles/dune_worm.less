@@ -288,7 +288,21 @@ html:not(.tm-mobile) .worm-move__chosen {
 .worm-vegetation__track {
   display: flex;
   align-items: flex-end;
-  gap: 18px;
+  // Between the groups: gap, dashed divider, gap – together still clearly more than the gaps inside a group
+  gap: 9px;
+}
+
+// Dashed half-transparent divider between the steps, as high as the track row (Jens, 26 Oct 2026)
+.worm-vegetation__divider {
+  align-self: flex-end;
+  height: 25px;
+  border-left: 1.5px dashed rgba(241, 226, 194, 0.4);
+}
+
+// The 0 has no steps of the track: an empty row of the same height keeps its button level with the others
+.worm-vegetation__hexes--none {
+  width: 30px;
+  height: 25px;
 }
 
 // Same rows as a section: distance (30 px) and hexes, the same gap between them
@@ -297,7 +311,7 @@ html:not(.tm-mobile) .worm-move__chosen {
   flex-direction: column;
   align-items: flex-end;
   gap: 5px;
-  margin-right: -6px;
+  margin-right: 0;
 }
 
 .worm-vegetation__label {
@@ -407,8 +421,10 @@ html:not(.tm-mobile) .worm-move__chosen {
 // Phone: up to 18 steps (Arrakis 91) and the row labels still fit 390 px; the gap between the groups stays a
 // multiple of the gap inside
 html.tm-mobile {
-  .worm-vegetation__track { gap: 8px; }
-  .worm-vegetation__labels { margin-right: -2px; }
+  .worm-vegetation__track { gap: 4px; }
+  .worm-vegetation__divider { height: 14px; }
+  .worm-vegetation__hexes--none { height: 14px; }
+  .worm-vegetation__labels { margin-right: 2px; }
   .worm-vegetation__label { font-size: 11px; }
   .worm-vegetation__label--track { height: 14px; }
   .worm-vegetation__hex { width: 12px; height: 14px; }
