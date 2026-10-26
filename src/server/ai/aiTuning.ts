@@ -116,6 +116,8 @@ export type AiTuning = {
   tagDemand: number,
   /** 1: energy-spending cards valued by the energy they can expect, draw value included (energyOutlook.ts); 0 = off. */
   energyOutlook: number,
+  /** 1: only the draw value of energy-spending draw cards follows the expected energy (energyOutlook.ts); 0 = off. */
+  energyDrawOutlook: number,
   /** Weight of the opponent's engine advantage in the award swing (awardEngineSwing.ts); 0 = off. */
   awardEngineSwing: number,
   /** Requirement outlook of a card missing tags: base − step × missing tags (requirementOutlook.ts). */
@@ -376,6 +378,7 @@ export const BASELINE_TUNING: AiTuning = {
   // Round 140: 0.5 cards played +0.72 (z +1.87), VP +0.26 – adopted by the card-throughput rule (1: −0.97, cards −0.71).
   tagDemand: 0.5,
   energyOutlook: 0,
+  energyDrawOutlook: 0,
   awardEngineSwing: 0,
   tagOutlookBase: 0.85,
   tagOutlookStep: 0.15,
@@ -902,6 +905,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   energyOutlook: {energyOutlook: 1},
   // Human games: awards funded with a narrow lead against a stronger engine (more draw/income), then overtaken.
   awardEngine: {awardEngineSwing: 1},
+  // Round 143: energyOutlook lost twice (−0.47, −0.69); only the draw value part. Requirement help re-checked.
+  energyDraw: {energyDrawOutlook: 1},
+  requirementHelpHalf: {enablerWeight: 0.25, needsPursuit: 0.25},
   buyStrictest: {buyMargin: 3},
   buyMargin2: {buyMargin: 2},
   buyMargin5: {buyMargin: 5},

@@ -45,9 +45,14 @@ export function expectedEnergyRatio(player: IPlayer, card: ICard, remaining: num
   return Math.max(0, Math.min(1, supply / need));
 }
 
-/** energyOutlook: the factor for the draw value of an energy-spending card (1 when the rule is off or no energy is spent). */
+/**
+ * energyOutlook / energyDrawOutlook: the factor for the draw value of an energy-spending card (1 when both rules are
+ * off or no energy is spent). energyDrawOutlook scales only this draw value – the part energySupply missed – and
+ * leaves the play value as it was (energyOutlook lowered both and lost 0.5 VP in rounds 141 and 142).
+ */
 export function energyOutlookFactor(player: IPlayer, card: ICard, remaining: number): number {
-  if (tuningOf(player).energyOutlook <= 0 || energyPerAction(card) === 0) {
+  const tuning = tuningOf(player);
+  if ((tuning.energyOutlook <= 0 && tuning.energyDrawOutlook <= 0) || energyPerAction(card) === 0) {
     return 1;
   }
   return expectedEnergyRatio(player, card, remaining);

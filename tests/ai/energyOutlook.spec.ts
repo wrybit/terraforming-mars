@@ -25,4 +25,10 @@ describe('AI energy outlook', () => {
     player.production.add(Resource.ENERGY, 2);
     expect(energyOutlookFactor(player, lab, 8)).eq(1);
   });
+
+  it('energyDraw scales the draw value the same way', () => {
+    const [, player] = testGame(2);
+    setPlayerTuning(player.id, 'energyDraw');
+    expect(energyOutlookFactor(player, new HiTechLab(), 8)).eq(0);
+  });
 });
