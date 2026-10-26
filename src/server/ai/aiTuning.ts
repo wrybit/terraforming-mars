@@ -380,7 +380,7 @@ export const BASELINE_TUNING: AiTuning = {
   // Round 140: 0.5 cards played +0.72 (z +1.87), VP +0.26 – adopted by the card-throughput rule (1: −0.97, cards −0.71).
   tagDemand: 0.5,
   energyOutlook: 0,
-  energyDrawOutlook: 0,
+  energyDrawOutlook: 1,
   passFairness: 0,
   awardEngineSwing: 0,
   tagOutlookBase: 0.85,
@@ -910,6 +910,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   awardEngine: {awardEngineSwing: 1},
   // Round 143: energyOutlook lost twice (−0.47, −0.69); only the draw value part. Requirement help re-checked.
   energyDraw: {energyDrawOutlook: 1},
+  // Round 143: energyDraw adopted (+1.89, z +2.42); check.
+  noEnergyDraw: {energyDrawOutlook: 0},
   requirementHelpHalf: {enablerWeight: 0.25, needsPursuit: 0.25},
   // Human game: useless moves beat passing because only passing is played on (rollouts).
   passFairness: {passFairness: 1},
