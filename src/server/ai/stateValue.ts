@@ -16,6 +16,7 @@ import {effectDrawsPerGeneration} from './cardIncome';
 import {energySupplyRatio} from './energySupply';
 import {energyUse} from './energyPlan';
 import {milestoneRacePoints} from './milestoneRace';
+import {milestoneDenialPoints} from './milestoneDenial';
 import {recentAwardGrowth} from './awardHistory';
 import {moneySwingShare} from './stockAward';
 import {openBonusValue} from './bonusRace';
@@ -486,7 +487,7 @@ export function playerValue(player: IPlayer, frozen: ValuationContext): number {
   const context = contextFor(player.game, frozen);
   const victoryPoints = player.getVictoryPoints();
   const expectedVictoryPoints = victoryPoints.total - victoryPoints.awards + expectedAwardPoints(player, context) +
-    milestoneRacePoints(player) + firstMilestoneBonus(player, frozen.generation, frozen.remaining);
+    milestoneRacePoints(player) + milestoneDenialPoints(player) + firstMilestoneBonus(player, frozen.generation, frozen.remaining);
   // Board VP still to come count only while there is time to realise them.
   const boardTime = Math.min(1, context.remaining / tuningOf(player).boardHorizon);
   return (expectedVictoryPoints + boardPotential(player) * boardTime) * context.victoryPoint +

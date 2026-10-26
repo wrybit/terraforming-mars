@@ -23,6 +23,7 @@ import {enablerBonus} from './enablerValue';
 import {draftReceiver, receiverValues} from './draftDenial';
 import {cardsForMilestone} from './milestoneBuying';
 import {openingSynergy} from './openingSynergy';
+import {preludeIncomePenalty} from './preludeIncomeFloor';
 import {withOpeningFit} from './cardFit';
 import {withPolicyPreference} from './bgaPolicy';
 
@@ -190,7 +191,8 @@ export function chooseInitialCards(input: SelectInitialCards, player: IPlayer): 
         preludePair.reduce((sum, prelude) => sum + value(prelude.name), 0) +
         cards.reduce((sum, card) => sum + value(card.name) - buyPrice, 0) +
         tagSynergy(corporation, [...cards, ...preludePair]) +
-        openingSynergy(player, corporation.name, preludePair.map((card) => card.name));
+        openingSynergy(player, corporation.name, preludePair.map((card) => card.name)) -
+        preludeIncomePenalty(player, corporation, preludePair);
       if (best === undefined || score > best.score) {
         best = {corporation, preludes: preludePair, cards, score};
       }
