@@ -124,6 +124,7 @@ export class Server {
       runId: runId,
       pickedCorporationCard: player.pickedCorporationCard ? cardsToModel(player, [player.pickedCorporationCard]) : [],
       preludeCardsInHand: cardsToModel(player, player.preludeCardsInHand),
+      requestId: player.requestId,
       thisPlayer: thisPlayer,
       // An AI player answers its inputs itself: whoever opens its page only watches it play
       // (otherwise the page kept showing the opening choice and never refreshed).

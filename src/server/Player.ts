@@ -67,6 +67,7 @@ import {Supercapacitors} from './cards/promo/Supercapacitors';
 import {CanAffordOptions, CardAction, IPlayer} from './IPlayer';
 import {IPreludeCard} from './cards/prelude/IPreludeCard';
 import {copyAndClear, inplaceRemove, sum, toName} from '../common/utils/utils';
+import {generateRandomId} from './utils/server-ids';
 import {PreludesExpansion} from './preludes/PreludesExpansion';
 import {ChooseCards} from './deferredActions/ChooseCards';
 import {UnderworldPlayerData} from '../common/underworld/UnderworldPlayerData';
@@ -193,6 +194,7 @@ export class Player implements IPlayer {
 
   public user?: DiscordId;
   public inputRequestedAt?: number;
+  public requestId?: string;
   public clock: Clock = new Clock();
 
   public get megaCredits(): number {
@@ -1015,9 +1017,17 @@ export class Player implements IPlayer {
       this.cardCost += corporationCard.cardCost - constants.CARD_COST;
     }
 
+    // Luna Trade Federation may pay with its starting titanium, which only arrives when the corp is played.
+    // TODO(kberg): Always pay with SelectPaymentDeferred, which pays with M€ when there's no choice,
+    // and log "kept N project cards" in its andThen.
+    let deferredCardCost = 0;
     if (additionalCorp === false && corporationCard.name !== CardName.BEGINNER_CORPORATION) {
       const diff = this.cardsInHand.length * this.cardCost;
-      this.stock.deduct(Resource.MEGACREDITS, diff);
+      if (corporationCard.name === CardName.LUNA_TRADE_FEDERATION) {
+        deferredCardCost = diff;
+      } else {
+        this.stock.deduct(Resource.MEGACREDITS, diff);
+      }
       if (diff > 0) {
         PathfindersExpansion.addToSolBank(this);
       }
@@ -1027,6 +1037,9 @@ export class Player implements IPlayer {
     const numberOfCardInHand = this.cardsInHand.length;
     ColoniesHandler.maybeActivateColonies(this.game, corporationCard);
     this.inCardContext(corporationCard.name, () => this.defer(corporationCard.play(this)));
+    if (deferredCardCost > 0) {
+      this.game.defer(new SelectPaymentDeferred(this, deferredCardCost, {title: 'Select how to pay for your project cards'}));
+    }
     if (corporationCard.initialAction !== undefined && corporationCard.initialActionText !== undefined) {
       this.pendingInitialActions.push(corporationCard);
     }
@@ -1723,8 +1736,10 @@ export class Player implements IPlayer {
     }
     const waitingFor = this.waitingFor;
     const waitingForCb = this.waitingForCb;
+    const requestId = this.requestId;
     this.waitingFor = undefined;
     this.waitingForCb = undefined;
+    this.requestId = undefined;
     try {
       if (!waitingFor.optional) {
         this.timer.stop();
@@ -1735,6 +1750,8 @@ export class Player implements IPlayer {
       waitingForCb();
     } catch (err) {
       this.setWaitingFor(waitingFor, waitingForCb);
+      // The player is still answering the same request.
+      this.requestId = requestId;
       throw err;
     }
   }
@@ -1757,6 +1774,7 @@ export class Player implements IPlayer {
     }
     this.waitingFor = input;
     this.waitingForCb = cb;
+    this.requestId = generateRandomId('');
     this.inputRequestedAt = this.clock.now();
     this.game.inputsThisRound++;
     if (this.aiLevel !== undefined) {
@@ -1792,6 +1810,7 @@ export class Player implements IPlayer {
     const waitingFor = this.waitingFor;
     this.waitingFor = undefined;
     this.waitingForCb = undefined;
+    this.requestId = undefined;
     if (waitingFor !== undefined && !waitingFor.optional) {
       this.timer.stop();
     }

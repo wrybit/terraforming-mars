@@ -284,7 +284,12 @@ export default defineComponent({
     getVisibilityState(targetVar: string): boolean {
       return (this as unknown as MainAppData).componentsVisibility[targetVar] ? true : false;
     },
-    update(path: typeof paths.PLAYER | typeof paths.SPECTATOR): void {
+    /**
+     * Fetches and shows the latest player or spectator view.
+     *
+     * Resolves to false when the fetch fails.
+     */
+    update(path: typeof paths.PLAYER | typeof paths.SPECTATOR): Promise<boolean> {
       const currentPathname = getLastPathSegment();
       const app = this as unknown as MainAppData;
       // If the game ends while the view is open, it stays: the floating notice (GameOverNotice)
@@ -293,7 +298,7 @@ export default defineComponent({
 
       const url = 'api/' + path + window.location.search.replace('&noredirect', '');
 
-      fetchOrFail(url)
+      return fetchOrFail(url)
         .then((resp) => resp.json())
         .then((model: ViewModel) => {
           // Polled updates come from other players' moves (own moves arrive via WaitingFor.updatePlayerView)
@@ -331,16 +336,18 @@ export default defineComponent({
               );
             }
           }
+          return true;
         })
         .catch((err) => {
           this.showGameLoadError(err);
+          return false;
         });
     },
-    updatePlayer() {
-      this.update(paths.PLAYER);
+    updatePlayer(): Promise<boolean> {
+      return this.update(paths.PLAYER);
     },
-    updateSpectator() {
-      this.update(paths.SPECTATOR);
+    updateSpectator(): Promise<boolean> {
+      return this.update(paths.SPECTATOR);
     },
   },
   created() {

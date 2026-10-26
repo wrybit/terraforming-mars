@@ -173,6 +173,9 @@ export class ApiCreateGame extends Handler {
       if (gameReq.escapeVelocity !== undefined && hasNegativeEscapeVelocityOption(gameReq.escapeVelocity)) {
         throw RouteError.badRequest('Escape Velocity values cannot be negative.');
       }
+      if (gameReq.boards.length === 0) {
+        throw RouteError.badRequest('Must select at least one board');
+      }
       // Same rule as the create-game form (common/ai/aiSupport.ts): no AI players with settings it cannot handle
       const aiBlockers = aiUnsupportedReasons({expansions: gameReq.expansions, twoCorpsVariant: gameReq.twoCorpsVariant});
       if (aiBlockers.length > 0 && gameReq.players.some((p) => isAiLevel(p.aiLevel))) {
