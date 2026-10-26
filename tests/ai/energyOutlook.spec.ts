@@ -10,8 +10,11 @@ import {Resource} from '../../src/common/Resource';
 describe('AI energy outlook', () => {
   afterEach(() => clearPlayerTunings());
 
-  it('is off in the baseline', () => {
+  // Round 143: the draw value follows the expected energy in the baseline (energyDrawOutlook).
+  it('follows the expected energy in the baseline and is off without both parameters', () => {
     const [, player] = testGame(2);
+    expect(energyOutlookFactor(player, new HiTechLab(), 8)).eq(0);
+    setPlayerTuning(player.id, 'noEnergyDraw');
     expect(energyOutlookFactor(player, new HiTechLab(), 8)).eq(1);
   });
 
