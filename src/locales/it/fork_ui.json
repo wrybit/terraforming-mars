@@ -2161,5 +2161,6 @@
   "Neutral player received ${0}:r:mc: from ${1} owner (${2})": "Il giocatore neutrale ha ricevuto ${0}:r:mc: dal proprietario di ${1} (${2})",
   "paid for the card": "pagato per la carta",
   "Prize": "Premio",
-  "Sale": "Vendita"
+  "Sale": "Vendita",
+  "This page is out of date. Click OK to refresh it.": "Questa pagina non è aggiornata. Fai clic su OK per ricaricarla."
 }

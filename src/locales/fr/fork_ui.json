@@ -947,5 +947,6 @@
   "${0} sued ${1} who had 0:r:mc:.": "${0} a poursuivi ${1}, qui avait 0:r:mc:.",
   "paid for the card": "payé pour la carte",
   "Prize": "Prix",
-  "Sale": "Vente"
+  "Sale": "Vente",
+  "This page is out of date. Click OK to refresh it.": "Cette page n'est plus à jour. Cliquez sur OK pour l'actualiser."
 }
