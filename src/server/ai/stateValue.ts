@@ -9,6 +9,9 @@ import {tuningOf} from './aiTuning';
 import {boardPotential} from './boardPotential';
 import {lastGenerationSpotPoints} from './lastGenerationSpots';
 import {futureTagPoints} from './tagPointOutlook';
+import {effectExhausted} from './exhaustedEffect';
+import {energyOutlookFactor} from './energyOutlook';
+import {awardEngineSwing} from './awardEngineSwing';
 import {effectDrawsPerGeneration} from './cardIncome';
 import {energySupplyRatio} from './energySupply';
 import {energyUse} from './energyPlan';
@@ -99,7 +102,7 @@ const HAND_LEAD_CONFIDENCE = 0.6;
  * the game: before half the terraforming a lead counts nothing, then it grows to full value
  * at about 75 % (the AI funded awards in generation 1 and later still too early).
  */
-function awardConfidence(progress: number): number {
+export function awardConfidence(progress: number): number {
   return Math.max(0, Math.min(1, (progress - 0.5) / 0.25));
 }
 
@@ -109,6 +112,8 @@ function awardConfidence(progress: number): number {
  */
 function expectedAwardPoints(player: IPlayer, context: ValuationContext): number {
   let points = 0;
+  // awardEngineSwing: a narrow lead against a faster-growing opponent engine is less safe (awardEngineSwing.ts).
+  const engineSwing = player.game.fundedAwards.length > 0 ? awardEngineSwing(player, context.remaining, cardsDrawnByAction) : 0;
   for (const {award} of player.game.fundedAwards) {
     const trend = tuningOf(player).awardTrend > 0;
     // Own hand (awardHandOutlook.ts): only for the deciding player, who sees these cards
@@ -127,7 +132,7 @@ function expectedAwardPoints(player: IPlayer, context: ValuationContext): number
     // A lead the own hand already holds is less of a guess than one on the board: counts from earlier in the game
     const confidence = handShare > 0 && ownScore > award.getScore(player) && margin >= HAND_LEAD_FOR_EARLY_AWARD ?
       Math.max(context.awardConfidence, HAND_LEAD_CONFIDENCE) : context.awardConfidence;
-    const swing = 2 + Math.max(own, best) * 0.25 * (1 - confidence) + remainingSwing +
+    const swing = 2 + Math.max(own, best) * 0.25 * (1 - confidence) + remainingSwing + engineSwing +
       actionSwing(player, context.awardActionSwing ?? tuningOf(player).awardActionSwing) * moneySwingShare(award, player);
     const firstPlaceChance = Math.max(0, Math.min(1, 0.5 + margin / (2 * swing)));
     points += 5 * firstPlaceChance * confidence;
@@ -234,7 +239,7 @@ function engineFlow(player: IPlayer, context: ValuationContext): number {
   let cards = 0;
   for (const card of player.playedCards) {
     if (card.type === CardType.ACTIVE) {
-      cards += isIActionCard(card) ? ACTION_CARD_VALUE_PER_GENERATION : EFFECT_CARD_VALUE_PER_GENERATION;
+      cards += isIActionCard(card) ? ACTION_CARD_VALUE_PER_GENERATION : effectExhausted(card, player.game) ? 0 : EFFECT_CARD_VALUE_PER_GENERATION;
     }
   }
   return (productionPerGeneration(player, context) + player.terraformRating) * (context.productionDiscount ?? PRODUCTION_DISCOUNT) + cards;
@@ -389,7 +394,11 @@ function tableauValue(player: IPlayer, context: ValuationContext): number {
     if (card.type === CardType.ACTIVE) {
       const own = isIActionCard(card) ? actionValuePerGeneration(card, player, context) : EFFECT_CARD_VALUE_PER_GENERATION;
       // measuredCardIncome: effects and actions count what they were measured to bring, not only the flat value.
-      const flat = Math.max(own, drawIncome(card), measuredCardIncome(player, card, context.remaining));
+      // An effect triggered only by a maxed global parameter (Arctic Algae with all oceans placed) earns nothing.
+      const exhausted = !isIActionCard(card) && effectExhausted(card, player.game);
+      // energyOutlook: draws bought with energy count only as far as energy can be expected (energyOutlook.ts).
+      const draws = drawIncome(card) * energyOutlookFactor(player, card, context.remaining);
+      const flat = exhausted ? 0 : Math.max(own, draws, measuredCardIncome(player, card, context.remaining));
       // A human player's collectors scored 20+ VP in long games; a flat 1.5 M€ per generation missed that.
       // collectorRates: the measured resources per generation of this card instead of one (collectorRate.ts).
       const rate = tuningOf(player).collectorRates > 0 ? collectorRate(card.name) : 1;

@@ -12,6 +12,7 @@ describe('AI board card bonus', () => {
     const [game, player] = testGame(2);
     const space = game.board.getAvailableSpacesForOcean(player).find((candidate) => candidate.bonus.includes(SpaceBonus.DRAW_CARD));
     expect(space).not.to.be.undefined;
+    setPlayerTuning(player.id, 'noBoardCards');
     const flat = spaceValue(space!, 'ocean', player);
     setPlayerTuning(player.id, 'boardCards1');
     expect(spaceValue(space!, 'ocean', player)).to.be.greaterThan(flat + 2);

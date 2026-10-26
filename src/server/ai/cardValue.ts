@@ -13,6 +13,7 @@ import {cardPriorFactor} from './cardPriors';
 import {flowFit} from './cardFit';
 import {drawChoiceBonus} from './drawChoice';
 import {energySupplyRatio} from './energySupply';
+import {expectedEnergyRatio} from './energyOutlook';
 import {closingWindowFactor, requirementOutlook} from './requirementOutlook';
 import {drawEngineBonus} from './drawEngineBoost';
 import {pickSome} from './randomChoice';
@@ -117,6 +118,8 @@ function priorFactor(card: ICard, player: IPlayer): number {
 }
 
 const ENERGYLESS_SHARE = 0.25;
+/** energyOutlook: share of the value an energy-spending card keeps with no energy expected at all. */
+const ENERGYLESS_OUTLOOK_SHARE = 0.1;
 
 /**
  * energySupply: a card whose action spends energy keeps a quarter of its value without any energy
@@ -125,6 +128,10 @@ const ENERGYLESS_SHARE = 0.25;
 function energyFactor(card: ICard, player: IPlayer, context: ValuationContext): number {
   if (tuningOf(player).energySupply <= 0 || player.playedCards.has(card.name)) {
     return 1;
+  }
+  // energyOutlook: expected energy (including energy production in hand) and almost nothing without it.
+  if (tuningOf(player).energyOutlook > 0) {
+    return ENERGYLESS_OUTLOOK_SHARE + (1 - ENERGYLESS_OUTLOOK_SHARE) * expectedEnergyRatio(player, card, context.remaining);
   }
   return ENERGYLESS_SHARE + (1 - ENERGYLESS_SHARE) * energySupplyRatio(player, card, context.remaining);
 }

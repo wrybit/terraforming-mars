@@ -21,6 +21,8 @@ import {tuningOf} from './aiTuning';
 import {RolloutEntry, RolloutPolicy, rolloutMeans} from './rolloutSearch';
 import {isStandardProject, standardProjectPenalty} from './standardProjectRestraint';
 import {cheapFirstPenalty} from './cheapFirst';
+import {isUselessMove} from './uselessMove';
+import {capAgainstPass} from './passFairness';
 import {triggerOrderAdjustments} from './triggerOrder';
 import {playPreferences} from './bgaPolicy';
 import {handReadinessMap} from './handReadiness';
@@ -121,7 +123,8 @@ function candidatesFor(menu: OrOptions, player: IPlayer): Array<Candidate> {
       return;
     }
     // awardFundingLead: no funding of awards the player does not lead (awardFunding.ts).
-    for (const response of responsesFor(option, player).filter((inner) => fundingAllowed(option, inner, player))) {
+    // Moves without any effect (convert heat at maximum temperature …) never compete with passing (uselessMove.ts).
+    for (const response of responsesFor(option, player).filter((inner) => fundingAllowed(option, inner, player) && !isUselessMove(option, inner))) {
       candidates.push({response: {type: 'or', index, response}, endsTurn: isTurnEnding(option)});
     }
   });
@@ -393,6 +396,9 @@ export function chooseAction(menu: OrOptions, player: IPlayer, options: Lookahea
     }
   }
 
+  // passFairness: the one-move values before replies and rollouts re-rank anything (passFairness.ts).
+  const plainValues = tuning.passFairness > 0 ? new Map(tried.map((entry) => [entry.candidate, entry.outcome.value])) : undefined;
+
   // Opponent reply: the best few moves are judged by the position after the next opponent's
   // best answer. Only the order among them changes, so a missing reply keeps the plain value.
   if (tuning.opponentReplies > 0) {
@@ -539,6 +545,10 @@ export function chooseAction(menu: OrOptions, player: IPlayer, options: Lookahea
         outcome.value += tuning.turnTempo;
       }
     }
+  }
+
+  if (plainValues !== undefined) {
+    capAgainstPass(tried, plainValues, relativeValue(player, context), (candidate) => isPass(menu, candidate.response));
   }
 
   let best: {candidate: Candidate, value: number} | undefined;

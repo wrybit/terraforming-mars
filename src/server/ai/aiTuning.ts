@@ -114,6 +114,14 @@ export type AiTuning = {
   boardCardBonus: number,
   /** Weight of tags as a stock for later requirements and open tag milestones (tagDemand.ts); 0 = off. */
   tagDemand: number,
+  /** 1: energy-spending cards valued by the energy they can expect, draw value included (energyOutlook.ts); 0 = off. */
+  energyOutlook: number,
+  /** 1: only the draw value of energy-spending draw cards follows the expected energy (energyOutlook.ts); 0 = off. */
+  energyDrawOutlook: number,
+  /** 1: no move worse than doing nothing may beat passing after rollouts (passFairness.ts); 0 = off. */
+  passFairness: number,
+  /** Weight of the opponent's engine advantage in the award swing (awardEngineSwing.ts); 0 = off. */
+  awardEngineSwing: number,
   /** Requirement outlook of a card missing tags: base − step × missing tags (requirementOutlook.ts). */
   tagOutlookBase: number,
   tagOutlookStep: number,
@@ -223,6 +231,8 @@ export type AiTuning = {
   keepAwardStock: number,
   /** > 0: award funding only with a lead of at least this share of the best opponent score (awardFunding.ts). */
   awardFundingLead: number,
+  /** 1: no paid award funding without any lead while award leads still count nothing (awardFunding.ts); 0 = off. */
+  awardPaidEarlyLead: number,
   /**
    * Share of the learned position value (bgaValueModel.ts, two-player games only) in the valuation: 0 = hand-made
    * valuation only, 1 = model only. The model's expected final VP margin is priced like VP now (stateValue.ts).
@@ -363,9 +373,16 @@ export const BASELINE_TUNING: AiTuning = {
   // Round 136: 5 M€ cards played +0.56 (z +1.67), VP −0.07 – adopted by the card-throughput rule (round 135: +0.85).
   // Round 137: back to 2 M€ +1.18 VP (z +1.69), cards +0.20 – 2 and 5 play as many cards, 2 scores more.
   standardProjectRestraint: 2,
-  cheapFirst: 0,
-  boardCardBonus: 0,
-  tagDemand: 0,
+  // Round 139: cheapFirst 0.5 +2.95 VP (z +3.33) – adopted; boardCardBonus 1 cards played +1.10 (z +3.01), VP +0.79 – adopted
+  // by the card-throughput rule.
+  cheapFirst: 0.5,
+  boardCardBonus: 1,
+  // Round 140: 0.5 cards played +0.72 (z +1.87), VP +0.26 – adopted by the card-throughput rule (1: −0.97, cards −0.71).
+  tagDemand: 0.5,
+  energyOutlook: 0,
+  energyDrawOutlook: 0,
+  passFairness: 0,
+  awardEngineSwing: 0,
   tagOutlookBase: 0.85,
   tagOutlookStep: 0.15,
   // Round 109: money now only (0) +1.74 (z +2.80) against one generation of income; two generations −0.70.
@@ -495,6 +512,8 @@ export const BASELINE_TUNING: AiTuning = {
   energyAsHeat: 0,
   // Round 76: −0.11 VP (z −0.17), neutral; fixes free award funding at 0 : 0 (tester report).
   awardFundingLead: 0.1,
+  // Round 141: +0.14 VP (z +0.16) – adopted: fixes the human-game error (paid funding at 0 : 0 in generation 1).
+  awardPaidEarlyLead: 1,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
@@ -805,6 +824,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   noFollowUpAmounts: {followUpAmounts: 0},
   noAwardLead: {awardFundingLead: 0},
   awardLead20: {awardFundingLead: 0.2},
+  // Human game: paid funding at 0 : 0 in generation 1 (lookahead beat pass by noise).
+  awardPaidEarly: {awardPaidEarlyLead: 1},
+  noAwardPaidEarly: {awardPaidEarlyLead: 0},
   // Control for the opening plan after the cache fix (plans of game copies were shared by tile count).
   noOpeningPlan: {openingPlan: 0},
   // Round 39: selling for milestones and awards −7.0 VP per deal (z −8.4); round 40 tries milestones only.
@@ -872,12 +894,25 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   cheapFirst01: {cheapFirst: 0.1},
   cheapFirst025: {cheapFirst: 0.25},
   cheapFirst05: {cheapFirst: 0.5},
+  cheapFirst1: {cheapFirst: 1},
+  noCheapFirst: {cheapFirst: 0},
+  noBoardCards: {boardCardBonus: 0},
   // Card spaces on the board valued like a drawn card instead of 3 M€.
   boardCards05: {boardCardBonus: 0.5},
   boardCards1: {boardCardBonus: 1},
   // Round 140: building tags while Builder is open, then science/power for later requirements (Jens' rule).
   tagDemand05: {tagDemand: 0.5},
   tagDemand1: {tagDemand: 1},
+  noTagDemand: {tagDemand: 0},
+  // Human games: Physics Complex, Development Center, Bio Printing Facility, Hi-Tech Lab played with 0 energy production.
+  energyOutlook: {energyOutlook: 1},
+  // Human games: awards funded with a narrow lead against a stronger engine (more draw/income), then overtaken.
+  awardEngine: {awardEngineSwing: 1},
+  // Round 143: energyOutlook lost twice (−0.47, −0.69); only the draw value part. Requirement help re-checked.
+  energyDraw: {energyDrawOutlook: 1},
+  requirementHelpHalf: {enablerWeight: 0.25, needsPursuit: 0.25},
+  // Human game: useless moves beat passing because only passing is played on (rollouts).
+  passFairness: {passFairness: 1},
   buyStrictest: {buyMargin: 3},
   buyMargin2: {buyMargin: 2},
   buyMargin5: {buyMargin: 5},

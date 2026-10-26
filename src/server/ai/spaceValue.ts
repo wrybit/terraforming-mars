@@ -20,7 +20,8 @@ import {adoptedOrphanPoints, lonelyGreeneryPoints} from './greeneryRing';
 // Scores a hex for tile placement. Weights tuned in AI test batches.
 
 /** cityNeighbour: tiles that score per adjacent city (Commercial District). */
-export type TileKind = 'greenery' | 'city' | 'ocean' | 'cityNeighbour' | 'other';
+/** claim: a reserved space (Land Claim) – worth the best own tile that can still go there later. */
+export type TileKind = 'greenery' | 'city' | 'ocean' | 'cityNeighbour' | 'claim' | 'other';
 
 const BONUS_VALUE: Partial<Record<SpaceBonus, number>> = {
   [SpaceBonus.TITANIUM]: 3,
@@ -83,6 +84,11 @@ export function tileKindOf(input: SelectSpace): TileKind {
   // Special tiles whose title names a neighbour, not the tile: Ecological Zone ("next to
   // greenery for special tile") and Industrial Center ("adjacent to a city tile"). Read as a
   // greenery, Ecological Zone went next to the own Capital instead of between opponent cities.
+  // Land Claim reserves a space for the own later tile; read as "other", it went to the best bonus even where the
+  // AI could build no city and only a greenery for the opponent's cities fit (human game).
+  if (text.includes('claim')) {
+    return 'claim';
+  }
   if (text.includes('special tile') || text.includes('adjacent to a city tile')) {
     return 'other';
   }
@@ -251,5 +257,11 @@ function planBonus(space: Space, kind: TileKind, player: IPlayer): number {
 }
 
 export function spaceValue(space: Space, kind: TileKind, player: IPlayer): number {
+  if (kind === 'claim') {
+    // The best own tile that may still be placed there: a city where no city is adjacent, else a greenery.
+    const cityAllowed = !player.game.board.getAdjacentSpaces(space).some((neighbour) => Board.isCitySpace(neighbour));
+    const greenery = spaceValue(space, 'greenery', player);
+    return cityAllowed ? Math.max(spaceValue(space, 'city', player), greenery) : greenery;
+  }
   return baseSpaceValue(space, kind, player) + planBonus(space, kind, player);
 }
