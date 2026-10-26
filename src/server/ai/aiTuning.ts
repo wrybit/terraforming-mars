@@ -120,6 +120,12 @@ export type AiTuning = {
   energyDrawOutlook: number,
   /** 1: no move worse than doing nothing may beat passing after rollouts (passFairness.ts); 0 = off. */
   passFairness: number,
+  /** Share of a milestone's 5 VP lost while the player could claim it and an opponent is about to (milestoneDenial.ts); 0 = off. */
+  milestoneDenial: number,
+  /** Weight of the opening penalty for M€ production below 1 after corporation and preludes (preludeIncomeFloor.ts); 0 = off. */
+  preludeIncomeFloor: number,
+  /** > 0: paid award funding only with a lead above this multiple of what the best opponent can still catch up (awardFundMargin.ts). */
+  awardFundMargin: number,
   /** Weight of the opponent's engine advantage in the award swing (awardEngineSwing.ts); 0 = off. */
   awardEngineSwing: number,
   /** Requirement outlook of a card missing tags: base − step × missing tags (requirementOutlook.ts). */
@@ -382,6 +388,9 @@ export const BASELINE_TUNING: AiTuning = {
   energyOutlook: 0,
   energyDrawOutlook: 1,
   passFairness: 0,
+  milestoneDenial: 0,
+  preludeIncomeFloor: 0,
+  awardFundMargin: 0,
   awardEngineSwing: 0,
   tagOutlookBase: 0.85,
   tagOutlookStep: 0.15,
@@ -915,6 +924,12 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   requirementHelpHalf: {enablerWeight: 0.25, needsPursuit: 0.25},
   // Human game: useless moves beat passing because only passing is played on (rollouts).
   passFairness: {passFairness: 1},
+  // Human games 24.–26.10.: a claimable milestone put off for another move, the opponent claimed it (3x).
+  milestoneDenial: {milestoneDenial: 1},
+  // Human games: M€ production at most 1 until generation 5 (8x), e.g. preludes with −1 M€ production.
+  preludeIncomeFloor: {preludeIncomeFloor: 1},
+  // Human games: self-funded awards lost by a narrow margin (8x, e.g. 6 : 7, 9 : 12, 15 : 21).
+  awardFundMargin: {awardFundMargin: 1},
   buyStrictest: {buyMargin: 3},
   buyMargin2: {buyMargin: 2},
   buyMargin5: {buyMargin: 5},
