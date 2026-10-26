@@ -299,10 +299,12 @@ html:not(.tm-mobile) .worm-move__chosen {
   border-left: 1.5px dashed rgba(241, 226, 194, 0.4);
 }
 
-// The 0 has no steps of the track: an empty row of the same height keeps its button level with the others
-.worm-vegetation__hexes--none {
-  width: 30px;
-  height: 25px;
+// The 0: an empty step with the worm token on it, a little inset like the greeneries in their steps
+.worm-vegetation__hex--worm img {
+  inset: 3px;
+  width: calc(100% - 6px);
+  height: calc(100% - 6px);
+  object-fit: contain;
 }
 
 // Same rows as a section: distance (30 px) and hexes, the same gap between them
@@ -423,7 +425,7 @@ html:not(.tm-mobile) .worm-move__chosen {
 html.tm-mobile {
   .worm-vegetation__track { gap: 4px; }
   .worm-vegetation__divider { height: 14px; }
-  .worm-vegetation__hexes--none { height: 14px; }
+  .worm-vegetation__hex--worm img { inset: 1.5px; width: calc(100% - 3px); height: calc(100% - 3px); }
   .worm-vegetation__labels { margin-right: 2px; }
   .worm-vegetation__label { font-size: 11px; }
   .worm-vegetation__label--track { height: 14px; }

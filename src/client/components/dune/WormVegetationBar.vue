@@ -15,7 +15,10 @@
           :class="['worm-vegetation__distance', {'worm-vegetation__distance--chosen': chosen === 0}]"
           :disabled="!choosable.includes(0)" :aria-pressed="chosen === 0"
           @click="$emit('choose', 0)">0</button>
-        <span class="worm-vegetation__hexes worm-vegetation__hexes--none"></span>
+        <!-- Its slot in the track: the empty step with the worm on it, so the 0 is not a gap (Jens, 26 Oct 2026) -->
+        <span class="worm-vegetation__hexes">
+          <span class="worm-vegetation__hex worm-vegetation__hex--worm"><img :src="wormToken" alt=""></span>
+        </span>
       </div>
       <template v-for="section in sections" :key="section.distance">
       <!-- Dashed line between the steps, in the row of the track (Jens, 26 Oct 2026) -->
@@ -97,6 +100,9 @@ export default defineComponent({
     },
     greenery(): string {
       return duneGraphic('tile-planting');
+    },
+    wormToken(): string {
+      return duneGraphic('token-worm');
     },
     caption(): string {
       if (this.thumper) {
