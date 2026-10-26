@@ -16,6 +16,7 @@ import {message} from '../logs/MessageBuilder';
 import {COSTLY_SUSPICION, MAX_SUSPICION, SmugglingModel, TRIBUTE_PRINTED_COST, suspicionPenalty} from '../../common/dune/DuneModel';
 import {CardName} from '../../common/cards/CardName';
 import {payWithLog} from './payWithLog';
+import {sellableWater} from './aiWaterSale';
 import {PrivilegeData, announcePrivilege, lapsePrivilege, newPrivilege, privilegeModel, renewPrivilege} from './Privilege';
 import {ProphecyData, fulfilOrders, initializeProphecy, prophecyModel} from './Prophecy';
 
@@ -262,6 +263,33 @@ export function aiGuildInput(player: IPlayer, data: SmugglingData): SelectTrade 
     return undefined;
   }
   return smuggleInput(player, data, true);
+}
+
+/**
+ * Water at maximum temperature: the AI sells its surplus at the guild for Solari (aiWaterSale.ts), below a penalty
+ * like the spice trade. The amount it may offer is limited to the surplus, so a funded water award keeps its lead.
+ */
+export function aiWaterInput(player: IPlayer, data: SmugglingData): SelectTrade | undefined {
+  const surplus = sellableWater(player);
+  if (surplus <= 0 || envyFull(data, player) || suspicionOf(data, player) + 1 >= COSTLY_SUSPICION) {
+    return undefined;
+  }
+  const {values, buyValues, spicePair} = currentPricing(data);
+  const pricing = {values, buyValues, pairs: [spicePair]};
+  const rate = tradeRate(pricing, Resource.HEAT, Resource.MEGACREDITS);
+  if (rate === undefined || surplus < rate.give) {
+    return undefined;
+  }
+  return new SelectTrade(SMUGGLE_TITLE, 'Trade', [{resource: Resource.HEAT, max: surplus}], [Resource.MEGACREDITS], NO_LIMIT, pricing)
+    .andThen((trade) => {
+      player.game.log('${0} traded with the guild', (b) => b.player(player));
+      player.stock.deduct(trade.give, trade.giveAmount, {log: true});
+      player.stock.add(trade.get, trade.getAmount, {log: true});
+      raiseEnvy(player, data);
+      recordTrade(exchangeOf(data), trade.give, trade.giveAmount, trade.get, trade.getAmount);
+      data.deals = {...data.deals, [player.id]: (data.deals?.[player.id] ?? 0) + 1};
+      return undefined;
+    });
 }
 
 /** End of generation: envy 3 and more costs TR (the houses vote against the player in the Landsraad), then back to 0 */

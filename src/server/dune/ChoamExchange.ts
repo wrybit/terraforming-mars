@@ -1,11 +1,12 @@
 import {IPlayer} from '../IPlayer';
+import {SelectTrade} from '../inputs/SelectTrade';
 import {PlayerInput} from '../PlayerInput';
 import {OrOptions} from '../inputs/OrOptions';
 import {CHOAM_TITLE} from '../../common/dune/duneActionTitles';
 import {DuneData} from './DuneExpansion';
 import {ChoamData, choamActions, initializeChoam, pactChoices} from './Choam';
 import {
-  SmugglingData, aiGuildInput, bribePayments, currentSellRates, envyFull, initializeSmuggling, privilegeOf, prophecyOf, raiseEnvy, smuggleInput,
+  SmugglingData, aiGuildInput, aiWaterInput, bribePayments, currentSellRates, envyFull, initializeSmuggling, privilegeOf, prophecyOf, raiseEnvy, smuggleInput,
   smugglingActions,
 } from './Smuggling';
 import {deliverInput} from './Privilege';
@@ -34,8 +35,8 @@ export function choamExchangeTabActions(player: IPlayer, data: DuneData): Array<
   }
   const {smuggling, choam} = parts;
   if (player.aiLevel !== undefined) {
-    const input = aiGuildInput(player, smuggling);
-    return input === undefined ? [] : [input];
+    // Spice and, at maximum temperature, surplus water (aiWaterSale.ts)
+    return [aiGuildInput(player, smuggling), aiWaterInput(player, smuggling)].filter((input): input is SelectTrade => input !== undefined);
   }
   const closed = envyFull(smuggling, player);
   const envy = () => raiseEnvy(player, smuggling);
