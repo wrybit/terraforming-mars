@@ -67,7 +67,7 @@
                WaitingFor stays mounted though, because it polls the server after the own turn -->
           <div class="player_home_block player_home_block--actions nofloat" v-show="playerView.waitingFor !== undefined">
             <a name="actions" class="player_home_anchor"></a>
-            <WaitingFor v-if="game.phase !== 'end'" :playerView="playerView" :waitingfor="playerView.waitingFor"/>
+            <WaitingFor v-if="game.phase !== 'end'" :playerView="playerView" :waitingfor="playerView.waitingFor" :requestId="playerView.requestId"/>
           </div>
 
           <div class="player_home_block player_home_block--hand" v-if="showsDraftedCardsBlock(playerView)">

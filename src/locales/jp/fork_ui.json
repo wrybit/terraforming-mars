@@ -1264,5 +1264,7 @@
   "All players lose 1:i:tr:.": "全てのプレイヤーは1:i:tr:を失う。",
   "Prize": "褒賞",
   "Sale": "売却",
-  "Temp.": "温度"
+  "Temp.": "温度",
+  "This page is out of date. Click OK to refresh it.": "このページは古くなっています。OKをクリックして更新してください。",
+  "Select how to pay for your project cards": "プロジェクトカードの支払い方法を選択してください"
 }

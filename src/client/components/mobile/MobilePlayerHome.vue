@@ -101,7 +101,7 @@
              step would have laid its own empty balance bar over the correct one -->
         <template v-else-if="!isSetupPhase">
           <p v-if="playerView.waitingFor === undefined" class="mb-empty">{{ bannerTitle }}</p>
-          <WaitingFor v-if="game.phase !== 'end'" :playerView="playerView" :waitingfor="playerView.waitingFor"/>
+          <WaitingFor v-if="game.phase !== 'end'" :playerView="playerView" :waitingfor="playerView.waitingFor" :requestId="playerView.requestId"/>
           <!-- Card carousel (play card): position and count, tapping a dot swipes there -->
           <div v-if="carousel !== undefined && carousel.count > 1" class="mb-dots">
             <button v-for="index in carousel.count" :key="index" type="button"

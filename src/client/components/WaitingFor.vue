@@ -49,7 +49,7 @@ import {paths} from '@/common/app/paths';
 import {statusCode} from '@/common/http/statusCode';
 import {isPlayerId} from '@/common/Types';
 import {InputResponse} from '@/common/inputs/InputResponse';
-import {INVALID_RUN_ID, SERVER_UPDATING, AppErrorResponse} from '@/common/app/AppErrorId';
+import {INVALID_REQUEST_ID, INVALID_RUN_ID, SERVER_UPDATING, AppErrorResponse} from '@/common/app/AppErrorId';
 import {markServerUpdating} from '@/client/utils/serverStatus';
 import {Color} from '@/common/Color';
 import {gameDocumentTitle, TitleView, turnTitleState} from '../utils/documentTitle';
@@ -120,6 +120,10 @@ export default defineComponent({
       type: Object as () => PlayerInputModel | undefined,
       default: undefined,
     },
+    requestId: {
+      type: String as () => string | undefined,
+      default: undefined,
+    },
   },
   data(): DataModel {
     return {
@@ -187,7 +191,7 @@ export default defineComponent({
         {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({runId: this.playerView.runId, ...out}),
+          body: JSON.stringify({runId: this.playerView.runId, requestId: this.requestId, ...out}),
         });
     },
     cancelAction() {
@@ -224,7 +228,7 @@ export default defineComponent({
               markServerUpdating();
               return;
             }
-            if (resp.id === INVALID_RUN_ID) {
+            if (resp.id === INVALID_RUN_ID || resp.id === INVALID_REQUEST_ID) {
               cb = () => setTimeout(() => window.location.reload(), 100);
             }
             showAlert(resp.id === INVALID_RUN_ID ? 'Server restarted' : 'Move not possible', resp.message, cb);
@@ -274,22 +278,30 @@ export default defineComponent({
         xhr.onerror = () => {
           this.showRequestFailure('The moves of the other players could not be fetched.', {kind: 'network'}, () => vueApp.waitForUpdate());
         };
-        xhr.onload = () => {
+        xhr.onload = async () => {
           if (xhr.status === statusCode.ok) {
             const result = xhr.response as WaitingForModel;
             this.playersWaitingFor = result.waitingFor;
             if (result.result === 'GO') {
               // Will only apply to player, not spectator.
-              root.updatePlayer();
+              const updated = root.updatePlayer();
               this.notify();
+              // When the fetch works, root.playerView changes and the playerView watcher
+              // calls start(), which decides whether to keep polling. When it fails
+              // nothing changes, so poll again here.
+              if (!await updated) {
+                vueApp.waitForUpdate();
+              }
               // We don't need to wait anymore - it's our turn
               return;
             } else if (result.result === 'REFRESH') {
               // Something changed, let's refresh UI
               if (isPlayerId(this.playerView.id)) {
-                root.updatePlayer();
-              } else {
-                root.updateSpectator();
+                if (!await root.updatePlayer()) {
+                  vueApp.waitForUpdate();
+                }
+              } else if (!await root.updateSpectator()) {
+                vueApp.waitForUpdate();
               }
 
               return;

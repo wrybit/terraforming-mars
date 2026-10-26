@@ -178,6 +178,10 @@ export class ApiCreateGame extends Handler {
       if (gameReq.escapeVelocity !== undefined && hasNegativeEscapeVelocityOption(gameReq.escapeVelocity)) {
         throw RouteError.badRequest('Escape Velocity values cannot be negative.');
       }
+      // Older API clients send only `board` (see pickBoard), so `boards` may be missing
+      if (Array.isArray(gameReq.boards) && gameReq.boards.length === 0) {
+        throw RouteError.badRequest('Must select at least one board');
+      }
       // Same rule as the create-game form (common/theme/Theme.ts): Dune only on Arrakis with the expansions it has texts for
       if (gameReq.theme !== undefined && !isTheme(gameReq.theme)) {
         throw RouteError.badRequest(`Unknown theme "${String(gameReq.theme)}" (known: ${THEMES.join(', ')})`);

@@ -1690,5 +1690,7 @@
   "${0} used the ${1} action to convert ${2}:cr:ware: into ${2}:r:mc:": "${0} używa akcji ${1}, aby zamienić ${2}:cr:ware: na ${2}:r:mc:",
   "All players lose 1:i:tr:.": "Wszyscy gracze tracą 1:i:tr:.",
   "Prize": "Nagroda",
-  "Sale": "Sprzedaż"
+  "Sale": "Sprzedaż",
+  "This page is out of date. Click OK to refresh it.": "Ta strona jest nieaktualna. Kliknij OK, aby ją odświeżyć.",
+  "Select how to pay for your project cards": "Wybierz, jak zapłacić za karty projektów"
 }

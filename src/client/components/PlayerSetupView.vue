@@ -27,7 +27,7 @@
          right column (PlayerHome), the player bars show the turn order ("1." = starting player) -->
     <!-- Invisible without own input (status tab shows who is still choosing); stays mounted because it polls the server -->
     <div v-show="playerView.waitingFor !== undefined">
-      <WaitingFor v-if="game.phase !== 'end'" :playerView="playerView" :waitingfor="playerView.waitingFor"/>
+      <WaitingFor v-if="game.phase !== 'end'" :playerView="playerView" :waitingfor="playerView.waitingFor" :requestId="playerView.requestId"/>
     </div>
   </div>
 </template>

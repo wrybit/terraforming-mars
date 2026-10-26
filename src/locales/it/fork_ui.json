@@ -2161,5 +2161,7 @@
   "Cards played by ${0} cost 1:r:mc: less this generation": "Le carte giocate da ${0} costano 1:r:mc: in meno in questa generazione",
   "Neutral player received ${0}:r:mc: from ${1} owner (${2})": "Il giocatore neutrale ha ricevuto ${0}:r:mc: dal proprietario di ${1} (${2})",
   "Prize": "Premio",
-  "Sale": "Vendita"
+  "Sale": "Vendita",
+  "This page is out of date. Click OK to refresh it.": "Questa pagina non è aggiornata. Fai clic su OK per ricaricarla.",
+  "Select how to pay for your project cards": "Scegli come pagare le tue carte progetto"
 }

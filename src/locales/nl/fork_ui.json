@@ -1523,5 +1523,7 @@
   "${0} used the ${1} action to convert ${2}:cr:ware: into ${2}:r:mc:": "${0} gebruikte de actie van ${1} om ${2}:cr:ware: om te zetten in ${2}:r:mc:",
   "All players lose 1:i:tr:.": "Alle spelers verliezen 1:i:tr:.",
   "Prize": "Prijs",
-  "Sale": "Verkoop"
+  "Sale": "Verkoop",
+  "This page is out of date. Click OK to refresh it.": "Deze pagina is verouderd. Klik op OK om haar te vernieuwen.",
+  "Select how to pay for your project cards": "Kies hoe je je projectkaarten betaalt"
 }

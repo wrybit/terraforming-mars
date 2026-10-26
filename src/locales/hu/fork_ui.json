@@ -1074,5 +1074,7 @@
   "${0} sued ${1} who had 0:r:mc:.": "${0} beperelte ${1} játékost, akinek 0:r:mc: volt.",
   "Prize": "Díj",
   "Sale": "Eladás",
-  "Temp.": "Hőm."
+  "Temp.": "Hőm.",
+  "This page is out of date. Click OK to refresh it.": "Ez az oldal elavult. Kattints az OK gombra a frissítéshez.",
+  "Select how to pay for your project cards": "Válaszd ki, hogyan fizetsz a projektkártyáidért"
 }

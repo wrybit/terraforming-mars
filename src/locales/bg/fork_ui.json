@@ -1839,5 +1839,7 @@
   "Neutral player received ${0}:r:mc: from ${1} owner (${2})": "Неутралният играч получи ${0}:r:mc: от собственика на ${1} (${2})",
   "Prize": "Награда",
   "Sale": "Продажба",
-  "Temp.": "Темп."
+  "Temp.": "Темп.",
+  "This page is out of date. Click OK to refresh it.": "Тази страница е остаряла. Натиснете OK, за да я обновите.",
+  "Select how to pay for your project cards": "Изберете как да платите за проектните си карти"
 }
