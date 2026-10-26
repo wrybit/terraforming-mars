@@ -460,6 +460,5 @@
   "${0} cancelled the action": "${0} perui toiminnon",
   "${0} bought ${1}": "${0} osti ${1}",
   "${0} bought no cards": "${0} ei ostanut kortteja",
-  "You bought ${0}": "Ostit ${0}",
   "${0} gained ${1} M€ from Turmoil ${2} policy": "${0} sai ${1} M€ puolueen ${2} politiikasta"
 }
