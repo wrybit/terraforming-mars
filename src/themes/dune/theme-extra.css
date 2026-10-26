@@ -19,6 +19,14 @@ html.theme-dune .board-space-tile--ocean {
   background: url(graphics/tile-spicefield.svg) center / contain no-repeat;
 }
 
+/* Owner's cube on a tile (BoardSpace.vue): a little smaller and in the upper left of the hex, so the Dune pictures
+   stay visible and the "+1" top right stays free; the random turn of the cube stays (Jens 26 Oct 2026) */
+html.theme-dune .board-space > .board-cube {
+  margin: 9px 0 0 6px;
+  transform: scale(0.78);
+  transform-origin: top left;
+}
+
 /* Spice field counter below the planet: number in the orange of the spice field tile */
 html.theme-dune .global-numbers-oceans {
   color: #e0662a;
