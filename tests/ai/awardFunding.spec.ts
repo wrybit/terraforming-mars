@@ -29,8 +29,9 @@ describe('AI award funding', () => {
     expect(leadsAward(player, 'Thermalist')).is.true;
   });
 
-  it('gates only free funding', () => {
+  it('gates free funding without a lead (paid early funding has its own rule)', () => {
     const [, player] = testGame(2);
+    setPlayerTuning(player.id, 'noAwardPaidEarly');
     const menu = (cost: number) => {
       const awards = new OrOptions(new SelectOption('Thermalist')).setTitle(message('Fund an award (${0} M€)', (b) => b.number(cost)));
       return awards;
@@ -68,8 +69,9 @@ describe('AI award funding', () => {
       expect(fundingAllowed(scientist(8), fund, player)).is.true;
     });
 
-    it('keeps the old behaviour without the variant', () => {
+    it('keeps the old behaviour without the rule', () => {
       const [, player] = testGame(2);
+      setPlayerTuning(player.id, 'noAwardPaidEarly');
       expect(fundingAllowed(scientist(8), fund, player)).is.true;
     });
   });

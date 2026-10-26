@@ -506,7 +506,8 @@ export const BASELINE_TUNING: AiTuning = {
   energyAsHeat: 0,
   // Round 76: −0.11 VP (z −0.17), neutral; fixes free award funding at 0 : 0 (tester report).
   awardFundingLead: 0.1,
-  awardPaidEarlyLead: 0,
+  // Round 141: +0.14 VP (z +0.16) – adopted: fixes the human-game error (paid funding at 0 : 0 in generation 1).
+  awardPaidEarlyLead: 1,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
@@ -819,6 +820,7 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   awardLead20: {awardFundingLead: 0.2},
   // Human game: paid funding at 0 : 0 in generation 1 (lookahead beat pass by noise).
   awardPaidEarly: {awardPaidEarlyLead: 1},
+  noAwardPaidEarly: {awardPaidEarlyLead: 0},
   // Control for the opening plan after the cache fix (plans of game copies were shared by tile count).
   noOpeningPlan: {openingPlan: 0},
   // Round 39: selling for milestones and awards −7.0 VP per deal (z −8.4); round 40 tries milestones only.
