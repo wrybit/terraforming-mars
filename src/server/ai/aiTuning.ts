@@ -118,6 +118,8 @@ export type AiTuning = {
   energyOutlook: number,
   /** 1: only the draw value of energy-spending draw cards follows the expected energy (energyOutlook.ts); 0 = off. */
   energyDrawOutlook: number,
+  /** 1: no move worse than doing nothing may beat passing after rollouts (passFairness.ts); 0 = off. */
+  passFairness: number,
   /** Weight of the opponent's engine advantage in the award swing (awardEngineSwing.ts); 0 = off. */
   awardEngineSwing: number,
   /** Requirement outlook of a card missing tags: base − step × missing tags (requirementOutlook.ts). */
@@ -379,6 +381,7 @@ export const BASELINE_TUNING: AiTuning = {
   tagDemand: 0.5,
   energyOutlook: 0,
   energyDrawOutlook: 0,
+  passFairness: 0,
   awardEngineSwing: 0,
   tagOutlookBase: 0.85,
   tagOutlookStep: 0.15,
@@ -908,6 +911,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Round 143: energyOutlook lost twice (−0.47, −0.69); only the draw value part. Requirement help re-checked.
   energyDraw: {energyDrawOutlook: 1},
   requirementHelpHalf: {enablerWeight: 0.25, needsPursuit: 0.25},
+  // Human game: useless moves beat passing because only passing is played on (rollouts).
+  passFairness: {passFairness: 1},
   buyStrictest: {buyMargin: 3},
   buyMargin2: {buyMargin: 2},
   buyMargin5: {buyMargin: 5},
