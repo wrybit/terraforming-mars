@@ -8,7 +8,7 @@ import {tuningOf} from './aiTuning';
 // add cities afterwards, often too late or after the opponent had taken the spot.
 
 /** Own cities and greeneries on the board. */
-function ownTileCounts(player: IPlayer): {cities: number, greeneries: number} {
+export function ownTileCounts(player: IPlayer): {cities: number, greeneries: number} {
   let cities = 0;
   let greeneries = 0;
   for (const space of player.game.board.spaces) {

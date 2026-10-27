@@ -22,6 +22,7 @@ import {RolloutEntry, RolloutPolicy, rolloutMeans} from './rolloutSearch';
 import {isStandardProject, standardProjectPenalty} from './standardProjectRestraint';
 import {cheapFirstPenalty} from './cheapFirst';
 import {isUselessMove} from './uselessMove';
+import {cityFirstActionAdjustment} from './cityFirstAction';
 import {capAgainstPass} from './passFairness';
 import {triggerOrderAdjustments} from './triggerOrder';
 import {playPreferences} from './bgaPolicy';
@@ -533,6 +534,13 @@ export function chooseAction(menu: OrOptions, player: IPlayer, options: Lookahea
       if (isStandardProject(menu, candidate.response)) {
         outcome.value -= standardPenalty;
       }
+    }
+  }
+
+  // cityFirstAction: while own cities do not lead, the city goes first and plants wait for it (cityFirstAction.ts).
+  if (tuning.cityFirstAction > 0) {
+    for (const {candidate, outcome} of tried) {
+      outcome.value += cityFirstActionAdjustment(player, menu, candidate.response);
     }
   }
 
