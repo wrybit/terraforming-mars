@@ -16,6 +16,9 @@ import {drawnCardValue} from './drawPriority';
 import {openingPlan} from './openingPlan';
 import {blockingShare} from './phasePlan';
 import {adoptedOrphanPoints, lonelyGreeneryPoints} from './greeneryRing';
+import {cityFirstPenalty} from './cityFirst';
+import {nestGuardPenalty} from './nestGuard';
+import {cityClaimSpreadBonus} from './cityClaimSpread';
 
 // Scores a hex for tile placement. Weights tuned in AI test batches.
 
@@ -190,6 +193,8 @@ function baseSpaceValue(space: Space, kind: TileKind, player: IPlayer): number {
     }
     value -= openCitySpots(neighbours, board) * victoryPoint * 0.6;
     value += ownTiles * 0.5;
+    // City first, then greeneries around it (cityFirst.ts); no nests for opponent cities (nestGuard.ts).
+    value -= (cityFirstPenalty(player, ownCities) + nestGuardPenalty(space, player, ownCities)) * victoryPoint;
     break;
   case 'city':
     // A city scores 1 VP per adjacent greenery (any owner) at game end; free land can become one.
@@ -211,6 +216,8 @@ function baseSpaceValue(space: Space, kind: TileKind, player: IPlayer): number {
     // too. A human player set a city one spot off on purpose so the AI could no longer build next to it.
     value += (opponentGreeneries(neighbours, player) + blockedOpponentSpots(neighbours, player, board) * 0.5) *
       (tuningOf(player).cityDenialShare + blockingShare(player)) * victoryPoint;
+    // Spread-out territory, card and ocean spots, spoiling opponent city rings (cityClaimSpread.ts).
+    value += cityClaimSpreadBonus(space, player) * victoryPoint;
     break;
   case 'ocean':
     // Oceans next to own tiles help nobody else; next to free land they feed later rebates.
