@@ -76,9 +76,10 @@ describe('AI round 147 variants', () => {
       const [, player, opponent] = testGame(2);
       player.heat = 10;
       opponent.heat = 9;
-      expect(fundingAllowed(thermalist, fund, player)).is.true;
-      setPlayerTuning(player.id, 'awardFundMargin');
+      // Round 148: adopted in the baseline; the check variant switches it off.
       expect(fundingAllowed(thermalist, fund, player)).is.false;
+      setPlayerTuning(player.id, 'noAwardFundMargin');
+      expect(fundingAllowed(thermalist, fund, player)).is.true;
     });
 
     it('allows it with a clear lead', () => {

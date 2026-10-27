@@ -126,6 +126,12 @@ export type AiTuning = {
   preludeIncomeFloor: number,
   /** > 0: paid award funding only with a lead above this multiple of what the best opponent can still catch up (awardFundMargin.ts). */
   awardFundMargin: number,
+  /** VP off a greenery without an adjacent own city while own cities do not outnumber own greeneries (cityFirst.ts); 0 = off. */
+  cityFirst: number,
+  /** Weight of the penalty for greeneries that open city spots an opponent can take soon, and lonely edge greeneries (nestGuard.ts); 0 = off. */
+  nestGuard: number,
+  /** Weight of the city bonus for spread-out territory, card/ocean spots and spoiling opponent city rings (cityClaimSpread.ts); 0 = off. */
+  cityClaimSpread: number,
   /** Weight of the opponent's engine advantage in the award swing (awardEngineSwing.ts); 0 = off. */
   awardEngineSwing: number,
   /** Requirement outlook of a card missing tags: base − step × missing tags (requirementOutlook.ts). */
@@ -390,7 +396,10 @@ export const BASELINE_TUNING: AiTuning = {
   passFairness: 0,
   milestoneDenial: 0,
   preludeIncomeFloor: 1,
-  awardFundMargin: 0,
+  awardFundMargin: 1,
+  cityFirst: 0,
+  nestGuard: 0,
+  cityClaimSpread: 0,
   awardEngineSwing: 0,
   tagOutlookBase: 0.85,
   tagOutlookStep: 0.15,
@@ -834,8 +843,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   noAwardLead: {awardFundingLead: 0},
   awardLead20: {awardFundingLead: 0.2},
   // Human game: paid funding at 0 : 0 in generation 1 (lookahead beat pass by noise).
-  awardPaidEarly: {awardPaidEarlyLead: 1},
-  noAwardPaidEarly: {awardPaidEarlyLead: 0},
+  // Rounds 141/142 measured these before awardFundMargin (round 148) gated paid funding: keep it off here.
+  awardPaidEarly: {awardPaidEarlyLead: 1, awardFundMargin: 0},
+  noAwardPaidEarly: {awardPaidEarlyLead: 0, awardFundMargin: 0},
   // Control for the opening plan after the cache fix (plans of game copies were shared by tile count).
   noOpeningPlan: {openingPlan: 0},
   // Round 39: selling for milestones and awards −7.0 VP per deal (z −8.4); round 40 tries milestones only.
@@ -932,6 +942,13 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   noPreludeIncomeFloor: {preludeIncomeFloor: 0},
   // Human games: self-funded awards lost by a narrow margin (8x, e.g. 6 : 7, 9 : 12, 15 : 21).
   awardFundMargin: {awardFundMargin: 1},
+  // Round 148: awardFundMargin adopted (+1.31, z +2.10); check.
+  noAwardFundMargin: {awardFundMargin: 0},
+  // Round 149: city first, no greenery nests, spread-out cities (human games: 29 % vs 15 % greeneries with a city
+  // lead, 1.19 vs 1.75 nests per game, first cities 3.4 vs 2.7 spaces apart).
+  cityFirst: {cityFirst: 1},
+  nestGuard: {nestGuard: 1},
+  cityClaimSpread: {cityClaimSpread: 1},
   buyStrictest: {buyMargin: 3},
   buyMargin2: {buyMargin: 2},
   buyMargin5: {buyMargin: 5},
