@@ -132,6 +132,8 @@ export type AiTuning = {
   nestGuard: number,
   /** Weight of the city bonus for spread-out territory, card/ocean spots and spoiling opponent city rings (cityClaimSpread.ts); 0 = off. */
   cityClaimSpread: number,
+  /** VP off converting plants into a greenery without an own city next to it, half of it as a city-move bonus, while own cities do not lead (cityFirstAction.ts); 0 = off. */
+  cityFirstAction: number,
   /** Weight of the opponent's engine advantage in the award swing (awardEngineSwing.ts); 0 = off. */
   awardEngineSwing: number,
   /** Requirement outlook of a card missing tags: base − step × missing tags (requirementOutlook.ts). */
@@ -399,7 +401,8 @@ export const BASELINE_TUNING: AiTuning = {
   awardFundMargin: 1,
   cityFirst: 0,
   nestGuard: 0,
-  cityClaimSpread: 0,
+  cityClaimSpread: 1,
+  cityFirstAction: 0,
   awardEngineSwing: 0,
   tagOutlookBase: 0.85,
   tagOutlookStep: 0.15,
@@ -949,6 +952,12 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   cityFirst: {cityFirst: 1},
   nestGuard: {nestGuard: 1},
   cityClaimSpread: {cityClaimSpread: 1},
+  // Round 149: cityClaimSpread adopted (+1.24, z +1.54, Jens' city rules); check.
+  noCityClaimSpread: {cityClaimSpread: 0},
+  // Round 149: nestGuard −1.34 but nests 1.65 → 1.29 per player; half strength.
+  nestGuardHalf: {nestGuard: 0.5},
+  // Round 149: cityFirst (space choice) left the order unchanged (15 % → 15 %); the order is the move choice.
+  cityFirstAction: {cityFirstAction: 1},
   buyStrictest: {buyMargin: 3},
   buyMargin2: {buyMargin: 2},
   buyMargin5: {buyMargin: 5},

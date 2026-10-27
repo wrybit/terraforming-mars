@@ -66,9 +66,10 @@ describe('AI round 149 variants', () => {
     game.addCity(player, first);
     const far = spacesAt(game, first, 3).find((space) => space.spaceType === SpaceType.LAND && space.tile === undefined);
     expect(far).is.not.undefined;
-    expect(cityClaimSpreadBonus(far!, player)).eq(0);
-    setPlayerTuning(player.id, 'cityClaimSpread');
+    // Round 149: adopted in the baseline; the check variant switches it off.
     expect(cityClaimSpreadBonus(far!, player)).to.be.at.least(1);
+    setPlayerTuning(player.id, 'noCityClaimSpread');
+    expect(cityClaimSpreadBonus(far!, player)).eq(0);
   });
 
   it('cityClaimSpread: an early city on a card space gains', () => {
