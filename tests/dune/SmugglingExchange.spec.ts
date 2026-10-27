@@ -117,14 +117,31 @@ describe('CHOAM exchange', () => {
     }
   });
 
-  it('never keeps a rate the same longer than 2 generations (Jens 27 Oct 2026)', () => {
+  it('draws the steps below 1 Solari as well: water sells for 1 more often, not more often higher (Jens 27 Oct 2026)', () => {
+    let atOne = 0;
+    let atFive = 0;
+    let cells = 0;
+    for (let seed = 1; seed <= 300; seed++) {
+      run(seed / 301, 14).sell.slice(1).forEach((sell) => {
+        atOne += sell.heat === 1 ? 1 : 0;
+        atFive += sell.heat === 5 ? 1 : 0;
+        cells++;
+      });
+    }
+    // Target: −2, −1 and 0 together 60 %, +4 5 %
+    expect(100 * atOne / cells).within(52, 68);
+    expect(100 * atFive / cells).within(2, 9);
+  });
+
+  it('never keeps a rate the same longer than 2 generations, except on 1 Solari (Jens 27 Oct 2026)', () => {
     for (const seed of [0.13, 0.58, 0.91]) {
       const data = run(seed, 200);
       for (const side of ['sell', 'buy'] as const) {
         for (const good of EXCHANGE_GOODS) {
           let same = 1;
           for (let generation = 1; generation < data[side].length; generation++) {
-            same = data[side][generation][good] === data[side][generation - 1][good] ? same + 1 : 1;
+            const rate = data[side][generation][good];
+            same = rate === data[side][generation - 1][good] && rate !== 1 ? same + 1 : 1;
             expect(same, `${side} ${good} generation ${generation}`).lte(MAX_SAME_GENERATIONS);
           }
         }

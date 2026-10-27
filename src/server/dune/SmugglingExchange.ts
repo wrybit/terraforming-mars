@@ -9,13 +9,14 @@ import {
 // (Jens 27 Oct 2026, variant G of _mockups/dune/choam/kurs-dynamik.html). The normal rates stay as they are; only how
 // often a rate leaves them changes:
 // - Each rate follows a target distribution of its favour −2 … +4 (12 / 22 / 26 / 18 / 10 / 7 / 5 %). No rate goes
-//   below 1 Solari: what would fall below stays on the lowest rate (water sells for 1 at worst).
+//   below 1 Solari: the draws below still happen and the rate stays on 1, so water sells for 1 more often, not more
+//   often higher (Jens 27 Oct 2026).
 // - A global market mood from −2 (slump) to +2 (boom) moves 1 every generation, mostly keeping its direction, and
 //   tilts that distribution a little: in a boom +3 and +4 come up more often.
 // - Each board (selling, buying) makes 10 tries per generation (Metropolis steps). A try moves one rate 1 (or, now and
 //   then, 2); half of the tries are pairs: what one good gains, another loses.
 // - No rate stays the same longer than 2 generations: one that would, moves now, in half of the cases with a counter
-//   move on another good of its board.
+//   move on another good of its board. A rate on 1 Solari may stay there.
 // - Selling may stand above buying the same good; trading there and back is blocked instead: a good bought from the
 //   guild cannot be sold to it in the same generation, and the other way round (guildRoundTrip.ts).
 // - The rates of the next generation are fixed one generation ahead: the forecast everybody sees.
@@ -26,6 +27,9 @@ import {
 /** Version of the exchange data: 2 since variant G (27 Oct 2026); missing in games from before (exchangeOf migrates them) */
 export const EXCHANGE_VERSION = 2;
 
+/** Per good how many steps beyond 1 Solari a rate lies */
+export type Depth = Partial<Record<ExchangeGood, number>>;
+
 export type ExchangeData = {
   /** Rates per generation, the current one last */
   sell: Array<ExchangePrices>,
@@ -35,8 +39,10 @@ export type ExchangeData = {
   market?: Array<number>,
   /** Direction the market mood last moved (−1, +1; 0 at the start) */
   marketTrend?: number,
+  /** How far beyond 1 Solari the current rates lie (see hiddenFavour); missing: nowhere */
+  depth?: {sell: Depth, buy: Depth},
   /** Rates (and market mood) of the next generation (the forecast); games from before it get it at their next generation end */
-  next?: {sell: ExchangePrices, buy: ExchangePrices, market?: number},
+  next?: {sell: ExchangePrices, buy: ExchangePrices, market?: number, depth?: {sell: Depth, buy: Depth}},
   /** Units of each good all players sold (+) and bought (−) at the guild this generation; missing: none */
   flow?: Partial<Record<ExchangeGood, number>>,
 };
@@ -97,35 +103,33 @@ const MARKET_MOMENTUM = 0.65;
 /** No rate stays the same longer than this many generations */
 export const MAX_SAME_GENERATIONS = 2;
 
-/** Favours a rate can have: −2 … +4, cut where the rate would fall below 1 Solari (selling: below, buying: above) */
+/** Favours a rate can show: −2 … +4, cut where the rate would fall below 1 Solari (selling: below, buying: above) */
 function favourRange(side: ExchangeSide, good: ExchangeGood): {low: number, high: number} {
   return side === 'sell' ?
     {low: Math.max(FAVOUR_MIN, 1 - NORMAL_SELL[good]), high: FAVOUR_MAX} :
     {low: FAVOUR_MIN, high: Math.min(FAVOUR_MAX, NORMAL_BUY[good] - 1)};
 }
 
-/** Target weight of a favour; the outermost possible one also carries the weight of those beyond it (0 outside) */
-function targetWeight(side: ExchangeSide, good: ExchangeGood, favour: number): number {
-  const {low, high} = favourRange(side, good);
-  if (favour < low || favour > high) {
-    return 0;
-  }
-  let weight = FAVOUR_WEIGHTS[favour];
-  if (favour === low) {
-    for (let beyond = FAVOUR_MIN; beyond < low; beyond++) {
-      weight += FAVOUR_WEIGHTS[beyond];
-    }
-  }
-  if (favour === high) {
-    for (let beyond = high + 1; beyond <= FAVOUR_MAX; beyond++) {
-      weight += FAVOUR_WEIGHTS[beyond];
-    }
-  }
-  return weight;
+/**
+ * The favour behind a rate. The exchange draws every favour −2 … +4, also those below 1 Solari (Jens 27 Oct 2026:
+ * statistically the step down still happens, the rate just stays on 1). How far beyond 1 Solari a rate lies is kept in
+ * `depth`, so water sells for 1 as often as the draws below it say.
+ */
+function hiddenFavour(side: ExchangeSide, good: ExchangeGood, rate: number, depth: Depth | undefined): number {
+  const beyond = depth?.[good] ?? 0;
+  return favourOf(side, good, rate) + (side === 'sell' ? -beyond : beyond);
 }
 
-function weightOf(side: ExchangeSide, good: ExchangeGood, favour: number, market: number): number {
-  return targetWeight(side, good, favour) * Math.exp(MARKET_TILT * market * favour);
+/** The rate a favour shows (at least 1 Solari) and how far beyond 1 Solari it lies */
+function shownRate(side: ExchangeSide, good: ExchangeGood, favour: number): {rate: number, beyond: number} {
+  const {low, high} = favourRange(side, good);
+  const shown = Math.min(high, Math.max(low, favour));
+  return {rate: rateAtFavour(side, good, shown), beyond: Math.abs(favour - shown)};
+}
+
+/** Target weight of a favour at a market mood; 0 outside −2 … +4 */
+function weightOf(favour: number, market: number): number {
+  return (FAVOUR_WEIGHTS[favour] ?? 0) * Math.exp(MARKET_TILT * market * favour);
 }
 
 function randomItem<T>(items: ReadonlyArray<T>, rng: Random): T {
@@ -144,8 +148,10 @@ function nextMarket(level: number, trend: number, rng: Random): {level: number, 
   return {level: level + direction, trend: direction};
 }
 
-/** One try on one board (changes `prices` when taken): a single move or a pair, taken by the target distribution */
-function tryMove(side: ExchangeSide, prices: ExchangePrices, market: number, rng: Random): void {
+type Favours = Record<ExchangeGood, number>;
+
+/** One try on one board (changes `favours` when taken): a single move or a pair, taken by the target distribution */
+function tryMove(favours: Favours, market: number, rng: Random): void {
   const first = randomItem(EXCHANGE_GOODS, rng);
   const size = rng.next() < JUMP_CHANCE ? 2 : 1;
   const direction = rng.next() < 0.5 ? -1 : 1;
@@ -153,65 +159,65 @@ function tryMove(side: ExchangeSide, prices: ExchangePrices, market: number, rng
   if (rng.next() < PAIRED_CHANCE) {
     moves.push({good: randomItem(EXCHANGE_GOODS.filter((good) => good !== first), rng), change: -direction * size});
   }
-  const next = {...prices};
   let ratio = 1;
   for (const {good, change} of moves) {
-    const favour = favourOf(side, good, prices[good]);
-    const weight = weightOf(side, good, favour + change, market);
+    const weight = weightOf(favours[good] + change, market);
     if (weight === 0) {
       return;
     }
-    // A rate outside the distribution (an old game) always moves back in
-    const current = weightOf(side, good, favour, market);
+    // A favour outside the distribution (an old game) always moves back in
+    const current = weightOf(favours[good], market);
     ratio *= current === 0 ? Infinity : weight / current;
-    next[good] = rateAtFavour(side, good, favour + change);
   }
   if (rng.next() > ratio) {
     return;
   }
-  Object.assign(prices, next);
+  for (const {good, change} of moves) {
+    favours[good] += change;
+  }
 }
 
-/** Weighted pick of a change; undefined when none has weight */
-function pickChange(changes: ReadonlyArray<number>, weight: (change: number) => number, rng: Random): number | undefined {
-  const weights = changes.map(weight);
+/** Weighted pick; undefined when nothing has weight */
+function pickWeighted(items: ReadonlyArray<number>, weight: (item: number) => number, rng: Random): number | undefined {
+  const weights = items.map(weight);
   const total = weights.reduce((sum, value) => sum + value, 0);
   if (total <= 0) {
     return undefined;
   }
   let roll = rng.next() * total;
-  for (let index = 0; index < changes.length; index++) {
+  for (let index = 0; index < items.length; index++) {
     roll -= weights[index];
     if (roll < 0) {
-      return changes[index];
+      return items[index];
     }
   }
-  return changes[changes.length - 1];
+  return items[items.length - 1];
 }
 
 /**
- * Rates that stood the same for MAX_SAME_GENERATIONS generations move now, by the target distribution; in half of the
- * cases with a counter move on another good, never one pushed back onto a value it already held that long.
+ * Favours whose rate stood the same for MAX_SAME_GENERATIONS generations move now, by the target distribution; in
+ * half of the cases with a counter move on another good, never one pushed back onto a rate it already held that long.
+ * A rate on 1 Solari may stay there: the draws below 1 keep it.
  */
-function moveStaleRates(side: ExchangeSide, prices: ExchangePrices, history: ReadonlyArray<ExchangePrices>, market: number, rng: Random): void {
+function moveStaleRates(side: ExchangeSide, favours: Favours, history: ReadonlyArray<ExchangePrices>, market: number, rng: Random): void {
   if (history.length < MAX_SAME_GENERATIONS) {
     return;
   }
   const recent = history.slice(-MAX_SAME_GENERATIONS);
-  const stalled = (good: ExchangeGood, rate: number) => recent.every((rates) => rates[good] === rate);
+  const stalled = (good: ExchangeGood, favour: number) => recent.every((rates) => rates[good] === shownRate(side, good, favour).rate);
   const forced = new Set<ExchangeGood>();
   for (const good of EXCHANGE_GOODS) {
-    if (!stalled(good, prices[good])) {
+    // On 1 Solari a rate may stay: the draws below 1 keep it there (Jens 27 Oct 2026)
+    if (!stalled(good, favours[good]) || shownRate(side, good, favours[good]).rate === 1) {
       continue;
     }
     forced.add(good);
-    const favour = favourOf(side, good, prices[good]);
-    const change = pickChange([-2, -1, 1, 2],
-      (step) => weightOf(side, good, favour + step, market) * (Math.abs(step) === 2 ? JUMP_CHANCE : 1), rng);
+    const change = pickWeighted([-2, -1, 1, 2],
+      (step) => weightOf(favours[good] + step, market) * (Math.abs(step) === 2 ? JUMP_CHANCE : 1), rng);
     if (change === undefined) {
       continue;
     }
-    prices[good] = rateAtFavour(side, good, favour + change);
+    favours[good] += change;
     if (rng.next() > PAIRED_CHANCE) {
       continue;
     }
@@ -219,10 +225,9 @@ function moveStaleRates(side: ExchangeSide, prices: ExchangePrices, history: Rea
     const start = Math.floor(rng.next() * Math.max(1, partners.length));
     for (let offset = 0; offset < partners.length; offset++) {
       const other = partners[(start + offset) % partners.length];
-      const otherFavour = favourOf(side, other, prices[other]) - change;
-      const rate = rateAtFavour(side, other, otherFavour);
-      if (weightOf(side, other, otherFavour, market) > 0 && !stalled(other, rate)) {
-        prices[other] = rate;
+      const otherFavour = favours[other] - change;
+      if (weightOf(otherFavour, market) > 0 && !stalled(other, otherFavour)) {
+        favours[other] = otherFavour;
         break;
       }
     }
@@ -230,29 +235,43 @@ function moveStaleRates(side: ExchangeSide, prices: ExchangePrices, history: Rea
 }
 
 /** Rates of one board in the generation after its history (current last) at the market mood of that generation */
-function nextBoard(side: ExchangeSide, history: ReadonlyArray<ExchangePrices>, market: number, rng: Random): ExchangePrices {
-  const prices = {...currentRates(history)};
+function nextBoard(side: ExchangeSide, history: ReadonlyArray<ExchangePrices>, depth: Depth | undefined, market: number, rng: Random): {rates: ExchangePrices, depth: Depth} {
+  const current = currentRates(history);
+  const favours = {} as Favours;
+  for (const good of EXCHANGE_GOODS) {
+    favours[good] = hiddenFavour(side, good, current[good], depth);
+  }
   for (let attempt = 0; attempt < TRIES; attempt++) {
-    tryMove(side, prices, market, rng);
+    tryMove(favours, market, rng);
   }
   // Twice, because a counter move can meet a rate that stood still as well
   for (let pass = 0; pass < 2; pass++) {
-    moveStaleRates(side, prices, history, market, rng);
+    moveStaleRates(side, favours, history, market, rng);
   }
-  return prices;
+  return shownRates(side, favours);
+}
+
+function shownRates(side: ExchangeSide, favours: Favours): {rates: ExchangePrices, depth: Depth} {
+  const rates = {...(side === 'sell' ? NORMAL_SELL : NORMAL_BUY)};
+  const depth: Depth = {};
+  for (const good of EXCHANGE_GOODS) {
+    const shown = shownRate(side, good, favours[good]);
+    rates[good] = shown.rate;
+    if (shown.beyond > 0) {
+      depth[good] = shown.beyond;
+    }
+  }
+  return {rates, depth};
 }
 
 /** Starting rates drawn from the target distribution (at mood 0) */
-function startingRates(side: ExchangeSide, rng: Random): ExchangePrices {
-  const prices = {...(side === 'sell' ? NORMAL_SELL : NORMAL_BUY)};
+function startingRates(side: ExchangeSide, rng: Random): {rates: ExchangePrices, depth: Depth} {
+  const favours = {} as Favours;
+  const all = [-2, -1, 0, 1, 2, 3, 4];
   for (const good of EXCHANGE_GOODS) {
-    const favours = [];
-    for (let favour = FAVOUR_MIN; favour <= FAVOUR_MAX; favour++) {
-      favours.push(favour);
-    }
-    prices[good] = rateAtFavour(side, good, pickChange(favours, (favour) => targetWeight(side, good, favour), rng) ?? 0);
+    favours[good] = pickWeighted(all, (favour) => weightOf(favour, 0), rng) ?? 0;
   }
-  return prices;
+  return shownRates(side, favours);
 }
 
 export function currentRates(rates: ReadonlyArray<ExchangePrices>): ExchangePrices {
@@ -268,21 +287,22 @@ export function currentMarket(data: ExchangeData): number {
 function drawForecast(data: ExchangeData, rng: Random): void {
   const market = nextMarket(currentMarket(data), data.marketTrend ?? 0, rng);
   data.marketTrend = market.trend;
-  data.next = {
-    buy: nextBoard('buy', data.buy, market.level, rng),
-    sell: nextBoard('sell', data.sell, market.level, rng),
-    market: market.level,
-  };
+  const buy = nextBoard('buy', data.buy, data.depth?.buy, market.level, rng);
+  const sell = nextBoard('sell', data.sell, data.depth?.sell, market.level, rng);
+  data.next = {sell: sell.rates, buy: buy.rates, market: market.level, depth: {sell: sell.depth, buy: buy.depth}};
 }
 
 /** New exchange: rates drawn from the target distribution (normal without `rng`); with `rng` also the forecast of generation 2 */
 export function initializeExchange(rng?: Random): ExchangeData {
-  const sell = rng === undefined ? {...NORMAL_SELL} : startingRates('sell', rng);
-  const buy = rng === undefined ? {...NORMAL_BUY} : startingRates('buy', rng);
-  const data: ExchangeData = {sell: [sell], buy: [buy], version: EXCHANGE_VERSION, market: [0], marketTrend: 0};
-  if (rng !== undefined) {
-    drawForecast(data, rng);
+  if (rng === undefined) {
+    return {sell: [{...NORMAL_SELL}], buy: [{...NORMAL_BUY}], version: EXCHANGE_VERSION, market: [0], marketTrend: 0};
   }
+  const sell = startingRates('sell', rng);
+  const buy = startingRates('buy', rng);
+  const data: ExchangeData = {
+    sell: [sell.rates], buy: [buy.rates], depth: {sell: sell.depth, buy: buy.depth}, version: EXCHANGE_VERSION, market: [0], marketTrend: 0,
+  };
+  drawForecast(data, rng);
   return data;
 }
 
@@ -297,6 +317,7 @@ export function advanceExchange(data: ExchangeData, rng: Random): void {
     return;
   }
   const market = next.market ?? currentMarket(data);
+  data.depth = data.next?.depth;
   data.sell.push(next.sell);
   data.buy.push(next.buy);
   data.market = [...(data.market ?? data.sell.slice(0, -1).map(() => 0)), market];
