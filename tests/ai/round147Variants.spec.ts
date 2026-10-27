@@ -58,9 +58,11 @@ describe('AI round 147 variants', () => {
       const corporation = new CrediCor();
       const poor = [new BiosphereSupport(), new PolarIndustries()];
       const rich = [new BusinessEmpire(), new Donation()];
+      // Round 147: adopted in the baseline; the check variant switches it off.
+      expect(preludeIncomePenalty(player, corporation, poor)).to.be.greaterThan(0);
+      setPlayerTuning(player.id, 'noPreludeIncomeFloor');
       expect(preludeIncomePenalty(player, corporation, poor)).eq(0);
       setPlayerTuning(player.id, 'preludeIncomeFloor');
-      expect(preludeIncomePenalty(player, corporation, poor)).to.be.greaterThan(0);
       expect(preludeIncomePenalty(player, corporation, rich)).eq(0);
     });
   });

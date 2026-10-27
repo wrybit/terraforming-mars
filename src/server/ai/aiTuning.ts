@@ -389,7 +389,7 @@ export const BASELINE_TUNING: AiTuning = {
   energyDrawOutlook: 1,
   passFairness: 0,
   milestoneDenial: 0,
-  preludeIncomeFloor: 0,
+  preludeIncomeFloor: 1,
   awardFundMargin: 0,
   awardEngineSwing: 0,
   tagOutlookBase: 0.85,
@@ -928,6 +928,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   milestoneDenial: {milestoneDenial: 1},
   // Human games: M€ production at most 1 until generation 5 (8x), e.g. preludes with −1 M€ production.
   preludeIncomeFloor: {preludeIncomeFloor: 1},
+  // Round 147: preludeIncomeFloor adopted (neutral −0.04, fixes a human-game error); check.
+  noPreludeIncomeFloor: {preludeIncomeFloor: 0},
   // Human games: self-funded awards lost by a narrow margin (8x, e.g. 6 : 7, 9 : 12, 15 : 21).
   awardFundMargin: {awardFundMargin: 1},
   buyStrictest: {buyMargin: 3},
