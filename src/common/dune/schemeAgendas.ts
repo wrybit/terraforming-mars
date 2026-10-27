@@ -30,11 +30,11 @@ export const SCHEME_LEVEL_LABELS = ['Easy', 'Medium', 'Hard'] as const;
 export const SCHEME_REDUCTION_TR = 35;
 
 export const SCHEME_AGENDAS: ReadonlyArray<SchemeAgenda> = [
-  {name: 'Lord of the Reserves', goal: 'own tiles next to oceans', measure: 'tilesNextToOceans', targets: [5, 8, 10], icon: 'tile-small-spicefield'},
-  {name: 'Green Dream', goal: 'own greeneries', measure: 'greeneries', targets: [9, 13, 18], icon: 'tile-small-planting'},
-  {name: 'League of Sietches', goal: 'own cities', measure: 'cities', targets: [5, 7, 10], icon: 'tile-small-sietch'},
+  {name: 'Lord of the Reserves', goal: 'own tiles next to oceans', measure: 'tilesNextToOceans', targets: [5, 8, 10], icon: 'tile-spicefield'},
+  {name: 'Green Dream', goal: 'own greeneries', measure: 'greeneries', targets: [9, 13, 18], icon: 'tile-planting'},
+  {name: 'League of Sietches', goal: 'own cities', measure: 'cities', targets: [5, 7, 10], icon: 'tile-sietch'},
   {name: 'Desert Chain', goal: 'own tiles connected', measure: 'largestTileGroup', targets: [10, 15, 20], icon: 'tile-planting'},
-  {name: 'Keeper of Wonders', goal: 'special tiles with an own neighbour', measure: 'specialTilesWithOwnNeighbour', targets: [3, 4, 5], icon: 'tile-small-special'},
+  {name: 'Keeper of Wonders', goal: 'special tiles with an own neighbour', measure: 'specialTilesWithOwnNeighbour', targets: [3, 4, 5], icon: 'tile-special'},
   {name: 'Rim to Rim', goal: 'rows A–I with an own tile', measure: 'rowsWithOwnTile', targets: [5, 7, 9], icon: 'tile-sietch'},
   {name: 'Spice Baron', goal: 'titanium production', measure: 'titaniumProduction', targets: [5, 7, 10], icon: 'res-spice'},
   {name: 'Plasteel Magnate', goal: 'steel production', measure: 'steelProduction', targets: [6, 9, 12], icon: 'res-plasteel'},

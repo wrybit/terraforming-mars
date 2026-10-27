@@ -1545,3 +1545,8 @@ html.theme-dune .mc-icon::after {
 html.theme-dune .create-game-player-name::placeholder {
   color: rgba(239, 223, 191, 0.5);
 }
+
+/* Board facts on the create page show the Dune board tiles, which are taller than wide: keep their shape */
+html.theme-dune .create-game-board-fact img {
+  object-fit: contain;
+}

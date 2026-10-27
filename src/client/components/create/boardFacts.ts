@@ -28,7 +28,7 @@ export type BoardFact = {picture: string, value: number, label: string};
 // Pictures of the three facts in each theme
 const PICTURES: Record<'mars' | 'dune', {oceans: string, oxygen: string, temperature: string}> = {
   mars: {oceans: 'assets/tiles/ocean.png', oxygen: 'assets/global-parameters/oxygen.png', temperature: 'assets/global-parameters/temperature.png'},
-  dune: {oceans: duneGraphic('tile-small-spicefield'), oxygen: duneGraphic('par-vegetation'), temperature: duneGraphic('par-water-storage')},
+  dune: {oceans: duneGraphic('tile-spicefield'), oxygen: duneGraphic('par-vegetation'), temperature: duneGraphic('par-water-storage')},
 };
 
 /** Short enough for the chip (Jens, 21 Oct 2026): a small picture and a number each, the words (in the theme's terms) as tooltip */

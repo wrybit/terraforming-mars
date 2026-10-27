@@ -38,10 +38,10 @@ export const SCHEMES_RULES: ReadonlyArray<DuneRule> = [
 
 // Shai-Hulud: what the worm does to the spaces it crosses
 const WORM_EFFECT_RULES: ReadonlyArray<DuneRule> = [
-  {picture: 'tile-small-spicefield', text: 'Spice field: +1 spice for each adjacent tile of a player'},
-  {picture: 'tile-small-sietch', text: 'City: worm riders, the owner gains 1 spice and 2 heat'},
-  {picture: 'tile-small-planting', text: 'Greenery: trampled, the owner loses 3 plants'},
-  {picture: 'tile-small-special', text: 'Special tile: damaged, the owner loses 3 M€'},
+  {picture: 'tile-spicefield', text: 'Spice field: +1 spice for each adjacent tile of a player'},
+  {picture: 'tile-sietch', text: 'City: worm riders, the owner gains 1 spice and 2 heat'},
+  {picture: 'tile-planting', text: 'Greenery: trampled, the owner loses 3 plants'},
+  {picture: 'tile-special', text: 'Special tile: damaged, the owner loses 3 M€'},
   {picture: 'special-worm-domain', text: 'Natural Preserve: the worm stops, the owner gains 1 TR'},
 ];
 
