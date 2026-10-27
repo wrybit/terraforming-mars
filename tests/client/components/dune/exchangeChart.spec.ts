@@ -4,7 +4,7 @@ import {NORMAL_BUY, NORMAL_SELL} from '@/common/dune/smugglingExchange';
 import {exchangeChart, moodOf, rateDeviation, SHOWN_GENERATIONS} from '@/client/components/dune/exchangeChart';
 
 describe('exchangeChart', () => {
-  const sell = {normal: NORMAL_SELL, history: [NORMAL_SELL, {...NORMAL_SELL, steel: 5}, {...NORMAL_SELL, steel: 3}]};
+  const sell = {normal: NORMAL_SELL, history: [NORMAL_SELL, {...NORMAL_SELL, steel: 3}, {...NORMAL_SELL, steel: 1}]};
 
   it('mood: high is good when selling, low when buying', () => {
     expect(moodOf(3, 2, true)).eq('good');
@@ -33,9 +33,9 @@ describe('exchangeChart', () => {
   });
 
   it('distance from the base price', () => {
-    // Plasteel sells for 3 instead of 4: one below normal, bad when you give it
+    // Steel sells for 1 instead of 2: one below normal, bad when you give it
     expect(rateDeviation(sell, Resource.STEEL, true)).deep.eq({delta: -1, mood: 'bad', peak: false});
-    expect(rateDeviation({normal: NORMAL_BUY, history: [{...NORMAL_BUY, steel: 8}]}, Resource.STEEL, false)).deep.eq({delta: -1, mood: 'good', peak: false});
+    expect(rateDeviation({normal: NORMAL_BUY, history: [{...NORMAL_BUY, steel: 3}]}, Resource.STEEL, false)).deep.eq({delta: -1, mood: 'good', peak: false});
     expect(rateDeviation({normal: NORMAL_BUY, history: [NORMAL_BUY]}, Resource.HEAT, false)).deep.eq({delta: 0, mood: 'normal', peak: false});
   });
 });

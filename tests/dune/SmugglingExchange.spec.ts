@@ -1,17 +1,13 @@
 import {expect} from 'chai';
 import {SeededRandom} from '../../src/common/utils/Random';
 import {
-  EXCHANGE_GOODS, ExchangePrices, ExchangeSide, FAVOUR_MAX, FAVOUR_MIN, MARKET_MAX, MARKET_MIN, NORMAL_BUY, NORMAL_SELL,
-  bestRate, boardSumBand, favourOf, orderLimits, orderPremium, orderRefund,
+  EXCHANGE_GOODS, FAVOUR_MAX, FAVOUR_MIN, MARKET_MAX, MARKET_MIN, NORMAL_BUY, NORMAL_SELL,
+  bestRate, favourOf, orderLimits, orderPremium, orderRefund,
   privilegePay, privilegeRate,
 } from '../../src/common/dune/smugglingExchange';
 import {
-  ExchangeData, MAX_SAME_GENERATIONS, advanceExchange, forecastOf, initializeExchange, migrateExchange, recordTrade,
+  EXCHANGE_VERSION, ExchangeData, MAX_SAME_GENERATIONS, advanceExchange, forecastOf, initializeExchange, migrateExchange, recordTrade,
 } from '../../src/server/dune/SmugglingExchange';
-
-function favourSum(side: ExchangeSide, prices: ExchangePrices): number {
-  return EXCHANGE_GOODS.reduce((sum, good) => sum + favourOf(side, good, prices[good]), 0);
-}
 
 function run(seed: number, generations: number): ExchangeData {
   const rng = new SeededRandom(seed);
@@ -26,37 +22,56 @@ describe('CHOAM exchange', () => {
   it('starts with drawn rates at market mood 0, with the forecast of the next generation', () => {
     const data = initializeExchange(new SeededRandom(0.3));
     expect(data.sell).has.length(1);
+    expect(data.version).eq(EXCHANGE_VERSION);
     expect(data.market).deep.eq([0]);
-    expect(favourSum('sell', data.sell[0])).within(boardSumBand(0).min, boardSumBand(0).max);
     expect(data.next).is.not.undefined;
     expect(Math.abs(data.next?.market ?? 9)).eq(1);
     // Without a random source (old games) at the normal rates
     expect(initializeExchange().sell).deep.eq([NORMAL_SELL]);
   });
 
-  it('keeps every rate within −2 … +4 in the player\'s favour, at least 1, selling never above buying, the sum mostly in the band of the market mood', () => {
+  it('keeps the normal rates of the game (Jens 27 Oct 2026: only how the rates move changes)', () => {
+    expect(NORMAL_SELL).deep.eq({megacredits: 1, steel: 2, titanium: 5, plants: 1, energy: 1, heat: 1});
+    expect(NORMAL_BUY).deep.eq({megacredits: 1, steel: 4, titanium: 6, plants: 2, energy: 2, heat: 2});
+  });
+
+  it('keeps every rate within −2 … +4 in the player\'s favour and at least 1 Solari; selling may stand above buying', () => {
+    let crossed = 0;
     for (const seed of [0.1, 0.42, 0.77]) {
       const data = run(seed, 300);
-      let inBand = 0;
       data.sell.forEach((sell, generation) => {
         const buy = data.buy[generation];
-        const band = boardSumBand(data.market?.[generation] ?? 0);
-        // The band moves 2 with every step of the mood; the rates follow within a generation or two
-        for (const sum of [favourSum('sell', sell), favourSum('buy', buy)]) {
-          if (sum >= band.min && sum <= band.max) {
-            inBand++;
-          }
-        }
         expect([sell.megacredits, buy.megacredits]).deep.eq([1, 1]);
         for (const good of EXCHANGE_GOODS) {
           expect(favourOf('sell', good, sell[good])).within(FAVOUR_MIN, FAVOUR_MAX);
           expect(favourOf('buy', good, buy[good])).within(FAVOUR_MIN, FAVOUR_MAX);
           expect(sell[good]).gte(1);
-          expect(sell[good]).lte(buy[good]);
+          expect(buy[good]).gte(1);
+          if (sell[good] > buy[good]) {
+            crossed++;
+          }
         }
       });
-      expect(inBand / (2 * data.sell.length)).gt(0.85);
     }
+    expect(crossed).gt(0);
+  });
+
+  it('follows the target distribution where 1 Solari does not cut it: spice sells for 3 to 9', () => {
+    const counts: Record<number, number> = {};
+    let cells = 0;
+    for (let seed = 1; seed <= 300; seed++) {
+      const data = run(seed / 301, 14);
+      data.sell.slice(1).forEach((sell) => {
+        const favour = favourOf('sell', 'titanium', sell.titanium);
+        counts[favour] = (counts[favour] ?? 0) + 1;
+        cells++;
+      });
+    }
+    const share = (favour: number) => 100 * (counts[favour] ?? 0) / cells;
+    // Target 12 / 22 / 26 / 18 / 10 / 7 / 5 %
+    expect(share(0)).within(18, 32);
+    expect(share(-2)).within(6, 18);
+    expect(share(4)).within(2, 9);
   });
 
   it('turns the forecast into the rates of the next generation', () => {
@@ -66,6 +81,7 @@ describe('CHOAM exchange', () => {
     advanceExchange(data, rng);
     expect(data.sell[1]).deep.eq(forecast?.sell);
     expect(data.buy[1]).deep.eq(forecast?.buy);
+    expect(data.market?.[1]).eq(forecast?.market);
   });
 
   it('gives games from before the forecast one at their next generation end', () => {
@@ -91,7 +107,7 @@ describe('CHOAM exchange', () => {
     expect(peaks).gt(0);
   });
 
-  it('moves the market mood 1 per generation within −2 … +3', () => {
+  it('moves the market mood 1 per generation within −2 … +2', () => {
     const data = run(0.27, 200);
     const market = data.market ?? [];
     expect(market).has.length(201);
@@ -116,22 +132,24 @@ describe('CHOAM exchange', () => {
     }
   });
 
-  it('reaches +4 now and then', () => {
-    const data = run(0.44, 600);
-    const tops = data.sell.filter((sell) => EXCHANGE_GOODS.some((good) => favourOf('sell', good, sell[good]) === FAVOUR_MAX));
-    expect(tops.length).gt(10);
+  it('gives games from before the market mood one, rates unchanged', () => {
+    const data: ExchangeData = {sell: [{...NORMAL_SELL, steel: 3}], buy: [{...NORMAL_BUY}]};
+    expect(migrateExchange(data)).eq('added');
+    expect(data.sell[0].steel).eq(3);
+    expect(data.market).deep.eq([0]);
+    expect(migrateExchange(data)).is.undefined;
   });
 
-  it('moves games from before the market mood onto the new normal rates, keeping every favour', () => {
+  it('moves games from the doubled normal rates back, keeping each favour as far as 1 Solari allows', () => {
     const data: ExchangeData = {
-      sell: [{megacredits: 1, steel: 3, titanium: 5, plants: 1, energy: 2, heat: 1}],
-      buy: [{megacredits: 1, steel: 4, titanium: 5, plants: 3, energy: 2, heat: 2}],
+      sell: [{megacredits: 1, steel: 5, titanium: 8, plants: 1, energy: 4, heat: 3}],
+      buy: [{megacredits: 1, steel: 9, titanium: 14, plants: 8, energy: 3, heat: 7}],
+      market: [1],
     };
-    expect(migrateExchange(data)).is.true;
-    expect(data.sell[0]).deep.eq({megacredits: 1, steel: 5, titanium: 10, plants: 3, energy: 4, heat: 3});
-    expect(data.buy[0]).deep.eq({megacredits: 1, steel: 9, titanium: 14, plants: 8, energy: 7, heat: 7});
-    expect(data.market).deep.eq([0]);
-    expect(migrateExchange(data)).is.false;
+    expect(migrateExchange(data)).eq('doubled');
+    expect(data.sell[0]).deep.eq({megacredits: 1, steel: 3, titanium: 3, plants: 1, energy: 2, heat: 1});
+    expect(data.buy[0]).deep.eq({megacredits: 1, steel: 4, titanium: 5, plants: 3, energy: 1, heat: 2});
+    expect(data.version).eq(EXCHANGE_VERSION);
   });
 
   it('is the same for the same seed (replays and the AI see the same rates)', () => {
@@ -143,7 +161,7 @@ describe('CHOAM exchange', () => {
     const data = initializeExchange(rng);
     data.next = {sell: {...NORMAL_SELL}, buy: {...NORMAL_BUY}};
     // 7 spice sold, 1 bought back: 6 net → selling 2 lower; 3 water bought → buying 1 higher
-    recordTrade(data, 'titanium', 7, 'megacredits', 70);
+    recordTrade(data, 'titanium', 7, 'megacredits', 35);
     recordTrade(data, 'megacredits', 6, 'titanium', 1);
     recordTrade(data, 'megacredits', 6, 'heat', 3);
     const forecast = forecastOf(data);
@@ -160,17 +178,17 @@ describe('CHOAM exchange', () => {
   });
 
   it('prices prophecies: limits, bet premium for selling only, half back on withdrawing', () => {
-    expect(orderLimits('sell', 'titanium')).deep.eq({min: 11, max: bestRate('sell', 'titanium')});
-    expect(bestRate('sell', 'titanium')).eq(14);
-    expect(orderLimits('buy', 'steel')).deep.eq({min: 5, max: 8});
-    expect(orderPremium('sell', 'titanium', 3, 12)).eq(6);
-    expect(orderPremium('buy', 'steel', 3, 6)).eq(0);
+    expect(orderLimits('sell', 'titanium')).deep.eq({min: 6, max: bestRate('sell', 'titanium')});
+    expect(bestRate('sell', 'titanium')).eq(9);
+    expect(orderLimits('buy', 'steel')).deep.eq({min: 1, max: 3});
+    expect(orderPremium('sell', 'titanium', 3, 7)).eq(6);
+    expect(orderPremium('buy', 'steel', 3, 2)).eq(0);
     expect(orderRefund(5)).eq(2);
   });
 
   it('lets the emperor pay 1 more than the guild, never less than normal + 1 (Jens 25 Oct 2026)', () => {
-    // Plasteel: normal 4; guild 5 -> 6, guild 4 -> 5, guild 3 -> still 5
-    expect([privilegeRate('steel', 5), privilegeRate('steel', 4), privilegeRate('steel', 3)]).deep.eq([6, 5, 5]);
-    expect(privilegePay('steel', 5, 5)).eq(30);
+    // Plasteel: normal 2; guild 3 -> 4, guild 2 -> 3, guild 1 -> still 3
+    expect([privilegeRate('steel', 3), privilegeRate('steel', 2), privilegeRate('steel', 1)]).deep.eq([4, 3, 3]);
+    expect(privilegePay('steel', 5, 3)).eq(20);
   });
 });

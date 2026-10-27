@@ -14,12 +14,11 @@ export type ExchangeSide = 'sell' | 'buy';
 export type ExchangePrices = Record<Resource, number>;
 
 /**
- * Normal rates (Jens 27 Oct 2026, variant D of _mockups/dune/choam/kurs-dynamik.html): the old ones doubled for a finer
- * grid, with more room between selling and buying so rates can reach +3/+4 without meeting and −2 without falling
- * below 1. Selling plasteel 4, spice 10, the others 3; buying plasteel 9, spice 15, the others 7.
+ * Normal rates: selling at the worth of the value table (spice at its smuggling price 5), buying at double worth. They
+ * carry the balance of the game and stay as they are; only how the rates move around them changes (Jens 27 Oct 2026).
  */
-export const NORMAL_SELL: Readonly<ExchangePrices> = {megacredits: 1, steel: 4, titanium: 10, plants: 3, energy: 3, heat: 3};
-export const NORMAL_BUY: Readonly<ExchangePrices> = {megacredits: 1, steel: 9, titanium: 15, plants: 7, energy: 7, heat: 7};
+export const NORMAL_SELL: Readonly<ExchangePrices> = {megacredits: 1, steel: 2, titanium: 5, plants: 1, energy: 1, heat: 1};
+export const NORMAL_BUY: Readonly<ExchangePrices> = {megacredits: 1, steel: 4, titanium: 6, plants: 2, energy: 2, heat: 2};
 export const NORMAL_RATES: Readonly<Record<ExchangeSide, Readonly<ExchangePrices>>> = {sell: NORMAL_SELL, buy: NORMAL_BUY};
 
 // "Favour" of a rate: how far it lies from normal in the player's favour (selling higher, buying cheaper). Each rate
@@ -29,19 +28,9 @@ export const FAVOUR_MAX = 4;
 /** From this favour on a rate counts as a peak (the tile shows it highlighted) */
 export const PEAK_FAVOUR = 3;
 
-// Global market mood (Jens 27 Oct 2026): from −2 (slump) to +3 (boom). It pulls all rates along, and the favours of
-// one board add up to a band that moves with it: −2 … +3 at mood 0, shifted by 2 per step of the mood.
+// Global market mood (Jens 27 Oct 2026): from −2 (slump) to +2 (boom). It pulls all rates along, a little.
 export const MARKET_MIN = -2;
-export const MARKET_MAX = 3;
-const BOARD_SUM_MIN = -2;
-const BOARD_SUM_MAX = 3;
-const BOARD_SUM_SHIFT = 2;
-
-/** Band the favours of one board add up to at the given market mood */
-export function boardSumBand(market: number): {min: number, max: number} {
-  const shift = market * BOARD_SUM_SHIFT;
-  return {min: BOARD_SUM_MIN + shift, max: BOARD_SUM_MAX + shift};
-}
+export const MARKET_MAX = 2;
 
 const SIGN: Readonly<Record<ExchangeSide, number>> = {sell: 1, buy: -1};
 
@@ -55,12 +44,20 @@ export function rateAtFavour(side: ExchangeSide, good: Resource, favour: number)
   return NORMAL_RATES[side][good] + SIGN[side] * favour;
 }
 
-/** Best rate the exchange can reach; selling never rises above the highest buying price of the same good */
+/** Best rate the exchange can reach (never below 1 Solari) */
 export function bestRate(side: ExchangeSide, good: Resource): number {
   if (side === 'sell') {
-    return Math.min(NORMAL_SELL[good] + FAVOUR_MAX, NORMAL_BUY[good] - FAVOUR_MIN);
+    return NORMAL_SELL[good] + FAVOUR_MAX;
   }
   return Math.max(1, NORMAL_BUY[good] - FAVOUR_MAX);
+}
+
+/** Worst rate the exchange can reach (never below 1 Solari) */
+export function worstRate(side: ExchangeSide, good: Resource): number {
+  if (side === 'sell') {
+    return Math.max(1, NORMAL_SELL[good] + FAVOUR_MIN);
+  }
+  return NORMAL_BUY[good] - FAVOUR_MIN;
 }
 
 /**

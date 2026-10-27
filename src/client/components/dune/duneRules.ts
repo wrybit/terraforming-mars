@@ -62,7 +62,8 @@ export function wormRules(layout: ArrakisLayout): ReadonlyArray<DuneRule> {
 // CHOAM (Jens 24 Oct 2026: smuggling and the CHOAM contracts as one module, as a short list like the other modules)
 export const CHOAM_RULES: ReadonlyArray<DuneRule> = [
   {picture: 'coin', text: 'Guild: the rates change every generation, the next one is known in advance'},
-  {sign: 'levels', text: 'Market mood from −2 (slump) to +3 (boom) pulls all rates along; no rate stays the same longer than 2 generations'},
+  {sign: 'levels', text: 'Market mood from −2 (slump) to +2 (boom) pulls all rates along; no rate stays the same longer than 2 generations'},
+  {sign: 'hidden', text: 'What you bought from the guild you cannot sell back to it in the same generation, and the other way round'},
   {sign: 'slide', text: 'Supply and demand: every 3 units all players sell net lower the next selling rate by 1, every 3 bought raise the next buying rate by 1'},
   {sign: 'die', text: 'Prophecy: 2 to 8 units on one rate; once the market reaches it you get exactly your column, premium included; withdrawing gives back half, at game end it is lost'},
   {picture: 'choam', text: 'Privilege: each generation the emperor wants one good and pays 1 Solari per unit more than the guild, only to the first'},

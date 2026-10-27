@@ -139,33 +139,47 @@ describe('Dune modules B, D, E, F', () => {
   describe('Smuggling (E)', () => {
     beforeEach(normalRates);
 
-    it('moves spice at the guild rate (normal 10 M€ each) and raises the suspicion', () => {
+    it('moves spice for 5 M€ each and raises the suspicion', () => {
       player1.titanium = 6;
       const move = smuggleTrade(player1);
-      // Only whole multiples of the rate: 1 spice for 10 M€, at most 5 spice per deal
-      expect(() => move.process({type: 'trade', give: Resource.TITANIUM, giveAmount: 2, get: Resource.MEGACREDITS, getAmount: 10})).to.throw();
-      expect(() => move.process({type: 'trade', give: Resource.TITANIUM, giveAmount: 6, get: Resource.MEGACREDITS, getAmount: 60})).to.throw();
-      move.process({type: 'trade', give: Resource.TITANIUM, giveAmount: 5, get: Resource.MEGACREDITS, getAmount: 50});
+      // Only whole multiples of the rate: 1 spice for 5 M€, at most 5 spice per deal
+      expect(() => move.process({type: 'trade', give: Resource.TITANIUM, giveAmount: 2, get: Resource.MEGACREDITS, getAmount: 5})).to.throw();
+      expect(() => move.process({type: 'trade', give: Resource.TITANIUM, giveAmount: 6, get: Resource.MEGACREDITS, getAmount: 30})).to.throw();
+      move.process({type: 'trade', give: Resource.TITANIUM, giveAmount: 5, get: Resource.MEGACREDITS, getAmount: 25});
       expect(player1.titanium).eq(1);
-      expect(player1.megaCredits).eq(50);
+      expect(player1.megaCredits).eq(25);
       expect(suspicionOf(game.duneData!.smuggling!, player1)).eq(1);
     });
 
-    it('trades good for good at the guild rates: water brings 3, vegetation costs 7, so 7 for 3', () => {
-      player1.heat = 15;
+    it('trades 2 for 1 on the black market', () => {
+      player1.heat = 9;
       const market = smuggleTrade(player1);
       expect(() => market.process({type: 'trade', give: Resource.HEAT, giveAmount: 10, get: Resource.PLANTS, getAmount: 5})).to.throw();
       expect(() => market.process({type: 'trade', give: Resource.HEAT, giveAmount: 8, get: Resource.HEAT, getAmount: 4})).to.throw();
-      market.process({type: 'trade', give: Resource.HEAT, giveAmount: 14, get: Resource.PLANTS, getAmount: 6});
-      expect([player1.heat, player1.plants]).deep.eq([1, 6]);
+      market.process({type: 'trade', give: Resource.HEAT, giveAmount: 8, get: Resource.PLANTS, getAmount: 4});
+      expect([player1.heat, player1.plants]).deep.eq([1, 4]);
     });
 
-    it('sells spice for Solari at the buying rate: 15 M€ for 1 spice, never 2', () => {
-      player1.megaCredits = 31;
+    it('prices the black market by worth: 6 M€ for 1 spice, never 2', () => {
+      player1.megaCredits = 13;
       const market = smuggleTrade(player1);
       expect(() => market.process({type: 'trade', give: Resource.MEGACREDITS, giveAmount: 2, get: Resource.TITANIUM, getAmount: 1})).to.throw();
-      market.process({type: 'trade', give: Resource.MEGACREDITS, giveAmount: 30, get: Resource.TITANIUM, getAmount: 2});
+      market.process({type: 'trade', give: Resource.MEGACREDITS, giveAmount: 12, get: Resource.TITANIUM, getAmount: 2});
       expect([player1.megaCredits, player1.titanium]).deep.eq([1, 2]);
+    });
+
+    it('blocks trading there and back in one generation: what was sold cannot be bought, what was bought cannot be sold', () => {
+      player1.heat = 5;
+      player1.megaCredits = 0;
+      smuggleTrade(player1).process({type: 'trade', give: Resource.HEAT, giveAmount: 3, get: Resource.MEGACREDITS, getAmount: 3});
+      const second = smuggleTrade(player1);
+      expect(second.get).not.includes(Resource.HEAT);
+      expect(second.give.map((option) => option.resource)).includes(Resource.HEAT);
+      second.process({type: 'trade', give: Resource.MEGACREDITS, giveAmount: 2, get: Resource.PLANTS, getAmount: 1});
+      expect(smuggleTrade(player1).give.map((option) => option.resource)).not.includes(Resource.PLANTS);
+      // A new generation starts afresh
+      (game as any).generation = game.generation + 1;
+      expect(smuggleTrade(player1).get).includes(Resource.HEAT);
     });
 
     it('trades at the rates of the current generation: what the given one brings, what the received one costs', () => {
@@ -357,12 +371,12 @@ describe('Dune modules B, D, E, F', () => {
       privilege.amount = 2;
       player1.titanium = 2;
       player2.titanium = 2;
-      // The guild pays 13 for spice this generation (normal 10): the emperor 14 per unit
+      // The guild pays 7 for spice this generation (normal 5): the emperor 8 per unit
       const sell = exchangeOf(smuggling).sell;
-      sell[sell.length - 1] = {...sell[sell.length - 1], titanium: 13};
+      sell[sell.length - 1] = {...sell[sell.length - 1], titanium: 7};
       cast(option(choamTab(player1), PRIVILEGE_TITLE), SelectOption).cb(undefined);
-      expect([player1.titanium, player1.megaCredits]).deep.eq([0, 28]);
-      expect(privilege.pay).eq(28);
+      expect([player1.titanium, player1.megaCredits]).deep.eq([0, 16]);
+      expect(privilege.pay).eq(16);
       expect(privilege.takenBy).eq(player1.id);
       expect(suspicionOf(smuggling, player1)).eq(1);
       expect(choamTab(player2).options.map(titleOf)).not.includes(PRIVILEGE_TITLE);
@@ -376,50 +390,49 @@ describe('Dune modules B, D, E, F', () => {
       const smuggling = game.duneData!.smuggling!;
       player1.titanium = 9;
       const sell = cast(option(choamTab(player1), PROPHECY_SELL_TITLE), SelectTrade);
-      // 1 unit is too few, the normal rate 10 cannot be named
-      expect(() => sell.process({type: 'trade', give: Resource.TITANIUM, giveAmount: 1, get: Resource.MEGACREDITS, getAmount: 12})).to.throw();
-      expect(() => sell.process({type: 'trade', give: Resource.TITANIUM, giveAmount: 5, get: Resource.MEGACREDITS, getAmount: 10})).to.throw();
-      sell.process({type: 'trade', give: Resource.TITANIUM, giveAmount: 5, get: Resource.MEGACREDITS, getAmount: 12});
+      // 1 unit is too few, the normal rate 5 cannot be named
+      expect(() => sell.process({type: 'trade', give: Resource.TITANIUM, giveAmount: 1, get: Resource.MEGACREDITS, getAmount: 7})).to.throw();
+      expect(() => sell.process({type: 'trade', give: Resource.TITANIUM, giveAmount: 5, get: Resource.MEGACREDITS, getAmount: 5})).to.throw();
+      sell.process({type: 'trade', give: Resource.TITANIUM, giveAmount: 5, get: Resource.MEGACREDITS, getAmount: 7});
       expect(player1.titanium).eq(4);
       expect(suspicionOf(smuggling, player1)).eq(1);
-      expect(prophecyOf(smuggling).orders[0].limit).eq(12);
+      expect(prophecyOf(smuggling).orders[0].limit).eq(7);
       const exchange = exchangeOf(smuggling);
       player1.megaCredits = 0;
-      // Spice only reaches 11: nothing yet
-      exchange.next = {sell: {...exchange.sell[0], titanium: 11}, buy: {...exchange.buy[0], titanium: 15}};
+      // Spice only reaches 6: nothing yet
+      exchange.next = {sell: {...exchange.sell[0], titanium: 6}, buy: {...exchange.buy[0], titanium: 8}};
       moveExchange(game, smuggling);
       expect(player1.megaCredits).eq(0);
       expect(prophecyOf(smuggling).orders).has.length(1);
-      // Spice reaches 13: exactly the column of 12, 5 × 12 = 60 plus the premium 5 × 2 = 10
-      exchange.next = {sell: {...exchange.sell[0], titanium: 13}, buy: {...exchange.buy[0], titanium: 15}};
+      // Spice reaches 8: exactly the column of 7, 5 × 7 = 35 plus the premium 5 × 2 = 10
+      exchange.next = {sell: {...exchange.sell[0], titanium: 8}, buy: {...exchange.buy[0], titanium: 8}};
       moveExchange(game, smuggling);
-      expect(player1.megaCredits).eq(70);
+      expect(player1.megaCredits).eq(45);
       expect(prophecyOf(smuggling).orders).deep.eq([]);
     });
 
     it('places a buy prophecy with a budget on a named rate and brings exactly its column, rounded up', () => {
       const smuggling = game.duneData!.smuggling!;
-      player1.megaCredits = 80;
-      // 5 spice at the normal 15: a budget of 75 Solari, named rate 13
+      player1.megaCredits = 40;
+      // 5 spice at the normal 6: a budget of 30 Solari, named rate 4
       cast(option(choamTab(player1), PROPHECY_BUY_TITLE), SelectTrade)
-        .process({type: 'trade', give: Resource.MEGACREDITS, giveAmount: 13, get: Resource.TITANIUM, getAmount: 5});
-      expect(player1.megaCredits).eq(5);
-      expect(prophecyOf(smuggling).orders[0].budget).eq(75);
-      // Spice falls to 12: the column of 13, 75 ÷ 13 = 5.8 → 6, premium 5 × 2 = 10 Solari ÷ 13 = 0.8 → 1
+        .process({type: 'trade', give: Resource.MEGACREDITS, giveAmount: 4, get: Resource.TITANIUM, getAmount: 5});
+      expect(player1.megaCredits).eq(10);
+      expect(prophecyOf(smuggling).orders[0].budget).eq(30);
+      // Spice falls to 3: the column of 4, 30 ÷ 4 = 7.5 → 8, premium 5 × 2 = 10 Solari ÷ 4 = 2.5 → 3
       player1.titanium = 0;
       const exchange = exchangeOf(smuggling);
-      exchange.next = {sell: {...exchange.sell[0], titanium: 10}, buy: {...exchange.buy[0], titanium: 12}};
+      exchange.next = {sell: {...exchange.sell[0], titanium: 3}, buy: {...exchange.buy[0], titanium: 3}};
       moveExchange(game, smuggling);
-      expect([player1.titanium, player1.megaCredits]).deep.eq([7, 5]);
+      expect([player1.titanium, player1.megaCredits]).deep.eq([11, 10]);
 
-      // Withdrawing gives back half of the budget: 4 vegetation at the normal 7 bind 28
-      player1.megaCredits = 30;
+      // Withdrawing gives back half of the budget
       cast(option(choamTab(player1), PROPHECY_BUY_TITLE), SelectTrade)
-        .process({type: 'trade', give: Resource.MEGACREDITS, giveAmount: 6, get: Resource.PLANTS, getAmount: 4});
+        .process({type: 'trade', give: Resource.MEGACREDITS, giveAmount: 1, get: Resource.PLANTS, getAmount: 4});
       expect(player1.megaCredits).eq(2);
       const id = prophecyOf(smuggling).orders[0].id;
       cast(option(choamTab(player1), 'CHOAM: withdraw prophecy ' + id), SelectOption).cb(undefined);
-      expect(player1.megaCredits).eq(2 + 14);
+      expect(player1.megaCredits).eq(2 + 4);
     });
   });
 

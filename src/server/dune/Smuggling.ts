@@ -10,7 +10,8 @@ import {SelectTrade} from '../inputs/SelectTrade';
 import {SelectPayment} from '../inputs/SelectPayment';
 import {tradeRate} from '../../common/inputs/tradeRate';
 import {NORMAL_BUY, NORMAL_SELL} from '../../common/dune/smugglingExchange';
-import {ExchangeData, advanceExchange, currentRates, forecastOf, initializeExchange, legacyShift, migrateExchange, recordTrade} from './SmugglingExchange';
+import {ExchangeData, advanceExchange, currentRates, forecastOf, initializeExchange, migrateExchange, recordTrade, undoubledRate} from './SmugglingExchange';
+import {GuildRoundTrips, mayBuyFromGuild, maySellToGuild, recordRoundTrip} from './guildRoundTrip';
 import {PlayerInput} from '../PlayerInput';
 import {message} from '../logs/MessageBuilder';
 import {COSTLY_SUSPICION, MAX_SUSPICION, SmugglingModel, TRIBUTE_PRINTED_COST, suspicionPenalty} from '../../common/dune/DuneModel';
@@ -35,6 +36,8 @@ export type SmugglingData = {
   suspicion: Record<PlayerId, number>,
   /** Guild deals each player made (milestone Smuggler King, dune/goals); missing in older games */
   deals?: Record<PlayerId, number>,
+  /** Goods each player sold to and bought from the guild this generation (no trading there and back) */
+  roundTrips?: GuildRoundTrips,
   /** Rates of the exchange; games from before the exchange get it on first use */
   exchange?: ExchangeData,
   /** The emperor's privilege of this generation; games from before it get one on first use */
@@ -63,17 +66,22 @@ export function initializeSmuggling(rng?: Random, generation = 1): SmugglingData
 }
 
 /**
- * The exchange of the game; added on first use to games from before it. Games from before the market mood (27 Oct
- * 2026) move once onto the new normal rates, their open prophecies with them, so every rate keeps its favour.
+ * The exchange of the game; added on first use to games from before it. Games from the hours of the doubled normal
+ * rates (27 Oct 2026, morning) move back onto the normal rates, their open prophecies with them.
  */
 export function exchangeOf(data: SmugglingData): ExchangeData {
   data.exchange ??= initializeExchange();
-  if (migrateExchange(data.exchange)) {
+  if (migrateExchange(data.exchange) === 'doubled') {
     data.prophecy?.orders.forEach((order) => {
-      order.limit += legacyShift(order.side, order.good);
+      order.limit = undoubledRate(order.side, order.good, order.limit);
     });
   }
   return data.exchange;
+}
+
+/** After a guild trade: the record against trading there and back */
+function noteRoundTrip(player: IPlayer, data: SmugglingData, give: Resource, get: Resource): void {
+  data.roundTrips = recordRoundTrip(data.roundTrips, player.id, player.game.generation, give, get);
 }
 
 export function prophecyOf(data: SmugglingData): ProphecyData {
@@ -187,11 +195,15 @@ export function smuggleInput(player: IPlayer, data: SmugglingData, onlySpice: bo
   }
   const {values, buyValues, spicePair} = currentPricing(data);
   const pricing = onlySpice ? {pairs: [spicePair]} : {values, buyValues, pairs: [spicePair]};
-  const getOptions = onlySpice ? [Resource.MEGACREDITS] : ALL_RESOURCES;
+  const generation = player.game.generation;
+  // No trading there and back in one generation: what was bought cannot be sold, what was sold cannot be bought
+  const getOptions = (onlySpice ? [Resource.MEGACREDITS] : ALL_RESOURCES)
+    .filter((resource) => mayBuyFromGuild(data.roundTrips, player.id, generation, resource));
   // What pays for at least one unit of some other resource
   const affords = (resource: Resource) => getOptions.some((get) => get !== resource &&
     player.stock.get(resource) >= (tradeRate(pricing, resource, get)?.give ?? Infinity));
-  const resources = onlySpice ? [Resource.TITANIUM] : ALL_RESOURCES;
+  const resources = (onlySpice ? [Resource.TITANIUM] : ALL_RESOURCES)
+    .filter((resource) => maySellToGuild(data.roundTrips, player.id, generation, resource));
   if (!resources.some(affords)) {
     return undefined;
   }
@@ -210,6 +222,7 @@ export function smuggleInput(player: IPlayer, data: SmugglingData, onlySpice: bo
       raiseEnvy(player, data);
       // Supply and demand: the trade moves the forecast of the next generation
       recordTrade(exchangeOf(data), trade.give, trade.giveAmount, trade.get, trade.getAmount);
+      noteRoundTrip(player, data, trade.give, trade.get);
       data.deals = {...data.deals, [player.id]: (data.deals?.[player.id] ?? 0) + 1};
       return undefined;
     });
@@ -280,7 +293,8 @@ export function aiGuildInput(player: IPlayer, data: SmugglingData): SelectTrade 
  */
 export function aiWaterInput(player: IPlayer, data: SmugglingData): SelectTrade | undefined {
   const surplus = sellableWater(player);
-  if (surplus <= 0 || envyFull(data, player) || suspicionOf(data, player) + 1 >= COSTLY_SUSPICION) {
+  if (surplus <= 0 || envyFull(data, player) || suspicionOf(data, player) + 1 >= COSTLY_SUSPICION ||
+    !maySellToGuild(data.roundTrips, player.id, player.game.generation, Resource.HEAT)) {
     return undefined;
   }
   const {values, buyValues, spicePair} = currentPricing(data);
@@ -296,6 +310,7 @@ export function aiWaterInput(player: IPlayer, data: SmugglingData): SelectTrade 
       player.stock.add(trade.get, trade.getAmount, {log: true});
       raiseEnvy(player, data);
       recordTrade(exchangeOf(data), trade.give, trade.giveAmount, trade.get, trade.getAmount);
+      noteRoundTrip(player, data, trade.give, trade.get);
       data.deals = {...data.deals, [player.id]: (data.deals?.[player.id] ?? 0) + 1};
       return undefined;
     });

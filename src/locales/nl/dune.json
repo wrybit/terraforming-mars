@@ -409,5 +409,6 @@
   "${0} fought with ${1} Sardaukar in the Kanly": "${0} vocht in de Kanly met ${1} Sardaukar",
   "Recruit: standard project, 12 M€ per Sardaukar": "Werven: standaardproject, 12 M€ per Sardaukar",
   "Market mood": "Marktstemming",
-  "Market mood from −2 (slump) to +3 (boom) pulls all rates along; no rate stays the same longer than 2 generations": "De marktstemming van −2 (malaise) tot +3 (hausse) trekt alle koersen mee; geen koers blijft langer dan 2 generaties gelijk"
+  "Market mood from −2 (slump) to +2 (boom) pulls all rates along; no rate stays the same longer than 2 generations": "De marktstemming van −2 (malaise) tot +2 (hausse) trekt alle koersen mee; geen koers blijft langer dan 2 generaties gelijk",
+  "What you bought from the guild you cannot sell back to it in the same generation, and the other way round": "Wat je van het gilde kocht, kun je in dezelfde generatie niet aan het gilde terugverkopen – en andersom"
 }
