@@ -10,7 +10,7 @@ import {SelectTrade} from '../inputs/SelectTrade';
 import {SelectPayment} from '../inputs/SelectPayment';
 import {tradeRate} from '../../common/inputs/tradeRate';
 import {NORMAL_BUY, NORMAL_SELL} from '../../common/dune/smugglingExchange';
-import {ExchangeData, advanceExchange, currentRates, forecastOf, initializeExchange, recordTrade} from './SmugglingExchange';
+import {ExchangeData, advanceExchange, currentRates, forecastOf, initializeExchange, legacyShift, migrateExchange, recordTrade} from './SmugglingExchange';
 import {PlayerInput} from '../PlayerInput';
 import {message} from '../logs/MessageBuilder';
 import {COSTLY_SUSPICION, MAX_SUSPICION, SmugglingModel, TRIBUTE_PRINTED_COST, suspicionPenalty} from '../../common/dune/DuneModel';
@@ -62,9 +62,17 @@ export function initializeSmuggling(rng?: Random, generation = 1): SmugglingData
   };
 }
 
-/** The exchange of the game; added on first use to games from before it */
+/**
+ * The exchange of the game; added on first use to games from before it. Games from before the market mood (27 Oct
+ * 2026) move once onto the new normal rates, their open prophecies with them, so every rate keeps its favour.
+ */
 export function exchangeOf(data: SmugglingData): ExchangeData {
   data.exchange ??= initializeExchange();
+  if (migrateExchange(data.exchange)) {
+    data.prophecy?.orders.forEach((order) => {
+      order.limit += legacyShift(order.side, order.good);
+    });
+  }
   return data.exchange;
 }
 
@@ -347,6 +355,7 @@ export function smugglingModel(game: IGame, data: SmugglingData, viewer?: IPlaye
     exchange: {
       sell: {normal: {...NORMAL_SELL}, history: exchange.sell, next: forecast?.sell},
       buy: {normal: {...NORMAL_BUY}, history: exchange.buy, next: forecast?.buy},
+      market: {history: exchange.market ?? [], next: forecast?.market},
     },
     privilege: privilegeModel(game, privilegeOf(game, data), currentRates(exchange.sell)),
     // The next privilege pays by the forecast, which supply and demand can still move this generation

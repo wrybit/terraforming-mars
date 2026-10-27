@@ -414,5 +414,7 @@
   "−${0} steps": "−${0} niveles",
   "no penalty": "sin castigo",
   "${0} fought with ${1} Sardaukar in the Kanly": "${0} luchó en el Kanly con ${1} Sardaukar",
-  "Recruit: standard project, 12 M€ per Sardaukar": "Reclutar: proyecto estándar, 12 M€ por Sardaukar"
+  "Recruit: standard project, 12 M€ per Sardaukar": "Reclutar: proyecto estándar, 12 M€ por Sardaukar",
+  "Market mood": "Clima del mercado",
+  "Market mood from −2 (slump) to +3 (boom) pulls all rates along; no rate stays the same longer than 2 generations": "El clima del mercado, de −2 (crisis) a +3 (auge), arrastra todos los precios; ningún precio se mantiene igual más de 2 generaciones"
 }

@@ -258,3 +258,32 @@
 .trade-select__change--bad {
   color: #ff7a68;
 }
+
+// Market mood above the two sides: label, value now, then the next generation (Jens, 27 Oct 2026)
+.trade-select__market {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 6px;
+  margin: 0 0 8px;
+  color: @exchange-muted;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.trade-select__market-next {
+  margin-left: 6px;
+}
+
+.trade-select__market-value {
+  color: @exchange-line;
+  font-size: 14px;
+}
+
+.trade-select__market-value--good {
+  color: #7fe07a;
+}
+
+.trade-select__market-value--bad {
+  color: #ff7a68;
+}

@@ -7,6 +7,15 @@
   <!-- Smuggling: above the tiles of each side the exchange (ExchangeChart), below each tile its rate (Jens, 20 Oct 2026) -->
   <div :class="['trade-select', {'trade-select--exchange': exchange !== undefined}]">
     <div v-if="showtitle === true" class="amount-select__title">{{ $t(playerinput.title) }}</div>
+    <!-- Market mood of the CHOAM exchange (−2 slump … +3 boom) now and in the next generation (Jens, 27 Oct 2026) -->
+    <div v-if="market !== undefined" class="trade-select__market" data-test="trade-market">
+      <span class="trade-select__market-label">{{ $t('Market mood') }}</span>
+      <span :class="['trade-select__market-value', 'trade-select__market-value--' + moodOfMarket(market.now)]">{{ signed(market.now) }}</span>
+      <template v-if="market.next !== undefined">
+        <span class="trade-select__market-next">G{{ generation + 1 }}</span>
+        <span :class="['trade-select__market-value', 'trade-select__market-value--' + moodOfMarket(market.next)]">{{ signed(market.next) }}</span>
+      </template>
+    </div>
     <!-- Two groups side by side (stacked when narrow): each with its label, its resources and – without a rate – its
          amount, so everything of one side belongs together (law of proximity) -->
     <div v-if="!hasRate || playerinput.give.length > 1 || playerinput.get.length > 1" class="trade-select__sides">
@@ -160,6 +169,14 @@ export default defineComponent({
     generation(): number {
       return this.playerView.game.generation;
     },
+    // Market mood now and next generation; missing outside the exchange and in games from before it
+    market(): {now: number, next: number | undefined} | undefined {
+      const market = this.exchange?.market;
+      if (market === undefined || market.history.length === 0) {
+        return undefined;
+      }
+      return {now: market.history[market.history.length - 1], next: market.next};
+    },
     // Priced trade (fixed rate or worth per resource): one slider for both sides
     hasRate(): boolean {
       return isPricedTrade(this.playerinput);
@@ -202,6 +219,12 @@ export default defineComponent({
     },
   },
   methods: {
+    signed(value: number): string {
+      return value > 0 ? '+' + value : value < 0 ? '−' + (-value) : '±0';
+    },
+    moodOfMarket(value: number): Mood {
+      return value > 0 ? 'good' : value < 0 ? 'bad' : 'normal';
+    },
     // Distance of a tile's rate from its base price as + / − (Solari: fixed)
     // A peak (3 or more in the player's favour) stands out (Jens, 24 Oct 2026)
     rateOf(resource: Resource, selling: boolean): {change: string, mood: Mood, peak: boolean} {

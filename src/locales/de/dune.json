@@ -412,5 +412,7 @@
   "−${0} steps": "−${0} Stufen",
   "no penalty": "keine Strafe",
   "${0} fought with ${1} Sardaukar in the Kanly": "${0} kämpfte mit ${1} Sardaukar im Kanly",
-  "Recruit: standard project, 12 M€ per Sardaukar": "Anwerben: Standard-Projekt, 12 M€ je Sardaukar"
+  "Recruit: standard project, 12 M€ per Sardaukar": "Anwerben: Standard-Projekt, 12 M€ je Sardaukar",
+  "Market mood": "Marktlage",
+  "Market mood from −2 (slump) to +3 (boom) pulls all rates along; no rate stays the same longer than 2 generations": "Marktlage von −2 (Flaute) bis +3 (Boom) zieht alle Kurse mit; kein Kurs bleibt länger als 2 Generationen gleich"
 }

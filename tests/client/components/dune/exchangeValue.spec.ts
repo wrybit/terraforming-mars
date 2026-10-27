@@ -7,11 +7,12 @@ import {formatValue, tileValue} from '@/client/components/dune/exchangeValue';
 import TradeTileValue from '@/client/components/dune/TradeTileValue.vue';
 
 describe('exchangeValue', () => {
-  const buy = {...NORMAL_BUY, steel: 3};
+  // Plasteel costs 9, vegetation brings 3, spice 10
+  const buy = {...NORMAL_BUY, steel: 9};
 
   it('get side: the price in the good you pay with, today\'s rate', () => {
     expect(tileValue(Resource.STEEL, false, Resource.PLANTS, NORMAL_SELL, buy)).deep.eq({amount: 3, currency: Resource.PLANTS});
-    expect(tileValue(Resource.STEEL, false, Resource.TITANIUM, NORMAL_SELL, buy)).deep.eq({amount: 0.6, currency: Resource.TITANIUM});
+    expect(tileValue(Resource.STEEL, false, Resource.TITANIUM, NORMAL_SELL, buy)).deep.eq({amount: 0.9, currency: Resource.TITANIUM});
   });
 
   it('give side: the worth in the good you get', () => {
@@ -19,8 +20,8 @@ describe('exchangeValue', () => {
   });
 
   it('Solari on the other side or the same good: the Solari coin', () => {
-    expect(tileValue(Resource.STEEL, false, Resource.MEGACREDITS, NORMAL_SELL, buy)).deep.eq({amount: 3, currency: undefined});
-    expect(tileValue(Resource.STEEL, true, Resource.STEEL, NORMAL_SELL, buy)).deep.eq({amount: 2, currency: undefined});
+    expect(tileValue(Resource.STEEL, false, Resource.MEGACREDITS, NORMAL_SELL, buy)).deep.eq({amount: 9, currency: undefined});
+    expect(tileValue(Resource.STEEL, true, Resource.STEEL, NORMAL_SELL, buy)).deep.eq({amount: 4, currency: undefined});
   });
 
   it('formats at most two decimals in the language', () => {

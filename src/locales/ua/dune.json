@@ -418,5 +418,7 @@
   "−${0} steps": "−${0} щаблі",
   "no penalty": "без покарання",
   "${0} fought with ${1} Sardaukar in the Kanly": "${0} бився в Канлі з ${1} сардаукарами",
-  "Recruit: standard project, 12 M€ per Sardaukar": "Найм: стандартний проєкт, 12 M€ за сардаукара"
+  "Recruit: standard project, 12 M€ per Sardaukar": "Найм: стандартний проєкт, 12 M€ за сардаукара",
+  "Market mood": "Настрій ринку",
+  "Market mood from −2 (slump) to +3 (boom) pulls all rates along; no rate stays the same longer than 2 generations": "Настрій ринку від −2 (спад) до +3 (бум) тягне за собою всі курси; жоден курс не тримається довше 2 поколінь"
 }

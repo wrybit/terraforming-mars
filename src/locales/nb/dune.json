@@ -411,5 +411,7 @@
   "−${0} steps": "−${0} trinn",
   "no penalty": "ingen straff",
   "${0} fought with ${1} Sardaukar in the Kanly": "${0} kjempet i Kanly med ${1} Sardaukar",
-  "Recruit: standard project, 12 M€ per Sardaukar": "Verve: standardprosjekt, 12 M€ per Sardaukar"
+  "Recruit: standard project, 12 M€ per Sardaukar": "Verve: standardprosjekt, 12 M€ per Sardaukar",
+  "Market mood": "Markedsstemning",
+  "Market mood from −2 (slump) to +3 (boom) pulls all rates along; no rate stays the same longer than 2 generations": "Markedsstemningen fra −2 (lavkonjunktur) til +3 (boom) drar alle kurser med seg; ingen kurs står stille lenger enn 2 generasjoner"
 }

@@ -415,5 +415,7 @@
   "−${0} steps": "−${0} porrasta",
   "no penalty": "ei rangaistusta",
   "${0} fought with ${1} Sardaukar in the Kanly": "${0} taisteli Kanlyssa ${1} sardaukarilla",
-  "Recruit: standard project, 12 M€ per Sardaukar": "Värvää: vakioprojekti, 12 M€ / sardaukar"
+  "Recruit: standard project, 12 M€ per Sardaukar": "Värvää: vakioprojekti, 12 M€ / sardaukar",
+  "Market mood": "Markkinatunnelma",
+  "Market mood from −2 (slump) to +3 (boom) pulls all rates along; no rate stays the same longer than 2 generations": "Markkinatunnelma −2:sta (lama) +3:een (nousukausi) vetää kaikkia kursseja mukanaan; mikään kurssi ei pysy samana yli 2 sukupolvea"
 }

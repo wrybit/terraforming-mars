@@ -416,5 +416,7 @@
   "−${0} steps": "−${0} fokozat",
   "no penalty": "nincs büntetés",
   "${0} fought with ${1} Sardaukar in the Kanly": "${0} ${1} sardaukarral harcolt a Kanlyban",
-  "Recruit: standard project, 12 M€ per Sardaukar": "Toborzás: alapprojekt, sardaukaronként 12 M€"
+  "Recruit: standard project, 12 M€ per Sardaukar": "Toborzás: alapprojekt, sardaukaronként 12 M€",
+  "Market mood": "Piaci hangulat",
+  "Market mood from −2 (slump) to +3 (boom) pulls all rates along; no rate stays the same longer than 2 generations": "A piaci hangulat −2-től (pangás) +3-ig (fellendülés) magával húzza az összes árfolyamot; egy árfolyam sem marad 2 generációnál tovább változatlan"
 }

@@ -419,5 +419,7 @@
   "−${0} steps": "−${0} 级",
   "no penalty": "无惩罚",
   "${0} fought with ${1} Sardaukar in the Kanly": "${0} 在决斗中投入了 ${1} 名萨督卡",
-  "Recruit: standard project, 12 M€ per Sardaukar": "招募：标准项目，每名萨督卡 12 M€"
+  "Recruit: standard project, 12 M€ per Sardaukar": "招募：标准项目，每名萨督卡 12 M€",
+  "Market mood": "市场行情",
+  "Market mood from −2 (slump) to +3 (boom) pulls all rates along; no rate stays the same longer than 2 generations": "市场行情从 −2（萧条）到 +3（繁荣），带动所有汇率；任何汇率都不会连续超过 2 个世代不变"
 }

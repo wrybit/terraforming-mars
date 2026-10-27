@@ -418,5 +418,7 @@
   "−${0} steps": "−${0}段階",
   "no penalty": "罰なし",
   "${0} fought with ${1} Sardaukar in the Kanly": "${0} はカンリーで ${1} 人のサーダカーと戦った",
-  "Recruit: standard project, 12 M€ per Sardaukar": "募集：スタンダードプロジェクト、サーダカー1人につき 12 M€"
+  "Recruit: standard project, 12 M€ per Sardaukar": "募集：スタンダードプロジェクト、サーダカー1人につき 12 M€",
+  "Market mood": "市況",
+  "Market mood from −2 (slump) to +3 (boom) pulls all rates along; no rate stays the same longer than 2 generations": "市況（−2 不況〜+3 好況）がすべての相場を引っぱる。どの相場も2世代を超えて同じままにはならない"
 }

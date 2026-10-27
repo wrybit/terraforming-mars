@@ -413,5 +413,7 @@
   "−${0} steps": "−${0} paliers",
   "no penalty": "aucune pénalité",
   "${0} fought with ${1} Sardaukar in the Kanly": "${0} a combattu avec ${1} Sardaukar dans le Kanly",
-  "Recruit: standard project, 12 M€ per Sardaukar": "Recruter : projet standard, 12 M€ par Sardaukar"
+  "Recruit: standard project, 12 M€ per Sardaukar": "Recruter : projet standard, 12 M€ par Sardaukar",
+  "Market mood": "Humeur du marché",
+  "Market mood from −2 (slump) to +3 (boom) pulls all rates along; no rate stays the same longer than 2 generations": "L'humeur du marché, de −2 (marasme) à +3 (boom), entraîne tous les cours ; aucun cours ne reste identique plus de 2 générations"
 }

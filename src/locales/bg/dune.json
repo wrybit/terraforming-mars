@@ -419,5 +419,7 @@
   "−${0} steps": "−${0} нива",
   "no penalty": "без наказание",
   "${0} fought with ${1} Sardaukar in the Kanly": "${0} се би в Канли с ${1} сардаукари",
-  "Recruit: standard project, 12 M€ per Sardaukar": "Наемане: стандартен проект, 12 M€ на сардаукар"
+  "Recruit: standard project, 12 M€ per Sardaukar": "Наемане: стандартен проект, 12 M€ на сардаукар",
+  "Market mood": "Пазарно настроение",
+  "Market mood from −2 (slump) to +3 (boom) pulls all rates along; no rate stays the same longer than 2 generations": "Пазарното настроение от −2 (застой) до +3 (бум) тегли всички курсове; никой курс не остава същият повече от 2 поколения"
 }
