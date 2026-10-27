@@ -402,7 +402,7 @@ export const BASELINE_TUNING: AiTuning = {
   cityFirst: 0,
   nestGuard: 0,
   cityClaimSpread: 1,
-  cityFirstAction: 0,
+  cityFirstAction: 1,
   awardEngineSwing: 0,
   tagOutlookBase: 0.85,
   tagOutlookStep: 0.15,
@@ -958,6 +958,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   nestGuardHalf: {nestGuard: 0.5},
   // Round 149: cityFirst (space choice) left the order unchanged (15 % → 15 %); the order is the move choice.
   cityFirstAction: {cityFirstAction: 1},
+  // Round 150: cityFirstAction adopted (+0.81, z +1.21; cities 4.0 → 4.45, greenery with more cities 15.7 → 19.5 %); check and stronger.
+  noCityFirstAction: {cityFirstAction: 0},
+  cityFirstActionStrong: {cityFirstAction: 2},
   buyStrictest: {buyMargin: 3},
   buyMargin2: {buyMargin: 2},
   buyMargin5: {buyMargin: 5},

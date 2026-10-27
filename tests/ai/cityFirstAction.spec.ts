@@ -40,6 +40,8 @@ describe('AI cityFirstAction', () => {
     player.plants = 8;
     player.megaCredits = 30;
     const menu = actionMenu(player);
+    // Round 150: adopted in the baseline; the check variant switches it off.
+    setPlayerTuning(player.id, 'noCityFirstAction');
     expect(cityFirstActionAdjustment(player, menu, convertPlants(menu))).eq(0);
     expect(cityFirstActionAdjustment(player, menu, cityProject(menu))).eq(0);
     setPlayerTuning(player.id, 'cityFirstAction');
