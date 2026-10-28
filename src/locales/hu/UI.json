@@ -1417,5 +1417,7 @@
   "Energy Production": "Energiatermelés",
   "Select a standard resource to gain": "Válassz egy alapnyersanyagot, amelyet megkapsz",
   "This action can no longer be cancelled": "Ez az akció már nem vonható vissza",
-  "This player is controlled by the AI.": "Ezt a játékost az MI irányítja."
+  "This player is controlled by the AI.": "Ezt a játékost az MI irányítja.",
+  "One": "Egy",
+  "Many": "Több"
 }

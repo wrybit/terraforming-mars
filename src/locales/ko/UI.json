@@ -1434,5 +1434,7 @@
   "Energy Production": "에너지 생산량",
   "Select a standard resource to gain": "얻을 기본 자원을 선택하세요",
   "This action can no longer be cancelled": "이 행동은 더 이상 취소할 수 없습니다",
-  "This player is controlled by the AI.": "이 플레이어는 AI가 조종합니다."
+  "This player is controlled by the AI.": "이 플레이어는 AI가 조종합니다.",
+  "One": "하나",
+  "Many": "여러 개"
 }

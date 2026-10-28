@@ -1,6 +1,6 @@
 <template>
 <TabPanelFooterSlot>
-<section class="payments_form" v-trim-whitespace>
+<section class="payments_form">
   <div class="payments_prices">
     <!-- Balance block (payments.less): what you pay | total | what is left afterwards.
          One grid, so icons, numbers and "=" share an axis per column; every group title sits in row 1.

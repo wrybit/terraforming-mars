@@ -5,7 +5,7 @@
          Comment deliberately inside the root, otherwise the component would have two root nodes ($el would not be an element) -->
     <TopBar :playerView="playerView" />
 
-    <Sidebar v-trim-whitespace
+    <Sidebar
       :actingPlayer="isPlayerActing(playerView)"
       :playerColor="thisPlayer.color"
       :coloniesCount="game.colonies.length"
@@ -55,7 +55,7 @@
           <SetupTurnOrder v-if="isSetupPhase" :players="playerView.players">
             <SetupBoardToggle/>
           </SetupTurnOrder>
-          <PlayersOverview v-else class="player_home_block player_home_block--players nofloat" :playerView="playerView" v-trim-whitespace id="shortkey-playersoverview"/>
+          <PlayersOverview v-else class="player_home_block player_home_block--players nofloat" :playerView="playerView" id="shortkey-playersoverview"/>
           <!-- Height of the players card, the tab box below gets the rest (only in the fixed layout) -->
           <RowResizeHandle v-if="!isSetupPhase" kind="players"/>
 

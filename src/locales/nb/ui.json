@@ -1177,5 +1177,7 @@
   "Select a standard resource to gain": "Velg en standardressurs å få",
   "This action can no longer be cancelled": "Denne handlingen kan ikke lenger avbrytes",
   "This player is controlled by the AI.": "Denne spilleren styres av AI.",
-  "Close": "Lukk"
+  "Close": "Lukk",
+  "One": "Én",
+  "Many": "Flere"
 }

@@ -763,5 +763,7 @@
   "Energy Production": "Produkcja energii",
   "Select a standard resource to gain": "Wybierz zasób standardowy do zdobycia",
   "This action can no longer be cancelled": "Tej akcji nie można już anulować",
-  "This player is controlled by the AI.": "Tym graczem steruje AI."
+  "This player is controlled by the AI.": "Tym graczem steruje AI.",
+  "One": "Jeden",
+  "Many": "Wiele"
 }

@@ -952,5 +952,7 @@
   "Select a standard resource to gain": "Kies een standaardgrondstof om te krijgen",
   "This action can no longer be cancelled": "Deze actie kan niet meer worden geannuleerd",
   "This player is controlled by the AI.": "Deze speler wordt door de AI bestuurd.",
-  "Close": "Sluiten"
+  "Close": "Sluiten",
+  "One": "Eén",
+  "Many": "Meerdere"
 }

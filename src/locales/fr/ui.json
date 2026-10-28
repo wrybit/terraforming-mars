@@ -1203,5 +1203,7 @@
   "Energy Production": "Production d’énergie",
   "Select a standard resource to gain": "Choisissez une ressource standard à gagner",
   "This action can no longer be cancelled": "Cette action ne peut plus être annulée",
-  "This player is controlled by the AI.": "Ce joueur est contrôlé par l'IA."
+  "This player is controlled by the AI.": "Ce joueur est contrôlé par l'IA.",
+  "One": "Un",
+  "Many": "Plusieurs"
 }

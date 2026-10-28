@@ -46,6 +46,7 @@
         <span v-else-if="data.type === LogMessageDataType.PRODUCTION" v-html="inlineMarkdown(`:p:${data.value}:`)"></span>
         <span v-else-if="data.type === LogMessageDataType.CARD_RESOURCE" v-html="inlineMarkdown(`:cr:${cardResourceName(data.value)}:`)"></span>
         <span v-else-if="data.type === LogMessageDataType.RAW_STRING">{{ data.value }}</span>
+        <span v-else-if="data.type === LogMessageDataType.MARKDOWN" v-html="renderIcons(data.value)"></span>
         <span v-else-if="data.type === LogMessageDataType.STRING" v-html="inlineMarkdown($t(data.value))"></span>
         <span v-else v-i18n>{{ data.value }}</span>
       </span>
@@ -73,7 +74,7 @@ import {undergroundResourceTokenDescription} from '@/common/underworld/Undergrou
 import {getPreferences} from '@/client/utils/PreferencesManager';
 import {gameLocaleToIntlLocale} from '@/client/utils/LocaleUtils';
 import {range} from '@/common/utils/utils';
-import {renderMarkdown} from '@/client/markdown/markdown';
+import {renderIcons, renderMarkdown} from '@/client/markdown/markdown';
 import {CardResource} from '@/common/CardResource';
 import {needsModalPreview} from '@/client/components/logpanel/logMessageContent';
 import {cardTypeToCss, partySlug} from '@/client/components/logpanel/logCardType';
@@ -124,6 +125,9 @@ export default defineComponent({
   methods: {
     inlineMarkdown(text: string): string {
       return renderMarkdown(text, {inline: true, translate: false});
+    },
+    renderIcons(text: string): string {
+      return renderIcons(text);
     },
     // Matches the card-resource-* CSS classes, e.g. Syndicate Fleet -> syndicate-fleet.
     cardResourceName(resource: CardResource): string {
