@@ -1,6 +1,7 @@
 import {IPlayer} from '../IPlayer';
 import {ICard} from '../cards/ICard';
 import {tuningOf} from './aiTuning';
+import {lateDrawFloor} from './lateDrawFloor';
 
 // Card-drawing cards are a priority (Jens' rule): humans played 7.6 of them per game, the AI 1.7 (28 two-player games
 // against humans; a strong human 9.1, the AI 1.6 against him). A drawn card counted only 2 M€ like any card in hand,
@@ -13,7 +14,9 @@ export const ACTION_DRAW_FACTOR = 1.25;
 /** M€ a drawn card is worth: the rule value early, less once few generations remain to play it. */
 export function drawnCardValue(player: IPlayer, remaining: number): number {
   const priority = tuningOf(player).drawPriority;
-  return Math.max(LATE_CARD_VALUE, Math.min(priority, LATE_CARD_VALUE + PER_GENERATION * remaining));
+  const value = Math.max(LATE_CARD_VALUE, Math.min(priority, LATE_CARD_VALUE + PER_GENERATION * remaining));
+  // lateDrawFloor: late, a large income plays a drawn card at once (lateDrawFloor.ts).
+  return Math.max(value, lateDrawFloor(player));
 }
 
 /** Cards a card draws once when played (Research 2, Technology Demonstration 2; kept ones for a choice). */
