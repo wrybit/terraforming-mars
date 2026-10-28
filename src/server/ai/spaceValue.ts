@@ -19,6 +19,7 @@ import {adoptedOrphanPoints, lonelyGreeneryPoints} from './greeneryRing';
 import {cityFirstPenalty} from './cityFirst';
 import {nestGuardPenalty} from './nestGuard';
 import {cityClaimSpreadBonus} from './cityClaimSpread';
+import {nestFillBonus} from './nestFill';
 
 // Scores a hex for tile placement. Weights tuned in AI test batches.
 
@@ -218,6 +219,8 @@ function baseSpaceValue(space: Space, kind: TileKind, player: IPlayer): number {
       (tuningOf(player).cityDenialShare + blockingShare(player)) * victoryPoint;
     // Spread-out territory, card and ocean spots, spoiling opponent city rings (cityClaimSpread.ts).
     value += cityClaimSpreadBonus(space, player) * victoryPoint;
+    // Fill own nests (≥ 2 own greeneries around) before an opponent city scores them (nestFill.ts).
+    value += nestFillBonus(space, player) * victoryPoint;
     break;
   case 'ocean':
     // Oceans next to own tiles help nobody else; next to free land they feed later rebates.
