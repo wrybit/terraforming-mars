@@ -4,6 +4,7 @@ import {CardName} from '../../common/cards/CardName';
 import {PlayerId} from '../../common/Types';
 import {CardType} from '../../common/cards/CardType';
 import {ICard, isIActionCard} from '../cards/ICard';
+import {productionPhasesWithFloor} from './lateProductionFloor';
 import {isTemperatureMaxed, remainingProductionPhases, stepsLeft, terraformingProgress, victoryPointValue} from './gameProgress';
 import {tuningOf} from './aiTuning';
 import {boardPotential} from './boardPotential';
@@ -228,7 +229,9 @@ function productionPerGeneration(player: IPlayer, context: ValuationContext): nu
 }
 
 function productionValue(player: IPlayer, context: ValuationContext): number {
-  const value = productionPerGeneration(player, context) * context.remaining * (context.productionDiscount ?? PRODUCTION_DISCOUNT);
+  // lateProductionFloor: production keeps a few phases of value until generation 10 (lateProductionFloor.ts).
+  const phases = productionPhasesWithFloor(player, context.generation, context.remaining);
+  const value = productionPerGeneration(player, context) * phases * (context.productionDiscount ?? PRODUCTION_DISCOUNT);
   return value * incomeFactor(player, context.generation, context.remaining);
 }
 

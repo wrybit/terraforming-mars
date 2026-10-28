@@ -24,6 +24,7 @@ import {cheapFirstPenalty} from './cheapFirst';
 import {drawEngineTimingBonus} from './drawEngineValue';
 import {isUselessMove} from './uselessMove';
 import {cityFirstActionAdjustment} from './cityFirstAction';
+import {spareMoneyDrawBonus} from './spareMoneyDraw';
 import {milestoneReservePenalty} from './milestoneReserve';
 import {capAgainstPass} from './passFairness';
 import {triggerOrderAdjustments} from './triggerOrder';
@@ -546,6 +547,14 @@ export function chooseAction(menu: OrOptions, player: IPlayer, options: Lookahea
   if (tuning.cityFirstAction > 0) {
     for (const {candidate, outcome} of tried) {
       outcome.value += cityFirstActionAdjustment(player, menu, candidate.response);
+    }
+  }
+
+  // spareMoneyDraw: with no hand card playable, a draw move turns idle money into cards (spareMoneyDraw.ts).
+  if (tuning.spareMoneyDraw > 0) {
+    const handCardPlayable = tried.some(({candidate}) => playedHandCard(candidate.response, player) !== undefined);
+    for (const {candidate, outcome} of tried) {
+      outcome.value += spareMoneyDrawBonus(player, menu, candidate.response, handCardPlayable);
     }
   }
 

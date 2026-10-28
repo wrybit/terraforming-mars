@@ -140,6 +140,12 @@ export type AiTuning = {
   milestoneReserve: number,
   /** Extra share for resource-VP collectors in the generations before the last four (vpResourceEngine.ts); 0 = off. */
   vpResourceEngine: number,
+  /** Weight of the late floor for a drawn card's value from income (lateDrawFloor.ts); 0 = off. */
+  lateDrawFloor: number,
+  /** Share of the floor of 3 production phases for valuing production until generation 10 (lateProductionFloor.ts); 0 = off. */
+  lateProductionFloor: number,
+  /** Weight of the drawn cards' value for a draw move when no hand card is playable (spareMoneyDraw.ts); 0 = off. */
+  spareMoneyDraw: number,
   /** VP off converting plants into a greenery without an own city next to it, half of it as a city-move bonus, while own cities do not lead (cityFirstAction.ts); 0 = off. */
   cityFirstAction: number,
   /** Weight of the opponent's engine advantage in the award swing (awardEngineSwing.ts); 0 = off. */
@@ -414,6 +420,9 @@ export const BASELINE_TUNING: AiTuning = {
   drawEngineValue: 0,
   milestoneReserve: 0,
   vpResourceEngine: 0,
+  lateDrawFloor: 0,
+  lateProductionFloor: 0,
+  spareMoneyDraw: 0,
   cityFirstAction: 1,
   awardEngineSwing: 0,
   tagOutlookBase: 0.85,
@@ -974,6 +983,10 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   milestoneReserve: {milestoneReserve: 1},
   // Round 153 (human games: card VP 20 : 69, 52 : 64): early resource-VP collectors get the discounted share back.
   vpResourceEngine: {vpResourceEngine: 0.5},
+  // Round 155 (60-card gap: humans draw 28.9 cards outside research, the AI 8.1; late cards 5–8 vs 3.6–4.1 per generation).
+  lateDrawFloor: {lateDrawFloor: 1},
+  lateProductionFloor: {lateProductionFloor: 1},
+  spareMoneyDraw: {spareMoneyDraw: 1},
   // Round 149: nestGuard −1.34 but nests 1.65 → 1.29 per player; half strength.
   nestGuardHalf: {nestGuard: 0.5},
   // Round 149: cityFirst (space choice) left the order unchanged (15 % → 15 %); the order is the move choice.
