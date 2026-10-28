@@ -847,11 +847,27 @@ html.theme-dune .card-container.card-media-archives .card-content .red-outline {
   margin-left: 8px;
 }
 
-/* Every cross on a card ("cancelled", "ignore") in the red of the theme with a light halo (Jens 21 Oct 2026) */
+/* Every cross on a card ("cancelled", "ignore") is the one cross of the theme, the same as on Business Contacts
+   (graphics/cross.svg from scripts/make-card-choice.py; Jens 28 Oct 2026): drawn, centred on the icon it cancels
+   instead of a letter x placed by its font size */
+html.theme-dune .card-container .card-content :has(> .card-x) {
+  position: relative;
+}
+
 html.theme-dune .card-container .card-content .card-x {
-  color: #b51616 !important;
-  font-weight: 700;
-  text-shadow: 0 0 2px #fffdf8, 0 0 2px #fffdf8;
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  width: 26px;
+  height: 32px;
+  margin: 0 !important;
+  transform: translate(-50%, -50%);
+  background: url(graphics/cross.svg) center / contain no-repeat;
+  color: transparent !important;
+  font-size: 0 !important;
+  text-shadow: none;
+  filter: none;
+  z-index: 2;
 }
 
 /* Shield Generator: the tile that becomes the war field shows the war field marker (graphics/war-field.svg) */
@@ -998,17 +1014,10 @@ html.theme-dune .card-container .card-content .card-project-requirements .card-r
   line-height: 15px !important;
 }
 
+/* Smaller on the requirements bar, so its words stay readable (Jens 28 Oct 2026) */
 html.theme-dune .card-container .card-content .card-project-requirements .card-x {
-  top: 50% !important;
-  left: 50% !important;
-  margin: 0 !important;
-  transform: translate(-50%, -55%);
-  color: #b51616 !important;
-  font-size: 40px !important;
-  font-weight: 700;
-  line-height: 1;
-  text-shadow: 0 0 2px #fffdf8, 0 0 2px #fffdf8;
-  z-index: 2;
+  width: 20px;
+  height: 25px;
 }
 
 /* CardDescription.vue makes a text with a rule note smaller when it would run out of the card
