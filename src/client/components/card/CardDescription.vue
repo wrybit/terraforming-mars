@@ -19,6 +19,7 @@ import {CARD_TEXT_MARKUP} from '@/client/cards/cardTextMarkup';
 import {CardTextParts, parseCardTextMarkup} from '@/client/cards/parseCardTextMarkup';
 import CardTextSegments from '@/client/components/card/CardTextSegments.vue';
 import {contentOverflowsCard} from '@/client/components/card/cardFit';
+import {activeTheme} from '@/client/theme/applyTheme';
 
 // Steps of a smaller type when main text and note do not fit into the card (dense cards in long languages)
 const COMPACT_CLASSES = ['', 'card-description-compact', 'card-description-compact-more'];
@@ -85,15 +86,19 @@ export default defineComponent({
       }
       return classes;
     },
-    // Parentheses mark an explanation of the icons; a leading text is the only text, so it has none
     leads(): boolean {
       return isDescription(this.item) && this.item.lead === true;
     },
+    // Mars puts the explanation of the icons in parentheses; Dune shows the text without them (less is more, Jens
+    // 28 Oct 2026), and so does a leading text, which is the only text of its card
+    parenthesised(): boolean {
+      return !this.leads && activeTheme() !== 'dune';
+    },
     open(): string {
-      return this.leads ? '' : '(';
+      return this.parenthesised ? '(' : '';
     },
     close(): string {
-      return this.leads ? '' : ')';
+      return this.parenthesised ? ')' : '';
     },
     description(): string {
       return isDescription(this.item) ? this.item.text : String(this.item);
