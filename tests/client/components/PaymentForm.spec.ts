@@ -191,7 +191,7 @@ describe('PaymentForm', () => {
       cost: 8,
       order: ['heat', 'megacredits'],
       ledger: {
-        'heat': {available: 20, rate: 1},
+        'heat': {available: 20, rate: 1, nonGreedy: true},
         'megacredits': {available: 5, rate: 1},
       },
     });
@@ -381,7 +381,7 @@ describe('PaymentForm', () => {
       ledger: {
         'megacredits': {available: 10, rate: 1},
         // Second currency, otherwise the form shows no sliders (only the price)
-        'heat': {available: 1, rate: 1},
+        'heat': {available: 1, rate: 1, nonGreedy: true},
       },
     });
 
