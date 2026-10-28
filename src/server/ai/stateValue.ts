@@ -22,6 +22,7 @@ import {moneySwingShare} from './stockAward';
 import {openBonusValue} from './bonusRace';
 import {expectedAttackLoss} from './attackExposure';
 import {collectorRate} from './collectorRate';
+import {earlyCollectorPoints} from './vpResourceEngine';
 import {firstMilestoneBonus, incomeFactor, openingBrakeCost} from './phasePlan';
 import {ACTION_DRAW_FACTOR, drawnCardValue} from './drawPriority';
 import {styleFocusValue} from './styleFocus';
@@ -405,6 +406,8 @@ function tableauValue(player: IPlayer, context: ValuationContext): number {
       const rate = tuningOf(player).collectorRates > 0 ? collectorRate(card.name) : 1;
       const collected = accumulator > 0 ? accumulator * rate * collectedPointsPerGeneration(card) * context.victoryPoint : 0;
       value += Math.max(flat, collected) * context.remaining;
+      // vpResourceEngine: an early collector gathers for many generations; the discount above only fits late ones.
+      value += earlyCollectorPoints(player, collectedPointsPerGeneration(card), rate, context.remaining) * context.victoryPoint;
     } else if (card.type === CardType.CORPORATION) {
       value += Math.max(drawIncome(card), measuredCardIncome(player, card, context.remaining)) * context.remaining;
     } else if (card.type === CardType.PRELUDE) {
