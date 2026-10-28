@@ -2179,5 +2179,7 @@
   "${0} is reading the fine print": "${0} 正在读小字条款",
   "${0} is building something": "${0} 正在建造",
   "${0} is looking for a good spot": "${0} 正在找好位置",
-  "${0} is surveying Mars": "${0} 正在勘测火星"
+  "${0} is surveying Mars": "${0} 正在勘测火星",
+  "Track +${0} before trading": "贸易前轨道 +${0}",
+  "optional": "可选"
 }

@@ -1195,5 +1195,7 @@
   "${0} is reading the fine print": "${0} lukee pikkupräntin",
   "${0} is building something": "${0} rakentaa jotain",
   "${0} is looking for a good spot": "${0} etsii hyvää paikkaa",
-  "${0} is surveying Mars": "${0} kartoittaa Marsia"
+  "${0} is surveying Mars": "${0} kartoittaa Marsia",
+  "Track +${0} before trading": "Ura +${0} ennen kaupankäyntiä",
+  "optional": "valinnainen"
 }

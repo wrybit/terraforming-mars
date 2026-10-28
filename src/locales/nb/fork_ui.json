@@ -1561,5 +1561,7 @@
   "${0} is reading the fine print": "${0} leser det med liten skrift",
   "${0} is building something": "${0} bygger noe",
   "${0} is looking for a good spot": "${0} leter etter et godt sted",
-  "${0} is surveying Mars": "${0} kartlegger Mars"
+  "${0} is surveying Mars": "${0} kartlegger Mars",
+  "Track +${0} before trading": "Sporet +${0} før handel",
+  "optional": "valgfritt"
 }

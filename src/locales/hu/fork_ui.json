@@ -1377,5 +1377,7 @@
   "${0} is reading the fine print": "${0} az apró betűs részt olvassa",
   "${0} is building something": "${0} épít valamit",
   "${0} is looking for a good spot": "${0} jó helyet keres",
-  "${0} is surveying Mars": "${0} felméri a Marsot"
+  "${0} is surveying Mars": "${0} felméri a Marsot",
+  "Track +${0} before trading": "Sáv +${0} kereskedés előtt",
+  "optional": "nem kötelező"
 }

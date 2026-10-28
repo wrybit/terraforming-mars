@@ -41,7 +41,7 @@
             </span>
             <b>{{ $t(colony.model.name) }}</b>
           </span>
-          <span class="trade-colony__gain">+{{ colony.tradeValue }}<span :class="{'colonies-board__production': colony.tradeIcon.production}"><img :src="'assets/' + colony.tradeIcon.src" alt=""></span></span>
+          <span class="trade-colony__gain">+{{ preview(colony).value }}<span :class="{'colonies-board__production': preview(colony).icon.production}"><img :src="'assets/' + preview(colony).icon.src" alt=""></span></span>
           <small>{{ offerNote(colony) }}</small>
         </button>
       </div>
@@ -49,7 +49,7 @@
         <span class="trade-colony__receipt-line">
           <span class="trade-colony__pay">−{{ selectedFee.amount ?? '' }}<img :src="'assets/' + FEE_ICON[selectedFee.kind]" alt=""></span>
           <i>→</i>
-          <span class="trade-colony__get">+{{ picked.tradeValue }}<img :src="'assets/' + picked.tradeIcon.src" alt=""></span>
+          <span class="trade-colony__get">+{{ preview(picked).value }}<img :src="'assets/' + preview(picked).icon.src" alt=""></span>
         </span>
         <small>{{ receiptNote }}</small>
       </div>
@@ -77,7 +77,7 @@ import {BoardTabId} from '@/client/components/boardTabs/boardTabs';
 import {boardTabState, selectBoardTab} from '@/client/components/boardTabs/boardTabState';
 import ColonyPlanet from './ColonyPlanet.vue';
 import TradeShip from './TradeShip.vue';
-import {ColonyView, colonyView} from './colonyView';
+import {ColonyView, TradePreview, colonyView, tradePreview} from './colonyView';
 import {setColonyPreview} from './colonyTradeState';
 import {FEE_ICON, MissingFee, TradeFee, missingFees, tradeFees, tradeInput} from './tradeInput';
 
@@ -144,18 +144,26 @@ export default defineComponent({
     picked(): ColonyView | undefined {
       return this.colonies.find((colony) => colony.model.name === this.pick);
     },
+    // Steps the colony track rises before this player's trade (Trade Envoys, Trading Colony, L1 Trade Terminal)
+    tradeOffset(): number {
+      return this.playerView.thisPlayer.colonyTradeOffset ?? 0;
+    },
     receiptNote(): string {
       const picked = this.picked;
       if (picked === undefined) {
         return '';
       }
+      const parts: Array<string> = [];
       const others = picked.model.colonies.filter((owner) => owner !== this.playerView.thisPlayer.color);
-      const drop = translateTextWithParams('${0} marker drops to step ${1}', [translateText(picked.model.name), String(picked.resetPosition + 1)]);
-      if (others.length === 0) {
-        return drop;
+      if (others.length > 0) {
+        parts.push(translateTextWithParams('Bonus for ${0}: ${1}', [this.names(others), translateText(picked.metadata.colony.description)]));
       }
-      const bonus = translateTextWithParams('Bonus for ${0}: ${1}', [this.names(others), translateText(picked.metadata.colony.description)]);
-      return bonus + ' · ' + drop;
+      parts.push(translateTextWithParams('${0} marker drops to step ${1}', [translateText(picked.model.name), String(picked.resetPosition + 1)]));
+      const preview = this.preview(picked);
+      if (preview.raised > 0) {
+        parts.push(this.tradeBonusText(preview));
+      }
+      return parts.join(' · ');
     },
   },
   mounted() {
@@ -200,19 +208,29 @@ export default defineComponent({
       return colors.map((color) => this.playerView.players.find((player) => player.color === color)?.name ?? color).join(', ');
     },
     offerNote(colony: ColonyView): string {
+      const parts: Array<string> = [];
       if (!colony.model.isActive) {
-        return translateText('inactive');
+        parts.push(translateText('inactive'));
+      } else if (colony.model.visitor !== undefined) {
+        parts.push(translateText('taken'));
+      } else if (colony.model.colonies.includes(this.playerView.thisPlayer.color)) {
+        parts.push(translateText('+ your colony bonus'));
+      } else if (colony.model.colonies.length > 0) {
+        parts.push(translateTextWithParams('Bonus for ${0}', [this.names(colony.model.colonies)]));
       }
-      if (colony.model.visitor !== undefined) {
-        return translateText('taken');
+      const preview = this.preview(colony);
+      if (preview.raised > 0) {
+        parts.push(this.tradeBonusText(preview));
       }
-      if (colony.model.colonies.includes(this.playerView.thisPlayer.color)) {
-        return translateText('+ your colony bonus');
-      }
-      if (colony.model.colonies.length > 0) {
-        return translateTextWithParams('Bonus for ${0}', [this.names(colony.model.colonies)]);
-      }
-      return '';
+      return parts.join(' · ');
+    },
+    preview(colony: ColonyView): TradePreview {
+      return tradePreview(colony, this.tradeOffset);
+    },
+    // Explains why the preview is higher than the value under the track marker
+    tradeBonusText(preview: TradePreview): string {
+      const text = translateTextWithParams('Track +${0} before trading', [String(preview.raised)]);
+      return preview.optional ? text + ' (' + translateText('optional') + ')' : text;
     },
     choose(colony: ColonyView) {
       this.pick = colony.model.name;

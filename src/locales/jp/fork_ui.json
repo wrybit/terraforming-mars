@@ -1569,5 +1569,7 @@
   "${0} is reading the fine print": "${0} が細則を確認中",
   "${0} is building something": "${0} が建設中",
   "${0} is looking for a good spot": "${0} が良い場所を探し中",
-  "${0} is surveying Mars": "${0} が火星を測量中"
+  "${0} is surveying Mars": "${0} が火星を測量中",
+  "Track +${0} before trading": "交易前にトラック +${0}",
+  "optional": "任意"
 }
