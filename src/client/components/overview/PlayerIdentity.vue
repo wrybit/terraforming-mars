@@ -8,7 +8,7 @@
         <span class="players-table-name-text">{{ symbol + nameParts.name }}</span>
         <span v-if="nameParts.marker !== undefined" class="players-table-name-marker">{{ nameParts.marker }}</span>
       </span>
-      <PlayerStatus :timer="player.timer" :showTimer="playerView.game.gameOptions.showTimers && escapeVelocity === undefined" :liveTimer="playerView.game.phase !== Phase.END" :actionLabel="actionLabel" v-trim-whitespace/>
+      <PlayerStatus :timer="player.timer" :showTimer="playerView.game.gameOptions.showTimers && escapeVelocity === undefined" :liveTimer="playerView.game.phase !== Phase.END" :actionLabel="actionLabel"/>
     </div>
     <!-- Several corporations (Merger): joined by a gold plus -->
     <div class="players-table-corporation" :title="corporations">
