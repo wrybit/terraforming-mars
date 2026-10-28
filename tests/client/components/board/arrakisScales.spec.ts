@@ -32,28 +32,32 @@ describe('arrakisScales', () => {
     expect(LARGE_SCALES.waterAngles).deep.eq(lessAngles(less, 'temperature-vals-arrakis-91'));
   });
 
-  it('turns symbol and name of the standard board up with its scales, the names meeting at the top', () => {
+  it('puts the names of the standard board above the top ends of its scales and the symbols below the low ends', () => {
     const vegetation = scaleLabels(STANDARD_SCALES).vegetation;
-    expect(vegetation.symbolAngle).closeTo(230.69, 0.01);
-    expect(vegetation.text.from).closeTo(234.98, 0.01);
-    expect(vegetation.text.to).closeTo(264.98, 0.01);
+    expect(vegetation.symbolAngle).closeTo(130.11, 0.01);
+    expect(vegetation.text.from).closeTo(234.62, 0.01);
+    expect(vegetation.text.to).closeTo(266.76, 0.01);
     const water = scaleLabels(STANDARD_SCALES).water;
-    expect(water.symbolAngle).closeTo(-55.69, 0.01);
-    expect(water.text.from).closeTo(-89.98, 0.01);
-    expect(water.text.to).closeTo(-59.98, 0.01);
+    expect(water.symbolAngle).closeTo(49.89, 0.01);
+    expect(water.text.from).closeTo(-91.76, 0.01);
+    expect(water.text.to).closeTo(-59.62, 0.01);
   });
 
-  // Gaps in board pixels from the end of the band, the same on both boards and both sides (design B · eng)
+  // Gaps in board pixels from the ends of the band, the same on both boards and both sides
   for (const [name, geometry] of [['standard', STANDARD_SCALES], ['large', LARGE_SCALES]] as const) {
     it(`keeps the same pixel gaps between band, symbol and name on the ${name} board`, () => {
       const pixels = (degrees: number) => Math.abs(degrees) * Math.PI / 180 * geometry.radius;
       const {vegetation, water} = scaleLabels(geometry);
+      const [veg0, veg1] = geometry.vegetationAngles;
+      const [water0, water1] = geometry.waterAngles;
+      const vegetationStart = veg0 - (veg1 - veg0) / 2;
+      const waterStart = water0 - (water1 - water0) / 2;
       const vegetationEnd = 2 * geometry.vegetationAngles.at(-1)! - (geometry.vegetationAngles.at(-1)! + geometry.vegetationAngles.at(-2)!) / 2;
       const waterEnd = 2 * geometry.waterAngles.at(-1)! - (geometry.waterAngles.at(-1)! + geometry.waterAngles.at(-2)!) / 2;
-      expect(pixels(vegetation.symbolAngle - vegetationEnd)).closeTo(31, 0.01);
-      expect(pixels(water.symbolAngle - waterEnd)).closeTo(31, 0.01);
-      expect(pixels(vegetation.text.from - vegetationEnd)).closeTo(51, 0.01);
-      expect(pixels(water.text.to - waterEnd)).closeTo(51, 0.01);
+      expect(pixels(vegetation.symbolAngle - vegetationStart)).closeTo(31, 0.01);
+      expect(pixels(water.symbolAngle - waterStart)).closeTo(31, 0.01);
+      expect(pixels(vegetation.text.from - vegetationEnd)).closeTo(12, 0.01);
+      expect(pixels(water.text.to - waterEnd)).closeTo(12, 0.01);
     });
   }
 

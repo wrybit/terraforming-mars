@@ -21,6 +21,12 @@ html.theme-dune .board-space-tile--ocean {
 
 /* Everywhere else the spice field is a symbol (cards, scales, bonuses): the simple tile-spicefield-icon.svg via
    graphics.json. Spice fields lying on the board keep the full scene, also with an Ares symbol on top. */
+/* On cards the spice field shows the real tile wherever the card is about the tile (placing it, effects on placing,
+   points per tile); only the minimum/maximum requirement plate keeps the simple symbol (.card-ocean--req) */
+html.theme-dune .card-container .card-ocean-global-requirement {
+  background-image: url(graphics/tile-spicefield.svg);
+}
+
 html.theme-dune .board-space-tile--ocean-farm {
   background-image: url('./assets/tiles/special_tile_icons/ocean_farm.png'), url(graphics/tile-spicefield.svg);
 }

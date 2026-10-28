@@ -14,25 +14,27 @@ export type ScaleGeometry = {
 };
 
 /** Standard board: globs.less @oxygen-vals-arrakis and @temperature-vals-arrakis (−30 … +8 °C): the Mars arcs turned
- *  further up, so the spice row below the planet has room, both starting at the same height (Jens, 20 Oct 2026) */
+ *  further up, so the spice row below the planet has room, both starting at the same height (Jens, 20 Oct 2026), and
+ *  8° more so the symbols fit below the low ends (Jens, 28 Oct 2026) */
 export const STANDARD_SCALES: ScaleGeometry = {
   centreX: 300,
   centreY: 300.2,
   radius: 267.4,
-  vegetationAngles: [131.7, 137.6, 144.3, 150.9, 156.9, 163.4, 169.7, 176.3, 182.7, 189.2, 195.5, 201.9, 208.3, 214.6, 220.9],
-  waterAngles: [48.6, 43.3, 38.6, 33.6, 28.7, 23.6, 18.7, 13.6, 8.8, 3.8, -1.3, -6.2, -11.1, -16.3, -21.1, -26.2, -31.3, -36.3, -41.1, -46.4],
+  vegetationAngles: [139.7, 145.6, 152.3, 158.9, 164.9, 171.4, 177.7, 184.3, 190.7, 197.2, 203.5, 209.9, 216.3, 222.6, 228.9],
+  waterAngles: [40.6, 35.3, 30.6, 25.6, 20.7, 15.6, 10.7, 5.6, 0.8, -4.2, -9.3, -14.2, -19.1, -24.3, -29.1, -34.2, -39.3, -44.3, -49.1, -54.4],
 };
 
 /** Large board: globs.less @oxygen-vals-arrakis-91 and @temperature-vals-arrakis-91 – the large Arrakis has the
  *  tracks of Amazonis Planitia (18 % vegetation, +14 °C, common/boards/GlobalParameterMaximums.ts hasAmazonisTracks),
  *  on the same arcs as before: they start further out than on Amazonis Planitia, so the spice fields fit between their
- *  low ends (arrakisSpiceFields.ts), and reach as high as the labels allow, so the steps are shorter */
+ *  low ends (arrakisSpiceFields.ts), and reach as high as the labels allow, so the steps are shorter; turned up 7° so
+ *  the symbols fit below the low ends (Jens, 28 Oct 2026) */
 export const LARGE_SCALES: ScaleGeometry = {
   centreX: 353,
   centreY: 351.2,
   radius: 313.9,
-  vegetationAngles: [126.5, 131.9, 137.3, 142.7, 148.1, 153.4, 158.8, 164.2, 169.6, 175, 180.4, 185.8, 191.2, 196.6, 201.9, 207.3, 212.7, 218.1, 223.5],
-  waterAngles: [54, 49.6, 45.2, 40.8, 36.4, 32, 27.5, 23.1, 18.7, 14.3, 9.9, 5.5, 1.1, -3.3, -7.7, -12.1, -16.5, -21, -25.4, -29.8, -34.2, -38.6, -43],
+  vegetationAngles: [133.5, 138.9, 144.3, 149.7, 155.1, 160.4, 165.8, 171.2, 176.6, 182, 187.4, 192.8, 198.2, 203.6, 208.9, 214.3, 219.7, 225.1, 230.5],
+  waterAngles: [47, 42.6, 38.2, 33.8, 29.4, 25, 20.5, 16.1, 11.7, 7.3, 2.9, -1.5, -5.9, -10.3, -14.7, -19.1, -23.5, -28, -32.4, -36.8, -41.2, -45.6, -50],
 };
 
 /** Width of the band; the 26px markers sit inside it */
@@ -69,23 +71,29 @@ export function pointAt(geometry: ScaleGeometry, angle: number, radius: number =
   return {x: geometry.centreX + radius * Math.cos(radians), y: geometry.centreY + radius * Math.sin(radians)};
 }
 
-// Symbol and name of each scale continue the band beyond its top end, on the same circle: vegetation goes on clockwise
+// The name of each scale continues the band beyond its top end, on the same circle; the symbol sits beyond its low end,
+// below the band (Jens, 28 Oct 2026: names stay at the top, symbols move to the bottom). Vegetation runs clockwise
 // (upper left), the water storage counter-clockwise (upper right); the text always runs clockwise, so it stays upright.
-// Measured in board pixels along the circle from the end of the band, so the gaps are the same on both boards and on
-// both sides (design B · eng, Jens, 21 Oct 2026).
+// Measured in board pixels along the circle from the ends of the band, so the gaps are the same on both boards and on
+// both sides.
 export type ScaleLabel = {symbolAngle: number, text: {from: number, to: number, anchor: 'start' | 'end'}};
 
-/** Distance from the end of the band to the centre of the symbol */
+/** Distance from the low end of the band to the centre of the symbol */
 export const LABEL_SYMBOL_DISTANCE = 31;
-/** Distance from the end of the band to the near end of the name */
-export const LABEL_TEXT_DISTANCE = 51;
+/** Distance from the top end of the band to the near end of the name */
+export const LABEL_TEXT_DISTANCE = 12;
 /** Length of the arc the name runs along (room for the longest translation) */
-export const LABEL_TEXT_LENGTH = 140;
+export const LABEL_TEXT_LENGTH = 150;
 
-/** Angle where the band ends: half a step beyond its last marker, like the outline (scaleOutline) */
+/** Angle where the band ends at its top: half a step beyond its last marker, like the outline (scaleOutline) */
 function bandEnd(angles: ReadonlyArray<number>): number {
   const last = angles[angles.length - 1];
   return last + (last - angles[angles.length - 2]) / 2;
+}
+
+/** Angle where the band starts at its low end: half a step before its first marker */
+function bandStart(angles: ReadonlyArray<number>): number {
+  return angles[0] - (angles[1] - angles[0]) / 2;
 }
 
 function label(geometry: ScaleGeometry, angles: ReadonlyArray<number>, direction: 1 | -1): ScaleLabel {
@@ -94,7 +102,7 @@ function label(geometry: ScaleGeometry, angles: ReadonlyArray<number>, direction
   const near = end + degrees(LABEL_TEXT_DISTANCE);
   const far = end + degrees(LABEL_TEXT_DISTANCE + LABEL_TEXT_LENGTH);
   return {
-    symbolAngle: end + degrees(LABEL_SYMBOL_DISTANCE),
+    symbolAngle: bandStart(angles) - degrees(LABEL_SYMBOL_DISTANCE),
     // The text runs clockwise: it starts at the band on the vegetation side and ends at the band on the water side
     text: direction === 1 ? {from: near, to: far, anchor: 'start'} : {from: far, to: near, anchor: 'end'},
   };
