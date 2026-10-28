@@ -1212,5 +1212,7 @@
   "Energy Production": "エネルギー産出",
   "Select a standard resource to gain": "獲得する標準資源を選択",
   "This action can no longer be cancelled": "この行動はもう取り消せません",
-  "This player is controlled by the AI.": "このプレイヤーはAIが操作しています。"
+  "This player is controlled by the AI.": "このプレイヤーはAIが操作しています。",
+  "One": "1つ",
+  "Many": "複数"
 }

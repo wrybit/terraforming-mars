@@ -1446,5 +1446,7 @@
   "Select a standard resource to gain": "Виберіть стандартний ресурс для отримання",
   "This action can no longer be cancelled": "Цю дію вже не можна скасувати",
   "This player is controlled by the AI.": "Цим гравцем керує ШІ.",
-  "OK": "ОК"
+  "OK": "ОК",
+  "One": "Один",
+  "Many": "Кілька"
 }

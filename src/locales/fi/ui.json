@@ -1610,5 +1610,7 @@
   "Energy Production": "Energiantuotanto",
   "Select a standard resource to gain": "Valitse saatava perusresurssi",
   "This action can no longer be cancelled": "Tätä toimintoa ei voi enää perua",
-  "This player is controlled by the AI.": "Tätä pelaajaa ohjaa tekoäly."
+  "This player is controlled by the AI.": "Tätä pelaajaa ohjaa tekoäly.",
+  "One": "Yksi",
+  "Many": "Useita"
 }

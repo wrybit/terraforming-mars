@@ -794,5 +794,7 @@
   "This action can no longer be cancelled": "此行动已无法取消",
   "This player is controlled by the AI.": "该玩家由 AI 控制。",
   "OK": "确定",
-  "Close": "关闭"
+  "Close": "关闭",
+  "One": "单个",
+  "Many": "多个"
 }

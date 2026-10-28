@@ -573,5 +573,7 @@
   "Select a standard resource to gain": "Elige un recurso estándar para obtener",
   "This action can no longer be cancelled": "Esta acción ya no se puede cancelar",
   "This player is controlled by the AI.": "Este jugador está controlado por la IA.",
-  "OK": "Aceptar"
+  "OK": "Aceptar",
+  "One": "Uno",
+  "Many": "Varios"
 }

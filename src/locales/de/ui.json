@@ -1733,5 +1733,7 @@
   "Server metrics": "Server-Kennzahlen",
   "Visitor addresses": "Besucher-Adressen",
   "Memory snapshot (large download)": "Speicherabbild (große Datei)",
-  "Player ${0}": "Spieler ${0}"
+  "Player ${0}": "Spieler ${0}",
+  "One": "Eins",
+  "Many": "Mehrere"
 }
