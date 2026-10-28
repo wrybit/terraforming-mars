@@ -132,6 +132,10 @@ export type AiTuning = {
   nestGuard: number,
   /** Weight of the city bonus for spread-out territory, card/ocean spots and spoiling opponent city rings (cityClaimSpread.ts); 0 = off. */
   cityClaimSpread: number,
+  /** VP per own greenery around a free spot (≥ 2) for an own city there – fill own nests first (nestFill.ts); 0 = off. */
+  nestFill: number,
+  /** Weight of playing a draw engine now: one generation of its draws, cheapFirst waived for it (drawEngineValue.ts); 0 = off. */
+  drawEngineValue: number,
   /** VP off converting plants into a greenery without an own city next to it, half of it as a city-move bonus, while own cities do not lead (cityFirstAction.ts); 0 = off. */
   cityFirstAction: number,
   /** Weight of the opponent's engine advantage in the award swing (awardEngineSwing.ts); 0 = off. */
@@ -402,6 +406,8 @@ export const BASELINE_TUNING: AiTuning = {
   cityFirst: 0,
   nestGuard: 0,
   cityClaimSpread: 1,
+  nestFill: 0,
+  drawEngineValue: 0,
   cityFirstAction: 1,
   awardEngineSwing: 0,
   tagOutlookBase: 0.85,
@@ -954,6 +960,10 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   cityClaimSpread: {cityClaimSpread: 1},
   // Round 149: cityClaimSpread adopted (+1.24, z +1.54, Jens' city rules); check.
   noCityClaimSpread: {cityClaimSpread: 0},
+  // Round 152: own nests (≥ 2 own greeneries at a free spot) filled with an own city – AI leaves 1.6–1.9 per game, humans 1.2.
+  nestFill: {nestFill: 1},
+  // Round 152: draw engines played early instead of last (cheapFirst waived); humans draw 27 cards per game, the AI 14.
+  drawEngineValue: {drawEngineValue: 1},
   // Round 149: nestGuard −1.34 but nests 1.65 → 1.29 per player; half strength.
   nestGuardHalf: {nestGuard: 0.5},
   // Round 149: cityFirst (space choice) left the order unchanged (15 % → 15 %); the order is the move choice.

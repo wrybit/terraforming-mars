@@ -21,6 +21,7 @@ import {tuningOf} from './aiTuning';
 import {RolloutEntry, RolloutPolicy, rolloutMeans} from './rolloutSearch';
 import {isStandardProject, standardProjectPenalty} from './standardProjectRestraint';
 import {cheapFirstPenalty} from './cheapFirst';
+import {drawEngineTimingBonus} from './drawEngineValue';
 import {isUselessMove} from './uselessMove';
 import {cityFirstActionAdjustment} from './cityFirstAction';
 import {capAgainstPass} from './passFairness';
@@ -500,8 +501,9 @@ export function chooseAction(menu: OrOptions, player: IPlayer, options: Lookahea
     }
   }
 
-  // cheapFirst: of several playable hand cards the cheap ones go first, like humans do (cheapFirst.ts).
-  if (tuning.cheapFirst > 0) {
+  // cheapFirst: of several playable hand cards the cheap ones go first, like humans do (cheapFirst.ts);
+  // drawEngineValue: draw engines go early anyway, every generation of delay loses their draws (drawEngineValue.ts).
+  if (tuning.cheapFirst > 0 || tuning.drawEngineValue > 0) {
     const playable = new Set<CardName>();
     for (const {candidate} of tried) {
       const name = playedHandCard(candidate.response, player);
@@ -512,6 +514,7 @@ export function chooseAction(menu: OrOptions, player: IPlayer, options: Lookahea
     for (const {candidate, outcome} of tried) {
       const name = playedHandCard(candidate.response, player);
       outcome.value -= name === undefined ? 0 : cheapFirstPenalty(player, name, playable);
+      outcome.value += name === undefined ? 0 : drawEngineTimingBonus(player, name, playable);
     }
   }
 
