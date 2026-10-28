@@ -32,7 +32,7 @@
   "tiles/city.png": "graphics/tile-sietch.svg",
   "tiles/greenery.png": "graphics/tile-planting.svg",
   "tiles/greenery_no_O2.png": "graphics/tile-planting.svg",
-  "tiles/ocean.png": "graphics/tile-spicefield.svg",
+  "tiles/ocean.png": "graphics/tile-spicefield-icon.svg",
   "tiles/special.png": "graphics/tile-special.svg",
   "tiles/special_tile_icons/mining_area.png": "graphics/special-mining-area.svg",
   "tiles/special_tile_icons/restricted_area.png": "graphics/special-restricted-area.svg",

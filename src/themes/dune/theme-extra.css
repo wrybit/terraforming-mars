@@ -19,6 +19,20 @@ html.theme-dune .board-space-tile--ocean {
   background: url(graphics/tile-spicefield.svg) center / contain no-repeat;
 }
 
+/* Everywhere else the spice field is a symbol (cards, scales, bonuses): the simple tile-spicefield-icon.svg via
+   graphics.json. Spice fields lying on the board keep the full scene, also with an Ares symbol on top. */
+html.theme-dune .board-space-tile--ocean-farm {
+  background-image: url('./assets/tiles/special_tile_icons/ocean_farm.png'), url(graphics/tile-spicefield.svg);
+}
+
+html.theme-dune .board-space-tile--ocean-sanctuary {
+  background-image: url('./assets/tiles/special_tile_icons/ocean_sanctuary.png'), url(graphics/tile-spicefield.svg);
+}
+
+html.theme-dune .board-space-tile--ocean-city {
+  background-image: url('./assets/tiles/special_tile_icons/ocean_city.png'), url(graphics/tile-spicefield.svg);
+}
+
 /* Owner's cube on a tile (BoardSpace.vue): a little smaller and in the upper left of the hex, so the Dune pictures
    stay visible and the "+1" top right stays free; the random turn of the cube stays (Jens 26 Oct 2026) */
 html.theme-dune .board-space > .board-cube {
@@ -686,9 +700,13 @@ html.theme-dune .card-container .card-content .card-rows :is(.card-ocean-global-
   width: 40px !important;
 }
 
+/* Vegetation and water storage are half rings (par-vegetation.svg, par-water-storage.svg): a square box, the whole
+   symbol visible – the slim box of the former thermometers cut them off */
 html.theme-dune .card-container .card-content .card-rows :is(.card-oxygen-global-requirement, .card-temperature-global-requirement) {
-  width: 22px !important;
-  background-size: auto 50px !important;
+  width: 44px !important;
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
 }
 
 html.theme-dune .card-container .card-content .card-rows .card-tile.card-tr {

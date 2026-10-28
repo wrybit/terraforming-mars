@@ -76,11 +76,11 @@ export function pointAt(geometry: ScaleGeometry, angle: number, radius: number =
 export type ScaleLabel = {symbolAngle: number, text: {from: number, to: number, anchor: 'start' | 'end'}};
 
 /** Distance from the end of the band to the centre of the symbol */
-export const LABEL_SYMBOL_DISTANCE = 21;
+export const LABEL_SYMBOL_DISTANCE = 31;
 /** Distance from the end of the band to the near end of the name */
-export const LABEL_TEXT_DISTANCE = 41;
+export const LABEL_TEXT_DISTANCE = 51;
 /** Length of the arc the name runs along (room for the longest translation) */
-export const LABEL_TEXT_LENGTH = 150;
+export const LABEL_TEXT_LENGTH = 140;
 
 /** Angle where the band ends: half a step beyond its last marker, like the outline (scaleOutline) */
 function bandEnd(angles: ReadonlyArray<number>): number {

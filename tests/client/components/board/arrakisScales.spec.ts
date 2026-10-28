@@ -34,13 +34,13 @@ describe('arrakisScales', () => {
 
   it('turns symbol and name of the standard board up with its scales, the names meeting at the top', () => {
     const vegetation = scaleLabels(STANDARD_SCALES).vegetation;
-    expect(vegetation.symbolAngle).closeTo(228.55, 0.01);
-    expect(vegetation.text.from).closeTo(232.84, 0.01);
+    expect(vegetation.symbolAngle).closeTo(230.69, 0.01);
+    expect(vegetation.text.from).closeTo(234.98, 0.01);
     expect(vegetation.text.to).closeTo(264.98, 0.01);
     const water = scaleLabels(STANDARD_SCALES).water;
-    expect(water.symbolAngle).closeTo(-53.55, 0.01);
+    expect(water.symbolAngle).closeTo(-55.69, 0.01);
     expect(water.text.from).closeTo(-89.98, 0.01);
-    expect(water.text.to).closeTo(-57.84, 0.01);
+    expect(water.text.to).closeTo(-59.98, 0.01);
   });
 
   // Gaps in board pixels from the end of the band, the same on both boards and both sides (design B · eng)
@@ -50,10 +50,10 @@ describe('arrakisScales', () => {
       const {vegetation, water} = scaleLabels(geometry);
       const vegetationEnd = 2 * geometry.vegetationAngles.at(-1)! - (geometry.vegetationAngles.at(-1)! + geometry.vegetationAngles.at(-2)!) / 2;
       const waterEnd = 2 * geometry.waterAngles.at(-1)! - (geometry.waterAngles.at(-1)! + geometry.waterAngles.at(-2)!) / 2;
-      expect(pixels(vegetation.symbolAngle - vegetationEnd)).closeTo(21, 0.01);
-      expect(pixels(water.symbolAngle - waterEnd)).closeTo(21, 0.01);
-      expect(pixels(vegetation.text.from - vegetationEnd)).closeTo(41, 0.01);
-      expect(pixels(water.text.to - waterEnd)).closeTo(41, 0.01);
+      expect(pixels(vegetation.symbolAngle - vegetationEnd)).closeTo(31, 0.01);
+      expect(pixels(water.symbolAngle - waterEnd)).closeTo(31, 0.01);
+      expect(pixels(vegetation.text.from - vegetationEnd)).closeTo(51, 0.01);
+      expect(pixels(water.text.to - waterEnd)).closeTo(51, 0.01);
     });
   }
 

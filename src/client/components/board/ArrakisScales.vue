@@ -38,8 +38,7 @@
             :stroke="scaleColour(track.key, piece.share)" :stroke-width="FILL_WIDTH"/>
         </g>
       </template>
-      <image class="arrakis-scales__symbol" :href="track.symbol" :x="track.symbolAt.x - SYMBOL / 2" :y="track.symbolAt.y - SYMBOL / 2" :width="SYMBOL" :height="SYMBOL" :filter="glowUrl"
-        :transform="`rotate(${track.symbolRotation} ${track.symbolAt.x} ${track.symbolAt.y})`"/>
+      <image class="arrakis-scales__symbol" :href="track.symbol" :x="track.symbolAt.x - SYMBOL / 2" :y="track.symbolAt.y - SYMBOL / 2" :width="SYMBOL" :height="SYMBOL" :filter="glowUrl"/>
       <text class="arrakis-scales__name">
         <textPath :href="'#' + pathId(track.key)" :startOffset="track.anchor === 'end' ? '100%' : '0%'" :text-anchor="track.anchor" dominant-baseline="central">{{ $t(track.label) }}</textPath>
       </text>
@@ -89,7 +88,6 @@ type Track = {
   symbol: string,
   symbolAt: {x: number, y: number},
   // Turned like the band at its end: the top of the symbol points away from the planet (Jens, 20 Oct 2026)
-  symbolRotation: number,
   textPath: string,
   anchor: 'start' | 'end',
 };
@@ -172,10 +170,10 @@ export default defineComponent({
       const {vegetation, water} = scaleLabels(geometry);
       return [
         {key: 'vegetation', label: 'Oxygen', art: scaleArt(geometry, 'vegetation', geometry.vegetationAngles, this.vegetation.level, this.vegetation.labels),
-          glow: SCALE_GLOW.vegetation, symbol: themedAsset('assets/global-parameters/oxygen.png'), symbolAt: pointAt(geometry, vegetation.symbolAngle), symbolRotation: vegetation.symbolAngle + 90,
+          glow: SCALE_GLOW.vegetation, symbol: themedAsset('assets/global-parameters/oxygen.png'), symbolAt: pointAt(geometry, vegetation.symbolAngle),
           textPath: arcPath(geometry, vegetation.text.from, vegetation.text.to), anchor: vegetation.text.anchor},
         {key: 'water', label: 'Temperature', art: scaleArt(geometry, 'water', geometry.waterAngles, this.water.level, this.water.labels),
-          glow: SCALE_GLOW.water, symbol: themedAsset('assets/global-parameters/temperature.png'), symbolAt: pointAt(geometry, water.symbolAngle), symbolRotation: water.symbolAngle + 90,
+          glow: SCALE_GLOW.water, symbol: themedAsset('assets/global-parameters/temperature.png'), symbolAt: pointAt(geometry, water.symbolAngle),
           textPath: arcPath(geometry, water.text.from, water.text.to), anchor: water.text.anchor},
       ];
     },

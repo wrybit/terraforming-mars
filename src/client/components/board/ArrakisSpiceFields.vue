@@ -13,7 +13,7 @@
       </linearGradient>
       <path :id="textPathId" :d="barPath"/>
     </defs>
-    <image :transform="at(layout.icon)" href="assets/themes/dune/graphics/tile-spicefield.svg"
+    <image :transform="at(layout.icon)" href="assets/themes/dune/graphics/tile-spicefield-icon.svg"
       :x="-ICON_SIZE / 2" :y="-ICON_SIZE / 2" :width="ICON_SIZE" :height="ICON_SIZE"/>
     <template v-if="complete">
       <path class="arrakis-spice__rim" :d="barPath" :stroke-width="(BAR_HEIGHT + 2.16) * row.scale"/>
