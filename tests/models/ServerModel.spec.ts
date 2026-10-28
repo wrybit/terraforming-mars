@@ -137,4 +137,12 @@ describe('ServerModel', () => {
       discardPile: game.turmoil!.globalEventDealer.discards.length,
     });
   });
+
+  it('exposes the colony trade offset of the player', () => {
+    createTestGame(false);
+    player.colonies.tradeOffset = 2;
+
+    expect(Server.getPlayerModel(player).thisPlayer.colonyTradeOffset).eq(2);
+    expect(Server.getPlayerModel(player).players.find((p) => p.color === player2.color)?.colonyTradeOffset).eq(0);
+  });
 });

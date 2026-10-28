@@ -2188,5 +2188,7 @@
   "Not shown: this tab was in front. In the game that is intended; switch to another app or tab during the countdown.": "Не показано: эта вкладка была на переднем плане. В игре так и задумано; во время обратного отсчёта переключитесь на другое приложение или вкладку.",
   "Notifications are not allowed for this site: allow them in the browser and test again.": "Уведомления для этого сайта не разрешены: разрешите их в браузере и проверьте снова.",
   "The browser refused to show the notification: check the notification permission of this site.": "Браузер отказался показать уведомление: проверьте разрешение уведомлений для этого сайта.",
-  "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "Значение: средний перевес в очках над лучшим соперником в ${0} пробных партиях на вариант максимум (чем выше, тем лучше)."
+  "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "Значение: средний перевес в очках над лучшим соперником в ${0} пробных партиях на вариант максимум (чем выше, тем лучше).",
+  "Track +${0} before trading": "Трек +${0} перед торговлей",
+  "optional": "необязательно"
 }

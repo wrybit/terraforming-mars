@@ -87,10 +87,12 @@ function cardResourceIcon(resource: CardResource | undefined): string {
 
 export type TradeIcon = {src: string, production: boolean};
 
-// Icon of what a trade (or the colony bonus) gives
-export function benefitIcon(metadata: ColonyMetadata, benefit: 'trade' | 'colony'): TradeIcon {
+// Icon of what a trade (or the colony bonus) gives at a given track position
+// (Europa names a different resource on every step)
+export function benefitIcon(metadata: ColonyMetadata, benefit: 'trade' | 'colony', position: number = 0): TradeIcon {
   const entry = metadata[benefit];
-  const resource = Array.isArray(entry.resource) ? entry.resource[0] : entry.resource;
+  const resourceList = entry.resource;
+  const resource = Array.isArray(resourceList) ? resourceList[Math.min(position, resourceList.length - 1)] : resourceList;
   switch (entry.type) {
   case ColonyBenefit.GAIN_RESOURCES:
   case ColonyBenefit.STEAL_RESOURCES:
@@ -141,9 +143,41 @@ export function colonyView(model: ColonyModel): ColonyView {
     planet: planetImage(model.name),
     tone: planetTone(model.name),
     tradeValue: track[Math.min(model.trackPosition, track.length - 1)] ?? 0,
-    tradeIcon: benefitIcon(metadata, 'trade'),
+    tradeIcon: benefitIcon(metadata, 'trade', model.trackPosition),
     track,
     resetPosition: Math.min(model.colonies.length, track.length - 1),
     full: model.colonies.length >= 3,
+  };
+}
+
+// What a trade actually gives this player: the server raises the colony track by the player's trade
+// offset before trading (Trade Envoys, Trading Colony, L1 Trade Terminal). Titania (shouldIncreaseTrack
+// 'no') never rises, and Europa ('ask') only rises if the player chooses so.
+export type TradePreview = {
+  value: number;
+  baseValue: number;
+  raised: number;
+  optional: boolean;
+  icon: TradeIcon;
+};
+
+export function tradePreview(view: ColonyView, offset: number): TradePreview {
+  const lastPosition = view.track.length - 1;
+  const raised = view.metadata.shouldIncreaseTrack === 'no' ?
+    0 :
+    Math.max(0, Math.min(offset, lastPosition - view.model.trackPosition));
+  if (raised === 0) {
+    return {value: view.tradeValue, baseValue: view.tradeValue, raised: 0, optional: false, icon: view.tradeIcon};
+  }
+  const position = view.model.trackPosition + raised;
+  // The server skips the question when the resource does not change (Europa, Mercury, Hygiea)
+  const resource = view.metadata.trade.resource;
+  const sameResource = Array.isArray(resource) && resource[view.model.trackPosition] === resource[position];
+  return {
+    value: view.track[position] ?? view.tradeValue,
+    baseValue: view.tradeValue,
+    raised,
+    optional: view.metadata.shouldIncreaseTrack === 'ask' && !sameResource,
+    icon: benefitIcon(view.metadata, 'trade', position),
   };
 }

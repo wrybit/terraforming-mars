@@ -1681,5 +1681,7 @@
   "Not shown: this tab was in front. In the game that is intended; switch to another app or tab during the countdown.": "Ikke vist: denne fanen var foran. I spillet er det meningen; bytt til en annen app eller fane under nedtellingen.",
   "Notifications are not allowed for this site: allow them in the browser and test again.": "Varsler er ikke tillatt for dette nettstedet: tillat dem i nettleseren og test på nytt.",
   "The browser refused to show the notification: check the notification permission of this site.": "Nettleseren nektet å vise varselet: sjekk varseltillatelsen for dette nettstedet.",
-  "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "Verdi: gjennomsnittlig poengforsprang på beste motstander i opptil ${0} prøvepartier per valg (høyere er bedre)."
+  "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "Verdi: gjennomsnittlig poengforsprang på beste motstander i opptil ${0} prøvepartier per valg (høyere er bedre).",
+  "Track +${0} before trading": "Sporet +${0} før handel",
+  "optional": "valgfritt"
 }

@@ -2301,5 +2301,7 @@
   "Not shown: this tab was in front. In the game that is intended; switch to another app or tab during the countdown.": "未显示：此标签页在前台。在游戏中这是预期行为；请在倒计时期间切换到其他应用或标签页。",
   "Notifications are not allowed for this site: allow them in the browser and test again.": "此网站不允许通知：请在浏览器中允许通知后再次测试。",
   "The browser refused to show the notification: check the notification permission of this site.": "浏览器拒绝显示通知：请检查此网站的通知权限。",
-  "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "数值：每个选项最多 ${0} 局试玩中领先最强对手的平均分数（越高越好）。"
+  "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "数值：每个选项最多 ${0} 局试玩中领先最强对手的平均分数（越高越好）。",
+  "Track +${0} before trading": "贸易前轨道 +${0}",
+  "optional": "可选"
 }
