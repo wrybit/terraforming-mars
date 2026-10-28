@@ -572,6 +572,10 @@
   padding-top: 2px;
   // Nothing may widen the page sideways (otherwise the bottom sheet gets wider than the screen)
   overflow-x: clip;
+  // The cost coin hangs over the left edge of the first card of a row: the clip edge lies 12px further out (padding),
+  // the cards stay where they are (negative margin); half the gap to the filter column (Jens 28 Oct 2026)
+  padding-left: 12px;
+  margin-left: -12px;
 }
 
 // The first section starts level with the filter column. .card-list-section is also the class of the sections below
