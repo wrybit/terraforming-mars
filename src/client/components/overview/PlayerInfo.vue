@@ -13,10 +13,10 @@
           </div>
           <div>
             <div class="icon-first-player" v-if="firstForGen && playerView.players.length > 1" v-i18n>1st</div>
-            <PlayerStatus :timer="player.timer" :showTimer="playerView.game.gameOptions.showTimers" :liveTimer="playerView.game.phase !== Phase.END" :firstForGen="firstForGen" v-trim-whitespace :actionLabel="actionLabel"/>
+            <PlayerStatus :timer="player.timer" :showTimer="playerView.game.gameOptions.showTimers" :liveTimer="playerView.game.phase !== Phase.END" :firstForGen="firstForGen" :actionLabel="actionLabel"/>
           </div>
         </div>
-          <PlayerResources :player="player" v-trim-whitespace />
+          <PlayerResources :player="player" />
           <div class="player-played-cards">
             <!-- No click handler of its own: the click bubbles up to the bar; button stays for keyboard use -->
             <button type="button" class="btn btn-tiny btn-rounded played-cards-button">

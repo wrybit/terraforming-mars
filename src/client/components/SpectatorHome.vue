@@ -1,7 +1,7 @@
 <template>
   <div id="spectator-home" :class="{'with-turmoil': game.turmoil, 'player-home--fixed': usesFixedLayout}">
     <!-- Built like the player view (PlayerHome.vue), just without own hand and input -->
-    <Sidebar v-trim-whitespace
+    <Sidebar
       :actingPlayer="false"
       :playerColor="spectator.color"
       :coloniesCount="game.colonies.length"
@@ -37,7 +37,7 @@
 
       <!-- On the left the log instead of hand cards: it fills the space below the player table -->
       <template #main>
-        <PlayersOverview class="player_home_block player_home_block--players nofloat" :playerView="spectator" v-trim-whitespace id="shortkey-playersoverview"/>
+        <PlayersOverview class="player_home_block player_home_block--players nofloat" :playerView="spectator" id="shortkey-playersoverview"/>
         <!-- Height of the players card, the log below gets the rest (only in the fixed layout) -->
         <RowResizeHandle kind="players"/>
         <div class="player_home_block nofloat player-home-columns__log player_home_block--spectator-log">
