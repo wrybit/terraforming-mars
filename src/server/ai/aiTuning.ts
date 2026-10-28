@@ -136,6 +136,10 @@ export type AiTuning = {
   nestFill: number,
   /** Weight of playing a draw engine now: one generation of its draws, cheapFirst waived for it (drawEngineValue.ts); 0 = off. */
   drawEngineValue: number,
+  /** Share of a reached milestone's 5 VP lost by a move that leaves less than the claim cost (milestoneReserve.ts); 0 = off. */
+  milestoneReserve: number,
+  /** Extra share for resource-VP collectors in the generations before the last four (vpResourceEngine.ts); 0 = off. */
+  vpResourceEngine: number,
   /** VP off converting plants into a greenery without an own city next to it, half of it as a city-move bonus, while own cities do not lead (cityFirstAction.ts); 0 = off. */
   cityFirstAction: number,
   /** Weight of the opponent's engine advantage in the award swing (awardEngineSwing.ts); 0 = off. */
@@ -408,6 +412,8 @@ export const BASELINE_TUNING: AiTuning = {
   cityClaimSpread: 1,
   nestFill: 0,
   drawEngineValue: 0,
+  milestoneReserve: 0,
+  vpResourceEngine: 0,
   cityFirstAction: 1,
   awardEngineSwing: 0,
   tagOutlookBase: 0.85,
@@ -964,6 +970,10 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   nestFill: {nestFill: 1},
   // Round 152: draw engines played early instead of last (cheapFirst waived); humans draw 27 cards per game, the AI 14.
   drawEngineValue: {drawEngineValue: 1},
+  // Round 153 (human games: milestones 2.2 vs 0.8 per game): keep the 8 M€ claim money while a milestone is reached or one step away.
+  milestoneReserve: {milestoneReserve: 1},
+  // Round 153 (human games: card VP 20 : 69, 52 : 64): early resource-VP collectors get the discounted share back.
+  vpResourceEngine: {vpResourceEngine: 0.5},
   // Round 149: nestGuard −1.34 but nests 1.65 → 1.29 per player; half strength.
   nestGuardHalf: {nestGuard: 0.5},
   // Round 149: cityFirst (space choice) left the order unchanged (15 % → 15 %); the order is the move choice.

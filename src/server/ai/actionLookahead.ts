@@ -24,6 +24,7 @@ import {cheapFirstPenalty} from './cheapFirst';
 import {drawEngineTimingBonus} from './drawEngineValue';
 import {isUselessMove} from './uselessMove';
 import {cityFirstActionAdjustment} from './cityFirstAction';
+import {milestoneReservePenalty} from './milestoneReserve';
 import {capAgainstPass} from './passFairness';
 import {triggerOrderAdjustments} from './triggerOrder';
 import {playPreferences} from './bgaPolicy';
@@ -163,7 +164,8 @@ function tryCandidate(snapshot: GameSnapshot, player: IPlayer, menuSize: number,
     }
     const titles = candidate.followUps === undefined ? followUpChoices(copyPlayer.getWaitingFor(), copyPlayer)?.map((choice) => choice.title) : undefined;
     finishMove(copy, copyPlayer, candidate.followUps);
-    const value = relativeValue(copyPlayer, context);
+    // milestoneReserve: a move that leaves a reached milestone without the claim money loses part of it (milestoneReserve.ts).
+    const value = relativeValue(copyPlayer, context) - milestoneReservePenalty(copyPlayer);
     const nextMenu = copyPlayer.getWaitingFor();
     if (!withNext || !isActionMenu(nextMenu) || copy.generation !== generation) {
       return {value, snapshot: withNext ? snapshotOf(copy) : undefined, followUpTitles: titles};
