@@ -21,6 +21,7 @@ import {CardRequirementDescriptor} from '@/common/cards/CardRequirementDescripto
 import {ICardRenderRoot, isICardRenderRoot, ItemType} from '@/common/cards/render/Types';
 import {activeTheme} from '@/client/theme/applyTheme';
 import {joinAlternativeRows} from './alternativeRows';
+import {signGainRows} from './signedGainRows';
 import {isDescription} from '@/common/cards/render/CardRenderDescription';
 
 export default defineComponent({
@@ -61,13 +62,14 @@ export default defineComponent({
     leadsWithDescription(): boolean {
       return isDescription(this.metadata.description) && this.metadata.description.lead === true;
     },
-    // Dune: alternatives in one row with a slash instead of OR (alternativeRows.ts); Mars keeps the rows of the card
+    // Dune: alternatives in one row with a slash instead of OR (alternativeRows.ts) and a plus before gains next to a
+    // loss (signedGainRows.ts); Mars keeps the rows of the card
     rows(): ReadonlyArray<Array<ItemType>> {
       if (!isICardRenderRoot(this.metadata.renderData)) {
         return [];
       }
       const rows = this.metadata.renderData.rows;
-      return activeTheme() === 'dune' ? joinAlternativeRows(rows) : rows;
+      return activeTheme() === 'dune' ? signGainRows(joinAlternativeRows(rows)) : rows;
     },
     firstRow(): ICardRenderRoot | undefined {
       if (this.rows.length > 0) {

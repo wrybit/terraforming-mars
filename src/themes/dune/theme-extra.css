@@ -841,6 +841,12 @@ html.theme-dune .card-container.card-protected-habitats .card-content > .card-ro
   filter: drop-shadow(0 12px 10px rgba(40, 22, 8, 0.5));
 }
 
+/* Media Archives: the red glow of the event tag of all players is not part of its width and reached the slash; room
+   for the glow keeps the slash apart (Jens 28 Oct 2026, only this card) */
+html.theme-dune .card-container.card-media-archives .card-content .red-outline {
+  margin-left: 8px;
+}
+
 /* Every cross on a card ("cancelled", "ignore") in the red of the theme with a light halo (Jens 21 Oct 2026) */
 html.theme-dune .card-container .card-content .card-x {
   color: #b51616 !important;
