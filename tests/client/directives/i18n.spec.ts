@@ -16,7 +16,8 @@ describe('i18n', () => {
   afterEach(reset);
 
   it('returns English text unchanged when lang is en', () => {
-    setTranslationsForTest({'Goal': 'Ziel'});
+    // The fork lets src/locales/en/ override single wordings, so only a text without an English entry stays unchanged
+    setTranslationsForTest({'Award': 'Auszeichnung'});
     expect(translateText('Goal')).eq('Goal');
   });
 
