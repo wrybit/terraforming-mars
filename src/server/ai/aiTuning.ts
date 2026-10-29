@@ -427,7 +427,7 @@ export const BASELINE_TUNING: AiTuning = {
   lateDrawFloor: 0,
   lateProductionFloor: 0,
   spareMoneyDraw: 0,
-  plantHoardDecay: 0,
+  plantHoardDecay: 1,
   lonelyGreeneryOdds: 0,
   cityFirstAction: 1,
   awardEngineSwing: 0,
@@ -997,6 +997,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   spareMoneyDraw: {spareMoneyDraw: 1},
   // Human game: the AI held 61 plants with no city and no money for one – waiting plants need a city plan.
   plantHoardDecay: {plantHoardDecay: 1},
+  // Round 156: plantHoardDecay adopted (+0.73, z +1.35; cards played +0.64, z +2.35 – card rule); check.
+  noPlantHoardDecay: {plantHoardDecay: 0},
   // Same game: fixed lonely-greenery penalties although an opponent would build on few of the open spots late.
   lonelyGreeneryOdds: {lonelyGreeneryOdds: 1},
   // Round 149: nestGuard −1.34 but nests 1.65 → 1.29 per player; half strength.

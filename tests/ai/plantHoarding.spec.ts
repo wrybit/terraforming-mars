@@ -37,6 +37,8 @@ describe('AI plant hoarding', () => {
     const [, player] = testGame(2);
     player.plants = 30;
     player.megaCredits = 0;
+    // Round 156: adopted in the baseline; the check variant switches it off.
+    setPlayerTuning(player.id, 'noPlantHoardDecay');
     expect(plantHoardDiscount(player, 5)).eq(0);
     setPlayerTuning(player.id, 'plantHoardDecay');
     expect(hasCityPlan(player)).is.false;
@@ -61,6 +63,7 @@ describe('AI plant hoarding', () => {
     player.plants = 24;
     player.megaCredits = 0;
     const menu = actionMenu(player, 5);
+    setPlayerTuning(player.id, 'noPlantHoardDecay');
     expect(cityFirstActionAdjustment(player, menu, convertPlants(menu))).to.be.lessThan(0);
     setPlayerTuning(player.id, 'plantHoardDecay');
     expect(cityFirstActionAdjustment(player, menu, convertPlants(menu))).eq(0);
