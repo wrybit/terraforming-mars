@@ -16,6 +16,8 @@
 @players-table-color-bar-width: 7px;
 @players-table-row-tint: 30%;
 @players-table-own-row-tint: 55%;
+@players-table-clear-row-tint: 16%;
+@players-table-clear-own-row-tint: 28%;
 @players-table-blur: 10px;
 @players-table-divider-color: rgba(255, 255, 255, 0.4);
 @players-table-dim: rgba(255, 255, 255, 0.25);
@@ -353,6 +355,15 @@ each(@players, {
     }
   }
 });
+
+// Clear is very light: with the usual tint the white text loses its contrast
+.players-table-row--clear {
+  background: fade(@player_clear, @players-table-clear-row-tint);
+
+  &.players-table-row--me {
+    background: fade(@player_clear, @players-table-clear-own-row-tint);
+  }
+}
 
 .players-table-row--me {
   box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.55);

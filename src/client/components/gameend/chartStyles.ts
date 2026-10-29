@@ -12,6 +12,8 @@ export const PLAYER_CHART_COLORS: Record<Color, string> = {
   ['purple']: 'rgb(140, 0, 255)',
   ['orange']: 'rgb(236, 113, 12)',
   ['pink']: 'rgb(245, 116, 187)',
+  ['turquoise']: 'rgb(30, 200, 190)',
+  ['clear']: 'rgb(205, 228, 246)',
 
   // Not real player colors
   ['neutral']: '',

@@ -22,7 +22,7 @@ export function partyImage(party: PartyName): string {
 }
 
 // Delegates as acrylic astronauts in the player colour (baked like the cubes and shuttles)
-const FIGURE_COLORS: ReadonlyArray<string> = ['red', 'yellow', 'green', 'black', 'blue', 'purple', 'orange', 'pink', 'neutral'];
+const FIGURE_COLORS: ReadonlyArray<string> = ['red', 'yellow', 'green', 'black', 'blue', 'purple', 'orange', 'pink', 'turquoise', 'clear', 'neutral'];
 export function figureImage(color: Color | undefined): string {
   return 'assets/acrylic/astronaut-' + (color !== undefined && FIGURE_COLORS.includes(color) ? color : 'neutral') + '.png';
 }

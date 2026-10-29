@@ -10,7 +10,7 @@ export const PLAYER_CUBE_SPRITE_URL = 'assets/player-cube/sprite.webp';
 export const PLAYER_CUBE_SPRITE_MANIFEST = 'assets/player-cube/sprite.json';
 
 // Neutral markers share the bronze look (player_cube.less), so they share its row
-export const SPRITE_ROWS: ReadonlyArray<Color> = ['red', 'green', 'yellow', 'blue', 'black', 'purple', 'orange', 'pink', 'bronze'];
+export const SPRITE_ROWS: ReadonlyArray<Color> = ['red', 'green', 'yellow', 'blue', 'black', 'purple', 'orange', 'pink', 'turquoise', 'clear', 'bronze'];
 
 /** The lighting is recalculated per turn and a cube looks the same every 90°: 0…80° in steps of 10° covers all
  (finer steps are not visible at this size, but would make the sheet much larger). */

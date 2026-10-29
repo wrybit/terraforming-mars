@@ -66,7 +66,7 @@ type Berth = {key: string, color: Color, name: string, away: ColonyName | undefi
 
 // Player colours for the docked fleet's outline (same as the colour cubes)
 const PLAYER_TONE: Record<string, string> = {
-  red: '#e2463e', green: '#3fb34a', blue: '#3b84f0', yellow: '#e8c21f', purple: '#a356d6', orange: '#f08a2e', black: '#9aa0aa', pink: '#ec7cb9', neutral: '#ccc',
+  red: '#e2463e', green: '#3fb34a', blue: '#3b84f0', yellow: '#e8c21f', purple: '#a356d6', orange: '#f08a2e', black: '#9aa0aa', pink: '#ec7cb9', turquoise: '#2cc7bb', clear: '#a9cfee', neutral: '#ccc',
 };
 
 export default defineComponent({
