@@ -4,6 +4,8 @@
 
 @selection-color: @bg_action;
 @selection-pulse-period: 1.6s;
+// Finite like the "your turn" markers: an endless box-shadow animation repaints the card every frame
+@selection-pulse-blinks: 3;
 
 // Clear 5px border (static), with a pulsing glow over it
 @selection-outline-width: 5px;
@@ -48,7 +50,7 @@
 // The element needs position: relative (for the tint as ::before)
 .selection-highlight() {
   box-shadow: 0 0 0 @selection-outline-width @selection-color, @selection-glow-rest;
-  animation: selection-pulse @selection-pulse-period ease-in-out infinite;
+  animation: selection-pulse @selection-pulse-period ease-in-out @selection-pulse-blinks;
 
   &::before {
     .selection-tint();

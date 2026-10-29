@@ -23,7 +23,8 @@
   backdrop-filter: blur(10px);
   box-shadow: @floating-button-shadow;
   text-align: center;
-  animation: game-over-notice-float 4s ease-in-out infinite;
+  // Three floats, then rest: an endless animation on a backdrop-filter surface keeps the compositor busy
+  animation: game-over-notice-float 4s ease-in-out 3;
 }
 
 .game-over-notice__title {
