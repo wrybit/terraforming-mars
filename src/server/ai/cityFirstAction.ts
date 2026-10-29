@@ -8,6 +8,7 @@ import {Board} from '../boards/Board';
 import {tuningOf} from './aiTuning';
 import {remainingProductionPhases, victoryPointValue} from './gameProgress';
 import {ownTileCounts} from './cityFirst';
+import {hoardingWithoutCityPlan} from './plantHoardDecay';
 
 // cityFirst (spaceValue.ts) only chose a better space for a greenery and left the order unchanged: greeneries placed
 // while own cities led stayed at 15 % (humans 29 %). The order is decided by the move itself – converting plants or
@@ -23,6 +24,10 @@ function titleOf(option: {title: string | {message: string}}): string {
 /** True while the rule applies: on, not the last generation, cities do not lead greeneries, a city spot is free. */
 function cityFirstActive(player: IPlayer): boolean {
   if (tuningOf(player).cityFirstAction <= 0 || remainingProductionPhases(player.game, player) <= 0) {
+    return false;
+  }
+  // plantHoardDecay: with no city coming, waiting for one only piles up plants (human game: 61 plants, no city).
+  if (hoardingWithoutCityPlan(player)) {
     return false;
   }
   const {cities, greeneries} = ownTileCounts(player);

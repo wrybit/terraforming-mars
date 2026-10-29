@@ -8,6 +8,7 @@ import {productionPhasesWithFloor} from './lateProductionFloor';
 import {isTemperatureMaxed, remainingProductionPhases, stepsLeft, terraformingProgress, victoryPointValue} from './gameProgress';
 import {tuningOf} from './aiTuning';
 import {boardPotential} from './boardPotential';
+import {plantHoardDiscount} from './plantHoardDecay';
 import {lastGenerationSpotPoints} from './lastGenerationSpots';
 import {futureTagPoints} from './tagPointOutlook';
 import {effectExhausted} from './exhaustedEffect';
@@ -324,7 +325,7 @@ function resourceValue(player: IPlayer, context: ValuationContext): number {
   return moneyValue +
     player.steel * player.getSteelValue() * 0.8 * money +
     player.titanium * player.getTitaniumValue() * 0.8 * money +
-    player.plants * 1.5 * plantFactor(player) +
+    player.plants * 1.5 * plantFactor(player) - plantHoardDiscount(player, context.remaining) +
     player.heat * heatValue +
     player.energy * energyResourceValue(player, context);
 }
