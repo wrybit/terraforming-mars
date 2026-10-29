@@ -45,6 +45,11 @@ export function railBox(edges: Box, axis: ScrollAxis, bothAxes: boolean): Box {
 
 export type ScrollMetrics = {viewport: number, content: number, position: number};
 
+/** Is the point inside the box, or at most `slack` px outside of it? */
+export function boxContains(box: Box, x: number, y: number, slack: number = 0): boolean {
+  return x >= box.left - slack && x <= box.right + slack && y >= box.top - slack && y <= box.bottom + slack;
+}
+
 /** Length of the thumb and its offset from the start of the track. */
 export function thumbGeometry(metrics: ScrollMetrics, track: number): {length: number, offset: number} {
   const length = Math.min(track, Math.max(OVERLAY_SCROLLBAR_MIN_THUMB, Math.round(track * metrics.viewport / metrics.content)));

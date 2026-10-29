@@ -73,22 +73,30 @@ const panel = ref<HTMLElement | undefined>(undefined);
 
 // 0 = mouse far away, 1 = mouse at or over the column
 const near = ref(0);
-function onMouseMove(event: MouseEvent): void {
-  const element = panel.value;
-  if (element === undefined) {
+// Panel metrics cached by measure(): reading offset* per pointer move forced a layout every time
+const metrics = {width: 0, height: 0, right: 0, top: 0};
+let pointerX = 0;
+let pointerY = 0;
+let pointerFrame = 0;
+
+function updateNear(): void {
+  pointerFrame = 0;
+  if (metrics.width === 0) {
     return;
   }
   // Abstand zur voll eingeblendeten Lage, nicht zur sichtbaren: die Spalte fährt der Maus entgegen, sonst
-  // schaukelte sich die Nähe selbst hoch. offset* misst ohne Transform; vergrößert wird um den rechten Rand.
-  const width = element.offsetWidth * NEAR_SCALE;
-  const height = element.offsetHeight * NEAR_SCALE;
-  const right = element.offsetLeft + element.offsetWidth;
-  const top = element.offsetTop + (element.offsetHeight - height) / 2;
-  // Rechts neben der Spalte (zwischen ihr und dem Fensterrand) zählt als „über der Spalte“: wer die Maus
-  // dort hinausschiebt, will weiterlesen – die Spalte soll dann nicht wieder wegfahren und unscharf werden
-  const dx = Math.max(right - width - event.clientX, 0);
-  const dy = Math.max(top - event.clientY, 0, event.clientY - top - height);
+  // schaukelte sich die Nähe selbst hoch.
+  const dx = Math.max(metrics.right - metrics.width - pointerX, 0);
+  const dy = Math.max(metrics.top - pointerY, 0, pointerY - metrics.top - metrics.height);
   near.value = Math.round(Math.max(0, 1 - Math.hypot(dx, dy) / NEAR_RANGE) * 100) / 100;
+}
+
+function onMouseMove(event: MouseEvent): void {
+  pointerX = event.clientX;
+  pointerY = event.clientY;
+  if (pointerFrame === 0) {
+    pointerFrame = requestAnimationFrame(updateNear);
+  }
 }
 function onMouseOut(event: MouseEvent): void {
   if (event.relatedTarget === null) {
@@ -101,6 +109,8 @@ function onMouseOut(event: MouseEvent): void {
 const openIndex = ref<number | undefined>(0);
 function toggleDay(index: number): void {
   openIndex.value = openIndex.value === index ? undefined : index;
+  // The height of the open day changes the panel: refresh the cached metrics for the pointer math
+  void nextTick(measure);
 }
 // Klicks in die Liste der Punkte schalten nicht um: wer Text markiert oder liest, soll ihn nicht zuklappen
 function onDayClick(event: MouseEvent, index: number): void {
@@ -118,8 +128,15 @@ function measure(): void {
   const element = panel.value;
   if (element === undefined || getComputedStyle(element).position !== 'fixed') {
     top.value = undefined;
+    metrics.width = 0;
     return;
   }
+  const width = element.offsetWidth * NEAR_SCALE;
+  const height = element.offsetHeight * NEAR_SCALE;
+  metrics.width = width;
+  metrics.height = height;
+  metrics.right = element.offsetLeft + element.offsetWidth;
+  metrics.top = element.offsetTop + (element.offsetHeight - height) / 2;
   const growth = (NEAR_SCALE - 1) / 2 * element.offsetHeight;
   top.value = `${Math.max(16 + growth, (window.innerHeight - element.offsetHeight) / 2)}px`;
 }
@@ -139,5 +156,8 @@ onBeforeUnmount(() => {
   window.removeEventListener('mousemove', onMouseMove);
   document.removeEventListener('mouseout', onMouseOut);
   window.removeEventListener('resize', measure);
+  if (pointerFrame !== 0) {
+    cancelAnimationFrame(pointerFrame);
+  }
 });
 </script>
