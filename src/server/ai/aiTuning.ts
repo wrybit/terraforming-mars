@@ -146,6 +146,10 @@ export type AiTuning = {
   lateProductionFloor: number,
   /** Weight of the drawn cards' value for a draw move when no hand card is playable (spareMoneyDraw.ts); 0 = off. */
   spareMoneyDraw: number,
+  /** Weight of the value lost by plants above one greenery while no city is planned, and by plants the remaining generations cannot convert; also lifts city first without a city plan (plantHoardDecay.ts); 0 = off. */
+  plantHoardDecay: number,
+  /** Weight of scaling the lonely/open greenery penalties by the chance an opponent still builds there (lonelyGreeneryOdds.ts); 0 = off. */
+  lonelyGreeneryOdds: number,
   /** VP off converting plants into a greenery without an own city next to it, half of it as a city-move bonus, while own cities do not lead (cityFirstAction.ts); 0 = off. */
   cityFirstAction: number,
   /** Weight of the opponent's engine advantage in the award swing (awardEngineSwing.ts); 0 = off. */
@@ -423,6 +427,8 @@ export const BASELINE_TUNING: AiTuning = {
   lateDrawFloor: 0,
   lateProductionFloor: 0,
   spareMoneyDraw: 0,
+  plantHoardDecay: 0,
+  lonelyGreeneryOdds: 0,
   cityFirstAction: 1,
   awardEngineSwing: 0,
   tagOutlookBase: 0.85,
@@ -987,6 +993,10 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   lateDrawFloor: {lateDrawFloor: 1},
   lateProductionFloor: {lateProductionFloor: 1},
   spareMoneyDraw: {spareMoneyDraw: 1},
+  // Human game: the AI held 61 plants with no city and no money for one – waiting plants need a city plan.
+  plantHoardDecay: {plantHoardDecay: 1},
+  // Same game: fixed lonely-greenery penalties although an opponent would build on few of the open spots late.
+  lonelyGreeneryOdds: {lonelyGreeneryOdds: 1},
   // Round 149: nestGuard −1.34 but nests 1.65 → 1.29 per player; half strength.
   nestGuardHalf: {nestGuard: 0.5},
   // Round 149: cityFirst (space choice) left the order unchanged (15 % → 15 %); the order is the move choice.

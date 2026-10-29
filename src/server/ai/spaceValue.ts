@@ -20,6 +20,7 @@ import {cityFirstPenalty} from './cityFirst';
 import {nestGuardPenalty} from './nestGuard';
 import {cityClaimSpreadBonus} from './cityClaimSpread';
 import {nestFillBonus} from './nestFill';
+import {expectedLaterCities} from './cityNeighbourOdds';
 
 // Scores a hex for tile placement. Weights tuned in AI test batches.
 
@@ -227,10 +228,10 @@ function baseSpaceValue(space: Space, kind: TileKind, player: IPlayer): number {
     value += ownTiles * 0.5;
     break;
   case 'cityNeighbour':
-    // Commercial District: 1 VP per adjacent city of any owner. Needs at least two cities
-    // around it; free spots where a city may still come count as half a chance (a test game
-    // placed it with one city next to it).
-    value += (ownCities + opponentCities) * victoryPoint + openCitySpots(neighbours, board) * victoryPoint * 0.4;
+    // Commercial District: 1 VP per adjacent city of any owner. Free spots where a city may still come count only
+    // as far as cities still fit and still come (cityNeighbourOdds.ts): five open spots outweighed a real city
+    // next door and the tile ended with 1 VP (human game).
+    value += (ownCities + opponentCities) * victoryPoint + expectedLaterCities(neighbours, ownCities + opponentCities, player) * victoryPoint;
     break;
   case 'other':
     // Special tiles (Restricted Area, Nuclear Zone, Mining Area …) take a greenery spot away:

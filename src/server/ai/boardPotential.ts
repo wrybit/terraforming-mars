@@ -4,6 +4,7 @@ import {Board} from '../boards/Board';
 import {SpaceType} from '../../common/boards/SpaceType';
 import {tuningOf} from './aiTuning';
 import {orphanPotential} from './greeneryRing';
+import {lonelyGreeneryFactor} from './lonelyGreeneryOdds';
 
 // Future VP on the board that the final scoring does not show yet, in VP.
 //
@@ -28,6 +29,8 @@ export function boardPotential(player: IPlayer): number {
   const board = player.game.board;
   const tuning = tuningOf(player);
   let potential = 0;
+  // lonelyGreeneryOdds: the greenery penalties count only as far as an opponent can still use the spots.
+  const greeneryRisk = lonelyGreeneryFactor(player);
   for (const space of board.spaces) {
     if (space.player !== player || space.tile === undefined) {
       continue;
@@ -39,9 +42,9 @@ export function boardPotential(player: IPlayer): number {
       // Free spots where any player may still put a city (no city next to them yet).
       const exposed = neighbours.filter((neighbour) =>
         isFreeLand(neighbour) && !board.getAdjacentSpaces(neighbour).some((next) => Board.isCitySpace(next)));
-      potential -= exposed.length * tuning.exposedSpotRisk;
+      potential -= exposed.length * tuning.exposedSpotRisk * greeneryRisk;
       if (!neighbours.some((neighbour) => Board.isCitySpace(neighbour) && neighbour.player === player)) {
-        potential -= LONELY_GREENERY_PENALTY;
+        potential -= LONELY_GREENERY_PENALTY * greeneryRisk;
       }
     }
   }
