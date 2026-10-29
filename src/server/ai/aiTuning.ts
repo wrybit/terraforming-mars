@@ -953,6 +953,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   tagDemand05: {tagDemand: 0.5},
   tagDemand1: {tagDemand: 1},
   noTagDemand: {tagDemand: 0},
+  // Jens' tag rule at half strength (without it: +0.50, +0.49, +0.66 in rounds 141/146/154).
+  tagDemandHalf: {tagDemand: 0.25},
   // Human games: Physics Complex, Development Center, Bio Printing Facility, Hi-Tech Lab played with 0 energy production.
   energyOutlook: {energyOutlook: 1},
   // Human games: awards funded with a narrow lead against a stronger engine (more draw/income), then overtaken.
