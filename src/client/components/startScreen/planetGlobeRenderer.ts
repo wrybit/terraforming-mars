@@ -63,17 +63,39 @@ type Uniforms = Record<'buttonSize' | 'globeScale' | 'spriteTop' | 'stripeTop' |
 
 export class PlanetGlobeRenderer implements PlanetRenderer {
   private constructor(
-    private readonly canvas: HTMLCanvasElement,
+    private readonly canvas: HTMLCanvasElement | OffscreenCanvas,
     private readonly gl: WebGLRenderingContext,
     private readonly uniforms: Uniforms,
+    private readonly bitmapPath: boolean,
   ) {}
 
   /** Builds the renderer and loads the texture; undefined if the browser has no WebGL (then planets.jpg stays). */
   public static async create(): Promise<PlanetGlobeRenderer | undefined> {
-    const canvas = document.createElement('canvas');
-    const gl = canvas.getContext('webgl', {premultipliedAlpha: true, alpha: true});
+    // An OffscreenCanvas can hand its frame over as an ImageBitmap, without a CPU readback into a 2D canvas
+    const options = {premultipliedAlpha: true, alpha: true};
+    let canvas: HTMLCanvasElement | OffscreenCanvas = document.createElement('canvas');
+    let gl = canvas.getContext('webgl', options) as WebGLRenderingContext | null;
+    if (typeof OffscreenCanvas === 'function') {
+      const candidate = new OffscreenCanvas(1, 1);
+      const candidateGl = candidate.getContext('webgl', options) as WebGLRenderingContext | null;
+      // Some browsers have OffscreenCanvas but no WebGL on it: keep the known-good HTML canvas then
+      if (candidateGl !== null) {
+        canvas = candidate;
+        gl = candidateGl;
+      }
+    }
     if (gl === null) {
       return undefined;
+    }
+    let bitmapPath = false;
+    if (typeof OffscreenCanvas === 'function' && canvas instanceof OffscreenCanvas) {
+      try {
+        canvas.transferToImageBitmap();
+        bitmapPath = true;
+      } catch {
+        // No WebGL-backed ImageBitmap in this browser: keep the 2D copy
+        bitmapPath = false;
+      }
     }
     const program = linkProgram(gl);
     if (program === undefined) {
@@ -103,12 +125,13 @@ export class PlanetGlobeRenderer implements PlanetRenderer {
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
-    return new PlanetGlobeRenderer(canvas, gl, uniforms);
+    return new PlanetGlobeRenderer(canvas, gl, uniforms, bitmapPath);
   }
 
   public draw(request: PlanetDrawRequest): void {
     const {target} = request;
-    const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+    // Decorative canvases: device pixel ratio 2 quadrupled the pixels to draw and copy for no visible gain
+    const pixelRatio = 1;
     const cssWidth = target.clientWidth;
     const cssHeight = target.clientHeight;
     if (cssWidth === 0 || cssHeight === 0) {
@@ -137,6 +160,12 @@ export class PlanetGlobeRenderer implements PlanetRenderer {
     gl.clearColor(0, 0, 0, 0);
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    if (this.bitmapPath) {
+      // GPU to GPU: hand the frame to the button canvas without reading it back on the CPU
+      const context = target.getContext('bitmaprenderer');
+      context?.transferFromImageBitmap((this.canvas as OffscreenCanvas).transferToImageBitmap());
+      return;
+    }
     const context = target.getContext('2d');
     context?.clearRect(0, 0, width, height);
     context?.drawImage(this.canvas, 0, 0);

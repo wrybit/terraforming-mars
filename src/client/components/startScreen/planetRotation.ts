@@ -6,6 +6,9 @@ import {PlanetStripe, rotationLimits} from './planetStripes';
 
 // Sprite pixels of surface per second on hover
 const ROTATE_SPEED = 1000 / 45;
+// Drawing the sphere and copying it into the button is expensive on software compositors:
+// 30 frames per second are smooth enough for this decorative rotation
+const FRAME_INTERVAL_MS = 1000 / 30;
 // the smaller, the more softly the rotation brakes and reverses at the ends
 const TURN_SOFTNESS = 1.2;
 // 1/s: how fast the glow fades in and out on hover
@@ -88,6 +91,11 @@ export class PlanetRotation {
   }
 
   private tick(now: number): void {
+    // Skip frames instead of drawing at the display's refresh rate; elapsed still covers the gap
+    if (now - this.lastTime < FRAME_INTERVAL_MS) {
+      this.frame = requestAnimationFrame((time) => this.tick(time));
+      return;
+    }
     const elapsed = Math.min((now - this.lastTime) / 1000, 0.1);
     this.lastTime = now;
     let active = false;
