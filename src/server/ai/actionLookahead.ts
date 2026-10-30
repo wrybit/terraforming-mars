@@ -20,6 +20,8 @@ import {describeResponse} from './decisionLabels';
 import {tuningOf} from './aiTuning';
 import {RolloutEntry, RolloutPolicy, rolloutMeans} from './rolloutSearch';
 import {isStandardProject, standardProjectPenalty} from './standardProjectRestraint';
+import {lateStandardPenalty} from './lateStandardRestraint';
+import {deadCardSaleResponses} from './deadCardSale';
 import {cheapFirstPenalty} from './cheapFirst';
 import {drawEngineTimingBonus} from './drawEngineValue';
 import {isUselessMove} from './uselessMove';
@@ -72,7 +74,9 @@ function sellPatentResponses(input: SelectCard<ICard>, player: IPlayer): Array<I
   if (remainingProductionPhases(player.game, player) > 0) {
     // Before: a sale that pays for a milestone or award this turn (sellToAfford.ts). Not inside
     // game copies (rollouts, replies): the hand values cost too much there.
-    return tuningOf(player).sellToAfford > 0 && !isSimulating() ? sellToAffordResponses(player, handCardValues(player)) : [];
+    // Also before: selling cards that can never be played again (deadCardSale.ts).
+    const dead = isSimulating() ? [] : deadCardSaleResponses(player);
+    return tuningOf(player).sellToAfford > 0 && !isSimulating() ? [...sellToAffordResponses(player, handCardValues(player)), ...dead] : dead;
   }
   const unplayable = input.cards.filter((card) => !isIProjectCard(card) || !player.canPlay(card));
   if (unplayable.length === 0) {
@@ -534,7 +538,9 @@ export function chooseAction(menu: OrOptions, player: IPlayer, options: Lookahea
   }
 
   // standardProjectRestraint: hand cards first, standard projects stay available later in the generation.
-  const standardPenalty = standardProjectPenalty(player, tried.some(({candidate}) => playedHandCard(candidate.response, player) !== undefined));
+  const playableHandCards = new Set(tried.map(({candidate}) => playedHandCard(candidate.response, player)).filter((card) => card !== undefined));
+  // lateStandardRestraint: late in the game each playable hand card weighs (lateStandardRestraint.ts).
+  const standardPenalty = standardProjectPenalty(player, playableHandCards.size > 0) + lateStandardPenalty(player, playableHandCards.size);
   if (standardPenalty > 0) {
     for (const {candidate, outcome} of tried) {
       if (isStandardProject(menu, candidate.response)) {

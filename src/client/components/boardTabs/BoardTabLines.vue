@@ -21,7 +21,7 @@ type Cell = {
 
 // Player colours of the markers on the Delta line (same as the colour cubes)
 const MARKER_COLOR: Record<string, string> = {
-  red: '#e5533d', green: '#4caf50', blue: '#3f8ed8', yellow: '#e0c23a', black: '#777', purple: '#a06ad9', orange: '#e08a2e', pink: '#e06aa8', neutral: '#ccc',
+  red: '#e5533d', green: '#4caf50', blue: '#3f8ed8', yellow: '#e0c23a', black: '#777', purple: '#a06ad9', orange: '#e08a2e', pink: '#e06aa8', turquoise: '#2bbfb3', clear: '#a3c9e8', neutral: '#ccc',
 };
 
 export default defineComponent({

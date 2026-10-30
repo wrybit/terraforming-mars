@@ -1230,8 +1230,10 @@ each(@players, {
 }
 
 .create-game-swatches {
-  display: flex;
-  flex-wrap: wrap;
+  // One row for any number of colors: the columns shrink instead of wrapping
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 30px);
   justify-content: space-between;
   gap: 2px;
 }
@@ -1240,7 +1242,7 @@ each(@players, {
 .create-game-swatch {
   display: grid;
   place-items: center;
-  width: 30px;
+  width: 100%;
   height: 30px;
   padding: 0;
   border: 0;

@@ -7,7 +7,7 @@
 import {defineComponent, PropType} from 'vue';
 import {Color} from '@/common/Color';
 
-const SHIP_COLORS: ReadonlyArray<string> = ['red', 'yellow', 'green', 'black', 'blue', 'purple', 'orange', 'pink', 'neutral'];
+const SHIP_COLORS: ReadonlyArray<string> = ['red', 'yellow', 'green', 'black', 'blue', 'purple', 'orange', 'pink', 'turquoise', 'clear', 'neutral'];
 
 export default defineComponent({
   name: 'TradeShip',
