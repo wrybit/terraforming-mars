@@ -9,6 +9,13 @@ import App from '@/client/components/App.vue';
 vi.mock('@/client/components/StartScreen.vue', () => ({
   default: {name: 'StartScreen', render: () => null},
 }));
+// Same reason: the start page footer also pulls async chunks (settings, online players).
+vi.mock('@/client/components/StartScreenFooter.vue', () => ({
+  default: {name: 'StartScreenFooter', render: () => null},
+}));
+vi.mock('@/client/components/OnlinePlayers.vue', () => ({
+  default: {name: 'OnlinePlayers', render: () => null},
+}));
 
 describe('App', () => {
   // App loads the start screen as an async chunk. Loaded here first, so its imports do not finish only after the
