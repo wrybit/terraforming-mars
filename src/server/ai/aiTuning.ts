@@ -148,6 +148,10 @@ export type AiTuning = {
   spareMoneyDraw: number,
   /** Weight of the value lost by plants above one greenery while no city is planned, and by plants the remaining generations cannot convert; also lifts city first without a city plan (plantHoardDecay.ts); 0 = off. */
   plantHoardDecay: number,
+  /** Extra M€ per playable hand card (at most 3) a standard project gives up in the last three generations before the last (lateStandardRestraint.ts); 0 = off. */
+  lateStandardRestraint: number,
+  /** > 0: before the last generation the AI may sell hand cards whose maximum requirement is exceeded (deadCardSale.ts). */
+  deadCardSale: number,
   /** Weight of scaling the lonely/open greenery penalties by the chance an opponent still builds there (lonelyGreeneryOdds.ts); 0 = off. */
   lonelyGreeneryOdds: number,
   /** VP off converting plants into a greenery without an own city next to it, half of it as a city-move bonus, while own cities do not lead (cityFirstAction.ts); 0 = off. */
@@ -428,6 +432,8 @@ export const BASELINE_TUNING: AiTuning = {
   lateProductionFloor: 0,
   spareMoneyDraw: 0,
   plantHoardDecay: 1,
+  lateStandardRestraint: 0,
+  deadCardSale: 0,
   lonelyGreeneryOdds: 0,
   cityFirstAction: 1,
   awardEngineSwing: 0,
@@ -999,6 +1005,10 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   plantHoardDecay: {plantHoardDecay: 1},
   // Round 156: plantHoardDecay adopted (+0.73, z +1.35; cards played +0.64, z +2.35 – card rule); check.
   noPlantHoardDecay: {plantHoardDecay: 0},
+  // Round 159 (batch analysis handLeftover.py): late standard projects while hand cards were playable (~70 M€ per game).
+  lateStandardRestraint: {lateStandardRestraint: 2},
+  // Round 159: 1.3 never-playable cards per player at the end, mostly exceeded maximum requirements – sell them earlier.
+  deadCardSale: {deadCardSale: 1},
   // Same game: fixed lonely-greenery penalties although an opponent would build on few of the open spots late.
   lonelyGreeneryOdds: {lonelyGreeneryOdds: 1},
   // Round 149: nestGuard −1.34 but nests 1.65 → 1.29 per player; half strength.
