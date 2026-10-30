@@ -1,4 +1,4 @@
-import {shallowMount} from '@vue/test-utils';
+import {flushPromises, shallowMount} from '@vue/test-utils';
 import {expect} from 'chai';
 import {beforeAll} from 'vitest';
 import {globalConfig} from '@tests/client/components/getLocalVue';
@@ -12,8 +12,11 @@ describe('App', () => {
     await import('@/client/components/StartScreenFooter.vue');
   });
 
-  it('mounts without errors', () => {
+  it('mounts without errors', async () => {
     const wrapper = shallowMount(App, globalConfig);
     expect(wrapper.exists()).to.be.true;
+    // Let the async screen components (StartScreen et al.) finish importing before the test environment is torn down.
+    await flushPromises();
+    wrapper.unmount();
   });
 });
