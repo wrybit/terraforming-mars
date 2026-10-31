@@ -1,4 +1,5 @@
 import {IPlayer} from '../IPlayer';
+import {closerBehindFactor} from './closerBehind';
 import {IGame} from '../IGame';
 import {CardName} from '../../common/cards/CardName';
 import {PlayerId} from '../../common/Types';
@@ -283,7 +284,8 @@ function closerTerm(player: IPlayer, frozen: ValuationContext): number {
       rivalValue = value;
     }
   }
-  return generationsCut * (engineFlow(rival, context) - engineFlow(player, context));
+  const ownValue = tuningOf(player).closerBehind > 0 ? playerValue(player, frozen) : rivalValue;
+  return generationsCut * (engineFlow(rival, context) - engineFlow(player, context)) * closerBehindFactor(player, ownValue, rivalValue);
 }
 
 // Last generation: money is only worth what it still buys. The cheapest VP is a greenery standard
