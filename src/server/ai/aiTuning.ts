@@ -351,7 +351,7 @@ export const BASELINE_TUNING: AiTuning = {
   // engine is stronger (human economy players kept terraforming slow) – adopted. Round 51: closer 0.5 +1.45 (z +1.86)
   // against 1 – lowered.
   closer: 0.5,
-  closerBehind: 0,
+  closerBehind: 2,
   terraformBrake: 0,
   // Neutral in AI-vs-AI (z +0.36) but measured right (2P 14.5, 3P 11.8 generations); adopted on
   // purpose against the z rule: with 12 the AI gave up its engine from generation 8 against a human.
@@ -700,6 +700,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // scale the closer term only while behind (closer2 doubled it everywhere, round 49: −0.55).
   closerBehind: {closerBehind: 1},
   closerBehind2: {closerBehind: 2},
+  // Round 161: closerBehind2 adopted (+0.86, z +1.47); check.
+  noCloserBehind: {closerBehind: 0},
   // Round 50: around the adopted closer 1.
   noCloser: {closer: 0},
   closer05: {closer: 0.5},

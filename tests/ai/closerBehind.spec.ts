@@ -11,8 +11,11 @@ import {Resource} from '../../src/common/Resource';
 describe('AI closerBehind', () => {
   afterEach(() => clearPlayerTunings());
 
-  it('changes nothing in the baseline or while ahead', () => {
+  it('changes nothing without the variant or while ahead', () => {
     const [, player] = testGame(2);
+    // Round 161: adopted in the baseline (2); the check variant switches it off.
+    expect(closerBehindFactor(player, 10, 20)).eq(3);
+    setPlayerTuning(player.id, 'noCloserBehind');
     expect(closerBehindFactor(player, 10, 20)).eq(1);
     setPlayerTuning(player.id, 'closerBehind');
     expect(closerBehindFactor(player, 30, 20)).eq(1);
@@ -39,6 +42,6 @@ describe('AI closerBehind', () => {
 
   it('ends the game harder when trailing a stronger engine', () => {
     // Baseline closer 0.5; while behind the variant doubles the term.
-    expect(gainOfRaising('closerBehind')).greaterThan(gainOfRaising());
+    expect(gainOfRaising('closerBehind')).greaterThan(gainOfRaising('noCloserBehind'));
   });
 });
