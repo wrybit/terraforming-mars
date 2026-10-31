@@ -42,6 +42,8 @@ export type AiTuning = {
   tempoAware: number,
   /** Weight of the race term: raising steps is good when the strongest rival's engine grows faster (stateValue.ts closerTerm). */
   closer: number,
+  /** Extra share of the closer term while the own position is behind the rival's (closerBehind.ts); 0 = off. */
+  closerBehind: number,
   /** M€ a global step raised by anybody costs in the valuation: > 0 keeps the game long (engine builder opponent). */
   terraformBrake: number,
   /** 1: expected game length by player count (2 players 15, 3 players 12) instead of 12 (gameProgress.ts). */
@@ -349,6 +351,7 @@ export const BASELINE_TUNING: AiTuning = {
   // engine is stronger (human economy players kept terraforming slow) – adopted. Round 51: closer 0.5 +1.45 (z +1.86)
   // against 1 – lowered.
   closer: 0.5,
+  closerBehind: 0,
   terraformBrake: 0,
   // Neutral in AI-vs-AI (z +0.36) but measured right (2P 14.5, 3P 11.8 generations); adopted on
   // purpose against the z rule: with 12 the AI gave up its engine from generation 8 against a human.
@@ -693,6 +696,10 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   noAwardTrend: {awardTrend: 0},
   // A human won twice with a late engine while the AI led on TR: end the game sooner (closer was neutral at 1).
   closer2: {closer: 2},
+  // Human games 27.–30.10.: the AI trailed far behind a stronger engine and did not close the game (rated) –
+  // scale the closer term only while behind (closer2 doubled it everywhere, round 49: −0.55).
+  closerBehind: {closerBehind: 1},
+  closerBehind2: {closerBehind: 2},
   // Round 50: around the adopted closer 1.
   noCloser: {closer: 0},
   closer05: {closer: 0.5},
