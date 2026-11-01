@@ -47,7 +47,8 @@
   "randomMilestones": [
     "No randomization",
     "Limited synergy",
-    "Full random"
+    "Full random",
+    "Manual"
   ],
   "agendas": [
     "Standard",
