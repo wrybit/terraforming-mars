@@ -1529,5 +1529,6 @@
   "turquoise": "Turquoise",
   "clear": "Transparant",
   "Manual milestones and awards are not configurable in the UI yet.": "Handmatige mijlpalen en prijzen zijn nog niet in te stellen in de interface.",
-  "Manual milestones and awards are invalid: ${0}": "Handmatige mijlpalen en prijzen zijn ongeldig: ${0}"
+  "Manual milestones and awards are invalid: ${0}": "Handmatige mijlpalen en prijzen zijn ongeldig: ${0}",
+  "Manually chosen": "Handmatig gekozen"
 }

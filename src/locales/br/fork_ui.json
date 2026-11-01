@@ -2060,5 +2060,6 @@
   "turquoise": "Turquesa",
   "clear": "Transparente",
   "Manual milestones and awards are not configurable in the UI yet.": "Marcos e premiações manuais ainda não podem ser configurados na interface.",
-  "Manual milestones and awards are invalid: ${0}": "Marcos e premiações manuais são inválidos: ${0}"
+  "Manual milestones and awards are invalid: ${0}": "Marcos e premiações manuais são inválidos: ${0}",
+  "Manually chosen": "Escolhidos manualmente"
 }

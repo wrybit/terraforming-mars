@@ -1148,5 +1148,6 @@
   "turquoise": "청록",
   "clear": "투명",
   "Manual milestones and awards are not configurable in the UI yet.": "수동으로 선택한 마일스톤과 어워드는 아직 화면에서 설정할 수 없습니다.",
-  "Manual milestones and awards are invalid: ${0}": "수동으로 선택한 마일스톤과 어워드가 올바르지 않습니다: ${0}"
+  "Manual milestones and awards are invalid: ${0}": "수동으로 선택한 마일스톤과 어워드가 올바르지 않습니다: ${0}",
+  "Manually chosen": "수동 선택"
 }

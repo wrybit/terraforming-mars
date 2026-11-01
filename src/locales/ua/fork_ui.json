@@ -1054,5 +1054,6 @@
   "turquoise": "Бірюзовий",
   "clear": "Прозорий",
   "Manual milestones and awards are not configurable in the UI yet.": "Вручну вибрані досягнення та нагороди поки не можна налаштувати в інтерфейсі.",
-  "Manual milestones and awards are invalid: ${0}": "Вручну вибрані досягнення та нагороди недійсні: ${0}"
+  "Manual milestones and awards are invalid: ${0}": "Вручну вибрані досягнення та нагороди недійсні: ${0}",
+  "Manually chosen": "Вибрані вручну"
 }

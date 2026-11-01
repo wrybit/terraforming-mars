@@ -1270,5 +1270,6 @@
   "turquoise": "ターコイズ",
   "clear": "クリア",
   "Manual milestones and awards are not configurable in the UI yet.": "手動で選んだマイルストーンとアワードは、まだ画面上で設定できません。",
-  "Manual milestones and awards are invalid: ${0}": "手動で選んだマイルストーンとアワードが無効です：${0}"
+  "Manual milestones and awards are invalid: ${0}": "手動で選んだマイルストーンとアワードが無効です：${0}",
+  "Manually chosen": "手動で選択"
 }

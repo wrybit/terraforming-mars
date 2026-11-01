@@ -1080,5 +1080,6 @@
   "turquoise": "Türkiz",
   "clear": "Átlátszó",
   "Manual milestones and awards are not configurable in the UI yet.": "A kézzel választott mérföldkövek és díjak még nem állíthatók be a felületen.",
-  "Manual milestones and awards are invalid: ${0}": "A kézzel választott mérföldkövek és díjak érvénytelenek: ${0}"
+  "Manual milestones and awards are invalid: ${0}": "A kézzel választott mérföldkövek és díjak érvénytelenek: ${0}",
+  "Manually chosen": "Kézzel választva"
 }

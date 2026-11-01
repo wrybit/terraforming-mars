@@ -1881,5 +1881,6 @@
   "turquoise": "青绿色",
   "clear": "透明",
   "Manual milestones and awards are not configurable in the UI yet.": "手动选择的里程碑和奖项暂时无法在界面中设置。",
-  "Manual milestones and awards are invalid: ${0}": "手动选择的里程碑和奖项无效：${0}"
+  "Manual milestones and awards are invalid: ${0}": "手动选择的里程碑和奖项无效：${0}",
+  "Manually chosen": "手动选择"
 }

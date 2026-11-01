@@ -1845,5 +1845,6 @@
   "turquoise": "Тюркоаз",
   "clear": "Прозрачен",
   "Manual milestones and awards are not configurable in the UI yet.": "Ръчно избраните етапи и награди все още не могат да се настройват в интерфейса.",
-  "Manual milestones and awards are invalid: ${0}": "Ръчно избраните етапи и награди са невалидни: ${0}"
+  "Manual milestones and awards are invalid: ${0}": "Ръчно избраните етапи и награди са невалидни: ${0}",
+  "Manually chosen": "Избрани ръчно"
 }

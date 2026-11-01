@@ -680,5 +680,6 @@
   "turquoise": "Türkis",
   "clear": "Klar",
   "Manual milestones and awards are not configurable in the UI yet.": "Manuell gewählte Meilensteine und Auszeichnungen lassen sich hier noch nicht einstellen.",
-  "Manual milestones and awards are invalid: ${0}": "Manuell gewählte Meilensteine und Auszeichnungen sind ungültig: ${0}"
+  "Manual milestones and awards are invalid: ${0}": "Manuell gewählte Meilensteine und Auszeichnungen sind ungültig: ${0}",
+  "Manually chosen": "Manuell gewählt"
 }
