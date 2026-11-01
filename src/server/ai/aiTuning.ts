@@ -158,6 +158,8 @@ export type AiTuning = {
   drawStop: number,
   /** > 0: next generation's income counts as a city plan for city first (cityFirstWithIncome.ts); 0 = off. */
   cityFirstWithIncome: number,
+  /** VP per own city beyond the first next to a greenery space (greeneryBetweenCities.ts); 0 = off. */
+  greeneryBetweenCities: number,
   /** > 0: before the last generation the AI may sell hand cards whose maximum requirement is exceeded (deadCardSale.ts). */
   deadCardSale: number,
   /** Weight of scaling the lonely/open greenery penalties by the chance an opponent still builds there (lonelyGreeneryOdds.ts); 0 = off. */
@@ -444,7 +446,8 @@ export const BASELINE_TUNING: AiTuning = {
   lateStandardRestraint: 0,
   cityRaceAdapt: 0,
   drawStop: 0,
-  cityFirstWithIncome: 0,
+  cityFirstWithIncome: 1,
+  greeneryBetweenCities: 0,
   deadCardSale: 0,
   lonelyGreeneryOdds: 0,
   cityFirstAction: 1,
@@ -1031,6 +1034,10 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   drawStop: {drawStop: 1},
   // Round 163: city first was nearly always off in human games (AI 8.5 % vs humans 52 %) – income counts as a plan.
   cityFirstWithIncome: {cityFirstWithIncome: 1},
+  // Round 163: cityFirstWithIncome adopted (+0.82, z +1.09; cities 4.05 → 4.27, nests 1.75 → 1.54); check.
+  noCityFirstWithIncome: {cityFirstWithIncome: 0},
+  // Human games: greeneries between own cities humans 53 %, AI 23 %.
+  greeneryBetweenCities: {greeneryBetweenCities: 0.5},
   // Round 159: 1.3 never-playable cards per player at the end, mostly exceeded maximum requirements – sell them earlier.
   deadCardSale: {deadCardSale: 1},
   // Same game: fixed lonely-greenery penalties although an opponent would build on few of the open spots late.

@@ -21,6 +21,7 @@ import {nestGuardPenalty} from './nestGuard';
 import {cityClaimSpreadBonus} from './cityClaimSpread';
 import {nestFillBonus} from './nestFill';
 import {cityRaceBonus} from './cityRaceAdapt';
+import {greeneryBetweenCitiesBonus} from './greeneryBetweenCities';
 import {expectedLaterCities} from './cityNeighbourOdds';
 
 // Scores a hex for tile placement. Weights tuned in AI test batches.
@@ -198,6 +199,8 @@ function baseSpaceValue(space: Space, kind: TileKind, player: IPlayer): number {
     value += ownTiles * 0.5;
     // City first, then greeneries around it (cityFirst.ts); no nests for opponent cities (nestGuard.ts).
     value -= (cityFirstPenalty(player, ownCities) + nestGuardPenalty(space, player, ownCities)) * victoryPoint;
+    // Fill the space between own cities first (greeneryBetweenCities.ts).
+    value += greeneryBetweenCitiesBonus(player, ownCities) * victoryPoint;
     break;
   case 'city':
     // A city scores 1 VP per adjacent greenery (any owner) at game end; free land can become one.

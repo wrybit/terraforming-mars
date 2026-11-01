@@ -60,6 +60,8 @@ describe('AI round 163 variants', () => {
       player.megaCredits = 10;
       player.production.override({megacredits: 5});
       player.plants = 8;
+      // Round 163: adopted in the baseline; the check variant switches it off.
+      setPlayerTuning(player.id, 'noCityFirstWithIncome');
       expect(hoardingWithoutCityPlan(player)).is.true;
       setPlayerTuning(player.id, 'cityFirstWithIncome');
       expect(incomeCityPlan(player)).is.true;
