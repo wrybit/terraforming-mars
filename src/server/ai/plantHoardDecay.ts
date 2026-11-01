@@ -1,6 +1,7 @@
 import {IPlayer} from '../IPlayer';
 import {TileType} from '../../common/TileType';
 import {tuningOf} from './aiTuning';
+import {incomeCityPlan} from './cityFirstWithIncome';
 import {plantFactor} from './playerTraits';
 
 // Plants on hand counted at their full value however many there were, so a greenery that the lonely-greenery
@@ -32,7 +33,8 @@ export function hasCityPlan(player: IPlayer): boolean {
 
 /** True when plantHoardDecay is on and no city is planned: waiting plants for a city makes no sense then. */
 export function hoardingWithoutCityPlan(player: IPlayer): boolean {
-  return tuningOf(player).plantHoardDecay > 0 && !hasCityPlan(player);
+  // cityFirstWithIncome: the next production phase can pay the city too (cityFirstWithIncome.ts).
+  return tuningOf(player).plantHoardDecay > 0 && !hasCityPlan(player) && !incomeCityPlan(player);
 }
 
 /** M€ to take off the value of the plants on hand (0 when off). */

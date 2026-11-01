@@ -20,6 +20,7 @@ import {cityFirstPenalty} from './cityFirst';
 import {nestGuardPenalty} from './nestGuard';
 import {cityClaimSpreadBonus} from './cityClaimSpread';
 import {nestFillBonus} from './nestFill';
+import {cityRaceBonus} from './cityRaceAdapt';
 import {expectedLaterCities} from './cityNeighbourOdds';
 
 // Scores a hex for tile placement. Weights tuned in AI test batches.
@@ -222,6 +223,8 @@ function baseSpaceValue(space: Space, kind: TileKind, player: IPlayer): number {
     value += cityClaimSpreadBonus(space, player) * victoryPoint;
     // Fill own nests (≥ 2 own greeneries around) before an opponent city scores them (nestFill.ts).
     value += nestFillBonus(space, player) * victoryPoint;
+    // While an opponent leads in cities, own greenery spots go to own cities first (cityRaceAdapt.ts).
+    value += cityRaceBonus(space, player) * victoryPoint;
     break;
   case 'ocean':
     // Oceans next to own tiles help nobody else; next to free land they feed later rebates.
