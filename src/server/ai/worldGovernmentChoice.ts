@@ -7,6 +7,8 @@ import {relativeValue, valuationContext} from './stateValue';
 import {handCardValues} from './cardValue';
 import {spaceValue} from './spaceValue';
 import {SpaceId} from '../../common/Types';
+import {SelectOption} from '../inputs/SelectOption';
+import {worldGovernmentRivalPenalty} from './worldGovernmentRival';
 
 // World Government terraforming (solar phase, played with Venus Next): the first player raises one global
 // parameter for free. The AI took the first option (temperature) every time. Strategy guides: raise Venus to
@@ -55,8 +57,11 @@ export function chooseWorldGovernment(input: OrOptions, player: IPlayer): InputR
       }
       return relativeValue(copyPlayer, {...frozen, handValues: handCardValues(copyPlayer), handOwner: copyPlayer.id});
     });
-    if (value !== undefined && (best === undefined || value > best.value)) {
-      best = {response, value};
+    // Hidden benefit for the rivals (worldGovernmentRival.ts): a Venus step may unlock their hand cards.
+    const raisesVenus = option instanceof SelectOption && /venus/i.test(String(option.title));
+    const adjusted = value === undefined ? undefined : value - worldGovernmentRivalPenalty(player, raisesVenus, frozen.victoryPoint);
+    if (adjusted !== undefined && (best === undefined || adjusted > best.value)) {
+      best = {response, value: adjusted};
     }
   });
   return best?.response;
