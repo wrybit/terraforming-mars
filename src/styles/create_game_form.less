@@ -877,6 +877,13 @@
   &.create-game-segmented--sub {
     margin: 2px 0 4px 16px;
   }
+
+  // Four segments (manual milestones from an import): single words must not stick out of their segment
+  &.create-game-segmented--fit button {
+    min-width: min-content;
+    padding-right: 4px;
+    padding-left: 4px;
+  }
 }
 
 // ---------- right column: player card and Create card, sticky together ----------

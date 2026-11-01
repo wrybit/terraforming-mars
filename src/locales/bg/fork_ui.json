@@ -1843,5 +1843,7 @@
   "This page is out of date. Click OK to refresh it.": "Тази страница е остаряла. Натиснете OK, за да я обновите.",
   "Select how to pay for your project cards": "Изберете как да платите за проектните си карти",
   "turquoise": "Тюркоаз",
-  "clear": "Прозрачен"
+  "clear": "Прозрачен",
+  "Manual milestones and awards are not configurable in the UI yet.": "Ръчно избраните етапи и награди все още не могат да се настройват в интерфейса.",
+  "Manual milestones and awards are invalid: ${0}": "Ръчно избраните етапи и награди са невалидни: ${0}"
 }

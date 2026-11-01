@@ -15,6 +15,7 @@ import {CardName} from '@/common/cards/CardName';
 import {CreateGameModel} from '@/client/components/create/CreateGameModel';
 import {ValidationErrors} from '@/common/game/validateNewGameConfig';
 import {ColonyName} from '@/common/colonies/ColonyName';
+import {RandomMAOptionType} from '@/common/ma/RandomMAOptionType';
 import {defaultCreateGameModel} from '@/client/components/create/defaultCreateGameModel';
 import {readSettingsFromHash, settingsHash} from '@/client/components/create/settingsLink/settingsLinkHash';
 
@@ -358,6 +359,37 @@ describe('CreateGameForm', () => {
       global.alert = originalAlert;
     }
   });
+  it('offers the manual milestone segment only for manual milestones and awards', async () => {
+    const wrapper = shallowMount(CreateGameForm, {
+      ...globalConfig,
+    });
+    const model = wrapper.vm as unknown as CreateGameModel;
+    const values = () => (wrapper.vm as any).milestoneOptions.map((option: {value: string}) => option.value);
+    expect(values()).not.to.include(RandomMAOptionType.MANUAL);
+
+    model.randomMA = RandomMAOptionType.MANUAL;
+    model.customMA = {milestones: ['Terraformer'], awards: ['Banker']};
+    await nextTick();
+    expect(values()).to.include(RandomMAOptionType.MANUAL);
+    expect((wrapper.vm as any).isRandomMAEnabled()).is.false;
+    expect((wrapper.vm as any).newGameConfig.customMA).deep.eq({milestones: ['Terraformer'], awards: ['Banker']});
+  });
+
+  it('leaving manual milestones and awards drops customMA', async () => {
+    const wrapper = shallowMount(CreateGameForm, {
+      ...globalConfig,
+    });
+    const model = wrapper.vm as unknown as CreateGameModel;
+    model.randomMA = RandomMAOptionType.MANUAL;
+    model.customMA = {milestones: ['Terraformer'], awards: ['Banker']};
+    await nextTick();
+
+    model.randomMA = RandomMAOptionType.LIMITED;
+    await nextTick();
+    expect(model.customMA).is.undefined;
+    expect((wrapper.vm as any).milestoneOptions.map((option: {value: string}) => option.value)).not.to.include(RandomMAOptionType.MANUAL);
+  });
+
   it('validates the form settings', () => {
     // Default: 4 starting corporations per player, so two players need 8
     expect(validateTwoPlayerGame((model) => model.customCorporations = cardNames(7)).notEnoughCorporations).eq(8);

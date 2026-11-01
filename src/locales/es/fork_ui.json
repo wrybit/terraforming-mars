@@ -2177,5 +2177,7 @@
   "This page is out of date. Click OK to refresh it.": "Esta página está desactualizada. Haz clic en OK para actualizarla.",
   "Select how to pay for your project cards": "Elige cómo pagar tus cartas de proyecto",
   "turquoise": "Turquesa",
-  "clear": "Transparente"
+  "clear": "Transparente",
+  "Manual milestones and awards are not configurable in the UI yet.": "Los hitos y recompensas manuales aún no se pueden configurar en la interfaz.",
+  "Manual milestones and awards are invalid: ${0}": "Los hitos y recompensas manuales no son válidos: ${0}"
 }

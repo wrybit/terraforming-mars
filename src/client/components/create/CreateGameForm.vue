@@ -208,7 +208,9 @@
             <section class="create-game-card" :style="cardStyle('milestones')">
               <CollapsibleSection title="Milestones & Awards" storageKey="milestones" :changed="milestonesNote">
                 <template #actions><InfoLink :href="wikiUrls.randomMilestonesAndAwards" /></template>
-                <SegmentedControl v-model="randomMA" :options="MILESTONE_OPTIONS" />
+                <SegmentedControl v-model="randomMA" :options="milestoneOptions" :class="{'create-game-segmented--fit': isManualMA}" />
+                <!-- Manual milestones and awards only come from an imported setting -->
+                <div v-if="isManualMA" class="create-game-note" v-i18n>Manual milestones and awards are not configurable in the UI yet.</div>
                 <template v-if="isRandomMAEnabled()">
                   <OptionRow label="Official Random α" sub><SwitchInput v-model="modularMA" /></OptionRow>
                   <div v-if="modularMA" class="create-game-note">
@@ -447,7 +449,7 @@ import NumberStepper from './NumberStepper.vue';
 import OptionRow from './OptionRow.vue';
 import SegmentedControl from './SegmentedControl.vue';
 import SwitchInput from './SwitchInput.vue';
-import {AGENDA_OPTIONS, AI_LEVEL_OPTIONS, ExpansionChoice, FAN_EXPANSIONS, MILESTONE_OPTIONS, OFFICIAL_BOARDS, ALPHA_BOARDS, OFFICIAL_EXPANSIONS, PLAYER_COUNT_OPTIONS, RANDOM_BOARD_OPTIONS, SegmentOption, FAN_BOARDS} from './createGameChoices';
+import {AGENDA_OPTIONS, AI_LEVEL_OPTIONS, ExpansionChoice, FAN_EXPANSIONS, MILESTONE_OPTIONS, MANUAL_MILESTONE_OPTION, OFFICIAL_BOARDS, ALPHA_BOARDS, OFFICIAL_EXPANSIONS, PLAYER_COUNT_OPTIONS, RANDOM_BOARD_OPTIONS, SegmentOption, FAN_BOARDS} from './createGameChoices';
 import {ExpansionGroup, ExpansionGrouping, ExpansionTile, groupExpansions, loadExpansionGrouping, saveExpansionGrouping} from './expansionGrouping';
 import {ContentLinePart, contentLine} from './expansionContentLine';
 import {ContentKey, TraitKey} from '@/common/game/expansionFacts';
@@ -550,6 +552,12 @@ export default defineComponent({
     ValidationProblems,
   },
   watch: {
+    // customMA is only valid with MANUAL; any other choice drops it
+    randomMA(value: RandomMAOptionType) {
+      if (value !== RandomMAOptionType.MANUAL) {
+        this.customMA = undefined;
+      }
+    },
     // A setting the AI cannot handle removes the AI players right away
     aiBlockers(blockers: Array<string>) {
       if (blockers.length > 0 && this.aiPlayersCount > 0) {
@@ -702,6 +710,7 @@ export default defineComponent({
         customCorporationsList: this.customCorporations,
         customColoniesList: this.customColonies,
         customCeos: this.customCeos,
+        customMA: this.customMA,
         customPreludes: this.customPreludes,
         bannedCards: this.bannedCards,
         includedCards: this.includedCards,
@@ -823,8 +832,11 @@ export default defineComponent({
         this.setSeatCounts(this.humanPlayersCount, count, 'ai');
       },
     },
-    MILESTONE_OPTIONS(): typeof MILESTONE_OPTIONS {
-      return MILESTONE_OPTIONS;
+    isManualMA(): boolean {
+      return this.randomMA === RandomMAOptionType.MANUAL;
+    },
+    milestoneOptions(): ReadonlyArray<SegmentOption> {
+      return this.isManualMA ? [...MILESTONE_OPTIONS, MANUAL_MILESTONE_OPTION] : MILESTONE_OPTIONS;
     },
     AGENDA_OPTIONS(): typeof AGENDA_OPTIONS {
       return AGENDA_OPTIONS;
@@ -1144,7 +1156,7 @@ export default defineComponent({
       return this.players.slice(0, this.playersCount);
     },
     isRandomMAEnabled(): boolean {
-      return this.randomMA !== RandomMAOptionType.NONE;
+      return this.randomMA === RandomMAOptionType.LIMITED || this.randomMA === RandomMAOptionType.UNLIMITED;
     },
     isPoliticalAgendasExtensionEnabled(): boolean {
       return this.politicalAgendasExtension !== 'Standard';
