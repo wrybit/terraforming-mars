@@ -2168,5 +2168,6 @@
   "clear": "Trasparente",
   "Manual milestones and awards are not configurable in the UI yet.": "Traguardi e riconoscimenti manuali non sono ancora configurabili nell'interfaccia.",
   "Manual milestones and awards are invalid: ${0}": "Traguardi e riconoscimenti manuali non validi: ${0}",
-  "Manually chosen": "Scelti manualmente"
+  "Manually chosen": "Scelti manualmente",
+  "Remember settings": "Ricorda impostazioni"
 }

@@ -377,6 +377,8 @@
           <div ref="createRow" class="create-game-create-row">
             <AppButton hotkey="create-game" class="create-game-create" title="Create game" size="big" @click="createGame" :disabled="hasBlockingValidationErrors" />
           </div>
+          <!-- Below the button: about the next visit, not a setting of this game (upstream: "Remember" next to Create game) -->
+          <OptionRow label="Remember settings" class="create-game-remember"><SwitchInput v-model="rememberSettings" data-test="remember-settings" /></OptionRow>
           <ValidationProblems v-if="hasValidationProblems" :errors="validationErrors" />
         </section>
       </aside>
@@ -434,6 +436,7 @@ import {paths} from '@/common/app/paths';
 import {JSONProcessor} from './JSONProcessor';
 import {defaultCreateGameModel} from './defaultCreateGameModel';
 import {createGameSettingsStorage} from './createGameSettingsStorage';
+import {getPreferences, PreferencesManager} from '@/client/utils/PreferencesManager';
 import {readSettingsFromHash, replaceSettingsHash, settingsHash} from './settingsLink/settingsLinkHash';
 import {getColony} from '@/client/colonies/ClientColonyManifest';
 import {RULEBOOK_URLS, WIKI_URLS} from '@/client/utils/WikiLinks';
@@ -678,6 +681,14 @@ export default defineComponent({
     },
     exportArrowPath(): string {
       return 'M12.25 13.63L18.56 2.7M15.9 3.56L18.56 2.7L19.15 5.44';
+    },
+    rememberSettings: {
+      get(): boolean {
+        return getPreferences().remember_create_game_settings;
+      },
+      set(value: boolean) {
+        PreferencesManager.INSTANCE.set('remember_create_game_settings', value);
+      },
     },
     wikiUrls(): typeof RULEBOOK_URLS & typeof WIKI_URLS {
       return {...RULEBOOK_URLS, ...WIKI_URLS};
@@ -964,6 +975,9 @@ export default defineComponent({
       }
     },
     restoreLastSettings() {
+      if (!this.rememberSettings) {
+        return;
+      }
       const settings = createGameSettingsStorage.load();
       if (settings === undefined) {
         return;
@@ -1289,7 +1303,9 @@ export default defineComponent({
       if (newGameConfig === undefined) {
         return;
       }
-      createGameSettingsStorage.save(newGameConfig);
+      if (this.rememberSettings) {
+        createGameSettingsStorage.save(newGameConfig);
+      }
       const onSuccess = (json: any) => {
         if (json.players.length === 1) {
           window.location.href = 'player?id=' + json.players[0].id;

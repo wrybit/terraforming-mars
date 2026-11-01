@@ -66,7 +66,8 @@ const defaults: Preferences = {
   experimental_ui: true,
   debug_view: false,
 
-  remember_create_game_settings: false,
+  // Fork: the create game form keeps restoring the last settings unless switched off
+  remember_create_game_settings: true,
 };
 
 export class PreferencesManager {

@@ -15,6 +15,7 @@ import {CardName} from '@/common/cards/CardName';
 import {CreateGameModel} from '@/client/components/create/CreateGameModel';
 import {ValidationErrors} from '@/common/game/validateNewGameConfig';
 import {ColonyName} from '@/common/colonies/ColonyName';
+import {PreferencesManager} from '@/client/utils/PreferencesManager';
 import {RandomMAOptionType} from '@/common/ma/RandomMAOptionType';
 import {defaultCreateGameModel} from '@/client/components/create/defaultCreateGameModel';
 import {readSettingsFromHash, settingsHash} from '@/client/components/create/settingsLink/settingsLinkHash';
@@ -64,6 +65,7 @@ describe('CreateGameForm', () => {
   beforeEach(() => {
     localStorage = new FakeLocalStorage();
     FakeLocalStorage.register(localStorage);
+    PreferencesManager.resetForTest();
     // The form writes its settings into the URL hash; don't carry that into the next test
     window.history.replaceState(null, '', '/new-game');
   });
@@ -237,6 +239,25 @@ describe('CreateGameForm', () => {
     await nextTick();
 
     expect(readSettingsFromHash(window.location.hash)?.board).eq(BoardName.HELLAS);
+  });
+
+  it('remembers settings by default', () => {
+    const wrapper = shallowMount(CreateGameForm, {
+      ...globalConfig,
+    });
+    expect((wrapper.vm as any).rememberSettings).is.true;
+  });
+
+  it('does not restore saved settings when remember is off', async () => {
+    PreferencesManager.INSTANCE.set('remember_create_game_settings', false);
+    createGameSettingsStorage.save(createNewGameConfig());
+
+    const wrapper = shallowMount(CreateGameForm, {
+      ...globalConfig,
+    });
+    await wrapper.vm.$nextTick();
+
+    expect((wrapper.vm as any).boards).deep.eq([BoardName.THARSIS]);
   });
 
   it('restores the last saved game settings on load', async () => {
