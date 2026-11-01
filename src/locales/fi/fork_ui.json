@@ -900,5 +900,6 @@
   "Manual milestones and awards are not configurable in the UI yet.": "Käsin valittuja virstanpylväitä ja palkintoja ei voi vielä asettaa käyttöliittymässä.",
   "Manual milestones and awards are invalid: ${0}": "Käsin valitut virstanpylväät ja palkinnot ovat virheellisiä: ${0}",
   "Manually chosen": "Valittu käsin",
-  "Remember settings": "Muista asetukset"
+  "Remember settings": "Muista asetukset",
+  "All tags except City and No tag": "Kaikki symbolit paitsi kaupunki ja ilman symbolia"
 }

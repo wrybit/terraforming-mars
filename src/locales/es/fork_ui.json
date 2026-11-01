@@ -2181,5 +2181,6 @@
   "Manual milestones and awards are not configurable in the UI yet.": "Los hitos y recompensas manuales aún no se pueden configurar en la interfaz.",
   "Manual milestones and awards are invalid: ${0}": "Los hitos y recompensas manuales no son válidos: ${0}",
   "Manually chosen": "Elegidos manualmente",
-  "Remember settings": "Recordar configuración"
+  "Remember settings": "Recordar configuración",
+  "All tags except City and No tag": "Todos los símbolos excepto ciudad y sin símbolo"
 }

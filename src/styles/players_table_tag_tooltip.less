@@ -1,0 +1,66 @@
+// Tooltip with the tag sums of the player table (PlayersTableTagTooltip.vue): same frosted glass as
+// v-glass-tooltip, but it follows the mouse and opens downward, so no nose.
+// Two groups (column, player) separated by a line; inside a group the lines sit closer than between the groups.
+@import (reference) "./glass_tooltip.less";
+
+.tag-sums-tooltip {
+  .glass-surface();
+  position: fixed;
+  z-index: 10000;
+  min-width: 150px;
+  padding: 6px 9px;
+  font: 12px/1.3 system-ui, sans-serif;
+  color: #eee;
+  pointer-events: none;
+}
+
+.tag-sums-tooltip-group {
+  display: grid;
+  grid-template-columns: 20px 1fr auto;
+  align-items: center;
+  column-gap: 6px;
+
+  & + & {
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 1px solid @glass-tooltip-border;
+  }
+}
+
+.tag-sums-tooltip-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+
+  // Tag icon scaled down from its 'big' size; its own CSS tooltip never shows here
+  .tag-count {
+    transform: scale(0.5);
+    flex: none;
+  }
+}
+
+.tag-sums-tooltip-label {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+// Tag names are lowercase keys; some languages translate them that way too
+.tag-sums-tooltip-label--tag {
+  text-transform: capitalize;
+}
+
+.tag-sums-tooltip-sum {
+  font-family: Prototype, sans-serif;
+  font-size: 17px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.tag-sums-tooltip-note {
+  grid-column: 2 / 4;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.6);
+  white-space: nowrap;
+}

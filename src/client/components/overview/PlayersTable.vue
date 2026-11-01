@@ -2,7 +2,9 @@
   <div :class="tableClasses" :style="variables">
     <!-- Player list as a table; arrangement and size follow the available width (playersTableLayout.ts) -->
     <PlayersTableHeader :mode="fit.mode" :tagColumns="tagColumns" />
-    <div class="players-table-rows" :style="{gridTemplateRows: tracks.template}">
+    <!-- Tag cells show the column and player sums at the mouse (PlayersTableTagTooltip.vue) -->
+    <div class="players-table-rows" :style="{gridTemplateRows: tracks.template}"
+      @pointerover="showTagSums" @pointermove="moveTagSums" @pointerleave="hideTagSums">
       <PlayersTableRow v-for="(row, index) in rows" :key="row.player.color"
         :style="{gridRow: String(tracks.lines[index])}"
         :player="row.player"
@@ -14,6 +16,7 @@
         :tagDetails="tagDetailsByColor[row.player.color]"
         :productionLeaders="productionLeadersByColor[row.player.color] ?? []" />
     </div>
+    <PlayersTableTagTooltip v-if="tagSums !== undefined" v-bind="tagSums" />
   </div>
 </template>
 
@@ -25,7 +28,9 @@ import {Color} from '@/common/Color';
 import {Resource} from '@/common/Resource';
 import PlayersTableHeader from '@/client/components/overview/PlayersTableHeader.vue';
 import PlayersTableRow from '@/client/components/overview/PlayersTableRow.vue';
-import {TAG_ORDER, TagDetails, buildTagDetails, isTagInGame} from '@/client/components/overview/playerTagDetails';
+import PlayersTableTagTooltip from '@/client/components/overview/PlayersTableTagTooltip.vue';
+import {columnTotal, playerTagTotal} from '@/client/components/overview/playersTableTagSums';
+import {InterfaceTagsType, TAG_ORDER, TagDetails, buildTagDetails, isTagInGame} from '@/client/components/overview/playerTagDetails';
 import {PlayerGood, playerGoods} from '@/client/components/overview/playerGoods';
 import {NameWidths, PlayersTableFit, PlayersTableRowModel, RowTracks, TagColumnGroups, fitPlayersTable, rowTracks, tableVariables} from '@/client/components/overview/playersTableLayout';
 
@@ -63,6 +68,19 @@ type DataModel = {
   // Boost the drag handle requests (home_cards.less, playersCardFit.ts): the name block grows with it and needs room
   boost: number;
   resizeObserver: ResizeObserver | undefined;
+  // Tag cell under the mouse and the pointer position for the sums tooltip
+  hoveredTag: {tag: InterfaceTagsType, color: Color} | undefined;
+  pointer: {x: number, y: number};
+};
+
+type TagSumsTooltip = {
+  tag: InterfaceTagsType;
+  color: Color;
+  playerName: string;
+  columnTotal: number;
+  playerTotal: number;
+  pointerX: number;
+  pointerY: number;
 };
 
 export default defineComponent({
@@ -70,6 +88,7 @@ export default defineComponent({
   components: {
     PlayersTableHeader,
     PlayersTableRow,
+    PlayersTableTagTooltip,
   },
   props: {
     playerView: {
@@ -87,6 +106,8 @@ export default defineComponent({
       availableWidth: 0,
       boost: 1,
       resizeObserver: undefined,
+      hoveredTag: undefined,
+      pointer: {x: 0, y: 0},
     };
   },
   // Watch the width: arrangement and size of the table follow it (never scrolls sideways)
@@ -107,6 +128,30 @@ export default defineComponent({
   beforeUnmount() {
     this.resizeObserver?.disconnect();
   },
+  methods: {
+    // Mouse only: on touch a tap opens the played cards of the row, a tooltip would get stuck
+    showTagSums(event: PointerEvent) {
+      if (event.pointerType !== 'mouse') {
+        return;
+      }
+      const cell = (event.target as HTMLElement).closest<HTMLElement>('[data-tag]');
+      const row = cell?.closest<HTMLElement>('[data-color]');
+      if (cell?.dataset.tag === undefined || row?.dataset.color === undefined) {
+        this.hoveredTag = undefined;
+        return;
+      }
+      this.hoveredTag = {tag: cell.dataset.tag as InterfaceTagsType, color: row.dataset.color as Color};
+      this.pointer = {x: event.clientX, y: event.clientY};
+    },
+    moveTagSums(event: PointerEvent) {
+      if (this.hoveredTag !== undefined) {
+        this.pointer = {x: event.clientX, y: event.clientY};
+      }
+    },
+    hideTagSums() {
+      this.hoveredTag = undefined;
+    },
+  },
   computed: {
     // Escape Velocity: rows get a clock line and a wider name column
     escapeVelocity(): boolean {
@@ -115,6 +160,22 @@ export default defineComponent({
     // Computed once per player color; every row has an entry
     tagDetailsByColor(): Record<string, TagDetails> {
       return Object.fromEntries(this.rows.map((row) => [row.player.color, buildTagDetails(row.player, this.playerView)]));
+    },
+    tagSums(): TagSumsTooltip | undefined {
+      const hovered = this.hoveredTag;
+      const row = this.rows.find((entry) => entry.player.color === hovered?.color);
+      if (hovered === undefined || row === undefined) {
+        return undefined;
+      }
+      return {
+        tag: hovered.tag,
+        color: hovered.color,
+        playerName: row.player.name,
+        columnTotal: columnTotal(hovered.tag, Object.values(this.tagDetailsByColor)),
+        playerTotal: playerTagTotal(this.tagDetailsByColor[hovered.color]),
+        pointerX: this.pointer.x,
+        pointerY: this.pointer.y,
+      };
     },
     // Only tags at least one player has (or a discount or substitution on) – otherwise hidden for everyone
     tagColumns(): TagColumnGroups {

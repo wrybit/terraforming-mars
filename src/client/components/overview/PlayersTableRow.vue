@@ -1,5 +1,5 @@
 <template>
-  <div :class="rowClasses" @click="toggleCards">
+  <div :class="rowClasses" :data-color="player.color" @click="toggleCards">
     <!-- The whole row is clickable and opens the played cards (like the classic player bar) -->
     <!-- First player as "1" in the color bar so the name row has room for name and status -->
     <span v-if="firstForGen && playerView.players.length > 1" class="players-table-first-player" :title="$t('First player')" data-test="first-player">1</span>
@@ -12,7 +12,7 @@
     <div class="players-table-section players-table-section--tags">
       <template v-for="(group, groupIndex) in tagColumns" :key="groupIndex">
         <div v-if="groupIndex > 0" class="players-table-tag-gap"></div>
-        <div :class="['players-table-cell', {'players-table-cell--discounted': tagDetail(tag).discount > 0}]" v-for="tag in group" :key="tag" :data-test="'tag-' + tag">
+        <div :class="['players-table-cell', {'players-table-cell--discounted': tagDetail(tag).discount > 0}]" v-for="tag in group" :key="tag" :data-tag="tag" :data-test="'tag-' + tag">
           <!-- Own icon only where the table has no column heads (three lines, cards) -->
           <span :class="tagCounterClasses(tag)" v-flash-count="flashKeys.playerTag(player.color, tag)"><Tag class="players-table-cell-icon" :tag="(tag as CardTag)" size="big" type="secondary" /><span v-if="protectedTags.includes(tag)" class="players-table-protection shield_icon" :data-test="'protection-' + tag"></span>{{ tagDetail(tag).count || '·' }}<PlayerTagSubstitution v-if="tagDetail(tag).substitution !== undefined" :tag="tagDetail(tag).substitution!" :data-test="'substitution-' + tag" /></span>
           <span v-if="tagDetail(tag).discount > 0" class="players-table-discount" :data-test="'discount-' + tag" :title="$t('Discount')">-{{ tagDetail(tag).discount }}</span>

@@ -1698,5 +1698,6 @@
   "Manual milestones and awards are not configurable in the UI yet.": "Ręcznie wybranych kamieni milowych i nagród nie można jeszcze ustawić w interfejsie.",
   "Manual milestones and awards are invalid: ${0}": "Ręcznie wybrane kamienie milowe i nagrody są nieprawidłowe: ${0}",
   "Manually chosen": "Wybrane ręcznie",
-  "Remember settings": "Zapamiętaj ustawienia"
+  "Remember settings": "Zapamiętaj ustawienia",
+  "All tags except City and No tag": "Wszystkie symbole oprócz miasta i bez symbolu"
 }
