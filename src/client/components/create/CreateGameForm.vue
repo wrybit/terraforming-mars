@@ -504,7 +504,6 @@ type FormModel = {
   expansionGrouping: ExpansionGrouping;
   preludeToggled: boolean;
   uploading: boolean;
-  previousViewport: string;
   /** Only start writing the URL after loading, otherwise the default state overwrites the shared link */
   settingsLinkReady: boolean;
   settingsLinkCopied: boolean;
@@ -564,7 +563,6 @@ export default defineComponent({
       expansionGrouping: loadExpansionGrouping(),
       preludeToggled: false,
       uploading: false,
-      previousViewport: '',
       settingsLinkReady: false,
       settingsLinkCopied: false,
       lastFixedBoard: BoardName.THARSIS,
@@ -749,19 +747,6 @@ export default defineComponent({
         replaceSettingsHash(this.currentSettingsHash);
       }
     });
-
-    // Set the viewport width to width=device-width on the create game form so mobile browsers use their actual CSS viewport width.
-    // The current global viewport is width=1260, which prevents the create game form from using the device width on phones.
-    // This is a temporary solution in order to make this edit scoped to the create game form.
-    // TODO: Once responsiveness covers the whole project, this code should be removed and the tag in index.html should be updated directly.
-    const viewport = document.querySelector('meta[name="viewport"]');
-    if (viewport !== null) {
-      this.previousViewport = viewport.getAttribute('content') ?? '';
-      viewport.setAttribute(
-        'content',
-        'width=device-width, initial-scale=1, viewport-fit=cover',
-      );
-    }
   },
   beforeUnmount() {
     // Closed without creating (also by mistake): keep everything for reopening; editing a waiting game keeps nothing
@@ -775,9 +760,6 @@ export default defineComponent({
     this.stopStickyObserver();
     this.stopBelowObserver();
     this.stopColumnWatch();
-    document
-      .querySelector('meta[name="viewport"]')
-      ?.setAttribute('content', this.previousViewport);
   },
   computed: {
     // Lobby: name, color and picture of the own seat; undefined without a name (the lobby needs one)
