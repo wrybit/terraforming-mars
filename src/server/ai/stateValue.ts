@@ -12,7 +12,7 @@ import {boardPotential} from './boardPotential';
 import {plantHoardDiscount} from './plantHoardDecay';
 import {lastGenerationSpotPoints} from './lastGenerationSpots';
 import {futureTagPoints} from './tagPointOutlook';
-import {effectExhausted} from './exhaustedEffect';
+import {cardExhausted} from './exhaustedEffect';
 import {energyOutlookFactor} from './energyOutlook';
 import {awardEngineSwing} from './awardEngineSwing';
 import {effectDrawsPerGeneration} from './cardIncome';
@@ -246,7 +246,7 @@ function engineFlow(player: IPlayer, context: ValuationContext): number {
   let cards = 0;
   for (const card of player.playedCards) {
     if (card.type === CardType.ACTIVE) {
-      cards += isIActionCard(card) ? ACTION_CARD_VALUE_PER_GENERATION : effectExhausted(card, player.game) ? 0 : EFFECT_CARD_VALUE_PER_GENERATION;
+      cards += cardExhausted(card, player.game) ? 0 : isIActionCard(card) ? ACTION_CARD_VALUE_PER_GENERATION : EFFECT_CARD_VALUE_PER_GENERATION;
     }
   }
   return (productionPerGeneration(player, context) + player.terraformRating) * (context.productionDiscount ?? PRODUCTION_DISCOUNT) + cards;
@@ -403,17 +403,21 @@ function tableauValue(player: IPlayer, context: ValuationContext): number {
       const own = isIActionCard(card) ? actionValuePerGeneration(card, player, context) : EFFECT_CARD_VALUE_PER_GENERATION;
       // measuredCardIncome: effects and actions count what they were measured to bring, not only the flat value.
       // An effect triggered only by a maxed global parameter (Arctic Algae with all oceans placed) earns nothing.
-      const exhausted = !isIActionCard(card) && effectExhausted(card, player.game);
+      // Same for an action that only raises a maxed parameter (Icy Impactors with all oceans placed).
+      const exhausted = cardExhausted(card, player.game);
       // energyOutlook: draws bought with energy count only as far as energy can be expected (energyOutlook.ts).
       const draws = drawIncome(card) * energyOutlookFactor(player, card, context.remaining);
       const flat = exhausted ? 0 : Math.max(own, draws, measuredCardIncome(player, card, context.remaining));
       // A human player's collectors scored 20+ VP in long games; a flat 1.5 M€ per generation missed that.
       // collectorRates: the measured resources per generation of this card instead of one (collectorRate.ts).
       const rate = tuningOf(player).collectorRates > 0 ? collectorRate(card.name) : 1;
-      const collected = accumulator > 0 ? accumulator * rate * collectedPointsPerGeneration(card) * context.victoryPoint : 0;
+      // An exhausted trigger also collects no more resources (Neptunian Power Consultants with all oceans placed).
+      const collected = accumulator > 0 && !exhausted ? accumulator * rate * collectedPointsPerGeneration(card) * context.victoryPoint : 0;
       value += Math.max(flat, collected) * context.remaining;
       // vpResourceEngine: an early collector gathers for many generations; the discount above only fits late ones.
-      value += earlyCollectorPoints(player, collectedPointsPerGeneration(card), rate, context.remaining) * context.victoryPoint;
+      if (!exhausted) {
+        value += earlyCollectorPoints(player, collectedPointsPerGeneration(card), rate, context.remaining) * context.victoryPoint;
+      }
     } else if (card.type === CardType.CORPORATION) {
       value += Math.max(drawIncome(card), measuredCardIncome(player, card, context.remaining)) * context.remaining;
     } else if (card.type === CardType.PRELUDE) {
