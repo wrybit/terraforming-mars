@@ -14,11 +14,11 @@
     <div class="exchange-chart__columns">
       <div v-for="column in chart.columns" :key="column.resource" class="exchange-chart__column" :style="{height: height + 'px'}">
         <svg class="exchange-chart__plot" :viewBox="'0 0 100 ' + height" preserveAspectRatio="none">
-          <line class="exchange-chart__normal" :x1="column.normalX" :x2="column.normalX" y1="3" :y2="height - 3"/>
+          <line class="exchange-chart__normal" :x1="column.normalX" :x2="column.normalX" y1="3" :y2="height - 3" />
           <polygon v-for="(area, index) in column.areas" :key="index" :points="area.points"
-            :class="'exchange-chart__area exchange-chart__area--' + area.mood"/>
-          <polyline class="exchange-chart__line" :points="column.line"/>
-          <polyline v-if="column.forecast !== undefined" class="exchange-chart__line exchange-chart__line--forecast" :points="column.forecast.line"/>
+            :class="'exchange-chart__area exchange-chart__area--' + area.mood" />
+          <polyline class="exchange-chart__line" :points="column.line" />
+          <polyline v-if="column.forecast !== undefined" class="exchange-chart__line exchange-chart__line--forecast" :points="column.forecast.line" />
         </svg>
         <span v-for="(point, index) in column.points" :key="index"
           :class="['exchange-chart__point', 'exchange-chart__point--' + point.mood, {'exchange-chart__point--current': point.current}]"

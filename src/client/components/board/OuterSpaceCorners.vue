@@ -5,7 +5,7 @@
   <div ref="root" :class="['board-outer-spaces', 'board-outer-spaces--corners', {'board-outer-spaces--short': short}]" id="colony_spaces" :style="{'--outer-hex-scale': hexScale}">
     <div v-for="group in groups" :key="group.corner" :class="['board-outer-group', 'board-outer-group--' + group.corner]">
       <span v-if="group.title !== undefined" class="board-outer-group__title" v-i18n>{{ group.title }}</span>
-      <BoardSpace v-for="outer in group.spaces" :key="outer.id" :space="spaceOf(outer.id)" :text="outer.short" :title="$t(outer.name)" :tileView="tileView"/>
+      <BoardSpace v-for="outer in group.spaces" :key="outer.id" :space="spaceOf(outer.id)" :text="outer.short" :title="$t(outer.name)" :tileView="tileView" />
     </div>
   </div>
 </template>

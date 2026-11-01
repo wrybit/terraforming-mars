@@ -1264,5 +1264,9 @@
   "This page is out of date. Click OK to refresh it.": "Denne siden er utdatert. Klikk OK for å oppdatere den.",
   "Select how to pay for your project cards": "Velg hvordan du betaler for prosjektkortene dine",
   "turquoise": "Turkis",
-  "clear": "Klar"
+  "clear": "Klar",
+  "Manual milestones and awards are not configurable in the UI yet.": "Manuelt valgte milepæler og utmerkelser kan ikke stilles inn i grensesnittet ennå.",
+  "Manual milestones and awards are invalid: ${0}": "Manuelt valgte milepæler og utmerkelser er ugyldige: ${0}",
+  "Manually chosen": "Valgt manuelt",
+  "Remember settings": "Husk innstillingene"
 }

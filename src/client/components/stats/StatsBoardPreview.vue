@@ -1,6 +1,6 @@
 <template>
   <div class="stats-board-preview" :class="heatmap === undefined ? undefined : `stats-heatmap stats-heatmap--${heatmapType}`">
-    <ScaledBoard v-if="spaces !== undefined" :spaces="spaces" :boardName="boardForBoardView"/>
+    <ScaledBoard v-if="spaces !== undefined" :spaces="spaces" :boardName="boardForBoardView" />
     <p v-else-if="failed" class="stats-note"><span v-i18n>The board could not be loaded.</span> {{ failureText }}</p>
   </div>
 </template>

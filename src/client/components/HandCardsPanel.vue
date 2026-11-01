@@ -7,15 +7,15 @@
   <div class="hand-cards-panel">
     <CardFilterBar v-if="allCards.length > 1" :cards="allCards" :filter="handCardFilter" :context="filterContext">
       <template #sort="{compact}">
-        <HandSortControl :playerView="playerView" :compact="compact" :allowManual="true"/>
+        <HandSortControl :playerView="playerView" :compact="compact" :allowManual="true" />
       </template>
     </CardFilterBar>
-    <CardFilterEmptyHint v-if="nothingShown" @reset="resetCardFilter(handCardFilter)"/>
+    <CardFilterEmptyHint v-if="nothingShown" @reset="resetCardFilter(handCardFilter)" />
     <section v-if="shownActiveCount > 0" class="hand-cards-panel__section hand-cards-panel__section--active">
       <h3 v-if="hasSeveralSections" class="hand-cards-panel__title">{{ $t('Active cards') }} <small>{{ shownActiveCount }}</small></h3>
       <div class="hand-cards-panel__cards">
         <div v-for="card in activeCards" :key="card.name" class="cardbox" :class="visibilityClass(card)">
-          <Card :card="isUnavailable(card) ? {...card, isDisabled: true} : card" :actionUsed="isCardActivated(card, thisPlayer)" :cubeColor="thisPlayer.color"/>
+          <Card :card="isUnavailable(card) ? {...card, isDisabled: true} : card" :actionUsed="isCardActivated(card, thisPlayer)" :cubeColor="thisPlayer.color" />
         </div>
       </div>
     </section>
@@ -23,17 +23,17 @@
       <div v-if="hasSeveralSections" class="hand-cards-panel__header">
         <h3 class="hand-cards-panel__title">{{ $t('Cards In Hand') }} <small>{{ shownHandCount }}</small></h3>
       </div>
-      <SortableCards :playerId="playerView.id" :cards="handCards" :visibility="visibility" :unavailable="isUnavailable"/>
+      <SortableCards :playerId="playerView.id" :cards="handCards" :visibility="visibility" :unavailable="isUnavailable" />
     </section>
     <section v-if="undergroundTokens" class="hand-cards-panel__section hand-cards-panel__section--underground">
       <h3 class="hand-cards-panel__title">{{ $t('Claimed Underground Resource Tokens') }} <small>{{ thisPlayer.underworldData.tokens.length }}</small></h3>
-      <UndergroundTokens :underworldData="thisPlayer.underworldData"/>
+      <UndergroundTokens :underworldData="thisPlayer.underworldData" />
     </section>
     <section v-if="shownPlayedCount > 0" class="hand-cards-panel__section hand-cards-panel__section--played">
       <div v-if="hasSeveralSections" class="hand-cards-panel__header">
         <h3 class="hand-cards-panel__title">{{ $t('Played Cards') }} <small>{{ shownPlayedCount }}</small></h3>
       </div>
-      <PlayedCardsGroups class="hand-cards-panel__cards" :player="thisPlayer" :visibility="visibility" :sortOrder="handSortOrder()" withoutActiveCards/>
+      <PlayedCardsGroups class="hand-cards-panel__cards" :player="thisPlayer" :visibility="visibility" :sortOrder="handSortOrder()" withoutActiveCards />
     </section>
   </div>
 </template>

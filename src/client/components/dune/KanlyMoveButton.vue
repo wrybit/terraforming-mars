@@ -6,7 +6,7 @@
        instead: its input lives in the content, the Kanly tab top right only shows the battle (Jens, 25 Oct 2026). -->
   <div v-if="isPlayer" class="kanly-move">
     <AppButton :title="label" :counts="counts" :disabled="!offered" :disableOnServerBusy="false"
-      :class="['kanly-move-button', {'kanly-move-button--open': isOpen}]" @click="toggle"/>
+      :class="['kanly-move-button', {'kanly-move-button--open': isOpen}]" @click="toggle" />
     <span v-if="!offered && reason !== undefined" class="kanly-move__reason">{{ $t(reason) }}</span>
   </div>
 </template>

@@ -5,7 +5,7 @@
     <div v-if="isCeo" class="ceo-label">CEO</div>
     <!-- Dune theme: the Houses have no logos, the House name stands in their place -->
     <div v-if="isCorporation && showsHouseName" class="card-title card-house-name" v-i18n>{{ title }}</div>
-    <CardCorporationLogo v-else-if="isCorporation" :title="title"/>
+    <CardCorporationLogo v-else-if="isCorporation" :title="title" />
     <div v-else ref="title" class="card-title" :class="backgroundColorClass">{{ titleWithoutSuffix }}</div>
   </div>
 </template>

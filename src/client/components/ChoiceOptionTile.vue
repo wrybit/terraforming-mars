@@ -24,7 +24,7 @@
         </span>
       </template>
     </span>
-    <span><MoneyText :text="$t(title)"/></span>
+    <span><MoneyText :text="$t(title)" /></span>
     <!-- Own values of every affected resource: stock and production, the changed one before → after -->
     <div v-if="cardCount !== undefined || changes.length > 0" class="choice-option-value">
       <!-- Same table as for standard resources: icon | on card | victory points of the card, so a

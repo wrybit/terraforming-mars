@@ -16,14 +16,14 @@
           :player="thisPlayer"
           :selected="chosen[level.depth] === index"
           :groupName="'dune-move-' + level.depth"
-          @select="choose(level.depth, index)"/>
+          @select="choose(level.depth, index)" />
       </div>
     </div>
     <div v-if="leaf !== undefined && leaf.type === 'option'" class="dune-move__confirm">
-      <AppButton hotkey="proceed" size="big" :title="$t(leaf.buttonLabel)" @click="confirmOption"/>
+      <AppButton hotkey="proceed" size="big" :title="$t(leaf.buttonLabel)" @click="confirmOption" />
     </div>
     <div v-else-if="leaf !== undefined && playerView !== undefined" class="dune-move__input">
-      <PlayerInputFactory :key="chosen.join('-')" :playerView="playerView" :playerinput="leaf" :onsave="sendLeaf" :showsave="true" :showtitle="chosen.length > 0"/>
+      <PlayerInputFactory :key="chosen.join('-')" :playerView="playerView" :playerinput="leaf" :onsave="sendLeaf" :showsave="true" :showtitle="chosen.length > 0" />
     </div>
   </div>
 </template>

@@ -3,7 +3,7 @@
        Used by the action menu (OrOptions) and by individual inputs (WaitingForTabs). -->
   <div :class="['or-tab-intro', {'card-intro': card !== undefined}]">
     <!-- If a card triggers this (e.g. place city via card effect): card in front, its name above the question -->
-    <SourceCardThumbnail v-if="card !== undefined" :card="card"/>
+    <SourceCardThumbnail v-if="card !== undefined" :card="card" />
     <div v-if="intro.tile !== undefined" class="or-tab-intro-tile">
       <img class="or-tab-intro-tile-base" :src="intro.tile.base" alt="">
       <img v-if="intro.tile.symbol !== undefined" class="or-tab-intro-tile-symbol" :src="intro.tile.symbol" alt="">

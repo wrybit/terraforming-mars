@@ -1,11 +1,11 @@
 <template>
   <div class="card-content" :class="corporationClass">
-    <CardRequirementsComponent v-if="requirements !== undefined && requirements.length > 0" :requirements="requirements"/>
-    <CardDescription v-if="!isCorporation && hasDescription && leadsWithDescription" :item="metadata.description"/>
+    <CardRequirementsComponent v-if="requirements !== undefined && requirements.length > 0" :requirements="requirements" />
+    <CardDescription v-if="!isCorporation && hasDescription && leadsWithDescription" :item="metadata.description" />
     <CardRenderData v-if="firstRow !== undefined" :renderData="firstRow" />
-    <CardDescription v-if="isCorporation && hasDescription" :item="metadata.description"/>
+    <CardDescription v-if="isCorporation && hasDescription" :item="metadata.description" />
     <CardRenderData v-if="remainingRows !== undefined" :renderData="remainingRows" />
-    <CardDescription v-if="!isCorporation && hasDescription && !leadsWithDescription" :item="metadata.description"/>
+    <CardDescription v-if="!isCorporation && hasDescription && !leadsWithDescription" :item="metadata.description" />
     <div :class="'bottom-padding-' + bottomPadding" v-if="bottomPadding"></div>
   </div>
 </template>

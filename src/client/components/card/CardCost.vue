@@ -3,7 +3,7 @@
     <div class="card-cost" :class="{'visibility-hidden': amount === undefined}">{{ amount }}</div>
     <template v-if="displayTwoCosts">
       <!-- Discount: printed cost small and pale, the chevron, the own cost large beside it (cards_v2.less) -->
-      <DiscountChevron class="card-cost-transition"/>
+      <DiscountChevron class="card-cost-transition" />
       <div class="card-old-cost">{{ newCost }}</div>
     </template>
   </div>

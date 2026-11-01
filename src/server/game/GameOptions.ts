@@ -9,6 +9,7 @@ import {Expansion} from '../../common/cards/GameModule';
 import {EscapeVelocityOptions} from '../../common/game/NewGameConfig';
 import {DEFAULT_THEME, Theme} from '../../common/theme/Theme';
 import {DuneModule} from '../../common/dune/DuneModule';
+import {CustomMA} from '../../common/ma/CustomMA';
 
 export type GameOptions = {
   boardName: BoardName;
@@ -65,6 +66,8 @@ export type GameOptions = {
   customColoniesList: ReadonlyArray<ColonyName>;
   customPreludes: ReadonlyArray<CardName>;
   customCeos: ReadonlyArray<CardName>;
+  /** Preselected milestones and awards, used instead of the board's. Only valid when randomMA is MANUAL. */
+  customMA?: CustomMA;
   startingCeos: number;
   startingPreludes: number;
   /** Moon must be completed to end the game */
@@ -100,6 +103,7 @@ export const DEFAULT_GAME_OPTIONS: GameOptions = {
   customCeos: [],
   customColoniesList: [],
   customCorporationsList: [],
+  customMA: undefined,
   customPreludes: [],
   draftVariant: false,
   escapeVelocity: undefined,

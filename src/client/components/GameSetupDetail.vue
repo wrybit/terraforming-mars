@@ -104,8 +104,10 @@ const randomMAValues = computed((): Array<SetupValue> => {
   case RandomMAOptionType.NONE: values.push(chip('Board-defined')); break;
   case RandomMAOptionType.LIMITED: values.push(chip('Randomized with limited synergy')); break;
   case RandomMAOptionType.UNLIMITED: values.push(chip('Full randomized')); break;
+  case RandomMAOptionType.MANUAL: values.push(chip('Manually chosen')); break;
   }
-  if (options.randomMA !== RandomMAOptionType.NONE && options.includeFanMA) {
+  // Fan milestones/awards only matter when they are drawn at random
+  if ((options.randomMA === RandomMAOptionType.LIMITED || options.randomMA === RandomMAOptionType.UNLIMITED) && options.includeFanMA) {
     values.push(chip('Include fan Milestones/Awards'));
   }
   return values;

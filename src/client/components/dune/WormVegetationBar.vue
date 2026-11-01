@@ -21,22 +21,22 @@
         </span>
       </div>
       <template v-for="section in sections" :key="section.distance">
-      <!-- Dashed line between the steps, in the row of the track (Jens, 26 Oct 2026) -->
-      <span class="worm-vegetation__divider" aria-hidden="true"></span>
-      <div class="worm-vegetation__section">
-        <!-- The distances are buttons too, for players who pick the number instead of the space on the map (and where
+        <!-- Dashed line between the steps, in the row of the track (Jens, 26 Oct 2026) -->
+        <span class="worm-vegetation__divider" aria-hidden="true"></span>
+        <div class="worm-vegetation__section">
+          <!-- The distances are buttons too, for players who pick the number instead of the space on the map (and where
              two targets share a space after a bounce). Beyond the reach of the worm they are disabled (Jens, 25 Oct 2026) -->
-        <button type="button"
-          :class="['worm-vegetation__distance', {'worm-vegetation__distance--chosen': section.distance === chosen}]"
-          :disabled="!choosable.includes(section.distance)" :aria-pressed="section.distance === chosen"
-          @click="$emit('choose', section.distance)">{{ section.distance }}</button>
-        <span class="worm-vegetation__hexes">
-          <span v-for="step in section.steps" :key="step.index"
-            :class="['worm-vegetation__hex', {'worm-vegetation__hex--front': step.front}]">
-            <img v-if="step.filled" :src="greenery" alt="">
+          <button type="button"
+            :class="['worm-vegetation__distance', {'worm-vegetation__distance--chosen': section.distance === chosen}]"
+            :disabled="!choosable.includes(section.distance)" :aria-pressed="section.distance === chosen"
+            @click="$emit('choose', section.distance)">{{ section.distance }}</button>
+          <span class="worm-vegetation__hexes">
+            <span v-for="step in section.steps" :key="step.index"
+              :class="['worm-vegetation__hex', {'worm-vegetation__hex--front': step.front}]">
+              <img v-if="step.filled" :src="greenery" alt="">
+            </span>
           </span>
-        </span>
-      </div>
+        </div>
       </template>
     </div>
     <p class="worm-vegetation__caption">{{ caption }}</p>

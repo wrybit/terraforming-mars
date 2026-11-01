@@ -1,7 +1,7 @@
 <template>
   <section class="stats-card">
     <h2><span v-i18n>Games</span> <span class="stats-dim">· {{ games.length }}</span></h2>
-    <StatsGameList :games="games"/>
+    <StatsGameList :games="games" />
   </section>
 </template>
 

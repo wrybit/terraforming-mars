@@ -26,7 +26,7 @@
               <div v-i18n>These are the colony tiles Aridor may choose from:</div>
               <div class="discarded-colonies-for-aridor">
                 <div class="player_home_colony small_colony" v-for="colonyName in playerView.game.discardedColonies" :key="colonyName">
-                  <Colony :colony="getColony(colonyName)" :active="getColony(colonyName).isActive"/>
+                  <Colony :colony="getColony(colonyName)" :active="getColony(colonyName).isActive" />
                 </div>
               </div>
             </div>
@@ -49,7 +49,7 @@
         :status="warning ?? 'Ready to start'"
         :statusReady="valid && warning === undefined">
         <!-- :key=warning is a way of validing that the state of the button should change. If the warning changes, or disappears, that's a signal that the button might change. -->
-        <AppButton hotkey="confirm" :disabled="!valid" v-if="showsave" @click="saveIfConfirmed" type="submit" :title="playerinput.buttonLabel" :counts="startCounts()" class="select-initial-cards-start"/>
+        <AppButton hotkey="confirm" :disabled="!valid" v-if="showsave" @click="saveIfConfirmed" type="submit" :title="playerinput.buttonLabel" :counts="startCounts()" class="select-initial-cards-start" />
       </SetupSummary>
     </div>
   </div>

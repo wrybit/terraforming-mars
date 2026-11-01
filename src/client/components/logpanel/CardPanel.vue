@@ -1,22 +1,22 @@
 <template>
   <!-- Attach the modal to body: in the log (own stacking context) it would otherwise lie below the icons at top right -->
   <Teleport to="body" :disabled="!modal">
-  <!-- The root is the Teleport, so attributes (e.g. the hover preview's position as style) don't land here on their own -->
-  <div ref="panel" :class="['card-panel', {'card-panel--floating': floating, 'card-panel--modal': modal}]" v-bind="$attrs" v-if="message !== undefined && show">
-    <!-- Hover preview closes itself when leaving the row, needs no button -->
-    <AppButton v-if="!floating" size="big" type="close" :disableOnServerBusy="false" @click="hideMe" align="right"/>
-    <div id="log_panel_card" class="cardbox" v-for="name in cards" :key="name">
-      <Card :card="cardModel(name)"/>
+    <!-- The root is the Teleport, so attributes (e.g. the hover preview's position as style) don't land here on their own -->
+    <div ref="panel" :class="['card-panel', {'card-panel--floating': floating, 'card-panel--modal': modal}]" v-bind="$attrs" v-if="message !== undefined && show">
+      <!-- Hover preview closes itself when leaving the row, needs no button -->
+      <AppButton v-if="!floating" size="big" type="close" :disableOnServerBusy="false" @click="hideMe" align="right" />
+      <div id="log_panel_card" class="cardbox" v-for="name in cards" :key="name">
+        <Card :card="cardModel(name)" />
+      </div>
+      <div id="log_panel_card" class="cardbox" v-for="name in globalEvents" :key="name">
+        <GlobalEvent :globalEventName="name" type="prior" :showIcons="false" />
+      </div>
+      <div id="log_panel_card" class="cardbox" v-for="name in colonies" :key="name">
+        <Colony :colony="getColony(name)" />
+      </div>
+      <!-- Action rows: what the action changed, compactly under the card -->
+      <LogActionEffects v-if="hasEffects" :action="action!" :players="players" />
     </div>
-    <div id="log_panel_card" class="cardbox" v-for="name in globalEvents" :key="name">
-      <GlobalEvent :globalEventName="name" type="prior" :showIcons="false"/>
-    </div>
-    <div id="log_panel_card" class="cardbox" v-for="name in colonies" :key="name">
-      <Colony :colony="getColony(name)"/>
-    </div>
-    <!-- Action rows: what the action changed, compactly under the card -->
-    <LogActionEffects v-if="hasEffects" :action="action!" :players="players"/>
-  </div>
   </Teleport>
 </template>
 
@@ -41,6 +41,7 @@ import {logMessageCards, logMessageColonies, logMessageGlobalEvents} from '@/cli
 
 export default defineComponent({
   name: 'LogPanel',
+  emits: ['hide'],
   // The template passes attributes on to the panel itself (Teleport as root)
   inheritAttrs: false,
   props: {

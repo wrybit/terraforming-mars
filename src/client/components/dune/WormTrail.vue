@@ -3,18 +3,18 @@
        ended and the worm token where it lies now (WormTrailModel, server/dune/Worm.ts moveWorm) -->
   <figure class="worm-trail" data-test="worm-trail">
     <svg class="worm-trail__map" :viewBox="viewBox" role="img" :aria-label="$t('Trail of the worm')">
-      <polygon v-for="cell in cells" :key="cell.id" :points="cell.points" :class="['worm-trail__hex', 'arrakis-zone--' + cell.zone]"/>
+      <polygon v-for="cell in cells" :key="cell.id" :points="cell.points" :class="['worm-trail__hex', 'arrakis-zone--' + cell.zone]" />
       <!-- Older moves fade, so the way reads from old to new. Each move a dotted light line on an orange glow, so it
            stands out on both the light and the dark sand (Jens, 19 Oct 2026) -->
       <g v-for="line in lines" :key="'line-' + line.index" :style="{opacity: line.opacity}">
-        <polyline class="worm-trail__glow" :points="line.points"/>
-        <polyline class="worm-trail__line" :points="line.points"/>
+        <polyline class="worm-trail__glow" :points="line.points" />
+        <polyline class="worm-trail__line" :points="line.points" />
       </g>
-      <circle class="worm-trail__start" :cx="start.x" :cy="start.y" r="7"/>
-      <image class="worm-trail__worm" :href="token" :x="now.x - WORM_SIZE / 2" :y="now.y - WORM_SIZE / 2" :width="WORM_SIZE" :height="WORM_SIZE"/>
+      <circle class="worm-trail__start" :cx="start.x" :cy="start.y" r="7" />
+      <image class="worm-trail__worm" :href="token" :x="now.x - WORM_SIZE / 2" :y="now.y - WORM_SIZE / 2" :width="WORM_SIZE" :height="WORM_SIZE" />
       <g v-for="stop in stops" :key="'stop-' + stop.spaceId" class="worm-trail__stop" :transform="'translate(' + stop.x + ' ' + stop.y + ')'">
         <title>{{ stop.title }}</title>
-        <rect :x="-stop.width / 2" :y="-STOP_HEIGHT / 2" :width="stop.width" :height="STOP_HEIGHT" :rx="STOP_HEIGHT / 2"/>
+        <rect :x="-stop.width / 2" :y="-STOP_HEIGHT / 2" :width="stop.width" :height="STOP_HEIGHT" :rx="STOP_HEIGHT / 2" />
         <text text-anchor="middle" dominant-baseline="central">{{ stop.label }}</text>
       </g>
     </svg>

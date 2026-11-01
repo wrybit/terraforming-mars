@@ -16,14 +16,14 @@
         :datasets="victoryPointDatasets"
         :generation="generation"
         :animation="true"
-        :id="'victory-point-chart'"/>
+        :id="'victory-point-chart'" />
       <VictoryPointChart v-else key="globalParameters"
         :datasets="globalParameterDatasets"
         :generation="generation"
         :animation="true"
         :id="'global-parameter-chart'"
         :yAxisLabel="'% completed'"
-        :yAxisStep="25"/>
+        :yAxisStep="25" />
     </div>
   </div>
 </template>

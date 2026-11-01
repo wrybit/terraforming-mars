@@ -4,27 +4,27 @@
   <svg class="arrakis-scales arrakis-spice" width="720" height="720" viewBox="0 0 720 720" role="img" :aria-label="label">
     <defs>
       <filter :id="glowId" x="-50%" y="-50%" width="200%" height="200%">
-        <feGaussianBlur stdDeviation="2.16" result="blur"/>
-        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        <feGaussianBlur stdDeviation="2.16" result="blur" />
+        <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
       </filter>
       <linearGradient :id="gradientId" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#ffb35c"/>
-        <stop offset="1" stop-color="#c4501a"/>
+        <stop offset="0" stop-color="#ffb35c" />
+        <stop offset="1" stop-color="#c4501a" />
       </linearGradient>
-      <path :id="textPathId" :d="barPath"/>
+      <path :id="textPathId" :d="barPath" />
     </defs>
     <image :transform="at(layout.icon)" href="assets/themes/dune/graphics/tile-spicefield-icon.svg"
-      :x="-ICON_SIZE / 2" :y="-ICON_SIZE / 2" :width="ICON_SIZE" :height="ICON_SIZE"/>
+      :x="-ICON_SIZE / 2" :y="-ICON_SIZE / 2" :width="ICON_SIZE" :height="ICON_SIZE" />
     <template v-if="complete">
-      <path class="arrakis-spice__rim" :d="barPath" :stroke-width="(BAR_HEIGHT + 2.16) * row.scale"/>
-      <path class="arrakis-spice__bar" :d="barPath" :stroke-width="BAR_HEIGHT * row.scale"/>
+      <path class="arrakis-spice__rim" :d="barPath" :stroke-width="(BAR_HEIGHT + 2.16) * row.scale" />
+      <path class="arrakis-spice__bar" :d="barPath" :stroke-width="BAR_HEIGHT * row.scale" />
       <text class="arrakis-spice__done" :style="{fontSize: 9.38 * row.scale + 'px', letterSpacing: 1.44 * row.scale + 'px'}"><textPath :href="'#' + textPathId" startOffset="50%" text-anchor="middle" dominant-baseline="central">{{ doneText }}</textPath></text>
     </template>
     <template v-else>
       <g v-for="(cell, index) in cells" :key="'cell' + index" :transform="at(cell.distance)">
-        <path v-if="cell.filled" class="arrakis-spice__cell" :d="hexagon(CELL_WIDTH)" :fill="gradientUrl" :filter="glowUrl"/>
+        <path v-if="cell.filled" class="arrakis-spice__cell" :d="hexagon(CELL_WIDTH)" :fill="gradientUrl" :filter="glowUrl" />
         <!-- The next open field blinks softly on its own layer (below) -->
-        <path v-else-if="!cell.next" class="arrakis-spice__cell arrakis-spice__cell--open" :d="hexagon(CELL_WIDTH)"/>
+        <path v-else-if="!cell.next" class="arrakis-spice__cell arrakis-spice__cell--open" :d="hexagon(CELL_WIDTH)" />
       </g>
       <text class="arrakis-spice__count" :transform="at(layout.count)" x="0" y="0.72">{{ count }}<tspan class="arrakis-spice__max">/{{ fields }}</tspan></text>
     </template>
@@ -34,25 +34,25 @@
   <div class="arrakis-motion-layer" aria-hidden="true">
     <template v-if="complete">
       <ArrakisMotionPart motionClass="arrakis-scales__pulse" :motion="motion('spice-glow', 2.2)" v-bind="BOARD_BOX">
-        <path class="arrakis-spice__glow" :d="barPath" :stroke-width="(BAR_HEIGHT + 8.66) * row.scale" :filter="glowUrl"/>
+        <path class="arrakis-spice__glow" :d="barPath" :stroke-width="(BAR_HEIGHT + 8.66) * row.scale" :filter="glowUrl" />
       </ArrakisMotionPart>
       <ArrakisMotionPart motionClass="arrakis-scales__breathe" :motion="motion('spice-check', 2.4)" v-bind="boxAround(point(layout.check), CHECK_HEX * 1.8 * row.scale)">
         <g :transform="at(layout.check)">
-          <path class="arrakis-spice__cell arrakis-spice__cell--check" :d="hexagon(CHECK_HEX)" :fill="gradientUrl" :filter="glowUrl"/>
-          <path class="arrakis-spice__tick" d="M -5.05 0 l 3.54 3.54 l 6.57 -7.07"/>
+          <path class="arrakis-spice__cell arrakis-spice__cell--check" :d="hexagon(CHECK_HEX)" :fill="gradientUrl" :filter="glowUrl" />
+          <path class="arrakis-spice__tick" d="M -5.05 0 l 3.54 3.54 l 6.57 -7.07" />
         </g>
       </ArrakisMotionPart>
     </template>
     <ArrakisMotionPart v-else-if="nextCell !== undefined" motionClass="arrakis-spice__blink" :motion="motion('spice-next', 1.6)"
       v-bind="boxAround(point(nextCell.distance), CELL_WIDTH * 1.6 * row.scale)">
       <g :transform="at(nextCell.distance)">
-        <path class="arrakis-spice__cell arrakis-spice__cell--open arrakis-spice__cell--next" :d="hexagon(CELL_WIDTH)"/>
+        <path class="arrakis-spice__cell arrakis-spice__cell--open arrakis-spice__cell--next" :d="hexagon(CELL_WIDTH)" />
       </g>
     </ArrakisMotionPart>
   </div>
   <!-- Full bar: particles stream from left to right, each with its own pace and blink. Otherwise sparks rise from every
        filled cell, each on its own clock. -->
-  <ArrakisParticles :particles="particles"/>
+  <ArrakisParticles :particles="particles" />
 </template>
 
 <script lang="ts">

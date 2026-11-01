@@ -1,29 +1,29 @@
 <template>
   <div class="card-container filterDiv hover-hide-res" :class="cardClasses" :style="fitStyle">
-      <!-- Dune theme: a scene of Arrakis fades in behind the lower part of the card -->
-      <span v-if="sceneUrl !== undefined" class="card-scene" :style="{backgroundImage: `url(${sceneUrl})`}" aria-hidden="true"></span>
-      <!-- Action used this generation: the player's cube lies on the card like at the table, seen from above,
+    <!-- Dune theme: a scene of Arrakis fades in behind the lower part of the card -->
+    <span v-if="sceneUrl !== undefined" class="card-scene" :style="{backgroundImage: `url(${sceneUrl})`}" aria-hidden="true"></span>
+    <!-- Action used this generation: the player's cube lies on the card like at the table, seen from above,
            at a random angle per card -->
-      <span v-if="showPlayerCube" class="card-player-cube"><PlayerCube :color="cubeColor" view="top" :size="22" :spin="cubeSpin"/></span>
-      <div class="card-content-wrapper" v-i18n @mouseover="hovering = true" @mouseleave="hovering = false">
-          <div v-if="!isStandardProject" class="card-cost-and-tags">
-              <CardCost :amount="cost" :newCost="reducedCost" />
-              <CardHelp v-if="helpText !== undefined" :name="card.name" :helpText="helpText" :hovering="hovering" />
-              <CardTags :tags="tags" />
-          </div>
-          <CardTitle :title="card.name" :type="cardType"/>
-          <CardContent
-              :metadata="cardMetadata"
-              :requirements="cardRequirements"
-              :isCorporation="isCorporationCard"
-              :bottomPadding="bottomPadding" />
+    <span v-if="showPlayerCube" class="card-player-cube"><PlayerCube :color="cubeColor" view="top" :size="22" :spin="cubeSpin" /></span>
+    <div class="card-content-wrapper" v-i18n @mouseover="hovering = true" @mouseleave="hovering = false">
+      <div v-if="!isStandardProject" class="card-cost-and-tags">
+        <CardCost :amount="cost" :newCost="reducedCost" />
+        <CardHelp v-if="helpText !== undefined" :name="card.name" :helpText="helpText" :hovering="hovering" />
+        <CardTags :tags="tags" />
       </div>
-      <CardExpansion :expansion="cardExpansion" :isCorporation="isCorporationCard" :isResourceCard="isResourceCard" :compatibility="cardCompatibility" />
-      <CardResourceCounter v-if="hasResourceType" :amount="resourceAmount" :type="resourceType" />
-      <CardVictoryPoints v-if="cardMetadata.victoryPoints" :victoryPoints="cardMetadata.victoryPoints" />
-      <CardExtraContent :card="card" />
-      <CardScrollbar v-if="scrollContent !== undefined" :content="scrollContent" />
-      <slot></slot>
+      <CardTitle :title="card.name" :type="cardType" />
+      <CardContent
+        :metadata="cardMetadata"
+        :requirements="cardRequirements"
+        :isCorporation="isCorporationCard"
+        :bottomPadding="bottomPadding" />
+    </div>
+    <CardExpansion :expansion="cardExpansion" :isCorporation="isCorporationCard" :isResourceCard="isResourceCard" :compatibility="cardCompatibility" />
+    <CardResourceCounter v-if="hasResourceType" :amount="resourceAmount" :type="resourceType" />
+    <CardVictoryPoints v-if="cardMetadata.victoryPoints" :victoryPoints="cardMetadata.victoryPoints" />
+    <CardExtraContent :card="card" />
+    <CardScrollbar v-if="scrollContent !== undefined" :content="scrollContent" />
+    <slot></slot>
   </div>
 </template>
 

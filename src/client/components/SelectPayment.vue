@@ -1,19 +1,19 @@
 <template>
-<div class="payments_cont">
-  <section>
-    <h3 class="payments_title">{{ $t(playerinput.title) }}</h3>
-    <PaymentForm
-      ref="paymentForm"
-      :cost="cost"
-      :order="order"
-      :ledger="ledger"
-      :showsave="showsave"
-      :buttonLabel="playerinput.buttonLabel"
-      :preset="playerinput.preset"
-      @change="(p) => payment = p"
-      @save="doSave"/>
-  </section>
-</div>
+  <div class="payments_cont">
+    <section>
+      <h3 class="payments_title">{{ $t(playerinput.title) }}</h3>
+      <PaymentForm
+        ref="paymentForm"
+        :cost="cost"
+        :order="order"
+        :ledger="ledger"
+        :showsave="showsave"
+        :buttonLabel="playerinput.buttonLabel"
+        :preset="playerinput.preset"
+        @change="(p) => payment = p"
+        @save="doSave" />
+    </section>
+  </div>
 </template>
 
 <script lang="ts">

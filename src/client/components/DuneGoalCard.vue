@@ -15,7 +15,7 @@
           </template>
         </template>
       </span>
-      <MilestoneAwardIcon v-else :parts="parts"/>
+      <MilestoneAwardIcon v-else :parts="parts" />
     </div>
     <p v-if="description !== ''" class="dune-goal-card__goal">{{ $t(description) }}</p>
     <p v-if="flavor !== undefined" class="dune-goal-card__flavor">{{ flavor }}</p>

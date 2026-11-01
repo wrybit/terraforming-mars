@@ -6,7 +6,7 @@
        Filters and gradients stay in the board SVG; url(#id) finds them anywhere in the document. -->
   <div :class="['arrakis-motion-part', motionClass]" :style="boxStyle" aria-hidden="true">
     <svg class="arrakis-motion-part__art" :width="width" :height="height" :viewBox="`${x} ${y} ${width} ${height}`">
-      <slot/>
+      <slot />
     </svg>
   </div>
 </template>

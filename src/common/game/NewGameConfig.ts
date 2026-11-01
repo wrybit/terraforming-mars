@@ -9,6 +9,7 @@ import {GameId} from '../Types';
 import {Expansion} from '../cards/GameModule';
 import {Theme} from '../theme/Theme';
 import {DuneModule} from '../dune/DuneModule';
+import {CustomMA} from '../ma/CustomMA';
 
 export interface NewPlayerModel {
   name: string;
@@ -91,4 +92,5 @@ export type NewGameConfig = {
   customCeos: ReadonlyArray<CardName>;
   startingCeos: number;
   startingPreludes: number;
+  customMA?: CustomMA;
 }

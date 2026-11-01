@@ -26,11 +26,11 @@
         <template v-if="hasNames(part)"><div></div><div class="ma-table-divider"></div></template>
         <template v-if="hasValues(part)">
           <div v-for="milestone in milestones" :key="milestone.name" :class="headCellClasses(milestoneClosed(milestone))" v-glass-tooltip="tooltip(milestone.name, milestoneDescription(milestone))" :data-test="'milestone-' + milestone.name">
-            <MilestoneAwardIcon :parts="milestoneIcon(milestone)" :requirement="milestone.threshold"/>
+            <MilestoneAwardIcon :parts="milestoneIcon(milestone)" :requirement="milestone.threshold" />
           </div>
           <div class="ma-table-divider"></div>
           <div v-for="award in awards" :key="award.name" :class="headCellClasses(awardClosed(award))" v-glass-tooltip="tooltip(award.name, awardDescription(award))" :data-test="'award-' + award.name">
-            <MilestoneAwardIcon :parts="awardIcon(award)"/>
+            <MilestoneAwardIcon :parts="awardIcon(award)" />
           </div>
         </template>
       </div>
@@ -45,7 +45,7 @@
           <div class="ma-table-divider"></div>
           <div v-for="award in awards" :key="award.name" class="ma-table-cell">
             <!-- Funded: cube only up here (the player rows keep showing the score); closed: no more costs -->
-            <span v-if="award.color" :class="ownerClasses(award.color)" v-glass-tooltip="award.playerName" data-test="award-owner" v-flash="flashKeys.award(award.name)"><PlayerCube class="ma-table-cube" :color="award.color" view="slight" :size="13"/><span class="ma-table-owner-name">{{ award.playerName }}</span></span>
+            <span v-if="award.color" :class="ownerClasses(award.color)" v-glass-tooltip="award.playerName" data-test="award-owner" v-flash="flashKeys.award(award.name)"><PlayerCube class="ma-table-cube" :color="award.color" view="slight" :size="13" /><span class="ma-table-owner-name">{{ award.playerName }}</span></span>
             <span v-else-if="!awardClosed(award)" class="ma-table-coin">{{ nextAwardCost }}</span>
           </div>
         </template>
@@ -59,7 +59,7 @@
         </template>
         <template v-if="hasValues(part)">
           <div v-for="milestone in milestones" :key="milestone.name" :class="milestoneCellClasses(milestone, player)">
-            <span v-if="milestone.color === player.color" :title="player.name" data-test="milestone-owner" v-flash="flashKeys.milestone(milestone.name)"><PlayerCube class="ma-table-cube" :color="player.color" view="slight" :size="13"/></span>
+            <span v-if="milestone.color === player.color" :title="player.name" data-test="milestone-owner" v-flash="flashKeys.milestone(milestone.name)"><PlayerCube class="ma-table-cube" :color="player.color" view="slight" :size="13" /></span>
             <span v-else class="ma-table-value">{{ scoreOf(milestone.scores, player) }}</span>
           </div>
           <div class="ma-table-divider"></div>

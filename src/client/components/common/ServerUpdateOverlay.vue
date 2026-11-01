@@ -4,7 +4,7 @@
     <div class="server-update-overlay__card" role="status">
       <template v-if="phase === 'updating'">
         <div class="server-update-overlay__title" v-i18n>The server is being updated</div>
-        <LoadingBar class="server-update-overlay__progress"/>
+        <LoadingBar class="server-update-overlay__progress" />
         <div class="server-update-overlay__hint">
           <span v-i18n>Please wait a moment.</span>
           <span v-i18n>All moves are saved.</span>
@@ -12,8 +12,8 @@
       </template>
       <template v-else>
         <svg class="server-update-overlay__check" width="56" height="56" viewBox="0 0 48 48" aria-hidden="true">
-          <circle cx="24" cy="24" r="22"/>
-          <path d="M14 25 l7 7 l13 -15"/>
+          <circle cx="24" cy="24" r="22" />
+          <path d="M14 25 l7 7 l13 -15" />
         </svg>
         <div class="server-update-overlay__title" v-i18n>Server updated successfully</div>
         <!-- Fills up within 10 s and then reloads by itself; a click reloads at once -->

@@ -3,7 +3,7 @@
     <StatsTable :columns="columns" :rows="rows" :rowKey="rowKey" initialSort="total">
       <template #name="{row}">
         <span v-if="row.baseline" class="stats-dim" v-i18n>{{ row.name }}</span>
-        <StatsEntityName v-else kind="player" :name="row.name"/>
+        <StatsEntityName v-else kind="player" :name="row.name" />
       </template>
       <template #bar="{row}">
         <span class="stats-sources-bar" :title="barTitle(row)">

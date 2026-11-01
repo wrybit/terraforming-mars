@@ -2,8 +2,8 @@
   <!-- Floating preview of a milestone, award or agenda row of the VP details, like the card preview of the log:
        follows the mouse; on touch a tap pins it until the next tap anywhere -->
   <div v-if="goal !== undefined && position !== undefined" ref="panel" class="goal-preview" :style="style">
-    <SchemeAgendaCard v-if="goal.kind === 'agenda'" :agenda="goal.agenda"/>
-    <StatsEntityAsset v-else :kind="goal.kind" :name="goal.name"/>
+    <SchemeAgendaCard v-if="goal.kind === 'agenda'" :agenda="goal.agenda" />
+    <StatsEntityAsset v-else :kind="goal.kind" :name="goal.name" />
   </div>
 </template>
 

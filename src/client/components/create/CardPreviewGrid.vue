@@ -2,10 +2,10 @@
   <div :class="['create-game-card-grid', {'create-game-card-grid--row': row}]">
     <div v-for="name in names" :key="name"
       :class="['cardbox', 'create-game-card-grid-item', tone && `create-game-card-grid-item--${tone}`,
-        {'create-game-card-grid-item--selectable': selectable, 'create-game-card-grid-item--active': name === activeName}]"
+               {'create-game-card-grid-item--selectable': selectable, 'create-game-card-grid-item--active': name === activeName}]"
       @mouseenter="selectable && $emit('hover', name)" @click="selectable && $emit('select', name)">
-      <Card :card="{name}"/>
-      <AppButton v-if="removable" class="create-game-card-grid-remove" size="small" type="close" @click="$emit('remove', name)"/>
+      <Card :card="{name}" />
+      <AppButton v-if="removable" class="create-game-card-grid-remove" size="small" type="close" @click="$emit('remove', name)" />
     </div>
   </div>
 </template>

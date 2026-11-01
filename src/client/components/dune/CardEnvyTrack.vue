@@ -11,7 +11,7 @@
         <li v-for="level in hitLevels" :key="level" :class="stepClass(level)">{{ level }}</li>
       </ol>
       <svg class="card-envy-track__bracket" viewBox="0 0 100 18" preserveAspectRatio="none">
-        <path d="M2 2V7H98V2M50 7V16" vector-effect="non-scaling-stroke"/>
+        <path d="M2 2V7H98V2M50 7V16" vector-effect="non-scaling-stroke" />
       </svg>
       <span class="card-envy-track__loss">
         <span class="card-envy-track__minus">−</span>

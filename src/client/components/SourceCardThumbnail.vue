@@ -3,7 +3,7 @@
        shared by CardIntroBlock.vue and TabIntroBlock.vue -->
   <div class="card-intro-card" :style="boxStyle">
     <div ref="scaled" class="card-intro-card__scaled">
-      <Card :card="{name: card}"/>
+      <Card :card="{name: card}" />
     </div>
   </div>
 </template>

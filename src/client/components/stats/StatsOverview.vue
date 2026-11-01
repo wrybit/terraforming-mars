@@ -2,7 +2,7 @@
   <div class="stats-stack">
     <section class="stats-card">
       <h2 v-i18n>{{ titles.glance }}</h2>
-      <StatsKpis :tiles="tiles"/>
+      <StatsKpis :tiles="tiles" />
     </section>
 
     <!-- Top 5 side by side; the cards inside scroll horizontally, on mobile the boxes stack vertically -->
@@ -10,7 +10,7 @@
     <div v-if="showcases.some((showcase) => showcase.entries.length > 0)" class="stats-columns">
       <section v-for="showcase in showcases" :key="showcase.kind" class="stats-card">
         <h2><a :href="topHref(showcase.kind)" data-stats-link class="stats-heading-link"><span v-i18n>{{ showcase.title }}</span> <span class="stats-dim">→ <span v-i18n>Top</span> 20</span></a></h2>
-        <StatsShowcase :kind="showcase.kind" :entries="showcase.entries"/>
+        <StatsShowcase :kind="showcase.kind" :entries="showcase.entries" />
       </section>
     </div>
 
@@ -64,19 +64,19 @@
     <div class="stats-columns">
       <section class="stats-card">
         <h2 v-i18n>{{ titles.recent }}</h2>
-        <StatsLineChart :series="recentSeries" :labels="recentLabels" :width="chartWidth" highlightLabel="Win"/>
+        <StatsLineChart :series="recentSeries" :labels="recentLabels" :width="chartWidth" highlightLabel="Win" />
       </section>
       <section class="stats-card">
         <h2 v-i18n>{{ titles.generations }}</h2>
-        <StatsBarChart :bars="generationBars" :width="chartWidth"/>
+        <StatsBarChart :bars="generationBars" :width="chartWidth" />
       </section>
       <section class="stats-card">
         <h2 v-i18n>{{ titles.points }}</h2>
-        <StatsLineChart :series="pointsSeries" :labels="generationLabels(pointsSeries)" :width="chartWidth"/>
+        <StatsLineChart :series="pointsSeries" :labels="generationLabels(pointsSeries)" :width="chartWidth" />
       </section>
       <section class="stats-card">
         <h2 v-i18n>{{ titles.globals }}</h2>
-        <StatsLineChart :series="globalsSeries" :labels="generationLabels(globalsSeries)" :width="chartWidth" :maximumValue="100" :step="20"/>
+        <StatsLineChart :series="globalsSeries" :labels="generationLabels(globalsSeries)" :width="chartWidth" :maximumValue="100" :step="20" />
       </section>
     </div>
   </div>

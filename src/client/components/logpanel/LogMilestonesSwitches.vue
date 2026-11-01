@@ -4,9 +4,9 @@
          (only while it is a tab of the log box) and whether it gets its own box above the log.
          Bound to the preference, not constants: a hidden tab keeps its checkboxes, a constant would never reset them -->
     <ToggleSwitch v-if="!separateOnly" data-test="log-milestones-auto"
-      :modelValue="autoOpen" :label="$t('Open on my turn')" @update:modelValue="$emit('autoOpen', $event)"/>
+      :modelValue="autoOpen" :label="$t('Open on my turn')" @update:modelValue="$emit('autoOpen', $event)" />
     <ToggleSwitch data-test="log-milestones-separate"
-      :modelValue="separate" :label="$t('Separate log')" @update:modelValue="$emit('separate', $event)"/>
+      :modelValue="separate" :label="$t('Separate log')" @update:modelValue="$emit('separate', $event)" />
   </div>
 </template>
 

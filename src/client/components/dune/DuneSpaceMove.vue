@@ -5,7 +5,7 @@
        keeps the spaces selectable on the small one; the Kanly button closes the move. -->
   <div v-if="spaceInput !== undefined && playerView !== undefined" class="dune-space-move">
     <SelectSpace :key="openDuneMove.path.map((step) => step.title).join('/')" :playerView="playerView" :playerinput="spaceInput"
-      :onsave="send" :showsave="true" :showtitle="false" :autoEnlarge="true"/>
+      :onsave="send" :showsave="true" :showtitle="false" :autoEnlarge="true" />
   </div>
 </template>
 

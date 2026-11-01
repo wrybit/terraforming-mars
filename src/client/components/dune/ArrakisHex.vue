@@ -2,7 +2,7 @@
   <!-- One Arrakis space outside the board (worm map, Kanly war field): its terrain as a coloured hex, on it the space as
        on the board – tile, owner's cube, worm and war-field marker (BoardSpace.vue) -->
   <div :class="['arrakis-hex', 'arrakis-hex--' + zone]">
-    <BoardSpace v-if="space !== undefined" :space="space" tileView="show"/>
+    <BoardSpace v-if="space !== undefined" :space="space" tileView="show" />
   </div>
 </template>
 

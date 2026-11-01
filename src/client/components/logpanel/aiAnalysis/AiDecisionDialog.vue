@@ -1,21 +1,21 @@
 <template>
   <SidebarModal :open="dialog !== undefined" :framed="true" @close="close()">
     <DialogFrame v-if="dialog !== undefined" :title="$t('Rate AI decision')" :width="700" class="ai-decision-dialog" data-test="ai-decision-dialog" @close="close()">
-      <template #icon><SeatIcon kind="ai" :size="22"/></template>
+      <template #icon><SeatIcon kind="ai" :size="22" /></template>
 
       <!-- The row exactly as the log shows it (log-panel: same row styles as in the log box) -->
       <section class="ai-decision-dialog__section">
         <h3 class="ai-decision-dialog__heading">{{ $t(kindTitle) }}</h3>
         <div class="log-panel ai-decision-dialog__lines">
-          <LogActionRow v-if="dialog.target.row.type === 'action'" :row="dialog.target.row" :viewModel="dialog.viewModel"/>
-          <LogMessageComponent v-else-if="dialog.target.row.type === 'message'" :message="dialog.target.row.message" :viewModel="dialog.viewModel"/>
+          <LogActionRow v-if="dialog.target.row.type === 'action'" :row="dialog.target.row" :viewModel="dialog.viewModel" />
+          <LogMessageComponent v-else-if="dialog.target.row.type === 'message'" :message="dialog.target.row.message" :viewModel="dialog.viewModel" />
         </div>
       </section>
 
       <!-- Draft, purchase, start: the offered cards themselves, the chosen ones marked -->
-      <AiDecisionCards v-if="showsCards && dialog.decision !== undefined" :decision="dialog.decision" :players="dialog.viewModel.players"/>
+      <AiDecisionCards v-if="showsCards && dialog.decision !== undefined" :decision="dialog.decision" :players="dialog.viewModel.players" />
 
-      <AiDecisionStateFacts v-if="dialog.decision?.state !== undefined" :state="dialog.decision.state" :passed="isPass" :effects="rowEffects"/>
+      <AiDecisionStateFacts v-if="dialog.decision?.state !== undefined" :state="dialog.decision.state" :passed="isPass" :effects="rowEffects" />
 
       <!-- What the AI weighed: options with the value it gave them, the chosen ones marked -->
       <section v-if="groups.length > 0" class="ai-decision-dialog__section" data-test="ai-decision-options">
@@ -96,7 +96,7 @@
             :title="$t('Next AI decision') + ' (↓)'" :aria-label="$t('Next AI decision')" @click="step(1)">↓</button>
         </div>
         <button v-if="canRate && ownRating !== undefined" type="button" class="btn btn-tone-danger" data-test="ai-rating-remove" :disabled="saving" @click="save(undefined)" v-i18n>Remove rating</button>
-        <button v-if="canRate" type="button" class="btn btn-tone-success" data-test="ai-rating-save" :disabled="rating === undefined || saving" @click="save(rating)"><span v-i18n>Save</span><HotkeyKeys :fixed="['Enter']"/></button>
+        <button v-if="canRate" type="button" class="btn btn-tone-success" data-test="ai-rating-save" :disabled="rating === undefined || saving" @click="save(rating)"><span v-i18n>Save</span><HotkeyKeys :fixed="['Enter']" /></button>
       </template>
     </DialogFrame>
   </SidebarModal>

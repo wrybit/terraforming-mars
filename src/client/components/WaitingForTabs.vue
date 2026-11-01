@@ -4,8 +4,8 @@
        The action menu (OrOptions) builds its own tabs, see orOptionsLayout.ts. -->
   <div class="wf-options wf-options--tabs">
     <div class="or-tabs" role="tablist">
-      <DevToolsTab/>
-      <HandCardsTab :count="handCards.length + dealtCount" :active="handTabActive && !devToolsState.open" @select="handTabActive = true; closeDevTools()"/>
+      <DevToolsTab />
+      <HandCardsTab :count="handCards.length + dealtCount" :active="handTabActive && !devToolsState.open" @select="handTabActive = true; closeDevTools()" />
       <button type="button" role="tab"
         :title="$t(fullTabTitle(tabSource.title))"
         :aria-selected="!handTabActive && !devToolsState.open"
@@ -15,24 +15,24 @@
         <span v-if="count !== undefined" class="or-tab-count">{{ count }}</span>
       </button>
       <!-- Choice can still be changed (e.g. draft) while others are choosing: same red status tab as without an input -->
-      <WaitingForPlayersTab v-if="playerinput.optional === true" :playerView="playerView"/>
+      <WaitingForPlayersTab v-if="playerinput.optional === true" :playerView="playerView" />
     </div>
 
     <div v-docked-tab data-hotkey-group :class="['or-tab-panel', {'or-tab-panel--devtools': devToolsState.open}, handTabActive ? 'or-tab-panel--view' : (tone !== undefined ? 'or-tab-panel--tone-' + tone : '')]" role="tabpanel">
-      <DevToolsOverlay :playerView="playerView"/>
+      <DevToolsOverlay :playerView="playerView" />
       <!-- Initial draft with an empty hand: only the dealt cards, without the empty hand area above them -->
-      <HandCardsPanel v-if="handTabActive && (handCards.length > 0 || dealtCount === 0)" :playerView="playerView"/>
+      <HandCardsPanel v-if="handTabActive && (handCards.length > 0 || dealtCount === 0)" :playerView="playerView" />
       <!-- Initial draft: the dealt corporations/preludes belong to the own cards -->
       <template v-if="handTabActive">
-        <CardListSection v-for="section in dealtSections" :key="section.title" :title="section.title" :cards="section.cards"/>
+        <CardListSection v-for="section in dealtSections" :key="section.title" :title="section.title" :cards="section.cards" />
       </template>
       <!-- The question belongs to the input and therefore sits in its box, not above the tabs.
            Card lists with a header row: the header row stays at the very top, the intro moves below it (tabPanelIntro.ts).
            Teleport only while the target exists, instead of toggling `disabled` (Vue fails moving a deferred Teleport) -->
       <Teleport v-if="introConsumers > 0" :to="'#' + introId">
-        <InputIntro v-show="!handTabActive" v-bind="introProps" belowHeader/>
+        <InputIntro v-show="!handTabActive" v-bind="introProps" belowHeader />
       </Teleport>
-      <InputIntro v-else v-show="!handTabActive" v-bind="introProps"/>
+      <InputIntro v-else v-show="!handTabActive" v-bind="introProps" />
       <!-- v-show instead of v-if: inputs are kept while looking at the hand -->
       <PlayerInputFactory v-show="!handTabActive"
         :players="playerView.players"
@@ -40,16 +40,16 @@
         :playerinput="shown"
         :onsave="saveShown"
         :showsave="true"
-        :showtitle="false"/>
+        :showtitle="false" />
       <!-- Draft: cards already kept below the new ones, instead of a separate block under the box -->
-      <CardListSection v-if="draftedCards.length > 0" v-show="!handTabActive" title="Drafted cards" :cards="draftedCards"/>
+      <CardListSection v-if="draftedCards.length > 0" v-show="!handTabActive" title="Drafted cards" :cards="draftedCards" />
       <!-- Sticky footer at the bottom of the box (tabPanelFooter.ts); payment areas attach via Teleport -->
       <div v-show="!handTabActive" :id="footerId" class="or-tab-footer">
         <!-- Cancel an action that is still only a plan: left in the footer (cancelAction.ts) -->
-        <CancelActionButton/>
+        <CancelActionButton />
         <!-- Declining a space selection (spaceWithSkip.ts): red like Skip next to a card selection (SelectCard.vue) -->
         <AppButton hotkey="cancel" v-for="index in spaceChoice?.skipIndices ?? []" :key="index" type="submit" class="btn-tone-danger"
-          :title="$t(skipTitle(index))" @click="skip(index)"/>
+          :title="$t(skipTitle(index))" @click="skip(index)" />
         <p v-if="draftRepick" class="or-tab-footer-hint">{{ $t(fullTabTitle(lead.title)) }}</p>
       </div>
     </div>

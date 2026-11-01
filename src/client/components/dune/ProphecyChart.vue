@@ -5,12 +5,12 @@
        others are pale; a tap on a column names its rate. Short axis labels instead of text below. -->
   <svg class="prophecy-chart" :viewBox="`0 0 ${W} ${H}`" role="img" :aria-label="$t('What you get, per rate')">
     <text class="prophecy-chart__label" :transform="`translate(12 ${(T + H - B) / 2}) rotate(-90)`" text-anchor="middle">{{ yLabel }}</text>
-    <line class="prophecy-chart__baseline" :x1="L" :x2="W - R" :y1="H - B" :y2="H - B"/>
+    <line class="prophecy-chart__baseline" :x1="L" :x2="W - R" :y1="H - B" :y2="H - B" />
     <g v-for="(column, index) in columns" :key="column.rate" :class="['prophecy-chart__column', {'prophecy-chart__column--other': column.rate !== rate}]"
       @click="$emit('pick', column.rate)">
-      <rect class="prophecy-chart__hit" :x="L + slot * index" y="0" :width="slot" :height="H"/>
+      <rect class="prophecy-chart__hit" :x="L + slot * index" y="0" :width="slot" :height="H" />
       <g v-for="part in column.parts" :key="part.kind">
-        <rect :class="'prophecy-chart__part prophecy-chart__part--' + part.kind" :x="barX(index)" :y="part.top" :width="bar" :height="part.height"/>
+        <rect :class="'prophecy-chart__part prophecy-chart__part--' + part.kind" :x="barX(index)" :y="part.top" :width="bar" :height="part.height" />
         <text :class="'prophecy-chart__value prophecy-chart__value--' + part.kind" :x="barX(index) + bar / 2" :y="part.top + part.height / 2 + 4"
           text-anchor="middle">{{ part.label }}</text>
       </g>
@@ -20,7 +20,7 @@
       <text v-if="column.rate === nextRate" class="prophecy-chart__axis prophecy-chart__axis--next" :x="barX(index) + bar / 2" :y="H - B + 29"
         text-anchor="middle">G{{ nextGeneration }}</text>
     </g>
-    <rect v-if="ownIndex !== -1" class="prophecy-chart__ring" :x="L + slot * ownIndex + 3" y="4" :width="slot - 6" :height="H - B + 25" rx="12"/>
+    <rect v-if="ownIndex !== -1" class="prophecy-chart__ring" :x="L + slot * ownIndex + 3" y="4" :width="slot - 6" :height="H - B + 25" rx="12" />
     <text class="prophecy-chart__label" :x="(L + W - R) / 2" :y="H - 4" text-anchor="middle">{{ $t('Rate (Solari per unit)') }}</text>
   </svg>
 </template>

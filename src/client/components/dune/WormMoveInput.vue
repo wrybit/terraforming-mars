@@ -15,21 +15,21 @@
             'worm-map__cell--context': cell.role === 'context',
             'worm-map__cell--way': onChosenWay(cell.id) || (cell.role === 'worm' && chosenDistance === 0),
           }]"
-          :style="{left: (cell.x - box.left) + 'px', top: (cell.y - box.top) + 'px'}"/>
+          :style="{left: (cell.x - box.left) + 'px', top: (cell.y - box.top) + 'px'}" />
         <!-- Effect of every space with a tile as a chip, on its own layer so it stays readable on the faded spaces -->
         <WormEffectChip v-for="effect in effects" :key="'chip-' + effect.id" :chip="effect.chip"
           :class="['worm-map__chip', {'worm-map__chip--on-way': onChosenWay(effect.id)}]"
-          :style="{left: effect.x + 'px', top: effect.y + 'px'}"/>
+          :style="{left: effect.x + 'px', top: effect.y + 'px'}" />
         <!-- The chosen way as a line, so the corners of a bounce read at a glance -->
         <svg v-if="wayLine !== '' || marks.walls.length > 0" class="worm-map__line" :width="box.width" :height="box.height" aria-hidden="true">
           <template v-if="wayLine !== ''">
-            <polyline class="worm-map__line-glow" :points="wayLine"/>
-            <polyline class="worm-map__line-dash" :points="wayLine"/>
+            <polyline class="worm-map__line-glow" :points="wayLine" />
+            <polyline class="worm-map__line-dash" :points="wayLine" />
           </template>
           <!-- What the worm bounces off, only where it is turned: an orange bar on the side of the blocked space it hits.
                At the start only when that space is on the map piece, not at the board edge (Jens, 21 Oct 2026) -->
           <line v-for="(wall, index) in shownWalls" :key="'wall-' + index" class="worm-map__wall"
-            :x1="wall.x1" :y1="wall.y1" :x2="wall.x2" :y2="wall.y2"/>
+            :x1="wall.x1" :y1="wall.y1" :x2="wall.x2" :y2="wall.y2" />
         </svg>
         <!-- Heading: a white disc with an arrow on every edge the worm crosses (worm → 1 → 2 → 3), along the longest
              way (Jens, 21 Oct 2026) -->
@@ -37,12 +37,12 @@
         <span v-for="(wall, index) in shownWalls" :key="'bounce-' + index" class="worm-map__heading worm-map__heading--bounce" aria-hidden="true"
           :style="{left: wall.disc.x + 'px', top: wall.disc.y + 'px'}">
           <svg viewBox="0 0 16 16" :style="{transform: 'rotate(' + wall.disc.angle + 'deg)'}">
-            <path :d="wall.disc.glyph.line"/><path class="worm-map__heading-head" :d="wall.disc.glyph.head"/>
+            <path :d="wall.disc.glyph.line" /><path class="worm-map__heading-head" :d="wall.disc.glyph.head" />
           </svg>
         </span>
         <span v-for="(heading, index) in marks.headings" :key="'heading-' + index" class="worm-map__heading" aria-hidden="true"
           :style="{left: heading.x + 'px', top: heading.y + 'px'}">
-          <svg viewBox="0 0 16 16" :style="{transform: 'rotate(' + heading.angle + 'deg)'}"><path d="M3 8h9M8 3.5 12.5 8 8 12.5"/></svg>
+          <svg viewBox="0 0 16 16" :style="{transform: 'rotate(' + heading.angle + 'deg)'}"><path d="M3 8h9M8 3.5 12.5 8 8 12.5" /></svg>
         </span>
         <!-- Targets on top, as labels with a radio: number keys and screen readers work like for every choice -->
         <label v-for="(target, index) in targets" :key="'target-' + index"
@@ -56,19 +56,19 @@
     </div>
     <WormVegetationBar :vegetation="playerView.game.oxygenLevel" :maximum="maximumVegetation" :thumper="playerView.game.dune?.worm?.thumper === true"
       :choosable="targets.map((target) => target.distance)" :chosen="chosenDistance"
-      @choose="chooseDistance"/>
+      @choose="chooseDistance" />
     <p class="worm-move__chosen">{{ chosen === undefined ? '' : $t(optionTitle(chosen)) }}</p>
     <!-- What the chosen way does, summed up per player -->
     <p v-if="chosen !== undefined && outcome.length === 0" class="worm-move__outcome worm-move__outcome--none">{{ $t('No gain or loss for anyone on this way.') }}</p>
     <div v-else-if="outcome.length > 0" class="worm-move__outcome">
       <span v-for="row in outcome" :key="row.color" class="worm-move__outcome-player">
-        <PlayerCube :color="row.color" :size="14"/>
-        <WormEffectChip v-for="(chip, index) in row.chips" :key="index" :chip="chip"/>
+        <PlayerCube :color="row.color" :size="14" />
+        <WormEffectChip v-for="(chip, index) in row.chips" :key="index" :chip="chip" />
       </span>
     </div>
     <TabPanelFooterSlot>
       <div v-if="showsave" class="worm-move__actions">
-        <AppButton hotkey="proceed" size="big" :disabled="chosen === undefined" :title="$t(buttonLabel)" @click="save"/>
+        <AppButton hotkey="proceed" size="big" :disabled="chosen === undefined" :title="$t(buttonLabel)" @click="save" />
       </div>
     </TabPanelFooterSlot>
   </div>

@@ -1,45 +1,45 @@
 <template>
-<div class="start-screen" :class="{'start-screen--intro': introPlaying, 'start-screen--loading': loading}">
-  <!-- Preloader: until fonts and images are loaded, everything else stays hidden -->
-  <div v-if="loading" class="start-screen-preloader" role="progressbar" :aria-valuenow="Math.round(loadProgress * 100)" aria-valuemin="0" aria-valuemax="100">
-    <div class="start-screen-preloader-fill" :style="{width: `${loadProgress * 100}%`}"></div>
-  </div>
-  <!-- Settings menu (language, help, settings) at the top left, without the navigation box (the buttons are right here); own class for the intro (start_intro.less) -->
-  <PageToolbar class="start-screen-toolbar" :navigation="false"/>
-  <div class="start-screen-links" :class="{'start-screen-links--globe': globeReady}">
-    <div class="start-screen-header start-screen-link--title">
-      <!-- Logo: own frame so the intro can move it as a whole -->
-      <div class="start-screen-title" :ref="setLogo" :style="logoOffset">
-        <div class="start-screen-title-top">TERRAFORMING</div>
-        <div class="start-screen-title-bottom">MARS</div>
-        <div v-if="serverName" class="start-screen-server-name">{{ serverName }}</div>
-      </div>
+  <div class="start-screen" :class="{'start-screen--intro': introPlaying, 'start-screen--loading': loading}">
+    <!-- Preloader: until fonts and images are loaded, everything else stays hidden -->
+    <div v-if="loading" class="start-screen-preloader" role="progressbar" :aria-valuenow="Math.round(loadProgress * 100)" aria-valuemin="0" aria-valuemax="100">
+      <div class="start-screen-preloader-fill" :style="{width: `${loadProgress * 100}%`}"></div>
     </div>
-    <!-- Row in the planet image (planets.jpg) follows from the position: row 0 is the title -->
-    <a v-for="(link, index) in links"
-      :key="link.label"
-      class="start-screen-link"
-      :class="{'start-screen-link--active': activeIndex === index}"
-      :style="{'--sprite-row': index + 1}"
-      :href="link.href"
-      :target="link.external ? '_blank' : undefined"
-      @pointerdown="lastPointerType = $event.pointerType"
-      @pointerenter="$event.pointerType === 'mouse' && activate(index)"
-      @pointerleave="$event.pointerType === 'mouse' && deactivate(index)"
-      @focus="($event.target as HTMLElement).matches(':focus-visible') && activate(index)"
-      @blur="deactivate(index)"
-      @click="onClick(index, $event)">
-      <!-- Planet surface: WebGL (planetGlobeRenderer.ts) or without WebGL flat via CSS (planetFlatRenderer.ts) -->
-      <canvas class="start-screen-link-planet" :ref="(element) => setCanvas(index, element)" aria-hidden="true"></canvas>
-      <span class="start-screen-link-content">
-        <MobileGlyph class="start-screen-link-icon" :name="link.icon" :strokeWidth="2"/>
-        <!-- v-i18n on the text span: the translation looks up the exact text content, the icon would interfere -->
-        <span v-i18n>{{ link.label }}</span>
-      </span>
-    </a>
+    <!-- Settings menu (language, help, settings) at the top left, without the navigation box (the buttons are right here); own class for the intro (start_intro.less) -->
+    <PageToolbar class="start-screen-toolbar" :navigation="false" />
+    <div class="start-screen-links" :class="{'start-screen-links--globe': globeReady}">
+      <div class="start-screen-header start-screen-link--title">
+        <!-- Logo: own frame so the intro can move it as a whole -->
+        <div class="start-screen-title" :ref="setLogo" :style="logoOffset">
+          <div class="start-screen-title-top">TERRAFORMING</div>
+          <div class="start-screen-title-bottom">MARS</div>
+          <div v-if="serverName" class="start-screen-server-name">{{ serverName }}</div>
+        </div>
+      </div>
+      <!-- Row in the planet image (planets.jpg) follows from the position: row 0 is the title -->
+      <a v-for="(link, index) in links"
+        :key="link.label"
+        class="start-screen-link"
+        :class="{'start-screen-link--active': activeIndex === index}"
+        :style="{'--sprite-row': index + 1}"
+        :href="link.href"
+        :target="link.external ? '_blank' : undefined"
+        @pointerdown="lastPointerType = $event.pointerType"
+        @pointerenter="$event.pointerType === 'mouse' && activate(index)"
+        @pointerleave="$event.pointerType === 'mouse' && deactivate(index)"
+        @focus="($event.target as HTMLElement).matches(':focus-visible') && activate(index)"
+        @blur="deactivate(index)"
+        @click="onClick(index, $event)">
+        <!-- Planet surface: WebGL (planetGlobeRenderer.ts) or without WebGL flat via CSS (planetFlatRenderer.ts) -->
+        <canvas class="start-screen-link-planet" :ref="(element) => setCanvas(index, element)" aria-hidden="true"></canvas>
+        <span class="start-screen-link-content">
+          <MobileGlyph class="start-screen-link-icon" :name="link.icon" :strokeWidth="2" />
+          <!-- v-i18n on the text span: the translation looks up the exact text content, the icon would interfere -->
+          <span v-i18n>{{ link.label }}</span>
+        </span>
+      </a>
+    </div>
+    <StartScreenUpdates />
   </div>
-  <StartScreenUpdates/>
-</div>
 </template>
 
 <script setup lang="ts">

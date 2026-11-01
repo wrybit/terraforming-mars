@@ -9,55 +9,55 @@
     <!-- Action menu: tabs with short label and count of available entries; empty tabs are dimmed but clickable -->
     <div v-if="asTabs" v-tab-steps class="or-tabs" role="tablist" data-hotkey-tabs>
       <!-- DevTools (admins) at the very front, then the hand cards (view only); the first real action stays preselected -->
-      <DevToolsTab/>
-      <HandCardsTab :count="handCards.length" :active="handTabActive && !devTools.open" compact="All" glyph="hand" @select="selectHandTab"/>
+      <DevToolsTab />
+      <HandCardsTab :count="handCards.length" :active="handTabActive && !devTools.open" compact="All" glyph="hand" @select="selectHandTab" />
       <!-- Display order via tabDisplayOrder (pass/end at the end); idx stays the index in displayedOptions.
            The CEO action has no tab of its own: it is part of the "Actions" tab (ceoActions.ts) -->
       <!-- A tab only on request (bazaar purchase, onRequestTabs.ts) stays in the DOM – the phone selects it by its
            data-option-index – but is visible only while it is the open tab -->
       <template v-for="idx in visibleTabOrder" :key="idx">
-      <button
-        v-show="tabShown(idx)"
-        :data-option-index="idx"
-        type="button"
-        role="tab"
-        v-glass-tooltip="tabTooltip($t(fullTabTitle(tabTitle(idx))), tabHotkey(tabTitle(idx), displayedOptions[idx]))"
-        :aria-label="$t(shortTabLabel(tabTitle(idx)))"
-        :aria-selected="tabActive(idx)"
-        :data-hotkey="tabHotkey(tabTitle(idx), displayedOptions[idx])"
-        :class="['or-tab', {
-          'or-tab--active': !handTabActive && !devTools.open && tabActive(idx),
-          'or-tab--empty': tabCount(idx) === 0,
-          'or-tab--icon': tabIcon(tabTitle(idx)) !== undefined,
-          'or-tab--highlight': tabHighlighted(tabTitle(idx)),
-          'or-tab--end': isEndTab(tabTitle(idx)),
-        }, tabToneClass('or-tab--tone-', displayedOptions[idx])]"
-        @click="selectOptionTab(displayedOptions[idx])">
-        <template v-if="tabIcon(tabTitle(idx)) !== undefined">
-          <OrOptionsTabIcon :icon="tabIcon(tabTitle(idx))!"/>
-          <span class="or-tab-icon-label">{{ $t(tabIconLabel(tabIcon(tabTitle(idx))!)) }}</span>
-        </template>
-        <OrOptionsTabLabel v-else :label="withoutCurrency($t(shortTabLabel(tabTitle(idx))))" :medium="mediumTabLabel(tabTitle(idx))"
-          :compact="compactTabLabel(tabTitle(idx))" :glyph="actionLook(titleKey(tabTitle(idx)))?.glyph"/>
-        <HotkeyKeys v-if="tabHotkey(tabTitle(idx), displayedOptions[idx]) !== undefined" :action="tabHotkey(tabTitle(idx), displayedOptions[idx])"/>
-        <span v-if="tabCount(idx) !== undefined" class="or-tab-count">{{ tabCount(idx) }}</span>
-      </button>
+        <button
+          v-show="tabShown(idx)"
+          :data-option-index="idx"
+          type="button"
+          role="tab"
+          v-glass-tooltip="tabTooltip($t(fullTabTitle(tabTitle(idx))), tabHotkey(tabTitle(idx), displayedOptions[idx]))"
+          :aria-label="$t(shortTabLabel(tabTitle(idx)))"
+          :aria-selected="tabActive(idx)"
+          :data-hotkey="tabHotkey(tabTitle(idx), displayedOptions[idx])"
+          :class="['or-tab', {
+            'or-tab--active': !handTabActive && !devTools.open && tabActive(idx),
+            'or-tab--empty': tabCount(idx) === 0,
+            'or-tab--icon': tabIcon(tabTitle(idx)) !== undefined,
+            'or-tab--highlight': tabHighlighted(tabTitle(idx)),
+            'or-tab--end': isEndTab(tabTitle(idx)),
+          }, tabToneClass('or-tab--tone-', displayedOptions[idx])]"
+          @click="selectOptionTab(displayedOptions[idx])">
+          <template v-if="tabIcon(tabTitle(idx)) !== undefined">
+            <OrOptionsTabIcon :icon="tabIcon(tabTitle(idx))!" />
+            <span class="or-tab-icon-label">{{ $t(tabIconLabel(tabIcon(tabTitle(idx))!)) }}</span>
+          </template>
+          <OrOptionsTabLabel v-else :label="withoutCurrency($t(shortTabLabel(tabTitle(idx))))" :medium="mediumTabLabel(tabTitle(idx))"
+            :compact="compactTabLabel(tabTitle(idx))" :glyph="actionLook(titleKey(tabTitle(idx)))?.glyph" />
+          <HotkeyKeys v-if="tabHotkey(tabTitle(idx), displayedOptions[idx]) !== undefined" :action="tabHotkey(tabTitle(idx), displayedOptions[idx])" />
+          <span v-if="tabCount(idx) !== undefined" class="or-tab-count">{{ tabCount(idx) }}</span>
+        </button>
       </template>
     </div>
 
     <!-- In tab mode this container is the box attached to the active tab (content + save) -->
     <div v-docked-tab :data-hotkey-group="asTabs ? '' : undefined" :class="[{'or-tab-panel': asTabs, 'or-tab-panel--devtools': asTabs && devTools.open, 'or-tab-panel--view': asTabs && handTabActive, 'or-tab-panel--end': asTabs && !handTabActive && selectedOption !== undefined && isEndTab(selectedOption.title), 'or-tab-panel--centered-button': asTabs && !handTabActive && selectedOption !== undefined && tabButtonCentered(selectedOption)}, asTabs && !handTabActive ? tabToneClass('or-tab-panel--tone-', selectedOption) : '']" :role="asTabs ? 'tabpanel' : undefined">
-      <DevToolsOverlay v-if="asTabs" :playerView="playerView"/>
-      <HandCardsPanel v-if="asTabs && handTabActive" :playerView="playerView"/>
+      <DevToolsOverlay v-if="asTabs" :playerView="playerView" />
+      <HandCardsPanel v-if="asTabs && handTabActive" :playerView="playerView" />
       <div v-if="asTabs && !handTabActive && showtitle && sourceCard === undefined && turnStep === undefined" class="or-tab-intro or-tab-question">
         <div class="or-tab-intro-title">{{ $t(playerinput.title) }}</div>
       </div>
       <!-- Explanation where there would otherwise be just a button (tabIntro.ts): image, what happens, hint -->
-      <TabIntroBlock v-if="asTabs && !handTabActive && selectedIntro !== undefined" :intro="selectedIntro" :title="fullTabTitle(selectedOption!.title)" :playerView="playerView" :card="selectedCard"/>
-      <CardIntroBlock v-else-if="asTabs && !handTabActive && selectedCard !== undefined && selectedOption !== undefined" :card="selectedCard" :title="fullTabTitle(selectedOption.title)"/>
+      <TabIntroBlock v-if="asTabs && !handTabActive && selectedIntro !== undefined" :intro="selectedIntro" :title="fullTabTitle(selectedOption!.title)" :playerView="playerView" :card="selectedCard" />
+      <CardIntroBlock v-else-if="asTabs && !handTabActive && selectedCard !== undefined && selectedOption !== undefined" :card="selectedCard" :title="fullTabTitle(selectedOption.title)" />
       <!-- Bazaar purchase (Dune): the ware and what it brings, before → after -->
       <BazaarPurchaseIntro v-if="asTabs && !handTabActive && bazaarPurchaseTitle !== undefined" :title="bazaarPurchaseTitle" :player="playerView.thisPlayer"
-        :bazaar="playerView.game.dune?.bazaar"/>
+        :bazaar="playerView.game.dune?.bazaar" />
       <!-- Pass: explanation of what happens (centered with the button, or-tab-panel--end) -->
       <p v-if="asTabs && !handTabActive && selectedOption !== undefined && endTabHint(selectedOption.title) !== undefined" class="or-tab-end-hint">
         {{ $t(endTabHint(selectedOption.title)!) }}
@@ -73,11 +73,11 @@
         </section>
         <section v-if="availableCeoCards.length > 0" class="hand-cards-panel__section">
           <h3 v-if="actionSectionCount > 1" class="hand-cards-panel__title">{{ $t('CEO') }} <small>{{ availableCeoCards.length }}</small></h3>
-          <CeoActionSection :cards="availableCeoCards" :option="ceoOption" :selected="selectedCeo" :groupName="radioElementName + '-ceo'" @select="selectCeo"/>
+          <CeoActionSection :cards="availableCeoCards" :option="ceoOption" :selected="selectedCeo" :groupName="radioElementName + '-ceo'" @select="selectCeo" />
         </section>
         <!-- With a usable CEO the greyed sections follow it; otherwise they sit inside the action cards' grid -->
         <template v-if="!inactiveInActionGrid">
-          <CardListSection v-for="section in inactiveSections" :key="section.title" v-bind="section" :visibility="actionCardVisibility"/>
+          <CardListSection v-for="section in inactiveSections" :key="section.title" v-bind="section" :visibility="actionCardVisibility" />
         </template>
       </div>
       <!-- v-show instead of v-if: inputs of the selected action survive a look at the hand -->
@@ -89,7 +89,7 @@
         :options="displayedOptions"
         :selected="selectedOption"
         :groupName="radioElementName"
-        @select="selectedOption = $event"/>
+        @select="selectedOption = $event" />
       <!-- Simple decision (choiceMenu.ts): options as tiles, the selected one pulses like cards;
            a player selection or an option against a player becomes a player tile with the affected resource -->
       <!-- Party choice offered as plain options (partyChoice.ts): the same party cards as SelectParty -->
@@ -99,7 +99,7 @@
         :selected="selectedOption"
         :groupName="radioElementName"
         :turmoil="playerView.game.turmoil"
-        @select="selectedOption = $event"/>
+        @select="selectedOption = $event" />
       <div v-else-if="!asTabs && maKind === undefined && isChoice" :class="['choice-options', 'choice-block', {'choice-options--players': hasPlayerChoice}]" :style="choiceBlockStyle(choiceTileCount)" role="radiogroup">
         <template v-for="(option, idx) in displayedOptions" :key="idx">
           <!-- Options against a player ("Remove 4 steel from …", playerTargetOption.ts): tiles in that player's color,
@@ -112,7 +112,7 @@
               :caption="displayedOptions[member].title"
               :selected="selectedIdx === member"
               :groupName="radioElementName"
-              @select="selectedOption = displayedOptions[member]"/>
+              @select="selectedOption = displayedOptions[member]" />
           </div>
           <!-- further members of a group are already inside it -->
           <template v-else-if="optionTarget(option) !== undefined"></template>
@@ -123,7 +123,7 @@
               :effect="optionEffect(option)"
               :selected="selectedIdx === idx && selectedPlayer === color"
               :groupName="radioElementName"
-              @select="selectPlayerTile(option, $event)"/>
+              @select="selectPlayerTile(option, $event)" />
           </template>
           <!-- Remaining options: tile with text; for a resource with icon and own amount before → after -->
           <ChoiceOptionTile v-else
@@ -132,20 +132,20 @@
             :sourceCard="decisionCard"
             :selected="selectedIdx === idx"
             :groupName="radioElementName"
-            @select="selectedOption = option"/>
+            @select="selectedOption = option" />
         </template>
       </div>
       <!-- Invisible child input of the selected tile running alongside: saveData() queries its answer
            (player tiles answer themselves, see saveData) -->
       <!-- A card selection or amount behind a tile (card decision, choiceMenu.ts) is visible below the tiles -->
       <PlayerInputFactory v-if="!asTabs && (maKind !== undefined || isChoice) && selectedIdx !== -1 && selectedOption.type !== 'player'" v-show="isInlineInput(selectedOption)"
-        ref="inputfactory" :key="selectedIdx" v-bind="childInputProps(selectedIdx)" @validity="childValid = $event"/>
+        ref="inputfactory" :key="selectedIdx" v-bind="childInputProps(selectedIdx)" @validity="childValid = $event" />
 
       <template v-else-if="!asTabs && !isChoice && partyCards === undefined">
         <div v-for="(option, idx) in displayedOptions" :key="idx">
           <label class="form-radio" ref="optionLabels">
-            <input v-model="selectedOption" type="radio" :name="radioElementName" :value="option" >
-            <i class="form-icon" ></i>
+            <input v-model="selectedOption" type="radio" :name="radioElementName" :value="option">
+            <i class="form-icon"></i>
             <span>{{ $t(option.title) }}</span>
           </label>
           <div v-if="selectedIdx === idx" style="margin-left: 30px">
@@ -164,10 +164,10 @@
       <!-- Tab mode: sticky footer at the bottom of the box (tabPanelFooter.ts); payment areas hook in via Teleport -->
       <div v-if="asTabs" v-show="!handTabActive" :id="footerId" class="or-tab-footer">
         <!-- Cancel an action that is still only a plan: left in the footer (cancelAction.ts) -->
-        <CancelActionButton v-if="!onRequestSelected"/>
+        <CancelActionButton v-if="!onRequestSelected" />
         <!-- Tab only on request (bazaar purchase): nothing has happened yet, Cancel closes the tab -->
-        <AppButton v-else hotkey="cancel" class="cancel-action-button cancel-action-button--leave-tab" :title="$t('Cancel')" @click="handTabActive = true"/>
-        <ActionStepChips v-if="turnStep !== undefined" :step="turnStep"/>
+        <AppButton v-else hotkey="cancel" class="cancel-action-button cancel-action-button--leave-tab" :title="$t('Cancel')" @click="handTabActive = true" />
+        <ActionStepChips v-if="turnStep !== undefined" :step="turnStep" />
         <div v-if="showOwnSaveButton()" :class="['wf-action', 'or-tab-save', tabToneClass('or-tab-save--', selectedOption)]">
           <!-- Disabled while the selected option has no valid selection yet (e.g. no card chosen) -->
           <AppButton :hotkey="tabConfirmHotkey(tabHotkey(selectedOption.title, selectedOption))" :title="$t(tabButtonLabel(selectedOption.title, selectedOption.buttonLabel))" type="submit" size="normal" :disabled="!childValid || awaitingCeo" @click="saveData" />
@@ -177,8 +177,8 @@
            Own footer bar at the bottom like everywhere else; the centered button keeps its place above it -->
       <div v-if="asTabs && !handTabActive && selectedOption !== undefined && tabButtonCentered(selectedOption) && !isEndTab(selectedOption.title)"
         class="or-tab-footer or-tab-footer--bar">
-        <AppButton hotkey="cancel" class="cancel-action-button" :title="$t('Cancel')" @click="handTabActive = true"/>
-        <ActionStepChips v-if="turnStep !== undefined" :step="turnStep"/>
+        <AppButton hotkey="cancel" class="cancel-action-button" :title="$t('Cancel')" @click="handTabActive = true" />
+        <ActionStepChips v-if="turnStep !== undefined" :step="turnStep" />
       </div>
     </div>
   </div>

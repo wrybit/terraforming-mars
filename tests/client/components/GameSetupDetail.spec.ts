@@ -3,6 +3,7 @@ import {expect} from 'chai';
 import {globalConfig} from './getLocalVue';
 import GameSetupDetail from '@/client/components/GameSetupDetail.vue';
 import {fakeGameOptionsModel} from './testHelpers';
+import {RandomMAOptionType} from '@/common/ma/RandomMAOptionType';
 
 describe('GameSetupDetail', () => {
   it('mounts without errors', () => {
@@ -43,5 +44,19 @@ describe('GameSetupDetail', () => {
     });
     const labels = wrapper.findAll('.setup-tile-label').map((label) => label.text());
     expect(labels).deep.eq(['Board', 'Expansions', 'Solo', 'World Government Terraforming']);
+  });
+
+  it('shows manually chosen milestones and awards without the fan option', () => {
+    const wrapper = shallowMount(GameSetupDetail, {
+      ...globalConfig,
+      props: {
+        playerNumber: 2,
+        gameOptions: {...fakeGameOptionsModel(), randomMA: RandomMAOptionType.MANUAL, includeFanMA: true},
+        lastSoloGeneration: 14,
+      },
+    });
+    const text = wrapper.text();
+    expect(text).to.include('Manually chosen');
+    expect(text).not.to.include('Include fan Milestones/Awards');
   });
 });

@@ -5,54 +5,54 @@
   <section class="game-menu-panel music-card" :aria-label="$t('Music')">
     <!-- Two panes side by side: player and playlist; the playlist slides in, the card takes the height of the shown pane -->
     <div class="music-card__viewport" :style="{height: height === undefined ? undefined : height + 'px'}">
-    <div :class="['music-card__panes', {'music-card__panes--list': showList}]">
-    <div ref="player" class="music-card__pane" :inert="showList">
-    <div class="music-card__head">
-      <span class="music-card__note"><MusicIcon name="note"/></span>
-      <div class="music-card__meta">
-        <strong class="music-card__title">{{ track?.title ?? $t('Music') }}</strong>
-        <span v-if="track !== undefined" class="music-card__credit">
-          {{ track.author }} · <a :href="licenseUrl" target="_blank" rel="noopener">{{ track.license }}</a>
-        </span>
+      <div :class="['music-card__panes', {'music-card__panes--list': showList}]">
+        <div ref="player" class="music-card__pane" :inert="showList">
+          <div class="music-card__head">
+            <span class="music-card__note"><MusicIcon name="note" /></span>
+            <div class="music-card__meta">
+              <strong class="music-card__title">{{ track?.title ?? $t('Music') }}</strong>
+              <span v-if="track !== undefined" class="music-card__credit">
+                {{ track.author }} · <a :href="licenseUrl" target="_blank" rel="noopener">{{ track.license }}</a>
+              </span>
+            </div>
+            <button type="button" class="music-card__open" :aria-label="$t('Show playlist')" @click="openList">
+              <MusicIcon name="chevron-right" />
+            </button>
+          </div>
+
+          <!-- Group choice and the two buttons in one row; volume with mute over the full width at the bottom -->
+          <div class="music-card__row">
+            <!-- Which tracks to hear: all, or one group (remembered per browser) -->
+            <div class="music-card__groups" role="radiogroup" :aria-label="$t('Tracks')">
+              <button v-for="choice in choices" :key="choice" type="button" role="radio" :aria-checked="music.choice === choice"
+                :class="['music-card__group', {'music-card__group--on': music.choice === choice}]" @click="choose(choice)">{{ $t(choiceLabel(choice)) }}</button>
+            </div>
+            <div class="music-card__buttons">
+              <button type="button" class="music-card__button" :aria-label="$t(music.playing ? 'Stop music' : 'Play music')" @click="toggle">
+                <MusicIcon :name="music.playing ? 'pause' : 'play'" />
+              </button>
+              <button type="button" class="music-card__button" :aria-label="$t('Next track')" :disabled="playlist.length < 2" @click="next">
+                <MusicIcon name="next" />
+              </button>
+            </div>
+          </div>
+
+          <MusicWaveform v-if="waveform !== undefined" class="music-card__wave" :peaks="waveform.peaks" :duration="waveform.duration"
+            :progress="progress" :label="track?.title ?? ''" @seek="seek" />
+
+          <div class="music-card__volume">
+            <button type="button" class="music-card__mute" :aria-pressed="music.muted" :aria-label="$t(music.muted ? 'Unmute' : 'Mute')" @click="toggleMute">
+              <MusicIcon :name="music.muted ? 'muted' : 'volume'" />
+            </button>
+            <input type="range" min="0" max="1" step="0.05" :value="music.volume" :aria-label="$t('Volume')" :disabled="music.muted"
+              :style="{'--music-volume': Math.round(music.volume * 100) + '%'}" @input="setVolume">
+          </div>
+        </div>
+
+        <div ref="list" class="music-card__pane" :inert="!showList">
+          <MusicPlaylist @back="closeList" @chosen="closeList" />
+        </div>
       </div>
-      <button type="button" class="music-card__open" :aria-label="$t('Show playlist')" @click="openList">
-        <MusicIcon name="chevron-right"/>
-      </button>
-    </div>
-
-    <!-- Group choice and the two buttons in one row; volume with mute over the full width at the bottom -->
-    <div class="music-card__row">
-      <!-- Which tracks to hear: all, or one group (remembered per browser) -->
-      <div class="music-card__groups" role="radiogroup" :aria-label="$t('Tracks')">
-        <button v-for="choice in choices" :key="choice" type="button" role="radio" :aria-checked="music.choice === choice"
-          :class="['music-card__group', {'music-card__group--on': music.choice === choice}]" @click="choose(choice)">{{ $t(choiceLabel(choice)) }}</button>
-      </div>
-      <div class="music-card__buttons">
-        <button type="button" class="music-card__button" :aria-label="$t(music.playing ? 'Stop music' : 'Play music')" @click="toggle">
-          <MusicIcon :name="music.playing ? 'pause' : 'play'"/>
-        </button>
-        <button type="button" class="music-card__button" :aria-label="$t('Next track')" :disabled="playlist.length < 2" @click="next">
-          <MusicIcon name="next"/>
-        </button>
-      </div>
-    </div>
-
-    <MusicWaveform v-if="waveform !== undefined" class="music-card__wave" :peaks="waveform.peaks" :duration="waveform.duration"
-      :progress="progress" :label="track?.title ?? ''" @seek="seek"/>
-
-    <div class="music-card__volume">
-      <button type="button" class="music-card__mute" :aria-pressed="music.muted" :aria-label="$t(music.muted ? 'Unmute' : 'Mute')" @click="toggleMute">
-        <MusicIcon :name="music.muted ? 'muted' : 'volume'"/>
-      </button>
-      <input type="range" min="0" max="1" step="0.05" :value="music.volume" :aria-label="$t('Volume')" :disabled="music.muted"
-        :style="{'--music-volume': Math.round(music.volume * 100) + '%'}" @input="setVolume">
-    </div>
-    </div>
-
-    <div ref="list" class="music-card__pane" :inert="!showList">
-      <MusicPlaylist @back="closeList" @chosen="closeList"/>
-    </div>
-    </div>
     </div>
   </section>
 </template>

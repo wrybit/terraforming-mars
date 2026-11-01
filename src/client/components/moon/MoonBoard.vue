@@ -5,11 +5,11 @@
     <template v-if="ring">
       <svg class="moon-ring__svg" :viewBox="'0 0 ' + RING_BOARD_SIZE + ' ' + RING_BOARD_SIZE" aria-hidden="true">
         <g v-for="band in ringBands" :key="band.rate" class="moon-ring__band">
-          <path :d="band.slot.path" :fill="band.slot.fill"/>
-          <image :href="band.icon.href" :x="band.icon.x" :y="band.icon.y" width="26" height="26"/>
-          <path v-for="(cell, index) in band.cells" :key="'c' + index" :d="cell.path" :fill="cell.fill"/>
-          <line v-for="(line, index) in band.lines" :key="'l' + index" v-bind="line" stroke="rgba(255,255,255,.45)" stroke-width="1"/>
-          <path :d="band.outline" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="1"/>
+          <path :d="band.slot.path" :fill="band.slot.fill" />
+          <image :href="band.icon.href" :x="band.icon.x" :y="band.icon.y" width="26" height="26" />
+          <path v-for="(cell, index) in band.cells" :key="'c' + index" :d="cell.path" :fill="cell.fill" />
+          <line v-for="(line, index) in band.lines" :key="'l' + index" v-bind="line" stroke="rgba(255,255,255,.45)" stroke-width="1" />
+          <path :d="band.outline" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="1" />
         </g>
       </svg>
       <div class="moon-ring__numbers">
@@ -22,7 +22,7 @@
       </div>
       <div v-for="pin in ringBonusPins" :key="pin.key" class="moon-ring__bonus" :style="pin.style">
         <span :class="['track-bonus-pin', {'track-bonus-pin--done': pin.done}]">
-          <span class="track-bonus-pin__chips" :style="pin.chipStyle"><TrackBonusChip :bonus="pin.bonus" :kind="pin.done ? 'done' : 'own'"/></span>
+          <span class="track-bonus-pin__chips" :style="pin.chipStyle"><TrackBonusChip :bonus="pin.bonus" :kind="pin.done ? 'done' : 'own'" /></span>
           <span class="track-bonus-link"></span>
         </span>
       </div>
@@ -33,16 +33,16 @@
           <tspan dy="15">Mare</tspan>
           <tspan x="12" dy="12">Imbrium</tspan>
         </text>
-        <line x1="24" y1="34" x2="33" y2="105" class="board-line"/>
+        <line x1="24" y1="34" x2="33" y2="105" class="board-line" />
         <text x="30" y="107" class="board-caption board_caption--black">●</text>
       </g>
 
       <g id="mare_serenitatis" transform="translate(485, 140)">
         <text class="board-caption">
-            <tspan dy="15">Mare</tspan>
-            <tspan x="4" dy="12">Serenitatis</tspan>
+          <tspan dy="15">Mare</tspan>
+          <tspan x="4" dy="12">Serenitatis</tspan>
         </text>
-        <line x1="0" y1="25" x2="-120" y2="50" class="board-line"/>
+        <line x1="0" y1="25" x2="-120" y2="50" class="board-line" />
         <text x="-122" y="53" class="board-caption board_caption--black">●</text>
       </g>
 
@@ -52,7 +52,7 @@
           <tspan dy="15">Mare</tspan>
           <tspan x="-2" dy="12">Nubium</tspan>
         </text>
-        <line x1="29" y1="14" x2="115" y2="-64" class="board-line"/>
+        <line x1="29" y1="14" x2="115" y2="-64" class="board-line" />
         <text x="113" y="-62" class="board-caption board_caption--black">●</text>
       </g>
 
@@ -61,14 +61,14 @@
           <tspan dy="15">Mare</tspan>
           <tspan dy="12" x="48">Nectaris</tspan>
         </text>
-        <line x1="-39" y1="-12" x2="45" y2="15" class="board-line"/>
+        <line x1="-39" y1="-12" x2="45" y2="15" class="board-line" />
         <text x="-39" y="-9" class="board-caption board_caption--black">&#x25cf;</text>
       </g>
     </svg>
 
     <div id="moon_board_outer_spaces" class="board-outer-spaces">
-      <MoonSpace :space="getSpaceById('m01')" text="Luna Trade Station"/>
-      <MoonSpace :space="getSpaceById('m37')" text="Momentum Virium Habitat"/>
+      <MoonSpace :space="getSpaceById('m01')" text="Luna Trade Station" />
+      <MoonSpace :space="getSpaceById('m37')" text="Momentum Virium Habitat" />
     </div>
 
     <div v-if="!ring" class="global-numbers">

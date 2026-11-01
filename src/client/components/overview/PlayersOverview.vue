@@ -1,32 +1,32 @@
 <template>
-        <div class="players-overview" v-if="hasPlayers()">
-            <!-- Played cards of all players, including your own (via "show" in the player bar) -->
-            <div class="other_player">
-                <div v-for="(otherPlayer, index) in getPlayersInOrder()" :key="otherPlayer.color">
-                    <OtherPlayer :player="otherPlayer" :playerIndex="index"/>
-                </div>
-                <div v-if="thisPlayer !== undefined">
-                    <OtherPlayer :player="thisPlayer" :playerIndex="ownPlayerIndex(playerView)"/>
-                </div>
-            </div>
-            <PlayerInfo v-for="(p, index) in getPlayersInOrder()"
-              :player="p"
-              :key="p.color"
-              :playerView="playerView"
-              :firstForGen="getIsFirstForGen(p)"
-              :actionLabel="getActionLabel(p)"
-              :playerIndex="index"/>
-            <PlayerInfo
-              v-if="thisPlayer !== undefined"
-              :player="thisPlayer"
-              :key="thisPlayer.color"
-              :playerView="playerView"
-              :firstForGen="getIsFirstForGen(thisPlayer)"
-              :actionLabel="getActionLabel(thisPlayer)"
-              :playerIndex="ownPlayerIndex(playerView)"/>
-            <!-- The same players as a table; visible only in the two-column layout (players_table.less) -->
-            <PlayersTable :playerView="playerView" :rows="tableRows"/>
-        </div>
+  <div class="players-overview" v-if="hasPlayers()">
+    <!-- Played cards of all players, including your own (via "show" in the player bar) -->
+    <div class="other_player">
+      <div v-for="(otherPlayer, index) in getPlayersInOrder()" :key="otherPlayer.color">
+        <OtherPlayer :player="otherPlayer" :playerIndex="index" />
+      </div>
+      <div v-if="thisPlayer !== undefined">
+        <OtherPlayer :player="thisPlayer" :playerIndex="ownPlayerIndex(playerView)" />
+      </div>
+    </div>
+    <PlayerInfo v-for="(p, index) in getPlayersInOrder()"
+      :player="p"
+      :key="p.color"
+      :playerView="playerView"
+      :firstForGen="getIsFirstForGen(p)"
+      :actionLabel="getActionLabel(p)"
+      :playerIndex="index" />
+    <PlayerInfo
+      v-if="thisPlayer !== undefined"
+      :player="thisPlayer"
+      :key="thisPlayer.color"
+      :playerView="playerView"
+      :firstForGen="getIsFirstForGen(thisPlayer)"
+      :actionLabel="getActionLabel(thisPlayer)"
+      :playerIndex="ownPlayerIndex(playerView)" />
+    <!-- The same players as a table; visible only in the two-column layout (players_table.less) -->
+    <PlayersTable :playerView="playerView" :rows="tableRows" />
+  </div>
 </template>
 
 <script lang="ts">

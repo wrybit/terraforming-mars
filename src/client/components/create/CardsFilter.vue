@@ -1,18 +1,18 @@
 <template>
-    <div class="cards-filter">
-        <div class="create-game-card-head">
-            <h2 v-i18n>{{ title }}</h2>
-            <span v-if="selected.length" class="create-game-count">{{ selected.length }}</span>
-        </div>
-        <div class="cards-filter-input">
-            <input ref="filter" class="create-game-text-input" :placeholder="$t(hint)" v-model="searchTerm"
-                @keydown.down.prevent="moveActive(1)" @keydown.up.prevent="moveActive(-1)" @keydown.enter.prevent="addActive">
-            <!-- Matches as cards in one row; click or Enter adds, arrow keys move the highlight -->
-            <CardPreviewGrid v-if="searchMatches.length" class="cards-filter-suggest" :names="searchMatches" row selectable
-                :activeName="activeCard" @hover="activeIndex = searchMatches.indexOf($event)" @select="addCard"/>
-        </div>
-        <CardPreviewGrid v-if="selected.length" class="cards-filter-selected" :names="selected" removable @remove="removeCard"/>
+  <div class="cards-filter">
+    <div class="create-game-card-head">
+      <h2 v-i18n>{{ title }}</h2>
+      <span v-if="selected.length" class="create-game-count">{{ selected.length }}</span>
     </div>
+    <div class="cards-filter-input">
+      <input ref="filter" class="create-game-text-input" :placeholder="$t(hint)" v-model="searchTerm"
+        @keydown.down.prevent="moveActive(1)" @keydown.up.prevent="moveActive(-1)" @keydown.enter.prevent="addActive">
+      <!-- Matches as cards in one row; click or Enter adds, arrow keys move the highlight -->
+      <CardPreviewGrid v-if="searchMatches.length" class="cards-filter-suggest" :names="searchMatches" row selectable
+        :activeName="activeCard" @hover="activeIndex = searchMatches.indexOf($event)" @select="addCard" />
+    </div>
+    <CardPreviewGrid v-if="selected.length" class="cards-filter-selected" :names="selected" removable @remove="removeCard" />
+  </div>
 </template>
 
 <script lang="ts">
@@ -46,6 +46,7 @@ type Refs = {
 
 export default defineComponent({
   name: 'CardsFilter',
+  emits: ['cards-list-changed'],
   props: {
     title: {
       type: String,

@@ -11,15 +11,15 @@
       <button type="button" class="card-bar-pill" :class="{'card-bar-pill--on': activeCount > 0, 'card-bar-pill--open': menuOpen}"
         :aria-expanded="menuOpen" :title="compact ? $t('Filter') : undefined" @click="menuOpen = !menuOpen">
         <svg class="card-sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
-          stroke-linejoin="round" aria-hidden="true"><path d="M3 5h18l-7 8.5V19l-4 2v-7.5z"/></svg>
+          stroke-linejoin="round" aria-hidden="true"><path d="M3 5h18l-7 8.5V19l-4 2v-7.5z" /></svg>
         <span v-if="!compact" v-i18n>Filter</span>
         <b v-if="activeCount > 0" class="card-bar-pill__badge">{{ activeCount }}</b>
-        <svg v-else class="card-bar-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        <svg v-else class="card-bar-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
       </button>
       <button v-if="compact && activeCount > 0" type="button" class="card-bar-pill card-bar-pill--clear"
         :title="$t('Reset filters')" :aria-label="$t('Reset filters')" @click="reset">×</button>
       <div v-if="menuOpen && !useSheet" ref="menu" class="card-bar-menu card-filter-menu">
-        <CardFilterOptions :cards="cards" :filter="filter" :context="context"/>
+        <CardFilterOptions :cards="cards" :filter="filter" :context="context" />
         <div class="card-filter-menu__foot">
           <span>{{ shownText }}</span>
           <button v-if="activeCount > 0" type="button" class="card-filter-link" @click="reset" v-i18n>Reset filters</button>
@@ -40,7 +40,7 @@
     </div>
     <span class="card-filter-bar__count" :class="{'card-filter-bar__count--idle': activeCount === 0}"><b>{{ shownCount }}</b>/{{ cards.length }}</span>
     <!-- Card size left of the sorting: not on the phone (cards are fitted there) -->
-    <CardZoomSlider v-if="!compact && !isMobile"/>
+    <CardZoomSlider v-if="!compact && !isMobile" />
     <span v-if="!compact && $slots.sort !== undefined" class="card-filter-bar__label card-filter-bar__label--sort">{{ $t('Sort') }}</span>
     <slot name="sort" :compact="compact"></slot>
     <!-- Phone: the filters as a bottom sheet over the screen; background only darkened, not blurred -->
@@ -53,10 +53,10 @@
           <button v-if="activeCount > 0" type="button" class="card-filter-link" @click="reset" v-i18n>Reset filters</button>
         </div>
         <div class="card-filter-sheet__body">
-          <CardFilterOptions :cards="cards" :filter="filter" :context="context"/>
+          <CardFilterOptions :cards="cards" :filter="filter" :context="context" />
         </div>
         <div class="card-filter-sheet__foot">
-          <AppButton type="submit" :title="showButtonText" @click="menuOpen = false"/>
+          <AppButton type="submit" :title="showButtonText" @click="menuOpen = false" />
         </div>
       </div>
     </Teleport>

@@ -18,7 +18,7 @@
           <ul class="admin-music__list">
             <li v-for="track in group.tracks" :key="track.id" :class="['admin-music__track', {'admin-music__track--off': !isEnabled(track.id)}]">
               <button type="button" class="admin-music__play" :aria-label="playLabel(track)" @click="toggle(track)">
-                <MusicIcon :name="isPlaying(track) ? 'pause' : 'play'"/>
+                <MusicIcon :name="isPlaying(track) ? 'pause' : 'play'" />
               </button>
               <div class="admin-music__meta">
                 <strong class="admin-music__title">{{ track.title }}</strong>
@@ -30,13 +30,13 @@
                 </span>
               </div>
               <MusicWaveform class="admin-music__wave" :peaks="waveform(track).peaks" :duration="waveform(track).duration"
-                :progress="progressOf(track)" :label="track.title" @seek="seek(track, $event)"/>
+                :progress="progressOf(track)" :label="track.title" @seek="seek(track, $event)" />
               <span class="admin-music__time">{{ timeOf(track) }}</span>
               <div class="admin-music__switch">
                 <!-- Start track of new games; its group is the listeners' default group -->
                 <button type="button" :class="['admin-music__start', {'admin-music__start--on': start === track.id}]"
                   :aria-pressed="start === track.id" @click="setStart(track.id)" v-i18n>Start track</button>
-                <ToggleSwitch :modelValue="isEnabled(track.id)" :label="$t('Active')" @update:modelValue="setEnabled(track.id, $event)"/>
+                <ToggleSwitch :modelValue="isEnabled(track.id)" :label="$t('Active')" @update:modelValue="setEnabled(track.id, $event)" />
               </div>
             </li>
           </ul>

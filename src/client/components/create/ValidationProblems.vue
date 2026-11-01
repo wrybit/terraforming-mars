@@ -23,6 +23,7 @@ import {validationDetails, ValidationErrors} from '@/common/game/validateNewGame
 import {translateMessage, translateText} from '@/client/directives/i18n';
 import {WIKI_URLS} from '@/client/utils/WikiLinks';
 import {partition} from '@/common/utils/utils';
+import {boxProblemKeys} from './validationProblemKeys';
 
 type Problem = {
   key: keyof ValidationErrors,
@@ -41,22 +42,10 @@ const props = defineProps<{
   errors: ValidationErrors;
 }>();
 
-/*
- * Returns true when this value represents the warning being engaged.
- *
- * For booleans that's 'true', for numbers that's non-zero and for arrays, that's non-empty.
- */
-function isSet(value: ValidationErrors[keyof ValidationErrors]): boolean {
-  return Array.isArray(value) ? value.length > 0 : Boolean(value);
-}
-
 const problems = computed((): Array<Problem> => {
   const result: Array<Problem> = [];
-  for (const key of Object.keys(validationDetails) as Array<keyof ValidationErrors>) {
+  for (const key of boxProblemKeys(props.errors)) {
     const value = props.errors[key];
-    if (!isSet(value)) {
-      continue;
-    }
     const {message} = validationDetails[key];
     const text = typeof message === 'string' ? translateText(message) : translateMessage(message(props.errors));
     const items = Array.isArray(value) ? value : [];

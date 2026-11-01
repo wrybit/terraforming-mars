@@ -3,35 +3,35 @@
     <!-- The content only while the panel is open: closed it held about 1000 nodes per player that every game update
          went through (Jens, 23 Oct 2026) -->
     <template v-if="isVisible()">
-    <div :class="'player_translucent_bg_color_' + player.color" class="other_player_header">
-      <div class="player_name">{{ player.name }} <span v-i18n>played cards</span></div>
-      <AppButton size="big" type="close" @click="hideMe" :disableOnServerBusy="false" align="right" />
-    </div>
-    <div class="other_player_cont menu">
+      <div :class="'player_translucent_bg_color_' + player.color" class="other_player_header">
+        <div class="player_name">{{ player.name }} <span v-i18n>played cards</span></div>
+        <AppButton size="big" type="close" @click="hideMe" :disableOnServerBusy="false" align="right" />
+      </div>
+      <div class="other_player_cont menu">
         <!-- Analysis game: hand cards of an AI player above its played cards – could it have played a better one? -->
-        <AiHandSection v-if="player.aiHand !== undefined && aiInsightsShown" :hand="player.aiHand"/>
+        <AiHandSection v-if="player.aiHand !== undefined && aiInsightsShown" :hand="player.aiHand" />
         <h3 v-if="player.aiHand !== undefined && aiInsightsShown" class="hand-cards-panel__title ai-hand-section__played-title">
           <span v-i18n>Played cards</span> <small>{{ player.tableau.length }}</small>
         </h3>
         <!-- Own filter and sorting for played cards (cardFilterState.ts), no cost filter; at the top with a separator line -->
         <CardFilterBar v-if="player.tableau.length > 1" :cards="player.tableau" :filter="playedCardFilter" :context="filterContext">
           <template #sort="{compact}">
-            <CardSortMenu :modelValue="playedCardsSortOrder" :compact="compact" @update:modelValue="setPlayedSortOrder"/>
+            <CardSortMenu :modelValue="playedCardsSortOrder" :compact="compact" @update:modelValue="setPlayedSortOrder" />
           </template>
         </CardFilterBar>
         <div v-if="player.tableau.length > 0" class="player_home_block">
-            <CardFilterEmptyHint v-if="nothingShown" @reset="resetCardFilter(playedCardFilter)"/>
-            <PlayedCardsGroups :player="player" :visibility="visibilityOf" :sortOrder="playedCardsSortOrder"/>
+          <CardFilterEmptyHint v-if="nothingShown" @reset="resetCardFilter(playedCardFilter)" />
+          <PlayedCardsGroups :player="player" :visibility="visibilityOf" :sortOrder="playedCardsSortOrder" />
         </div>
         <div v-if="player.selfReplicatingRobotsCards.length > 0" class="player_home_block">
-            <span v-i18n>Self-replicating Robots cards</span>
-            <div>
-                <div v-for="card in player.selfReplicatingRobotsCards" :key="card.name" class="cardbox">
-                    <Card :card="card" />
-                </div>
+          <span v-i18n>Self-replicating Robots cards</span>
+          <div>
+            <div v-for="card in player.selfReplicatingRobotsCards" :key="card.name" class="cardbox">
+              <Card :card="card" />
             </div>
+          </div>
         </div>
-    </div>
+      </div>
     </template>
   </div>
 </template>

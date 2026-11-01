@@ -2,13 +2,13 @@
   <div id="card-list" class="card-list" :class="getLanguageCssClass()" @keydown.esc="filtersOpen = false">
     <header class="card-list-header">
       <!-- Menu at the top left, as in the game and on the other pages -->
-      <PageToolbar/>
-      <PageTitle title="Cards List"/>
+      <PageToolbar />
+      <PageTitle title="Cards List" />
       <div class="card-list-search">
         <span class="card-list-search-icon" aria-hidden="true"></span>
         <input ref="filter" type="search" class="card-list-search-input" autocomplete="off" :placeholder="searchPlaceholder" :title="$t('Hint: ^ at the start finds titles that begin with the text')" v-model="filterText">
         <button v-if="filterText !== ''" type="button" class="card-list-search-clear" :title="$t('Clear')" @click="clearSearch()">✕</button>
-        <SegmentedControl class="card-list-search-scope" :options="searchScopeOptions" v-model="searchScope"/>
+        <SegmentedControl class="card-list-search-scope" :options="searchScopeOptions" v-model="searchScope" />
       </div>
       <div class="card-list-header-actions">
         <button type="button" class="card-list-filter-toggle" :title="$t('Filters')" @click="filtersOpen = true">
@@ -19,7 +19,7 @@
       </div>
     </header>
     <!-- Mars/Dune switch, shared with create game and statistics: Dune shows only what a Dune game can hold -->
-    <div class="theme-switch-row"><ThemeSwitch @switch="startTheme"/></div>
+    <div class="theme-switch-row"><ThemeSwitch @switch="startTheme" /></div>
 
     <div class="card-list-scrim" :class="{'card-list-scrim--open': filtersOpen}" @click="filtersOpen = false"></div>
 
@@ -45,36 +45,36 @@
               <button type="button" :title="$t('Remove')" @click="removeFilter(item)">✕</button>
             </span>
           </div>
-          <SegmentedControl class="card-list-sort" :options="sortOptions" v-model="sortOrder"/>
+          <SegmentedControl class="card-list-sort" :options="sortOptions" v-model="sortOrder" />
         </section>
 
         <CardListFilterGroup title="Card type" :options="typeOptions" :selection="types" :counts="typeCounts"
-          @toggle="toggle('types', $event)" @reset="reset('types')"/>
+          @toggle="toggle('types', $event)" @reset="reset('types')" />
         <section class="card-list-group">
           <header class="card-list-group-head">
             <h2 v-i18n>Cost</h2>
             <button v-if="hasCostFilter" type="button" class="card-list-link" @click="resetCost()" v-i18n>Reset</button>
           </header>
-          <CardListCostRange v-model:costMin="costMin" v-model:costMax="costMax" :highest="highestCost"/>
+          <CardListCostRange v-model:costMin="costMin" v-model:costMax="costMax" :highest="highestCost" />
         </section>
         <CardListFilterGroup title="Tags" variant="icons" :options="tagOptions" :selection="tags" :counts="tagCounts"
-          @toggle="toggle('tags', $event)" @reset="reset('tags')"/>
+          @toggle="toggle('tags', $event)" @reset="reset('tags')" />
         <CardListFilterGroup title="Expansions" :options="expansionOptions" :selection="expansions" :counts="expansionCounts"
-          @toggle="toggle('expansions', $event)" @reset="reset('expansions')"/>
+          @toggle="toggle('expansions', $event)" @reset="reset('expansions')" />
 
         <details ref="moreFilters" class="card-list-group card-list-more">
           <summary @click="moreFiltersChosen = true" v-i18n>More filters</summary>
           <div class="card-list-more-body">
             <div class="card-list-more-row">
               <h3 v-i18n>Victory points</h3>
-              <SegmentedControl :options="vpOptions" v-model="vps"/>
+              <SegmentedControl :options="vpOptions" v-model="vps" />
             </div>
             <div class="card-list-more-row">
               <h3 v-i18n>Special rule (*)</h3>
-              <SegmentedControl :options="asteriskRuleOptions" v-model="asteriskRules"/>
+              <SegmentedControl :options="asteriskRuleOptions" v-model="asteriskRules" />
             </div>
             <CardListFilterGroup title="Card resources" variant="icons" :options="resourceOptions" :selection="resources" :counts="resourceCounts"
-              @toggle="toggle('resources', $event)" @reset="reset('resources')"/>
+              @toggle="toggle('resources', $event)" @reset="reset('resources')" />
             <div class="card-list-more-row">
               <h3 v-i18n>Display</h3>
               <div class="card-list-chips card-list-chips--chips">
@@ -96,59 +96,59 @@
 
       <main ref="results" class="card-list-results">
         <!-- First the page itself (header, filters), then the cards: a preloader in the middle until the first ones are built -->
-        <LoadingPlate v-if="!cardsVisible"/>
+        <LoadingPlate v-if="!cardsVisible" />
         <template v-if="cardsReady">
-        <CardListSection v-for="section in cardSections" :key="section.title" v-show="section.names.length > 0"
-          :title="section.title" :count="section.names.length" :parts="section.parts">
-          <CardListCardGrid :names="section.names" :tallCards="tallCards" :boxSize="section.boxSize" @cardsShown="cardsShown"/>
-        </CardListSection>
+          <CardListSection v-for="section in cardSections" :key="section.title" v-show="section.names.length > 0"
+            :title="section.title" :count="section.names.length" :parts="section.parts">
+            <CardListCardGrid :names="section.names" :tallCards="tallCards" :boxSize="section.boxSize" @cardsShown="cardsShown" />
+          </CardListSection>
 
-        <CardListSection v-show="visibleGlobalEvents.length > 0" title="Global Events" :count="visibleGlobalEvents.length" :parts="partsFor('globalEvents', visibleGlobalEvents.length)">
-          <div class="card-list-cards">
-            <div class="cardbox" v-for="globalEventName in visibleGlobalEvents" :key="globalEventName" v-memo="[globalEventName]">
-              <GlobalEvent :globalEventName="globalEventName" type="distant"/>
-            </div>
-          </div>
-        </CardListSection>
-
-        <CardListSection v-show="visibleColonyNames.length > 0" title="Colonies" :count="visibleColonyNames.length" :parts="partsFor('colonyTiles', visibleColonyNames.length)">
-          <div class="player_home_colony_cont">
-            <div class="player_home_colony" v-for="colonyName in visibleColonyNames" :key="colonyName" v-memo="[colonyName, showMetadata]">
-              <Colony :colony="colonyModel(colonyName)"/>
-            </div>
-          </div>
-        </CardListSection>
-
-        <CardListSection v-show="visibleMilestoneNames.length > 0" title="Milestones" :count="visibleMilestoneNames.length" :parts="partsFor('milestones', visibleMilestoneNames.length)">
-          <!-- Dune theme: goal cards with the rules, as on the mockup's goals page, instead of the Mars board tiles -->
-          <CardListDuneGoals v-if="theme === 'dune'" kind="milestones" :names="visibleMilestoneNames"/>
-          <div v-else class="player_home_colony_cont">
-            <div class="player_home_colony" v-for="milestoneName in visibleMilestoneNames" :key="milestoneName" v-memo="[milestoneName]">
-              <div class="milestones"> <!-- This div is necessary for the CSS. Perhaps find a way to remove that?-->
-                <Milestone :milestone="milestoneModel(milestoneName)" :showDescription="true"/>
+          <CardListSection v-show="visibleGlobalEvents.length > 0" title="Global Events" :count="visibleGlobalEvents.length" :parts="partsFor('globalEvents', visibleGlobalEvents.length)">
+            <div class="card-list-cards">
+              <div class="cardbox" v-for="globalEventName in visibleGlobalEvents" :key="globalEventName" v-memo="[globalEventName]">
+                <GlobalEvent :globalEventName="globalEventName" type="distant" />
               </div>
             </div>
-          </div>
-        </CardListSection>
+          </CardListSection>
 
-        <CardListSection v-show="visibleAwardNames.length > 0" title="Awards" :count="visibleAwardNames.length" :parts="partsFor('awards', visibleAwardNames.length)">
-          <CardListDuneGoals v-if="theme === 'dune'" kind="awards" :names="visibleAwardNames"/>
-          <div v-else class="player_home_colony_cont">
-            <div class="player_home_colony" v-for="awardName in visibleAwardNames" :key="awardName" v-memo="[awardName]">
-              <div class="awards"> <!-- This div is necessary for the CSS. Perhaps find a way to remove that?-->
-                <Award :award="awardModel(awardName)" :showDescription="true"/>
+          <CardListSection v-show="visibleColonyNames.length > 0" title="Colonies" :count="visibleColonyNames.length" :parts="partsFor('colonyTiles', visibleColonyNames.length)">
+            <div class="player_home_colony_cont">
+              <div class="player_home_colony" v-for="colonyName in visibleColonyNames" :key="colonyName" v-memo="[colonyName, showMetadata]">
+                <Colony :colony="colonyModel(colonyName)" />
               </div>
             </div>
-          </div>
-        </CardListSection>
+          </CardListSection>
 
-        <CardListSection v-show="visibleAgendaIds.length > 0" title="Agendas" :count="visibleAgendaIds.length" :parts="partsFor('agendas', visibleAgendaIds.length)">
-          <div class="player_home_colony_cont">
-            <div class="player_home_colony" v-for="id in visibleAgendaIds" :key="id" v-memo="[id]">
-              <TurmoilAgendaContainer :agendaId="id"/>
+          <CardListSection v-show="visibleMilestoneNames.length > 0" title="Milestones" :count="visibleMilestoneNames.length" :parts="partsFor('milestones', visibleMilestoneNames.length)">
+            <!-- Dune theme: goal cards with the rules, as on the mockup's goals page, instead of the Mars board tiles -->
+            <CardListDuneGoals v-if="theme === 'dune'" kind="milestones" :names="visibleMilestoneNames" />
+            <div v-else class="player_home_colony_cont">
+              <div class="player_home_colony" v-for="milestoneName in visibleMilestoneNames" :key="milestoneName" v-memo="[milestoneName]">
+                <div class="milestones"> <!-- This div is necessary for the CSS. Perhaps find a way to remove that? -->
+                  <Milestone :milestone="milestoneModel(milestoneName)" :showDescription="true" />
+                </div>
+              </div>
             </div>
-          </div>
-        </CardListSection>
+          </CardListSection>
+
+          <CardListSection v-show="visibleAwardNames.length > 0" title="Awards" :count="visibleAwardNames.length" :parts="partsFor('awards', visibleAwardNames.length)">
+            <CardListDuneGoals v-if="theme === 'dune'" kind="awards" :names="visibleAwardNames" />
+            <div v-else class="player_home_colony_cont">
+              <div class="player_home_colony" v-for="awardName in visibleAwardNames" :key="awardName" v-memo="[awardName]">
+                <div class="awards"> <!-- This div is necessary for the CSS. Perhaps find a way to remove that? -->
+                  <Award :award="awardModel(awardName)" :showDescription="true" />
+                </div>
+              </div>
+            </div>
+          </CardListSection>
+
+          <CardListSection v-show="visibleAgendaIds.length > 0" title="Agendas" :count="visibleAgendaIds.length" :parts="partsFor('agendas', visibleAgendaIds.length)">
+            <div class="player_home_colony_cont">
+              <div class="player_home_colony" v-for="id in visibleAgendaIds" :key="id" v-memo="[id]">
+                <TurmoilAgendaContainer :agendaId="id" />
+              </div>
+            </div>
+          </CardListSection>
 
         </template>
         <div v-if="cardsReady && visibleCount === 0" class="card-list-empty">
@@ -159,7 +159,7 @@
     </div>
 
     <!-- Desktop: ticks at the right edge to jump between the sections, the current one stands out -->
-    <CardListSectionRail v-if="cardsReady && railSections.length > 1" :sections="railSections" :activeIndex="activeSection" @jump="jumpToSection"/>
+    <CardListSectionRail v-if="cardsReady && railSections.length > 1" :sections="railSections" :activeIndex="activeSection" @jump="jumpToSection" />
 
     <button type="button" class="card-list-scroll-top" :class="{'card-list-scroll-top--visible': showScrollTop}" :title="$t('Back to top')" @click="scrollToTop()">
       <span aria-hidden="true">↑</span>

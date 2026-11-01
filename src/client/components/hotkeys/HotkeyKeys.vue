@@ -6,7 +6,7 @@
       <!-- "1 … 0": the dots stand for the keys in between, they are no key themselves -->
       <span v-if="key === '…'" class="hotkey-keys__range">…</span>
       <kbd v-else :class="['hotkey-key', {'hotkey-key--icon': iconOf(key) !== undefined}]">
-        <svg v-if="iconOf(key) !== undefined" class="hotkey-key__icon" viewBox="0 0 16 16"><path v-for="path in iconOf(key)" :key="path" :d="path"/></svg>
+        <svg v-if="iconOf(key) !== undefined" class="hotkey-key__icon" viewBox="0 0 16 16"><path v-for="path in iconOf(key)" :key="path" :d="path" /></svg>
         <template v-else>{{ capLabel(key) }}</template>
       </kbd>
     </template>

@@ -8,7 +8,7 @@
     </div>
 
     <!-- Drag handle between the columns (only visible in the two-column layout): splits the width, double click = default -->
-    <ColumnResizeHandle class="player-home-columns__resizer" :split="split"/>
+    <ColumnResizeHandle class="player-home-columns__resizer" :split="split" />
 
     <div class="player-home-columns__main">
       <slot name="main"></slot>

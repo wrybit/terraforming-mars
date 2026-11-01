@@ -26,7 +26,7 @@
         :title="$t('Pay as much as useful with this resource')"
         data-test="target"
         @click="$emit('max')">
-        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h8M8 4.5 11.5 8 8 11.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h8M8 4.5 11.5 8 8 11.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
         <!-- In the M€ row the value is money: the coin with the number, like every amount in a button (ButtonCount) -->
         <span v-if="unit === 'megacredits'" class="button-count button-count--megacredits">{{ target }}</span>
         <span v-else>{{ target }}</span>
@@ -43,6 +43,7 @@ import {paymentIconClass} from '@/client/components/paymentIcon';
 
 export default defineComponent({
   name: 'PaymentUnitComponent',
+  emits: ['plus', 'minus', 'max', 'update:count'],
   props: {
     count: {
       type: Number,

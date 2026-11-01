@@ -4,50 +4,50 @@
     <div class="server-dashboard-grid">
       <section class="games-overview-card">
         <h2 v-i18n>Server</h2>
-        <DashboardServerLogo :identity="dashboard.identity"/>
-        <DashboardFacts :facts="serverFacts"/>
+        <DashboardServerLogo :identity="dashboard.identity" />
+        <DashboardFacts :facts="serverFacts" />
       </section>
       <section class="games-overview-card">
         <h2 v-i18n>Processor</h2>
         <DashboardSplitBar v-if="dashboard.machineUsage !== undefined" label="Processor load" :segments="cpuParts" :total="100" unit="percent"
-          :measuredAtMs="dashboard.machineUsage.measuredAtMs"/>
-        <DashboardMeter v-else label="Processor load" :used="dashboard.cpu.usagePercent" :total="100" unit="percent"/>
-        <DashboardFacts :facts="processorFacts"/>
+          :measuredAtMs="dashboard.machineUsage.measuredAtMs" />
+        <DashboardMeter v-else label="Processor load" :used="dashboard.cpu.usagePercent" :total="100" unit="percent" />
+        <DashboardFacts :facts="processorFacts" />
       </section>
       <section class="games-overview-card">
         <h2 v-i18n>Memory</h2>
-        <DashboardSplitBar label="Memory" :segments="memoryParts" :total="dashboard.memory.totalBytes" :measuredAtMs="dashboard.machineUsage?.measuredAtMs"/>
-        <DashboardMeter v-if="dashboard.memory.swapTotalBytes > 0" label="Swap" :used="dashboard.memory.swapTotalBytes - dashboard.memory.swapFreeBytes" :total="dashboard.memory.swapTotalBytes"/>
+        <DashboardSplitBar label="Memory" :segments="memoryParts" :total="dashboard.memory.totalBytes" :measuredAtMs="dashboard.machineUsage?.measuredAtMs" />
+        <DashboardMeter v-if="dashboard.memory.swapTotalBytes > 0" label="Swap" :used="dashboard.memory.swapTotalBytes - dashboard.memory.swapFreeBytes" :total="dashboard.memory.swapTotalBytes" />
       </section>
       <section class="games-overview-card">
         <h2 v-i18n>Disk</h2>
         <DashboardSplitBar v-if="dashboard.disk !== undefined" label="Disk" :segments="diskParts" :total="dashboard.disk.totalBytes"
-          :measuredAtMs="dashboard.disk.usage?.docker === undefined ? undefined : dashboard.disk.usage.measuredAtMs"/>
+          :measuredAtMs="dashboard.disk.usage?.docker === undefined ? undefined : dashboard.disk.usage.measuredAtMs" />
       </section>
       <section class="games-overview-card">
         <h2 v-i18n>Games</h2>
-        <DashboardOnlineCount :count="dashboard.games.playersOnline"/>
-        <DashboardFacts :facts="gameFacts"/>
-        <DashboardUpdateButton :dashboard="dashboard" @changed="$emit('changed')"/>
+        <DashboardOnlineCount :count="dashboard.games.playersOnline" />
+        <DashboardFacts :facts="gameFacts" />
+        <DashboardUpdateButton :dashboard="dashboard" @changed="$emit('changed')" />
       </section>
       <section class="games-overview-card">
         <h2 v-i18n>Graphics</h2>
-        <DashboardGraphics :gpus="dashboard.gpus" :mainMemoryBytes="dashboard.memory.totalBytes"/>
+        <DashboardGraphics :gpus="dashboard.gpus" :mainMemoryBytes="dashboard.memory.totalBytes" />
       </section>
     </div>
 
     <div class="server-dashboard-grid server-dashboard-grid--wide">
       <section class="games-overview-card">
         <h2 v-i18n>Players per day</h2>
-        <StatsBarChart :bars="dayBars" axisLabel="Distinct human players with a move that day"/>
+        <StatsBarChart :bars="dayBars" axisLabel="Distinct human players with a move that day" />
       </section>
       <section class="games-overview-card">
         <h2 v-i18n>Players per week</h2>
-        <StatsBarChart :bars="weekBars" axisLabel="Distinct human players with a move in that calendar week"/>
+        <StatsBarChart :bars="weekBars" axisLabel="Distinct human players with a move in that calendar week" />
       </section>
       <section class="games-overview-card">
         <h2 v-i18n>Availability</h2>
-        <StatsBarChart v-if="availabilityBars.length > 0" :bars="availabilityBars" axisLabel="Share of the day the server was running (%)"/>
+        <StatsBarChart v-if="availabilityBars.length > 0" :bars="availabilityBars" axisLabel="Share of the day the server was running (%)" />
         <p v-else class="games-overview-note" v-i18n>First values after one minute of running</p>
         <h3 v-if="dashboard.serverStarts.length > 0" class="server-dashboard-subheading" v-i18n>Last server starts</h3>
         <ul class="server-dashboard-list">
@@ -58,11 +58,11 @@
 
     <section class="games-overview-card">
       <h2 v-i18n>Players online by time of day</h2>
-      <DashboardDayOverlay v-if="dashboard.presence.length > 0" :profiles="dashboard.presence"/>
+      <DashboardDayOverlay v-if="dashboard.presence.length > 0" :profiles="dashboard.presence" />
       <p v-else class="games-overview-note" v-i18n>First values after one minute of running</p>
     </section>
 
-    <DashboardCommits :dashboard="dashboard" @changed="$emit('changed')"/>
+    <DashboardCommits :dashboard="dashboard" @changed="$emit('changed')" />
   </div>
 </template>
 

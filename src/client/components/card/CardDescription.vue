@@ -2,10 +2,10 @@
   <!-- Marked-up variant is already translated: tm-has-i18n keeps a v-i18n of a parent from translating (and trimming) it again -->
   <div v-if="parts === undefined" class="card-description" :class="alignClasses">{{ open }}<span v-i18n>{{ description }}</span>{{ close }}</div>
   <div v-else class="card-description card-description-split" :class="[alignClasses, compactClass]" tm-has-i18n="true">
-    <div v-if="parts.main.length > 0">{{ open }}<CardTextSegments :segments="parts.main"/>{{ close }}</div>
+    <div v-if="parts.main.length > 0">{{ open }}<CardTextSegments :segments="parts.main" />{{ close }}</div>
     <div v-if="parts.note !== undefined" class="card-asterisk-note">
       <span class="card-asterisk-note-star">*</span>
-      <CardTextSegments :segments="parts.note"/>
+      <CardTextSegments :segments="parts.note" />
     </div>
   </div>
 </template>

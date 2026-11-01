@@ -4,7 +4,7 @@
   <div class="music-list">
     <div class="music-list__head">
       <button type="button" class="music-list__back" :aria-label="$t('Back to the player')" @click="$emit('back')">
-        <MusicIcon name="chevron-left"/>
+        <MusicIcon name="chevron-left" />
       </button>
       <strong class="music-list__title" v-i18n>Playlist</strong>
       <span class="music-list__count">{{ tracks.length }}</span>
@@ -14,7 +14,7 @@
       <li v-for="track in tracks" :key="track.id" :class="{'music-list__item--current': track === current}">
         <button type="button" :class="['music-list__track', {'music-list__track--current': track === current}]"
           :aria-current="track === current ? 'true' : undefined" @click="choose(track)">
-          <span class="music-list__mark"><MusicIcon v-if="track === current" :name="playing ? 'volume' : 'pause'"/></span>
+          <span class="music-list__mark"><MusicIcon v-if="track === current" :name="playing ? 'volume' : 'pause'" /></span>
           <span class="music-list__meta">
             <span class="music-list__name">{{ track.title }}</span>
             <span class="music-list__author">{{ track.author }}</span>

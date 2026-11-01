@@ -1,16 +1,16 @@
 <template>
   <button v-if="isCard" type="button" class="stats-asset stats-asset--card" :title="$t('Show card')" @click="showCard">
-    <Card :card="{name: cardName}"/>
+    <Card :card="{name: cardName}" />
   </button>
   <!-- Dune theme: milestones and awards as the goal cards of the game (DuneGoalCard.vue), not as Mars board tiles -->
   <div v-else-if="isDune && (kind === 'milestone' || kind === 'award')" class="stats-asset stats-asset--tile">
-    <DuneGoalCard :kind="kind === 'milestone' ? 'milestones' : 'awards'" :name="name"/>
+    <DuneGoalCard :kind="kind === 'milestone' ? 'milestones' : 'awards'" :name="name" />
   </div>
   <div v-else-if="kind === 'milestone'" class="stats-asset stats-asset--tile">
-    <div class="milestones"><Milestone :milestone="{name: milestoneName, playerName: undefined, color: undefined, scores: []}" :showScores="false" :showDescription="true"/></div>
+    <div class="milestones"><Milestone :milestone="{name: milestoneName, playerName: undefined, color: undefined, scores: []}" :showScores="false" :showDescription="true" /></div>
   </div>
   <div v-else-if="kind === 'award'" class="stats-asset stats-asset--tile">
-    <div class="awards"><Award :award="{name: awardName, playerName: undefined, color: undefined, scores: []}" :showScores="false" :showDescription="true"/></div>
+    <div class="awards"><Award :award="{name: awardName, playerName: undefined, color: undefined, scores: []}" :showScores="false" :showDescription="true" /></div>
   </div>
 </template>
 

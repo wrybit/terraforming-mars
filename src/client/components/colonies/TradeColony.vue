@@ -36,8 +36,8 @@
           @click="choose(colony)">
           <span class="trade-colony__offer-head">
             <span class="trade-colony__offer-planet">
-              <ColonyPlanet :name="colony.model.name"/>
-              <TradeShip v-if="colony.model.visitor !== undefined" class="trade-colony__offer-ship" :color="colony.model.visitor" :size="30"/>
+              <ColonyPlanet :name="colony.model.name" />
+              <TradeShip v-if="colony.model.visitor !== undefined" class="trade-colony__offer-ship" :color="colony.model.visitor" :size="30" />
             </span>
             <b>{{ $t(colony.model.name) }}</b>
           </span>
@@ -57,7 +57,7 @@
     </div>
     <TabPanelFooterSlot>
       <div v-if="showsave" class="wf-action">
-        <AppButton hotkey="confirm" :title="playerinput.buttonLabel" type="submit" size="normal" @click="saveData" :disabled="!canSave()"/>
+        <AppButton hotkey="confirm" :title="playerinput.buttonLabel" type="submit" size="normal" @click="saveData" :disabled="!canSave()" />
       </div>
     </TabPanelFooterSlot>
   </div>

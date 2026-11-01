@@ -6,14 +6,14 @@
     <DuneFitBox :maxScale="1">
       <template v-for="entry in schemes.players" :key="entry.color">
         <div v-if="entry.agendas !== undefined" class="dune-schemes__own">
-          <PlayerChip v-if="owned.length > 1" :color="entry.color" :players="players"/>
+          <PlayerChip v-if="owned.length > 1" :color="entry.color" :players="players" />
           <div class="dune-schemes__cards">
-            <SchemeAgendaCard v-for="agenda in entry.agendas" :key="agenda.name" :agenda="agenda"/>
+            <SchemeAgendaCard v-for="agenda in entry.agendas" :key="agenda.name" :agenda="agenda" />
           </div>
         </div>
       </template>
     </DuneFitBox>
-    <DuneRuleCards :rules="SCHEMES_RULES"/>
+    <DuneRuleCards :rules="SCHEMES_RULES" />
   </div>
 </template>
 

@@ -4,7 +4,7 @@
        Not in the mobile view: cards and tiles are fitted to the screen there (CardFilterBar does the same). -->
   <div v-if="!isMobile" class="card-filter-bar card-filter-bar--zoom-only">
     <slot name="lead"></slot>
-    <CardZoomSlider/>
+    <CardZoomSlider />
   </div>
 </template>
 

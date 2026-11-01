@@ -7,8 +7,8 @@
         <h1 class="help-overlay-title" v-i18n>Help</h1>
         <label class="help-overlay-search">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <circle cx="11" cy="11" r="7"/>
-            <path d="m20 20-3.5-3.5"/>
+            <circle cx="11" cy="11" r="7" />
+            <path d="m20 20-3.5-3.5" />
           </svg>
           <input v-model="query" type="search" autocomplete="off" :placeholder="$t('Search in this tab')" :aria-label="$t('Search in this tab')">
         </label>
@@ -31,10 +31,10 @@
 
     <div class="help-overlay-main">
       <nav v-show="currentTab.noOutline !== true" ref="outlineNav" class="help-overlay-outline">
-        <HelpOutlineNav :nodes="outline" :active-id="activeId" @select="scrollToSection"/>
+        <HelpOutlineNav :nodes="outline" :active-id="activeId" @select="scrollToSection" />
       </nav>
       <div ref="content" class="help-overlay-content" @scroll.passive="scheduleActiveUpdate">
-        <component :is="currentTab.component" :key="currentTab.key"/>
+        <component :is="currentTab.component" :key="currentTab.key" />
         <div v-if="noMatches" class="help-overlay-empty" v-i18n>Nothing found</div>
       </div>
     </div>

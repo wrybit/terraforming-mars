@@ -4,7 +4,7 @@
   <template v-for="(part, index) in parts" :key="index">
     <template v-if="part.kind === 'text'">{{ part.text }}</template>
     <span v-else :class="['money-text__coin', {'money-text__coin--after-text': part.spaceBefore, 'money-text__coin--before-text': part.spaceAfter}]">
-      <ButtonCount :part="{kind: 'megacredits', value: part.value, printed}"/>
+      <ButtonCount :part="{kind: 'megacredits', value: part.value, printed}" />
     </span>
   </template>
 </template>

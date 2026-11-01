@@ -5,7 +5,7 @@
        after the chevron, as on a project card (CardCost.vue, same "hide discount" preference) – Jens, 19 Oct 2026 -->
   <span :class="['dune-bazaar__price', {'dune-bazaar__price--printed': showsDiscount}]"><img :src="coinIcon" alt=""><b>{{ price }}</b></span>
   <template v-if="showsDiscount">
-    <DiscountChevron class="dune-bazaar__price-arrow"/>
+    <DiscountChevron class="dune-bazaar__price-arrow" />
     <span class="dune-bazaar__price dune-bazaar__price--own"><img :src="coinIcon" alt=""><b>{{ newPrice }}</b></span>
   </template>
   <span class="dune-bazaar__name">{{ $t(ware) }}</span>

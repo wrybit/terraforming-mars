@@ -1,20 +1,20 @@
 <template>
-<div ref="root" class="sortable-cards-root" :class="{'sortable-dragging': dragCard !== undefined}">
-  <TransitionGroup tag="div" name="sortable" class="sortable-cards">
-    <div
-      v-for="card in getSortedCards()"
-      :key="card.name"
-      :data-card-name="card.name"
-      class="sortable-slot"
-      :class="{'sortable-placeholder': card.name === dragCard, 'card-filter-hidden': visibilityOf(card) === 'hidden', 'card-filter-dimmed': visibilityOf(card) === 'dimmed'}"
-      @pointerdown="onPointerDown(card.name, $event)"
-      @dragstart.prevent>
-      <div class="cardbox">
-        <Card :card="isUnavailable(card) ? {...card, isDisabled: true} : card"/>
+  <div ref="root" class="sortable-cards-root" :class="{'sortable-dragging': dragCard !== undefined}">
+    <TransitionGroup tag="div" name="sortable" class="sortable-cards">
+      <div
+        v-for="card in getSortedCards()"
+        :key="card.name"
+        :data-card-name="card.name"
+        class="sortable-slot"
+        :class="{'sortable-placeholder': card.name === dragCard, 'card-filter-hidden': visibilityOf(card) === 'hidden', 'card-filter-dimmed': visibilityOf(card) === 'dimmed'}"
+        @pointerdown="onPointerDown(card.name, $event)"
+        @dragstart.prevent>
+        <div class="cardbox">
+          <Card :card="isUnavailable(card) ? {...card, isDisabled: true} : card" />
+        </div>
       </div>
-    </div>
-  </TransitionGroup>
-</div>
+    </TransitionGroup>
+  </div>
 </template>
 
 <script lang="ts">

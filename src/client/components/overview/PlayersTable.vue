@@ -1,7 +1,7 @@
 <template>
   <div :class="tableClasses" :style="variables">
     <!-- Player list as a table; arrangement and size follow the available width (playersTableLayout.ts) -->
-    <PlayersTableHeader :mode="fit.mode" :tagColumns="tagColumns"/>
+    <PlayersTableHeader :mode="fit.mode" :tagColumns="tagColumns" />
     <div class="players-table-rows" :style="{gridTemplateRows: tracks.template}">
       <PlayersTableRow v-for="(row, index) in rows" :key="row.player.color"
         :style="{gridRow: String(tracks.lines[index])}"
@@ -12,7 +12,7 @@
         :playerIndex="row.playerIndex"
         :tagColumns="tagColumns"
         :tagDetails="tagDetailsByColor[row.player.color]"
-        :productionLeaders="productionLeadersByColor[row.player.color] ?? []"/>
+        :productionLeaders="productionLeadersByColor[row.player.color] ?? []" />
     </div>
   </div>
 </template>

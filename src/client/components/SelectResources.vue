@@ -2,19 +2,19 @@
   <div class="wf-component wf-options">
     <div v-if="showtitle === true" class="nofloat wf-component-title">{{ $t(playerinput.title) }}</div>
     <template v-for="unit in keys" :key="unit">
-        <PaymentUnitComponent
-          v-model:count.number="units[unit]"
-          :unit="(unit as SpendableResource)"
-          :showMax="false"
-          description=""
-          @plus="addValue(unit)"
-          @minus="reduceValue(unit)"/>
-        <!-- @max="onMaxClicked(unit)" -->
+      <PaymentUnitComponent
+        v-model:count.number="units[unit]"
+        :unit="(unit as SpendableResource)"
+        :showMax="false"
+        description=""
+        @plus="addValue(unit)"
+        @minus="reduceValue(unit)" />
+      <!-- @max="onMaxClicked(unit)" -->
     </template>
     <TabPanelFooterSlot>
-    <div v-if="showsave === true" class="nofloat">
+      <div v-if="showsave === true" class="nofloat">
         <AppButton hotkey="proceed" @click="saveData" :title="playerinput.buttonLabel" />
-    </div>
+      </div>
     </TabPanelFooterSlot>
   </div>
 </template>

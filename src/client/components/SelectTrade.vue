@@ -22,7 +22,7 @@
       <section class="trade-select__side" data-test="trade-give">
         <h4 class="trade-select__label">{{ $t(hasRate ? 'You give' : 'You offer') }}</h4>
         <div :class="{'trade-select__exchange': exchange !== undefined}">
-          <ExchangeChart v-if="exchange !== undefined" :resources="giveResources" :board="exchange.sell" :higherIsGood="true" :generation="generation"/>
+          <ExchangeChart v-if="exchange !== undefined" :resources="giveResources" :board="exchange.sell" :higherIsGood="true" :generation="generation" />
           <div class="trade-select__resources">
             <button v-for="option in playerinput.give" :key="option.resource" type="button" :disabled="!givable(option.resource)"
               :class="['trade-select__resource', {'trade-select__resource--selected': option.resource === give}]"
@@ -30,20 +30,20 @@
               <i :class="'resource_icon resource_icon--' + option.resource"></i>
               <span class="trade-select__stock">{{ stockOf(option.resource) }}</span>
               <span v-if="exchange !== undefined" class="trade-select__rate">
-                <TradeTileValue :value="valueOf(option.resource, true)"/>
+                <TradeTileValue :value="valueOf(option.resource, true)" />
                 <span :class="['trade-select__change', 'trade-select__change--' + rateOf(option.resource, true).mood, {'trade-select__change--peak': rateOf(option.resource, true).peak}]">{{ rateOf(option.resource, true).change }}</span>
               </span>
             </button>
           </div>
         </div>
         <div v-if="!hasRate" class="amount-slider-plain trade-select__slider">
-          <AmountSlider v-model="giveAmount" :min="1" :max="giveMax"/>
+          <AmountSlider v-model="giveAmount" :min="1" :max="giveMax" />
         </div>
       </section>
       <section class="trade-select__side" data-test="trade-get">
         <h4 class="trade-select__label">{{ $t(hasRate ? 'You get' : 'You want in return') }}</h4>
         <div :class="{'trade-select__exchange': exchange !== undefined}">
-          <ExchangeChart v-if="exchange !== undefined" :resources="playerinput.get" :board="exchange.buy" :higherIsGood="false" :generation="generation"/>
+          <ExchangeChart v-if="exchange !== undefined" :resources="playerinput.get" :board="exchange.buy" :higherIsGood="false" :generation="generation" />
           <div class="trade-select__resources">
             <button v-for="resource in playerinput.get" :key="resource" type="button" :disabled="!receivable(give, resource)"
               :class="['trade-select__resource', {'trade-select__resource--selected': resource === get}]"
@@ -51,19 +51,19 @@
               <i :class="'resource_icon resource_icon--' + resource"></i>
               <span class="trade-select__stock">{{ stockOf(resource) }}</span>
               <span v-if="exchange !== undefined" class="trade-select__rate">
-                <TradeTileValue :value="valueOf(resource, false)"/>
+                <TradeTileValue :value="valueOf(resource, false)" />
                 <span :class="['trade-select__change', 'trade-select__change--' + rateOf(resource, false).mood, {'trade-select__change--peak': rateOf(resource, false).peak}]">{{ rateOf(resource, false).change }}</span>
               </span>
             </button>
           </div>
         </div>
         <div v-if="!hasRate" class="amount-slider-plain trade-select__slider">
-          <AmountSlider v-model="getAmount" :min="1" :max="playerinput.maxGet"/>
+          <AmountSlider v-model="getAmount" :min="1" :max="playerinput.maxGet" />
         </div>
       </section>
     </div>
     <div v-if="conversion !== undefined" class="choice-block choice-block--natural trade-select__amounts">
-      <AmountConverter v-model="units" :conversion="conversion" :min="1" :max="maxUnits" :player="playerView.thisPlayer"/>
+      <AmountConverter v-model="units" :conversion="conversion" :min="1" :max="maxUnits" :player="playerView.thisPlayer" />
     </div>
     <div v-if="conversion === undefined" class="trade-select__summary" data-test="trade-summary">
       <span>{{ finalGive }} <i :class="'resource_icon resource_icon--' + give"></i></span>
@@ -72,7 +72,7 @@
     </div>
     <TabPanelFooterSlot>
       <div v-if="showsave === true" class="amount-select__actions">
-        <AppButton hotkey="proceed" type="submit" :title="$t(playerinput.buttonLabel || 'Confirm')" @click="saveData"/>
+        <AppButton hotkey="proceed" type="submit" :title="$t(playerinput.buttonLabel || 'Confirm')" @click="saveData" />
       </div>
     </TabPanelFooterSlot>
   </div>

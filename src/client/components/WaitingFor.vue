@@ -1,30 +1,30 @@
 <template>
   <div>
-  <!-- Inputs in the tab container show whom we are waiting for as a status tab (WaitingForTabs.vue) instead of this text -->
-  <template v-if="waitingfor === undefined || (waitingfor.optional && buildsOwnTabs)">
-    <template v-if="waitingfor === undefined">
-      {{ $t('Not your turn to take any actions') }}
+    <!-- Inputs in the tab container show whom we are waiting for as a status tab (WaitingForTabs.vue) instead of this text -->
+    <template v-if="waitingfor === undefined || (waitingfor.optional && buildsOwnTabs)">
+      <template v-if="waitingfor === undefined">
+        {{ $t('Not your turn to take any actions') }}
+      </template>
+      <template v-else>
+        {{ $t('Waiting for other players') }}
+      </template>
+      <template v-if="playersWaitingFor.length > 0">
+        (⌛ <span v-for="color in playersWaitingFor" class="log-player" :class="playerColorClass(color, 'bg')" :key="color">{{ getPlayerName(color) }}</span>)
+      </template>
     </template>
-    <template v-else>
-      {{ $t('Waiting for other players') }}
-    </template>
-    <template v-if="playersWaitingFor.length > 0">
-      (⌛ <span v-for="color in playersWaitingFor" class="log-player" :class="playerColorClass(color, 'bg')" :key="color">{{ getPlayerName(color) }}</span>)
-    </template>
-  </template>
-  <div v-if="waitingfor !== undefined" class="wf-root">
-    <!-- Action menu (OrOptions) and start selection (SelectInitialCards) build their tabs themselves;
+    <div v-if="waitingfor !== undefined" class="wf-root">
+      <!-- Action menu (OrOptions) and start selection (SelectInitialCards) build their tabs themselves;
          every other input goes into the tab container -->
-    <!-- Simple decisions (choiceMenu.ts) are not an action menu: one tab with tiles -->
-    <PlayerInputFactory v-if="buildsOwnTabs"
-                          :players="playerView.players"
-                          :playerView="playerView"
-                          :playerinput="waitingfor"
-                          :onsave="onsave"
-                          :showsave="true"
-                          :showtitle="true"
-                          :key="inputKey" />
-    <WaitingForTabs v-else :playerView="playerViewWithHand" :playerinput="waitingfor" :onsave="onsave" :key="inputKey"/>
+      <!-- Simple decisions (choiceMenu.ts) are not an action menu: one tab with tiles -->
+      <PlayerInputFactory v-if="buildsOwnTabs"
+        :players="playerView.players"
+        :playerView="playerView"
+        :playerinput="waitingfor"
+        :onsave="onsave"
+        :showsave="true"
+        :showtitle="true"
+        :key="inputKey" />
+      <WaitingForTabs v-else :playerView="playerViewWithHand" :playerinput="waitingfor" :onsave="onsave" :key="inputKey" />
     </div>
   </div>
 </template>

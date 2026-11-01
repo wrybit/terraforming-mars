@@ -9,7 +9,7 @@
         <h3 :class="['hotkey-list__title', 'hotkey-list__title--' + group.color]"><i class="hotkey-list__swatch" aria-hidden="true"></i><span v-i18n>{{ group.title }}</span></h3>
         <HotkeyRow v-for="row in group.rows" :key="row.id" :row="row" :editing="editing" :capturing="capturing === row.id"
           :duplicate="duplicates.has(row.id)" :highlighted="highlighted.has(row.id)"
-          @capture="$emit('capture', row.id)" @hover="$emit('hover', $event ? row.id : undefined)"/>
+          @capture="$emit('capture', row.id)" @hover="$emit('hover', $event ? row.id : undefined)" />
       </section>
     </div>
   </div>

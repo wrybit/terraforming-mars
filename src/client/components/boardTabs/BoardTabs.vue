@@ -10,10 +10,10 @@
         :data-hotkey="'board-' + tab"
         @click="select(tab)">
         <!-- Name and key cap side by side: below the name only the track lines have room -->
-        <span class="board-tab-head"><span class="board-tab-name">{{ $t(label(tab)) }}</span><HotkeyKeys :action="'board-' + tab"/></span>
+        <span class="board-tab-head"><span class="board-tab-name">{{ $t(label(tab)) }}</span><HotkeyKeys :action="'board-' + tab" /></span>
         <!-- The active tab drops its short info: the board itself shows it, the others get the room -->
-        <BoardTabLines v-if="tab !== active" :tracks="tracks(tab)"/>
-        <BoardTabInfo v-if="tab !== active && info(tab) !== undefined" :info="info(tab)!"/>
+        <BoardTabLines v-if="tab !== active" :tracks="tracks(tab)" />
+        <BoardTabInfo v-if="tab !== active && info(tab) !== undefined" :info="info(tab)!" />
       </button>
     </div>
     <div v-docked-tab ref="panel" :class="['or-tab-panel', 'board-tabs-panel', 'board-tabs-panel--' + active, 'or-tab-panel--tone-' + tone(active), {'board-tabs-panel--single': tabs.length < 2}]" role="tabpanel">
@@ -27,7 +27,7 @@
       <div v-for="tab in otherTabs" :key="tab" v-show="tab === active" :class="['board-tabs-view', 'board-tabs-view--' + tab]" v-bind="fitSize(tab)">
         <slot :name="tab"></slot>
       </div>
-      <TileViewToggle v-if="active === 'mars' || active === 'moon'" :tileView="tileView" @toggleTileView="$emit('toggleTileView')"/>
+      <TileViewToggle v-if="active === 'mars' || active === 'moon'" :tileView="tileView" @toggleTileView="$emit('toggleTileView')" />
     </div>
   </div>
 </template>

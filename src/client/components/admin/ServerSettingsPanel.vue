@@ -31,10 +31,10 @@
                 <input :id="'server-setting-' + setting.key" type="checkbox" :checked="isOn(values[setting.key])" @change="setValue(setting.key, ($event.target as HTMLInputElement).checked ? 'true' : '')">
               </label>
               <ServerSettingImageField v-else-if="setting.kind === 'image'" :inputId="'server-setting-' + setting.key"
-                :value="values[setting.key] ?? ''" @update="setValue(setting.key, $event)"/>
+                :value="values[setting.key] ?? ''" @update="setValue(setting.key, $event)" />
               <ServerSettingChoiceField v-else-if="setting.kind === 'choice'" :inputId="'server-setting-' + setting.key"
                 :value="values[setting.key] ?? ''" :choices="setting.choices ?? []"
-                :image="(choice: string) => setting.choiceImage?.(choice, values) ?? ''" @update="setValue(setting.key, $event)"/>
+                :image="(choice: string) => setting.choiceImage?.(choice, values) ?? ''" @update="setValue(setting.key, $event)" />
               <div v-else class="server-settings-input">
                 <input :id="'server-setting-' + setting.key"
                   :type="inputType(setting)"

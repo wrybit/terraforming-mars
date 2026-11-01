@@ -2,7 +2,7 @@
   <div id="games-overview" class="games-overview-container admin-home">
     <AdminGate active="settings">
       <!-- Settings of the .env file, changeable here (serverSettings.ts) -->
-      <ServerSettingsPanel/>
+      <ServerSettingsPanel />
     </AdminGate>
   </div>
 </template>

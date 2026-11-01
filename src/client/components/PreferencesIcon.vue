@@ -2,7 +2,7 @@
   <div class="sidebar_item sidebar_item--settings">
     <i class="sidebar_icon sidebar_icon--settings" :title="$t('Player Settings')" :class="{'sidebar_item--is-active': preferencesPanelOpen}" @click="preferencesPanelOpen = !preferencesPanelOpen"></i>
     <SidebarModal :open="preferencesPanelOpen" :framed="true" @close="preferencesPanelOpen = false">
-      <PreferencesDialog @okButtonClicked="preferencesPanelOpen = false" :preferencesManager="PreferencesManager.INSTANCE"/>
+      <PreferencesDialog @okButtonClicked="preferencesPanelOpen = false" :preferencesManager="PreferencesManager.INSTANCE" />
     </SidebarModal>
   </div>
 </template>

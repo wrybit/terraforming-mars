@@ -9,7 +9,7 @@
         :checked="selected === card.name"
         :disabled="stateOf(card) !== 'available'"
         @change="$emit('select', card.name)">
-      <Card :card="displayedCard(card)"/>
+      <Card :card="displayedCard(card)" />
     </label>
   </div>
 </template>

@@ -9,20 +9,20 @@
       :actingPlayer="isPlayerActing(playerView)"
       :playerColor="thisPlayer.color"
       :coloniesCount="game.colonies.length"
-      :temperature = "game.temperature"
-      :oxygen = "game.oxygenLevel"
-      :oceans = "game.oceans"
-      :venus = "game.venusScaleLevel"
-      :turmoil = "game.turmoil"
+      :temperature="game.temperature"
+      :oxygen="game.oxygenLevel"
+      :oceans="game.oceans"
+      :venus="game.venusScaleLevel"
+      :turmoil="game.turmoil"
       :moonData="game.moon"
-      :gameOptions = "game.gameOptions"
-      :playerNumber = "playerView.players.length"
-      :lastSoloGeneration = "game.lastSoloGeneration"
-      :deckSize = "game.deckSize"
-      :discardPileSize = "game.discardPileSize"
-      :otherDeckSizes = "game.otherDeckSizes"
-      :spectatorId = "game.spectatorId"
-      :expectedPurgeTimeMs = "game.expectedPurgeTimeMs"/>
+      :gameOptions="game.gameOptions"
+      :playerNumber="playerView.players.length"
+      :lastSoloGeneration="game.lastSoloGeneration"
+      :deckSize="game.deckSize"
+      :discardPileSize="game.discardPileSize"
+      :otherDeckSizes="game.otherDeckSizes"
+      :spectatorId="game.spectatorId"
+      :expectedPurgeTimeMs="game.expectedPurgeTimeMs" />
 
     <!-- Two-column layout (HomeColumns) also in the start phase (choosing starting cards): selection on the left, board and log on the right -->
     <div>
@@ -39,58 +39,58 @@
               @toggleTileView="cycleTileView()"
             />
             <!-- Game end: message above Mars, then automatically to the results page -->
-            <GameOverNotice v-if="game.phase === 'end'" :participantId="playerView.id"/>
+            <GameOverNotice v-if="game.phase === 'end'" :participantId="playerView.id" />
           </div>
           <!-- Height of the Mars card, the log below gets the rest (only in the fixed layout) -->
-          <RowResizeHandle v-if="!isSetupPhase" kind="mars"/>
+          <RowResizeHandle v-if="!isSetupPhase" kind="mars" />
 
           <!-- Log below the board: both stay visible together in the two-column layout -->
           <div v-if="!isSetupPhase" class="player_home_block nofloat player-home-columns__log">
-            <LogPanel :viewModel="playerView" milestonesAwards :acting="isPlayerActing(playerView)" @spaceClicked="onSpaceClicked"/>
+            <LogPanel :viewModel="playerView" milestonesAwards :acting="isPlayerActing(playerView)" @spaceClicked="onSpaceClicked" />
           </div>
         </template>
 
         <template #main>
           <!-- Start phase: only the turn order – the player bars show nothing but zeros there yet -->
           <SetupTurnOrder v-if="isSetupPhase" :players="playerView.players">
-            <SetupBoardToggle/>
+            <SetupBoardToggle />
           </SetupTurnOrder>
-          <PlayersOverview v-else class="player_home_block player_home_block--players nofloat" :playerView="playerView" id="shortkey-playersoverview"/>
+          <PlayersOverview v-else class="player_home_block player_home_block--players nofloat" :playerView="playerView" id="shortkey-playersoverview" />
           <!-- Height of the players card, the tab box below gets the rest (only in the fixed layout) -->
-          <RowResizeHandle v-if="!isSetupPhase" kind="players"/>
+          <RowResizeHandle v-if="!isSetupPhase" kind="players" />
 
           <!-- Start phase: starting card selection or draft instead of action menu and hand cards -->
-          <PlayerSetupView v-if="isSetupPhase" :playerView="playerView"/>
+          <PlayerSetupView v-if="isSetupPhase" :playerView="playerView" />
 
           <template v-else>
-          <!-- Invisible without an own input (the note on whose turn it is then appears as a red tab by the hand cards);
+            <!-- Invisible without an own input (the note on whose turn it is then appears as a red tab by the hand cards);
                WaitingFor stays mounted though, because it polls the server after the own turn -->
-          <div class="player_home_block player_home_block--actions nofloat" v-show="playerView.waitingFor !== undefined">
-            <a name="actions" class="player_home_anchor"></a>
-            <WaitingFor v-if="game.phase !== 'end'" :playerView="playerView" :waitingfor="playerView.waitingFor" :requestId="playerView.requestId"/>
-          </div>
-
-          <div class="player_home_block player_home_block--hand" v-if="showsDraftedCardsBlock(playerView)">
-            <DynamicTitle title="Drafted cards" :color="thisPlayer.color" />
-            <div v-for="card in playerView.draftedCards" :key="card.name" class="cardbox">
-              <Card :card="card"/>
+            <div class="player_home_block player_home_block--actions nofloat" v-show="playerView.waitingFor !== undefined">
+              <a name="actions" class="player_home_anchor"></a>
+              <WaitingFor v-if="game.phase !== 'end'" :playerView="playerView" :waitingfor="playerView.waitingFor" :requestId="playerView.requestId" />
             </div>
-          </div>
 
-          <a name="cards" class="player_home_anchor"></a>
-          <!-- Without a pending input (not our turn) the hand cards sit alone in the same tab container.
+            <div class="player_home_block player_home_block--hand" v-if="showsDraftedCardsBlock(playerView)">
+              <DynamicTitle title="Drafted cards" :color="thisPlayer.color" />
+              <div v-for="card in playerView.draftedCards" :key="card.name" class="cardbox">
+                <Card :card="card" />
+              </div>
+            </div>
+
+            <a name="cards" class="player_home_anchor"></a>
+            <!-- Without a pending input (not our turn) the hand cards sit alone in the same tab container.
                Otherwise they are the first tab there above the input (isHandInInputTabs), and this block is dropped. -->
-          <div class="player_home_block player_home_block--hand" v-if="hasHandPanelContent && !isHandInInputTabs(playerView)" id="shortkey-hand">
-            <div class="or-tabs" role="tablist">
-              <DevToolsTab/>
-              <HandCardsTab :count="cardsInHandCount" :active="!devTools.open" @select="closeDevTools"/>
-              <WaitingForPlayersTab :playerView="playerView"/>
+            <div class="player_home_block player_home_block--hand" v-if="hasHandPanelContent && !isHandInInputTabs(playerView)" id="shortkey-hand">
+              <div class="or-tabs" role="tablist">
+                <DevToolsTab />
+                <HandCardsTab :count="cardsInHandCount" :active="!devTools.open" @select="closeDevTools" />
+                <WaitingForPlayersTab :playerView="playerView" />
+              </div>
+              <div v-docked-tab :class="['or-tab-panel', 'or-tab-panel--view', {'or-tab-panel--devtools': devTools.open}]" role="tabpanel">
+                <DevToolsOverlay :playerView="playerView" />
+                <HandCardsPanel :playerView="playerView" />
+              </div>
             </div>
-            <div v-docked-tab :class="['or-tab-panel', 'or-tab-panel--view', {'or-tab-panel--devtools': devTools.open}]" role="tabpanel">
-              <DevToolsOverlay :playerView="playerView"/>
-              <HandCardsPanel :playerView="playerView"/>
-            </div>
-          </div>
 
           <!-- Own played cards: as for opponents, via "show" in the player bar (modal) -->
           </template>
@@ -98,7 +98,7 @@
       </HomeColumns>
     </div>
 
-    <HotkeyHelpDialog :open="keyboardShortcutOpened" :expansions="hotkeyExpansions" @close="keyboardShortcutOpened = false"/>
+    <HotkeyHelpDialog :open="keyboardShortcutOpened" :expansions="hotkeyExpansions" @close="keyboardShortcutOpened = false" />
   </div>
 </template>
 

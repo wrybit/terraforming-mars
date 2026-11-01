@@ -33,7 +33,7 @@
             :turmoil="turmoil"
             :selected="party.name === selectedParty"
             :disabled="!partyAvailableToSelect(party.name)"
-            @select="pick(party.name)"/>
+            @select="pick(party.name)" />
         </div>
         <div class="select-party__preview" :style="selectedParty !== undefined ? {'--party': PARTY_COLOR[selectedParty]} : {}">
           <template v-if="forecastText !== undefined"><b>{{ $t('Then') }}:</b> {{ forecastText }}</template>
@@ -42,9 +42,9 @@
       </div>
     </div>
     <TabPanelFooterSlot>
-    <div v-if="showsave === true" class="nofloat">
-        <AppButton hotkey="proceed" @click="saveData" :title="playerinput.buttonLabel" type="submit" size="normal" :disabled="selectedParty === undefined"/>
-    </div>
+      <div v-if="showsave === true" class="nofloat">
+        <AppButton hotkey="proceed" @click="saveData" :title="playerinput.buttonLabel" type="submit" size="normal" :disabled="selectedParty === undefined" />
+      </div>
     </TabPanelFooterSlot>
   </div>
 </template>

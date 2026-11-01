@@ -7,9 +7,9 @@
         <button type="button" class="create-game-small-button create-game-info-box-more" @click="overlayOpen = true">
           <span v-i18n>Full info</span>
           <!-- Opens a page (as an overlay) -->
-          <svg class="create-game-info-box-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>
+          <svg class="create-game-info-box-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" /></svg>
         </button>
-        <WikiOverlay :open="overlayOpen" :href="href" :target="target" @close="overlayOpen = false"/>
+        <WikiOverlay :open="overlayOpen" :href="href" :target="target" @close="overlayOpen = false" />
       </span>
       <span v-if="excerpt !== undefined">{{ excerpt }}</span>
       <span v-else-if="failed"><span v-i18n>The info could not be loaded.</span> {{ failureText }}</span>

@@ -4,8 +4,8 @@
   <div class="setup-turn-order">
     <!-- Game menu before the title: the same place as later in the players table (game_menu.less) -->
     <div class="setup-turn-order-title-row">
-      <GameMenu/>
-      <MarsHomeLink/>
+      <GameMenu />
+      <MarsHomeLink />
       <h2 class="setup-turn-order-title" v-i18n>Turn order</h2>
     </div>
     <ol class="setup-turn-order-list">

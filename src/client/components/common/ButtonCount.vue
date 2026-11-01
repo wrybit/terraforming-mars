@@ -7,7 +7,7 @@
   <span v-if="showsDiscount" class="button-count-discount">
     <span class="button-count button-count--megacredits button-count-discount__printed">{{ part.printed }}</span>
     <span class="button-count button-count--megacredits button-count-discount__own">{{ part.value }}</span>
-    <DiscountChevron class="button-count-discount__chevron"/>
+    <DiscountChevron class="button-count-discount__chevron" />
   </span>
   <span v-else-if="part.kind === 'card' || part.kind === 'megacredits'" :class="['button-count', 'button-count--' + part.kind]">{{ part.value }}</span>
   <span v-else :class="['button-count', 'button-count--resource', 'button-count--' + part.kind]">

@@ -8,8 +8,8 @@
     <div class="board-space-text" v-if="text" v-i18n>{{ text }}</div>
     <Bonus v-if="space.tileType === undefined || !showTiles" :bonus="space.bonus" />
     <div v-if="tileView === 'coords' && space.a9 !== undefined" class="board-space-coords">{{ space.a9 }}</div>
-    <BoardCube v-if="space.color !== undefined && showTiles" class="board-cube" :color="space.color" :spinSeed="space.id"/>
-    <BoardCube v-if="space.coOwner !== undefined && showTiles" class="board-cube-coOwner" :color="space.coOwner" :size="11" :spinSeed="space.id + '-co'"/>
+    <BoardCube v-if="space.color !== undefined && showTiles" class="board-cube" :color="space.color" :spinSeed="space.id" />
+    <BoardCube v-if="space.coOwner !== undefined && showTiles" class="board-cube-coOwner" :color="space.coOwner" :size="11" :spinSeed="space.id + '-co'" />
     <div class="board-log-highlight" :data_log_highlight_id="space.id"></div>
   </div>
 </template>

@@ -4,25 +4,25 @@
   <SidebarModal :open="open" :framed="true" @close="requestClose">
     <div class="dialog-frame hotkey-dialog">
       <div class="dialog-frame-head">
-        <h2 class="dialog-frame-title hotkey-dialog__title"><span v-i18n>Keyboard Shortcuts</span><HotkeyKeys :fixed="['?']" always/></h2>
+        <h2 class="dialog-frame-title hotkey-dialog__title"><span v-i18n>Keyboard Shortcuts</span><HotkeyKeys :fixed="['?']" always /></h2>
         <button v-if="!editing" type="button" class="btn btn-tone-quiet hotkey-dialog__button" data-test="hotkey-edit" @click="startEditing">
           <span v-i18n>Edit</span>
         </button>
         <button v-else type="button" :class="['btn', 'hotkey-dialog__button', blocked ? 'hotkey-dialog__button--blocked' : 'hotkey-dialog__button--cta']"
           :disabled="blocked" :title="blocked ? $t('Resolve the keys assigned twice first') : undefined"
           data-hotkey="proceed" data-test="hotkey-done" @click="finishEditing">
-          <span v-i18n>Done</span><HotkeyKeys action="proceed" always/>
+          <span v-i18n>Done</span><HotkeyKeys action="proceed" always />
         </button>
         <button type="button" :class="['btn', 'hotkey-dialog__button', editing ? 'btn-tone-quiet' : 'hotkey-dialog__button--cta']"
           :aria-label="$t('Close')" data-test="hotkey-close" @click="requestClose">
-          <span aria-hidden="true">✕</span><HotkeyKeys action="cancel" always/>
+          <span aria-hidden="true">✕</span><HotkeyKeys action="cancel" always />
         </button>
       </div>
       <div class="dialog-frame-body hotkey-dialog__body">
         <HotkeyKeyboard :language="language" :expansions="expansions" :editing="editing" :highlighted="highlighted" :pressed="pressed" :modArmed="modArmed"
-          @hover="hoveredKey = $event" @press="pressVirtualKey"/>
+          @hover="hoveredKey = $event" @press="pressVirtualKey" />
         <HotkeyList :expansions="expansions" :editing="editing" :capturing="capturing" :duplicates="duplicates" :highlighted="highlighted"
-          @capture="capturing = $event" @hover="hoveredRow = $event"/>
+          @capture="capturing = $event" @hover="hoveredRow = $event" />
       </div>
       <div class="dialog-frame-foot hotkey-dialog__foot">
         <template v-if="editing">
@@ -30,22 +30,22 @@
           <button type="button" class="btn btn-tone-quiet hotkey-dialog__button" @click="reset"><span v-i18n>Reset</span></button>
           <label class="btn btn-tone-quiet hotkey-dialog__button">
             <svg class="hotkey-dialog__icon" viewBox="0 0 24 24" aria-hidden="true">
-              <mask id="hotkey-import-cut" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24"><rect width="24" height="24" fill="#fff"/><path :d="IMPORT_ARROW" stroke="#000" stroke-width="6"/></mask>
-              <polygon mask="url(#hotkey-import-cut)" points="11.5,5.2 18.43,9.2 18.43,17.2 11.5,21.2 4.57,17.2 4.57,9.2"/><path :d="IMPORT_ARROW"/>
+              <mask id="hotkey-import-cut" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24"><rect width="24" height="24" fill="#fff" /><path :d="IMPORT_ARROW" stroke="#000" stroke-width="6" /></mask>
+              <polygon mask="url(#hotkey-import-cut)" points="11.5,5.2 18.43,9.2 18.43,17.2 11.5,21.2 4.57,17.2 4.57,9.2" /><path :d="IMPORT_ARROW" />
             </svg>
             <span v-i18n>Import</span>
             <input type="file" accept=".json,application/json" hidden @change="importFile">
           </label>
           <button type="button" class="btn btn-tone-quiet hotkey-dialog__button" @click="exportFile">
             <svg class="hotkey-dialog__icon" viewBox="0 0 24 24" aria-hidden="true">
-              <mask id="hotkey-export-cut" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24"><rect width="24" height="24" fill="#fff"/><path :d="EXPORT_ARROW" stroke="#000" stroke-width="6"/></mask>
-              <polygon class="hotkey-dialog__icon-filled" mask="url(#hotkey-export-cut)" points="12.5,5.2 19.43,9.2 19.43,17.2 12.5,21.2 5.57,17.2 5.57,9.2"/><path :d="EXPORT_ARROW"/>
+              <mask id="hotkey-export-cut" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24"><rect width="24" height="24" fill="#fff" /><path :d="EXPORT_ARROW" stroke="#000" stroke-width="6" /></mask>
+              <polygon class="hotkey-dialog__icon-filled" mask="url(#hotkey-export-cut)" points="12.5,5.2 19.43,9.2 19.43,17.2 12.5,21.2 5.57,17.2 5.57,9.2" /><path :d="EXPORT_ARROW" />
             </svg>
             <span v-i18n>Export</span>
           </button>
         </template>
         <template v-else>
-          <ToggleSwitch :modelValue="hotkeyState.showHints" :label="$t('Show keys in the game')" @update:modelValue="setShowHints"/>
+          <ToggleSwitch :modelValue="hotkeyState.showHints" :label="$t('Show keys in the game')" @update:modelValue="setShowHints" />
           <span class="hotkey-dialog__message hotkey-dialog__message--end">{{ message }}</span>
         </template>
       </div>

@@ -5,7 +5,7 @@
     @pointerenter="show" @pointermove="move" @pointerleave="hide" @click="toggle"><slot></slot></span>
   <Teleport to="body">
     <div v-if="open && model !== undefined" class="ai-card-hover__preview" :style="position" aria-hidden="true">
-      <div class="ai-card-hover__card"><Card :card="model"/></div>
+      <div class="ai-card-hover__card"><Card :card="model" /></div>
     </div>
   </Teleport>
 </template>

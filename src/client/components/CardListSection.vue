@@ -7,7 +7,7 @@
     <h3 class="hand-cards-panel__title choice-section-title">{{ $t(title) }} <small>{{ shownCount }}</small></h3>
     <div class="hand-cards-panel__cards">
       <div v-for="card in cards" :key="card.name" class="cardbox" :class="visibilityClass(card)">
-        <Card :card="unavailable ? {...card, isDisabled: true} : card" :actionUsed="actionUsed" :cubeColor="cubeColor"/>
+        <Card :card="unavailable ? {...card, isDisabled: true} : card" :actionUsed="actionUsed" :cubeColor="cubeColor" />
       </div>
     </div>
   </section>

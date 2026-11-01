@@ -8,36 +8,36 @@
     <h3 class="dune-bazaar-purchase-intro__title">{{ $t(title) }}</h3>
     <div class="dune-bazaar-purchase-intro__row">
       <div v-if="printedPrice !== undefined" class="dune-bazaar__slot dune-bazaar-purchase-intro__card">
-        <BazaarWareCard :ware="ware" :price="printedPrice" :newPrice="price"/>
+        <BazaarWareCard :ware="ware" :price="printedPrice" :newPrice="price" />
       </div>
-  <div class="choice-options choice-block dune-bazaar-purchase" :style="choiceBlockStyle(1)">
-    <div class="choice-option choice-option--selected choice-option--resource">
-      <span class="choice-option-icons">
-        <span class="choice-option-item">
-          <span class="choice-option-amount choice-option-amount--loss">−{{ price }}</span>
-          <i class="resource_icon choice-option-icon resource_icon--megacredits"></i>
-        </span>
-        <i class="choice-option-arrow" aria-hidden="true"></i>
-        <span v-for="row in gains" :key="row.key" class="choice-option-item">
-          <span class="choice-option-amount choice-option-amount--gain">+{{ row.amount }}</span>
-          <i :class="'choice-option-icon ' + row.iconClass"></i>
-        </span>
-      </span>
-      <span>{{ $t(ware) }}</span>
-      <div class="choice-option-value">
-        <div class="choice-option-table choice-option-table--single">
-          <span></span>
-          <span class="choice-option-value-label">{{ $t('Stock') }}</span>
-          <template v-for="row in rows" :key="row.key">
-            <i :class="'choice-option-row-icon ' + row.iconClass"></i>
-            <span class="choice-option-number">
-              {{ row.before }}<span :class="['choice-option-after', row.amount > 0 ? 'choice-option-after--gain' : 'choice-option-after--loss']">→{{ row.before + row.amount }}</span>
+      <div class="choice-options choice-block dune-bazaar-purchase" :style="choiceBlockStyle(1)">
+        <div class="choice-option choice-option--selected choice-option--resource">
+          <span class="choice-option-icons">
+            <span class="choice-option-item">
+              <span class="choice-option-amount choice-option-amount--loss">−{{ price }}</span>
+              <i class="resource_icon choice-option-icon resource_icon--megacredits"></i>
             </span>
-          </template>
+            <i class="choice-option-arrow" aria-hidden="true"></i>
+            <span v-for="row in gains" :key="row.key" class="choice-option-item">
+              <span class="choice-option-amount choice-option-amount--gain">+{{ row.amount }}</span>
+              <i :class="'choice-option-icon ' + row.iconClass"></i>
+            </span>
+          </span>
+          <span>{{ $t(ware) }}</span>
+          <div class="choice-option-value">
+            <div class="choice-option-table choice-option-table--single">
+              <span></span>
+              <span class="choice-option-value-label">{{ $t('Stock') }}</span>
+              <template v-for="row in rows" :key="row.key">
+                <i :class="'choice-option-row-icon ' + row.iconClass"></i>
+                <span class="choice-option-number">
+                  {{ row.before }}<span :class="['choice-option-after', row.amount > 0 ? 'choice-option-after--gain' : 'choice-option-after--loss']">→{{ row.before + row.amount }}</span>
+                </span>
+              </template>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
     </div>
   </section>
 </template>

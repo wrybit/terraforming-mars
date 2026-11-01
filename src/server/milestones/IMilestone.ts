@@ -1,6 +1,7 @@
 import {MilestoneName} from '../../common/ma/MilestoneName';
 import {IPlayer} from '../IPlayer';
 import {IGame} from '../IGame';
+import {IMarsBot} from '@/server/automa/MarsBotCorpTypes';
 
 export interface IMilestone {
   name: MilestoneName;
@@ -9,6 +10,12 @@ export interface IMilestone {
   getScore(player: IPlayer): number;
   // Threshold for display in the milestone table; only for milestones with a simple number
   thresholdFor?(game: IGame): number;
+  /**
+   * Whether MarsBot meets the criteria.
+   *
+   * Only for milestones where the automa rules differ from `canClaim` for MarsBot's player.
+   */
+  marsBotCanClaim?(bot: IMarsBot): boolean;
 }
 
 export abstract class BaseMilestone implements IMilestone {

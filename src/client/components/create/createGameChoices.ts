@@ -114,6 +114,9 @@ export const DUNE_MILESTONE_OPTIONS: ReadonlyArray<SegmentOption> = [
   {value: RandomMAOptionType.LIMITED, label: 'Random'},
 ];
 
+/** Only offered while an imported setting holds manual milestones and awards (customMA); the form cannot pick them itself. */
+export const MANUAL_MILESTONE_OPTION: SegmentOption = {value: RandomMAOptionType.MANUAL, label: 'Manual'};
+
 export const AGENDA_OPTIONS: ReadonlyArray<SegmentOption> = [
   {value: 'Random', label: 'Random'},
   {value: 'Chairman', label: 'Chairman'},

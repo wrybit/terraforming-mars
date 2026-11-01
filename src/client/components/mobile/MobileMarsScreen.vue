@@ -20,7 +20,7 @@
       :discardPileSize="game.discardPileSize"
       :otherDeckSizes="game.otherDeckSizes"
       :spectatorId="game.spectatorId"
-      :expectedPurgeTimeMs="game.expectedPurgeTimeMs"/>
+      :expectedPurgeTimeMs="game.expectedPurgeTimeMs" />
     <!-- Turn status: who is up or which task is pending; optionally your own game time on the right (slot) -->
     <div :class="['mb-banner', {'mb-banner--waiting': !acting}]">
       <span class="mb-banner-dot"></span>
@@ -42,20 +42,20 @@
           :oxygen="game.oxygenLevel"
           :oceans="game.oceans"
           :venus="game.gameOptions.expansions.venus ? game.venusScaleLevel : undefined"
-          :boardName="game.gameOptions.boardName"/>
+          :boardName="game.gameOptions.boardName" />
       </template>
     </GameBoardView>
     <!-- Tapping Mars or the Moon also opens the large view (GameBoardView) -->
     <button v-if="boardTabState.active === 'mars' || boardTabState.active === 'moon'" type="button" class="mb-mars-zoom"
       @click="requestPlacementZoom(boardTabState.active)">
       <!-- Icon only: no own texts next to the existing translations -->
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21M10.5 7.5v6M7.5 10.5h6"/></svg>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5" /><path d="M15.5 15.5L21 21M10.5 7.5v6M7.5 10.5h6" /></svg>
     </button>
     <div v-if="players.length > 1" class="mb-quick">
       <button type="button" @click="emit('showMilestones')">{{ $t('Milestones') }} <b>{{ claimedMilestones }}/{{ MAX_MILESTONES }}</b></button>
       <button type="button" @click="emit('showMilestones')">{{ $t('Awards') }} <b>{{ fundedAwards }}/{{ MAX_AWARDS }}</b></button>
     </div>
-    <GameOverNotice v-if="game.phase === 'end'" :participantId="participantId"/>
+    <GameOverNotice v-if="game.phase === 'end'" :participantId="participantId" />
     <!-- Further sections from the caller (e.g. own underground tokens) -->
     <slot></slot>
   </section>

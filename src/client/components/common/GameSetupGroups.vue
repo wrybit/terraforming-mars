@@ -3,7 +3,7 @@
     <div class="game-setup-groups__row">
       <section v-for="group in groups" :key="group.key" class="game-setup-group">
         <h3 class="game-setup-group__title" v-i18n>{{ group.title }}</h3>
-        <GameSetupChips :chips="group.chips" compact/>
+        <GameSetupChips :chips="group.chips" compact />
       </section>
     </div>
   </div>

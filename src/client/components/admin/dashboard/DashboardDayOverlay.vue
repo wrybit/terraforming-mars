@@ -4,15 +4,15 @@
   <div class="stats-chart dashboard-day-overlay">
     <svg :viewBox="`0 0 ${width} ${height}`" role="img">
       <g v-for="tick in ticks" :key="`tick-${tick}`">
-        <line :x1="left" :x2="width - right" :y1="y(tick)" :y2="y(tick)" class="stats-chart-grid"/>
+        <line :x1="left" :x2="width - right" :y1="y(tick)" :y2="y(tick)" class="stats-chart-grid" />
         <text :x="left - 6" :y="y(tick) + 4" text-anchor="end" class="stats-chart-label">{{ tick }}</text>
       </g>
-      <line v-for="hour in hourLabels" :key="`hour-line-${hour}`" :x1="x(hour * slotsPerHour)" :x2="x(hour * slotsPerHour)" :y1="top" :y2="y(0)" class="stats-chart-grid"/>
+      <line v-for="hour in hourLabels" :key="`hour-line-${hour}`" :x1="x(hour * slotsPerHour)" :x2="x(hour * slotsPerHour)" :y1="top" :y2="y(0)" class="stats-chart-grid" />
       <polyline v-for="(profile, index) in profiles" :key="profile.start" :points="path(profile.slots)" fill="none"
         class="dashboard-day-overlay-day" :class="{'dashboard-day-overlay-day--today': index === profiles.length - 1}">
         <title>{{ dayTitle(profile.start) }}</title>
       </polyline>
-      <polyline :points="path(average)" fill="none" class="dashboard-day-overlay-average"/>
+      <polyline :points="path(average)" fill="none" class="dashboard-day-overlay-average" />
       <text v-for="hour in hourLabels" :key="`hour-${hour}`" :x="x(hour * slotsPerHour)" :y="height - 4" text-anchor="middle" class="stats-chart-label">{{ hour }}:00</text>
     </svg>
     <div class="stats-legend">

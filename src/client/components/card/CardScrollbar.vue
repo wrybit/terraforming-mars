@@ -3,7 +3,7 @@
        the content scrolls. A click on it must not choose the card (cards sit in a label with their checkbox). -->
   <!-- Hidden with visibility, not display: the track keeps its height to measure while the content does not scroll -->
   <div class="card-scrollbar" :class="{'card-scrollbar-active': active, 'card-scrollbar-idle': !state.scrolls}" aria-hidden="true"
-       @click.stop.prevent @pointerdown.stop>
+    @click.stop.prevent @pointerdown.stop>
     <div class="card-scrollbar-thumb" :style="{top: state.thumbTop + 'px', height: state.thumbHeight + 'px'}" @pointerdown.stop.prevent="grab"></div>
   </div>
 </template>

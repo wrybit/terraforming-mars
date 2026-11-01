@@ -33,14 +33,14 @@
         <div class="choam-form__row">
           <span class="choam-form__label">{{ $t(side === 'sell' ? 'Amount' : 'Budget') }}</span>
           <div class="choam-form__control">
-            <div class="amount-slider-plain"><AmountSlider v-model="amount" :min="MIN_UNITS" :max="amountMax" :shownPerStep="side === 'buy' ? normal : 1"/></div>
+            <div class="amount-slider-plain"><AmountSlider v-model="amount" :min="MIN_UNITS" :max="amountMax" :shownPerStep="side === 'buy' ? normal : 1" /></div>
             <p class="choam-info choam-info--left">{{ amountLine }}</p>
           </div>
         </div>
         <div class="choam-form__row">
           <span class="choam-form__label">{{ $t('Wish rate') }}</span>
           <div class="choam-form__control">
-            <div class="amount-slider-plain"><AmountSlider v-model="rateIndex" :min="0" :max="rates.length - 1" :display="rateText"/></div>
+            <div class="amount-slider-plain"><AmountSlider v-model="rateIndex" :min="0" :max="rates.length - 1" :display="rateText" /></div>
             <p class="choam-info choam-info--left">{{ rateLine }}</p>
           </div>
         </div>
@@ -64,7 +64,7 @@
             <span><i class="choam-chart__key choam-chart__key--own"></i>{{ $t('your prophecy') }}</span>
           </div>
           <ProphecyChart :side="side" :good="good" :units="amount" :rate="rate" :nextRate="nextRate"
-            :nextGeneration="playerView.game.generation + 1" @pick="pickRate"/>
+            :nextGeneration="playerView.game.generation + 1" @pick="pickRate" />
         </div>
       </div>
     </div>
@@ -105,7 +105,7 @@
         </div>
         <div class="choam-prophecy__withdraw">
           <AppButton size="small" class="choam-input__move choam-input__move--withdraw" :title="$t('Withdraw')"
-            :disabled="withdrawIndex(order.id) === -1" @click="$emit('withdraw', withdrawIndex(order.id))"/>
+            :disabled="withdrawIndex(order.id) === -1" @click="$emit('withdraw', withdrawIndex(order.id))" />
           <span class="choam-prophecy__hint">{{ withdrawCostLabel(order) }}</span>
         </div>
       </div>

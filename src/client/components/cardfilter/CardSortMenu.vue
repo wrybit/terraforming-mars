@@ -9,21 +9,21 @@
     <button type="button" class="card-bar-pill card-sort__more"
       :class="{'card-bar-pill--on': modelValue !== undefined, 'card-bar-pill--open': open}"
       :aria-expanded="open" :title="buttonTitle" @click="open = !open">
-      <CardSortIcon v-if="modelValue !== undefined || (compact && allowManual)" :sortKey="modelValue?.key ?? 'manual'"/>
+      <CardSortIcon v-if="modelValue !== undefined || (compact && allowManual)" :sortKey="modelValue?.key ?? 'manual'" />
       <svg v-else class="card-sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
-        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4v16M3 16l4 4 4-4M17 20V4M13 8l4-4 4 4"/></svg>
+        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4v16M3 16l4 4 4-4M17 20V4M13 8l4-4 4 4" /></svg>
       <span v-if="!compact">{{ modelValue === undefined ? $t('Sort') : $t(labelOf(modelValue.key)) + ' ' + arrow(modelValue.reversed) }}</span>
       <span v-else-if="modelValue !== undefined">{{ arrow(modelValue.reversed) }}</span>
-      <svg class="card-bar-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+      <svg class="card-bar-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
     </button>
     <div v-if="open" class="card-bar-menu card-sort-menu">
       <button v-if="compact && allowManual" type="button" class="card-sort-menu__manual" :class="{'card-sort-menu__manual--on': modelValue === undefined}"
         @click="choose(undefined)">
-        <CardSortIcon sortKey="manual"/><span v-i18n>Manual</span>
+        <CardSortIcon sortKey="manual" /><span v-i18n>Manual</span>
       </button>
       <div v-for="option in SORT_OPTIONS" :key="option.key" class="card-sort-menu__row"
         :class="{'card-sort-menu__row--on': modelValue?.key === option.key}">
-        <span class="card-sort-menu__label"><CardSortIcon :sortKey="option.key"/><span v-i18n>{{ option.label }}</span></span>
+        <span class="card-sort-menu__label"><CardSortIcon :sortKey="option.key" /><span v-i18n>{{ option.label }}</span></span>
         <button type="button" :class="{'card-sort-menu__direction--on': isChosen(option.key, false)}" :title="$t('ascending')"
           @click="chooseDirection(option.key, false)">↑</button>
         <button type="button" :class="{'card-sort-menu__direction--on': isChosen(option.key, true)}" :title="$t('descending')"

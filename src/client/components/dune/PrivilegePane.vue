@@ -6,7 +6,7 @@
     <div v-if="privilege.takenBy !== undefined" class="choam-card choam-done" data-test="choam-privilege-done">
       <div class="choam-done__head">
         <h4 class="choam-card__title">{{ titleLabel }}</h4>
-        <span class="choam-done__by">{{ $t('delivered by') }} <PlayerChip :color="privilege.takenBy" :players="playerView.players"/></span>
+        <span class="choam-done__by">{{ $t('delivered by') }} <PlayerChip :color="privilege.takenBy" :players="playerView.players" /></span>
       </div>
       <div class="choam-done__flow">
         <div class="choam-done__part">
@@ -28,8 +28,8 @@
     </div>
     <div v-else class="choam-privilege" data-test="choam-privilege">
       <div class="smuggle-input__bribe">
-        <AmountSideTile :side="goodSide" :before="stock" :after="Math.max(0, stock - privilege.amount)" :change="privilege.amount" direction="loss"/>
-        <AmountSideTile :side="SOLARI" :before="solari" :after="solari + privilege.pay" :change="privilege.pay" direction="gain"/>
+        <AmountSideTile :side="goodSide" :before="stock" :after="Math.max(0, stock - privilege.amount)" :change="privilege.amount" direction="loss" />
+        <AmountSideTile :side="SOLARI" :before="solari" :after="solari + privilege.pay" :change="privilege.pay" direction="gain" />
       </div>
       <p class="choam-info choam-info--block">
         {{ onlyOneLabel }}<br>{{ compareLabel }}<template v-if="missing > 0"><br>{{ missingLabel }}</template>

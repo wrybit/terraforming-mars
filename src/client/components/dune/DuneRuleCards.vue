@@ -4,13 +4,13 @@
        button on the right by default; a tap opens them and the button goes (Jens, 19 Oct 2026). -->
   <div class="dune-rules-block">
     <button v-if="!expanded" type="button" class="dune-rules__toggle" data-test="dune-rules-toggle" @click="expand">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path :d="BOOK"/></svg>{{ $t('Rules') }}
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path :d="BOOK" /></svg>{{ $t('Rules') }}
     </button>
     <ul v-else class="dune-rules" data-test="dune-rules">
       <li v-for="rule in rules" :key="rule.text" class="dune-rules__card">
         <span class="dune-rules__icon">
           <img v-if="rule.picture !== undefined" :src="graphic(rule.picture)" alt="">
-          <svg v-else viewBox="0 0 24 24" aria-hidden="true"><path :d="SIGNS[rule.sign ?? 'tap']"/></svg>
+          <svg v-else viewBox="0 0 24 24" aria-hidden="true"><path :d="SIGNS[rule.sign ?? 'tap']" /></svg>
         </span>
         <span class="dune-rules__text">{{ $t(rule.text) + (rule.detail === undefined ? '' : ' ' + rule.detail) }}</span>
       </li>

@@ -14,7 +14,7 @@
                random per step, like the cubes on the board; spread over the step in cells of their own, so two cubes
                never overlap (trackCubeSpots.ts; Jens 25 Oct 2026) -->
           <BoardCube v-for="(entry, index) in at(level)" :key="entry.color" class="dune-smuggling__marker" :color="entry.color"
-            :size="20" :spinSeed="'suspicion-' + entry.color + '-' + level" :title="name(entry.color)" :style="spotStyle(level, index)"/>
+            :size="20" :spinSeed="'suspicion-' + entry.color + '-' + level" :title="name(entry.color)" :style="spotStyle(level, index)" />
         </span>
       </li>
     </ol>

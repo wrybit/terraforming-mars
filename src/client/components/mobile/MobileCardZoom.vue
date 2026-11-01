@@ -21,7 +21,7 @@
       <button type="button" class="mb-card-zoom-step" :class="{'mb-card-zoom-step--hidden': !hasPrevious}" :disabled="!hasPrevious"
         :aria-label="$t('Previous card')" @click="step(-1)">‹</button>
       <div class="mb-card-zoom-main">
-        <AppButton v-if="playable" :title="$t('Play card')" type="submit" @click="$emit('play')"/>
+        <AppButton v-if="playable" :title="$t('Play card')" type="submit" @click="$emit('play')" />
         <button type="button" class="mb-card-zoom-close" @click="close">{{ $t('Close') }}</button>
       </div>
       <button type="button" class="mb-card-zoom-step" :class="{'mb-card-zoom-step--hidden': !hasNext}" :disabled="!hasNext"

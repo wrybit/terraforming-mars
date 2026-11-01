@@ -3,7 +3,7 @@
   <Teleport to="body">
     <MobileCardZoom class="stats-card-zoom" :count="names.length" v-model:index="shown" :origin="origin" @close="$emit('close')">
       <template #slide="{index: slide}">
-        <Card :card="{name: names[slide]}"/>
+        <Card :card="{name: names[slide]}" />
       </template>
     </MobileCardZoom>
   </Teleport>

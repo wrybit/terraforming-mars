@@ -6,39 +6,39 @@
   <svg class="arrakis-scales" width="720" height="720" viewBox="0 0 720 720" aria-hidden="true">
     <defs>
       <filter :id="glowId" x="-50%" y="-50%" width="200%" height="200%">
-        <feGaussianBlur stdDeviation="2.16" result="blur"/>
-        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        <feGaussianBlur stdDeviation="2.16" result="blur" />
+        <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
       </filter>
-      <path v-for="track in tracks" :id="pathId(track.key)" :key="track.key" :d="track.textPath"/>
+      <path v-for="track in tracks" :id="pathId(track.key)" :key="track.key" :d="track.textPath" />
     </defs>
     <g v-for="track in tracks" :key="track.key" :class="['arrakis-scales__track', 'arrakis-scales__track--' + track.key, {'arrakis-scales__track--full': track.art.full}]">
       <template v-if="track.art.full">
         <!-- Loaded: halo, the whole band in its gradient, solid white edges, a slow shine and the check in the middle -->
         <g :filter="glowUrl">
           <path v-for="(piece, index) in track.art.fill" :key="'fill' + index" class="arrakis-scales__piece" :d="piece.path"
-            :stroke="scaleColour(track.key, piece.share)" :stroke-width="FULL_WIDTH"/>
+            :stroke="scaleColour(track.key, piece.share)" :stroke-width="FULL_WIDTH" />
         </g>
-        <path class="arrakis-scales__edge arrakis-scales__edge--full" :d="track.art.innerEdge"/>
-        <path class="arrakis-scales__edge arrakis-scales__edge--full" :d="track.art.outerEdge"/>
-        <path class="arrakis-scales__shine" :style="motion(track.key + '-sweep', 4.5)" pathLength="1" :d="track.art.band" :stroke-width="FULL_WIDTH"/>
+        <path class="arrakis-scales__edge arrakis-scales__edge--full" :d="track.art.innerEdge" />
+        <path class="arrakis-scales__edge arrakis-scales__edge--full" :d="track.art.outerEdge" />
+        <path class="arrakis-scales__shine" :style="motion(track.key + '-sweep', 4.5)" pathLength="1" :d="track.art.band" :stroke-width="FULL_WIDTH" />
       </template>
       <template v-else>
         <!-- Glass band, the faint path of the whole gradient, edges, step dots and numbers -->
-        <path class="arrakis-scales__glass" :d="track.art.band" :stroke="track.glow" :stroke-width="SCALE_BAND"/>
+        <path class="arrakis-scales__glass" :d="track.art.band" :stroke="track.glow" :stroke-width="SCALE_BAND" />
         <path v-for="(piece, index) in track.art.ghost" :key="'ghost' + index" class="arrakis-scales__piece arrakis-scales__piece--ghost" :d="piece.path"
-          :stroke="scaleColour(track.key, piece.share)" :stroke-width="GHOST_WIDTH"/>
-        <path class="arrakis-scales__edge" :d="track.art.innerEdge" :stroke="track.glow"/>
-        <path class="arrakis-scales__edge arrakis-scales__edge--outer" :d="track.art.outerEdge" :stroke="track.glow"/>
+          :stroke="scaleColour(track.key, piece.share)" :stroke-width="GHOST_WIDTH" />
+        <path class="arrakis-scales__edge" :d="track.art.innerEdge" :stroke="track.glow" />
+        <path class="arrakis-scales__edge arrakis-scales__edge--outer" :d="track.art.outerEdge" :stroke="track.glow" />
         <circle v-for="(dot, index) in track.art.dots" :key="'dot' + index" :class="['arrakis-scales__dot', {'arrakis-scales__dot--reached': dot.reached}]"
-          :cx="dot.x" :cy="dot.y" :r="dot.reached ? 2.2 : 1.3"/>
+          :cx="dot.x" :cy="dot.y" :r="dot.reached ? 2.2 : 1.3" />
         <text v-for="(mark, index) in track.art.numbers" :key="'number' + index" :class="['arrakis-scales__number', {'arrakis-scales__number--reached': mark.reached}]"
           :x="mark.x" :y="mark.y" :transform="`rotate(${mark.rotation} ${mark.x} ${mark.y})`">{{ mark.text }}</text>
         <g :filter="glowUrl">
           <path v-for="(piece, index) in track.art.fill" :key="'fill' + index" class="arrakis-scales__piece" :d="piece.path"
-            :stroke="scaleColour(track.key, piece.share)" :stroke-width="FILL_WIDTH"/>
+            :stroke="scaleColour(track.key, piece.share)" :stroke-width="FILL_WIDTH" />
         </g>
       </template>
-      <image class="arrakis-scales__symbol" :href="track.symbol" :x="track.symbolAt.x - SYMBOL / 2" :y="track.symbolAt.y - SYMBOL / 2" :width="SYMBOL" :height="SYMBOL" :filter="glowUrl"/>
+      <image class="arrakis-scales__symbol" :href="track.symbol" :x="track.symbolAt.x - SYMBOL / 2" :y="track.symbolAt.y - SYMBOL / 2" :width="SYMBOL" :height="SYMBOL" :filter="glowUrl" />
       <text class="arrakis-scales__name">
         <textPath :href="'#' + pathId(track.key)" :startOffset="track.anchor === 'end' ? '100%' : '0%'" :text-anchor="track.anchor" dominant-baseline="central">{{ $t(track.label) }}</textPath>
       </text>
@@ -49,25 +49,25 @@
   <div class="arrakis-motion-layer" aria-hidden="true">
     <template v-for="track in tracks" :key="track.key">
       <ArrakisMotionPart v-if="track.art.full" motionClass="arrakis-scales__pulse" :motion="motion(track.key + '-halo', 2.2)" v-bind="BOARD_BOX">
-        <path class="arrakis-scales__halo" :d="track.art.band" :stroke="track.glow" :filter="glowUrl"/>
+        <path class="arrakis-scales__halo" :d="track.art.band" :stroke="track.glow" :filter="glowUrl" />
       </ArrakisMotionPart>
       <ArrakisMotionPart v-if="track.art.check !== undefined" motionClass="arrakis-scales__breathe" :motion="motion(track.key + '-check', 2.4)"
         v-bind="boxAround(track.art.check, CHECK_BOX)">
-        <path class="arrakis-scales__check arrakis-scales__check--shadow" :d="checkPath(track.art.check)"/>
-        <path class="arrakis-scales__check" :d="checkPath(track.art.check)" :filter="glowUrl"/>
+        <path class="arrakis-scales__check arrakis-scales__check--shadow" :d="checkPath(track.art.check)" />
+        <path class="arrakis-scales__check" :d="checkPath(track.art.check)" :filter="glowUrl" />
       </ArrakisMotionPart>
       <ArrakisMotionPart v-if="track.art.capsule !== undefined" motionClass="arrakis-scales__breathe" :motion="motion(track.key + '-capsule', 2.4)"
         v-bind="boxAround(track.art.capsule, CAPSULE_BOX)">
         <g :transform="`rotate(${track.art.capsule.rotation} ${track.art.capsule.x} ${track.art.capsule.y})`">
           <rect class="arrakis-scales__capsule" :x="track.art.capsule.x - 18" :y="track.art.capsule.y - 11.55" width="36" height="23.1" rx="11.55"
-            :stroke="scaleColour(track.key, track.art.capsule.share)" :filter="glowUrl"/>
+            :stroke="scaleColour(track.key, track.art.capsule.share)" :filter="glowUrl" />
           <text class="arrakis-scales__value" :x="track.art.capsule.x" :y="track.art.capsule.y">{{ track.art.capsule.text }}</text>
         </g>
       </ArrakisMotionPart>
     </template>
   </div>
   <!-- Particles from the sand to the value, each with its own size, path, pace, colour and blink -->
-  <ArrakisParticles :particles="particles"/>
+  <ArrakisParticles :particles="particles" />
 </template>
 
 <script lang="ts">

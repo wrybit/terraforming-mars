@@ -5,17 +5,17 @@
     <div class="resource-options choice-block" :style="choiceBlockStyle(playerinput.include.length)" role="radiogroup">
       <label v-for="included in playerinput.include" :key="included"
         :class="['resource-option', {'resource-option--selected': unit === included}]">
-          <!-- Radio for keyboard and screen readers, the tile is what's visible -->
-          <input type="radio" v-model="unit" :value="included" class="resource-option-input">
-          <i :class="'resource_icon resource-option-icon resource_icon--' + included"></i>
-          <span class="resource-option-name">{{ $t(included) }}</span>
+        <!-- Radio for keyboard and screen readers, the tile is what's visible -->
+        <input type="radio" v-model="unit" :value="included" class="resource-option-input">
+        <i :class="'resource_icon resource-option-icon resource_icon--' + included"></i>
+        <span class="resource-option-name">{{ $t(included) }}</span>
       </label>
     </div>
     <TabPanelFooterSlot>
-    <div v-if="showsave === true" class="nofloat">
+      <div v-if="showsave === true" class="nofloat">
         <!-- Disabled until a resource is selected -->
         <AppButton hotkey="proceed" @click="saveData" :title="playerinput.buttonLabel" :disabled="unit === undefined" />
-    </div>
+      </div>
     </TabPanelFooterSlot>
   </div>
 </template>
@@ -30,6 +30,7 @@ import {PlayerViewModel} from '@/common/models/PlayerModel';
 
 export default defineComponent({
   name: 'SelectResource',
+  emits: ['validity'],
   props: {
     playerView: {
       type: Object as () => PlayerViewModel,

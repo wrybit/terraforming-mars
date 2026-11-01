@@ -4,25 +4,25 @@
     <!-- Bazaar and schemes: their cards grow into the free room of the box, keeping their proportions (DuneFitBox.vue) -->
     <section v-if="tab === 'bazaar' && dune.bazaar" class="dune-board__section dune-board__section--fill">
       <h3 class="dune-board__title"><img class="dune-board__icon" :src="graphic('special-bazaar')" alt="">{{ $t('Bazaar of Arrakeen') }}</h3>
-      <BazaarBoard :bazaar="dune.bazaar" :players="players"/>
+      <BazaarBoard :bazaar="dune.bazaar" :players="players" />
     </section>
     <!-- The trail map grows into the free height of the box (dune_board.less) -->
     <section v-if="tab === 'worm' && dune.worm" class="dune-board__section dune-board__section--fill">
       <h3 class="dune-board__title"><img class="dune-board__icon" :src="graphic('special-worm-domain')" alt="">{{ $t('Shai-Hulud') }}</h3>
-      <WormPanel :worm="dune.worm" :board="dune.board"/>
+      <WormPanel :worm="dune.worm" :board="dune.board" />
     </section>
     <section v-if="tab === 'kanly' && dune.kanly" class="dune-board__section">
       <h3 class="dune-board__title"><img class="dune-board__icon" :src="graphic('res-sardaukar')" alt="">{{ $t('Kanly') }}</h3>
-      <KanlyPanel :kanly="dune.kanly" :players="players" :spaces="spaces" :board="dune.board"/>
+      <KanlyPanel :kanly="dune.kanly" :players="players" :spaces="spaces" :board="dune.board" />
     </section>
     <section v-if="tab === 'schemes' && dune.schemes" class="dune-board__section dune-board__section--fill">
       <h3 class="dune-board__title"><img class="dune-board__icon" :src="graphic('res-advisor')" alt="">{{ $t('House schemes') }}</h3>
-      <SchemesPanel :schemes="dune.schemes" :players="players"/>
+      <SchemesPanel :schemes="dune.schemes" :players="players" />
     </section>
     <!-- The moves of this module are made right here (duneTabActions.ts, duneMoves.ts) -->
-    <DuneActionButtons :tab="tab" :actions="tabActions"/>
+    <DuneActionButtons :tab="tab" :actions="tabActions" />
     <!-- Kanly opens its moves right below the war field card (KanlyPanel.vue) -->
-    <DuneMovePanel v-if="tab !== 'kanly'" :tab="tab"/>
+    <DuneMovePanel v-if="tab !== 'kanly'" :tab="tab" />
   </div>
 </template>
 

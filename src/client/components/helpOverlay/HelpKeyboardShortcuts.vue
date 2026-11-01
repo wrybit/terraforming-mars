@@ -6,8 +6,8 @@
     <section class="help-overlay-section help-shortcuts__section">
       <p class="help-overlay-section-lead" v-i18n>Press ? in the game to see these keys and change them.</p>
       <HotkeyKeyboard :language="language" :editing="false" :highlighted="highlighted" :pressed="NO_KEYS" :modArmed="false"
-        @hover="hoveredKey = $event"/>
-      <HotkeyList :highlighted="highlighted" @hover="hoveredRow = $event"/>
+        @hover="hoveredKey = $event" />
+      <HotkeyList :highlighted="highlighted" @hover="hoveredRow = $event" />
     </section>
   </div>
 </template>

@@ -9,7 +9,7 @@
     </template>
     <template #setup="{row}">
       <!-- Same chips as above "Create game" (gameSetupChips.ts) -->
-      <GameSetupChips :chips="setupChips(row)" compact/>
+      <GameSetupChips :chips="setupChips(row)" compact />
     </template>
     <template #result="{row}">
       <!-- Real link styled as a button: opens in a new tab, middle click works too -->

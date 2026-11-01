@@ -5,10 +5,10 @@
     <div
       class="sidebar_icon sidebar_icon--language"
       :class="{'sidebar_item--is-active': languagePanelOpen}">
-      <LanguageFlag :lang="lang" class="language-flag--toolbar" :title="title"/>
+      <LanguageFlag :lang="lang" class="language-flag--toolbar" :title="title" />
     </div>
     <SidebarModal :open="languagePanelOpen" :framed="true" @close="languagePanelOpen = false">
-      <LanguageSelectionDialog :preferencesManager="PreferencesManager.INSTANCE" @close="languagePanelOpen = false"/>
+      <LanguageSelectionDialog :preferencesManager="PreferencesManager.INSTANCE" @close="languagePanelOpen = false" />
     </SidebarModal>
   </div>
 </template>

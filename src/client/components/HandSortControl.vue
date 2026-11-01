@@ -1,7 +1,7 @@
 <template>
   <!-- Hand card sorting: one of the upstream sortings, ascending or descending; "Manual" (drag & drop) only in the hand tab.
        Hand tab and selection dialogs (play, sell) share the sorting (handSort.ts). -->
-  <CardSortMenu :modelValue="sortOrder" :compact="compact" :allowManual="allowManual" @update:modelValue="select"/>
+  <CardSortMenu :modelValue="sortOrder" :compact="compact" :allowManual="allowManual" @update:modelValue="select" />
 </template>
 
 <script setup lang="ts">

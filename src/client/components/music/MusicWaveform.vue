@@ -5,7 +5,7 @@
     @click="seekAt" @keydown.left.prevent="step(-0.05)" @keydown.right.prevent="step(0.05)">
     <svg :viewBox="`0 0 ${peaks.length * 3} 40`" preserveAspectRatio="none" aria-hidden="true">
       <rect v-for="(peak, index) in peaks" :key="index" :x="index * 3" :y="20 - barHeight(peak) / 2" width="2" :height="barHeight(peak)" rx="1"
-        :class="['music-waveform__bar', {'music-waveform__bar--played': (index + 0.5) / peaks.length <= progress}]"/>
+        :class="['music-waveform__bar', {'music-waveform__bar--played': (index + 0.5) / peaks.length <= progress}]" />
     </svg>
   </div>
 </template>

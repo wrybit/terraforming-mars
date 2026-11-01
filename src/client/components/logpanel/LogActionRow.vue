@@ -36,9 +36,9 @@
         </span>
       </template>
       <!-- Where the action placed tiles, right after the text as in the classic log -->
-      <LogSpaceChip v-for="space in placedSpaces" :key="space" :space="space" :game="viewModel.game" @spaceClicked="$emit('spaceClicked', $event)"/>
+      <LogSpaceChip v-for="space in placedSpaces" :key="space" :space="space" :game="viewModel.game" @spaceClicked="$emit('spaceClicked', $event)" />
     </span>
-    <LogRowEffects :action="row.action" :viewModel="viewModel" @spaceClicked="$emit('spaceClicked', $event)"/>
+    <LogRowEffects :action="row.action" :viewModel="viewModel" @spaceClicked="$emit('spaceClicked', $event)" />
   </div>
   <div v-else-if="row.type === 'research'" class="log-row log-row--research" data-test="log-research-row">
     <!-- Card purchase at the start of a generation, all players in one line -->

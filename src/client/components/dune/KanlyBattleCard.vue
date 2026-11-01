@@ -5,7 +5,7 @@
        outlined row, without a line of its own (Jens, 19 Oct 2026). With "added" (slider of the send input) the own new Sardaukar show lighter and count
        in the forecast. -->
   <div :class="['kanly-battle', {'kanly-battle--none': forecast === undefined || battle === undefined}]" data-test="kanly-battle">
-    <ArrakisHex v-if="battle !== undefined" ref="hex" class="kanly-battle__hex" data-flash-shape="hex" :spaceId="battle.spaceId" :space="space" :board="board"/>
+    <ArrakisHex v-if="battle !== undefined" ref="hex" class="kanly-battle__hex" data-flash-shape="hex" :spaceId="battle.spaceId" :space="space" :board="board" />
     <div v-else class="kanly-battle__hex kanly-battle__hex--empty arrakis-hex arrakis-hex--erg">
       <img :src="icon" alt="">
     </div>
@@ -18,21 +18,21 @@
           <button type="button" class="kanly-battle__coordinate" :title="$t('Show on Arrakis')" @click="showOnArrakis(battle.spaceId)">{{ coordinate }}</button>
         </span>
         <span v-if="forecast.owner !== undefined" class="kanly-battle__owner">
-          {{ $t('Tile of') }} <PlayerChip :color="forecast.owner" :players="players"/>
+          {{ $t('Tile of') }} <PlayerChip :color="forecast.owner" :players="players" />
         </span>
       </div>
 
       <ul class="kanly-battle__forces">
         <li v-for="force in forecast.forces" :key="force.color"
           :class="['kanly-battle__force', {'kanly-battle__force--holder': force.color === forecast.holder}]">
-          <PlayerChip :color="force.color" :players="players"/>
+          <PlayerChip :color="force.color" :players="players" />
           <span class="kanly-battle__role">{{ $t(roleLabel(force)) }}</span>
           <span class="kanly-battle__troops" :aria-label="String(force.sardaukar + force.added)">
             <!-- One cube in the player's colour per Sardaukar on the field, as in the mockup -->
             <BoardCube v-for="index in shownIcons(force.sardaukar)" :key="'on-' + index" class="kanly-battle__cube"
-              :color="force.color" view="slight" :size="CUBE_SIZE" :spinSeed="force.color + index"/>
+              :color="force.color" view="slight" :size="CUBE_SIZE" :spinSeed="force.color + index" />
             <BoardCube v-for="index in addedIcons(force)" :key="'add-' + index" class="kanly-battle__cube kanly-battle__cube--added"
-              :color="force.color" view="slight" :size="CUBE_SIZE" :spinSeed="force.color + 'added' + index"/>
+              :color="force.color" view="slight" :size="CUBE_SIZE" :spinSeed="force.color + 'added' + index" />
             <span v-if="force.sardaukar + force.added === 0" class="kanly-battle__none">–</span>
           </span>
           <span class="kanly-battle__count">

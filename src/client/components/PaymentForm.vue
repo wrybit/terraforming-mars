@@ -1,88 +1,88 @@
 <template>
-<TabPanelFooterSlot>
-<section class="payments_form">
-  <div class="payments_prices">
-    <!-- Balance block (payments.less): what you pay | total | what is left afterwards.
+  <TabPanelFooterSlot>
+    <section class="payments_form">
+      <div class="payments_prices">
+        <!-- Balance block (payments.less): what you pay | total | what is left afterwards.
          One grid, so icons, numbers and "=" share an axis per column; every group title sits in row 1.
          With only one currency there is nothing to split: just the cost and what is left. -->
-    <div class="payments_balance" :class="{'payments_balance--single': !hasCurrencyChoice}">
-      <template v-if="hasCurrencyChoice">
-        <span class="payments_group_title payments_group_title--cost" v-i18n>Costs</span>
-        <span class="payments_group_title payments_group_title--total" v-i18n>Sum</span>
-      </template>
-      <span v-else class="payments_group_title payments_group_title--total" v-i18n>Costs</span>
-      <span class="payments_group_title payments_group_title--rest" v-i18n>Left over</span>
-
-      <template v-for="(unit, index) of visibleUnits" :key="unit">
-        <template v-if="hasCurrencyChoice">
-          <div class="payments_unit" :style="{gridRow: index + 2}">
-            <PaymentUnitComponent
-              v-model:count.number="payment[unit]"
-              :unit="unit"
-              :description="descriptions[unit]"
-              :target="targetValue(unit)"
-              :targetReached="targetValue(unit) === payment[unit]"
-              :minusDisabled="payment[unit] <= 0"
-              :plusDisabled="payment[unit] >= plusLimit(unit)"
-              @plus="addValue(unit)"
-              @minus="reduceValue(unit)"
-              @max="maxValue(unit)"/>
-            <div v-if="ledger[unit]?.reserved" class="card-warning" v-i18n="$t(unit)">
-            Some ${0} are reserved and unavailable here.</div>
-          </div>
-          <!-- Value of this row in M€; dimmed at 0 instead of empty, so the column stays calm -->
-          <span class="payments_unit_subtotal" :class="{'payments_unit_subtotal--zero': payment[unit] === 0}" :style="{gridRow: index + 2}">
-            <span class="payments_equals">=</span>
-            <span>{{ ledger[unit].rate * payment[unit] }}</span>
-            <i class="resource_icon payments_type_smallicon resource_icon--megacredits"></i>
-          </span>
-        </template>
-        <!-- What is left of this currency after paying, in the row of its currency -->
-        <span class="payments_rest" :class="{'payments_rest--empty': restOf(unit) === 0}" :style="{gridRow: index + 2}" :data-test="'rest-' + unit">
-          <span>{{ restOf(unit) }}</span>
-          <i class="resource_icon payments_type_smallicon" :class="iconClass(unit)"></i>
-        </span>
-      </template>
-
-      <!-- Total: only whether the split fits (green), falls short (red) or overpays (yellow) – the amounts are in the rows -->
-      <div v-if="hasCurrencyChoice" class="payments_total" :class="totalSpentClass()" :style="{gridRow: '2 / span ' + visibleUnits.length}">
-        <span class="payments_total_value" :title="$t(totalSpentTitle())">
-          <template v-if="totalSpent() === cost">✓ <span v-i18n>Fits</span></template>
-          <template v-else>
-            <span>{{ Math.abs(totalSpent() - cost) }}</span>
-            <i class="resource_icon payments_type_smallicon resource_icon--megacredits"></i>
-            <span v-if="totalSpent() < cost" v-i18n>missing</span>
-            <span v-else v-i18n>too much</span>
+        <div class="payments_balance" :class="{'payments_balance--single': !hasCurrencyChoice}">
+          <template v-if="hasCurrencyChoice">
+            <span class="payments_group_title payments_group_title--cost" v-i18n>Costs</span>
+            <span class="payments_group_title payments_group_title--total" v-i18n>Sum</span>
           </template>
-        </span>
+          <span v-else class="payments_group_title payments_group_title--total" v-i18n>Costs</span>
+          <span class="payments_group_title payments_group_title--rest" v-i18n>Left over</span>
+
+          <template v-for="(unit, index) in visibleUnits" :key="unit">
+            <template v-if="hasCurrencyChoice">
+              <div class="payments_unit" :style="{gridRow: index + 2}">
+                <PaymentUnitComponent
+                  v-model:count.number="payment[unit]"
+                  :unit="unit"
+                  :description="descriptions[unit]"
+                  :target="targetValue(unit)"
+                  :targetReached="targetValue(unit) === payment[unit]"
+                  :minusDisabled="payment[unit] <= 0"
+                  :plusDisabled="payment[unit] >= plusLimit(unit)"
+                  @plus="addValue(unit)"
+                  @minus="reduceValue(unit)"
+                  @max="maxValue(unit)" />
+                <div v-if="ledger[unit]?.reserved" class="card-warning" v-i18n="$t(unit)">
+                  Some ${0} are reserved and unavailable here.</div>
+              </div>
+              <!-- Value of this row in M€; dimmed at 0 instead of empty, so the column stays calm -->
+              <span class="payments_unit_subtotal" :class="{'payments_unit_subtotal--zero': payment[unit] === 0}" :style="{gridRow: index + 2}">
+                <span class="payments_equals">=</span>
+                <span>{{ ledger[unit].rate * payment[unit] }}</span>
+                <i class="resource_icon payments_type_smallicon resource_icon--megacredits"></i>
+              </span>
+            </template>
+            <!-- What is left of this currency after paying, in the row of its currency -->
+            <span class="payments_rest" :class="{'payments_rest--empty': restOf(unit) === 0}" :style="{gridRow: index + 2}" :data-test="'rest-' + unit">
+              <span>{{ restOf(unit) }}</span>
+              <i class="resource_icon payments_type_smallicon" :class="iconClass(unit)"></i>
+            </span>
+          </template>
+
+          <!-- Total: only whether the split fits (green), falls short (red) or overpays (yellow) – the amounts are in the rows -->
+          <div v-if="hasCurrencyChoice" class="payments_total" :class="totalSpentClass()" :style="{gridRow: '2 / span ' + visibleUnits.length}">
+            <span class="payments_total_value" :title="$t(totalSpentTitle())">
+              <template v-if="totalSpent() === cost">✓ <span v-i18n>Fits</span></template>
+              <template v-else>
+                <span>{{ Math.abs(totalSpent() - cost) }}</span>
+                <i class="resource_icon payments_type_smallicon resource_icon--megacredits"></i>
+                <span v-if="totalSpent() < cost" v-i18n>missing</span>
+                <span v-else v-i18n>too much</span>
+              </template>
+            </span>
+          </div>
+          <div v-else class="payments_total payments_single" :style="{gridRow: '2 / span ' + visibleUnits.length}">
+            <span class="payments_total_value">
+              <span>{{ cost }}</span>
+              <i class="resource_icon payments_type_smallicon resource_icon--megacredits"></i>
+            </span>
+          </div>
+
+          <span v-if="hasCurrencyChoice" class="payments_divider payments_divider--total" :style="{gridRow: '1 / span ' + (visibleUnits.length + 1)}"></span>
+          <span class="payments_divider payments_divider--rest" :style="{gridRow: '1 / span ' + (visibleUnits.length + 1)}"></span>
+        </div>
+
+        <div v-if="warning !== undefined" class="tm-warning">
+          <label class="label label-error">{{ $t(warning) }}</label>
+        </div>
       </div>
-      <div v-else class="payments_total payments_single" :style="{gridRow: '2 / span ' + visibleUnits.length}">
-        <span class="payments_total_value">
-          <span>{{ cost }}</span>
-          <i class="resource_icon payments_type_smallicon resource_icon--megacredits"></i>
-        </span>
+
+      <div v-if="showsave" class="payments_save">
+        <AppButton hotkey="confirm" size="big" @click="handleSave()" :title="$t(buttonLabel)" data-test="save" />
       </div>
 
-      <span v-if="hasCurrencyChoice" class="payments_divider payments_divider--total" :style="{gridRow: '1 / span ' + (visibleUnits.length + 1)}"></span>
-      <span class="payments_divider payments_divider--rest" :style="{gridRow: '1 / span ' + (visibleUnits.length + 1)}"></span>
-    </div>
-
-    <div v-if="warning !== undefined" class="tm-warning">
-      <label class="label label-error">{{ $t(warning) }}</label>
-    </div>
-  </div>
-
-  <div v-if="showsave" class="payments_save">
-    <AppButton hotkey="confirm" size="big" @click="handleSave()" :title="$t(buttonLabel)" data-test="save"/>
-  </div>
-
-  <!-- Confirmation before overpaying; grows out of the payment area (the save button may sit outside, SelectPayment.vue) -->
-  <SidebarModal :open="overpaymentOpen" :framed="true" @close="dismissOverpayment()">
-    <OverpaymentDialog :cost="cost" :payment="payment" :order="order" :ledger="ledger" :descriptions="descriptions" :itemName="itemName"
-      @accept="acceptOverpayment()" @dismiss="dismissOverpayment()"/>
-  </SidebarModal>
-</section>
-</TabPanelFooterSlot>
+      <!-- Confirmation before overpaying; grows out of the payment area (the save button may sit outside, SelectPayment.vue) -->
+      <SidebarModal :open="overpaymentOpen" :framed="true" @close="dismissOverpayment()">
+        <OverpaymentDialog :cost="cost" :payment="payment" :order="order" :ledger="ledger" :descriptions="descriptions" :itemName="itemName"
+          @accept="acceptOverpayment()" @dismiss="dismissOverpayment()" />
+      </SidebarModal>
+    </section>
+  </TabPanelFooterSlot>
 </template>
 
 <script lang="ts">

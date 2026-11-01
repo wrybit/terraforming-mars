@@ -1,7 +1,7 @@
 <template>
   <div class="ma-block">
     <div class="ma-player" v-if="award.playerName">
-      <BoardCube v-if="award.color !== undefined" :title="award.playerName" class="board-cube" :color="award.color" view="slight"/>
+      <BoardCube v-if="award.color !== undefined" :title="award.playerName" class="board-cube" :color="award.color" view="slight" />
     </div>
 
     <div class="ma-name ma-name--awards award-block" :class="nameCss">
@@ -21,7 +21,7 @@
             v-text="score.score"
             data-test="player-score"
           ></p>
-      </template>
+        </template>
       </div>
     </div>
 

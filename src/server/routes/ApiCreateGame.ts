@@ -22,6 +22,7 @@ import {durationToMilliseconds} from '../utils/durations';
 import {readBody} from './readBody';
 import {RouteError} from './RouteError';
 import {CEO_CARDS_DEALT_PER_PLAYER} from '../../common/constants';
+import {validateCustomMA} from '../../common/ma/CustomMA';
 import {hasNegativeEscapeVelocityOption, sanitizeEscapeVelocityOptions} from '../../common/game/escapeVelocity';
 import {boardRandom, pickBoard} from '../boards/newGameBoard';
 import {boardPool} from '../../common/boards/boardPool';
@@ -96,6 +97,7 @@ export class ApiCreateGame extends Handler {
       customCeos: gameReq.customCeos,
       customColoniesList: gameReq.customColoniesList,
       customCorporationsList: gameReq.customCorporationsList,
+      customMA: gameReq.customMA,
       customPreludes: gameReq.customPreludes,
       draftVariant: gameReq.draftVariant,
       escapeVelocity: gameReq.escapeVelocity === undefined ? undefined : sanitizeEscapeVelocityOptions(gameReq.escapeVelocity),
@@ -229,6 +231,12 @@ export class ApiCreateGame extends Handler {
       // Board drawn from the board seed of the request: the same board the preview on the page showed
       const boardRng = boardRandom(gameReq.boardSeed);
       const gameOptions = ApiCreateGame.gameOptions(gameReq, pickBoard(gameReq, boardRng));
+
+      try {
+        validateCustomMA(gameOptions.customMA, gameOptions.randomMA, gameOptions.venusNextExtension);
+      } catch (e) {
+        throw RouteError.badRequest(e instanceof Error ? e.message : String(e));
+      }
 
       let game: IGame;
       if (gameOptions.clonedGamedId !== undefined && !gameOptions.clonedGamedId.startsWith('#')) {

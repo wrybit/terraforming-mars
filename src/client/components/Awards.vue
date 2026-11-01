@@ -12,7 +12,7 @@
         >
           <span v-i18n>{{ award.name }}</span>
           <span class="ma-player-cube">
-            <BoardCube v-if="award.color !== undefined" class="board-cube" :color="award.color" view="slight" :data-test-player-cube="award.color"/>
+            <BoardCube v-if="award.color !== undefined" class="board-cube" :color="award.color" view="slight" :data-test-player-cube="award.color" />
           </span>
         </span>
 
@@ -21,7 +21,7 @@
           :key="spotPrice"
           class="milestone-award-inline unpaid"
         >
-          <div class="milestone-award-price" data-test="spot-price" v-text="spotPrice" ></div>
+          <div class="milestone-award-price" data-test="spot-price" v-text="spotPrice"></div>
         </span>
       </div>
 

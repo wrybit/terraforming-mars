@@ -2,7 +2,7 @@
   <div id="admin-raw" class="games-overview-container admin-home">
     <AdminGate active="raw">
       <!-- All raw data of the server, one card each, below each other -->
-      <RawDataCard v-for="source in sources" :key="source.path" :label="source.label" :path="source.path" :kind="source.kind"/>
+      <RawDataCard v-for="source in sources" :key="source.path" :label="source.label" :path="source.path" :kind="source.kind" />
     </AdminGate>
   </div>
 </template>

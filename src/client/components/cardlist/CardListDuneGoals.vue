@@ -6,7 +6,7 @@
       <li v-for="rule in rules" :key="rule.text">{{ ruleText(rule) }}</li>
     </ul>
     <div class="card-list-dune-goals__grid">
-      <DuneGoalCard v-for="name in names" :key="name" :kind="kind" :name="name"/>
+      <DuneGoalCard v-for="name in names" :key="name" :kind="kind" :name="name" />
     </div>
   </div>
 </template>

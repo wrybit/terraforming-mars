@@ -11,30 +11,30 @@
     <div class="devtools__box devtools__group devtools__group--globals">
       <h4 class="devtools__group-title">{{ $t('Global parameters') }}</h4>
       <div class="devtools-globals">
-      <div class="devtools-pair">
-        <label class="devtools-field">
-          <span class="devtools-field__name">{{ $t('Board') }}</span>
-          <select class="devtools-select" v-model="setup.boardName" @change="scheduleSetup">
-            <option v-for="board in boards" :key="board" :value="board">{{ $t(board) }}</option>
-          </select>
+        <div class="devtools-pair">
+          <label class="devtools-field">
+            <span class="devtools-field__name">{{ $t('Board') }}</span>
+            <select class="devtools-select" v-model="setup.boardName" @change="scheduleSetup">
+              <option v-for="board in boards" :key="board" :value="board">{{ $t(board) }}</option>
+            </select>
+          </label>
+          <label class="devtools-field">
+            <span class="devtools-field__name">{{ $t('Theme') }}</span>
+            <select class="devtools-select" v-model="setup.theme" @change="scheduleSetup">
+              <option v-for="theme in themes" :key="theme" :value="theme">{{ theme }}</option>
+            </select>
+          </label>
+        </div>
+        <label :class="['devtools-slider', {'devtools-slider--pending': isPending('generation')}]">
+          <span class="devtools-slider__name">{{ $t('Generation') }}</span>
+          <input type="number" min="1" class="devtools-input devtools-input--short" v-model.number="generation" @input="scheduleGeneration">
         </label>
-        <label class="devtools-field">
-          <span class="devtools-field__name">{{ $t('Theme') }}</span>
-          <select class="devtools-select" v-model="setup.theme" @change="scheduleSetup">
-            <option v-for="theme in themes" :key="theme" :value="theme">{{ theme }}</option>
-          </select>
+        <label v-for="slider in sliders" :key="slider.key" :class="['devtools-slider', {'devtools-slider--pending': isPending(slider.key)}]">
+          <span class="devtools-slider__name">{{ $t(slider.label) }}</span>
+          <input type="range" class="devtools-range" :min="slider.min" :max="slider.max" :step="slider.step"
+            :style="{'--devtools-fill': fillOf(slider)}" v-model.number="values[slider.key]" @input="scheduleSlider(slider.key)">
+          <b class="devtools-slider__value">{{ shown(slider.key, values[slider.key]) }}</b>
         </label>
-      </div>
-      <label :class="['devtools-slider', {'devtools-slider--pending': isPending('generation')}]">
-        <span class="devtools-slider__name">{{ $t('Generation') }}</span>
-        <input type="number" min="1" class="devtools-input devtools-input--short" v-model.number="generation" @input="scheduleGeneration">
-      </label>
-      <label v-for="slider in sliders" :key="slider.key" :class="['devtools-slider', {'devtools-slider--pending': isPending(slider.key)}]">
-        <span class="devtools-slider__name">{{ $t(slider.label) }}</span>
-        <input type="range" class="devtools-range" :min="slider.min" :max="slider.max" :step="slider.step"
-          :style="{'--devtools-fill': fillOf(slider)}" v-model.number="values[slider.key]" @input="scheduleSlider(slider.key)">
-        <b class="devtools-slider__value">{{ shown(slider.key, values[slider.key]) }}</b>
-      </label>
       </div>
     </div>
 
@@ -101,7 +101,7 @@
             <span></span>
             <input type="number" min="0" class="devtools-input" v-model.number="stats.cardDiscount" @input="schedulePlayer('cardDiscount')">
             <template v-for="tag in tagList" :key="tag">
-              <span class="devtools-grid__name devtools-grid__name--tag"><Tag :tag="tag" size="small"/>{{ $t(tag) }}</span>
+              <span class="devtools-grid__name devtools-grid__name--tag"><Tag :tag="tag" size="small" />{{ $t(tag) }}</span>
               <input type="number" min="0" class="devtools-input" v-model.number="tags[tag]" @input="schedulePlayer('tags')">
               <input type="number" min="0" class="devtools-input" v-model.number="tagDiscounts[tag]" @input="schedulePlayer('tagDiscounts')">
             </template>

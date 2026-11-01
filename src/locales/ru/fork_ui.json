@@ -1766,5 +1766,9 @@
   "This page is out of date. Click OK to refresh it.": "Эта страница устарела. Нажмите OK, чтобы обновить её.",
   "Select how to pay for your project cards": "Выберите, как оплатить карты проектов",
   "turquoise": "Бирюзовый",
-  "clear": "Прозрачный"
+  "clear": "Прозрачный",
+  "Manual milestones and awards are not configurable in the UI yet.": "Вручную выбранные достижения и награды пока нельзя настроить в интерфейсе.",
+  "Manual milestones and awards are invalid: ${0}": "Вручную выбранные достижения и награды недействительны: ${0}",
+  "Manually chosen": "Выбраны вручную",
+  "Remember settings": "Запомнить настройки"
 }

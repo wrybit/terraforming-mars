@@ -3,15 +3,15 @@
        agendas as real agenda cards with their progress, closed by the button (Jens, 21 Oct 2026) -->
   <div class="schemes-keep" data-test="spy-agendas">
     <p v-if="target !== undefined" class="schemes-keep__reason">
-      <PlayerChip :color="target" :players="playerView.players"/>
+      <PlayerChip :color="target" :players="playerView.players" />
       <span>{{ $t('holds these agendas:') }}</span>
     </p>
     <div class="dune-schemes__cards schemes-keep__cards">
-      <SchemeAgendaCard v-for="agenda in agendas" :key="agenda.name" :agenda="agenda"/>
+      <SchemeAgendaCard v-for="agenda in agendas" :key="agenda.name" :agenda="agenda" />
     </div>
     <TabPanelFooterSlot>
       <div v-if="showsave" class="schemes-keep__actions">
-        <AppButton hotkey="proceed" size="big" :title="$t('Done')" data-test="spy-done" @click="done"/>
+        <AppButton hotkey="proceed" size="big" :title="$t('Done')" data-test="spy-done" @click="done" />
       </div>
     </TabPanelFooterSlot>
   </div>

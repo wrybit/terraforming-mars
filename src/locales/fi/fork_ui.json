@@ -896,5 +896,9 @@
   "This page is out of date. Click OK to refresh it.": "Tämä sivu on vanhentunut. Päivitä se valitsemalla OK.",
   "Select how to pay for your project cards": "Valitse, miten maksat projektikorttisi",
   "turquoise": "Turkoosi",
-  "clear": "Kirkas"
+  "clear": "Kirkas",
+  "Manual milestones and awards are not configurable in the UI yet.": "Käsin valittuja virstanpylväitä ja palkintoja ei voi vielä asettaa käyttöliittymässä.",
+  "Manual milestones and awards are invalid: ${0}": "Käsin valitut virstanpylväät ja palkinnot ovat virheellisiä: ${0}",
+  "Manually chosen": "Valittu käsin",
+  "Remember settings": "Muista asetukset"
 }

@@ -5,11 +5,11 @@
     <!-- The moves sit on the war field card; opening Kanly opens its input right below it (Jens, 19 Oct 2026), sending
          Sardaukar opens its tab of the action menu in the content (Jens, 25 Oct 2026) -->
     <KanlyBattleCard :kanly="kanly" :players="players" :spaces="spaces" :board="board">
-      <KanlyMoveButton v-if="kanly.battle !== undefined" :moveTitle="JOIN_KANLY_TITLE" label="Send Sardaukar" :reason="joinReason" actionTab/>
+      <KanlyMoveButton v-if="kanly.battle !== undefined" :moveTitle="JOIN_KANLY_TITLE" label="Send Sardaukar" :reason="joinReason" actionTab />
       <KanlyMoveButton v-else-if="!kanly.foughtThisGeneration" :moveTitle="OPEN_KANLY_TITLE" label="Open Kanly" :cost="OPEN_KANLY_COST"
-        :reason="openReason"/>
+        :reason="openReason" />
     </KanlyBattleCard>
-    <DuneMovePanel tab="kanly"/>
+    <DuneMovePanel tab="kanly" />
     <!-- Every player's garrison as a card of its own; the cards share the width (Jens, 19 Oct 2026) -->
     <section class="dune-kanly__garrisons">
       <h4 class="dune-kanly__label">{{ $t('Garrison') }}</h4>
@@ -19,12 +19,12 @@
           :class="['dune-kanly__troop', {'dune-kanly__troop--own': entry.color === ownColor}]"
           v-bind="entry.color === ownColor ? {role: 'button', tabindex: 0, title: $t(RECRUIT_TITLE)} : {}"
           @click="entry.color === ownColor && openRecruiting()" @keydown.enter="entry.color === ownColor && openRecruiting()">
-          <PlayerChip :color="entry.color" :players="players"/>
+          <PlayerChip :color="entry.color" :players="players" />
           <span class="dune-kanly__strength"><img :src="graphic('res-sardaukar')" alt=""><b>{{ entry.sardaukar }}</b></span>
         </li>
       </ul>
     </section>
-    <DuneRuleCards :rules="KANLY_RULES"/>
+    <DuneRuleCards :rules="KANLY_RULES" />
   </div>
 </template>
 

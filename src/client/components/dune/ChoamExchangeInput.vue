@@ -13,7 +13,7 @@
         <p class="choam-claim">{{ $t('The universal development company of the empire.') }}<br>{{ $t('A seat at CHOAM means wealth and political weight.') }}</p>
       </div>
     </header>
-    <SmugglingPanel v-if="smuggling !== undefined" :smuggling="smuggling" :players="playerView.players" :compact="true"/>
+    <SmugglingPanel v-if="smuggling !== undefined" :smuggling="smuggling" :players="playerView.players" :compact="true" />
 
     <section class="smuggle-input__move">
       <div class="smuggle-input__modes" role="radiogroup">
@@ -21,7 +21,7 @@
           :class="['smuggle-input__mode', {'smuggle-input__mode--on': mode.id === chosen, 'smuggle-input__mode--blocked': !possible(mode.id)}]"
           :aria-checked="mode.id === chosen" @click="chosen = mode.id">
           {{ $t(mode.label) }}
-          <ButtonCount v-if="mode.id === 'tribute' && ownBribeCost !== undefined" :part="{kind: 'megacredits', value: ownBribeCost, printed: TRIBUTE_PRINTED_COST}"/>
+          <ButtonCount v-if="mode.id === 'tribute' && ownBribeCost !== undefined" :part="{kind: 'megacredits', value: ownBribeCost, printed: TRIBUTE_PRINTED_COST}" />
           <!-- A privilege nobody took yet: a small green dot -->
           <span v-if="mode.id === 'privilege' && smuggling?.privilege.takenBy === undefined" class="smuggle-input__news"></span>
         </button>
@@ -34,18 +34,18 @@
           </p>
           <!-- What a step costs, in the type of the story above and a line apart from it (Jens 25 Oct 2026) -->
           <p v-if="chosen === 'tribute' && ownEnvy > 0 && ownBribeCost !== undefined" class="choam-info choam-lead choam-tribute__cost">
-            <MoneyText :text="stepCostText" :printed="TRIBUTE_PRINTED_COST"/>
+            <MoneyText :text="stepCostText" :printed="TRIBUTE_PRINTED_COST" />
           </p>
-          <p v-if="closedReason !== undefined" class="choam-info choam-closed" data-test="choam-closed"><MoneyText :text="closedReason"/></p>
+          <p v-if="closedReason !== undefined" class="choam-info choam-closed" data-test="choam-closed"><MoneyText :text="closedReason" /></p>
           <template v-else-if="smuggling !== undefined">
             <SelectTrade v-if="chosen === 'guild' && guildInput !== undefined" ref="trade" :playerView="playerView" :playerinput="guildInput"
-              :onsave="answerTo(guildIndex)" :showsave="false" :showtitle="false" :exchange="smuggling.exchange"/>
+              :onsave="answerTo(guildIndex)" :showsave="false" :showtitle="false" :exchange="smuggling.exchange" />
             <ProphecyPane v-else-if="chosen === 'prophecy'" ref="prophecy" :playerView="playerView" :options="options"
-              :exchange="smuggling.exchange" :orders="smuggling.orders" @withdraw="choose" @ready="prophecyReady = $event"/>
+              :exchange="smuggling.exchange" :orders="smuggling.orders" @withdraw="choose" @ready="prophecyReady = $event" />
             <PrivilegePane v-else-if="chosen === 'privilege'" :playerView="playerView" :privilege="smuggling.privilege" :exchange="smuggling.exchange"
-              :upcoming="smuggling.nextPrivilege"/>
+              :upcoming="smuggling.nextPrivilege" />
             <PactsPane v-else-if="chosen === 'pacts' && choam !== undefined" ref="pacts" :playerView="playerView" :options="options"
-              :choam="choam" :exchange="smuggling.exchange" @choose="choose" @offer="answerOffer"/>
+              :choam="choam" :exchange="smuggling.exchange" @choose="choose" @offer="answerOffer" />
             <template v-else-if="chosen === 'tribute' && tributeInput !== undefined">
               <!-- One row per step the envy can go down: steps, the step reached with its penalty, the price. Rows the
                    player cannot pay for are only greyed out (Jens 25 Oct 2026, variant A) -->
@@ -64,13 +64,13 @@
                     <span v-if="penalty(row.level) === 0" class="choam-tribute__free">{{ $t('no penalty') }}</span>
                   </span>
                   <span class="choam-tribute__price">
-                    <ButtonCount :part="{kind: 'megacredits', value: row.price, printed: row.steps * TRIBUTE_PRINTED_COST}"/>
+                    <ButtonCount :part="{kind: 'megacredits', value: row.price, printed: row.steps * TRIBUTE_PRINTED_COST}" />
                   </span>
                 </button>
               </div>
               <!-- Other means of payment (heat for Helion …): the usual payment form for the chosen steps -->
               <SelectPayment v-if="!paysInSolari" :key="tributeIndex" ref="payment" :playerView="playerView" :playerinput="tributeInput"
-                :onsave="answerTo(tributeIndex)" :showsave="false" :showtitle="false"/>
+                :onsave="answerTo(tributeIndex)" :showsave="false" :showtitle="false" />
             </template>
           </template>
         </div>
@@ -78,11 +78,11 @@
     </section>
 
     <!-- The rules below everything behind the "Rules" button, like on the other Dune tabs -->
-    <DuneRuleCards class="smuggle-input__rules" :rules="CHOAM_RULES"/>
+    <DuneRuleCards class="smuggle-input__rules" :rules="CHOAM_RULES" />
 
     <TabPanelFooterSlot v-if="showsave">
       <div class="amount-select__actions">
-        <AppButton hotkey="proceed" type="submit" :title="$t(FOOTER[chosen])" :counts="footerCounts" :disabled="!canSave" @click="saveData"/>
+        <AppButton hotkey="proceed" type="submit" :title="$t(FOOTER[chosen])" :counts="footerCounts" :disabled="!canSave" @click="saveData" />
       </div>
     </TabPanelFooterSlot>
   </div>

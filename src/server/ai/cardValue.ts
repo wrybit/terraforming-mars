@@ -232,6 +232,11 @@ function laterValue(snapshot: GameSnapshot, player: IPlayer, card: ICard, contex
 // remembered for the rest of the generation.
 const laterCache = new Map<string, number>();
 
+/** Tests reuse game and player ids (testGame), so a value cached by one spec must not leak into the next. */
+export function clearLaterValueCacheForTest(): void {
+  laterCache.clear();
+}
+
 function cachedLaterValue(snapshot: GameSnapshot, player: IPlayer, card: ICard, context: ValuationContext): number {
   // Tuning in the key: the same seat with another tuning (tests, variants) must not reuse the value.
   const key = `${player.game.id}|${player.id}|${player.game.generation}|${card.name}|${tuningKey(player)}`;

@@ -4,7 +4,7 @@
     <div v-for="option in cardOptions" :key="option.index ?? option.label"
       :class="['ai-decision-cards__item', {'ai-decision-cards__item--chosen': option.chosen === true}]">
       <div class="ai-decision-cards__card">
-        <Card :card="cardModel(option.card)"/>
+        <Card :card="cardModel(option.card)" />
       </div>
       <span class="ai-decision-cards__value">{{ option.chosen === true ? '✓ ' : '' }}{{ formatValue(option.value) }}</span>
     </div>

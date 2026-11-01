@@ -17,6 +17,7 @@ import {defineComponent, PropType} from 'vue';
 
 export default defineComponent({
   name: 'PopupPanel',
+  emits: ['close'],
   props: {
     /** compact: sized to its content up to a readable line length (popup.less); wide: most of the screen (filter grids) */
     size: {

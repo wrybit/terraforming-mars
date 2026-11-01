@@ -7,9 +7,9 @@
     <div class="turmoil-event__name">{{ $t(event.name) }}</div>
     <!-- card-container: the card icon styles (cards_v2.less) only apply inside it -->
     <div class="turmoil-event__effect card-container">
-      <div class="card-content turmoil-event__render"><CardRenderData :renderData="event.renderData"/></div>
+      <div class="card-content turmoil-event__render"><CardRenderData :renderData="event.renderData" /></div>
     </div>
-    <div class="turmoil-event__text"><CardDescription :item="event.description"/></div>
+    <div class="turmoil-event__text"><CardDescription :item="event.description" /></div>
     <div class="turmoil-event__neutral">
       <span class="turmoil-event__step turmoil-event__step--done" :title="$t('when revealed')">
         <img class="turmoil-event__figure" :src="figureImage('neutral')" alt=""><i>→</i>

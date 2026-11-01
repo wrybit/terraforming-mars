@@ -4,9 +4,9 @@
     <p v-if="gpus.length === 0" class="games-overview-note" v-i18n>No graphics adapter found</p>
     <div v-for="(gpu, index) in gpus" :key="index" class="server-dashboard-gpu">
       <h3 class="server-dashboard-subheading">{{ gpu.name }}</h3>
-      <DashboardMeter v-if="gpu.busyPercent !== undefined" label="Graphics load" :used="gpu.busyPercent" :total="100" unit="percent"/>
-      <DashboardMeter v-if="gpu.videoMemory !== undefined" label="Video memory" :used="gpu.videoMemory.usedBytes" :total="gpu.videoMemory.totalBytes"/>
-      <DashboardFacts :facts="facts(gpu)"/>
+      <DashboardMeter v-if="gpu.busyPercent !== undefined" label="Graphics load" :used="gpu.busyPercent" :total="100" unit="percent" />
+      <DashboardMeter v-if="gpu.videoMemory !== undefined" label="Video memory" :used="gpu.videoMemory.usedBytes" :total="gpu.videoMemory.totalBytes" />
+      <DashboardFacts :facts="facts(gpu)" />
       <p v-if="gpu.kind === 'virtual'" class="games-overview-note" v-i18n>Display adapter of the virtual machine: it does not compute graphics.</p>
     </div>
   </div>

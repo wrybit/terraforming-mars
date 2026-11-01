@@ -6,7 +6,7 @@
     <div class="choam-card choam-open">
       <h4 class="choam-card__title">{{ $t('Open offers') }}</h4>
       <div v-for="line in lines" :key="line.color" class="choam-open__row">
-        <PlayerChip :color="line.color" :players="playerView.players"/>
+        <PlayerChip :color="line.color" :players="playerView.players" />
         <span v-if="line.offers.length === 0" class="choam-info">{{ $t(line.own && offerInput !== undefined ? 'No offer yet, make one below' : 'No offer at the moment') }}</span>
         <template v-for="offer in line.offers" :key="offer.index">
           <span class="choam-input__goods"><b>{{ offer.giveAmount }}</b><img :src="graphic(offer.give)" :alt="$t(label(offer.give))" :title="$t(label(offer.give))"></span>
@@ -14,7 +14,7 @@
           <span class="choam-input__goods"><b>{{ offer.wantAmount }}</b><img :src="graphic(offer.want)" :alt="$t(label(offer.want))" :title="$t(label(offer.want))"></span>
           <span class="choam-open__note">{{ noteLabel(offer) }}</span>
           <AppButton size="small" :class="['choam-input__move', {'choam-input__move--withdraw': line.own}]"
-            :title="$t(line.own ? 'Withdraw' : 'Accept')" :disabled="offer.choice === -1" @click="$emit('choose', offer.choice)"/>
+            :title="$t(line.own ? 'Withdraw' : 'Accept')" :disabled="offer.choice === -1" @click="$emit('choose', offer.choice)" />
         </template>
       </div>
     </div>
@@ -22,7 +22,7 @@
     <div class="choam-card choam-form">
       <h4 class="choam-card__title">{{ $t('Your offer') }}</h4>
       <template v-if="offerInput !== undefined">
-        <SelectTrade ref="trade" :playerView="playerView" :playerinput="offerInput" :onsave="answerOffer" :showsave="false" :showtitle="false"/>
+        <SelectTrade ref="trade" :playerView="playerView" :playerinput="offerInput" :onsave="answerOffer" :showsave="false" :showtitle="false" />
         <p class="choam-info">{{ feeLabel }}</p>
       </template>
       <p v-else class="choam-info">{{ $t(ownOpen ? 'You already have an offer open, withdraw it to make a new one.' : 'Nothing to offer') }}</p>

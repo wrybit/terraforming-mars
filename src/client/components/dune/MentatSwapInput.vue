@@ -12,7 +12,7 @@
         <button v-for="agenda in own" :key="agenda.name" type="button"
           :class="['schemes-keep__choice', 'mentat-swap__choice', {'mentat-swap__choice--out': chosenOwn === agenda.name}]"
           :data-test="'mentat-own-' + agenda.name" @click="chosenOwn = agenda.name">
-          <SchemeAgendaCard :agenda="agenda"/>
+          <SchemeAgendaCard :agenda="agenda" />
         </button>
       </div>
     </section>
@@ -26,15 +26,15 @@
         <button v-for="agenda in deck" :key="agenda.name" type="button"
           :class="['schemes-keep__choice', 'mentat-swap__choice', {'mentat-swap__choice--in': chosenNew === agenda.name}]"
           :data-test="'mentat-new-' + agenda.name" @click="chosenNew = agenda.name">
-          <SchemeAgendaCard :agenda="agenda"/>
+          <SchemeAgendaCard :agenda="agenda" />
         </button>
       </div>
     </section>
 
     <TabPanelFooterSlot>
       <div v-if="showsave" class="mentat-swap__actions">
-        <AppButton size="big" :title="$t('Keep my agendas')" data-test="mentat-keep" @click="keep"/>
-        <AppButton hotkey="proceed" size="big" :disabled="!canSwap" :title="$t('Swap agendas')" data-test="mentat-swap-button" @click="swap"/>
+        <AppButton size="big" :title="$t('Keep my agendas')" data-test="mentat-keep" @click="keep" />
+        <AppButton hotkey="proceed" size="big" :disabled="!canSwap" :title="$t('Swap agendas')" data-test="mentat-swap-button" @click="swap" />
       </div>
     </TabPanelFooterSlot>
   </div>

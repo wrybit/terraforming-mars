@@ -7,13 +7,13 @@
       v-flash-tab="{id: 'mobile-segment-' + entry.key, areas: entry.flashAreas, active: segment === entry.key}"
       @click="emit('update:segment', entry.key)">{{ entry.labels.map((label) => $t(label)).join(' & ') }}</button>
   </div>
-  <PlayersOverview v-show="segment === 'players'" :playerView="viewModel"/>
+  <PlayersOverview v-show="segment === 'players'" :playerView="viewModel" />
   <!-- The wrapper carries v-show: the table itself is forced visible in the mobile view via !important -->
   <div v-if="viewModel.players.length > 1" v-show="segment === 'ma'" class="mb-ma">
     <MilestoneAwardTable :milestones="viewModel.game.milestones" :awards="viewModel.game.awards" :players="viewModel.players" :viewerColor="viewerColor">
       <!-- Same header as in the player section: name, status/time, corporation -->
       <template #player="{player}">
-        <PlayerIdentity :player="player" :playerView="viewModel" :actionLabel="playerActionLabel(player, viewModel)" :highlighted="player.color === viewerColor"/>
+        <PlayerIdentity :player="player" :playerView="viewModel" :actionLabel="playerActionLabel(player, viewModel)" :highlighted="player.color === viewerColor" />
       </template>
     </MilestoneAwardTable>
   </div>

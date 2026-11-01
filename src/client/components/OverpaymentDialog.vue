@@ -24,7 +24,7 @@
         </span>
       </div>
       <div class="overpayment-dialog__bar">
-        <span v-for="part of parts" :key="part.unit" class="overpayment-dialog__segment"
+        <span v-for="part in parts" :key="part.unit" class="overpayment-dialog__segment"
           :class="'overpayment-dialog__segment--' + part.unit" :style="{flexGrow: part.value}" :data-test="'segment-' + part.unit">
           <i class="resource_icon overpayment-dialog__segment-icon" :class="iconClass(part.unit)" :style="{left: iconLeft(part) + '%'}"></i>
         </span>
@@ -40,7 +40,7 @@
 
       <!-- Legend under the bar: count × rate = value, in the order of the segments -->
       <ul class="overpayment-dialog__legend">
-        <li v-for="part of parts" :key="part.unit" class="overpayment-dialog__legend-row">
+        <li v-for="part in parts" :key="part.unit" class="overpayment-dialog__legend-row">
           <i class="resource_icon overpayment-dialog__legend-icon" :class="iconClass(part.unit)"></i>
           <span class="overpayment-dialog__legend-calc">{{ part.count }} × {{ part.rate }}</span>
           <span class="overpayment-dialog__legend-value">= {{ part.value }}</span>
@@ -54,13 +54,13 @@
 
     <template #footer>
       <!-- Red = back out, green = go ahead (button_tones.less); the accept button repeats the excess, so the click says what it costs -->
-      <button type="button" class="btn btn-tone-danger" data-test="dismiss" @click="emit('dismiss')"><span v-i18n>No, adjust</span><HotkeyKeys action="cancel"/></button>
+      <button type="button" class="btn btn-tone-danger" data-test="dismiss" @click="emit('dismiss')"><span v-i18n>No, adjust</span><HotkeyKeys action="cancel" /></button>
       <button type="button" class="btn btn-tone-success overpayment-dialog__accept" data-test="accept" data-hotkey="confirm" @click="emit('accept')">
         <span v-i18n>Yes, pay anyway</span>
         <span class="overpayment-dialog__accept-excess" data-test="accept-excess">
           <span class="overpayment-dialog__accept-figure">+<span class="button-count button-count--megacredits">{{ excess }}</span></span>
         </span>
-        <HotkeyKeys action="confirm"/>
+        <HotkeyKeys action="confirm" />
       </button>
     </template>
   </DialogFrame>

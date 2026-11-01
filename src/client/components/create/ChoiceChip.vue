@@ -18,7 +18,7 @@
     </span>
     <span v-else class="create-game-chip-label" :class="{capitalized}">{{ translatedLabel }}</span>
     <slot></slot>
-    <InfoLink v-if="href" :href="href"/>
+    <InfoLink v-if="href" :href="href" />
   </div>
 </template>
 

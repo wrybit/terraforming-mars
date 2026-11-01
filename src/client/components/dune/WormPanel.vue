@@ -3,8 +3,8 @@
        what it does to the spaces it crosses. Choosing the distance and paying a levy come as inputs of their own
        (WormMoveInput.vue, levy input). -->
   <div class="dune-worm" data-test="dune-worm">
-    <WormTrail :trail="worm.trail" :board="board"/>
-    <DuneRuleCards :rules="rules"/>
+    <WormTrail :trail="worm.trail" :board="board" />
+    <DuneRuleCards :rules="rules" />
   </div>
 </template>
 

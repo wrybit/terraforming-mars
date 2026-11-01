@@ -4,7 +4,7 @@
        of the schemes tab; a click (or the number key) picks one, the button keeps it (Jens, 20 Oct 2026). -->
   <div class="schemes-keep" data-test="schemes-keep">
     <p class="schemes-keep__reason">
-      <PlayerChip v-for="player in reachedBy" :key="player.color" :color="player.color" :players="playerView.players"/>
+      <PlayerChip v-for="player in reachedBy" :key="player.color" :color="player.color" :players="playerView.players" />
       <span>{{ $t(reachedBy.length > 1 ? 'have passed 35 on the Landsraad track.' : 'has passed 35 on the Landsraad track.') }}</span>
     </p>
     <p class="schemes-keep__hint">{{ $t('Choose the agenda you keep:') }}</p>
@@ -12,13 +12,13 @@
       <label v-for="(agenda, index) in agendas" :key="agenda.name"
         :class="['schemes-keep__choice', {'schemes-keep__choice--chosen': chosen === index}]" :data-test="'schemes-keep-' + index">
         <input type="radio" class="choice-option-input" name="schemes-keep" :checked="chosen === index" @change="chosen = index">
-        <SchemeAgendaCard :agenda="agenda"/>
+        <SchemeAgendaCard :agenda="agenda" />
         <span class="schemes-keep__key">{{ index + 1 }}</span>
       </label>
     </div>
     <TabPanelFooterSlot>
       <div v-if="showsave" class="schemes-keep__actions">
-        <AppButton hotkey="proceed" size="big" :disabled="chosen === undefined" :title="$t('Keep')" @click="save"/>
+        <AppButton hotkey="proceed" size="big" :disabled="chosen === undefined" :title="$t('Keep')" @click="save" />
       </div>
     </TabPanelFooterSlot>
   </div>
