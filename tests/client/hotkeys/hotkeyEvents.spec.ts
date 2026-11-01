@@ -15,6 +15,9 @@ describe('hotkeyEvents', () => {
   });
 
   it('reads single keys by position', () => {
+    // QWERTZ: Pass and End stay on the bottom row (KeyZ / KeyX), whatever their caps say.
+    expect(keysOfEvent(press('KeyZ', 'w'))).to.deep.equal(['KeyZ']);
+    expect(keysOfEvent(press('KeyX', 'x'))).to.deep.equal(['KeyX']);
     expect(keysOfEvent(press('KeyY', 'z'))).to.deep.equal(['KeyY']);
     expect(keysOfEvent(press('Numpad1', '1'))).to.deep.equal(['Digit1']);
   });

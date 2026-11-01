@@ -45,6 +45,18 @@ describe('HotkeyKeyboard', () => {
     const allCards = wrapper.find('[data-key="Q"]');
     expect(allCards.text()).to.include('A');
     expect(allCards.find('.hotkey-keyboard__use').text()).to.equal('Cards');
+    expect(wrapper.find('[data-key="A"] .hotkey-keyboard__use').text()).to.equal('Corporation');
+  });
+
+  it('updates the drawn caps when the detected layout arrives while the dialog is open', async () => {
+    const wrapper = mountKeyboard('en');
+    expect(wrapper.find('[data-key="Q"]').text()).to.include('Q');
+
+    detectedLayout.value = new Map([['KeyQ', 'a'], ['KeyA', 'q']]);
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.find('[data-key="Q"]').text()).to.include('A');
+    expect(wrapper.find('[data-key="Q"] .hotkey-keyboard__use').text()).to.equal('Cards');
   });
 
   it('has arrow up and down as two half keys', () => {
