@@ -437,8 +437,9 @@ import {getColony} from '@/client/colonies/ClientColonyManifest';
 import {RULEBOOK_URLS, WIKI_URLS} from '@/client/utils/WikiLinks';
 import {setDocumentTitle} from '@/client/utils/documentTitle';
 import {sanitizeEscapeVelocityOptions} from '@/common/game/escapeVelocity';
-import {validateNewGameConfig, validationDetails, ValidationErrors} from '@/common/game/validateNewGameConfig';
+import {validateNewGameConfig, ValidationErrors} from '@/common/game/validateNewGameConfig';
 import ValidationProblems from './ValidationProblems.vue';
+import {boxProblemKeys, hasBlockingProblem} from './validationProblemKeys';
 import ChoiceChip from './ChoiceChip.vue';
 import ExpansionGroupMenu from './ExpansionGroupMenu.vue';
 import InfoLink from './InfoLink.vue';
@@ -755,13 +756,10 @@ export default defineComponent({
       });
     },
     hasValidationProblems(): boolean {
-      return Object.values(this.validationErrors).some((value) => Array.isArray(value) ? value.length > 0 : Boolean(value));
+      return boxProblemKeys(this.validationErrors).length > 0;
     },
     hasBlockingValidationErrors(): boolean {
-      return (Object.keys(validationDetails) as Array<keyof ValidationErrors>).some((key) => {
-        const value = this.validationErrors[key];
-        return validationDetails[key].blocking && (Array.isArray(value) ? value.length > 0 : Boolean(value));
-      });
+      return hasBlockingProblem(this.validationErrors);
     },
     RandomBoardOption(): typeof RandomBoardOption {
       return RandomBoardOption;
