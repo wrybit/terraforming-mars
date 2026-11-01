@@ -955,5 +955,6 @@
   "Manual milestones and awards are not configurable in the UI yet.": "Les objectifs et récompenses manuels ne sont pas encore configurables dans l'interface.",
   "Manual milestones and awards are invalid: ${0}": "Les objectifs et récompenses manuels sont invalides : ${0}",
   "Manually chosen": "Choisis manuellement",
-  "Remember settings": "Mémoriser les paramètres"
+  "Remember settings": "Mémoriser les paramètres",
+  "All tags except City and No tag": "Tous les badges sauf Cité et sans badge"
 }

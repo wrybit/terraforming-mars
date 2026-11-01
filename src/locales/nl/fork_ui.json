@@ -1531,5 +1531,6 @@
   "Manual milestones and awards are not configurable in the UI yet.": "Handmatige mijlpalen en prijzen zijn nog niet in te stellen in de interface.",
   "Manual milestones and awards are invalid: ${0}": "Handmatige mijlpalen en prijzen zijn ongeldig: ${0}",
   "Manually chosen": "Handmatig gekozen",
-  "Remember settings": "Instellingen onthouden"
+  "Remember settings": "Instellingen onthouden",
+  "All tags except City and No tag": "Alle labels behalve stad en zonder label"
 }
