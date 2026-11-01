@@ -152,6 +152,12 @@ export type AiTuning = {
   plantHoardDecay: number,
   /** Extra M€ per playable hand card (at most 3) a standard project gives up in the last three generations before the last (lateStandardRestraint.ts); 0 = off. */
   lateStandardRestraint: number,
+  /** VP per own adjacent greenery and per city an opponent leads by, for an own city spot (cityRaceAdapt.ts); 0 = off. */
+  cityRaceAdapt: number,
+  /** Weight of the drawn cards' value taken off a draw move while the hand holds many unplayable cards (drawStop.ts); 0 = off. */
+  drawStop: number,
+  /** > 0: next generation's income counts as a city plan for city first (cityFirstWithIncome.ts); 0 = off. */
+  cityFirstWithIncome: number,
   /** > 0: before the last generation the AI may sell hand cards whose maximum requirement is exceeded (deadCardSale.ts). */
   deadCardSale: number,
   /** Weight of scaling the lonely/open greenery penalties by the chance an opponent still builds there (lonelyGreeneryOdds.ts); 0 = off. */
@@ -436,6 +442,9 @@ export const BASELINE_TUNING: AiTuning = {
   spareMoneyDraw: 0,
   plantHoardDecay: 1,
   lateStandardRestraint: 0,
+  cityRaceAdapt: 0,
+  drawStop: 0,
+  cityFirstWithIncome: 0,
   deadCardSale: 0,
   lonelyGreeneryOdds: 0,
   cityFirstAction: 1,
@@ -1016,6 +1025,12 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   noPlantHoardDecay: {plantHoardDecay: 0},
   // Round 159 (batch analysis handLeftover.py): late standard projects while hand cards were playable (~70 M€ per game).
   lateStandardRestraint: {lateStandardRestraint: 2},
+  // Round 163 (human games 29.–31.10.): opponents put 2.9 cities per game next to AI greeneries, AI nests 3.85.
+  cityRaceAdapt: {cityRaceAdapt: 1},
+  // Round 163: hands of 12+ cards, 32 drawn cards in one human game – stop drawing into an unplayable hand.
+  drawStop: {drawStop: 1},
+  // Round 163: city first was nearly always off in human games (AI 8.5 % vs humans 52 %) – income counts as a plan.
+  cityFirstWithIncome: {cityFirstWithIncome: 1},
   // Round 159: 1.3 never-playable cards per player at the end, mostly exceeded maximum requirements – sell them earlier.
   deadCardSale: {deadCardSale: 1},
   // Same game: fixed lonely-greenery penalties although an opponent would build on few of the open spots late.
