@@ -362,7 +362,7 @@ export const BASELINE_TUNING: AiTuning = {
   // against 1 – lowered.
   closer: 0.5,
   closerBehind: 2,
-  worldGovernmentRival: 0,
+  worldGovernmentRival: 1,
   terraformBrake: 0,
   // Neutral in AI-vs-AI (z +0.36) but measured right (2P 14.5, 3P 11.8 generations); adopted on
   // purpose against the z rule: with 12 the AI gave up its engine from generation 8 against a human.
@@ -719,6 +719,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   noCloserBehind: {closerBehind: 0},
   // Player rating: World Government raised Venus for a Venus-tag rival (Morning Star Inc.).
   worldGovernmentRival: {worldGovernmentRival: 1},
+  // Round 165: worldGovernmentRival adopted (+0.64, z +1.08; fixes a tester-reported Venus raise for a rival); check.
+  noWorldGovernmentRival: {worldGovernmentRival: 0},
   // Round 50: around the adopted closer 1.
   noCloser: {closer: 0},
   closer05: {closer: 0.5},
