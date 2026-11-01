@@ -5,7 +5,7 @@
     @click="$emit('capture')" @mouseenter="$emit('hover', true)" @mouseleave="$emit('hover', false)">
     <span class="hotkey-row__keys">
       <kbd v-if="capturing" class="hotkey-key">…</kbd>
-      <HotkeyKeys v-else-if="hasKeys" :action="row.id" always/>
+      <HotkeyKeys v-else-if="hasKeys" :action="row.id" always />
       <kbd v-else class="hotkey-key hotkey-key--empty">–</kbd>
     </span>
     <span :class="labelClass">{{ capturing ? $t('Press a key …') : $t(row.label) }}<span v-if="row.detail !== undefined && !capturing" class="hotkey-row__detail">{{ $t(row.detail) }}</span></span>
@@ -13,8 +13,8 @@
   <div v-else :class="['hotkey-row', {'hotkey-row--locked': editing && row.locked === true, 'hotkey-row--highlighted': highlighted}]"
     @mouseenter="$emit('hover', true)" @mouseleave="$emit('hover', false)">
     <span class="hotkey-row__keys">
-      <HotkeyKeys v-if="row.locked === true" :fixed="row.keys" always/>
-      <HotkeyKeys v-else-if="hasKeys" :action="row.id" always/>
+      <HotkeyKeys v-if="row.locked === true" :fixed="row.keys" always />
+      <HotkeyKeys v-else-if="hasKeys" :action="row.id" always />
       <kbd v-else class="hotkey-key hotkey-key--empty">–</kbd>
     </span>
     <span :class="labelClass">{{ $t(row.label) }}<span v-if="row.detail !== undefined" class="hotkey-row__detail">{{ $t(row.detail) }}</span></span>

@@ -2,7 +2,7 @@
   <a v-if="kind === 'player'" :href="href" data-stats-link class="stats-player" :class="`player_translucent_bg_color_${color}`">{{ name }}</a>
   <span v-else class="stats-entity-group">
     <a :href="href" data-stats-link class="stats-entity">
-      <MilestoneAwardIcon v-if="iconParts !== undefined" class="stats-entity-icon" :parts="iconParts"/>
+      <MilestoneAwardIcon v-if="iconParts !== undefined" class="stats-entity-icon" :parts="iconParts" />
       <span v-i18n>{{ label }}</span>
     </a>
     <!-- Cards can be viewed large; the icon is a small card -->

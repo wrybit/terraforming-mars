@@ -1,47 +1,47 @@
 <template>
-<!-- Latest updates from the feature log (feature-log.json of the showcase site). Desktop: column at the right edge,
+  <!-- Latest updates from the feature log (feature-log.json of the showcase site). Desktop: column at the right edge,
      faint until the mouse comes near; narrow windows: below the menu. Without the file there is no column. -->
-<aside v-if="days.length > 0"
-  ref="panel"
-  class="start-updates"
-  :style="{'--near': near, 'top': top}"
-  :aria-label="texts.heading">
-  <div class="start-updates-head">
-    <h2 class="start-updates-heading">{{ texts.heading }}</h2>
-    <a class="start-updates-all" :href="featureLogUrl" target="_blank" rel="noopener">{{ texts.all }} →</a>
-  </div>
-  <div class="start-updates-days">
-    <div v-for="(day, index) in days"
-      :key="day.date"
-      class="start-updates-day"
-      :class="{'start-updates-day--newest': index === 0, 'start-updates-day--open': index === openIndex}"
-      tabindex="0"
-      role="button"
-      :aria-expanded="index === openIndex"
-      @click="onDayClick($event, index)"
-      @keydown.enter.prevent="toggleDay(index)"
-      @keydown.space.prevent="toggleDay(index)">
-      <span class="start-updates-date">{{ day.shortDate }}</span>
-      <span class="start-updates-title">{{ day.title }}<span class="start-updates-count">{{ day.items.length }}</span></span>
-      <span class="start-updates-chevron" aria-hidden="true">›</span>
-      <div class="start-updates-sheet" :class="{'start-updates-sheet--sunday': day.sunday}" aria-hidden="true">
-        <span class="start-updates-sheet-month">{{ day.month }}</span>
-        <span class="start-updates-sheet-day">{{ day.dayOfMonth }}</span>
-        <span class="start-updates-sheet-weekday">{{ day.weekday }}</span>
-      </div>
-      <!-- Extra wrapper: the grid row animates from 0fr to 1fr, the list keeps its own spacing -->
-      <div class="start-updates-body">
-        <div>
-          <ul class="start-updates-items">
-            <li v-for="item in day.items" :key="item" :title="item">{{ item }}</li>
-            <!-- Commits of the day as the last line of the list (not on the sheet, where it was too small to read) -->
-            <li v-if="day.commits > 0" class="start-updates-commits">{{ day.commits }} {{ day.commitsLabel }}</li>
-          </ul>
+  <aside v-if="days.length > 0"
+    ref="panel"
+    class="start-updates"
+    :style="{'--near': near, 'top': top}"
+    :aria-label="texts.heading">
+    <div class="start-updates-head">
+      <h2 class="start-updates-heading">{{ texts.heading }}</h2>
+      <a class="start-updates-all" :href="featureLogUrl" target="_blank" rel="noopener">{{ texts.all }} →</a>
+    </div>
+    <div class="start-updates-days">
+      <div v-for="(day, index) in days"
+        :key="day.date"
+        class="start-updates-day"
+        :class="{'start-updates-day--newest': index === 0, 'start-updates-day--open': index === openIndex}"
+        tabindex="0"
+        role="button"
+        :aria-expanded="index === openIndex"
+        @click="onDayClick($event, index)"
+        @keydown.enter.prevent="toggleDay(index)"
+        @keydown.space.prevent="toggleDay(index)">
+        <span class="start-updates-date">{{ day.shortDate }}</span>
+        <span class="start-updates-title">{{ day.title }}<span class="start-updates-count">{{ day.items.length }}</span></span>
+        <span class="start-updates-chevron" aria-hidden="true">›</span>
+        <div class="start-updates-sheet" :class="{'start-updates-sheet--sunday': day.sunday}" aria-hidden="true">
+          <span class="start-updates-sheet-month">{{ day.month }}</span>
+          <span class="start-updates-sheet-day">{{ day.dayOfMonth }}</span>
+          <span class="start-updates-sheet-weekday">{{ day.weekday }}</span>
+        </div>
+        <!-- Extra wrapper: the grid row animates from 0fr to 1fr, the list keeps its own spacing -->
+        <div class="start-updates-body">
+          <div>
+            <ul class="start-updates-items">
+              <li v-for="item in day.items" :key="item" :title="item">{{ item }}</li>
+              <!-- Commits of the day as the last line of the list (not on the sheet, where it was too small to read) -->
+              <li v-if="day.commits > 0" class="start-updates-commits">{{ day.commits }} {{ day.commitsLabel }}</li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</aside>
+  </aside>
 </template>
 
 <script setup lang="ts">

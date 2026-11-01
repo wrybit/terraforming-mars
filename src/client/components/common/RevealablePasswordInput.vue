@@ -7,13 +7,13 @@
     <button type="button" class="revealable-password-eye" :aria-pressed="shown" :aria-label="$t(shown ? 'Hide password' : 'Show password')" :title="$t(shown ? 'Hide password' : 'Show password')" @click="toggle">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <template v-if="shown">
-          <path d="M3 3l18 18"/>
-          <path d="M10.6 6.1A9.6 9.6 0 0 1 12 6c6.5 0 10 7 10 7a15.9 15.9 0 0 1-3.4 4.1M6.5 6.6A15.8 15.8 0 0 0 2 12s3.5 7 10 7a9.7 9.7 0 0 0 4.3-1"/>
-          <path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/>
+          <path d="M3 3l18 18" />
+          <path d="M10.6 6.1A9.6 9.6 0 0 1 12 6c6.5 0 10 7 10 7a15.9 15.9 0 0 1-3.4 4.1M6.5 6.6A15.8 15.8 0 0 0 2 12s3.5 7 10 7a9.7 9.7 0 0 0 4.3-1" />
+          <path d="M9.9 9.9a3 3 0 0 0 4.2 4.2" />
         </template>
         <template v-else>
-          <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/>
-          <circle cx="12" cy="12" r="3"/>
+          <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" />
+          <circle cx="12" cy="12" r="3" />
         </template>
       </svg>
     </button>

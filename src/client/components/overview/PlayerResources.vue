@@ -7,7 +7,7 @@
       :production="good.production"
       :value="good.value"
       :resourceProtection="good.resourceProtection"
-      :productionProtection="good.productionProtection"/>
+      :productionProtection="good.productionProtection" />
   </div>
 </template>
 

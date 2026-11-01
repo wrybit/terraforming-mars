@@ -1,59 +1,59 @@
 <template>
-<div :class="'sidebar_cont sidebar '+getSideBarClass()">
-  <div v-if="gameOptions.expansions.turmoil" :title="$t('Ruling Party')">
-    <div :class="'party-name party-name-indicator party-name--'+rulingPartyToCss()"> <span v-i18n>{{ getRulingParty() }}</span></div>
-  </div>
-  <div class="global_params">
-    <GlobalParameterValue :param="globalParameter.TEMPERATURE" :value="temperature" :boardName="gameOptions.boardName"/>
-    <GlobalParameterValue :param="globalParameter.OXYGEN" :value="oxygen" :boardName="gameOptions.boardName"/>
-    <GlobalParameterValue :param="globalParameter.OCEANS" :value="oceans" :boardName="gameOptions.boardName"/>
-    <GlobalParameterValue v-if="gameOptions.expansions.venus" :param="globalParameter.VENUS" :value="venus" :boardName="gameOptions.boardName"/>
-    <MoonGlobalParameterValue v-if="moonData" :moonData="moonData"/>
-  </div>
-  <!-- Display only, below the buttons and visibly not a button: own player cube and pile sizes.
+  <div :class="'sidebar_cont sidebar '+getSideBarClass()">
+    <div v-if="gameOptions.expansions.turmoil" :title="$t('Ruling Party')">
+      <div :class="'party-name party-name-indicator party-name--'+rulingPartyToCss()"> <span v-i18n>{{ getRulingParty() }}</span></div>
+    </div>
+    <div class="global_params">
+      <GlobalParameterValue :param="globalParameter.TEMPERATURE" :value="temperature" :boardName="gameOptions.boardName" />
+      <GlobalParameterValue :param="globalParameter.OXYGEN" :value="oxygen" :boardName="gameOptions.boardName" />
+      <GlobalParameterValue :param="globalParameter.OCEANS" :value="oceans" :boardName="gameOptions.boardName" />
+      <GlobalParameterValue v-if="gameOptions.expansions.venus" :param="globalParameter.VENUS" :value="venus" :boardName="gameOptions.boardName" />
+      <MoonGlobalParameterValue v-if="moonData" :moonData="moonData" />
+    </div>
+    <!-- Display only, below the buttons and visibly not a button: own player cube and pile sizes.
        Spectators (neutral colour) have no own cube. -->
-  <div class="sidebar-status" :title="$t('Draw pile') + ' / ' + $t('Discard pile')">
-    <span v-if="playerColor !== 'neutral'" class="sidebar-status-cube" :title="$t('Player Color Cube')">
-      <PlayerCube :color="playerColor" view="iso" :size="20"/>
-    </span>
-    <span class="sidebar-status-piles">
-      <span class="sidebar-status-pile">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2" fill="currentColor"/></svg>{{ deckSize }}
+    <div class="sidebar-status" :title="$t('Draw pile') + ' / ' + $t('Discard pile')">
+      <span v-if="playerColor !== 'neutral'" class="sidebar-status-cube" :title="$t('Player Color Cube')">
+        <PlayerCube :color="playerColor" view="iso" :size="20" />
       </span>
-      <span class="sidebar-status-pile">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="2"/></svg>{{ discardPileSize }}
+      <span class="sidebar-status-piles">
+        <span class="sidebar-status-pile">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2" fill="currentColor" /></svg>{{ deckSize }}
+        </span>
+        <span class="sidebar-status-pile">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="2" /></svg>{{ discardPileSize }}
+        </span>
       </span>
-    </span>
-  </div>
-  <a v-if="coloniesCount > 0" href="#colonies" :title="$t('Jump to colonies')">
+    </div>
+    <a v-if="coloniesCount > 0" href="#colonies" :title="$t('Jump to colonies')">
       <div class="sidebar_item sidebar_item_shortcut">
-          <i class="sidebar_icon sidebar_icon--colonies"></i>
+        <i class="sidebar_icon sidebar_icon--colonies"></i>
       </div>
-  </a>
+    </a>
 
-  <LanguageIcon/>
+    <LanguageIcon />
 
-  <div class="sidebar_item sidebar_item--info" :title="$t('Information panel')">
-    <i class="sidebar_icon sidebar_icon--info"
-      :class="{'sidebar_item--is-active': ui.gamesetup_detail_open}"
-      @click="ui.gamesetup_detail_open = !ui.gamesetup_detail_open"
-      :title="$t('game setup details')"></i>
-    <SidebarModal :open="ui.gamesetup_detail_open" :framed="true" @close="ui.gamesetup_detail_open=false">
-      <InfoPanel :gameOptions="gameOptions" :playerNumber="playerNumber" :lastSoloGeneration="lastSoloGeneration" :deckSize="deckSize" :discardPileSize="discardPileSize" :otherDeckSizes="otherDeckSizes" :spectatorId="spectatorId" :expectedPurgeTimeMs="expectedPurgeTimeMs" @close="ui.gamesetup_detail_open=false" />
-    </SidebarModal>
+    <div class="sidebar_item sidebar_item--info" :title="$t('Information panel')">
+      <i class="sidebar_icon sidebar_icon--info"
+        :class="{'sidebar_item--is-active': ui.gamesetup_detail_open}"
+        @click="ui.gamesetup_detail_open = !ui.gamesetup_detail_open"
+        :title="$t('game setup details')"></i>
+      <SidebarModal :open="ui.gamesetup_detail_open" :framed="true" @close="ui.gamesetup_detail_open=false">
+        <InfoPanel :gameOptions="gameOptions" :playerNumber="playerNumber" :lastSoloGeneration="lastSoloGeneration" :deckSize="deckSize" :discardPileSize="discardPileSize" :otherDeckSizes="otherDeckSizes" :spectatorId="spectatorId" :expectedPurgeTimeMs="expectedPurgeTimeMs" @close="ui.gamesetup_detail_open=false" />
+      </SidebarModal>
+    </div>
+
+    <!-- Help as a modal instead of in a new window -->
+    <!-- Modal inside the tile: it grows out of it (SidebarModal anchor). Clicks inside the modal don't reach the tile: teleported to body -->
+    <div class="sidebar_item sidebar_item--help" @click="ui.help_open = true">
+      <i class="sidebar_icon sidebar_icon--help" :class="{'sidebar_item--is-active': ui.help_open}" :title="$t('player aid')"></i>
+      <SidebarModal :open="ui.help_open" :wide="true" :bare="true" @close="ui.help_open = false">
+        <HelpOverlay :closable="true" @close="ui.help_open = false" />
+      </SidebarModal>
+    </div>
+
+    <PreferencesIcon />
   </div>
-
-  <!-- Help as a modal instead of in a new window -->
-  <!-- Modal inside the tile: it grows out of it (SidebarModal anchor). Clicks inside the modal don't reach the tile: teleported to body -->
-  <div class="sidebar_item sidebar_item--help" @click="ui.help_open = true">
-    <i class="sidebar_icon sidebar_icon--help" :class="{'sidebar_item--is-active': ui.help_open}" :title="$t('player aid')"></i>
-    <SidebarModal :open="ui.help_open" :wide="true" :bare="true" @close="ui.help_open = false">
-      <HelpOverlay :closable="true" @close="ui.help_open = false"/>
-    </SidebarModal>
-  </div>
-
-  <PreferencesIcon/>
-</div>
 </template>
 
 <script lang="ts">

@@ -4,18 +4,18 @@
   <div class="amount-converter">
     <AmountSideTile class="amount-converter__from" :side="conversion.from"
       :before="fromBefore" :after="fromBefore - modelValue * conversion.from.perStep"
-      :change="modelValue * conversion.from.perStep" direction="loss"/>
+      :change="modelValue * conversion.from.perStep" direction="loss" />
     <div class="amount-converter__middle">
       <div class="amount-rate">
         {{ conversion.from.perStep }} <i :class="iconClass(conversion.from)"></i>
         <span class="amount-rate__arrow">→</span>
         {{ conversion.to.perStep }} <i :class="iconClass(conversion.to)"></i>
       </div>
-      <AmountSlider :modelValue="modelValue" :min="min" :max="max" @update:modelValue="$emit('update:modelValue', $event)"/>
+      <AmountSlider :modelValue="modelValue" :min="min" :max="max" @update:modelValue="$emit('update:modelValue', $event)" />
     </div>
     <AmountSideTile class="amount-converter__to" :side="conversion.to"
       :before="toBefore" :after="toBefore + modelValue * conversion.to.perStep"
-      :change="modelValue * conversion.to.perStep" direction="gain"/>
+      :change="modelValue * conversion.to.perStep" direction="gain" />
   </div>
 </template>
 

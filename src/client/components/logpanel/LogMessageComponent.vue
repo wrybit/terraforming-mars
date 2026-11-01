@@ -1,60 +1,60 @@
 <template>
-   <!-- log-line--<colour>: text and hover in the colour of the player the line is about (log.less) -->
-   <li v-if="message !== undefined && message.data !== undefined && message.message !== undefined"
-     :class="[lineColor !== undefined ? 'log-line--' + lineColor : '', {'log-line--effects': hasEffects, 'log-line--expandable': expandable, 'log-line--ai-insight': message.aiInsight !== undefined, 'log-line--discard': isDiscard, 'log-line--follows': follows, 'log-line--spoiler': spoiler, 'log-line--spoiler-hidden': spoilerHidden}]"
-     :title="spoilerTitle"
-     @click.prevent="$emit('click')">
+  <!-- log-line--<colour>: text and hover in the colour of the player the line is about (log.less) -->
+  <li v-if="message !== undefined && message.data !== undefined && message.message !== undefined"
+    :class="[lineColor !== undefined ? 'log-line--' + lineColor : '', {'log-line--effects': hasEffects, 'log-line--expandable': expandable, 'log-line--ai-insight': message.aiInsight !== undefined, 'log-line--discard': isDiscard, 'log-line--follows': follows, 'log-line--spoiler': spoiler, 'log-line--spoiler-hidden': spoilerHidden}]"
+    :title="spoilerTitle"
+    @click.prevent="$emit('click')">
     <span v-if="(message.type ?? LogMessageType.DEFAULT) === LogMessageType.DEFAULT" :title="when" v-html="icon"></span>
     <!-- Consequence of the row above (same player): indented, the arrow points back to it -->
     <span v-if="follows" class="log-follows-arrow" aria-hidden="true">↳</span>
     <!-- Analysis game: a private line of an AI player, normally hidden from the others (after the time icon, which the log hides) -->
-    <span v-if="message.aiInsight !== undefined" class="log-ai-insight" :title="$t('Visible because this is an analysis game')"><SeatIcon kind="ai" :size="14"/></span>
+    <span v-if="message.aiInsight !== undefined" class="log-ai-insight" :title="$t('Visible because this is an analysis game')"><SeatIcon kind="ai" :size="14" /></span>
     <!-- Own private line (e.g. cards drawn or discarded): the others don't see it -->
     <span v-else-if="message.playerId !== undefined" class="log-private" :title="$t('Only you can see this line in the log')">
       <!-- Filled with cut-outs like the meeple and robot (SeatIcon.vue), so both markers read as one family -->
-      <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M12 4.5C6.2 4.5 1.9 10.6 1.3 11.5a.9.9 0 0 0 0 1c.6.9 4.9 7 10.7 7s10.1-6.1 10.7-7a.9.9 0 0 0 0-1C22.1 10.6 17.8 4.5 12 4.5zM12 7.8a4.2 4.2 0 1 0 0 8.4 4.2 4.2 0 0 0 0-8.4z"/><circle cx="12" cy="12" r="1.9"/></svg>
+      <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M12 4.5C6.2 4.5 1.9 10.6 1.3 11.5a.9.9 0 0 0 0 1c.6.9 4.9 7 10.7 7s10.1-6.1 10.7-7a.9.9 0 0 0 0-1C22.1 10.6 17.8 4.5 12 4.5zM12 7.8a4.2 4.2 0 1 0 0 8.4 4.2 4.2 0 0 0 0-8.4z" /><circle cx="12" cy="12" r="1.9" /></svg>
     </span>
     <!-- The content as one inline box: an AI line of an analysis game blurs it as a spoiler (aiSpoilers.ts) -->
     <span class="log-line-content">
-    <template v-for="(data, idx) of entries" :key="idx">
-      <span class="log-plain-text" v-if="typeof(data) === 'string'" v-html="inlineMarkdown(data)"></span>
-      <span v-else>
-        <span v-if="data.type === undefined || data.value === undefined"></span>
-        <span v-else-if="data.type === LogMessageDataType.PLAYER" class="log-player" :class="'player_bg_color_' + data.value"> {{ getPlayerName(data.value) }} </span>
-        <span v-else-if="data.type === LogMessageDataType.CARD" v-html="cardToHtml(data)"></span>
-        <span v-else-if="data.type === LogMessageDataType.GLOBAL_EVENT" class="log-card background-color-global-event" v-i18n>
-          {{data.value}}
-        </span>
-        <span v-else-if="data.type === LogMessageDataType.TILE_TYPE" v-i18n>
-          {{tileTypeToString[data.value]}}
-        </span>
-        <span v-else-if="data.type === LogMessageDataType.PARTY" class="log-row-party">
-          <i :class="['log-row-party-icon', 'log-row-party-icon--' + partySlug(data.value)]"></i>{{ $t(data.value) }}
-        </span>
-        <span v-else-if="data.type === LogMessageDataType.COLONY" class="log-card background-color-colony" v-i18n>
-          {{data.value}}
-        </span>
-        <span v-else-if="data.type === LogMessageDataType.UNDERGROUND_TOKEN" class="log-excavation-token" v-i18n>
-          {{undergroundResourceTokenDescription[data.value]}}
-        </span>
-        <LogSpaceChip v-else-if="data.type === LogMessageDataType.SPACE" :space="data.value" :game="viewModel.game" @spaceClicked="$emit('spaceClicked', $event)"/>
-        <span v-else-if="data.type === LogMessageDataType.CARDS" v-html="cardsToHtml(data)"></span>
+      <template v-for="(data, idx) in entries" :key="idx">
+        <span class="log-plain-text" v-if="typeof(data) === 'string'" v-html="inlineMarkdown(data)"></span>
+        <span v-else>
+          <span v-if="data.type === undefined || data.value === undefined"></span>
+          <span v-else-if="data.type === LogMessageDataType.PLAYER" class="log-player" :class="'player_bg_color_' + data.value"> {{ getPlayerName(data.value) }} </span>
+          <span v-else-if="data.type === LogMessageDataType.CARD" v-html="cardToHtml(data)"></span>
+          <span v-else-if="data.type === LogMessageDataType.GLOBAL_EVENT" class="log-card background-color-global-event" v-i18n>
+            {{ data.value }}
+          </span>
+          <span v-else-if="data.type === LogMessageDataType.TILE_TYPE" v-i18n>
+            {{ tileTypeToString[data.value] }}
+          </span>
+          <span v-else-if="data.type === LogMessageDataType.PARTY" class="log-row-party">
+            <i :class="['log-row-party-icon', 'log-row-party-icon--' + partySlug(data.value)]"></i>{{ $t(data.value) }}
+          </span>
+          <span v-else-if="data.type === LogMessageDataType.COLONY" class="log-card background-color-colony" v-i18n>
+            {{ data.value }}
+          </span>
+          <span v-else-if="data.type === LogMessageDataType.UNDERGROUND_TOKEN" class="log-excavation-token" v-i18n>
+            {{ undergroundResourceTokenDescription[data.value] }}
+          </span>
+          <LogSpaceChip v-else-if="data.type === LogMessageDataType.SPACE" :space="data.value" :game="viewModel.game" @spaceClicked="$emit('spaceClicked', $event)" />
+          <span v-else-if="data.type === LogMessageDataType.CARDS" v-html="cardsToHtml(data)"></span>
 
-        <!-- Game id at the end of the game: link to the results page -->
-        <a v-else-if="data.type === LogMessageDataType.RAW_STRING && resultsLink !== undefined" :href="resultsLink" class="log-results-link" @click.stop>{{ data.value }}</a>
-        <span v-else-if="data.type === LogMessageDataType.RESOURCE" v-html="inlineMarkdown(`:r:${data.value}:`)"></span>
-        <span v-else-if="data.type === LogMessageDataType.PRODUCTION" v-html="inlineMarkdown(`:p:${data.value}:`)"></span>
-        <span v-else-if="data.type === LogMessageDataType.CARD_RESOURCE" v-html="inlineMarkdown(`:cr:${cardResourceName(data.value)}:`)"></span>
-        <span v-else-if="data.type === LogMessageDataType.RAW_STRING">{{ data.value }}</span>
-        <span v-else-if="data.type === LogMessageDataType.MARKDOWN" v-html="renderIcons(data.value)"></span>
-        <span v-else-if="data.type === LogMessageDataType.STRING" v-html="inlineMarkdown($t(data.value))"></span>
-        <span v-else v-i18n>{{ data.value }}</span>
-      </span>
-    </template>
+          <!-- Game id at the end of the game: link to the results page -->
+          <a v-else-if="data.type === LogMessageDataType.RAW_STRING && resultsLink !== undefined" :href="resultsLink" class="log-results-link" @click.stop>{{ data.value }}</a>
+          <span v-else-if="data.type === LogMessageDataType.RESOURCE" v-html="inlineMarkdown(`:r:${data.value}:`)"></span>
+          <span v-else-if="data.type === LogMessageDataType.PRODUCTION" v-html="inlineMarkdown(`:p:${data.value}:`)"></span>
+          <span v-else-if="data.type === LogMessageDataType.CARD_RESOURCE" v-html="inlineMarkdown(`:cr:${cardResourceName(data.value)}:`)"></span>
+          <span v-else-if="data.type === LogMessageDataType.RAW_STRING">{{ data.value }}</span>
+          <span v-else-if="data.type === LogMessageDataType.MARKDOWN" v-html="renderIcons(data.value)"></span>
+          <span v-else-if="data.type === LogMessageDataType.STRING" v-html="inlineMarkdown($t(data.value))"></span>
+          <span v-else v-i18n>{{ data.value }}</span>
+        </span>
+      </template>
     </span>
     <!-- What this line set off (bazaar ware, copied production ...): on the right like in the action rows -->
-    <LogRowEffects v-if="hasEffects && action !== undefined" :action="action" :viewModel="viewModel" @spaceClicked="$emit('spaceClicked', $event)"/>
-   </li>
+    <LogRowEffects v-if="hasEffects && action !== undefined" :action="action" :viewModel="viewModel" @spaceClicked="$emit('spaceClicked', $event)" />
+  </li>
 </template>
 
 <script lang="ts">

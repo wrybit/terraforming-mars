@@ -3,10 +3,10 @@
     <!-- Header like card list/statistics: confirmation with game ID, language and settings in a header card -->
     <header class="card-list-header card-list-header--plain game-home-head">
       <!-- Menu at the top left, as in the game -->
-      <PageToolbar/>
+      <PageToolbar />
       <!-- Logo inside the title like PageTitle.vue, so the narrow header grid keeps its cells. App name like the other page titles (PageTitle.vue), hidden on narrow screens; check mark right before the status -->
       <h1>
-        <MarsHomeLink/>
+        <MarsHomeLink />
         <span class="page-title-app">Terraforming Mars –</span>
         <span class="game-home-check">✓</span>
         <span v-i18n>Game created</span>
@@ -26,28 +26,28 @@
               <strong>{{ player.name }}</strong>
               <code>{{ getUrl(player.id) }}</code>
             </div>
-            <AppButton class="btn-tone-quiet" :title="isPlayerUrlCopied(player.id) ? 'Copied!' : 'Copy URL'" :fixedHotkey="copyKeys(index)" @click="copyUrl(player.id)"/>
+            <AppButton class="btn-tone-quiet" :title="isPlayerUrlCopied(player.id) ? 'Copied!' : 'Copy URL'" :fixedHotkey="copyKeys(index)" @click="copyUrl(player.id)" />
             <!-- The AI plays by itself: its page only lets you watch it (the server refuses input there) -->
             <!-- Watching the AI is secondary: the same quiet button as Copy URL; playing is the main action -->
             <!-- Every row has its own number: Alt + number opens the link, Ctrl + number copies it (onLinkKey) -->
             <a class="btn btn-rounded" :class="player.aiLevel !== undefined ? 'btn-tone-quiet' : 'btn-primary'" :href="getHref(player.id)"
-              ><span v-i18n>{{ player.aiLevel !== undefined ? 'Watch' : 'Play' }}</span><HotkeyKeys :fixed="openKeys(index)"/></a>
+            ><span v-i18n>{{ player.aiLevel !== undefined ? 'Watch' : 'Play' }}</span><HotkeyKeys :fixed="openKeys(index)" /></a>
           </div>
           <div class="game-home-link game-home-link--spectator">
-            <span class="game-home-order"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></span>
+            <span class="game-home-order"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z" /><circle cx="12" cy="12" r="3" /></svg></span>
             <div class="game-home-who">
               <strong v-i18n>Spectator</strong>
               <code>{{ getUrl(game.spectatorId) }}</code>
             </div>
-            <AppButton class="btn-tone-quiet" :title="isPlayerUrlCopied(game.spectatorId) ? 'Copied!' : 'Copy URL'" :fixedHotkey="copyKeys(game.players.length)" @click="copyUrl(game.spectatorId)"/>
-            <a class="btn btn-rounded btn-tone-quiet" :href="getHref(game.spectatorId)"><span v-i18n>Watch</span><HotkeyKeys :fixed="openKeys(game.players.length)"/></a>
+            <AppButton class="btn-tone-quiet" :title="isPlayerUrlCopied(game.spectatorId) ? 'Copied!' : 'Copy URL'" :fixedHotkey="copyKeys(game.players.length)" @click="copyUrl(game.spectatorId)" />
+            <a class="btn btn-rounded btn-tone-quiet" :href="getHref(game.spectatorId)"><span v-i18n>Watch</span><HotkeyKeys :fixed="openKeys(game.players.length)" /></a>
           </div>
         </div>
       </section>
 
       <section class="game-home-card">
         <h2 v-i18n>Game settings</h2>
-        <GameSetupDetail :gameOptions="game.gameOptions" :playerNumber="game.players.length" :lastSoloGeneration="game.lastSoloGeneration"/>
+        <GameSetupDetail :gameOptions="game.gameOptions" :playerNumber="game.players.length" :lastSoloGeneration="game.lastSoloGeneration" />
       </section>
     </div>
   </div>

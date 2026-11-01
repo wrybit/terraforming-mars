@@ -4,39 +4,39 @@
       <div class="stats-detail-main">
         <a :href="backHref" data-stats-link class="stats-link">← <span v-i18n>{{ backLabel }}</span></a>
         <h2 class="stats-detail-title">
-          <StatsEntityName :kind="kind" :name="name"/>
+          <StatsEntityName :kind="kind" :name="name" />
           <span class="stats-dim" v-i18n>{{ definition.singular }}</span>
         </h2>
         <p v-if="detail.results.length === 0" class="stats-note" v-i18n>No games for these filters.</p>
-        <StatsKpis v-else :tiles="tiles"/>
+        <StatsKpis v-else :tiles="tiles" />
       </div>
       <!-- The game material itself (card, milestone, award); a click shows cards large -->
-      <StatsEntityAsset v-if="hasAsset" class="stats-detail-asset" :kind="kind" :name="name"/>
+      <StatsEntityAsset v-if="hasAsset" class="stats-detail-asset" :kind="kind" :name="name" />
     </section>
 
     <section v-if="kind === 'board'" class="stats-card">
-      <StatsBoardHeatmap :boardKey="boardKey" :games="games"/>
+      <StatsBoardHeatmap :boardKey="boardKey" :games="games" />
     </section>
 
     <div v-if="detail.results.length > 0" class="stats-columns">
       <section v-if="kind === 'player'" class="stats-card">
         <h2 v-i18n>Head to head</h2>
         <StatsTable :columns="headToHeadColumns" :rows="headToHead" :rowKey="keyByOpponent" initialSort="games">
-          <template #opponent="{row}"><StatsEntityName kind="player" :name="row.opponent"/></template>
+          <template #opponent="{row}"><StatsEntityName kind="player" :name="row.opponent" /></template>
         </StatsTable>
       </section>
       <section v-else-if="kind !== 'board' || stats.players.length > 1" class="stats-card">
         <h2 v-i18n>By player</h2>
         <StatsTable :columns="playerColumns" :rows="stats.players" :rowKey="keyByName" initialSort="plays">
-          <template #name="{row}"><StatsEntityName kind="player" :name="row.name"/></template>
-          <template #winRate="{row}"><StatsWinRate :winRate="share(row.wins, row.plays) ?? 0" :expected="row.expectedWinRate"/></template>
+          <template #name="{row}"><StatsEntityName kind="player" :name="row.name" /></template>
+          <template #winRate="{row}"><StatsWinRate :winRate="share(row.wins, row.plays) ?? 0" :expected="row.expectedWinRate" /></template>
         </StatsTable>
       </section>
 
       <section class="stats-card">
         <h2 v-i18n>By number of players</h2>
         <StatsTable :columns="playerCountColumns" :rows="detail.byPlayerCount" :rowKey="keyByPlayerCount" initialSort="playerCount">
-          <template #winRate="{row}"><StatsWinRate :winRate="share(row.wins, row.plays) ?? 0" :expected="row.expectedWinRate"/></template>
+          <template #winRate="{row}"><StatsWinRate :winRate="share(row.wins, row.plays) ?? 0" :expected="row.expectedWinRate" /></template>
         </StatsTable>
       </section>
     </div>
@@ -45,32 +45,32 @@
     <div v-if="detail.results.length > 0" class="stats-columns">
       <section class="stats-card">
         <h2 v-i18n>Final scores</h2>
-        <StatsBarChart :bars="pointBars" axisLabel="Victory points in steps of 10" highlightLabel="Of these won"/>
+        <StatsBarChart :bars="pointBars" axisLabel="Victory points in steps of 10" highlightLabel="Of these won" />
       </section>
       <section class="stats-card">
         <h2 v-i18n>Game length</h2>
-        <StatsBarChart :bars="generationBars" axisLabel="Generations" highlightLabel="Of these won"/>
+        <StatsBarChart :bars="generationBars" axisLabel="Generations" highlightLabel="Of these won" />
       </section>
     </div>
 
     <section v-if="hasPointSources" class="stats-card">
       <h2 v-i18n>Where the points come from</h2>
-      <StatsPointSources :results="detail.results" :baseline="kind === 'player' || kind === 'board' ? undefined : results"/>
+      <StatsPointSources :results="detail.results" :baseline="kind === 'player' || kind === 'board' ? undefined : results" />
     </section>
 
     <div v-if="companions.length > 0" class="stats-columns">
       <section v-for="companion in companions" :key="companion.kind" class="stats-card">
         <h2><span v-i18n>Played together</span>: <span v-i18n>{{ kindLabel(companion.kind) }}</span></h2>
         <StatsTable :columns="companionColumns" :rows="companion.entries.slice(0, companionLimit)" :rowKey="keyByName" initialSort="plays">
-          <template #name="{row, rows: shownRows}"><StatsEntityName :kind="companion.kind" :name="row.name" :siblings="namesOf(shownRows)"/></template>
-          <template #winRate="{row}"><StatsWinRate :winRate="row.winRate" :expected="row.expectedWinRate"/></template>
+          <template #name="{row, rows: shownRows}"><StatsEntityName :kind="companion.kind" :name="row.name" :siblings="namesOf(shownRows)" /></template>
+          <template #winRate="{row}"><StatsWinRate :winRate="row.winRate" :expected="row.expectedWinRate" /></template>
         </StatsTable>
       </section>
     </div>
 
     <section v-if="detail.results.length > 0" class="stats-card">
       <h2><span v-i18n>Games</span> <span class="stats-dim">· {{ games.length }}</span></h2>
-      <StatsGameList :games="games" :highlighted="highlighted"/>
+      <StatsGameList :games="games" :highlighted="highlighted" />
     </section>
   </div>
 </template>

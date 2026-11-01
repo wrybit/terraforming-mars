@@ -14,9 +14,9 @@
       </label>
     </div>
     <TabPanelFooterSlot>
-    <div v-if="showsave === true" class="nofloat">
-      <AppButton hotkey="proceed" @click="saveData" :title="playerinput.buttonLabel" />
-    </div>
+      <div v-if="showsave === true" class="nofloat">
+        <AppButton hotkey="proceed" @click="saveData" :title="playerinput.buttonLabel" />
+      </div>
     </TabPanelFooterSlot>
   </div>
 </template>

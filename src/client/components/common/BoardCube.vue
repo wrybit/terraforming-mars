@@ -2,7 +2,7 @@
   <!-- Player marker on a board or track: the acrylic PlayerCube in a fixed box, so the existing position classes
        (board-cube, board-cube-coOwner, colony-cube, ...) keep working. The colorblind symbol sits on top of it. -->
   <span :class="['board-cube-acrylic', 'board-cube--' + color]">
-    <PlayerCube :color="color" :view="view" :size="size" :spin="spin"/>
+    <PlayerCube :color="color" :view="view" :size="size" :spin="spin" />
     <span v-if="symbol !== ''" class="board-cube-acrylic__symbol">{{ symbol }}</span>
     <span v-if="$slots.default" class="board-cube-acrylic__label"><slot></slot></span>
   </span>

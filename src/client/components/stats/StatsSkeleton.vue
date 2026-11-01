@@ -31,7 +31,7 @@
     <section v-else class="stats-card">
       <div class="stats-skeleton-block stats-skeleton-block--tall"></div>
     </section>
-    <LoadingPlate/>
+    <LoadingPlate />
   </div>
 </template>
 

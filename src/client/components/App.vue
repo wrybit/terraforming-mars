@@ -1,15 +1,15 @@
 <template>
   <div :class="'topmost-'+screen">
-    <RotateHint/>
-    <AppBackground v-if="hasBackground" :always="screen === 'start-screen'" :show-credit="hasBackgroundCredit"/>
-    <ServerUpdateOverlay/>
-    <RenderErrorBanner/>
+    <RotateHint />
+    <AppBackground v-if="hasBackground" :always="screen === 'start-screen'" :show-credit="hasBackgroundCredit" />
+    <ServerUpdateOverlay />
+    <RenderErrorBanner />
     <!-- Rating of AI decisions (analysis games): outside the game view, so updates never close it -->
-    <AiDecisionDialog/>
+    <AiDecisionDialog />
     <!-- Analysis game: introduction to rating, once per browser at the end of the first generation -->
-    <AiAnalysisWelcome v-if="screen === 'player-home'" :player-view="playerView"/>
+    <AiAnalysisWelcome v-if="screen === 'player-home'" :player-view="playerView" />
     <!-- Optional extensions (src/extensions/): each may bring one root component -->
-    <component :is="extension.component" v-for="extension in componentExtensions" :key="extension.name" :view="participant"/>
+    <component :is="extension.component" v-for="extension in componentExtensions" :key="extension.name" :view="participant" />
     <section>
       <dialog id="alert-dialog" class="alert-dialog">
         <form method="dialog">
@@ -22,7 +22,7 @@
       </dialog>
     </section>
     <div class="main-container">
-      <StartScreen v-if="screen === 'start-screen'"/>
+      <StartScreen v-if="screen === 'start-screen'" />
       <CreateGameForm
         v-else-if="screen === 'create-game-form'"
       />
@@ -54,21 +54,21 @@
       <GamesOverview
         v-else-if="screen === 'games-overview'"
       />
-      <CardList v-else-if="screen === 'cards'"/>
-      <StatsPage v-else-if="screen === 'stats'"/>
-      <AdminHome v-else-if="screen === 'admin-settings'"/>
-      <AdminRaw v-else-if="screen === 'admin-raw'"/>
-      <AdminDashboard v-else-if="screen === 'admin-dashboard'"/>
-      <LoginHome v-else-if="screen === 'login-home'"/>
-      <HelpOverlay v-else-if="screen === 'help'"/>
+      <CardList v-else-if="screen === 'cards'" />
+      <StatsPage v-else-if="screen === 'stats'" />
+      <AdminHome v-else-if="screen === 'admin-settings'" />
+      <AdminRaw v-else-if="screen === 'admin-raw'" />
+      <AdminDashboard v-else-if="screen === 'admin-dashboard'" />
+      <LoginHome v-else-if="screen === 'login-home'" />
+      <HelpOverlay v-else-if="screen === 'help'" />
     </div>
     <!-- In game views the notice sits in the sidebar's info window; on the results page it is dropped (Jens' request) -->
     <!-- Start page and "Create game" share the same footer (Jens' request): build facts left, notice right -->
     <footer v-if="screen !== 'player-home' && screen !== 'spectator-home' && screen !== 'the-end'" class="notice" :class="{'notice--split': hasStartScreenFooter, 'notice--online': screen === 'start-screen'}">
-      <StartScreenFooter v-if="hasStartScreenFooter"/>
+      <StartScreenFooter v-if="hasStartScreenFooter" />
       <!-- Start page: how many are playing right now, in the middle of the footer -->
-      <OnlinePlayers v-if="screen === 'start-screen'"/>
-      <FanProjectNotice/>
+      <OnlinePlayers v-if="screen === 'start-screen'" />
+      <FanProjectNotice />
     </footer>
   </div>
 </template>

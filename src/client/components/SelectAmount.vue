@@ -6,10 +6,10 @@
     <!-- As a choice block: centered in the tab box like other decisions (choice_block.less) -->
     <div v-if="conversion !== undefined" class="choice-block choice-block--natural">
       <AmountConverter v-model="amount" :conversion="conversion"
-        :min="minimum" :max="maximum" :player="playerView.thisPlayer" :sourceCard="sourceCard"/>
+        :min="minimum" :max="maximum" :player="playerView.thisPlayer" :sourceCard="sourceCard" />
     </div>
     <div v-else class="amount-slider-plain">
-      <AmountSlider v-model="amount" :min="minimum" :max="maximum"/>
+      <AmountSlider v-model="amount" :min="minimum" :max="maximum" />
     </div>
     <TabPanelFooterSlot>
       <div v-if="showsave === true" class="amount-select__actions">

@@ -3,7 +3,7 @@
   <div class="log-action-effects" data-test="log-action-effects">
     <div class="log-action-effects-title">{{ $t('Effects') }}</div>
     <!-- Text lines the row stands for (turmoil: chairman, ruling bonus and policy) -->
-    <div v-for="(note, index) in notes" :key="'note' + index" class="log-action-effects-text">{{ note }}</div>
+    <div v-for="(noteText, index) in notes" :key="'note' + index" class="log-action-effects-text">{{ noteText }}</div>
     <div v-if="parties.length > 0" class="log-action-effects-line">
       <span class="log-action-effects-note">{{ $t('Neutral delegates') }}</span>
       <span v-for="(party, index) in parties" :key="index" class="log-row-party"><i :class="['log-row-party-icon', 'log-row-party-icon--' + slug(party)]"></i>{{ $t(party) }}</span>
@@ -12,7 +12,7 @@
          only other players (or "All players") get their name in front -->
     <div v-for="(item, index) in items" :key="'effect' + index" class="log-action-effects-line">
       <span v-if="!isActing(item.player)" :class="['log-action-effects-player', item.player !== undefined ? 'player_bg_color_' + item.player : 'log-action-effects-player--all']">{{ item.player !== undefined ? playerName(item.player) : $t('All players') }}</span>
-      <LogEffectIcon :effect="item.effect"/>
+      <LogEffectIcon :effect="item.effect" />
       <span v-if="reason(item.effect) !== ''" class="log-action-effects-note">{{ reason(item.effect) }}</span>
     </div>
   </div>

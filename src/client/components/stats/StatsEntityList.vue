@@ -4,16 +4,16 @@
       <h2><span v-i18n>{{ definition.label }}</span> <span class="stats-dim">· {{ visibleRows.length }}</span></h2>
       <div v-if="rows.length > searchThreshold" class="stats-list-tools">
         <span class="stats-dim" v-i18n>Played at least</span>
-        <SegmentedControl :options="minPlaysOptions" v-model="minPlays"/>
+        <SegmentedControl :options="minPlaysOptions" v-model="minPlays" />
         <input v-model="search" type="search" class="stats-search" :placeholder="$t('Search')">
       </div>
     </div>
     <p v-if="rows.length === 0" class="stats-note" v-i18n>No games for these filters.</p>
     <StatsTable v-else :columns="columns" :rows="visibleRows" :rowKey="rowKey" :initialSort="initialSort">
-      <template #name="{row, rows: shownRows}"><StatsEntityName :kind="kind" :name="row.name" :siblings="namesOf(shownRows)"/></template>
-      <template #winRate="{row}"><StatsWinRate :winRate="row.winRate" :expected="row.expectedWinRate"/></template>
-      <template #mostPlayedBy="{row}"><StatsEntityName v-if="row.mostPlayedBy" kind="player" :name="row.mostPlayedBy"/></template>
-      <template #mostWinsBy="{row}"><StatsEntityName v-if="row.mostWinsBy" kind="player" :name="row.mostWinsBy"/></template>
+      <template #name="{row, rows: shownRows}"><StatsEntityName :kind="kind" :name="row.name" :siblings="namesOf(shownRows)" /></template>
+      <template #winRate="{row}"><StatsWinRate :winRate="row.winRate" :expected="row.expectedWinRate" /></template>
+      <template #mostPlayedBy="{row}"><StatsEntityName v-if="row.mostPlayedBy" kind="player" :name="row.mostPlayedBy" /></template>
+      <template #mostWinsBy="{row}"><StatsEntityName v-if="row.mostWinsBy" kind="player" :name="row.mostWinsBy" /></template>
     </StatsTable>
   </section>
 </template>

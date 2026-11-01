@@ -23,7 +23,7 @@
           </tr>
         </thead>
         <tbody>
-          <GameOverview v-for="summary in games" :key="summary.id" :summary="summary" :columns="shownColumns" :isDeleting="deletingIds.includes(summary.id)" @delete="$emit('delete', $event)"/>
+          <GameOverview v-for="summary in games" :key="summary.id" :summary="summary" :columns="shownColumns" :isDeleting="deletingIds.includes(summary.id)" @delete="$emit('delete', $event)" />
         </tbody>
       </table>
     </div>

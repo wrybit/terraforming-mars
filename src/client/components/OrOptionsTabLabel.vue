@@ -4,7 +4,7 @@
   <span class="or-tab-title or-tab-label or-tab-label--full">{{ label }}</span>
   <span v-if="medium !== undefined" class="or-tab-title or-tab-label or-tab-label--medium">{{ $t(medium) }}</span>
   <span v-if="compact !== undefined" class="or-tab-title or-tab-label or-tab-label--compact">{{ $t(compact) }}</span>
-  <MobileGlyph v-if="glyph !== undefined" :name="glyph" class="or-tab-glyph"/>
+  <MobileGlyph v-if="glyph !== undefined" :name="glyph" class="or-tab-glyph" />
 </template>
 
 <script setup lang="ts">

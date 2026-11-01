@@ -2,7 +2,7 @@
   <!-- Milestone/award as image tiles like on the board; the chosen one pulses in the CTA colour -->
   <div :class="['ma-options', 'choice-block', kind]" :style="choiceBlockStyle(options.length)" role="radiogroup">
     <!-- Header row with the zoom, in the same place as in every tab (card_zoom_slider.less scales the tiles) -->
-    <CardZoomBar/>
+    <CardZoomBar />
     <label v-for="option in options" :key="optionName(option)"
       :class="['ma-block', 'ma-option', {'ma-option--selected': option === selected}]">
       <input type="radio" class="ma-option-input" :name="groupName" :checked="option === selected" @change="$emit('select', option)">

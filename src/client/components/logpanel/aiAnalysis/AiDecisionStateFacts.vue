@@ -19,7 +19,7 @@
     <!-- Tags the AI had at the decision, in the order of the player board -->
     <div v-if="tags.length > 0" class="ai-decision-state__tags" data-test="ai-decision-tags">
       <span v-for="entry in tags" :key="entry.tag" class="ai-decision-state__tag">
-        <TagIcon :tag="entry.tag" size="small"/><b class="ai-decision-state__tag-count">{{ entry.count }}</b>
+        <TagIcon :tag="entry.tag" size="small" /><b class="ai-decision-state__tag-count">{{ entry.count }}</b>
       </span>
     </div>
     <div class="ai-decision-state__totals">

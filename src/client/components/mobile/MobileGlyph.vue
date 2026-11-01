@@ -4,14 +4,14 @@
     <g v-for="(layer, index) in glyph.layers" :key="index">
       <!-- Filled: front layers get a gap so the shapes don't merge into one area -->
       <g v-if="filled && index > 0" class="mb-glyph-gap">
-        <component :is="shape.tag" v-for="(shape, shapeIndex) in layer" :key="shapeIndex" v-bind="shape.attributes"/>
+        <component :is="shape.tag" v-for="(shape, shapeIndex) in layer" :key="shapeIndex" v-bind="shape.attributes" />
       </g>
       <g :class="layerClass(index)">
-        <component :is="shape.tag" v-for="(shape, shapeIndex) in layer" :key="shapeIndex" v-bind="shape.attributes"/>
+        <component :is="shape.tag" v-for="(shape, shapeIndex) in layer" :key="shapeIndex" v-bind="shape.attributes" />
       </g>
     </g>
     <g :class="filled ? 'mb-glyph-cut' : 'mb-glyph-line'">
-      <component :is="shape.tag" v-for="(shape, shapeIndex) in glyph.details" :key="shapeIndex" v-bind="shape.attributes"/>
+      <component :is="shape.tag" v-for="(shape, shapeIndex) in glyph.details" :key="shapeIndex" v-bind="shape.attributes" />
     </g>
   </svg>
 </template>

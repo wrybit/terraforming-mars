@@ -2,13 +2,13 @@
   <div class="stats-chart">
     <svg v-if="bars.length > 0" :viewBox="`0 0 ${width} ${height}`" role="img">
       <g v-for="tick in ticks" :key="`tick-${tick}`">
-        <line :x1="left" :x2="width" :y1="y(tick)" :y2="y(tick)" class="stats-chart-grid"/>
+        <line :x1="left" :x2="width" :y1="y(tick)" :y2="y(tick)" class="stats-chart-grid" />
         <text :x="left - 6" :y="y(tick) + 4" text-anchor="end" class="stats-chart-label">{{ tick }}</text>
       </g>
       <g v-for="(bar, index) in bars" :key="bar.label">
         <title>{{ bar.title ?? `${bar.label}: ${bar.value}` }}</title>
-        <rect :x="barX(index)" :y="y(bar.value)" :width="slot * 0.64" :height="y(0) - y(bar.value)" rx="3" class="stats-chart-bar"/>
-        <rect v-if="(bar.highlight ?? 0) > 0" :x="barX(index)" :y="y(bar.highlight ?? 0)" :width="slot * 0.64" :height="y(0) - y(bar.highlight ?? 0)" rx="3" class="stats-chart-bar-highlight"/>
+        <rect :x="barX(index)" :y="y(bar.value)" :width="slot * 0.64" :height="y(0) - y(bar.value)" rx="3" class="stats-chart-bar" />
+        <rect v-if="(bar.highlight ?? 0) > 0" :x="barX(index)" :y="y(bar.highlight ?? 0)" :width="slot * 0.64" :height="y(0) - y(bar.highlight ?? 0)" rx="3" class="stats-chart-bar-highlight" />
         <text v-if="bar.value > 0" :x="center(index)" :y="y(bar.value) - 4" text-anchor="middle" class="stats-chart-value">{{ bar.value }}</text>
         <text v-if="showLabel(index)" :x="center(index)" :y="height - 4" text-anchor="middle" class="stats-chart-label">{{ bar.label }}</text>
       </g>

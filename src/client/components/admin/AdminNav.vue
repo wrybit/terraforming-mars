@@ -2,8 +2,8 @@
   <!-- Head of the admin area (only after the login), built like the heads of the other pages (card list, create game):
        app menu, Mars logo back to the start page, page title; then the admin pages in words and the logout -->
   <header class="card-list-header card-list-header--plain admin-nav">
-    <PageToolbar/>
-    <PageTitle title="Administration"/>
+    <PageToolbar />
+    <PageTitle title="Administration" />
     <nav class="admin-nav-links">
       <a v-for="item in items" :key="item.page" :href="item.path"
         class="admin-nav-link" :class="{'admin-nav-link--active': item.page === active}"

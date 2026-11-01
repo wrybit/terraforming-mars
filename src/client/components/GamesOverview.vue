@@ -5,11 +5,11 @@
       <div class="games-overview-tools">
         <section class="games-overview-card">
           <h2 v-i18n>Import result</h2>
-          <ImportGameForm @imported="loadGames"/>
+          <ImportGameForm @imported="loadGames" />
         </section>
         <section class="games-overview-card">
           <h2 v-i18n>Load a game</h2>
-          <LoadGameForm/>
+          <LoadGameForm />
         </section>
       </div>
 
@@ -51,7 +51,7 @@
           <template v-if="group.key === 'open'" #actions>
             <DeleteGameButton v-for="key in bulkDeleteKeys" :key="key" :label="bulkDeleteLabels[key]"
               :count="bulkDeleteIds(group.games, key).length" :isDeleting="bulkDeleting === key"
-              @delete="deleteGames(key, bulkDeleteIds(group.games, key))"/>
+              @delete="deleteGames(key, bulkDeleteIds(group.games, key))" />
           </template>
         </GamesTableCard>
       </template>

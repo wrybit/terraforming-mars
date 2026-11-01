@@ -9,10 +9,10 @@
         :effect="effect"
         :selected="selectedPlayer === player"
         :groupName="groupName"
-        @select="selectedPlayer = $event"/>
+        @select="selectedPlayer = $event" />
     </div>
     <TabPanelFooterSlot>
-    <AppButton hotkey="proceed" v-if="showsave === true" size="big" @click="saveData" :title="$t(playerinput.buttonLabel)" />
+      <AppButton hotkey="proceed" v-if="showsave === true" size="big" @click="saveData" :title="$t(playerinput.buttonLabel)" />
     </TabPanelFooterSlot>
   </div>
 </template>

@@ -1,7 +1,7 @@
 <template>
   <div id="admin-dashboard" class="games-overview-container admin-home">
     <AdminGate active="dashboard">
-      <ServerDashboardPanel/>
+      <ServerDashboardPanel />
     </AdminGate>
   </div>
 </template>

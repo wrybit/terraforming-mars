@@ -1,7 +1,7 @@
 <template>
   <!-- Trading with a colony gets its own layout (pay → get), the rest the generic list of sub-inputs -->
-  <TradeColony v-if="isTrade" ref="trade" :playerView="playerView" :playerinput="playerinput" :onsave="onsave" :showsave="showsave"/>
-  <div v-else class='wf-options'>
+  <TradeColony v-if="isTrade" ref="trade" :playerView="playerView" :playerinput="playerinput" :onsave="onsave" :showsave="showsave" />
+  <div v-else class="wf-options">
     <div v-if="showtitle" class="wf-title">{{ $t(playerinput.title) }}</div>
     <PlayerInputFactory v-for="(option, idx) in (playerinput.options || [])"
       :key="idx"
@@ -12,9 +12,9 @@
       :showsave="false"
       :showtitle="true" />
     <TabPanelFooterSlot>
-    <div v-if="showsave" class="wf-action">
-      <AppButton hotkey="proceed" :title="playerinput.buttonLabel" type="submit" size="normal" @click="saveData" :disabled="!canSave()"/>
-    </div>
+      <div v-if="showsave" class="wf-action">
+        <AppButton hotkey="proceed" :title="playerinput.buttonLabel" type="submit" size="normal" @click="saveData" :disabled="!canSave()" />
+      </div>
     </TabPanelFooterSlot>
   </div>
 </template>

@@ -3,26 +3,26 @@
     <!-- Header like card list/statistics: title, file buttons, language and settings in one header card -->
     <header class="card-list-header card-list-header--plain create-game-head">
       <!-- Menu at the top left, as in the game -->
-      <PageToolbar/>
-      <PageTitle title="Create New Game"/>
+      <PageToolbar />
+      <PageTitle title="Create New Game" />
       <div class="create-game-head-actions">
         <label class="create-game-icon-button" :title="$t('Load settings from file')">
           <!-- Import/export icons: arrow perpendicular to a hex edge, into the tile (import) or out of it (export);
                the mask cuts the hex where the shaft crosses it. Mask ids only exist once on the page. -->
           <svg class="create-game-head-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <mask id="create-game-import-cut" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24"><rect width="24" height="24" fill="#fff"/><path :d="importArrowPath" stroke="#000" stroke-width="6"/></mask>
-            <polygon mask="url(#create-game-import-cut)" points="11.5,5.2 18.43,9.2 18.43,17.2 11.5,21.2 4.57,17.2 4.57,9.2"/><path :d="importArrowPath"/>
+            <mask id="create-game-import-cut" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24"><rect width="24" height="24" fill="#fff" /><path :d="importArrowPath" stroke="#000" stroke-width="6" /></mask>
+            <polygon mask="url(#create-game-import-cut)" points="11.5,5.2 18.43,9.2 18.43,17.2 11.5,21.2 4.57,17.2 4.57,9.2" /><path :d="importArrowPath" />
           </svg>
           <span class="create-game-head-label" v-i18n>Import</span>
           <input style="display: none" type="file" accept=".json" id="settings-file" ref="file" @change="uploadSettings()">
         </label>
         <button type="button" class="create-game-icon-button" :title="$t('Save settings to file')" @click="downloadSettings()"><svg class="create-game-head-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <mask id="create-game-export-cut" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24"><rect width="24" height="24" fill="#fff"/><path :d="exportArrowPath" stroke="#000" stroke-width="6"/></mask>
-            <polygon class="create-game-head-icon-filled" mask="url(#create-game-export-cut)" points="12.5,5.2 19.43,9.2 19.43,17.2 12.5,21.2 5.57,17.2 5.57,9.2"/><path :d="exportArrowPath"/>
-          </svg><span class="create-game-head-label" v-i18n>Export</span></button>
+          <mask id="create-game-export-cut" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24"><rect width="24" height="24" fill="#fff" /><path :d="exportArrowPath" stroke="#000" stroke-width="6" /></mask>
+          <polygon class="create-game-head-icon-filled" mask="url(#create-game-export-cut)" points="12.5,5.2 19.43,9.2 19.43,17.2 12.5,21.2 5.57,17.2 5.57,9.2" /><path :d="exportArrowPath" />
+        </svg><span class="create-game-head-label" v-i18n>Export</span></button>
         <!-- Share link: the URL already carries the settings anyway, the button just copies it -->
-        <button type="button" class="create-game-icon-button" :title="$t('Copy link with these settings')" @click="copySettingsLink()"><svg class="create-game-head-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span class="create-game-head-label">{{ $t(settingsLinkCopied ? 'Link copied' : 'Copy link') }}</span></button>
-        <AppButton class="create-game-reset btn-tone-quiet" title="Reset" @click="resetSettings"/>
+        <button type="button" class="create-game-icon-button" :title="$t('Copy link with these settings')" @click="copySettingsLink()"><svg class="create-game-head-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" /></svg><span class="create-game-head-label">{{ $t(settingsLinkCopied ? 'Link copied' : 'Copy link') }}</span></button>
+        <AppButton class="create-game-reset btn-tone-quiet" title="Reset" @click="resetSettings" />
       </div>
     </header>
     <div class="create-game-layout">
@@ -36,249 +36,249 @@
         <!-- The cards move into their columns (elements, not selectors: the form need not be in the document, e.g. in tests);
              only after mounting, when the columns exist. Order inside a column via CSS order (cardStyle) -->
         <template v-if="columnsMounted">
-        <Teleport :to="columnTarget('expansions')">
-          <section class="create-game-card" :style="cardStyle('expansions')">
-            <!-- Grouping of the tiles in the header row: one control, no second row -->
-            <div class="create-game-card-head create-game-expansions-head"><h2 v-i18n>Expansions</h2><ExpansionGroupMenu v-model="expansionGrouping"/></div>
-            <template v-for="group in expansionGroups" :key="expansionGrouping + group.key">
-              <!-- Fan-made can be closed; closed, its active expansions stand behind the title -->
-              <CollapsibleSection variant="subhead" :title="group.title" :collapsible="group.key === 'fan'" storageKey="fanExpansions" defaultOpen
-                :changed="group.key === 'fan' ? activeFanExpansionsNote : undefined">
-                <!-- Per group a small button that says what it does: select all, or deselect all once everything is on -->
-                <template #actions>
-                  <button v-if="choicesOf(group).length > 0" type="button" class="create-game-small-button"
-                    @click="setExpansions(choicesOf(group), !allSelected(group))">{{ $t(allSelected(group) ? 'Deselect all' : 'Select all') }}</button>
+          <Teleport :to="columnTarget('expansions')">
+            <section class="create-game-card" :style="cardStyle('expansions')">
+              <!-- Grouping of the tiles in the header row: one control, no second row -->
+              <div class="create-game-card-head create-game-expansions-head"><h2 v-i18n>Expansions</h2><ExpansionGroupMenu v-model="expansionGrouping" /></div>
+              <template v-for="group in expansionGroups" :key="expansionGrouping + group.key">
+                <!-- Fan-made can be closed; closed, its active expansions stand behind the title -->
+                <CollapsibleSection variant="subhead" :title="group.title" :collapsible="group.key === 'fan'" storageKey="fanExpansions" defaultOpen
+                  :changed="group.key === 'fan' ? activeFanExpansionsNote : undefined">
+                  <!-- Per group a small button that says what it does: select all, or deselect all once everything is on -->
+                  <template #actions>
+                    <button v-if="choicesOf(group).length > 0" type="button" class="create-game-small-button"
+                      @click="setExpansions(choicesOf(group), !allSelected(group))">{{ $t(allSelected(group) ? 'Deselect all' : 'Select all') }}</button>
+                  </template>
+                  <div class="create-game-chip-grid create-game-expansion-grid">
+                    <!-- The base game is always part of the game: shown as a selected chip that cannot be switched off -->
+                    <ChoiceChip v-for="tile in group.tiles" :key="tile.module"
+                      :label="tile.choice?.label ?? 'Base game'" :iconClass="tile.choice?.iconClass ?? 'expansion-icon-base'"
+                      :selected="tile.choice === undefined || expansions[tile.choice.expansion]" :locked="tile.choice === undefined"
+                      :href="tile.choice?.info ? wikiUrls[tile.choice.expansion] : undefined"
+                      :tooltip="tile.choice === undefined ? undefined : requiredByTooltip(tile.choice.expansion, expansions)"
+                      @select="tile.choice !== undefined && toggleExpansion(tile.choice.expansion)">
+                      <template #detail>
+                        <span v-for="(part, index) in contentLine(tile, group.highlight, expansionGrouping !== 'source')" :key="index"
+                          :class="{'create-game-chip-detail--hit': part.highlighted}">{{ part.text }}</span>
+                      </template>
+                      <span v-if="tile.choice?.alpha" class="create-game-alpha" :title="$t('Alpha — work in progress')">α</span>
+                    </ChoiceChip>
+                  </div>
+                </CollapsibleSection>
+              </template>
+            </section>
+          </Teleport>
+          <!-- Only once an expansion with options is on (less is more); v-if on the Teleport, see Milestones & Awards -->
+          <Teleport v-if="hasExpansionOptions" :to="columnTarget('expansionOptions')">
+            <section class="create-game-card" :style="cardStyle('expansionOptions')">
+              <CollapsibleSection title="Expansion options" storageKey="expansionOptions" :changed="expansionOptionsNote">
+                <div v-if="expansions.venus" class="create-game-option-group">
+                  <div class="create-game-option-group-title"><span class="create-game-expansion-icon expansion-icon-venus"></span><span v-i18n>Venus Next</span></div>
+                  <OptionRow label="Alt. Venus Board" :href="wikiUrls.alternativeVenusBoard"><SwitchInput v-model="altVenusBoard" /></OptionRow>
+                  <OptionRow v-if="playersCount > 1" label="Mandatory Venus Terraforming" :href="wikiUrls.venusTerraforming">
+                    <SwitchInput v-model="requiresVenusTrackCompletion" />
+                  </OptionRow>
+                </div>
+                <div v-if="expansions.turmoil" class="create-game-option-group">
+                  <div class="create-game-option-group-title"><span class="create-game-expansion-icon expansion-icon-turmoil"></span><span v-i18n>Turmoil</span></div>
+                  <OptionRow label="Agendas" iconClass="expansion-icon-agendas" href="https://www.notion.so/Political-Agendas-8c6b0b018a884692be29b3ef44b340a9">
+                    <SwitchInput :modelValue="isPoliticalAgendasExtensionEnabled()" @update:modelValue="politicalAgendasExtensionToggle()" />
+                  </OptionRow>
+                  <SegmentedControl v-if="isPoliticalAgendasExtensionEnabled()" class="create-game-segmented--sub" v-model="politicalAgendasExtension" :options="AGENDA_OPTIONS" />
+                  <OptionRow label="Remove negative Global Events" :href="wikiUrls.removeNegativeGlobalEvents">
+                    <SwitchInput v-model="removeNegativeGlobalEventsOption" />
+                  </OptionRow>
+                </div>
+                <div v-if="expansions.moon" class="create-game-option-group">
+                  <div class="create-game-option-group-title"><span class="create-game-expansion-icon expansion-icon-themoon"></span><span v-i18n>The Moon</span></div>
+                  <OptionRow label="Mandatory Moon Terraforming"><SwitchInput v-model="requiresMoonTrackCompletion" /></OptionRow>
+                  <OptionRow label="Standard Project Variant #1" :href="wikiUrls.moonStandardProjectVariant"><SwitchInput v-model="moonStandardProjectVariant1" /></OptionRow>
+                  <OptionRow label="Standard Project Variant #2" :href="wikiUrls.moonStandardProjectVariant"><SwitchInput v-model="moonStandardProjectVariant" /></OptionRow>
+                </div>
+                <div v-if="expansions.ares" class="create-game-option-group">
+                  <div class="create-game-option-group-title"><span class="create-game-expansion-icon expansion-icon-ares"></span><span v-i18n>Ares</span></div>
+                  <OptionRow label="Extreme" :href="wikiUrls.aresExtreme"><SwitchInput v-model="aresExtremeVariant" /></OptionRow>
+                </div>
+              </CollapsibleSection>
+            </section>
+          </Teleport>
+          <Teleport :to="columnTarget('board')">
+            <section class="create-game-card" :style="cardStyle('board')">
+              <div class="create-game-card-head"><h2 v-i18n>Board</h2></div>
+              <!-- Chance first: with a random board the board chips below pick the pool it draws from -->
+              <div class="create-game-subhead" v-i18n>Random</div>
+              <OptionRow label="Random board">
+                <SwitchInput v-model="randomBoard" />
+              </OptionRow>
+              <SegmentedControl v-if="randomBoard" v-model="randomBoardScope" :options="RANDOM_BOARD_OPTIONS" />
+              <OptionRow label="Randomize board tiles" :href="wikiUrls.randomizeBoardTiles">
+                <SwitchInput v-model="shuffleMapOption" />
+              </OptionRow>
+              <template v-for="group in boardGroups" :key="group.title">
+                <!-- Fan-made can be closed; closed, a chosen fan board stands behind the title -->
+                <CollapsibleSection variant="subhead" :title="group.title" :collapsible="group.fan" storageKey="fanBoards" :changed="group.fan ? fanBoardNote : undefined">
+                  <div class="create-game-chip-grid">
+                    <ChoiceChip v-for="boardName in group.boards" :key="boardName"
+                      :label="boardName" capitalized :selected="boards.includes(boardName)"
+                      @select="selectBoard(boardName)">
+                      <template #icon><span :class="getBoardColorClass(boardName)"></span></template>
+                      <span v-if="ALPHA_BOARDS.includes(boardName)" class="create-game-alpha" :title="$t('Alpha — work in progress')">α</span>
+                    </ChoiceChip>
+                  </div>
+                </CollapsibleSection>
+              </template>
+              <!-- Exactly the board the game gets (same board seed); a cloned game brings its own board -->
+              <CreateGameBoardPreview v-if="!seededGame" :config="boardPreviewConfig" :isRandom="randomBoard || shuffleMapOption" :showBoardName="randomBoard"
+                :boardColorClass="getBoardColorClass" @reroll="boardSeed = Math.random()" @drawn="drawnBoard = $event" />
+            </section>
+          </Teleport>
+          <Teleport :to="columnTarget('setup')">
+            <section class="create-game-card" :style="cardStyle('setup')">
+              <div class="create-game-card-head"><h2 v-i18n>Setup</h2></div>
+              <OptionRow label="Starting Corporations">
+                <NumberStepper v-model="startingCorporations" :min="1" :max="6" />
+              </OptionRow>
+              <OptionRow v-if="expansions.prelude" label="Starting Preludes" iconClass="expansion-icon-prelude">
+                <NumberStepper v-model="startingPreludes" :min="4" :max="8" />
+              </OptionRow>
+              <OptionRow v-if="expansions.ceo" label="Starting CEOs" iconClass="expansion-icon-ceo">
+                <NumberStepper v-model="startingCeos" :min="1" :max="6" />
+              </OptionRow>
+              <div v-if="expansions.prelude || playersCount > 1" class="create-game-divider"></div>
+              <OptionRow v-if="expansions.prelude" label="Merger" iconClass="expansion-icon-prelude" :href="wikiUrls.merger">
+                <SwitchInput v-model="twoCorpsVariant" />
+              </OptionRow>
+              <template v-if="playersCount > 1">
+                <OptionRow label="Draft variant"><SwitchInput v-model="draftVariant" /></OptionRow>
+                <OptionRow label="Initial Draft variant" :href="wikiUrls.initialDraft"><SwitchInput v-model="initialDraft" /></OptionRow>
+                <template v-if="initialDraft">
+                  <OptionRow v-if="expansions.prelude" label="Prelude Draft" sub><SwitchInput v-model="preludeDraftVariant" /></OptionRow>
+                  <OptionRow v-if="expansions.ceo" label="CEO Draft" sub><SwitchInput v-model="ceosDraftVariant" /></OptionRow>
                 </template>
-                <div class="create-game-chip-grid create-game-expansion-grid">
-                  <!-- The base game is always part of the game: shown as a selected chip that cannot be switched off -->
-                  <ChoiceChip v-for="tile in group.tiles" :key="tile.module"
-                    :label="tile.choice?.label ?? 'Base game'" :iconClass="tile.choice?.iconClass ?? 'expansion-icon-base'"
-                    :selected="tile.choice === undefined || expansions[tile.choice.expansion]" :locked="tile.choice === undefined"
-                    :href="tile.choice?.info ? wikiUrls[tile.choice.expansion] : undefined"
-                    :tooltip="tile.choice === undefined ? undefined : requiredByTooltip(tile.choice.expansion, expansions)"
-                    @select="tile.choice !== undefined && toggleExpansion(tile.choice.expansion)">
-                    <template #detail>
-                      <span v-for="(part, index) in contentLine(tile, group.highlight, expansionGrouping !== 'source')" :key="index"
-                        :class="{'create-game-chip-detail--hit': part.highlighted}">{{ part.text }}</span>
-                    </template>
-                    <span v-if="tile.choice?.alpha" class="create-game-alpha" :title="$t('Alpha — work in progress')">α</span>
-                  </ChoiceChip>
-                </div>
-              </CollapsibleSection>
-            </template>
-          </section>
-        </Teleport>
-        <!-- Only once an expansion with options is on (less is more); v-if on the Teleport, see Milestones & Awards -->
-        <Teleport v-if="hasExpansionOptions" :to="columnTarget('expansionOptions')">
-          <section class="create-game-card" :style="cardStyle('expansionOptions')">
-            <CollapsibleSection title="Expansion options" storageKey="expansionOptions" :changed="expansionOptionsNote">
-              <div v-if="expansions.venus" class="create-game-option-group">
-                <div class="create-game-option-group-title"><span class="create-game-expansion-icon expansion-icon-venus"></span><span v-i18n>Venus Next</span></div>
-                <OptionRow label="Alt. Venus Board" :href="wikiUrls.alternativeVenusBoard"><SwitchInput v-model="altVenusBoard"/></OptionRow>
-                <OptionRow v-if="playersCount > 1" label="Mandatory Venus Terraforming" :href="wikiUrls.venusTerraforming">
-                  <SwitchInput v-model="requiresVenusTrackCompletion"/>
-                </OptionRow>
-              </div>
-              <div v-if="expansions.turmoil" class="create-game-option-group">
-                <div class="create-game-option-group-title"><span class="create-game-expansion-icon expansion-icon-turmoil"></span><span v-i18n>Turmoil</span></div>
-                <OptionRow label="Agendas" iconClass="expansion-icon-agendas" href="https://www.notion.so/Political-Agendas-8c6b0b018a884692be29b3ef44b340a9">
-                  <SwitchInput :modelValue="isPoliticalAgendasExtensionEnabled()" @update:modelValue="politicalAgendasExtensionToggle()"/>
-                </OptionRow>
-                <SegmentedControl v-if="isPoliticalAgendasExtensionEnabled()" class="create-game-segmented--sub" v-model="politicalAgendasExtension" :options="AGENDA_OPTIONS"/>
-                <OptionRow label="Remove negative Global Events" :href="wikiUrls.removeNegativeGlobalEvents">
-                  <SwitchInput v-model="removeNegativeGlobalEventsOption"/>
-                </OptionRow>
-              </div>
-              <div v-if="expansions.moon" class="create-game-option-group">
-                <div class="create-game-option-group-title"><span class="create-game-expansion-icon expansion-icon-themoon"></span><span v-i18n>The Moon</span></div>
-                <OptionRow label="Mandatory Moon Terraforming"><SwitchInput v-model="requiresMoonTrackCompletion"/></OptionRow>
-                <OptionRow label="Standard Project Variant #1" :href="wikiUrls.moonStandardProjectVariant"><SwitchInput v-model="moonStandardProjectVariant1"/></OptionRow>
-                <OptionRow label="Standard Project Variant #2" :href="wikiUrls.moonStandardProjectVariant"><SwitchInput v-model="moonStandardProjectVariant"/></OptionRow>
-              </div>
-              <div v-if="expansions.ares" class="create-game-option-group">
-                <div class="create-game-option-group-title"><span class="create-game-expansion-icon expansion-icon-ares"></span><span v-i18n>Ares</span></div>
-                <OptionRow label="Extreme" :href="wikiUrls.aresExtreme"><SwitchInput v-model="aresExtremeVariant"/></OptionRow>
-              </div>
-            </CollapsibleSection>
-          </section>
-        </Teleport>
-        <Teleport :to="columnTarget('board')">
-          <section class="create-game-card" :style="cardStyle('board')">
-            <div class="create-game-card-head"><h2 v-i18n>Board</h2></div>
-            <!-- Chance first: with a random board the board chips below pick the pool it draws from -->
-            <div class="create-game-subhead" v-i18n>Random</div>
-            <OptionRow label="Random board">
-              <SwitchInput v-model="randomBoard"/>
-            </OptionRow>
-            <SegmentedControl v-if="randomBoard" v-model="randomBoardScope" :options="RANDOM_BOARD_OPTIONS"/>
-            <OptionRow label="Randomize board tiles" :href="wikiUrls.randomizeBoardTiles">
-              <SwitchInput v-model="shuffleMapOption"/>
-            </OptionRow>
-            <template v-for="group in boardGroups" :key="group.title">
-              <!-- Fan-made can be closed; closed, a chosen fan board stands behind the title -->
-              <CollapsibleSection variant="subhead" :title="group.title" :collapsible="group.fan" storageKey="fanBoards" :changed="group.fan ? fanBoardNote : undefined">
-                <div class="create-game-chip-grid">
-                  <ChoiceChip v-for="boardName in group.boards" :key="boardName"
-                    :label="boardName" capitalized :selected="boards.includes(boardName)"
-                    @select="selectBoard(boardName)">
-                    <template #icon><span :class="getBoardColorClass(boardName)"></span></template>
-                    <span v-if="ALPHA_BOARDS.includes(boardName)" class="create-game-alpha" :title="$t('Alpha — work in progress')">α</span>
-                  </ChoiceChip>
-                </div>
-              </CollapsibleSection>
-            </template>
-            <!-- Exactly the board the game gets (same board seed); a cloned game brings its own board -->
-            <CreateGameBoardPreview v-if="!seededGame" :config="boardPreviewConfig" :isRandom="randomBoard || shuffleMapOption" :showBoardName="randomBoard"
-              :boardColorClass="getBoardColorClass" @reroll="boardSeed = Math.random()" @drawn="drawnBoard = $event"/>
-          </section>
-        </Teleport>
-        <Teleport :to="columnTarget('setup')">
-          <section class="create-game-card" :style="cardStyle('setup')">
-            <div class="create-game-card-head"><h2 v-i18n>Setup</h2></div>
-            <OptionRow label="Starting Corporations">
-              <NumberStepper v-model="startingCorporations" :min="1" :max="6"/>
-            </OptionRow>
-            <OptionRow v-if="expansions.prelude" label="Starting Preludes" iconClass="expansion-icon-prelude">
-              <NumberStepper v-model="startingPreludes" :min="4" :max="8"/>
-            </OptionRow>
-            <OptionRow v-if="expansions.ceo" label="Starting CEOs" iconClass="expansion-icon-ceo">
-              <NumberStepper v-model="startingCeos" :min="1" :max="6"/>
-            </OptionRow>
-            <div v-if="expansions.prelude || playersCount > 1" class="create-game-divider"></div>
-            <OptionRow v-if="expansions.prelude" label="Merger" iconClass="expansion-icon-prelude" :href="wikiUrls.merger">
-              <SwitchInput v-model="twoCorpsVariant"/>
-            </OptionRow>
-            <template v-if="playersCount > 1">
-              <OptionRow label="Draft variant"><SwitchInput v-model="draftVariant"/></OptionRow>
-              <OptionRow label="Initial Draft variant" :href="wikiUrls.initialDraft"><SwitchInput v-model="initialDraft"/></OptionRow>
-              <template v-if="initialDraft">
-                <OptionRow v-if="expansions.prelude" label="Prelude Draft" sub><SwitchInput v-model="preludeDraftVariant"/></OptionRow>
-                <OptionRow v-if="expansions.ceo" label="CEO Draft" sub><SwitchInput v-model="ceosDraftVariant"/></OptionRow>
               </template>
-            </template>
-          </section>
-        </Teleport>
-        <Teleport :to="columnTarget('rules')">
-          <section class="create-game-card" :style="cardStyle('rules')">
-            <div class="create-game-card-head"><h2 v-i18n>House-rule variants &amp; pace</h2></div>
-            <OptionRow label="World Government Terraforming" :href="wikiUrls.worldGovernmentTerraforming">
-              <SwitchInput v-model="solarPhaseOption"/>
-            </OptionRow>
-            <OptionRow v-if="playersCount === 1" label="63 TR solo mode" :href="wikiUrls.trSoloMode">
-              <SwitchInput v-model="soloTR"/>
-            </OptionRow>
-            <OptionRow label="Allow undo" :href="wikiUrls.allowUndo"><SwitchInput v-model="undoOption"/></OptionRow>
-            <div v-if="undoOption" class="create-game-note">
-              <span v-i18n>Undo is now in best effort support.</span>
-              <span v-i18n>No effort will be spent to fix it.</span>
-              <InfoLink href="https://github.com/terraforming-mars/terraforming-mars/discussions/7647"/>
-            </div>
-            <OptionRow label="Show timers"><SwitchInput v-model="showTimers"/></OptionRow>
-            <template v-if="playersCount > 1">
-              <OptionRow label="Show real-time VP" :href="wikiUrls.showRealtimeVP"><SwitchInput v-model="showOtherPlayersVP"/></OptionRow>
-              <OptionRow label="Fast mode" :href="wikiUrls.fastMode"><SwitchInput v-model="fastModeOption"/></OptionRow>
-            </template>
-            <OptionRow label="Escape Velocity" iconClass="expansion-icon-escape-velocity" :href="wikiUrls.escapeVelocity">
-              <SwitchInput v-model="escapeVelocityMode"/>
-            </OptionRow>
-            <template v-if="escapeVelocityMode">
-              <div class="create-game-option create-game-option--sub">
-                <span v-i18n>After</span>
-                <NumberStepper v-model="escapeVelocityThreshold" :min="0" :max="180" :step="5"/>
-                <span v-i18n>min</span>
+            </section>
+          </Teleport>
+          <Teleport :to="columnTarget('rules')">
+            <section class="create-game-card" :style="cardStyle('rules')">
+              <div class="create-game-card-head"><h2 v-i18n>House-rule variants &amp; pace</h2></div>
+              <OptionRow label="World Government Terraforming" :href="wikiUrls.worldGovernmentTerraforming">
+                <SwitchInput v-model="solarPhaseOption" />
+              </OptionRow>
+              <OptionRow v-if="playersCount === 1" label="63 TR solo mode" :href="wikiUrls.trSoloMode">
+                <SwitchInput v-model="soloTR" />
+              </OptionRow>
+              <OptionRow label="Allow undo" :href="wikiUrls.allowUndo"><SwitchInput v-model="undoOption" /></OptionRow>
+              <div v-if="undoOption" class="create-game-note">
+                <span v-i18n>Undo is now in best effort support.</span>
+                <span v-i18n>No effort will be spent to fix it.</span>
+                <InfoLink href="https://github.com/terraforming-mars/terraforming-mars/discussions/7647" />
               </div>
-              <div class="create-game-option create-game-option--sub">
-                <span v-i18n>Plus</span>
-                <NumberStepper v-model="escapeVelocityBonusSeconds" :min="1" :max="10"/>
-                <span v-i18n>seconds per action</span>
-              </div>
-              <div class="create-game-option create-game-option--sub">
-                <span v-i18n>Reduce</span>
-                <NumberStepper v-model="escapeVelocityPenalty" :min="1" :max="10"/>
-                <span v-i18n>VP every</span>
-                <NumberStepper v-model="escapeVelocityPeriod" :min="1" :max="10"/>
-                <span v-i18n>min</span>
-              </div>
-            </template>
-          </section>
-        </Teleport>
-        <!-- Own card: has nothing to do with the board (only with several players, solo has none).
+              <OptionRow label="Show timers"><SwitchInput v-model="showTimers" /></OptionRow>
+              <template v-if="playersCount > 1">
+                <OptionRow label="Show real-time VP" :href="wikiUrls.showRealtimeVP"><SwitchInput v-model="showOtherPlayersVP" /></OptionRow>
+                <OptionRow label="Fast mode" :href="wikiUrls.fastMode"><SwitchInput v-model="fastModeOption" /></OptionRow>
+              </template>
+              <OptionRow label="Escape Velocity" iconClass="expansion-icon-escape-velocity" :href="wikiUrls.escapeVelocity">
+                <SwitchInput v-model="escapeVelocityMode" />
+              </OptionRow>
+              <template v-if="escapeVelocityMode">
+                <div class="create-game-option create-game-option--sub">
+                  <span v-i18n>After</span>
+                  <NumberStepper v-model="escapeVelocityThreshold" :min="0" :max="180" :step="5" />
+                  <span v-i18n>min</span>
+                </div>
+                <div class="create-game-option create-game-option--sub">
+                  <span v-i18n>Plus</span>
+                  <NumberStepper v-model="escapeVelocityBonusSeconds" :min="1" :max="10" />
+                  <span v-i18n>seconds per action</span>
+                </div>
+                <div class="create-game-option create-game-option--sub">
+                  <span v-i18n>Reduce</span>
+                  <NumberStepper v-model="escapeVelocityPenalty" :min="1" :max="10" />
+                  <span v-i18n>VP every</span>
+                  <NumberStepper v-model="escapeVelocityPeriod" :min="1" :max="10" />
+                  <span v-i18n>min</span>
+                </div>
+              </template>
+            </section>
+          </Teleport>
+          <!-- Own card: has nothing to do with the board (only with several players, solo has none).
              v-if on the Teleport, not on the card: a card switched on later inside a Teleport did not appear -->
-        <Teleport v-if="playersCount > 1" :to="columnTarget('milestones')">
-          <section class="create-game-card" :style="cardStyle('milestones')">
-            <CollapsibleSection title="Milestones & Awards" storageKey="milestones" :changed="milestonesNote">
-              <template #actions><InfoLink :href="wikiUrls.randomMilestonesAndAwards"/></template>
-              <SegmentedControl v-model="randomMA" :options="MILESTONE_OPTIONS"/>
-              <template v-if="isRandomMAEnabled()">
-                <OptionRow label="Official Random α" sub><SwitchInput v-model="modularMA"/></OptionRow>
-                <div v-if="modularMA" class="create-game-note">
-                  <span v-i18n>The new Milestones and Awards are still in active development. Please don't report anything unless it breaks the game.</span>
-                  <b v-i18n>These are always fully random.</b>
+          <Teleport v-if="playersCount > 1" :to="columnTarget('milestones')">
+            <section class="create-game-card" :style="cardStyle('milestones')">
+              <CollapsibleSection title="Milestones & Awards" storageKey="milestones" :changed="milestonesNote">
+                <template #actions><InfoLink :href="wikiUrls.randomMilestonesAndAwards" /></template>
+                <SegmentedControl v-model="randomMA" :options="MILESTONE_OPTIONS" />
+                <template v-if="isRandomMAEnabled()">
+                  <OptionRow label="Official Random α" sub><SwitchInput v-model="modularMA" /></OptionRow>
+                  <div v-if="modularMA" class="create-game-note">
+                    <span v-i18n>The new Milestones and Awards are still in active development. Please don't report anything unless it breaks the game.</span>
+                    <b v-i18n>These are always fully random.</b>
+                  </div>
+                  <OptionRow label="Include fan Milestones/Awards" sub><SwitchInput v-model="includeFanMA" /></OptionRow>
+                </template>
+              </CollapsibleSection>
+            </section>
+          </Teleport>
+          <Teleport :to="columnTarget('cardPool')">
+            <section class="create-game-card" :style="cardStyle('cardPool')">
+              <CollapsibleSection title="Card pool" storageKey="cardPool" :changed="cardPoolNote">
+                <div class="create-game-chip-grid create-game-chip-grid--two">
+                  <ChoiceChip label="Custom Corporation list" :selected="showCorporationList" @select="showCorporationList = !showCorporationList">
+                    <span v-if="customCorporations.length" class="create-game-count">{{ customCorporations.length }}</span>
+                  </ChoiceChip>
+                  <ChoiceChip v-if="expansions.prelude" label="Custom Preludes list" :selected="showPreludesList" @select="showPreludesList = !showPreludesList">
+                    <span v-if="customPreludes.length" class="create-game-count">{{ customPreludes.length }}</span>
+                  </ChoiceChip>
+                  <ChoiceChip v-if="expansions.ceo" label="Custom CEOs list" :selected="showCeosList" @select="showCeosList = !showCeosList">
+                    <span v-if="customCeos.length" class="create-game-count">{{ customCeos.length }}</span>
+                  </ChoiceChip>
+                  <ChoiceChip v-if="expansions.colonies" label="Custom Colonies list" :selected="showColoniesList" @select="showColoniesList = !showColoniesList">
+                    <span v-if="customColonies.length" class="create-game-count">{{ customColonies.length }}</span>
+                  </ChoiceChip>
+                  <ChoiceChip label="Exclude some cards" :selected="showBannedCards" @select="showBannedCards = !showBannedCards">
+                    <span v-if="bannedCards.length" class="create-game-count">{{ bannedCards.length }}</span>
+                  </ChoiceChip>
+                  <ChoiceChip label="Include some cards" :selected="showIncludedCards" @select="showIncludedCards = !showIncludedCards">
+                    <span v-if="includedCards.length" class="create-game-count">{{ includedCards.length }}</span>
+                  </ChoiceChip>
                 </div>
-                <OptionRow label="Include fan Milestones/Awards" sub><SwitchInput v-model="includeFanMA"/></OptionRow>
-              </template>
-            </CollapsibleSection>
-          </section>
-        </Teleport>
-        <Teleport :to="columnTarget('cardPool')">
-          <section class="create-game-card" :style="cardStyle('cardPool')">
-            <CollapsibleSection title="Card pool" storageKey="cardPool" :changed="cardPoolNote">
-              <div class="create-game-chip-grid create-game-chip-grid--two">
-                <ChoiceChip label="Custom Corporation list" :selected="showCorporationList" @select="showCorporationList = !showCorporationList">
-                  <span v-if="customCorporations.length" class="create-game-count">{{ customCorporations.length }}</span>
-                </ChoiceChip>
-                <ChoiceChip v-if="expansions.prelude" label="Custom Preludes list" :selected="showPreludesList" @select="showPreludesList = !showPreludesList">
-                  <span v-if="customPreludes.length" class="create-game-count">{{ customPreludes.length }}</span>
-                </ChoiceChip>
-                <ChoiceChip v-if="expansions.ceo" label="Custom CEOs list" :selected="showCeosList" @select="showCeosList = !showCeosList">
-                  <span v-if="customCeos.length" class="create-game-count">{{ customCeos.length }}</span>
-                </ChoiceChip>
-                <ChoiceChip v-if="expansions.colonies" label="Custom Colonies list" :selected="showColoniesList" @select="showColoniesList = !showColoniesList">
-                  <span v-if="customColonies.length" class="create-game-count">{{ customColonies.length }}</span>
-                </ChoiceChip>
-                <ChoiceChip label="Exclude some cards" :selected="showBannedCards" @select="showBannedCards = !showBannedCards">
-                  <span v-if="bannedCards.length" class="create-game-count">{{ bannedCards.length }}</span>
-                </ChoiceChip>
-                <ChoiceChip label="Include some cards" :selected="showIncludedCards" @select="showIncludedCards = !showIncludedCards">
-                  <span v-if="includedCards.length" class="create-game-count">{{ includedCards.length }}</span>
-                </ChoiceChip>
-              </div>
-              <OptionRow label="Set Predefined Game" :href="wikiUrls.setPredefinedGame"><SwitchInput v-model="seededGame"/></OptionRow>
-              <input v-if="seededGame" type="text" name="clonedGamedId" class="create-game-text-input" :placeholder="$t('game id:')" v-model="clonedGameId">
-            </CollapsibleSection>
-          </section>
-        </Teleport>
+                <OptionRow label="Set Predefined Game" :href="wikiUrls.setPredefinedGame"><SwitchInput v-model="seededGame" /></OptionRow>
+                <input v-if="seededGame" type="text" name="clonedGamedId" class="create-game-text-input" :placeholder="$t('game id:')" v-model="clonedGameId">
+              </CollapsibleSection>
+            </section>
+          </Teleport>
         </template>
 
         <!-- Custom lists as their own cards: show (difference to the default as cards) or edit -->
         <CustomCardListCard v-if="showCorporationList" kind="corporations" title="Custom Corporation list"
-            :expansions="expansions" :selected="customCorporations" @list-changed="updateCustomCorporations"/>
+          :expansions="expansions" :selected="customCorporations" @list-changed="updateCustomCorporations" />
         <CustomCardListCard v-if="showPreludesList" kind="preludes" title="Custom Preludes list"
-            :expansions="expansions" :selected="customPreludes" @list-changed="updateCustomPreludes"/>
+          :expansions="expansions" :selected="customPreludes" @list-changed="updateCustomPreludes" />
         <CustomCardListCard v-if="showCeosList" kind="ceos" title="Custom CEOs list"
-            :expansions="expansions" :selected="customCeos" @list-changed="updateCustomCeos"/>
+          :expansions="expansions" :selected="customCeos" @list-changed="updateCustomCeos" />
         <ColoniesFilter
-            ref="coloniesFilter"
-            v-if="showColoniesList"
-            @colonies-list-changed="updateCustomColonies"
-            :expansions="expansions"
-            :selected="customColonies"
-            @close="showColoniesList = false"
+          ref="coloniesFilter"
+          v-if="showColoniesList"
+          @colonies-list-changed="updateCustomColonies"
+          :expansions="expansions"
+          :selected="customColonies"
+          @close="showColoniesList = false"
         />
         <div class="create-game--block" v-if="showBannedCards">
           <CardsFilter
-              ref="cardsFilter"
-              @cards-list-changed="updateBannedCards"
-              :title="'Cards to exclude from the game'"
-              :hint="'Start typing the card name to exclude'"
+            ref="cardsFilter"
+            @cards-list-changed="updateBannedCards"
+            :title="'Cards to exclude from the game'"
+            :hint="'Start typing the card name to exclude'"
           />
         </div>
         <div class="create-game--block" v-if="showIncludedCards">
           <CardsFilter
-              ref="cardsFilter2"
-              @cards-list-changed="updateIncludedCards"
-              :title="'Cards to include in the game'"
-              :hint="'Start typing the card name to include'"
+            ref="cardsFilter2"
+            @cards-list-changed="updateIncludedCards"
+            :title="'Cards to include in the game'"
+            :hint="'Start typing the card name to include'"
           />
         </div>
 
@@ -292,9 +292,9 @@
               <h2 v-i18n>Players</h2>
               <!-- Humans and AI players in two aligned rows; together they make up the player count -->
               <div class="create-game-seat-rows">
-                <span class="create-game-seat-label"><SeatIcon kind="human"/><span v-i18n>Player</span></span>
-                <SegmentedControl v-model="humanPlayersCount" :options="humanCountOptions" class="create-game-segmented--equal create-game-segmented--seats"/>
-                <span class="create-game-seat-label"><SeatIcon kind="ai"/><!-- "AI" in every language (no translation) --><span>AI</span></span>
+                <span class="create-game-seat-label"><SeatIcon kind="human" /><span v-i18n>Player</span></span>
+                <SegmentedControl v-model="humanPlayersCount" :options="humanCountOptions" class="create-game-segmented--equal create-game-segmented--seats" />
+                <span class="create-game-seat-label"><SeatIcon kind="ai" /><!-- "AI" in every language (no translation) --><span>AI</span></span>
                 <!-- Blocked: instead of the count a warning that names the expansions/options the AI cannot handle -->
                 <div v-if="aiBlockers.length > 0" class="create-game-validation-box create-game-validation-box--warning create-game-seat-warning" role="status">
                   <h3 class="create-game-validation-title"><span aria-hidden="true">&#9888;&#xFE0E;</span><span v-i18n>AI not yet compatible with:</span></h3>
@@ -305,13 +305,13 @@
                     </span>
                   </div>
                 </div>
-                <SegmentedControl v-else v-model="aiPlayersCount" :options="aiCountOptions" class="create-game-segmented--equal create-game-segmented--seats"/>
+                <SegmentedControl v-else v-model="aiPlayersCount" :options="aiCountOptions" class="create-game-segmented--equal create-game-segmented--seats" />
               </div>
               <!-- Who starts belongs to the players: switched on, the "Goes first" stars on the player cards disappear -->
-              <OptionRow v-if="playersCount > 1" class="create-game-players-first" label="Random first player"><SwitchInput v-model="randomFirstPlayer"/></OptionRow>
+              <OptionRow v-if="playersCount > 1" class="create-game-players-first" label="Random first player"><SwitchInput v-model="randomFirstPlayer" /></OptionRow>
               <!-- Analysis game: only with AI players; the log then shows the AI's cards and decisions, which humans can rate -->
               <template v-if="aiPlayersCount > 0 && aiBlockers.length === 0">
-                <OptionRow class="create-game-players-first" label="Analysis game"><SwitchInput v-model="aiAnalysis"/></OptionRow>
+                <OptionRow class="create-game-players-first" label="Analysis game"><SwitchInput v-model="aiAnalysis" /></OptionRow>
                 <div v-if="aiAnalysis" class="create-game-note create-game-analysis-note" v-i18n>The log shows the AI's cards and decisions. Hover an AI entry and click 👍 👎 🚩 to rate it (touch: double-tap, keyboard: I).</div>
               </template>
             </div>
@@ -324,7 +324,7 @@
                 <div class="create-game-player-top">
                   <!-- Seat: meeple or robot plus seat number -->
                   <span class="create-game-player-position">
-                    <SeatIcon :kind="newPlayer.aiLevel !== undefined ? 'ai' : 'human'"/>{{ index + 1 }}
+                    <SeatIcon :kind="newPlayer.aiLevel !== undefined ? 'ai' : 'human'" />{{ index + 1 }}
                   </span>
                   <span class="create-game-player-name-field">
                     <input class="create-game-player-name" :placeholder="getPlayerNamePlaceholder(index)" v-model="newPlayer.name">
@@ -344,24 +344,24 @@
                     :class="['create-game-swatch', {'create-game-swatch--selected': newPlayer.color === color}]"
                     :disabled="isColorTaken(color, index)" :title="$t(color)" :aria-pressed="newPlayer.color === color"
                     @click="newPlayer.color = color">
-                    <PlayerCube :color="color" :view="newPlayer.color === color ? 'slight' : 'top'" :size="newPlayer.color === color ? 17 : 16" animated/>
+                    <PlayerCube :color="color" :view="newPlayer.color === color ? 'slight' : 'top'" :size="newPlayer.color === color ? 17 : 16" animated />
                   </button>
                 </div>
                 <div v-if="newPlayer.aiLevel !== undefined" class="create-game-ai-strength">
                   <span v-i18n>Strength</span>
-                  <SegmentedControl v-model="newPlayer.aiLevel" :options="AI_LEVEL_OPTIONS" class="create-game-segmented--equal"/>
+                  <SegmentedControl v-model="newPlayer.aiLevel" :options="AI_LEVEL_OPTIONS" class="create-game-segmented--equal" />
                 </div>
                 <div class="create-game-player-extra">
                   <!-- The beginner corporation is a help for humans; AI players do not need it -->
                   <label v-if="isBeginnerToggleEnabled() && newPlayer.aiLevel === undefined" class="create-game-player-toggle">
-                    <SwitchInput v-model="newPlayer.beginner"/>
+                    <SwitchInput v-model="newPlayer.beginner" />
                     <span v-i18n>Beginner?</span>
-                    <InfoLink :href="wikiUrls.beginnerCorporation"/>
+                    <InfoLink :href="wikiUrls.beginnerCorporation" />
                   </label>
                   <span class="create-game-player-toggle">
                     <span v-i18n>TR Boost</span>
-                    <InfoLink :href="wikiUrls.trBoost"/>
-                    <NumberStepper v-model="newPlayer.handicap" :min="0" :max="10"/>
+                    <InfoLink :href="wikiUrls.trBoost" />
+                    <NumberStepper v-model="newPlayer.handicap" :min="0" :max="10" />
                   </span>
                 </div>
               </div>
@@ -371,17 +371,17 @@
         <!-- Sticks to the bottom edge while the page is too short for it; then with an extra shadow -->
         <section ref="createCard" class="create-game-card create-game-create-card" :class="{'create-game-create-card--stuck': createCardStuck}">
           <!-- Same chips as the game list of the statistics (gameSetupChips.ts) -->
-          <GameSetupChips :chips="summaryChips"/>
+          <GameSetupChips :chips="summaryChips" />
           <div ref="createRow" class="create-game-create-row">
-            <AppButton hotkey="create-game" class="create-game-create" title="Create game" size="big" @click="createGame" :disabled="hasBlockingValidationErrors"/>
+            <AppButton hotkey="create-game" class="create-game-create" title="Create game" size="big" @click="createGame" :disabled="hasBlockingValidationErrors" />
           </div>
-          <ValidationProblems v-if="hasValidationProblems" :errors="validationErrors"/>
+          <ValidationProblems v-if="hasValidationProblems" :errors="validationErrors" />
         </section>
       </aside>
       <!-- One column (phone): the Create card stays at the end of the page; only the button follows along at the
            bottom edge until the card's own button comes into view – summary and warnings would cover the settings -->
       <div v-if="createButtonBelow" class="create-game-create-float">
-        <AppButton class="create-game-create" title="Create game" size="big" @click="createGame" :disabled="hasBlockingValidationErrors"/>
+        <AppButton class="create-game-create" title="Create game" size="big" @click="createGame" :disabled="hasBlockingValidationErrors" />
       </div>
     </div>
 

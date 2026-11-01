@@ -5,18 +5,18 @@
          Used by the players' card view (OtherPlayer.vue) and the "All cards" tab (HandCardsPanel.vue);
          the latter shows the active cards in their own section above and leaves them out here. -->
     <div v-for="card in cardsOf([CardType.CORPORATION])" :key="card.name" class="cardbox" :class="visibilityClass(card)">
-      <Card :card="card" :actionUsed="isCardActivated(card, player)" :cubeColor="player.color"/>
+      <Card :card="card" :actionUsed="isCardActivated(card, player)" :cubeColor="player.color" />
     </div>
     <div v-for="card in cardsOf([CardType.CEO])" :key="card.name" class="cardbox" :class="visibilityClass(card)">
-      <Card :card="card" :actionUsed="isCardActivated(card, player)" :cubeColor="player.color"/>
+      <Card :card="card" :actionUsed="isCardActivated(card, player)" :cubeColor="player.color" />
     </div>
     <template v-if="!withoutActiveCards">
       <div v-for="card in cardsOf([CardType.ACTIVE])" :key="card.name" class="cardbox" :class="visibilityClass(card)">
-        <Card :card="card" :actionUsed="isCardActivated(card, player)" :cubeColor="player.color"/>
+        <Card :card="card" :actionUsed="isCardActivated(card, player)" :cubeColor="player.color" />
       </div>
     </template>
-    <StackedCards v-if="automatedCards.length > 0" :cards="automatedCards" :visibility="visibility"/>
-    <StackedCards v-if="eventCards.length > 0" :cards="eventCards" :visibility="visibility"/>
+    <StackedCards v-if="automatedCards.length > 0" :cards="automatedCards" :visibility="visibility" />
+    <StackedCards v-if="eventCards.length > 0" :cards="eventCards" :visibility="visibility" />
   </div>
 </template>
 

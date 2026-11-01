@@ -1,12 +1,12 @@
 <template>
   <button v-if="isCard" type="button" class="stats-asset stats-asset--card" :title="$t('Show card')" @click="showCard">
-    <Card :card="{name: cardName}"/>
+    <Card :card="{name: cardName}" />
   </button>
   <div v-else-if="kind === 'milestone'" class="stats-asset stats-asset--tile">
-    <div class="milestones"><Milestone :milestone="{name: milestoneName, playerName: undefined, color: undefined, scores: []}" :showScores="false" :showDescription="true"/></div>
+    <div class="milestones"><Milestone :milestone="{name: milestoneName, playerName: undefined, color: undefined, scores: []}" :showScores="false" :showDescription="true" /></div>
   </div>
   <div v-else-if="kind === 'award'" class="stats-asset stats-asset--tile">
-    <div class="awards"><Award :award="{name: awardName, playerName: undefined, color: undefined, scores: []}" :showScores="false" :showDescription="true"/></div>
+    <div class="awards"><Award :award="{name: awardName, playerName: undefined, color: undefined, scores: []}" :showScores="false" :showDescription="true" /></div>
   </div>
 </template>
 

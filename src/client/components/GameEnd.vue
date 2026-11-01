@@ -4,8 +4,8 @@
     <div class="game-end-hero">
       <!-- Menu and Mars logo at the top left like on the other pages (card list, statistics); the logo leads to the start screen -->
       <div class="game-end-hero-lead">
-        <PageToolbar/>
-        <MarsHomeLink/>
+        <PageToolbar />
+        <MarsHomeLink />
         <!-- Solo: result as a sentence in the same place as the winner in a multiplayer game, so both views are built the same -->
         <div v-if="isSoloGame" class="game-end-winner-announcement">
           <span v-if="game.isSoloModeWin" v-i18n>You win!</span>
@@ -19,15 +19,15 @@
       <div class="game_end_navigation">
         <!-- Icon + text like the other action buttons; rounded corners (btn-rounded), height grows with wrapped text -->
         <a href="new-game" class="btn btn-lg btn-rounded btn-tone-success game-end-nav-button">
-          <svg class="game-end-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+          <svg class="game-end-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
           <span v-i18n>Create New Game</span>
         </a>
         <a href="." class="btn btn-lg btn-rounded game-end-nav-button">
-          <svg class="game-end-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>
+          <svg class="game-end-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7" /><path d="M5 10v10h5v-6h4v6h5V10" /></svg>
           <span v-i18n>Go to main page</span>
         </a>
         <a href="stats" class="btn btn-lg btn-rounded game-end-nav-button">
-          <svg class="game-end-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>
+          <svg class="game-end-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" /></svg>
           <span v-i18n>All statistics</span>
         </a>
       </div>
@@ -65,11 +65,11 @@
         <!-- Basis of the game above the players: its settings in the groups of the create form -->
         <section class="game-end-box game-end-setup">
           <h2 v-i18n>Game settings</h2>
-          <GameSetupGroups :chips="setupChips"/>
+          <GameSetupGroups :chips="setupChips" />
         </section>
 
         <div class="game-end-box game_end_victory_points">
-          <h2><span v-i18n>Victory point breakdown after</span> {{game.generation}} <span v-i18n>generations</span></h2>
+          <h2><span v-i18n>Victory point breakdown after</span> {{ game.generation }} <span v-i18n>generations</span></h2>
           <!-- Contributions to the global parameters as their own column group in the same table (formerly a separate table) -->
           <table class="table game_end_table">
             <thead>
@@ -121,7 +121,7 @@
                 <td v-if="game.moon !== undefined">{{ p.victoryPointsBreakdown.moonRoads }}</td>
                 <td v-if="game.moon !== undefined">{{ p.victoryPointsBreakdown.moonHabitats }}</td>
                 <td v-if="game.moon !== undefined">{{ p.victoryPointsBreakdown.moonMines }}</td>
-                <td v-if="game.pathfinders !== undefined"> {{ p.victoryPointsBreakdown.planetaryTracks}}</td>
+                <td v-if="game.pathfinders !== undefined"> {{ p.victoryPointsBreakdown.planetaryTracks }}</td>
                 <td>{{ p.victoryPointsBreakdown.victoryPoints }}</td>
                 <td v-if="game.gameOptions.escapeVelocity">{{ p.victoryPointsBreakdown.escapeVelocity }}</td>
                 <td class="game-end-total">{{ p.victoryPointsBreakdown.total }}</td>
@@ -144,19 +144,19 @@
         </div>
 
         <!-- Drag handles between the boxes (from the two-column layout on, like in the game view, resize_handle.less) -->
-        <RowResizeHandle kind="game-end-table"/>
+        <RowResizeHandle kind="game-end-table" />
 
         <div class="game-end-box game-end-box--fill">
           <h2 v-i18n>Victory points details</h2>
           <div class="game-end-flexrow game-end-details">
             <div v-for="p in playersInPlace" :key="p.color" class="game-end-column">
               <div class="game-end-winner-scorebreak-player-title">
-                <div :class="'game-end-player ' + getEndGamePlayerRowColorClass(p.color)"><a :href="'player?id='+p.id+'&noredirect'">{{p.name}}</a></div>
+                <div :class="'game-end-player ' + getEndGamePlayerRowColorClass(p.color)"><a :href="'player?id='+p.id+'&noredirect'">{{ p.name }}</a></div>
               </div>
               <div v-for="v in p.victoryPointsBreakdown.detailsCards" :key="v.cardName">
                 <div :class="detailRowClass(v.victoryPoint)">
-                  <div class="game-end-column-vp">{{v.victoryPoint}}</div>
-                  <div class="game-end-column-text" v-i18n>{{v.cardName}}</div>
+                  <div class="game-end-column-vp">{{ v.victoryPoint }}</div>
+                  <div class="game-end-column-text" v-i18n>{{ v.cardName }}</div>
                 </div>
               </div>
               <div class="game-end-column-row">
@@ -165,19 +165,19 @@
               </div>
               <div v-for="v in p.victoryPointsBreakdown.detailsMilestones" :key="v.message">
                 <div :class="detailRowClass(v.victoryPoint)">
-                  <div class="game-end-column-vp">{{v.victoryPoint}}</div>
-                  <div class="game-end-column-text">{{translateMilestoneDetails(v)}}</div>
+                  <div class="game-end-column-vp">{{ v.victoryPoint }}</div>
+                  <div class="game-end-column-text">{{ translateMilestoneDetails(v) }}</div>
                 </div>
               </div>
               <div v-for="v in p.victoryPointsBreakdown.detailsAwards" :key="v.message">
                 <div :class="detailRowClass(v.victoryPoint)">
-                  <div class="game-end-column-vp">{{v.victoryPoint}}</div>
-                  <div class="game-end-column-text">{{translateAwardDetails(v)}}</div>
+                  <div class="game-end-column-vp">{{ v.victoryPoint }}</div>
+                  <div class="game-end-column-text">{{ translateAwardDetails(v) }}</div>
                 </div>
               </div>
               <div v-for="v in p.victoryPointsBreakdown.detailsPlanetaryTracks" :key="v.tag">
                 <div :class="detailRowClass(v.points)">
-                  <div class="game-end-column-vp">{{v.points}}</div>
+                  <div class="game-end-column-vp">{{ v.points }}</div>
                   <div class="game-end-column-text" v-i18n="[v.tag]">Most tags on the ${0} track</div>
                 </div>
               </div>
@@ -186,7 +186,7 @@
         </div>
       </div>
 
-      <ColumnResizeHandle class="game-end-columns__resizer" :split="columnSplit"/>
+      <ColumnResizeHandle class="game-end-columns__resizer" :split="columnSplit" />
 
       <div class="game-end-columns__side">
         <div class="game-end-box game_end_block--board">
@@ -195,38 +195,38 @@
           <div class="game-end-board-zoom">
             <!-- Click enlarges Mars or the Moon like in the game (BoardZoomModal) -->
             <Board
-                ref="columnBoard"
-                v-bind="boardProps"
-                class="board-cont--zoomable"
-                @toggleTileView="cycleTileView()"
-                @click="onBoardClick($event, 'mars')"/>
+              ref="columnBoard"
+              v-bind="boardProps"
+              class="board-cont--zoomable"
+              @toggleTileView="cycleTileView()"
+              @click="onBoardClick($event, 'mars')" />
             <MoonBoard v-if="game.moon !== undefined" ref="columnMoon" :model="game.moon" :tileView="tileView"
-                class="board-cont--zoomable" @click="onBoardClick($event, 'moon')"/>
+              class="board-cont--zoomable" @click="onBoardClick($event, 'moon')" />
             <div v-if="game.gameOptions.expansions.pathfinders">
-              <PlanetaryTracks :tracks="game.pathfinders" :gameOptions="game.gameOptions"/>
+              <PlanetaryTracks :tracks="game.pathfinders" :gameOptions="game.gameOptions" />
             </div>
-            <DeltaProjectBoard v-if="game.gameOptions.expansions.deltaProject" :players="participant.players"/>
+            <DeltaProjectBoard v-if="game.gameOptions.expansions.deltaProject" :players="participant.players" />
           </div>
           <!-- Outside the scaled part: the zoom would also scale the full-screen view -->
           <BoardZoomModal :open="boardZoomOpen" :origin="columnBoardElement" :frame="zoomBoard === 'mars' ? marsZoomFrame : undefined"
-              @close="boardZoomOpen = false">
+            @close="boardZoomOpen = false">
             <template #controls>
-              <TileViewToggle :tileView="tileView" @toggleTileView="cycleTileView()"/>
+              <TileViewToggle :tileView="tileView" @toggleTileView="cycleTileView()" />
             </template>
-            <MoonBoard v-if="zoomBoard === 'moon' && game.moon !== undefined" :model="game.moon" :tileView="tileView" ring/>
-            <Board v-else v-bind="boardProps" @toggleTileView="cycleTileView()"/>
+            <MoonBoard v-if="zoomBoard === 'moon' && game.moon !== undefined" :model="game.moon" :tileView="tileView" ring />
+            <Board v-else v-bind="boardProps" @toggleTileView="cycleTileView()" />
           </BoardZoomModal>
         </div>
-        <RowResizeHandle kind="game-end-board"/>
+        <RowResizeHandle kind="game-end-board" />
 
         <GameEndChartTabs
           :victoryPointDatasets="vpDataset"
           :globalParameterDatasets="globalsDataset"
-          :generation="game.generation"/>
-        <RowResizeHandle kind="game-end-chart"/>
+          :generation="game.generation" />
+        <RowResizeHandle kind="game-end-chart" />
 
         <div class="game_end_block--log">
-          <LogPanel :viewModel="participant"/>
+          <LogPanel :viewModel="participant" />
         </div>
       </div>
     </div>

@@ -5,11 +5,11 @@
     <template v-if="ring">
       <svg class="moon-ring__svg" :viewBox="'0 0 ' + RING_BOARD_SIZE + ' ' + RING_BOARD_SIZE" aria-hidden="true">
         <g v-for="band in ringBands" :key="band.rate" class="moon-ring__band">
-          <path :d="band.slot.path" :fill="band.slot.fill"/>
-          <image :href="band.icon.href" :x="band.icon.x" :y="band.icon.y" width="26" height="26"/>
-          <path v-for="(cell, index) in band.cells" :key="'c' + index" :d="cell.path" :fill="cell.fill"/>
-          <line v-for="(line, index) in band.lines" :key="'l' + index" v-bind="line" stroke="rgba(255,255,255,.45)" stroke-width="1"/>
-          <path :d="band.outline" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="1"/>
+          <path :d="band.slot.path" :fill="band.slot.fill" />
+          <image :href="band.icon.href" :x="band.icon.x" :y="band.icon.y" width="26" height="26" />
+          <path v-for="(cell, index) in band.cells" :key="'c' + index" :d="cell.path" :fill="cell.fill" />
+          <line v-for="(line, index) in band.lines" :key="'l' + index" v-bind="line" stroke="rgba(255,255,255,.45)" stroke-width="1" />
+          <path :d="band.outline" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="1" />
         </g>
       </svg>
       <div class="moon-ring__numbers">
@@ -22,7 +22,7 @@
       </div>
       <div v-for="pin in ringBonusPins" :key="pin.key" class="moon-ring__bonus" :style="pin.style">
         <span :class="['track-bonus-pin', {'track-bonus-pin--done': pin.done}]">
-          <span class="track-bonus-pin__chips" :style="pin.chipStyle"><TrackBonusChip :bonus="pin.bonus" :kind="pin.done ? 'done' : 'own'"/></span>
+          <span class="track-bonus-pin__chips" :style="pin.chipStyle"><TrackBonusChip :bonus="pin.bonus" :kind="pin.done ? 'done' : 'own'" /></span>
           <span class="track-bonus-link"></span>
         </span>
       </div>

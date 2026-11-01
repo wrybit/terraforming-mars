@@ -7,11 +7,11 @@
       :class="['choice-option', 'colony-choice', {'choice-option--selected': selectedColony === colony.model.name}]"
       :data-test="'colony-choice-' + colony.model.name">
       <input type="radio" class="choice-option-input" v-model="selectedColony" :value="colony.model.name" @change="preview()">
-      <ColonyPlanet class="colony-choice__planet" :name="colony.model.name"/>
+      <ColonyPlanet class="colony-choice__planet" :name="colony.model.name" />
       <b class="colony-choice__name">{{ $t(colony.model.name) }}</b>
       <span class="colony-choice__slots">
         <template v-for="slot in 3" :key="slot">
-          <PlayerCube v-if="colony.model.colonies[slot - 1] !== undefined" :color="colony.model.colonies[slot - 1]" view="slight" :size="11"/>
+          <PlayerCube v-if="colony.model.colonies[slot - 1] !== undefined" :color="colony.model.colonies[slot - 1]" view="slight" :size="11" />
           <i v-else class="colony-choice__slot"></i>
         </template>
       </span>
@@ -19,9 +19,9 @@
       <span v-else class="colony-choice__trade">+{{ colony.tradeValue }}<img :src="'assets/' + colony.tradeIcon.src" alt=""></span>
     </label>
     <TabPanelFooterSlot>
-    <div v-if="showsave === true" class="nofloat">
-      <AppButton hotkey="proceed" @click="saveData" :title="playerinput.buttonLabel" type="submit" size="normal" :disabled="!canSave()"/>
-    </div>
+      <div v-if="showsave === true" class="nofloat">
+        <AppButton hotkey="proceed" @click="saveData" :title="playerinput.buttonLabel" type="submit" size="normal" :disabled="!canSave()" />
+      </div>
     </TabPanelFooterSlot>
   </div>
 </template>

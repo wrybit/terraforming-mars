@@ -8,7 +8,7 @@
     :modal="modal"
     ref="cardPanel"
     :style="previewStyle"
-    @hide="selectedMessage = undefined; modal = false"/>
+    @hide="selectedMessage = undefined; modal = false" />
 </template>
 
 <script setup lang="ts">

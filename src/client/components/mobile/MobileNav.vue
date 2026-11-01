@@ -7,7 +7,7 @@
       @click="emit('navigate', item.screen)">
       <!-- The turn entry shows the caller's round turn button instead of the icon -->
       <slot v-if="item.screen === 'turn'" name="turn"></slot>
-      <MobileGlyph v-else :name="item.icon" :filled="active === item.screen"/>
+      <MobileGlyph v-else :name="item.icon" :filled="active === item.screen" />
       <span v-if="item.screen === 'hand' && handCount > 0" class="mb-nav-badge">{{ handCount }}</span>
       <span class="mb-nav-label">{{ $t(item.label) }}</span>
     </button>

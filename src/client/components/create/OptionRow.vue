@@ -3,7 +3,7 @@
     <span class="create-game-option-name">
       <span v-if="iconClass" :class="'create-game-expansion-icon ' + iconClass"></span>
       <span v-i18n>{{ label }}</span>
-      <InfoLink v-if="href" :href="href"/>
+      <InfoLink v-if="href" :href="href" />
     </span>
     <slot></slot>
   </div>

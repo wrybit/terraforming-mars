@@ -9,19 +9,19 @@
         <span v-for="(option, index) in modelValue.options" :key="optionKey(option)" :class="chipClasses(option)" :title="optionTitle(option)">
           <template v-if="option.group === 'player'">{{ playerName(option.value) }}</template>
           <template v-else-if="option.group === 'me'">{{ $t('Affects me') }}</template>
-          <LogFilterSymbol v-else :option="option"/>
+          <LogFilterSymbol v-else :option="option" />
           <button type="button" class="log-filter-chip-remove" :aria-label="$t('Remove')" @click.stop="removeAt(index)">×</button>
         </span>
         <!-- AI info switched off: visible as a chip, × shows it again -->
         <span v-if="aiInsights && !aiInsightsShown" class="log-filter-chip log-filter-chip--ai-off" :title="$t('AI info (spoilers) hidden')" data-test="log-filter-ai-off">
-          <SeatIcon kind="ai" :size="14"/><span class="log-filter-chip-strike" aria-hidden="true"></span>
+          <SeatIcon kind="ai" :size="14" /><span class="log-filter-chip-strike" aria-hidden="true"></span>
           <button type="button" class="log-filter-chip-remove" :aria-label="$t('Show AI info (spoilers)')" @click.stop="setAiInsightsShown(true)">×</button>
         </span>
         <input id="log-filter-input" ref="input" class="log-filter-input" type="search" name="log-filter" :value="text" :placeholder="$t('Search or filter …')" :aria-label="$t('Search or filter …')"
           @input="textChanged" @keydown="keyDown">
       </label>
       <button type="button" :class="['log-filter-toggle', {'log-filter-toggle--open': open}]" :aria-expanded="open" :title="$t('Filter')" @click="open = !open">
-        <svg class="log-filter-toggle-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18l-7 8v6l-4 2v-8z"/></svg>
+        <svg class="log-filter-toggle-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18l-7 8v6l-4 2v-8z" /></svg>
         <span class="log-filter-toggle-text">{{ $t('Filter') }}</span>
         <span class="log-filter-toggle-caret" aria-hidden="true">▾</span>
       </button>
@@ -32,14 +32,14 @@
           :aria-pressed="isSelected(option)" @click="toggle(option)">
           <template v-if="option.group === 'player'">{{ initial(option.value) }}</template>
           <template v-else-if="option.group === 'me'">{{ $t('Me') }}</template>
-          <LogFilterSymbol v-else :option="option"/>
+          <LogFilterSymbol v-else :option="option" />
         </button>
       </span>
       <!-- Analysis game: show or hide what the AI drafted, kept and bought (on by default) -->
       <span v-if="aiInsights" class="log-filter-group">
         <button type="button" :class="['log-filter-option', 'log-filter-option--ai', {'log-filter-option--on': aiInsightsShown}]"
           :title="$t('AI info (spoilers)')" :aria-pressed="aiInsightsShown" data-test="log-filter-ai" @click="setAiInsightsShown(!aiInsightsShown)">
-          <SeatIcon kind="ai" :size="20"/>
+          <SeatIcon kind="ai" :size="20" />
         </button>
       </span>
     </div>

@@ -1,28 +1,28 @@
 <template>
   <div id="spectator-home" :class="['mb-home', 'mb-home--spectator', 'mb-home--' + screen]">
     <!-- Mobile view for spectators: the same building blocks as MobilePlayerHome, without hand, turn and own money -->
-    <MobileHeader :game="game" @click="go('players')" :aria-label="$t('Players')"/>
+    <MobileHeader :game="game" @click="go('players')" :aria-label="$t('Players')" />
 
     <main class="mb-main">
       <MobileMarsScreen v-show="screen === 'mars'" ref="gameBoardView"
         :game="game" :players="spectator.players" :participantId="spectator.id" :tileView="tileView"
         :acting="false" :bannerTitle="bannerTitle"
-        @toggleTileView="cycleTileView()" @showMilestones="showMilestones"/>
+        @toggleTileView="cycleTileView()" @showMilestones="showMilestones" />
 
       <!-- From three players on, the tables scroll horizontally beneath fixed icon columns (mobile.less) -->
       <section v-show="screen === 'players'" :class="['mb-screen', 'mb-screen--players', {'mb-screen--players-scroll': spectator.players.length > 2}]"
         @scroll.capture="markHorizontalScroll">
-        <MobilePlayersPanel :viewModel="spectator" v-model:segment="playersSegment"/>
+        <MobilePlayersPanel :viewModel="spectator" v-model:segment="playersSegment" />
       </section>
 
       <section v-show="screen === 'log'" class="mb-screen mb-screen--log">
-        <LogPanel :viewModel="spectator" zoomCarousel @spaceClicked="showSpace"/>
+        <LogPanel :viewModel="spectator" zoomCarousel @spaceClicked="showSpace" />
       </section>
     </main>
 
-    <MobileNav :items="navItems" :active="screen" @navigate="go"/>
+    <MobileNav :items="navItems" :active="screen" @navigate="go" />
     <!-- Polls the server regularly for updates (like the desktop spectator view) -->
-    <WaitingFor v-show="false" v-if="game.phase !== 'end'" :playerView="spectator" :waitingfor="undefined"/>
+    <WaitingFor v-show="false" v-if="game.phase !== 'end'" :playerView="spectator" :waitingfor="undefined" />
   </div>
 </template>
 

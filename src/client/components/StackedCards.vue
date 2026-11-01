@@ -1,10 +1,10 @@
 <template>
-    <div class="cardbox">
-        <div v-for="(card, index) in shownCards" :key="card.name"
-          :class="{'cards-stack': index > 0, 'cards-stack-first': index === 0, 'card-filter-dimmed': visibilityOf(card) === 'dimmed'}">
-            <Card :card="card" />
-        </div>
+  <div class="cardbox">
+    <div v-for="(card, index) in shownCards" :key="card.name"
+      :class="{'cards-stack': index > 0, 'cards-stack-first': index === 0, 'card-filter-dimmed': visibilityOf(card) === 'dimmed'}">
+      <Card :card="card" />
     </div>
+  </div>
 </template>
 
 <script lang="ts">

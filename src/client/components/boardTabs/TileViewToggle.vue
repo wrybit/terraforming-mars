@@ -2,12 +2,12 @@
   <!-- Tiles / bonus / coordinates as a segmented switch at the bottom of the Mars and Moon box -->
   <div class="tile-view-toggle" role="radiogroup" data-test="tile-view-toggle">
     <!-- N / M step through the views (hotkeyDispatcher.ts); the caps sit at both ends -->
-    <HotkeyKeys action="board-view-previous" class="tile-view-toggle__keys"/>
+    <HotkeyKeys action="board-view-previous" class="tile-view-toggle__keys" />
     <button v-for="option in OPTIONS" :key="option.view" type="button" role="radio"
       :class="['tile-view-toggle__option', {'tile-view-toggle__option--on': option.view === tileView}]"
       :aria-checked="option.view === tileView"
       @click="choose(option.view)">{{ $t(option.label) }}</button>
-    <HotkeyKeys action="board-view-next" class="tile-view-toggle__keys"/>
+    <HotkeyKeys action="board-view-next" class="tile-view-toggle__keys" />
   </div>
 </template>
 

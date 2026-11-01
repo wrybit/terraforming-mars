@@ -2,13 +2,13 @@
   <div class="select_space_cont">
     <!-- Confirmation as a speech bubble at the chosen space (opens to the left if there's no room on the right) -->
     <SpaceConfirmPopover
-        :anchor="confirmAnchor"
-        @accept="confirmPlacement"
-        @dismiss="cancelPlacement"
-        @hide="hideDialog" />
+      :anchor="confirmAnchor"
+      @accept="confirmPlacement"
+      @dismiss="cancelPlacement"
+      @hide="hideDialog" />
     <div v-if="showtitle" class="wf-select-space">
       {{ $t(playerinput.title) }}
-      <GoToMap :playerinput="playerinput"/>
+      <GoToMap :playerinput="playerinput" />
     </div>
     <!-- Transition to the large board deliberately via a button: automatic expanding feels disruptive.
          The top line says what is being placed, below it the next step – so it's clear what happens after the click -->
@@ -17,12 +17,12 @@
         <span class="select-space-zoom-action">{{ placementAction }}</span>
         <span v-if="zoomBoard === 'moon'" class="select-space-zoom-next-step" v-i18n>Show the Moon enlarged and choose a space</span>
         <span v-else class="select-space-zoom-next-step" v-i18n>Show Mars enlarged and choose a space</span>
-        <HotkeyKeys action="proceed"/>
+        <HotkeyKeys action="proceed" />
       </button>
     </div>
     <div v-if="warning" class="nes-container is-rounded">
       <span class="nes-text is-warning" v-i18n>{{ warning }}</span>
-      <GoToMap :playerinput="playerinput"/>
+      <GoToMap :playerinput="playerinput" />
     </div>
   </div>
 </template>

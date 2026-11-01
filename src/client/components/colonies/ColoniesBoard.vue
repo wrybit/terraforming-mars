@@ -6,7 +6,7 @@
     <div v-for="colony in views" :key="colony.model.name" :class="tileClasses(colony)"
       :style="{'--planet-tone': colony.tone}" :data-test="'colony-tile-' + colony.model.name">
       <span v-if="isPicked(colony)" class="colonies-board__flag">✓</span>
-      <span class="colonies-board__art"><ColonyPlanet :name="colony.model.name"/></span>
+      <span class="colonies-board__art"><ColonyPlanet :name="colony.model.name" /></span>
       <div class="colonies-board__body">
         <div class="colonies-board__head">
           <b class="colonies-board__name">{{ $t(colony.model.name) }}</b>
@@ -18,7 +18,7 @@
         <div class="colonies-board__track">
           <span v-for="(value, index) in colony.track" :key="index" class="colonies-board__cell">
             <span :class="stepClasses(colony, index)">
-              <PlayerCube v-if="slotOwner(colony, index) !== undefined" :color="slotOwner(colony, index)!" view="slight" :size="13"/>
+              <PlayerCube v-if="slotOwner(colony, index) !== undefined" :color="slotOwner(colony, index)!" view="slight" :size="13" />
               <template v-else>
                 <b>{{ value }}</b>
                 <img v-if="index === colony.model.trackPosition" class="colonies-board__step-icon" :src="'assets/' + colony.tradeIcon.src" alt="">
@@ -29,7 +29,7 @@
       </div>
       <div class="colonies-board__value">
         <span v-if="colony.model.visitor !== undefined" class="colonies-board__docked" :style="{'--player': playerColor(colony.model.visitor)}">
-          <TradeShip :color="colony.model.visitor" :size="30"/>{{ playerName(colony.model.visitor) }}
+          <TradeShip :color="colony.model.visitor" :size="30" />{{ playerName(colony.model.visitor) }}
         </span>
         <span class="colonies-board__big">{{ colony.tradeValue }}<span :class="{'colonies-board__production': colony.tradeIcon.production}"><img :src="'assets/' + colony.tradeIcon.src" alt=""></span></span>
         <small v-if="colony.model.isActive">{{ $t(statusText(colony)) }}</small>
@@ -43,7 +43,7 @@
       </span>
       <span class="colonies-board__berths">
         <span v-for="berth in berths" :key="berth.key" :class="['colonies-board__berth', {'colonies-board__berth--away': berth.away, 'colonies-board__berth--me': berth.color === viewerColor}]">
-          <TradeShip :color="berth.color" :size="28"/>{{ berth.name }}<small v-if="berth.away">→ {{ $t(berth.away) }}</small>
+          <TradeShip :color="berth.color" :size="28" />{{ berth.name }}<small v-if="berth.away">→ {{ $t(berth.away) }}</small>
         </span>
       </span>
     </div>

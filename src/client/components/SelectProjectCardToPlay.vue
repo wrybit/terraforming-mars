@@ -1,65 +1,65 @@
 <template>
-<div class="payments_cont choice-block" :class="[choiceBlockClass(allCards.length, isHandSelection), {'choice-block--sections': unplayableCards.length > 0}]" :style="choiceBlockStyle(allCards.length)"
-  @tm-carousel-unselect="unselectCard">
-  <!-- Cards as a choice block (choice_block.less) like when buying and for standard projects -->
-  <div v-if="showtitle === true">{{ $t(playerinput.title) }}</div>
-  <!-- Same filter and sorting as in the hand tab, at the top of the box – only for hand cards (not standard projects) -->
-  <CardFilterBar v-if="isHandSelection" :cards="allCards" :filter="handCardFilter" :context="filterContext">
-    <template #sort="{compact}">
-      <HandSortControl :playerView="playerView" :compact="compact"/>
-    </template>
-  </CardFilterBar>
-  <!-- Standard projects and single cards: no filter, but the zoom in the same place as in every tab -->
-  <CardZoomBar v-else/>
-  <TabPanelIntroSlot/>
-  <CardFilterEmptyHint v-if="nothingShown" @reset="resetCardFilter(handCardFilter)"/>
-  <!-- Hand cards that can't be played have their own section below (unplayableHandCards): then both get a heading,
+  <div class="payments_cont choice-block" :class="[choiceBlockClass(allCards.length, isHandSelection), {'choice-block--sections': unplayableCards.length > 0}]" :style="choiceBlockStyle(allCards.length)"
+    @tm-carousel-unselect="unselectCard">
+    <!-- Cards as a choice block (choice_block.less) like when buying and for standard projects -->
+    <div v-if="showtitle === true">{{ $t(playerinput.title) }}</div>
+    <!-- Same filter and sorting as in the hand tab, at the top of the box – only for hand cards (not standard projects) -->
+    <CardFilterBar v-if="isHandSelection" :cards="allCards" :filter="handCardFilter" :context="filterContext">
+      <template #sort="{compact}">
+        <HandSortControl :playerView="playerView" :compact="compact" />
+      </template>
+    </CardFilterBar>
+    <!-- Standard projects and single cards: no filter, but the zoom in the same place as in every tab -->
+    <CardZoomBar v-else />
+    <TabPanelIntroSlot />
+    <CardFilterEmptyHint v-if="nothingShown" @reset="resetCardFilter(handCardFilter)" />
+    <!-- Hand cards that can't be played have their own section below (unplayableHandCards): then both get a heading,
        like the sections of the hand cards tab. Same grid, so the one filter row works on both -->
-  <h3 v-if="shownUnplayableCount > 0 && shownPlayableCount > 0" class="hand-cards-panel__title choice-section-title">
-    {{ $t('Playable now') }} <small>{{ shownPlayableCount }}</small>
-  </h3>
-  <label v-for="availableCard in cards" class="payments_cards" :class="visibilityClass(availableCard)" :key="availableCard.name">
-    <input v-if="!availableCard.isDisabled" class="hidden" type="radio" v-model="cardName" :value="availableCard.name" >
-    <Card class="cardbox" :card="availableCard" />
-  </label>
-  <template v-if="card !== undefined && card.additionalProjectCosts">
-    <div v-if="card.additionalProjectCosts.aeronGenomicsResources" class="card-warning"
-      v-i18n="[$t(card.name), card.additionalProjectCosts.aeronGenomicsResources, 'animals', $t(CardName.AERON_GENOMICS)]"
-    >
-      Playing ${0} consumes ${1} ${2} from ${3}
-    </div>
-    <div v-if="card.additionalProjectCosts.thinkTankResources" class="card-warning"
-      v-i18n="[$t(card.name), card.additionalProjectCosts.thinkTankResources, 'data', $t(CardName.THINK_TANK)]">
-      Playing ${0} consumes ${1} ${2} from ${3}
-    </div>
-    <div v-if="card.additionalProjectCosts.redsCost" class="card-warning" v-i18n="[$t(card.name), card.additionalProjectCosts.redsCost, $t('Reds')]">
-      Playing ${0} will cost ${1} M€ more because ${2} are in power
-    </div>
-  </template>
-  <WarningsComponent v-if="card !== undefined" :warnings="card.warnings"/>
-  <!-- Not playable: view only, grey and half transparent; no radio, so neither a click nor the mobile carousel selects them -->
-  <template v-if="shownUnplayableCount > 0">
-    <h3 class="hand-cards-panel__title choice-section-title choice-section-title--separated">
-      {{ $t('Not playable') }} <small>{{ shownUnplayableCount }}</small>
+    <h3 v-if="shownUnplayableCount > 0 && shownPlayableCount > 0" class="hand-cards-panel__title choice-section-title">
+      {{ $t('Playable now') }} <small>{{ shownPlayableCount }}</small>
     </h3>
-    <label v-for="unplayableCard in unplayableCards" class="payments_cards payments_cards--unplayable" :class="visibilityClass(unplayableCard)" :key="unplayableCard.name">
-      <Card class="cardbox" :card="{...unplayableCard, isDisabled: true}" />
+    <label v-for="availableCard in cards" class="payments_cards" :class="visibilityClass(availableCard)" :key="availableCard.name">
+      <input v-if="!availableCard.isDisabled" class="hidden" type="radio" v-model="cardName" :value="availableCard.name">
+      <Card class="cardbox" :card="availableCard" />
     </label>
-  </template>
+    <template v-if="card !== undefined && card.additionalProjectCosts">
+      <div v-if="card.additionalProjectCosts.aeronGenomicsResources" class="card-warning"
+        v-i18n="[$t(card.name), card.additionalProjectCosts.aeronGenomicsResources, 'animals', $t(CardName.AERON_GENOMICS)]"
+      >
+        Playing ${0} consumes ${1} ${2} from ${3}
+      </div>
+      <div v-if="card.additionalProjectCosts.thinkTankResources" class="card-warning"
+        v-i18n="[$t(card.name), card.additionalProjectCosts.thinkTankResources, 'data', $t(CardName.THINK_TANK)]">
+        Playing ${0} consumes ${1} ${2} from ${3}
+      </div>
+      <div v-if="card.additionalProjectCosts.redsCost" class="card-warning" v-i18n="[$t(card.name), card.additionalProjectCosts.redsCost, $t('Reds')]">
+        Playing ${0} will cost ${1} M€ more because ${2} are in power
+      </div>
+    </template>
+    <WarningsComponent v-if="card !== undefined" :warnings="card.warnings" />
+    <!-- Not playable: view only, grey and half transparent; no radio, so neither a click nor the mobile carousel selects them -->
+    <template v-if="shownUnplayableCount > 0">
+      <h3 class="hand-cards-panel__title choice-section-title choice-section-title--separated">
+        {{ $t('Not playable') }} <small>{{ shownUnplayableCount }}</small>
+      </h3>
+      <label v-for="unplayableCard in unplayableCards" class="payments_cards payments_cards--unplayable" :class="visibilityClass(unplayableCard)" :key="unplayableCard.name">
+        <Card class="cardbox" :card="{...unplayableCard, isDisabled: true}" />
+      </label>
+    </template>
 
-  <PaymentForm
-    v-if="showPaymentSection"
-    ref="paymentForm"
-    :key="cardName"
-    :cost="cost"
-    :order="order"
-    :ledger="ledger"
-    :showsave="showsave"
-    :buttonLabel="playerinput.buttonLabel"
-    :itemName="cardName"
-    @change="(p) => payment = p"
-    @save="doSave"/>
-</div>
+    <PaymentForm
+      v-if="showPaymentSection"
+      ref="paymentForm"
+      :key="cardName"
+      :cost="cost"
+      :order="order"
+      :ledger="ledger"
+      :showsave="showsave"
+      :buttonLabel="playerinput.buttonLabel"
+      :itemName="cardName"
+      @change="(p) => payment = p"
+      @save="doSave" />
+  </div>
 </template>
 
 <script lang="ts">

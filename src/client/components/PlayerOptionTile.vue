@@ -7,7 +7,7 @@
     :title="caption === undefined ? undefined : $t(caption)">
     <!-- Radio for keyboard and screen readers; the tile is what's visible -->
     <input type="radio" :name="groupName" :value="color" :checked="selected" class="player-option-input" @change="$emit('select', color)">
-    <SelectPlayerRow class="player-option-name" :player="player"/>
+    <SelectPlayerRow class="player-option-name" :player="player" />
     <div v-if="snapshot !== undefined && after !== undefined" class="player-option-resource">
       <i :class="'resource_icon player-option-icon resource_icon--' + effect?.resource"></i>
       <div class="player-option-values">

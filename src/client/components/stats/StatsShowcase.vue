@@ -1,9 +1,9 @@
 <template>
   <div ref="row" class="stats-showcase">
     <figure v-for="entry in entries" :key="entry.name" class="stats-showcase-item">
-      <StatsEntityAsset :kind="kind" :name="entry.name" :siblings="names"/>
+      <StatsEntityAsset :kind="kind" :name="entry.name" :siblings="names" />
       <figcaption>
-        <StatsEntityName :kind="kind" :name="entry.name"/>
+        <StatsEntityName :kind="kind" :name="entry.name" />
         <span class="stats-showcase-numbers">{{ entry.plays }}× · {{ formatPercent(entry.winRate) }} <span v-i18n>wins</span></span>
       </figcaption>
     </figure>

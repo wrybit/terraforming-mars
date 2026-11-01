@@ -2,11 +2,11 @@
   <div class="stats-chart">
     <svg v-if="hasData" :viewBox="`0 0 ${width} ${height}`" role="img">
       <g v-for="tick in ticks" :key="tick">
-        <line :x1="left" :x2="width - right" :y1="y(tick)" :y2="y(tick)" class="stats-chart-grid"/>
+        <line :x1="left" :x2="width - right" :y1="y(tick)" :y2="y(tick)" class="stats-chart-grid" />
         <text :x="left - 6" :y="y(tick) + 4" text-anchor="end" class="stats-chart-label">{{ tick }}</text>
       </g>
       <g v-for="line in lines" :key="line.name">
-        <polyline :points="line.path" fill="none" :class="`stats-chart-line stats-chart-stroke-${line.color}`"/>
+        <polyline :points="line.path" fill="none" :class="`stats-chart-line stats-chart-stroke-${line.color}`" />
         <circle
           v-for="dot in line.dots"
           :key="dot.index"

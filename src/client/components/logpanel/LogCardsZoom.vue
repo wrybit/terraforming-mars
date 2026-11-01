@@ -3,13 +3,13 @@
   <Teleport to="body">
     <MobileCardZoom :count="items.length" v-model:index="index" @close="$emit('close')">
       <template #slide="{index: slide}">
-        <Card v-if="items[slide].kind === 'card'" :card="cardModel(items[slide].name as CardName)"/>
-        <GlobalEvent v-else-if="items[slide].kind === 'globalEvent'" :globalEventName="items[slide].name as GlobalEventName" type="prior" :showIcons="false"/>
-        <Colony v-else :colony="simpleColonyModel(items[slide].name as ColonyName)"/>
+        <Card v-if="items[slide].kind === 'card'" :card="cardModel(items[slide].name as CardName)" />
+        <GlobalEvent v-else-if="items[slide].kind === 'globalEvent'" :globalEventName="items[slide].name as GlobalEventName" type="prior" :showIcons="false" />
+        <Colony v-else :colony="simpleColonyModel(items[slide].name as ColonyName)" />
       </template>
       <!-- What the action changed, like the box under the hover preview on desktop -->
       <template v-if="hasActionSummary(action)" #footer>
-        <LogActionEffects :action="action!" :players="players"/>
+        <LogActionEffects :action="action!" :players="players" />
       </template>
     </MobileCardZoom>
   </Teleport>

@@ -1,12 +1,12 @@
 <template>
-    <div class="top-bar-container">
-      <div :class="formatCssClass()" :key="componentKey">
-        <PlayerInfo v-show="isExpanded()" :player="playerView.thisPlayer" :playerView="playerView" :actionLabel="''" :playerIndex="ownPlayerIndex(playerView)" :hideZeroTags="true" :isTopBar="true"/>
-        <div class="top-bar-collapser" @click="toggleBar()">
-          <img src="assets/arrows_left.png">
-        </div>
+  <div class="top-bar-container">
+    <div :class="formatCssClass()" :key="componentKey">
+      <PlayerInfo v-show="isExpanded()" :player="playerView.thisPlayer" :playerView="playerView" :actionLabel="''" :playerIndex="ownPlayerIndex(playerView)" :hideZeroTags="true" :isTopBar="true" />
+      <div class="top-bar-collapser" @click="toggleBar()">
+        <img src="assets/arrows_left.png">
       </div>
     </div>
+  </div>
 </template>
 
 <script lang="ts">

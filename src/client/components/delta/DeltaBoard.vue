@@ -6,7 +6,7 @@
     <BoardTrackRow v-for="player in players" :key="player.color" :name="player.name" :cells="cells(player)" :bonuses="lane(player)"
       :class="['delta-board__row', 'player_translucent_bg_color_' + player.color, {'delta-board__row--self': player.color === viewerColor}]"
       :data-test="'delta-row-' + player.color">
-      <template #image><span class="board-track-row__picture"><PlayerCube :color="player.color" view="slight" :size="22"/></span></template>
+      <template #image><span class="board-track-row__picture"><PlayerCube :color="player.color" view="slight" :size="22" /></span></template>
       <template #value>
         <template v-if="next(player) !== undefined">
           <img v-if="next(player)!.space.tag !== undefined" :src="'assets/tags/' + next(player)!.space.tag + '.png'" alt="">

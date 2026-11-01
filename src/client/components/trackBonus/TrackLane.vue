@@ -6,7 +6,7 @@
       <span v-if="(bonuses[index - 1] ?? []).length > 0" :class="['track-bonus-pin', 'track-bonus-pin--up', {'track-bonus-pin--done': allDone(index - 1)}]">
         <span class="track-bonus-link"></span>
         <span v-for="(row, rowIndex) in rows(index - 1)" :key="rowIndex" class="track-bonus-pin__row">
-          <TrackBonusChip v-for="(entry, entryIndex) in row" :key="entryIndex" :bonus="entry.bonus" :kind="entry.kind"/>
+          <TrackBonusChip v-for="(entry, entryIndex) in row" :key="entryIndex" :bonus="entry.bonus" :kind="entry.kind" />
         </span>
       </span>
     </span>

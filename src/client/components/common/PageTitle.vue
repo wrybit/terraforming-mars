@@ -2,7 +2,7 @@
   <!-- Page title of the pages outside the game (card list, statistics): Mars logo + app name + page name.
        The logo always leads back to the start screen in the same tab; on narrow screens the app name is hidden. -->
   <h1 class="page-title">
-    <MarsHomeLink/>
+    <MarsHomeLink />
     <a v-if="titleHref !== undefined" :href="titleHref" data-page-title-link class="page-title-text">
       <span class="page-title-app">Terraforming Mars – </span><span>{{ $t(title) }}</span>
     </a>

@@ -3,8 +3,8 @@
     <span v-if="hasIcon" class="icon" :class="iconClass" data-test="icon"></span>
     <span v-else-if="counts.length === 0">{{ buttonText }}</span>
     <!-- Text and counters on one line ("Buy [3] for [9]", buttonCount.ts) -->
-    <span v-else class="btn-counted__label">{{ buttonText }}<ButtonCount v-for="(part, index) in counts" :key="index" :part="part"/></span>
-    <HotkeyKeys v-if="hotkey !== undefined || fixedHotkey !== undefined" :action="hotkey" :fixed="fixedHotkey"/>
+    <span v-else class="btn-counted__label">{{ buttonText }}<ButtonCount v-for="(part, index) in counts" :key="index" :part="part" /></span>
+    <HotkeyKeys v-if="hotkey !== undefined || fixedHotkey !== undefined" :action="hotkey" :fixed="fixedHotkey" />
   </button>
 </template>
 

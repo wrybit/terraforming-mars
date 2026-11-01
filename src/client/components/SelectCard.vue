@@ -1,92 +1,92 @@
 <template>
-    <div class="wf-component wf-component--select-card choice-block" :class="[choiceBlockClass(choiceCount, isHandSelection || playerinput.showOwner || trailingSections.length > 0), {'choice-block--sections': trailingSections.length > 0}]" :style="choiceBlockStyle(choiceCount)">
-        <!-- Cards as a choice block (choice_block.less): as square as possible and centered in the tab box;
+  <div class="wf-component wf-component--select-card choice-block" :class="[choiceBlockClass(choiceCount, isHandSelection || playerinput.showOwner || trailingSections.length > 0), {'choice-block--sections': trailingSections.length > 0}]" :style="choiceBlockStyle(choiceCount)">
+    <!-- Cards as a choice block (choice_block.less): as square as possible and centered in the tab box;
              comment inside, so the caller's v-show hits the root -->
-        <div v-if="showtitle === true" class="nofloat wf-component-title">{{ $t(playerinput.title) }}</div>
-        <!-- Header row above the cards: "Select all" on the left, on the right the same sorting as in the hand tab -->
-        <!-- Hand cards (e.g. selling): the same filter and sorting as in the hand tab, in one row -->
-        <CardFilterBar v-if="isHandSelection" :cards="playerinput.cards" :filter="handCardFilter" :context="filterContext">
-          <template #lead>
-            <AppButton v-if="showSelectAll" hotkey="select-all" class="select-card-toolbar__select-all" size="small" @click="toggleSelectAll" :title="selectAllTitle" />
-          </template>
-          <template #sort="{compact}">
-            <HandSortControl :playerView="playerView" :compact="compact"/>
-          </template>
-        </CardFilterBar>
-        <!-- Action cards: filter and sorting like the played cards (own filter state, no cost filter) -->
-        <CardFilterBar v-else-if="isActionSelection" :cards="playerinput.cards" :filter="playedCardFilter" :context="filterContext">
-          <template #sort="{compact}">
-            <CardSortMenu :modelValue="playedCardsSortOrder" :compact="compact" @update:modelValue="setPlayedSortOrder"/>
-          </template>
-        </CardFilterBar>
-        <!-- Other card lists (buying, draft …): no filter, but the zoom in the same place as in every tab;
+    <div v-if="showtitle === true" class="nofloat wf-component-title">{{ $t(playerinput.title) }}</div>
+    <!-- Header row above the cards: "Select all" on the left, on the right the same sorting as in the hand tab -->
+    <!-- Hand cards (e.g. selling): the same filter and sorting as in the hand tab, in one row -->
+    <CardFilterBar v-if="isHandSelection" :cards="playerinput.cards" :filter="handCardFilter" :context="filterContext">
+      <template #lead>
+        <AppButton v-if="showSelectAll" hotkey="select-all" class="select-card-toolbar__select-all" size="small" @click="toggleSelectAll" :title="selectAllTitle" />
+      </template>
+      <template #sort="{compact}">
+        <HandSortControl :playerView="playerView" :compact="compact" />
+      </template>
+    </CardFilterBar>
+    <!-- Action cards: filter and sorting like the played cards (own filter state, no cost filter) -->
+    <CardFilterBar v-else-if="isActionSelection" :cards="playerinput.cards" :filter="playedCardFilter" :context="filterContext">
+      <template #sort="{compact}">
+        <CardSortMenu :modelValue="playedCardsSortOrder" :compact="compact" @update:modelValue="setPlayedSortOrder" />
+      </template>
+    </CardFilterBar>
+    <!-- Other card lists (buying, draft …): no filter, but the zoom in the same place as in every tab;
              "Select all" only where it makes sense. Mobile: no zoom, only the "Select all" row -->
-        <div v-else-if="isMobile && showSelectAll" class="select-card-toolbar">
-          <AppButton hotkey="select-all" class="select-card-toolbar__select-all" size="small" @click="toggleSelectAll" :title="selectAllTitle" />
-        </div>
-        <CardZoomBar v-else>
-          <template v-if="showSelectAll" #lead>
-            <AppButton hotkey="select-all" class="select-card-toolbar__select-all" size="small" @click="toggleSelectAll" :title="selectAllTitle" />
-          </template>
-        </CardZoomBar>
-        <TabPanelIntroSlot/>
-        <CardFilterEmptyHint v-if="nothingShown" @reset="resetFilter"/>
-        <!-- Several card sections in the tab (cardSections.ts): heading of this one below the header row -->
-        <h3 v-if="cardSections?.title !== undefined" class="hand-cards-panel__title choice-section-title">
-          {{ $t(cardSections.title.text) }} <small>{{ cardSections.title.count }}</small>
-        </h3>
-        <!-- Cards of several players: one group per player with the name as heading, opponents first, own last
-             (cardOwnerGroups.ts) – instead of a small name label on every card -->
-        <template v-for="group in getCardGroups()" :key="group.owner?.color ?? 'none'">
-        <h3 v-if="group.owner !== undefined" class="hand-cards-panel__title select-card-owner-title">
-          <PlayerCube :color="group.owner.color" view="slight" :size="11"/>{{ group.owner.name }} <small>{{ group.cards.length }}</small>
-        </h3>
-        <label v-for="card in group.cards" :key="card.name" :class="getCardBoxClass(card)" @click="keepCurrentPick(card)">
-            <template v-if="!card.isDisabled">
-              <input v-if="selectOnlyOneCard" type="radio" name="selected-cards" v-model="cards" :value="card" >
-              <input v-else type="checkbox" name="selected-cards" v-model="cards" :value="card" :disabled="playerinput.max !== undefined && Array.isArray(cards) && cards.length >= playerinput.max && cards.includes(card) === false" >
-            </template>
-            <!-- No "action used" look here: a card offered in a selection is either selectable or isDisabled;
-                 greying out a selectable card (e.g. adding microbes to a card whose action was used) misleads -->
-            <Card :card="card" :robotCard="robotCard(card)">
-              <!-- Draft: the card picked this round stays in its place, marked as the current choice that can still be changed;
-                   inside the card so the tab sits flush on its border like the selection tab -->
-              <span v-if="isCurrentPick(card)" class="current-pick-tab">{{ (cardsSelected() === 0 ? '✓ ' : '') + $t(cardsSelected() === 0 ? 'Your pick – can be changed' : 'Previous pick') }}</span>
-            </Card>
-        </label>
-        </template>
-        <!-- View-only sections after the selectable cards (cardSections.ts): heading and cards as items of this grid,
-             so they get the same size, spacing and sticky header row; no input, nothing to choose -->
-        <template v-for="section in trailingSections" :key="section.title">
-          <h3 v-if="shownCount(section.cards) > 0" class="hand-cards-panel__title choice-section-title choice-section-title--separated">
-            {{ $t(section.title) }} <small>{{ shownCount(section.cards) }}</small>
-          </h3>
-          <label v-for="card in section.cards" :key="section.title + card.name" :class="['cardbox', 'cardbox--view-only', visibilityClass(card)]">
-            <Card :card="section.unavailable ? {...card, isDisabled: true} : card" :actionUsed="section.actionUsed" :cubeColor="section.cubeColor"/>
-          </label>
-        </template>
-        <div v-if="hasCardWarning()" class="card-warning" v-i18n>{{ warning }}</div>
-        <WarningsComponent :warnings="warnings"/>
-        <TabPanelFooterSlot>
-        <div v-if="showsave === true" class="nofloat select-card-actions">
-            <!-- Chosen cards the filter hides are still sold/discarded: say so next to the button -->
-            <span v-if="hiddenSelectedCount > 0" class="card-filter-hidden-note">{{ hiddenSelectedText }}</span>
-            <!-- Disabled while fewer cards are chosen than required: shows that a card must be chosen first.
-                 With Skip next to it: Confirm green, Skip red (button_tones.less) -->
-            <!-- Too little money: note left of the buttons (footer, also fine on the phone carousel), buying is disabled;
-                 discarding remains so the game can go on -->
-            <template v-if="cannotAfford">
-              <span class="select-card-unaffordable" v-i18n="affordNote">Not enough money: a card costs ${0} M€, you only have ${1} M€</span>
-              <AppButton hotkey="confirm" :disabled="true" type="submit" :title="$t('Buy')" class="btn-tone-success" />
-              <AppButton hotkey="cancel" type="submit" @click="saveData" :title="$t('Discard')" class="btn-tone-danger" />
-            </template>
-            <AppButton :hotkey="labelConfirmHotkey(playerinput.buttonLabel)" v-else :disabled="!hasRequiredSelection" type="submit" @click="saveData" :title="playerinput.buttonLabel" :counts="buttonCounts()"
-              :class="{'btn-tone-success': isOptionalToManyCards}" />
-            <AppButton hotkey="cancel" :disabled="isOptionalToManyCards && cardsSelected() > 0" v-if="isOptionalToManyCards" @click="saveData" type="submit" :title="$t(skipLabel)"
-              class="btn-tone-danger" />
-        </div>
-        </TabPanelFooterSlot>
+    <div v-else-if="isMobile && showSelectAll" class="select-card-toolbar">
+      <AppButton hotkey="select-all" class="select-card-toolbar__select-all" size="small" @click="toggleSelectAll" :title="selectAllTitle" />
     </div>
+    <CardZoomBar v-else>
+      <template v-if="showSelectAll" #lead>
+        <AppButton hotkey="select-all" class="select-card-toolbar__select-all" size="small" @click="toggleSelectAll" :title="selectAllTitle" />
+      </template>
+    </CardZoomBar>
+    <TabPanelIntroSlot />
+    <CardFilterEmptyHint v-if="nothingShown" @reset="resetFilter" />
+    <!-- Several card sections in the tab (cardSections.ts): heading of this one below the header row -->
+    <h3 v-if="cardSections?.title !== undefined" class="hand-cards-panel__title choice-section-title">
+      {{ $t(cardSections.title.text) }} <small>{{ cardSections.title.count }}</small>
+    </h3>
+    <!-- Cards of several players: one group per player with the name as heading, opponents first, own last
+             (cardOwnerGroups.ts) – instead of a small name label on every card -->
+    <template v-for="group in getCardGroups()" :key="group.owner?.color ?? 'none'">
+      <h3 v-if="group.owner !== undefined" class="hand-cards-panel__title select-card-owner-title">
+        <PlayerCube :color="group.owner.color" view="slight" :size="11" />{{ group.owner.name }} <small>{{ group.cards.length }}</small>
+      </h3>
+      <label v-for="card in group.cards" :key="card.name" :class="getCardBoxClass(card)" @click="keepCurrentPick(card)">
+        <template v-if="!card.isDisabled">
+          <input v-if="selectOnlyOneCard" type="radio" name="selected-cards" v-model="cards" :value="card">
+          <input v-else type="checkbox" name="selected-cards" v-model="cards" :value="card" :disabled="playerinput.max !== undefined && Array.isArray(cards) && cards.length >= playerinput.max && cards.includes(card) === false">
+        </template>
+        <!-- No "action used" look here: a card offered in a selection is either selectable or isDisabled;
+                 greying out a selectable card (e.g. adding microbes to a card whose action was used) misleads -->
+        <Card :card="card" :robotCard="robotCard(card)">
+          <!-- Draft: the card picked this round stays in its place, marked as the current choice that can still be changed;
+                   inside the card so the tab sits flush on its border like the selection tab -->
+          <span v-if="isCurrentPick(card)" class="current-pick-tab">{{ (cardsSelected() === 0 ? '✓ ' : '') + $t(cardsSelected() === 0 ? 'Your pick – can be changed' : 'Previous pick') }}</span>
+        </Card>
+      </label>
+    </template>
+    <!-- View-only sections after the selectable cards (cardSections.ts): heading and cards as items of this grid,
+             so they get the same size, spacing and sticky header row; no input, nothing to choose -->
+    <template v-for="section in trailingSections" :key="section.title">
+      <h3 v-if="shownCount(section.cards) > 0" class="hand-cards-panel__title choice-section-title choice-section-title--separated">
+        {{ $t(section.title) }} <small>{{ shownCount(section.cards) }}</small>
+      </h3>
+      <label v-for="card in section.cards" :key="section.title + card.name" :class="['cardbox', 'cardbox--view-only', visibilityClass(card)]">
+        <Card :card="section.unavailable ? {...card, isDisabled: true} : card" :actionUsed="section.actionUsed" :cubeColor="section.cubeColor" />
+      </label>
+    </template>
+    <div v-if="hasCardWarning()" class="card-warning" v-i18n>{{ warning }}</div>
+    <WarningsComponent :warnings="warnings" />
+    <TabPanelFooterSlot>
+      <div v-if="showsave === true" class="nofloat select-card-actions">
+        <!-- Chosen cards the filter hides are still sold/discarded: say so next to the button -->
+        <span v-if="hiddenSelectedCount > 0" class="card-filter-hidden-note">{{ hiddenSelectedText }}</span>
+        <!-- Disabled while fewer cards are chosen than required: shows that a card must be chosen first.
+                 With Skip next to it: Confirm green, Skip red (button_tones.less) -->
+        <!-- Too little money: note left of the buttons (footer, also fine on the phone carousel), buying is disabled;
+                 discarding remains so the game can go on -->
+        <template v-if="cannotAfford">
+          <span class="select-card-unaffordable" v-i18n="affordNote">Not enough money: a card costs ${0} M€, you only have ${1} M€</span>
+          <AppButton hotkey="confirm" :disabled="true" type="submit" :title="$t('Buy')" class="btn-tone-success" />
+          <AppButton hotkey="cancel" type="submit" @click="saveData" :title="$t('Discard')" class="btn-tone-danger" />
+        </template>
+        <AppButton :hotkey="labelConfirmHotkey(playerinput.buttonLabel)" v-else :disabled="!hasRequiredSelection" type="submit" @click="saveData" :title="playerinput.buttonLabel" :counts="buttonCounts()"
+          :class="{'btn-tone-success': isOptionalToManyCards}" />
+        <AppButton hotkey="cancel" :disabled="isOptionalToManyCards && cardsSelected() > 0" v-if="isOptionalToManyCards" @click="saveData" type="submit" :title="$t(skipLabel)"
+          class="btn-tone-danger" />
+      </div>
+    </TabPanelFooterSlot>
+  </div>
 </template>
 
 <script lang="ts">
@@ -143,6 +143,7 @@ type WidgetDataModel = {
 
 export default defineComponent({
   name: 'SelectCard',
+  emits: ['cardschanged', 'validity'],
   setup() {
     return {cardSectionsFor: inject(CARD_SECTIONS, undefined)};
   },

@@ -19,11 +19,11 @@
         :acting="acting" :bannerTitle="bannerTitle" :viewerColor="thisPlayer.color"
         @toggleTileView="cycleTileView()" @showMilestones="showMilestones">
         <template #timer>
-          <PlayerTimer v-if="game.gameOptions.showTimers" class="mb-banner-timer" :timer="thisPlayer.timer" :live="game.phase !== 'end'"/>
+          <PlayerTimer v-if="game.gameOptions.showTimers" class="mb-banner-timer" :timer="thisPlayer.timer" :live="game.phase !== 'end'" />
         </template>
         <div v-if="thisPlayer.underworldData.tokens.length > 0" class="mb-underground">
           <h3 class="mb-section-label">{{ $t('Claimed Underground Resource Tokens') }}</h3>
-          <UndergroundTokens :underworldData="thisPlayer.underworldData"/>
+          <UndergroundTokens :underworldData="thisPlayer.underworldData" />
         </div>
       </MobileMarsScreen>
 
@@ -32,22 +32,22 @@
           <h3 class="mb-section-label">{{ $t('Drafted cards') }}</h3>
           <div class="mb-card-list">
             <div v-for="card in playerView.draftedCards" :key="card.name" class="cardbox">
-              <Card :card="card"/>
+              <Card :card="card" />
             </div>
           </div>
         </div>
-        <HandCardsPanel :playerView="playerView" hideUndergroundTokens/>
+        <HandCardsPanel :playerView="playerView" hideUndergroundTokens />
       </section>
 
       <!-- From three players on, the tables scroll horizontally beneath sticky icon columns (mobile.less) -->
       <section v-show="screen === 'players'" :class="['mb-screen', 'mb-screen--players', {'mb-screen--players-scroll': playerView.players.length > 2}]"
         @click.capture="zoomCard" @scroll.capture="markHorizontalScroll">
-        <SetupTurnOrder v-if="isSetupPhase" :players="playerView.players"/>
-        <MobilePlayersPanel v-else :viewModel="playerView" :viewerColor="thisPlayer.color" v-model:segment="playersSegment"/>
+        <SetupTurnOrder v-if="isSetupPhase" :players="playerView.players" />
+        <MobilePlayersPanel v-else :viewModel="playerView" :viewerColor="thisPlayer.color" v-model:segment="playersSegment" />
       </section>
 
       <section v-show="screen === 'log'" class="mb-screen mb-screen--log">
-        <LogPanel v-if="!isSetupPhase" :viewModel="playerView" zoomCarousel @spaceClicked="showSpace" @drawnCards="showDrawnCards" @drawnCardsClosed="drawnCardsClosed"/>
+        <LogPanel v-if="!isSetupPhase" :viewModel="playerView" zoomCarousel @spaceClicked="showSpace" @drawnCards="showDrawnCards" @drawnCardsClosed="drawnCardsClosed" />
       </section>
 
       <!-- The input always stays mounted: WaitingFor asks the server about the own turn.
@@ -56,7 +56,7 @@
         <div v-if="!isSetupPhase && (isActionMenu ? task !== undefined : inputTitle !== undefined)"
           :class="['mb-task-head', isActionMenu && task?.tone !== undefined && task.tone !== 'highlight' ? 'mb-task-head--' + task.tone : '']">
           <button type="button" class="mb-icon-button" :aria-label="$t('Back')" @click="leaveTask">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
           </button>
           <template v-if="isActionMenu && task !== undefined">
             <span class="mb-task-title">{{ $t(task.label) }}</span>
@@ -67,7 +67,7 @@
         <!-- Initial selection confirmed: header like a task, below it the own selection (PlayerSetupView); status of who is still choosing -->
         <div v-else-if="isSetupConfirmed" class="mb-task-head">
           <button type="button" class="mb-icon-button" :aria-label="$t('Back')" @click="go('mars')">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
           </button>
           <span class="mb-task-title">{{ $t('Your selection') }}</span>
           <span class="mb-task-sub">{{ bannerTitle }}</span>
@@ -83,7 +83,7 @@
             <b class="mb-step-count">{{ step.badge }}</b>
           </button>
         </div>
-        <PlayerSetupView v-if="isSetupPhase" :playerView="playerView"/>
+        <PlayerSetupView v-if="isSetupPhase" :playerView="playerView" />
         <!-- Before the last step: "Next" instead of Start (the selection's start button appears in the last step) -->
         <button v-if="isSetupPhase && setupStep < setupSteps.length - 1" type="button"
           class="btn btn-submit btn-rounded mb-setup-next" @click="showSetupStep(setupStep + 1)">
@@ -93,7 +93,7 @@
              step would have laid its own empty balance bar over the correct one -->
         <template v-else-if="!isSetupPhase">
           <p v-if="playerView.waitingFor === undefined" class="mb-empty">{{ bannerTitle }}</p>
-          <WaitingFor v-if="game.phase !== 'end'" :playerView="playerView" :waitingfor="playerView.waitingFor" :requestId="playerView.requestId"/>
+          <WaitingFor v-if="game.phase !== 'end'" :playerView="playerView" :waitingfor="playerView.waitingFor" :requestId="playerView.requestId" />
           <!-- Card carousel (play card): position and count, tapping a dot swipes there -->
           <div v-if="carousel !== undefined && carousel.count > 1" class="mb-dots">
             <button v-for="index in carousel.count" :key="index" type="button"
@@ -109,11 +109,11 @@
          After the initial selection is confirmed there is nothing to confirm: then the navigation stays -->
     <div v-if="(screen === 'turn' && !isSetupConfirmed) || placing" class="mb-taskbar">
       <!-- Back as an icon: no own texts besides the existing translations -->
-      <button type="button" class="mb-taskbar-back" :aria-label="$t('Close')" @click="leaveTask"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <button type="button" class="mb-taskbar-back" :aria-label="$t('Close')" @click="leaveTask"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6" /></svg></button>
       <template v-if="screen !== 'turn'">
         <span class="mb-taskbar-hint">{{ task !== undefined ? $t(task.label) : '' }}</span>
         <button type="button" class="btn btn-submit btn-rounded mb-taskbar-zoom" @click="zoomMars">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21M10.5 7.5v6M7.5 10.5h6"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5" /><path d="M15.5 15.5L21 21M10.5 7.5v6M7.5 10.5h6" /></svg>
         </button>
       </template>
     </div>
@@ -121,19 +121,19 @@
       <template #turn>
         <!-- While the turn sheet is open (incl. sliding in/out), its own button moves with it; this one stays invisible -->
         <MobileTurnButton :class="{'mb-turn-button--lifted': turnButtonLifted}"
-          :acting="acting" :action-number="actionNumber" :actions-per-turn="actionsPerTurn"/>
+          :acting="acting" :action-number="actionNumber" :actions-per-turn="actionsPerTurn" />
       </template>
     </MobileNav>
 
     <MobileCardZoom v-if="zoomedCard !== undefined" :count="zoomedCardList.length" :index="zoomedCardIndex" :origin="zoomedCardOrigin"
       :playable="zoomedCardPlayTile !== undefined" @close="zoomedCard = undefined" @play="playZoomedCard" @update:index="showZoomedCard">
       <template #slide="{index}">
-        <Card :card="zoomedCardList[index]"/>
+        <Card :card="zoomedCardList[index]" />
       </template>
     </MobileCardZoom>
     <Transition name="mb-sheet" @before-enter="turnButtonLifted = true" @after-leave="turnButtonLifted = false">
       <MobileTurnSheet v-if="sheetOpen && (menu !== undefined || !acting)" :menu="menu" :waitingPlayers="waitingPlayers" :title="bannerTitle"
-        :action-number="actionNumber" :actions-per-turn="actionsPerTurn" :playerView="playerView" @close="sheetOpen = false" @select="startTask" @confirm="confirmTask"/>
+        :action-number="actionNumber" :actions-per-turn="actionsPerTurn" :playerView="playerView" @close="sheetOpen = false" @select="startTask" @confirm="confirmTask" />
     </Transition>
   </div>
 </template>

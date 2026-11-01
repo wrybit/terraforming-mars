@@ -8,7 +8,7 @@
     <p v-else-if="hand.cards.length === 0" class="ai-hand-section__hint" v-i18n>No cards in hand</p>
     <div v-else class="other-player-cards ai-hand-section__cards">
       <div v-for="card in hand.cards" :key="card.name" class="cardbox">
-        <Card :card="card"/>
+        <Card :card="card" />
       </div>
     </div>
   </section>

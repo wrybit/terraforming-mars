@@ -4,7 +4,7 @@
       :class="['create-game-summary-chip', {'create-game-summary-chip--icon': chip.iconOnly}]" :href="chip.statsHref"
       :data-stats-link="chip.statsHref !== undefined ? '' : undefined"
       v-glass-tooltip="chip.iconOnly ? chip.label : ''" :aria-label="chip.iconOnly ? chip.label : undefined">
-      <SeatIcon v-if="chip.seatIcon !== undefined" :kind="chip.seatIcon"/>
+      <SeatIcon v-if="chip.seatIcon !== undefined" :kind="chip.seatIcon" />
       <span v-if="chip.iconClass !== undefined" :class="chip.iconClass"></span>
       <span v-else-if="chip.toggle" class="create-game-summary-toggle" aria-hidden="true"></span>
       <span v-if="!chip.iconOnly" :class="{capitalized: chip.capitalized}">{{ chip.label }}</span>

@@ -5,9 +5,9 @@
       :class="{'card-bar-pill--on': modelValue !== 'source', 'card-bar-pill--open': open}"
       :aria-expanded="open" :title="$t('Group by') + ': ' + $t(GROUPING_LABELS[modelValue])" @click="open = !open">
       <svg class="card-sort-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
-        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h10M4 12h7M4 18h4M17 4v16M14 17l3 3 3-3"/></svg>
+        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h10M4 12h7M4 18h4M17 4v16M14 17l3 3 3-3" /></svg>
       <span class="expansion-group-menu__label">{{ $t(GROUPING_LABELS[modelValue]) }}</span>
-      <svg class="card-bar-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+      <svg class="card-bar-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
     </button>
     <div v-if="open" class="card-bar-menu expansion-group-menu__list" role="listbox">
       <div class="expansion-group-menu__heading" v-i18n>Group by</div>

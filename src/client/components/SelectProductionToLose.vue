@@ -16,9 +16,9 @@
     </div>
 
     <TabPanelFooterSlot>
-    <div v-if="showsave === true" class="nofloat">
-      <button class="btn btn-primary btn-submit" @click="saveData">{{ $t(playerinput.buttonLabel) }}</button>
-    </div>
+      <div v-if="showsave === true" class="nofloat">
+        <button class="btn btn-primary btn-submit" @click="saveData">{{ $t(playerinput.buttonLabel) }}</button>
+      </div>
     </TabPanelFooterSlot>
   </div>
 </template>

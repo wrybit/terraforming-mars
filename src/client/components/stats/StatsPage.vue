@@ -2,8 +2,8 @@
   <div id="stats" class="card-list stats" @keydown.esc="filtersOpen = false" @click="followStatsLink">
     <header class="card-list-header">
       <!-- Menu at the top left, as in the game and on the other pages -->
-      <PageToolbar/>
-      <PageTitle title="Statistics" :titleHref="overviewHref"/>
+      <PageToolbar />
+      <PageTitle title="Statistics" :titleHref="overviewHref" />
       <span class="stats-header-info">{{ headerInfo }}</span>
       <div class="card-list-header-actions">
         <button type="button" class="card-list-filter-toggle" :title="$t('Filters')" @click="filtersOpen = true">
@@ -34,7 +34,7 @@
             :selection="filters.selections[group.key]"
             :counts="countsOf(group)"
             @toggle="toggle(group, $event)"
-            @reset="reset(group)"/>
+            @reset="reset(group)" />
         </template>
         <section v-if="generationRange !== undefined" class="card-list-group">
           <header class="card-list-group-head">
@@ -63,22 +63,22 @@
             v-i18n>{{ entry.label }}</a>
         </nav>
 
-        <StatsSkeleton v-if="status === 'loading'" :overview="view.type === 'tab' && view.tab === 'overview'"/>
+        <StatsSkeleton v-if="status === 'loading'" :overview="view.type === 'tab' && view.tab === 'overview'" />
         <p v-else-if="status === 'error'" class="stats-card stats-note"><span v-i18n>Could not load the statistics.</span> {{ failureText }}</p>
         <p v-else-if="games.length === 0" class="stats-card stats-note" v-i18n>No finished games yet.</p>
         <template v-else>
-          <StatsTopView v-if="view.type === 'top'" :key="`top:${view.kind}`" :kind="view.kind" :results="results"/>
-          <StatsEntityDetail v-else-if="view.type === 'detail'" :key="`${view.kind}:${view.name}`" :kind="view.kind" :name="view.name" :results="results"/>
-          <StatsOverview v-else-if="view.tab === 'overview'" :games="filteredGames" :results="results" :chartWidth="chartWidth"/>
-          <StatsGamesView v-else-if="view.tab === 'games'" :games="filteredGames"/>
-          <StatsPlayersView v-else-if="view.tab === 'players'" :results="results" :names="names"/>
-          <StatsRecordsView v-else-if="view.tab === 'records'" :results="results"/>
-          <StatsCombinationsView v-else-if="view.tab === 'combinations'" :results="results"/>
-          <StatsEntityList v-else :key="view.tab" :kind="view.tab" :results="results"/>
+          <StatsTopView v-if="view.type === 'top'" :key="`top:${view.kind}`" :kind="view.kind" :results="results" />
+          <StatsEntityDetail v-else-if="view.type === 'detail'" :key="`${view.kind}:${view.name}`" :kind="view.kind" :name="view.name" :results="results" />
+          <StatsOverview v-else-if="view.tab === 'overview'" :games="filteredGames" :results="results" :chartWidth="chartWidth" />
+          <StatsGamesView v-else-if="view.tab === 'games'" :games="filteredGames" />
+          <StatsPlayersView v-else-if="view.tab === 'players'" :results="results" :names="names" />
+          <StatsRecordsView v-else-if="view.tab === 'records'" :results="results" />
+          <StatsCombinationsView v-else-if="view.tab === 'combinations'" :results="results" />
+          <StatsEntityList v-else :key="view.tab" :kind="view.tab" :results="results" />
         </template>
       </main>
     </div>
-    <StatsCardZoom v-if="cardZoom !== undefined" :names="cardZoom.names" :index="cardZoom.index" :origin="cardZoom.origin" @close="cardZoom = undefined"/>
+    <StatsCardZoom v-if="cardZoom !== undefined" :names="cardZoom.names" :index="cardZoom.index" :origin="cardZoom.origin" @close="cardZoom = undefined" />
   </div>
 </template>
 

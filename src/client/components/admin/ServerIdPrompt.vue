@@ -11,7 +11,7 @@
       <p class="admin-login-hint" v-i18n>It is the value of SERVER_ID in the .env file of the server.</p>
     </div>
     <div class="admin-login-fields">
-      <RevealablePasswordInput v-model="serverId" inputClass="admin-login-input" autofocus :ariaLabel="$t('Server ID')" :placeholder="$t('Server ID')"/>
+      <RevealablePasswordInput v-model="serverId" inputClass="admin-login-input" autofocus :ariaLabel="$t('Server ID')" :placeholder="$t('Server ID')" />
       <!-- After a failure the button counts down until the server accepts the next attempt -->
       <button type="submit" class="btn btn-primary admin-login-button" :disabled="serverId.trim() === '' || busy || waitSeconds > 0">
         <span v-if="waitSeconds > 0" class="admin-login-countdown">{{ countdown }}</span>

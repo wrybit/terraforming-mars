@@ -5,20 +5,20 @@
       :actingPlayer="false"
       :playerColor="spectator.color"
       :coloniesCount="game.colonies.length"
-      :temperature = "game.temperature"
-      :oxygen = "game.oxygenLevel"
-      :oceans = "game.oceans"
-      :venus = "game.venusScaleLevel"
-      :turmoil = "game.turmoil"
+      :temperature="game.temperature"
+      :oxygen="game.oxygenLevel"
+      :oceans="game.oceans"
+      :venus="game.venusScaleLevel"
+      :turmoil="game.turmoil"
       :moonData="game.moon"
-      :gameOptions = "game.gameOptions"
-      :playerNumber = "spectator.players.length"
-      :lastSoloGeneration = "game.lastSoloGeneration"
-      :deckSize = "game.deckSize"
-      :discardPileSize = "game.discardPileSize"
-      :otherDeckSizes = "game.otherDeckSizes"
-      :spectatorId = "game.spectatorId"
-      :expectedPurgeTimeMs = "game.expectedPurgeTimeMs"/>
+      :gameOptions="game.gameOptions"
+      :playerNumber="spectator.players.length"
+      :lastSoloGeneration="game.lastSoloGeneration"
+      :deckSize="game.deckSize"
+      :discardPileSize="game.discardPileSize"
+      :otherDeckSizes="game.otherDeckSizes"
+      :spectatorId="game.spectatorId"
+      :expectedPurgeTimeMs="game.expectedPurgeTimeMs" />
 
     <HomeColumns>
       <template #board>
@@ -31,23 +31,23 @@
             @toggleTileView="cycleTileView()"
           />
           <!-- Game end: notice above Mars, then automatically to the results page -->
-          <GameOverNotice v-if="game.phase === 'end'" :participantId="spectator.id"/>
+          <GameOverNotice v-if="game.phase === 'end'" :participantId="spectator.id" />
         </div>
       </template>
 
       <!-- On the left the log instead of hand cards: it fills the space below the player table -->
       <template #main>
-        <PlayersOverview class="player_home_block player_home_block--players nofloat" :playerView="spectator" id="shortkey-playersoverview"/>
+        <PlayersOverview class="player_home_block player_home_block--players nofloat" :playerView="spectator" id="shortkey-playersoverview" />
         <!-- Height of the players card, the log below gets the rest (only in the fixed layout) -->
-        <RowResizeHandle kind="players"/>
+        <RowResizeHandle kind="players" />
         <div class="player_home_block nofloat player-home-columns__log player_home_block--spectator-log">
-          <LogPanel :viewModel="spectator" milestonesAwards @spaceClicked="onSpaceClicked"/>
+          <LogPanel :viewModel="spectator" milestonesAwards @spaceClicked="onSpaceClicked" />
         </div>
       </template>
     </HomeColumns>
 
-    <WaitingFor v-show="false" v-if="game.phase !== 'end'" :playerView="spectator" :waitingfor="undefined"/>
-    <HotkeyHelpDialog :open="keyboardShortcutOpened" :expansions="hotkeyExpansions" @close="keyboardShortcutOpened = false"/>
+    <WaitingFor v-show="false" v-if="game.phase !== 'end'" :playerView="spectator" :waitingfor="undefined" />
+    <HotkeyHelpDialog :open="keyboardShortcutOpened" :expansions="hotkeyExpansions" @close="keyboardShortcutOpened = false" />
   </div>
 </template>
 

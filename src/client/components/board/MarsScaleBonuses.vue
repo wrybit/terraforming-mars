@@ -3,14 +3,14 @@
        handed out ones grey. Same chip and pin as the Moon ring and the track rows (track_bonus.less). -->
   <!-- display: contents wrapper: carries the counter-scale for the chips (same size on every zoom, like the Moon) -->
   <span ref="root" class="mars-scale-bonuses" :style="{'--mars-chip-scale': String(chipScale)}">
-  <div v-for="pin in pins" :key="pin.key" class="mars-scale-bonus" :style="pinStyle(pin)" :data-test="'mars-scale-bonus-' + pin.key">
-    <span :class="['track-bonus-pin', {'track-bonus-pin--done': pin.done}]">
-      <span class="track-bonus-pin__chips" :style="{transform: 'rotate(' + -pin.angle + 'deg)'}">
-        <TrackBonusChip :bonus="pin.bonus" :kind="pin.done ? 'done' : 'own'"/>
+    <div v-for="pin in pins" :key="pin.key" class="mars-scale-bonus" :style="pinStyle(pin)" :data-test="'mars-scale-bonus-' + pin.key">
+      <span :class="['track-bonus-pin', {'track-bonus-pin--done': pin.done}]">
+        <span class="track-bonus-pin__chips" :style="{transform: 'rotate(' + -pin.angle + 'deg)'}">
+          <TrackBonusChip :bonus="pin.bonus" :kind="pin.done ? 'done' : 'own'" />
+        </span>
+        <span class="track-bonus-link"></span>
       </span>
-      <span class="track-bonus-link"></span>
-    </span>
-  </div>
+    </div>
   </span>
 </template>
 

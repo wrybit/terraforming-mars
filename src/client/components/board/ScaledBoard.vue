@@ -3,7 +3,7 @@
     <!-- The game board is a fixed ~700 px wide; in narrower containers it shrinks instead of being clipped.
          Comment inside the root on purpose: above it, dev builds get a fragment root (no class fallthrough, $el not an element) -->
     <div ref="scaled" class="scaled-board-content" :style="contentStyle">
-      <Board :spaces="spaces" :expansions="expansions" :venusScaleLevel="0" :boardName="boardName"/>
+      <Board :spaces="spaces" :expansions="expansions" :venusScaleLevel="0" :boardName="boardName" />
     </div>
   </div>
 </template>

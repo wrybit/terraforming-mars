@@ -9,7 +9,7 @@
       <span class="game-menu-burger" aria-hidden="true"><i></i><i></i><i></i></span>
       <span class="game-menu-button-label">{{ buttonLabel }}</span>
       <!-- Shortcut only in the game: the start page has none -->
-      <HotkeyKeys v-if="context" action="setup-menu"/>
+      <HotkeyKeys v-if="context" action="setup-menu" />
     </button>
 
     <Teleport to="body">
@@ -20,70 +20,70 @@
       <Transition name="game-menu-dropdown">
         <div v-if="menuOpen" ref="dropdown" class="game-menu-dropdown" :style="dropdownPosition" @click.stop>
           <div class="game-menu-panel" role="menu">
-          <template v-if="context">
-          <!-- Own player: neutral dark box, the colour comes from the cube alone -->
-          <div class="game-menu-player">
-            <PlayerCube :color="context.playerColor" view="iso" :size="34"/>
-            <span class="game-menu-player-name">{{ context.playerName }}</span>
-          </div>
+            <template v-if="context">
+              <!-- Own player: neutral dark box, the colour comes from the cube alone -->
+              <div class="game-menu-player">
+                <PlayerCube :color="context.playerColor" view="iso" :size="34" />
+                <span class="game-menu-player-name">{{ context.playerName }}</span>
+              </div>
 
-          <!-- Display only: pile sizes with card icons (filled = draw pile, outline = discard pile) -->
-          <dl class="game-menu-piles">
-            <div class="game-menu-pile">
-              <dt>
-                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2" fill="currentColor"/></svg>
-                <span v-i18n>Draw pile</span>
-              </dt>
-              <dd>{{ context.deckSize }}</dd>
-            </div>
-            <div class="game-menu-pile">
-              <dt>
-                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="2"/></svg>
-                <span v-i18n>Discard pile</span>
-              </dt>
-              <dd>{{ context.discardPileSize }}</dd>
-            </div>
-          </dl>
-          </template>
+              <!-- Display only: pile sizes with card icons (filled = draw pile, outline = discard pile) -->
+              <dl class="game-menu-piles">
+                <div class="game-menu-pile">
+                  <dt>
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2" fill="currentColor" /></svg>
+                    <span v-i18n>Draw pile</span>
+                  </dt>
+                  <dd>{{ context.deckSize }}</dd>
+                </div>
+                <div class="game-menu-pile">
+                  <dt>
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="2" /></svg>
+                    <span v-i18n>Discard pile</span>
+                  </dt>
+                  <dd>{{ context.discardPileSize }}</dd>
+                </div>
+              </dl>
+            </template>
 
-          <div class="game-menu-items">
-            <button type="button" role="menuitem" class="game-menu-item" @click="openDialog('language')">
-              <span class="game-menu-item-icon"><LanguageFlag :lang="lang"/></span>
-              <span v-i18n>Language</span>
-            </button>
-            <button v-if="context" type="button" role="menuitem" class="game-menu-item" @click="openDialog('info')">
-              <span class="game-menu-item-icon"><i class="sidebar_icon sidebar_icon--info"></i></span>
-              <span v-i18n>Game settings</span>
-            </button>
-            <button type="button" role="menuitem" class="game-menu-item" @click="openDialog('help')">
-              <span class="game-menu-item-icon"><i class="sidebar_icon sidebar_icon--help"></i></span>
-              <span v-i18n>Player help</span>
-            </button>
-            <!-- Shortcut dialog, only where shortcuts exist (keyboard, no mobile view) -->
-            <button v-if="context && hotkeysAvailable" type="button" role="menuitem" class="game-menu-item" @click="openHotkeyHelp">
-              <span class="game-menu-item-icon">
-                <svg class="game-menu-keyboard-icon" viewBox="0 0 24 24" aria-hidden="true">
-                  <rect x="2.5" y="6" width="19" height="12" rx="2"/>
-                  <path d="M6 9.5h1M9.5 9.5h1M13 9.5h1M16.5 9.5h1M6 12h1M9.5 12h1M13 12h1M16.5 12h1M8 14.75h8"/>
-                </svg>
-              </span>
-              <span v-i18n>Keyboard Shortcuts</span>
-              <HotkeyKeys :fixed="['?']"/>
-            </button>
-            <button type="button" role="menuitem" class="game-menu-item" @click="openDialog('settings')">
-              <span class="game-menu-item-icon"><i class="sidebar_icon sidebar_icon--settings"></i></span>
-              <span v-i18n>Player Settings</span>
-            </button>
-            <!-- Entries of the optional extensions (src/extensions/) -->
-            <button v-for="item in extensionMenuItems" :key="item.label" type="button" role="menuitem" class="game-menu-item" @click="selectExtensionItem(item)">
-              <span class="game-menu-item-icon"><component :is="item.icon"/></span>
-              <span v-i18n>{{ item.label }}</span>
-            </button>
-            <a v-if="context && context.coloniesCount > 0" href="#colonies" role="menuitem" class="game-menu-item" @click="closeMenu">
-              <span class="game-menu-item-icon"><i class="sidebar_icon sidebar_icon--colonies"></i></span>
-              <span v-i18n>Jump to colonies</span>
-            </a>
-          </div>
+            <div class="game-menu-items">
+              <button type="button" role="menuitem" class="game-menu-item" @click="openDialog('language')">
+                <span class="game-menu-item-icon"><LanguageFlag :lang="lang" /></span>
+                <span v-i18n>Language</span>
+              </button>
+              <button v-if="context" type="button" role="menuitem" class="game-menu-item" @click="openDialog('info')">
+                <span class="game-menu-item-icon"><i class="sidebar_icon sidebar_icon--info"></i></span>
+                <span v-i18n>Game settings</span>
+              </button>
+              <button type="button" role="menuitem" class="game-menu-item" @click="openDialog('help')">
+                <span class="game-menu-item-icon"><i class="sidebar_icon sidebar_icon--help"></i></span>
+                <span v-i18n>Player help</span>
+              </button>
+              <!-- Shortcut dialog, only where shortcuts exist (keyboard, no mobile view) -->
+              <button v-if="context && hotkeysAvailable" type="button" role="menuitem" class="game-menu-item" @click="openHotkeyHelp">
+                <span class="game-menu-item-icon">
+                  <svg class="game-menu-keyboard-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="2.5" y="6" width="19" height="12" rx="2" />
+                    <path d="M6 9.5h1M9.5 9.5h1M13 9.5h1M16.5 9.5h1M6 12h1M9.5 12h1M13 12h1M16.5 12h1M8 14.75h8" />
+                  </svg>
+                </span>
+                <span v-i18n>Keyboard Shortcuts</span>
+                <HotkeyKeys :fixed="['?']" />
+              </button>
+              <button type="button" role="menuitem" class="game-menu-item" @click="openDialog('settings')">
+                <span class="game-menu-item-icon"><i class="sidebar_icon sidebar_icon--settings"></i></span>
+                <span v-i18n>Player Settings</span>
+              </button>
+              <!-- Entries of the optional extensions (src/extensions/) -->
+              <button v-for="item in extensionMenuItems" :key="item.label" type="button" role="menuitem" class="game-menu-item" @click="selectExtensionItem(item)">
+                <span class="game-menu-item-icon"><component :is="item.icon" /></span>
+                <span v-i18n>{{ item.label }}</span>
+              </button>
+              <a v-if="context && context.coloniesCount > 0" href="#colonies" role="menuitem" class="game-menu-item" @click="closeMenu">
+                <span class="game-menu-item-icon"><i class="sidebar_icon sidebar_icon--colonies"></i></span>
+                <span v-i18n>Jump to colonies</span>
+              </a>
+            </div>
           </div>
 
           <!-- Navigation box: the main pages of the start page (siteLinks.ts), always in a new tab so a running game stays open;
@@ -91,7 +91,7 @@
           <nav v-if="navigationLinks.length > 0" class="game-menu-panel game-menu-items" role="menu">
             <a v-for="link in navigationLinks" :key="link.label" :href="link.href" target="_blank" rel="noopener"
               role="menuitem" class="game-menu-item" @click="closeMenu">
-              <span class="game-menu-item-icon"><MobileGlyph :name="link.icon" :strokeWidth="2"/></span>
+              <span class="game-menu-item-icon"><MobileGlyph :name="link.icon" :strokeWidth="2" /></span>
               <!-- v-i18n on the text span: the translation looks up the exact text content -->
               <span v-i18n>{{ link.label }}</span>
             </a>
@@ -99,7 +99,7 @@
 
           <!-- Legal notice: always reachable from every page and during a game, since the menu exists everywhere -->
           <div class="game-menu-panel game-menu-notice">
-            <FanProjectNotice layout="stacked"/>
+            <FanProjectNotice layout="stacked" />
           </div>
         </div>
       </Transition>
@@ -107,18 +107,18 @@
 
     <!-- Dialogs grow out of the menu button (SidebarModal anchors at its parent element, this span) -->
     <SidebarModal :open="dialog === 'language'" :framed="true" @close="closeDialog">
-      <LanguageSelectionDialog :preferencesManager="PreferencesManager.INSTANCE" @close="closeDialog"/>
+      <LanguageSelectionDialog :preferencesManager="PreferencesManager.INSTANCE" @close="closeDialog" />
     </SidebarModal>
     <SidebarModal v-if="context" :open="dialog === 'info'" :framed="true" @close="closeDialog">
       <InfoPanel :gameOptions="context.gameOptions" :playerNumber="context.playerNumber" :lastSoloGeneration="context.lastSoloGeneration"
         :deckSize="context.deckSize" :discardPileSize="context.discardPileSize" :otherDeckSizes="context.otherDeckSizes"
-        :spectatorId="context.spectatorId" :expectedPurgeTimeMs="context.expectedPurgeTimeMs" @close="closeDialog"/>
+        :spectatorId="context.spectatorId" :expectedPurgeTimeMs="context.expectedPurgeTimeMs" @close="closeDialog" />
     </SidebarModal>
     <SidebarModal :open="dialog === 'help'" :wide="true" :bare="true" @close="closeDialog">
-      <HelpOverlay :closable="true" @close="closeDialog"/>
+      <HelpOverlay :closable="true" @close="closeDialog" />
     </SidebarModal>
     <SidebarModal :open="dialog === 'settings'" :framed="true" @close="closeDialog">
-      <PreferencesDialog :preferencesManager="PreferencesManager.INSTANCE" @okButtonClicked="closeDialog"/>
+      <PreferencesDialog :preferencesManager="PreferencesManager.INSTANCE" @okButtonClicked="closeDialog" />
     </SidebarModal>
   </span>
 </template>

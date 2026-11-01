@@ -14,7 +14,7 @@
         id="shortkey-board"
       />
       <!-- Desktop: the special spaces off Mars in the corners of the box -->
-      <OuterSpaceCorners v-if="!mobileLayout" :spaces="game.spaces" :tileView="tileView"/>
+      <OuterSpaceCorners v-if="!mobileLayout" :spaces="game.spaces" :tileView="tileView" />
     </template>
     <!-- Caller's content next to Mars inside the Mars tab (mobile: parameter bars) -->
     <template #marsAside>
@@ -23,19 +23,19 @@
     <template #moon>
       <!-- Enlarges on click like Mars (BoardZoomModal) -->
       <MoonBoard v-if="game.moon" ref="columnMoon" :model="game.moon" :tileView="tileView" ring id="shortkey-moonBoard"
-        class="board-cont--zoomable" @click="onBoardClick($event, 'moon')"/>
+        class="board-cont--zoomable" @click="onBoardClick($event, 'moon')" />
     </template>
     <template #colonies>
-      <ColoniesBoard :colonies="game.colonies" :players="players" :viewerColor="viewerColor"/>
+      <ColoniesBoard :colonies="game.colonies" :players="players" :viewerColor="viewerColor" />
     </template>
     <template #turmoil>
-      <TurmoilBoard v-if="game.turmoil" :turmoil="game.turmoil" :players="players" :viewerColor="viewerColor" :generation="game.generation"/>
+      <TurmoilBoard v-if="game.turmoil" :turmoil="game.turmoil" :players="players" :viewerColor="viewerColor" :generation="game.generation" />
     </template>
     <template #paths>
-      <PlanetsBoard v-if="game.pathfinders" :model="game.pathfinders" :gameOptions="game.gameOptions"/>
+      <PlanetsBoard v-if="game.pathfinders" :model="game.pathfinders" :gameOptions="game.gameOptions" />
     </template>
     <template #delta>
-      <DeltaBoard :players="players" :viewerColor="viewerColor"/>
+      <DeltaBoard :players="players" :viewerColor="viewerColor" />
     </template>
   </BoardTabs>
 
@@ -44,12 +44,12 @@
   <BoardZoomModal :open="boardZoomOpen" :origin="columnBoardElement" :frame="zoomBoard === 'mars' ? marsZoomFrame : undefined"
     @close="closeBoardZoom" @rendered="notifyZoomBoardRendered" @hidden="notifyZoomBoardHidden">
     <template #banner>
-      <PlacementBanner v-if="placementDescription !== undefined" :description="placementDescription"/>
+      <PlacementBanner v-if="placementDescription !== undefined" :description="placementDescription" />
     </template>
     <template #controls>
-      <TileViewToggle :tileView="tileView" @toggleTileView="$emit('toggleTileView')"/>
+      <TileViewToggle :tileView="tileView" @toggleTileView="$emit('toggleTileView')" />
     </template>
-    <MoonBoard v-if="zoomBoard === 'moon' && game.moon" :model="game.moon" :tileView="tileView" ring/>
+    <MoonBoard v-if="zoomBoard === 'moon' && game.moon" :model="game.moon" :tileView="tileView" ring />
     <Board
       v-else
       v-bind="boardProps"
@@ -61,7 +61,7 @@
     <Milestones :milestones="game.milestones" />
     <Awards :awards="game.awards" />
     <!-- The same data as a table; only visible in the two-column layout (milestone_award_table.less) -->
-    <MilestoneAwardTable :milestones="game.milestones" :awards="game.awards" :players="players" :viewerColor="viewerColor"/>
+    <MilestoneAwardTable :milestones="game.milestones" :awards="game.awards" :players="players" :viewerColor="viewerColor" />
   </div>
 </template>
 

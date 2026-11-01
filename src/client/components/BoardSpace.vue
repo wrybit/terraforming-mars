@@ -6,27 +6,27 @@
       :tileView="tileView"
     />
     <div class="board-space-text" v-if="text" v-i18n>{{ text }}</div>
-    <Bonus :bonus="space.bonus" v-if="showBonus"/>
+    <Bonus :bonus="space.bonus" v-if="showBonus" />
     <div v-if="tileView === 'coords' && space.a9 !== undefined" class="board-space-coords">{{ space.a9 }}</div>
     <template v-if="showTiles">
-      <BoardCube v-if="space.color !== undefined" class="board-cube" :color="space.color" :spinSeed="space.id"/>
+      <BoardCube v-if="space.color !== undefined" class="board-cube" :color="space.color" :spinSeed="space.id" />
       <template v-if="space.gagarin !== undefined">
-        <div v-if="space.gagarin === 0" class='gagarin'></div>
-        <div v-else class='gagarin visited'></div>
+        <div v-if="space.gagarin === 0" class="gagarin"></div>
+        <div v-else class="gagarin visited"></div>
       </template>
       <template v-if="space.cathedral === true">
-        <div class='board-cube--cathedral'></div>
+        <div class="board-cube--cathedral"></div>
       </template>
       <template v-if="space.nomads === true">
-        <div class='board-cube--nomad'></div>
+        <div class="board-cube--nomad"></div>
       </template>
-      <BoardSpaceCube v-if="space.cube !== undefined" :cube="space.cube"/>
-      <UndergroundToken v-if="claimedToken !== undefined" :token="claimedToken" location="board"/>
+      <BoardSpaceCube v-if="space.cube !== undefined" :cube="space.cube" />
+      <UndergroundToken v-if="claimedToken !== undefined" :token="claimedToken" location="board" />
       <div v-if="space.excavator !== undefined" class="underground-excavator" :class="'underground-excavator--' + space.excavator"></div>
       <div v-if="space.spaceType === SpaceType.DEFLECTION_ZONE" class="board-space-type-deflection-zone"></div>
     </template>
     <div class="board-log-highlight" :data_log_highlight_id="space.id"></div>
-    </div>
+  </div>
 </template>
 
 <script lang="ts">

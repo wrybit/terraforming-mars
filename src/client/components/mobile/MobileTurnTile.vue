@@ -2,7 +2,7 @@
   <button type="button" :class="['mb-tile', tile.tone !== undefined ? 'mb-tile--' + tile.tone : '', {'mb-tile--empty': tile.empty}]"
     :disabled="disabled" @click="$emit('select', tile.index)">
     <!-- Tile in the turn menu as in the mockup: icon, short label, below it what the action offers -->
-    <span v-if="!compact" :class="['mb-tile-icon', 'mb-tile-icon--' + tile.glyphTone]"><MobileGlyph :name="tile.glyph"/></span>
+    <span v-if="!compact" :class="['mb-tile-icon', 'mb-tile-icon--' + tile.glyphTone]"><MobileGlyph :name="tile.glyph" /></span>
     <span class="mb-tile-text">
       <span class="mb-tile-label">{{ $t(tile.label) }}</span>
       <span v-if="tile.detail !== undefined && !compact" class="mb-tile-sub">{{ $t(tile.detail) }}</span>

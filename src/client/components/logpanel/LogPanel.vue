@@ -6,12 +6,12 @@
         <div class="log-milestones">
           <MilestoneAwardTable :milestones="viewModel.game.milestones" :awards="viewModel.game.awards" :players="viewModel.players" :viewerColor="viewModel.thisPlayer?.color" scrollable @split="tableSplit = $event">
             <template v-if="tableSplit" #corner>
-              <LogMilestonesSwitches corner separateOnly :separate="true" @separate="setSeparateMilestonesLog"/>
+              <LogMilestonesSwitches corner separateOnly :separate="true" @separate="setSeparateMilestonesLog" />
             </template>
           </MilestoneAwardTable>
         </div>
         <!-- Transposed table (narrow box): no free corner, the switch goes below the table -->
-        <LogMilestonesSwitches v-if="!tableSplit" separateOnly :separate="true" @separate="setSeparateMilestonesLog"/>
+        <LogMilestonesSwitches v-if="!tableSplit" separateOnly :separate="true" @separate="setSeparateMilestonesLog" />
       </div>
     </template>
     <LogGenerationList
@@ -34,51 +34,51 @@
     </LogGenerationList>
     <div v-docked-tab :class="panelClasses" role="tabpanel">
       <!-- Filter line above the stream: search field with the active filters as chips, options to fold out -->
-      <LogFilterBar v-show="!showsMilestonesAwards" v-model="logFilter" :players="viewModel.players" :me="viewModel.thisPlayer?.color" :aiInsights="analysisGame"/>
+      <LogFilterBar v-show="!showsMilestonesAwards" v-model="logFilter" :players="viewModel.players" :me="viewModel.thisPlayer?.color" :aiInsights="analysisGame" />
       <!-- One continuous stream of all generations; the tabs above follow the scroll position -->
       <!-- The edge fade sits on this frame, not on the scrolling box: a mask on the scroll box itself leaves stale,
            overlapping rows in Chrome on Windows while scrolling -->
       <div v-show="!showsMilestonesAwards" ref="scrollFrame" class="log-scroll-frame">
         <div id="logpanel-scrollable" ref="scrollBody" class="panel-body" @scroll="onScroll" @mouseenter="pointerEntered" @mousemove="pointerMoved" @mouseleave="pointerLeft">
-        <!-- With an active filter, generations without a matching row are hidden -->
-        <section v-for="section in sections" v-show="!filterActive || visibleRows(section).length > 0" :key="section.generation" class="log-generation" :data-generation="section.generation">
-          <h3 class="log-generation-title">
-            <span class="log-generation-marker" aria-hidden="true">{{ section.generation }}</span>{{ generationTitle(section.generation) }}
-          </h3>
-          <!-- One row per action (card, action, standard project ...) with its effects; unrecognised messages stay text lines -->
-          <template v-for="(row, rowIndex) in visibleRows(section)" :key="rowIndex">
-            <div v-if="row.type === 'phase'" class="log-phase-line" aria-hidden="true"></div>
-            <!-- Terraformed: the banner stays where it happened, also after later actions (Jens, 25 Oct 2026) -->
-            <TerraformedBanner v-else-if="row.type === 'terraformed'" :playerId="viewModel.id"/>
-            <!-- Analysis game: hovering an AI row shows rating buttons behind its text (touch: double-tap; key I) -->
-            <LogMessageComponent v-else-if="row.type === 'message'" :data-log-row="rowKey(section, row)" :message="row.message" :viewModel="viewModel"
-              :follows="row.follows === true" :action="row.action" :class="{'log-row--ai-rateable': isRateable(section, row)}"
-              @click="messageClicked(row.message, row.action, section, row, $event)"
-              @mouseenter="messageHovered(row.message, $event, row.action); rowHovered(section, row, $event)" @mouseleave="rowLeft($event)" @spaceClicked="$emit('spaceClicked', $event)"/>
-            <LogActionRow v-else-if="row.type === 'action'" :data-log-row="rowKey(section, row)" :row="row" :viewModel="viewModel"
-              :class="{'log-row--ai-rateable': isRateable(section, row)}"
-              @click="messageClicked(row.action.lead, row.action, section, row)"
-              @mouseenter="messageHovered(row.action.lead, $event, row.action); rowHovered(section, row, $event)" @mouseleave="rowLeft($event)" @spaceClicked="$emit('spaceClicked', $event)"/>
-            <LogActionRow v-else :data-log-row="rowKey(section, row)" :row="row" :viewModel="viewModel"/>
-            <LogAiRatings v-if="analysisGame && row.type !== 'phase'" :entries="rowRatings(section, row)"/>
-          </template>
-          <!-- Games saved before the server logged the moment: the banner below the newest row -->
-          <TerraformedBanner v-if="showsLateTerraformedBanner && section === sections[sections.length - 1]" :playerId="viewModel.id"/>
-        </section>
-      </div>
+          <!-- With an active filter, generations without a matching row are hidden -->
+          <section v-for="section in sections" v-show="!filterActive || visibleRows(section).length > 0" :key="section.generation" class="log-generation" :data-generation="section.generation">
+            <h3 class="log-generation-title">
+              <span class="log-generation-marker" aria-hidden="true">{{ section.generation }}</span>{{ generationTitle(section.generation) }}
+            </h3>
+            <!-- One row per action (card, action, standard project ...) with its effects; unrecognised messages stay text lines -->
+            <template v-for="(row, rowIndex) in visibleRows(section)" :key="rowIndex">
+              <div v-if="row.type === 'phase'" class="log-phase-line" aria-hidden="true"></div>
+              <!-- Terraformed: the banner stays where it happened, also after later actions (Jens, 25 Oct 2026) -->
+              <TerraformedBanner v-else-if="row.type === 'terraformed'" :playerId="viewModel.id" />
+              <!-- Analysis game: hovering an AI row shows rating buttons behind its text (touch: double-tap; key I) -->
+              <LogMessageComponent v-else-if="row.type === 'message'" :data-log-row="rowKey(section, row)" :message="row.message" :viewModel="viewModel"
+                :follows="row.follows === true" :action="row.action" :class="{'log-row--ai-rateable': isRateable(section, row)}"
+                @click="messageClicked(row.message, row.action, section, row, $event)"
+                @mouseenter="messageHovered(row.message, $event, row.action); rowHovered(section, row, $event)" @mouseleave="rowLeft($event)" @spaceClicked="$emit('spaceClicked', $event)" />
+              <LogActionRow v-else-if="row.type === 'action'" :data-log-row="rowKey(section, row)" :row="row" :viewModel="viewModel"
+                :class="{'log-row--ai-rateable': isRateable(section, row)}"
+                @click="messageClicked(row.action.lead, row.action, section, row)"
+                @mouseenter="messageHovered(row.action.lead, $event, row.action); rowHovered(section, row, $event)" @mouseleave="rowLeft($event)" @spaceClicked="$emit('spaceClicked', $event)" />
+              <LogActionRow v-else :data-log-row="rowKey(section, row)" :row="row" :viewModel="viewModel" />
+              <LogAiRatings v-if="analysisGame && row.type !== 'phase'" :entries="rowRatings(section, row)" />
+            </template>
+            <!-- Games saved before the server logged the moment: the banner below the newest row -->
+            <TerraformedBanner v-if="showsLateTerraformedBanner && section === sections[sections.length - 1]" :playerId="viewModel.id" />
+          </section>
+        </div>
       </div>
       <div v-if="hasMilestonesAwards" v-show="showsMilestonesAwards" class="log-milestones">
         <MilestoneAwardTable :milestones="viewModel.game.milestones" :awards="viewModel.game.awards" :players="viewModel.players" :viewerColor="viewModel.thisPlayer?.color" scrollable @split="tableSplit = $event">
           <!-- Switches in the free corner above the names, only while hovering the box -->
           <template v-if="tableSplit" #corner>
             <LogMilestonesSwitches corner :autoOpen="autoMilestonesTab" :separate="separatesMilestonesAwards"
-              @autoOpen="setAutoMilestonesTab" @separate="setSeparateMilestonesLog"/>
+              @autoOpen="setAutoMilestonesTab" @separate="setSeparateMilestonesLog" />
           </template>
         </MilestoneAwardTable>
       </div>
       <!-- Transposed table (narrow box): no free corner, the switches go below the table -->
       <LogMilestonesSwitches v-if="hasMilestonesAwards && !tableSplit" v-show="showsMilestonesAwards"
-        :autoOpen="autoMilestonesTab" :separate="separatesMilestonesAwards" @autoOpen="setAutoMilestonesTab" @separate="setSeparateMilestonesLog"/>
+        :autoOpen="autoMilestonesTab" :separate="separatesMilestonesAwards" @autoOpen="setAutoMilestonesTab" @separate="setSeparateMilestonesLog" />
       <button
         v-show="showScrollToBottomButton && !showsMilestonesAwards"
         type="button"
@@ -89,14 +89,14 @@
         @click="showLatestLogs"
       >
         <svg class="log-latest-button-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
-          <path d="M12 5v14M19 12l-7 7-7-7"/>
+          <path d="M12 5v14M19 12l-7 7-7-7" />
         </svg>
       </button>
     </div>
     <LogAiRateBar v-if="rateBar !== undefined" ref="rateBar" :left="rateBar.left" :top="rateBar.top"
-      @rate="rateFromBar" @mouseenter="messageUnhovered()" @mouseleave="rateBarLeft"/>
-    <LogMessageInspector ref="messageInspector" :viewModel="viewModel" @pinnedClosed="drawnCardsClosed"/>
-    <LogCardsZoom v-if="zoomedMessage !== undefined" :message="zoomedMessage" :action="zoomedAction" :players="viewModel.players" @close="closeZoom"/>
+      @rate="rateFromBar" @mouseenter="messageUnhovered()" @mouseleave="rateBarLeft" />
+    <LogMessageInspector ref="messageInspector" :viewModel="viewModel" @pinnedClosed="drawnCardsClosed" />
+    <LogCardsZoom v-if="zoomedMessage !== undefined" :message="zoomedMessage" :action="zoomedAction" :players="viewModel.players" @close="closeZoom" />
   </div>
 </template>
 

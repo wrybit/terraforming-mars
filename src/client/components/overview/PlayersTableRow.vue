@@ -3,10 +3,10 @@
     <!-- The whole row is clickable and opens the played cards (like the classic player bar) -->
     <!-- First player as "1" in the color bar so the name row has room for name and status -->
     <span v-if="firstForGen && playerView.players.length > 1" class="players-table-first-player" :title="$t('First player')" data-test="first-player">1</span>
-    <PlayerIdentity :player="player" :playerView="playerView" :actionLabel="actionLabel" :highlighted="isThisPlayer"/>
+    <PlayerIdentity :player="player" :playerView="playerView" :actionLabel="actionLabel" :highlighted="isThisPlayer" />
 
     <div class="players-table-section players-table-section--goods">
-      <PlayersTableGoods v-for="good in goods" :key="good.type" :good="good" :color="player.color" :isProductionLeader="productionLeaders.includes(good.type)"/>
+      <PlayersTableGoods v-for="good in goods" :key="good.type" :good="good" :color="player.color" :isProductionLeader="productionLeaders.includes(good.type)" />
     </div>
 
     <div class="players-table-section players-table-section--tags">
@@ -14,22 +14,22 @@
         <div v-if="groupIndex > 0" class="players-table-tag-gap"></div>
         <div :class="['players-table-cell', {'players-table-cell--discounted': tagDetail(tag).discount > 0}]" v-for="tag in group" :key="tag" :data-test="'tag-' + tag">
           <!-- Own icon only where the table has no column heads (three lines, cards) -->
-          <span :class="tagCounterClasses(tag)" v-flash-count="flashKeys.playerTag(player.color, tag)"><Tag class="players-table-cell-icon" :tag="(tag as CardTag)" size="big" type="secondary"/><span v-if="protectedTags.includes(tag)" class="players-table-protection shield_icon" :data-test="'protection-' + tag"></span>{{ tagDetail(tag).count || '·' }}<PlayerTagSubstitution v-if="tagDetail(tag).substitution !== undefined" :tag="tagDetail(tag).substitution!" :data-test="'substitution-' + tag"/></span>
+          <span :class="tagCounterClasses(tag)" v-flash-count="flashKeys.playerTag(player.color, tag)"><Tag class="players-table-cell-icon" :tag="(tag as CardTag)" size="big" type="secondary" /><span v-if="protectedTags.includes(tag)" class="players-table-protection shield_icon" :data-test="'protection-' + tag"></span>{{ tagDetail(tag).count || '·' }}<PlayerTagSubstitution v-if="tagDetail(tag).substitution !== undefined" :tag="tagDetail(tag).substitution!" :data-test="'substitution-' + tag" /></span>
           <span v-if="tagDetail(tag).discount > 0" class="players-table-discount" :data-test="'discount-' + tag" :title="$t('Discount')">-{{ tagDetail(tag).discount }}</span>
-          <PointsPerTag :points="tagDetail(tag)"/>
+          <PointsPerTag :points="tagDetail(tag)" />
         </div>
       </template>
     </div>
 
     <div class="players-table-section players-table-section--score">
-      <div class="players-table-cell"><span class="players-table-counter" data-test="vp" v-flash-count="flashKeys.playerCounter(player.color, 'victoryPoints')"><ScoreIcon class="players-table-cell-icon" kind="vp"/>{{ victoryPoints }}</span></div>
-      <div class="players-table-cell"><span class="players-table-counter" data-test="tr" v-flash-count="flashKeys.playerCounter(player.color, 'terraformRating')"><ScoreIcon class="players-table-cell-icon" kind="tr"/>{{ player.terraformRating }}</span></div>
+      <div class="players-table-cell"><span class="players-table-counter" data-test="vp" v-flash-count="flashKeys.playerCounter(player.color, 'victoryPoints')"><ScoreIcon class="players-table-cell-icon" kind="vp" />{{ victoryPoints }}</span></div>
+      <div class="players-table-cell"><span class="players-table-counter" data-test="tr" v-flash-count="flashKeys.playerCounter(player.color, 'terraformRating')"><ScoreIcon class="players-table-cell-icon" kind="tr" />{{ player.terraformRating }}</span></div>
       <div :class="['players-table-cell', {'players-table-cell--discounted': handDiscount !== ''}]">
-        <span class="players-table-counter" data-test="hand" v-flash-count="flashKeys.playerCounter(player.color, 'cardsInHand')"><ScoreIcon class="players-table-cell-icon" kind="hand"/>{{ player.cardsInHandNbr ?? 0 }}</span>
+        <span class="players-table-counter" data-test="hand" v-flash-count="flashKeys.playerCounter(player.color, 'cardsInHand')"><ScoreIcon class="players-table-cell-icon" kind="hand" />{{ player.cardsInHandNbr ?? 0 }}</span>
         <span v-if="handDiscount !== ''" class="players-table-discount" data-test="discount-all" :title="handDiscountTitle">{{ handDiscount.replace('*', '') }}<b v-if="handDiscount.endsWith('*')" class="players-table-discount-mark">*</b></span>
       </div>
       <div class="players-table-cell">
-        <span :class="['players-table-counter', {'players-table-counter--zero': player.availableBlueCardActionCount === 0}]" data-test="actions"><ScoreIcon class="players-table-cell-icon" kind="actions"/>{{ player.availableBlueCardActionCount }}</span>
+        <span :class="['players-table-counter', {'players-table-counter--zero': player.availableBlueCardActionCount === 0}]" data-test="actions"><ScoreIcon class="players-table-cell-icon" kind="actions" />{{ player.availableBlueCardActionCount }}</span>
       </div>
       <div class="players-table-cell">
         <!-- No own click handler: the click bubbles up to the row; the button stays for keyboard use -->

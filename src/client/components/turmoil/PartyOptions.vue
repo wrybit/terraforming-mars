@@ -10,7 +10,7 @@
         :note="card.stays ? 'Stays here' : undefined"
         :policyText="card.policyText"
         :bonusText="card.bonusText"
-        @select="pick(card)"/>
+        @select="pick(card)" />
     </div>
   </div>
 </template>

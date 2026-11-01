@@ -7,8 +7,8 @@
     data-hotkey="tab-hand"
     :class="['or-tab', 'or-tab--view', 'or-tab--hand', {'or-tab--active': active, 'or-tab--empty': count === 0}]"
     @click="$emit('select')">
-    <OrOptionsTabLabel :label="$t(label)" :compact="compact" :glyph="glyph"/>
-    <HotkeyKeys action="tab-hand"/>
+    <OrOptionsTabLabel :label="$t(label)" :compact="compact" :glyph="glyph" />
+    <HotkeyKeys action="tab-hand" />
     <span class="or-tab-count">{{ count }}</span>
   </button>
 </template>

@@ -9,10 +9,10 @@
       </div>
     </div>
     <div class="stats-heatmap-tools">
-      <SegmentedControl :options="typeOptions" v-model="type"/>
-      <SegmentedControl v-if="playerOptions.length > 2" :options="playerOptions" v-model="player"/>
+      <SegmentedControl :options="typeOptions" v-model="type" />
+      <SegmentedControl v-if="playerOptions.length > 2" :options="playerOptions" v-model="player" />
     </div>
-    <StatsBoardPreview :boardKey="boardKey" :heatmap="map" :heatmapType="type"/>
+    <StatsBoardPreview :boardKey="boardKey" :heatmap="map" :heatmapType="type" />
     <p v-if="map.games === 0" class="stats-note" v-i18n>No game with a saved board yet.</p>
   </div>
 </template>

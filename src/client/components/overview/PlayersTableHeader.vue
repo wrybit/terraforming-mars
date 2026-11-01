@@ -2,7 +2,7 @@
   <div class="players-table-row players-table-head">
     <!-- Game menu in front (only in the player view, GameMenu.vue) -->
     <!-- Two lines: no own line for the menu, the burger alone sits at the left edge in front of the goods icons -->
-    <div :class="['players-table-menu', {'players-table-menu--inline': mode === 'two-lines'}]"><GameMenu/></div>
+    <div :class="['players-table-menu', {'players-table-menu--inline': mode === 'two-lines'}]"><GameMenu /></div>
 
     <!-- Column heads only where the cells have no icon of their own (one and two lines) -->
     <template v-if="mode === 'line' || mode === 'two-lines'">
@@ -16,17 +16,17 @@
         <template v-for="(group, groupIndex) in tagColumns" :key="groupIndex">
           <div v-if="groupIndex > 0" class="players-table-tag-gap"></div>
           <div class="players-table-cell" v-for="tag in group" :key="tag" :data-test="'tag-head-' + tag">
-            <Tag :tag="(tag as CardTag)" size="big" type="secondary"/>
+            <Tag :tag="(tag as CardTag)" size="big" type="secondary" />
           </div>
         </template>
       </div>
 
       <!-- Two lines: the score has its icons in the chips next to the name -->
       <div v-if="mode === 'line'" class="players-table-section players-table-section--score">
-        <div class="players-table-cell"><ScoreIcon kind="vp"/></div>
-        <div class="players-table-cell"><ScoreIcon kind="tr"/></div>
-        <div class="players-table-cell"><ScoreIcon kind="hand"/></div>
-        <div class="players-table-cell"><ScoreIcon kind="actions"/></div>
+        <div class="players-table-cell"><ScoreIcon kind="vp" /></div>
+        <div class="players-table-cell"><ScoreIcon kind="tr" /></div>
+        <div class="players-table-cell"><ScoreIcon kind="hand" /></div>
+        <div class="players-table-cell"><ScoreIcon kind="actions" /></div>
         <div class="players-table-cell players-table-head-label" v-i18n>Cards</div>
       </div>
     </template>

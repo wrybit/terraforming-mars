@@ -3,7 +3,7 @@
        the card itself scaled down, next to it its name instead of "Select an option", its text and – if
        it says more than "Select an option" – the actual question. Structure like TabIntroBlock.vue. -->
   <div class="or-tab-intro card-intro">
-    <SourceCardThumbnail :card="card"/>
+    <SourceCardThumbnail :card="card" />
     <div>
       <div class="or-tab-intro-title card-intro-name">{{ $t(card) }}</div>
       <div v-if="description !== undefined" class="or-tab-intro-hint">{{ $t(description) }}</div>

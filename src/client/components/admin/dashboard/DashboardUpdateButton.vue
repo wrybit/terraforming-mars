@@ -8,7 +8,7 @@
       <div class="server-dashboard-update-status">
         <span class="server-dashboard-deploy-status" :class="{'server-dashboard-deploy-status-behind': !inProgress}">{{ statusText }}</span>
         <!-- While the script works: the same running bar as the update notice of the players -->
-        <LoadingBar v-if="inProgress" class="server-dashboard-update-progress"/>
+        <LoadingBar v-if="inProgress" class="server-dashboard-update-progress" />
         <!-- Why the server is still behind: refused, build failed or waiting for the players -->
         <span v-if="problem !== undefined" class="server-dashboard-deploy-problem" :class="{'server-dashboard-deploy-problem--blocking': problem.blocking}">{{ problem.text }}</span>
         <span v-if="problem?.command !== undefined" class="server-dashboard-updated"><span v-i18n>Approve on the Mac:</span> <code>{{ problem.command }}</code></span>

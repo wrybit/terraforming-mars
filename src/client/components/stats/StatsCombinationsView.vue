@@ -4,16 +4,16 @@
       <h2><span v-i18n>Combinations</span> <span class="stats-dim">· {{ visibleRows.length }}</span></h2>
       <div class="stats-list-tools">
         <span class="stats-dim" v-i18n>Played at least</span>
-        <SegmentedControl :options="minPlaysOptions" v-model="minPlays"/>
+        <SegmentedControl :options="minPlaysOptions" v-model="minPlays" />
         <input v-model="search" type="search" class="stats-search" :placeholder="$t('Search')">
       </div>
     </div>
-    <SegmentedControl class="stats-combination-types" :options="typeOptions" :modelValue="typeKey" @update:modelValue="selectType"/>
+    <SegmentedControl class="stats-combination-types" :options="typeOptions" :modelValue="typeKey" @update:modelValue="selectType" />
     <p v-if="visibleRows.length === 0" class="stats-note" v-i18n>No games for these filters.</p>
     <StatsTable v-else :key="typeKey" :columns="columns" :rows="visibleRows" :rowKey="rowKey" initialSort="plays">
-      <template #first="{row}"><StatsEntityName :kind="type.first" :name="row.first"/></template>
-      <template #second="{row}"><StatsEntityName :kind="type.second" :name="row.second"/></template>
-      <template #winRate="{row}"><StatsWinRate :winRate="row.winRate" :expected="row.expectedWinRate"/></template>
+      <template #first="{row}"><StatsEntityName :kind="type.first" :name="row.first" /></template>
+      <template #second="{row}"><StatsEntityName :kind="type.second" :name="row.second" /></template>
+      <template #winRate="{row}"><StatsWinRate :winRate="row.winRate" :expected="row.expectedWinRate" /></template>
     </StatsTable>
   </section>
 </template>

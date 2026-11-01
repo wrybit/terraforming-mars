@@ -2,13 +2,13 @@
   <div>
     <div v-if="showtitle === true">{{ $t(playerinput.title) }}</div>
     <label v-for="player in (playerinput.players || [])" :key="player" class="form-radio form-inline">
-      <input type="radio" v-model="selectedPlayer" :value="player" >
+      <input type="radio" v-model="selectedPlayer" :value="player">
       <i class="form-icon"></i>
       <span v-if="player === 'NEUTRAL'" v-i18n>Neutral</span>
-      <SelectPlayerRow v-else :player="playerView.players.find((otherPlayer) => otherPlayer.color === player)"/>
+      <SelectPlayerRow v-else :player="playerView.players.find((otherPlayer) => otherPlayer.color === player)" />
     </label>
     <TabPanelFooterSlot>
-    <AppButton hotkey="proceed" v-if="showsave === true" size="big" @click="saveData" :title="$t(playerinput.buttonLabel)" />
+      <AppButton hotkey="proceed" v-if="showsave === true" size="big" @click="saveData" :title="$t(playerinput.buttonLabel)" />
     </TabPanelFooterSlot>
   </div>
 </template>

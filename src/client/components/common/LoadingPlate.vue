@@ -2,7 +2,7 @@
   <!-- In the middle of the screen on a small dark plate: "Loading…" above the running bar (start_preloader.less) -->
   <div class="loading-plate" role="status">
     <span v-i18n>Loading…</span>
-    <LoadingBar/>
+    <LoadingBar />
   </div>
 </template>
 
