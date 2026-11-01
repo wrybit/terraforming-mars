@@ -30,6 +30,8 @@ describe('GameMenu', () => {
     FakeLocalStorage.register(localStorage);
     // The menu hides the link to the current page, so start from a neutral URL
     window.history.replaceState(null, '', '/');
+    // Specs share one document (isolate: false): a menu another spec left open (teleported to body) would be found too
+    document.body.innerHTML = '';
   });
 
   afterEach(() => {
