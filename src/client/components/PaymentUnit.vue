@@ -41,6 +41,7 @@ import {paymentIconClass} from '@/client/components/paymentIcon';
 
 export default defineComponent({
   name: 'PaymentUnitComponent',
+  emits: ['plus', 'minus', 'max', 'update:count'],
   props: {
     count: {
       type: Number,

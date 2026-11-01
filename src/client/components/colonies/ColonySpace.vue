@@ -1,6 +1,6 @@
 <template>
   <div>
-    <BuildBenefit v-if="idx <= 2" :metadata="metadata" :idx="idx"/>
+    <BuildBenefit v-if="idx <= 2" :metadata="metadata" :idx="idx" />
     <div v-if="player !== undefined" class="occupied-colony-space">
       <BoardCube class="board-cube colony-cube" :color="player" :size="21" :spinSeed="metadata.name + idx"/>
     </div>
