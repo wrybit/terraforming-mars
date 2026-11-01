@@ -9,9 +9,12 @@ import {VenusianInsects} from '../../src/server/cards/venusNext/VenusianInsects'
 describe('AI World Government rival', () => {
   afterEach(() => clearPlayerTunings());
 
-  it('is off in the baseline', () => {
+  // Round 165: adopted in the baseline; the check variant switches it off.
+  it('is on in the baseline and off in the check variant', () => {
     const [, player, opponent] = testGame(2, {venusNextExtension: true});
     opponent.playedCards.push(new VenusianAnimals(), new VenusianInsects());
+    expect(worldGovernmentRivalPenalty(player, true, 8)).to.be.greaterThan(0);
+    setPlayerTuning(player.id, 'noWorldGovernmentRival');
     expect(worldGovernmentRivalPenalty(player, true, 8)).eq(0);
   });
 
