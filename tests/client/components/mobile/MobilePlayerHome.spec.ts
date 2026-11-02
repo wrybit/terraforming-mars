@@ -3,19 +3,10 @@ import {expect} from 'chai';
 import {globalConfig} from '../getLocalVue';
 import MobilePlayerHome from '@/client/components/mobile/MobilePlayerHome.vue';
 import {fakePlayerViewModel} from '../testHelpers';
-import {FakeLocalStorage} from '../FakeLocalStorage';
+import {useFakeLocalStorage} from '../FakeLocalStorage';
 
 describe('MobilePlayerHome', () => {
-  let localStorage: FakeLocalStorage;
-
-  beforeEach(() => {
-    localStorage = new FakeLocalStorage();
-    FakeLocalStorage.register(localStorage);
-  });
-
-  afterEach(() => {
-    FakeLocalStorage.deregister(localStorage);
-  });
+  useFakeLocalStorage();
 
   function mountHome(playerView = fakePlayerViewModel()) {
     return shallowMount(MobilePlayerHome, {

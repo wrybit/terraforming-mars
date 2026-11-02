@@ -2,18 +2,10 @@ import {expect} from 'chai';
 import {computed} from 'vue';
 import {CardName} from '@/common/cards/CardName';
 import {CardOrderStorage} from '@/client/utils/CardOrderStorage';
-import {FakeLocalStorage} from '../components/FakeLocalStorage';
+import {useFakeLocalStorage} from '../components/FakeLocalStorage';
 
 describe('CardOrderStorage', () => {
-  let localStorage: FakeLocalStorage;
-
-  beforeEach(() => {
-    localStorage = new FakeLocalStorage();
-    FakeLocalStorage.register(localStorage);
-  });
-  afterEach(() => {
-    FakeLocalStorage.deregister(localStorage);
-  });
+  useFakeLocalStorage();
 
   // Build and sell dialogs stay mounted while the hand is re-sorted.
   it('is reactive: readers see a new order without remount', () => {
