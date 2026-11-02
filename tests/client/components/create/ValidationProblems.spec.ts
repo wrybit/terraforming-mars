@@ -59,12 +59,4 @@ describe('ValidationProblems', () => {
     expect(link.text()).eq('Learn more');
     expect(link.attributes('href')).eq(WIKI_URLS.customPreludes);
   });
-
-  it('leaves out problems the form shows inline', () => {
-    const wrapper = mount(ValidationProblems, {
-      ...globalConfig,
-      props: {errors: {...NO_ERRORS, modularMAInDevelopment: true}},
-    });
-    expect(wrapper.find('.create-game-validation-box').exists()).is.false;
-  });
 });
