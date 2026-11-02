@@ -18,15 +18,10 @@ const NO_ERRORS: ValidationErrors = {
   prelude2WithoutPrelude: false,
   deltaProjectWithoutPrelude: false,
   notEnoughCorporations: 0,
-  modularMAInDevelopment: false,
   invalidCustomMA: '',
 };
 
 describe('validationProblemKeys', () => {
-  it('keeps the Official Random note out of the box', () => {
-    expect(boxProblemKeys({...NO_ERRORS, modularMAInDevelopment: true})).deep.eq([]);
-  });
-
   it('lists engaged problems in validationDetails order', () => {
     expect(boxProblemKeys({...NO_ERRORS, notEnoughCorporations: 4, soloWithoutCorporateEra: true}))
       .to.have.members(['notEnoughCorporations', 'soloWithoutCorporateEra']);
@@ -35,6 +30,5 @@ describe('validationProblemKeys', () => {
   it('treats a non-empty string as engaged', () => {
     expect(boxProblemKeys({...NO_ERRORS, invalidCustomMA: 'bad'})).deep.eq(['invalidCustomMA']);
     expect(hasBlockingProblem({...NO_ERRORS, invalidCustomMA: 'bad'})).is.true;
-    expect(hasBlockingProblem({...NO_ERRORS, modularMAInDevelopment: true})).is.false;
   });
 });

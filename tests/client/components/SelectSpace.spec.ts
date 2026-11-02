@@ -2,21 +2,15 @@ import {shallowMount} from '@vue/test-utils';
 import {expect} from 'chai';
 import {globalConfig} from './getLocalVue';
 import SelectSpace from '@/client/components/SelectSpace.vue';
-import {FakeLocalStorage} from './FakeLocalStorage';
+import {useFakeLocalStorage} from './FakeLocalStorage';
 import {PlayerViewModel} from '@/common/models/PlayerModel';
 import {placementZoom, releasePlacementZoom} from '@/client/components/board/placementZoom';
 import {SpaceId} from '@/common/Types';
 
 describe('SelectSpace', () => {
-  let localStorage: FakeLocalStorage;
-
-  beforeEach(() => {
-    localStorage = new FakeLocalStorage();
-    FakeLocalStorage.register(localStorage);
-  });
+  useFakeLocalStorage();
 
   afterEach(() => {
-    FakeLocalStorage.deregister(localStorage);
     document.body.innerHTML = '';
     releasePlacementZoom();
   });

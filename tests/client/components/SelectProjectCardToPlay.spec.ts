@@ -6,7 +6,7 @@ import SelectProjectCardToPlay from '@/client/components/SelectProjectCardToPlay
 import {SelectProjectCardToPlayModel} from '@/common/models/PlayerInputModel';
 import {PlayerViewModel, PublicPlayerModel} from '@/common/models/PlayerModel';
 import {Units} from '@/common/Units';
-import {FakeLocalStorage} from './FakeLocalStorage';
+import {useFakeLocalStorage} from './FakeLocalStorage';
 import {PaymentTester} from './PaymentTester';
 import {Payment} from '@/common/inputs/Payment';
 import {CardModel} from '@/common/models/CardModel';
@@ -16,16 +16,11 @@ import {SelectProjectCardToPlayResponse} from '@/common/inputs/InputResponse';
 import {asComplete} from './utils/models';
 
 describe('SelectProjectCardToPlay', () => {
-  let localStorage: FakeLocalStorage;
   let saveResponse: SelectProjectCardToPlayResponse;
 
+  useFakeLocalStorage();
   beforeEach(() => {
-    localStorage = new FakeLocalStorage();
-    FakeLocalStorage.register(localStorage);
     PreferencesManager.INSTANCE.set('show_alerts', false);
-  });
-  afterEach(() => {
-    FakeLocalStorage.deregister(localStorage);
   });
 
   it('using sort order for cards', async () => {
@@ -703,7 +698,7 @@ describe('SelectProjectCardToPlay', () => {
     const tester = new PaymentTester(wrapper);
     await tester.nextTick();
 
-    (wrapper.vm as any).saveData();
+    wrapper.vm.saveData();
 
     expect(saveResponse.payment).deep.eq(Payment.of({heat: 3, megacredits: 7}));
   });
@@ -725,7 +720,7 @@ describe('SelectProjectCardToPlay', () => {
     tester.expectPayment({steel: 6, megacredits: 0});
 
     saveResponse = undefined as any;
-    (wrapper.vm as any).saveData();
+    wrapper.vm.saveData();
 
     expect(saveResponse).to.be.undefined;
   });
@@ -785,7 +780,7 @@ describe('SelectProjectCardToPlay', () => {
 
     await wrapper.vm.$nextTick();
 
-    const vm = wrapper.vm as any;
+    const vm = wrapper.vm;
     const tester = new PaymentTester(wrapper);
     expect(vm.cardName).to.eq(CardName.BIRDS);
     tester.expectValue('megacredits', 10);

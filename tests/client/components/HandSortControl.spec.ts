@@ -7,7 +7,7 @@ import {CardModel} from '@/common/models/CardModel';
 import {PlayerViewModel} from '@/common/models/PlayerModel';
 import {CardOrderStorage} from '@/client/utils/CardOrderStorage';
 import {handSortOrder, resetHandSort} from '@/client/utils/handSort';
-import {FakeLocalStorage} from './FakeLocalStorage';
+import {useFakeLocalStorage} from './FakeLocalStorage';
 import {asComplete} from './utils/models';
 
 // Ants: 9, Cartel: 8, Birds: 10
@@ -28,16 +28,11 @@ function handOrder(): Array<string> {
 }
 
 describe('HandSortControl', () => {
-  let localStorage: FakeLocalStorage;
+  useFakeLocalStorage();
 
   beforeEach(() => {
-    localStorage = new FakeLocalStorage();
-    FakeLocalStorage.register(localStorage);
     resetHandSort();
     CardOrderStorage.updateCardOrder('p-1', {[CardName.BIRDS]: 1, [CardName.ANTS]: 2, [CardName.CARTEL]: 3});
-  });
-  afterEach(() => {
-    FakeLocalStorage.deregister(localStorage);
   });
 
   function mountControl(compact = false, allowManual = true) {

@@ -3,21 +3,15 @@ import {expect} from 'chai';
 import {globalConfig} from './getLocalVue';
 import LanguageSelectionDialog from '@/client/components/LanguageSelectionDialog.vue';
 import {PreferencesManager} from '@/client/utils/PreferencesManager';
-import {FakeLocalStorage} from './FakeLocalStorage';
+import {useFakeLocalStorage} from './FakeLocalStorage';
 import {ALL_LANGUAGES} from '@/common/constants';
 
 describe('LanguageSelectionDialog', () => {
-  let localStorage: FakeLocalStorage;
+  useFakeLocalStorage();
 
   beforeEach(() => {
-    localStorage = new FakeLocalStorage();
-    FakeLocalStorage.register(localStorage);
     // Other specs (e.g. LogMessageComponent) set 'lang' on the shared instance; start from defaults
     PreferencesManager.resetForTest();
-  });
-
-  afterEach(() => {
-    FakeLocalStorage.deregister(localStorage);
   });
 
   it('mounts without errors', () => {

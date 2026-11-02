@@ -6,7 +6,7 @@ import GameMenu from '@/client/components/gameMenu/GameMenu.vue';
 import {GAME_MENU_CONTEXT, GameMenuContext} from '@/client/components/gameMenu/gameMenuContext';
 import {fakeGameOptionsModel} from '../testHelpers';
 import {CLIENT_EXTENSIONS} from '@/genfiles/extensionsClient';
-import {FakeLocalStorage} from '../FakeLocalStorage';
+import {useFakeLocalStorage} from '../FakeLocalStorage';
 
 function context(): GameMenuContext {
   return {
@@ -23,19 +23,13 @@ function context(): GameMenuContext {
 }
 
 describe('GameMenu', () => {
-  let localStorage: FakeLocalStorage;
+  useFakeLocalStorage();
 
   beforeEach(() => {
-    localStorage = new FakeLocalStorage();
-    FakeLocalStorage.register(localStorage);
     // The menu hides the link to the current page, so start from a neutral URL
     window.history.replaceState(null, '', '/');
     // Specs share one document (isolate: false): a menu another spec left open (teleported to body) would be found too
     document.body.innerHTML = '';
-  });
-
-  afterEach(() => {
-    FakeLocalStorage.deregister(localStorage);
   });
 
   it('outside the game only offers language, help, settings and the entries of the extensions present', async () => {

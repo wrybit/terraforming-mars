@@ -3,9 +3,9 @@ import {validationDetails, ValidationErrors} from '@/common/game/validateNewGame
 /**
  * Problems the fork form shows inline next to their setting rather than in the validation box under Create game.
  *
- * modularMAInDevelopment: the note under "Official Random α" already says it.
+ * Empty since upstream dropped modularMAInDevelopment (42fd7e0ed); the fork note under "Official Random α" stays.
  */
-export const INLINE_VALIDATION_PROBLEMS: ReadonlySet<keyof ValidationErrors> = new Set(['modularMAInDevelopment']);
+export const INLINE_VALIDATION_PROBLEMS: ReadonlySet<keyof ValidationErrors> = new Set<keyof ValidationErrors>();
 
 /*
  * Returns true when this value represents the warning being engaged.
