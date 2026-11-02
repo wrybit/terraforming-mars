@@ -1144,6 +1144,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   openingSynergy: {openingSynergy: 1},
   phaseIncomeOnly: {phasePlan: 1, phaseBrake: 0, phaseMilestone: 0},
   phaseNoBrake: {phasePlan: 1, phaseBrake: 0},
+  // Round 168: only the income part of the three-phase plan stronger (human games: M€ production 1–3 until gen 7).
+  phaseIncome15: {phaseIncome: 1.5},
+  phaseIncome2: {phaseIncome: 2},
   noPhasePlan: {phasePlan: 0},
   noDrawPriority: {drawPriority: 0},
   drawPriority3: {drawPriority: 3},
