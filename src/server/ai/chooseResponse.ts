@@ -18,6 +18,8 @@ import {OrOptions} from '../inputs/OrOptions';
 import {WORLD_GOVERNMENT_TITLE, chooseWorldGovernment} from './worldGovernmentChoice';
 import {tuningOf} from './aiTuning';
 import {clearFollowUpPlan, plannedFollowUp} from './followUpPlan';
+import {SelectColony} from '../inputs/SelectColony';
+import {chooseColony} from './colonyChoice';
 
 // Entry point of the rule-based AI (stage 1): which answer to give for the current input.
 
@@ -75,6 +77,13 @@ function decide(input: PlayerInput, player: IPlayer, level: AiLevel): InputRespo
   // World Government terraforming (Venus Next): each option tried on a game copy (worldGovernmentChoice.ts).
   if (input instanceof OrOptions && input.title === WORLD_GOVERNMENT_TITLE && tuningOf(player).worldGovernment > 0 && !isSimulating()) {
     const response = chooseWorldGovernment(input, player);
+    if (response !== undefined) {
+      return response;
+    }
+  }
+  // Colonies: trade and build choices valued on a game copy (colonyChoice.ts) instead of a random colony.
+  if (input instanceof SelectColony && tuningOf(player).colonyChoice > 0) {
+    const response = chooseColony(input, player);
     if (response !== undefined) {
       return response;
     }
