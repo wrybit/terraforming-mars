@@ -3,7 +3,7 @@ import {globalConfig} from '../getLocalVue';
 import {expect} from 'chai';
 import CreateGameForm from '@/client/components/create/CreateGameForm.vue';
 import {createGameSettingsStorage} from '@/client/components/create/createGameSettingsStorage';
-import {FakeLocalStorage} from '../FakeLocalStorage';
+import {useFakeLocalStorage} from '../FakeLocalStorage';
 import {BoardName} from '@/common/boards/BoardName';
 import {RandomBoardOption} from '@/common/boards/RandomBoardOption';
 import {boardOptions} from '@/common/boards/randomBoardOptions';
@@ -60,18 +60,15 @@ function validateTwoPlayerGame(setup: (model: CreateGameModel) => void): Validat
 }
 
 describe('CreateGameForm', () => {
-  let localStorage: FakeLocalStorage;
+  useFakeLocalStorage();
 
   beforeEach(() => {
-    localStorage = new FakeLocalStorage();
-    FakeLocalStorage.register(localStorage);
     PreferencesManager.resetForTest();
     // The form writes its settings into the URL hash; don't carry that into the next test
     window.history.replaceState(null, '', '/new-game');
   });
 
   afterEach(() => {
-    FakeLocalStorage.deregister(localStorage);
     // Specs share one environment (isolate: false); leave the URL as other specs expect it
     window.history.replaceState(null, '', '/');
   });

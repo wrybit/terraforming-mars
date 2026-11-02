@@ -4,7 +4,7 @@ import {expect} from 'chai';
 import {CardName} from '@/common/cards/CardName';
 import SortableCards from '@/client/components/SortableCards.vue';
 import {CardOrderStorage} from '@/client/utils/CardOrderStorage';
-import {FakeLocalStorage} from './FakeLocalStorage';
+import {useFakeLocalStorage} from './FakeLocalStorage';
 import {handSortOrder, resetHandSort, sortHand} from '@/client/utils/handSort';
 import {SortOrder} from '@/client/utils/SortOrder';
 
@@ -39,7 +39,6 @@ function cardsInOrder(sortable: VueWrapper<InstanceType<typeof SortableCards>>):
   }).map((card) => card.props().card.name);
 }
 
-
 // Sorting runs through the shared state (handSort.ts) that the sort bar also uses
 async function sortBy(sortable: VueWrapper<InstanceType<typeof SortableCards>>, sortOrder: SortOrder | undefined) {
   sortHand('player1', sortable.props('cards'), sortOrder);
@@ -47,15 +46,10 @@ async function sortBy(sortable: VueWrapper<InstanceType<typeof SortableCards>>, 
 }
 
 describe('SortableCards', () => {
-  let localStorage: FakeLocalStorage;
+  useFakeLocalStorage();
 
   beforeEach(() => {
-    localStorage = new FakeLocalStorage();
-    FakeLocalStorage.register(localStorage);
     resetHandSort();
-  });
-  afterEach(() => {
-    FakeLocalStorage.deregister(localStorage);
   });
 
   it('allows sorting after initial loading with no local storage', async () => {
