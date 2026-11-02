@@ -16,6 +16,10 @@ export const STRATEGY_STYLES: Record<string, Partial<AiTuning>> = {
   styleCards: {styleFocus: focus({playedCard: 0.6}), drawPriority: 7, phasePlan: 1},
   // Terraformer: raises the global parameters as fast as possible and ends the game early.
   styleTerraform: {styleFocus: focus({terraformRating: 0.7}), terraformBrake: -4, phasePlan: 0, closer: 1.5},
+  // Sprinter: the human rush that beats the AI on the public server – income early, then raise the parameters as
+  // fast as possible and end the game around generation 9–10 while the AI still holds a full hand. Used as a fixed
+  // opponent in test rounds (self-play never ends that fast, so the AI's slow opening goes unpunished there).
+  styleSprint: {styleFocus: focus({terraformRating: 1, production: 0.3}), terraformBrake: -8, phasePlan: 0.5, closer: 3},
   // Economist: production of every kind above all, points come from the money later.
   styleIncome: {styleFocus: focus({production: 0.5}), phasePlan: 1},
   // Milestones and awards at any price.
