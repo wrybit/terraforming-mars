@@ -207,6 +207,13 @@
   filter: drop-shadow(0 2px 1.5px rgba(0, 0, 0, 0.75));
 }
 
+// Cube of a claimed milestone in the player row: a flex box instead of a line box, otherwise the text
+// baseline puts the cube below the middle of the row
+.ma-table-milestone-owner {
+  display: flex;
+  align-items: center;
+}
+
 // Player rows like in the player list: muted color surface, bar in the original color, blur
 .ma-table-player {
   height: @ma-table-row-height;
