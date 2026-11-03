@@ -85,6 +85,7 @@ export class ApiCreateGame extends Handler {
       aresExtension: gameReq.expansions.ares,
       aresHazards: true, // Not a runtime option.
       aresExtremeVariant: gameReq.aresExtremeVariant,
+      automa: false, // No create-game UI yet.
       bannedCards: gameReq.bannedCards,
       boardName,
       ceoExtension: gameReq.expansions.ceo,

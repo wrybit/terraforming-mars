@@ -1113,6 +1113,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // less per card (effects and discounts); measured effect income weighted higher.
   cardIncome15: {measuredCardIncome: 1.5},
   cardIncome2: {measuredCardIncome: 2},
+  // Round 173: round 172 cardIncome2 +0.33 (z +0.57, candidate), cardIncome15 +0.02 – one step further.
+  cardIncome3: {measuredCardIncome: 3},
   cardIncomeTraits: {measuredCardIncome: 0.5, playerTraitValues: 1},
   // Card understanding fix in one piece (card-understanding audit): measured income of lasting effects and actions,
   // measured draw rates, lasting player traits.
