@@ -59,7 +59,7 @@
         </template>
         <template v-if="hasValues(part)">
           <div v-for="milestone in milestones" :key="milestone.name" :class="milestoneCellClasses(milestone, player)">
-            <span v-if="milestone.color === player.color" :title="player.name" data-test="milestone-owner" v-flash="flashKeys.milestone(milestone.name)"><PlayerCube class="ma-table-cube" :color="player.color" view="slight" :size="13" /></span>
+            <span v-if="milestone.color === player.color" class="ma-table-milestone-owner" :title="player.name" data-test="milestone-owner" v-flash="flashKeys.milestone(milestone.name)"><PlayerCube class="ma-table-cube" :color="player.color" view="slight" :size="13" /></span>
             <span v-else class="ma-table-value">{{ scoreOf(milestone.scores, player) }}</span>
           </div>
           <div class="ma-table-divider"></div>

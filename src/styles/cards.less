@@ -108,6 +108,12 @@ input[type="radio"]+.filterDiv.card-container {
 input[type="checkbox"]:checked+.filterDiv,
 input[type="radio"]:checked+.filterDiv {
   .selection-highlight();
+
+  // Cost coin and tags stick out over the card edge: they sit above the tint (z-index 5),
+  // otherwise the tint draws the card edge as a purple line right through coin and tags
+  .card-cost-and-tags {
+    z-index: 6;
+  }
 }
 
 input[type="checkbox"]:checked+.filterDiv::after,
