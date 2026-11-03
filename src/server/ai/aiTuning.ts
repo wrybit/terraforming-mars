@@ -1115,6 +1115,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   cardIncome2: {measuredCardIncome: 2},
   // Round 173: round 172 cardIncome2 +0.33 (z +0.57, candidate), cardIncome15 +0.02 – one step further.
   cardIncome3: {measuredCardIncome: 3},
+  // Round 174: Oracle 03.11. – from generation 9 humans buy 52 vs 33 M€ of cards and play 32 vs 18; late buying up.
+  handLate8: {handTargetLate: 8},
+  lateBuy15: {lateBuyFactor: 1.5},
   cardIncomeTraits: {measuredCardIncome: 0.5, playerTraitValues: 1},
   // Card understanding fix in one piece (card-understanding audit): measured income of lasting effects and actions,
   // measured draw rates, lasting player traits.
