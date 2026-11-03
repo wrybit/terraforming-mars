@@ -39,13 +39,14 @@
         <template v-if="hasNames(part)"><div></div><div class="ma-table-divider"></div></template>
         <template v-if="hasValues(part)">
           <div v-for="milestone in milestones" :key="milestone.name" class="ma-table-cell">
-            <!-- Claimed: cube only in the player row; awarded or closed: no more costs -->
-            <span v-if="milestone.color === undefined && !milestoneClosed(milestone)" class="ma-table-coin">{{ milestoneCost }}</span>
+            <!-- Claimed: owner tag like a funded award; closed: no more costs -->
+            <MilestoneAwardOwner v-if="milestone.color" :color="milestone.color" :player-name="milestone.playerName" :flash-key="flashKeys.milestone(milestone.name)" data-test="milestone-owner" />
+            <span v-else-if="!milestoneClosed(milestone)" class="ma-table-coin">{{ milestoneCost }}</span>
           </div>
           <div class="ma-table-divider"></div>
           <div v-for="award in awards" :key="award.name" class="ma-table-cell">
             <!-- Funded: cube only up here (the player rows keep showing the score); closed: no more costs -->
-            <span v-if="award.color" :class="ownerClasses(award.color)" v-glass-tooltip="award.playerName" data-test="award-owner" v-flash="flashKeys.award(award.name)"><PlayerCube class="ma-table-cube" :color="award.color" view="slight" :size="13" /><span class="ma-table-owner-name">{{ award.playerName }}</span></span>
+            <MilestoneAwardOwner v-if="award.color" :color="award.color" :player-name="award.playerName" :flash-key="flashKeys.award(award.name)" data-test="award-owner" />
             <span v-else-if="!awardClosed(award)" class="ma-table-coin">{{ nextAwardCost }}</span>
           </div>
         </template>
@@ -59,8 +60,7 @@
         </template>
         <template v-if="hasValues(part)">
           <div v-for="milestone in milestones" :key="milestone.name" :class="milestoneCellClasses(milestone, player)">
-            <span v-if="milestone.color === player.color" class="ma-table-milestone-owner" :title="player.name" data-test="milestone-owner" v-flash="flashKeys.milestone(milestone.name)"><PlayerCube class="ma-table-cube" :color="player.color" view="slight" :size="13" /></span>
-            <span v-else class="ma-table-value">{{ scoreOf(milestone.scores, player) }}</span>
+            <span class="ma-table-value">{{ scoreOf(milestone.scores, player) }}</span>
           </div>
           <div class="ma-table-divider"></div>
           <div v-for="award in awards" :key="award.name" :class="awardCellClasses(award, player)">
@@ -81,7 +81,7 @@ import {FundedAwardModel} from '@/common/models/FundedAwardModel';
 import {AWARD_COSTS, MAX_AWARDS, MAX_MILESTONES, MILESTONE_COST} from '@/common/constants';
 import {getAward, getMilestone} from '@/client/MilestoneAwardManifest';
 import MilestoneAwardIcon from '@/client/components/milestoneAwardTable/MilestoneAwardIcon.vue';
-import PlayerCube from '@/client/components/common/PlayerCube.vue';
+import MilestoneAwardOwner from '@/client/components/milestoneAwardTable/MilestoneAwardOwner.vue';
 import {AWARD_ICONS, IconPart, MILESTONE_ICONS} from '@/client/components/milestoneAwardTable/milestoneAwardIcons';
 import {scoreRanks} from '@/client/components/milestoneAwardTable/scoreRanks';
 import {playersInTurnOrder} from '@/client/utils/playersInTurnOrder';
@@ -89,7 +89,6 @@ import {glassTooltip} from '@/client/directives/GlassTooltip';
 import {observeHeaderFit} from '@/client/components/milestoneAwardTable/headerFit';
 import {observeOrientation} from '@/client/components/milestoneAwardTable/tableOrientation';
 import {markHorizontalScroll} from '@/client/components/mobile/horizontalScroll';
-import {vFlash} from '@/client/directives/ChangeFlash';
 import {flashKeys} from '@/client/utils/changeFlashKeys';
 
 // Cleanup functions of the header adjustment and the orientation watcher per table (not reactive)
@@ -105,10 +104,9 @@ export default defineComponent({
   name: 'MilestoneAwardTable',
   components: {
     MilestoneAwardIcon,
-    PlayerCube,
+    MilestoneAwardOwner,
   },
   directives: {
-    flash: vFlash,
     glassTooltip,
   },
   // "split": whether the free corner above the names exists (slot "corner"), so the parent can place things elsewhere otherwise
@@ -269,9 +267,6 @@ export default defineComponent({
         classes.push('ma-table-player--me');
       }
       return classes;
-    },
-    ownerClasses(color: Color): Array<string> {
-      return ['ma-table-owner', 'ma-table-owner--' + color];
     },
   },
 });

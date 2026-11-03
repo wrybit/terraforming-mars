@@ -170,13 +170,16 @@
 
 // Owner: cube + name. If the name doesn't fully fit next to it, headerFit.ts shows only the cube
 // (name then in the tooltip). Measured on the truncated name (ellipsis).
+// One spacing for all three gaps: tag edge – cube – name – tag edge
+@ma-table-owner-spacing: 3px;
+
 .ma-table-owner {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: @ma-table-owner-spacing;
   max-width: 100%;
   // no overflow: hidden – it would clip the 3D cube; the name truncates by itself (.ma-table-owner-name)
-  padding: 2px 6px 1px;
+  padding: 2px @ma-table-owner-spacing 1px;
   border-radius: 4px;
   font-size: 12px;
   color: #fff;
@@ -202,16 +205,16 @@
 // Acrylic 3D player cube (PlayerCube.vue, player_cube.less) like everywhere else; its box is 1.5 × the edge
 // length (room for the shadow), so the owner tag pulls it a little closer to the name
 // Drop shadow below the cube: more contrast against the player-colored rows
+// The drawn cube (seen slightly from above) is wider than its box: it reaches 2px past the left edge and 1.5px
+// past the right one. The margins give it that room, so the gaps around it are as wide as the visible cube says.
 .ma-table .ma-table-cube {
-  margin: -3px -2px -3px -3px;
+  margin: -3px 1.5px -3px 2px;
   filter: drop-shadow(0 2px 1.5px rgba(0, 0, 0, 0.75));
 }
 
-// Cube of a claimed milestone in the player row: a flex box instead of a line box, otherwise the text
-// baseline puts the cube below the middle of the row
-.ma-table-milestone-owner {
-  display: flex;
-  align-items: center;
+// Cube alone (name dropped): no tag around it, so no extra room either
+.ma-table .ma-table-owner--cube-only .ma-table-cube {
+  margin: -3px -2px -3px -3px;
 }
 
 // Player rows like in the player list: muted color surface, bar in the original color, blur

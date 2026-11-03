@@ -10,6 +10,8 @@ const OWNER_NAME_SELECTOR = '.ma-table-owner-name';
 export const OWNER_CUBE_ONLY_CLASS = 'ma-table-owner--cube-only';
 // Space between two icons so they don't touch
 const ICON_SPACING = 4;
+// Rounding of scrollWidth/clientWidth (whole pixels) that still counts as a fitting name
+const NAME_ROUNDING_TOLERANCE = 1;
 
 // Factor at which the icon fits its column (at most 1)
 export function iconZoom(iconWidth: number, cellWidth: number): number {
@@ -23,10 +25,11 @@ function fitOwners(table: HTMLElement): void {
   const owners = [...table.querySelectorAll<HTMLElement>(OWNER_SELECTOR)];
   // First measure all with cube, then switch only the too-wide ones (no back and forth per element)
   owners.forEach((owner) => owner.classList.remove(OWNER_CUBE_ONLY_CLASS));
-  // The name shrinks (ellipsis) instead of overflowing – a truncated name means: not enough room
+  // The name shrinks (ellipsis) instead of overflowing – a truncated name means: not enough room.
+  // Both widths are rounded to whole pixels, so a name that fits exactly can measure 1px too wide: only more counts.
   const tooWide = owners.filter((owner) => {
     const name = owner.querySelector<HTMLElement>(OWNER_NAME_SELECTOR);
-    return name !== null && name.scrollWidth > name.clientWidth;
+    return name !== null && name.scrollWidth - name.clientWidth > NAME_ROUNDING_TOLERANCE;
   });
   tooWide.forEach((owner) => owner.classList.add(OWNER_CUBE_ONLY_CLASS));
 }
