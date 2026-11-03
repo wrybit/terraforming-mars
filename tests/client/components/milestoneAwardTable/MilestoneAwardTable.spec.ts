@@ -2,6 +2,7 @@ import {shallowMount} from '@vue/test-utils';
 import {expect} from 'chai';
 import {globalConfig} from '../getLocalVue';
 import MilestoneAwardTable from '@/client/components/milestoneAwardTable/MilestoneAwardTable.vue';
+import MilestoneAwardOwner from '@/client/components/milestoneAwardTable/MilestoneAwardOwner.vue';
 import {ClaimedMilestoneModel} from '@/common/models/ClaimedMilestoneModel';
 import {FundedAwardModel} from '@/common/models/FundedAwardModel';
 import {Color} from '@/common/Color';
@@ -70,9 +71,11 @@ describe('MilestoneAwardTable', () => {
 
   it('shows who claimed or funded', () => {
     const wrapper = mountTable();
-    expect(wrapper.find('[data-test="row-blue"] [data-test="milestone-owner"]').exists()).to.be.true;
+    // Milestone: owner tag in the owner's row (scores are over); award: up in the status row (scores still count)
+    const mayor = wrapper.find('[data-test="row-blue"]').findComponent<typeof MilestoneAwardOwner>('[data-test="milestone-owner"]');
+    expect(mayor.props('playerName')).to.eq('Jens');
     expect(wrapper.find('.ma-table-status [data-test="milestone-owner"]').exists()).to.be.false;
-    expect(wrapper.find('[data-test="award-owner"]').text()).to.eq('Daniel');
+    expect(wrapper.find('.ma-table-status').findComponent<typeof MilestoneAwardOwner>('[data-test="award-owner"]').props('playerName')).to.eq('Daniel');
   });
 
   it('greys out the rest once all places are taken', () => {

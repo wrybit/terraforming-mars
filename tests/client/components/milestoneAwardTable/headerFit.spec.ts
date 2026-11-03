@@ -19,16 +19,30 @@ describe('observeHeaderFit', () => {
   const nextFrame = () => new Promise((resolve) => setTimeout(resolve, 50));
 
   // Owner tag whose name is cut off (jsdom has no layout, so the widths are set by hand)
-  function truncatedOwner(): HTMLElement {
+  function ownerWithName(scrollWidth: number, clientWidth: number): HTMLElement {
     const owner = document.createElement('span');
     owner.className = 'ma-table-owner';
     const name = document.createElement('span');
     name.className = 'ma-table-owner-name';
-    Object.defineProperty(name, 'scrollWidth', {value: 40});
-    Object.defineProperty(name, 'clientWidth', {value: 12});
+    Object.defineProperty(name, 'scrollWidth', {value: scrollWidth});
+    Object.defineProperty(name, 'clientWidth', {value: clientWidth});
     owner.appendChild(name);
     return owner;
   }
+
+  const truncatedOwner = () => ownerWithName(40, 12);
+
+  it('keeps the name when it only measures 1px too wide (pixel rounding)', async () => {
+    const table = document.createElement('div');
+    const owner = ownerWithName(32, 31);
+    table.appendChild(owner);
+    document.body.appendChild(table);
+    const stop = observeHeaderFit(table);
+    await nextFrame();
+    expect(owner.classList.contains(OWNER_CUBE_ONLY_CLASS)).is.false;
+    stop();
+    table.remove();
+  });
 
   it('shows only the cube for an owner added after the start (award funded later)', async () => {
     const table = document.createElement('div');
