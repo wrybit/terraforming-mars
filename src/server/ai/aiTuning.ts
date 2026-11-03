@@ -1109,6 +1109,10 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   noDrawRules: {drawPriority: 0, ownDrawnCardValue: 0, drawEngineBoost: 0},
   noRequirementHelp: {enablerWeight: 0, needsPursuit: 0},
   cardIncome1: {measuredCardIncome: 1},
+  // Round 172: human games (Oracle, 03.11.) – from generation 9 humans earn more with the same production and TR and pay
+  // less per card (effects and discounts); measured effect income weighted higher.
+  cardIncome15: {measuredCardIncome: 1.5},
+  cardIncome2: {measuredCardIncome: 2},
   cardIncomeTraits: {measuredCardIncome: 0.5, playerTraitValues: 1},
   // Card understanding fix in one piece (card-understanding audit): measured income of lasting effects and actions,
   // measured draw rates, lasting player traits.
