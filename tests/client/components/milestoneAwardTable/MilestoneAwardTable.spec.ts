@@ -71,11 +71,11 @@ describe('MilestoneAwardTable', () => {
 
   it('shows who claimed or funded', () => {
     const wrapper = mountTable();
-    // Both as an owner tag in the status row, none in the player rows
-    const status = wrapper.find('.ma-table-status');
-    expect(status.findComponent<typeof MilestoneAwardOwner>('[data-test="milestone-owner"]').props('playerName')).to.eq('Jens');
-    expect(status.findComponent<typeof MilestoneAwardOwner>('[data-test="award-owner"]').props('playerName')).to.eq('Daniel');
-    expect(wrapper.find('.ma-table-player [data-test="milestone-owner"]').exists()).to.be.false;
+    // Milestone: owner tag in the owner's row (scores are over); award: up in the status row (scores still count)
+    const mayor = wrapper.find('[data-test="row-blue"]').findComponent<typeof MilestoneAwardOwner>('[data-test="milestone-owner"]');
+    expect(mayor.props('playerName')).to.eq('Jens');
+    expect(wrapper.find('.ma-table-status [data-test="milestone-owner"]').exists()).to.be.false;
+    expect(wrapper.find('.ma-table-status').findComponent<typeof MilestoneAwardOwner>('[data-test="award-owner"]').props('playerName')).to.eq('Daniel');
   });
 
   it('greys out the rest once all places are taken', () => {

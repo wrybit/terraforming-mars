@@ -39,9 +39,8 @@
         <template v-if="hasNames(part)"><div></div><div class="ma-table-divider"></div></template>
         <template v-if="hasValues(part)">
           <div v-for="milestone in milestones" :key="milestone.name" class="ma-table-cell">
-            <!-- Claimed: owner tag like a funded award; closed: no more costs -->
-            <MilestoneAwardOwner v-if="milestone.color" :color="milestone.color" :player-name="milestone.playerName" :flash-key="flashKeys.milestone(milestone.name)" data-test="milestone-owner" />
-            <span v-else-if="!milestoneClosed(milestone)" class="ma-table-coin">{{ milestoneCost }}</span>
+            <!-- Claimed: owner tag in the player row (the scores no longer matter); closed: no more costs -->
+            <span v-if="milestone.color === undefined && !milestoneClosed(milestone)" class="ma-table-coin">{{ milestoneCost }}</span>
           </div>
           <div class="ma-table-divider"></div>
           <div v-for="award in awards" :key="award.name" class="ma-table-cell">
@@ -60,7 +59,8 @@
         </template>
         <template v-if="hasValues(part)">
           <div v-for="milestone in milestones" :key="milestone.name" :class="milestoneCellClasses(milestone, player)">
-            <span class="ma-table-value">{{ scoreOf(milestone.scores, player) }}</span>
+            <MilestoneAwardOwner v-if="milestone.color === player.color" :color="player.color" :player-name="player.name" :flash-key="flashKeys.milestone(milestone.name)" data-test="milestone-owner" />
+            <span v-else class="ma-table-value">{{ scoreOf(milestone.scores, player) }}</span>
           </div>
           <div class="ma-table-divider"></div>
           <div v-for="award in awards" :key="award.name" :class="awardCellClasses(award, player)">
