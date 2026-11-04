@@ -333,7 +333,9 @@ export const BASELINE_TUNING: AiTuning = {
   // Round 131 (card-throughput rule): buyStrict (−1) cards played +1.25 (z +3.69), VP +0.04 – adopted.
   buyMargin: -1,
   handTargetEarly: 12,
-  handTargetLate: 5,
+  // Round 174 (packages p1/p2/p3): handLate8 +1.03 VP (z +1.73; cards played +1.07, z +3.74) – adopted. Oracle humans
+  // buy 52 vs 33 M€ of cards from generation 9 and play 32 vs 18; a late hand of 5 starved the endgame.
+  handTargetLate: 8,
   researchReserveEarly: 0,
   sharedSpotShare: 0.4,
   opponentSpotShare: 0.25,
@@ -1118,6 +1120,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Round 174: Oracle 03.11. – from generation 9 humans buy 52 vs 33 M€ of cards and play 32 vs 18; late buying up.
   handLate8: {handTargetLate: 8},
   lateBuy15: {lateBuyFactor: 1.5},
+  // Round 175: check of round 174's adoption (back to 5) and one step further.
+  handLate5: {handTargetLate: 5},
+  handLate11: {handTargetLate: 11},
   cardIncomeTraits: {measuredCardIncome: 0.5, playerTraitValues: 1},
   // Card understanding fix in one piece (card-understanding audit): measured income of lasting effects and actions,
   // measured draw rates, lasting player traits.
