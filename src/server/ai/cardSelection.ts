@@ -234,7 +234,7 @@ export function chooseInitialCards(input: SelectInitialCards, player: IPlayer): 
  * Drawn cards of which some are kept for free (Business Contacts: keep 2 of 4, Invention Contest: 1 of 3):
  * the best by the full card valuation (timing, cost, synergies), not by statistics alone.
  */
-export function chooseFreeCardsToKeep(input: SelectCard<ICard>, player: IPlayer): InputResponse {
+export function chooseFreeCardsToKeep<T extends ICard>(input: SelectCard<T>, player: IPlayer): InputResponse {
   const candidates = input.cards.filter((_card, index) => input.config.enabled?.[index] !== false);
   const {valueOf, timingOf} = valuesOf(player, candidates);
   const sorted = [...candidates].sort((a, b) => valueOf(b.name) - valueOf(a.name));
