@@ -45,6 +45,7 @@ describe('AI player', () => {
     expect(Database.getInstance()).eq(database);
   });
 
+  // A random game takes 20-60 s, close to the old 60 s limit under parallel load: allow headroom.
   it('plays a complete game and beats a random player', () => {
     const result = playRandomGame({
       playerCount: 2,
@@ -62,5 +63,5 @@ describe('AI player', () => {
     clearPlayerTunings();
     expect(result.finished).is.true;
     expect(result.victoryPoints[0]).greaterThan(result.victoryPoints[1]);
-  }).timeout(60000);
+  }).timeout(180000);
 });
