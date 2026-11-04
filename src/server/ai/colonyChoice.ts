@@ -18,8 +18,12 @@ type ColonyIntent = 'trade' | 'build';
 
 function intentOf(input: SelectColony): ColonyIntent | undefined {
   const title = titleOf(input).toLowerCase();
-  if (input.buttonLabel === 'Build' || title.includes('build')) return 'build';
-  if (title.includes('trade')) return 'trade';
+  if (input.buttonLabel === 'Build' || title.includes('build')) {
+    return 'build';
+  }
+  if (title.includes('trade')) {
+    return 'trade';
+  }
   return undefined;
 }
 
@@ -53,7 +57,9 @@ export function chooseColony(input: SelectColony, player: IPlayer): InputRespons
     const value = withCopy(snapshot, (copy): number | undefined => {
       const copyPlayer = copy.getPlayerById(player.id);
       const copyColony = copy.colonies.find((candidate) => candidate.name === colony.name);
-      if (copyColony === undefined) return undefined;
+      if (copyColony === undefined) {
+        return undefined;
+      }
       try {
         apply(intent, copyColony, copyPlayer);
         copy.deferredActions.runAll(() => {});

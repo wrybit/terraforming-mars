@@ -1126,6 +1126,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Round 176: round 175 confirmed late 8 (back to 5 −2.20, z −3.59; 11 +0.03); re-tune the early target with it.
   handEarly10: {handTargetEarly: 10},
   handEarly14: {handTargetEarly: 14},
+  // Round 177: round 176 handEarly14 +0.76 (z +1.12, candidate), handEarly10 −1.11 – repeat 14, try 16.
+  handEarly16: {handTargetEarly: 16},
   cardIncomeTraits: {measuredCardIncome: 0.5, playerTraitValues: 1},
   // Card understanding fix in one piece (card-understanding audit): measured income of lasting effects and actions,
   // measured draw rates, lasting player traits.
