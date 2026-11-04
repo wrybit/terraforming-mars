@@ -36,6 +36,7 @@ export function checkCallSites(params: {srcDir: string, rootDir: string, knownKe
       if (SKIPPED_DIRECTORIES.some((skipped) => relative.startsWith(skipped))) {
         continue;
       }
+      const displayPath = relative.split(/[\\/]/).join('/');
       const lines = fs.readFileSync(file, 'utf8').split('\n');
       lines.forEach((line, index) => {
         // Comments only describe texts
@@ -57,7 +58,7 @@ export function checkCallSites(params: {srcDir: string, rootDir: string, knownKe
             continue;
           }
           if (!params.knownKeys.has(text) && !params.allowlist.has(text)) {
-            problems.push(`${relative}:${index + 1}: no language translates "${text}"`);
+            problems.push(`${displayPath}:${index + 1}: no language translates "${text}"`);
           }
         }
       });
