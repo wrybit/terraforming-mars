@@ -15,7 +15,8 @@ function mkdirQuietly(path: string) {
 
 function readdir(path: string, predicate: (dirent: string) => boolean) {
   const entries = fs.readdirSync(path);
-  return entries.filter(predicate);
+  // Sorted, so the result does not depend on the file system's directory order (Linux, Windows)
+  return entries.filter(predicate).sort();
 }
 
 type Translation = {[lang: string]: string}
@@ -56,6 +57,12 @@ function getAllTranslations(): {[phrase: string]: Translation} {
           const json = JSON.parse(content);
 
           for (const phrase of Object.keys(json)) {
+            const translated = json[phrase];
+            // Empty translations mark a phrase as untranslated; they must not count as a duplicate
+            // when another locale file has the real translation (the file order differs by OS).
+            if (translated.trim().length === 0) {
+              continue;
+            }
             if (translations[phrase] === undefined) {
               translations[phrase] = {};
             }
@@ -69,13 +76,10 @@ function getAllTranslations(): {[phrase: string]: Translation} {
               duplicates.push({lang, phrase});
               continue;
             }
-            const translated = json[phrase];
             if (translated.trim() === phrase.trim()) {
               throw new Error('Do not repeat a translation with its own text: ' + phrase);
             }
-            if (translated.trim().length !== 0) {
-              translations[phrase][lang] = translated;
-            }
+            translations[phrase][lang] = translated;
           }
         } catch (e) {
           throw new Error(`While parsing ${filename}`, {cause: e});
@@ -167,12 +171,19 @@ function generateTranslations() {
     const localeDirs = [localesDir, ...extensionLocalesDirs]
       .map((dir) => path.join(dir, localeCode))
       .filter((dir) => fs.existsSync(dir));
-    const localeObject = localeDirs.reduce((localeObject, localeDir) => {
-      for (const localeFile of fs.readdirSync(localeDir).filter((dirent) => dirent.endsWith('.json'))) {
-        Object.assign(localeObject, require(path.join(localeDir, localeFile)));
+    const localeObject: Record<string, unknown> = {};
+    for (const localeDir of localeDirs) {
+      for (const localeFile of readdir(localeDir, (dirent) => dirent.endsWith('.json'))) {
+        const content = require(path.join(localeDir, localeFile)) as Record<string, unknown>;
+        for (const [key, value] of Object.entries(content)) {
+          // An empty placeholder must not overwrite a translation from another locale file
+          if (typeof value === 'string' && value.trim() === '') {
+            continue;
+          }
+          localeObject[key] = value;
+        }
       }
-      return localeObject;
-    }, {});
+    }
 
     const destinationFile = path.join(destinationPath, `${localeCode}.json`);
     fs.writeFileSync(destinationFile, JSON.stringify(localeObject));
