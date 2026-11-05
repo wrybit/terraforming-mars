@@ -56,12 +56,12 @@ describe('Lobby components', () => {
     expect(filters.sizes).deep.eq([2]);
   });
 
-  it('lobby filters offer only what the open games have, plus what is selected', () => {
+  it('lobby filters offer only what the listed games have, plus what is selected', () => {
     const open = room([host, {kind: 'free'}, {kind: 'free'}]);
     const full = room([host, {...host, host: false}], {setup: {...open.setup, expansions: {...open.setup.expansions, colonies: true}}});
     const choices = availableFilterChoices([open, full], {...defaultLobbyFilters(), sizes: [5]}, ['corpera', 'prelude', 'venus', 'colonies']);
-    expect(choices.sizes).deep.eq([3, 5]);
-    expect(choices.expansions).deep.eq(['corpera', 'prelude']);
+    expect(choices.sizes).deep.eq([2, 3, 5]);
+    expect(choices.expansions).deep.eq(['corpera', 'prelude', 'colonies']);
     expect(choices.drafts).deep.eq(['on']);
     expect(choices.tempos).deep.eq(['normal']);
   });

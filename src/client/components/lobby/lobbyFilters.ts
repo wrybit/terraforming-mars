@@ -41,7 +41,7 @@ export function matchesFilters(room: LobbyRoomModel, filters: LobbyFilters): boo
   return true;
 }
 
-/** What the open games offer: the panel shows only filters that match at least one of them */
+/** What the listed games offer (open and running, the filter works on both lists): only filters that match one */
 export type LobbyFilterChoices = {
   sizes: Array<number>;
   expansions: Array<Expansion>;
@@ -50,16 +50,15 @@ export type LobbyFilterChoices = {
 };
 
 /**
- * Choices from the joinable open games; what is selected stays visible too, so it can be switched off again.
+ * Choices from every listed game; what is selected stays visible too, so it can be switched off again.
  * Expansions come in the given order (the create form's order).
  */
 export function availableFilterChoices(rooms: ReadonlyArray<LobbyRoomModel>, filters: LobbyFilters, expansionOrder: ReadonlyArray<Expansion>): LobbyFilterChoices {
-  const open = rooms.filter(hasFreeSeat);
   const sizes = new Set<number>(filters.sizes);
   const expansions = new Set<Expansion>(filters.expansions);
   const tempos = new Set<string>(filters.tempo === 'any' ? [] : [filters.tempo]);
   const drafts = new Set<string>(filters.draft === 'any' ? [] : [filters.draft]);
-  for (const room of open) {
+  for (const room of rooms) {
     sizes.add(room.seats.length);
     for (const expansion of expansionOrder) {
       if (room.setup.expansions[expansion]) {

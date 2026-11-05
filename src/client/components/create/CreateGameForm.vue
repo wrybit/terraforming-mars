@@ -4,7 +4,7 @@
     <header class="card-list-header card-list-header--plain create-game-head">
       <!-- Menu at the top left, as in the game -->
       <PageToolbar v-if="!lobbyMode" />
-      <PageTitle :title="lobbyMode ? 'Open game' : 'Create New Game'" />
+      <PageTitle :title="lobbyMode ? 'Create game' : 'Create New Game'" />
       <div class="create-game-head-actions">
         <label class="create-game-icon-button" :title="$t('Load settings from file')">
           <!-- Import/export icons: arrow perpendicular to a hex edge, into the tile (import) or out of it (export);
@@ -573,7 +573,7 @@ export default defineComponent({
     };
   },
   props: {
-    // Shown as the "Open game" modal of the lobby (LobbyPage.vue)
+    // Shown as the "Create game" modal of the lobby (LobbyPage.vue)
     lobbyMode: {
       type: Boolean,
       default: false,

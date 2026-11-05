@@ -1,31 +1,38 @@
 <template>
   <!-- Filters of the lobby list, closed at first; nothing selected means all games.
-       Only filters that match at least one open game (availableFilterChoices) -->
-  <div v-if="hasChoices" class="lobby-filters">
-    <div v-if="choices.sizes.length > 0" class="lobby-filter-group">
-      <div class="create-game-subhead" v-i18n>Players</div>
-      <div class="lobby-filter-chips">
-        <ChoiceChip v-for="size in choices.sizes" :key="size" :label="size === 2 ? '1 vs 1' : String(size)"
-          :selected="modelValue.sizes.includes(size)" @select="toggleSize(size)" />
+       Only filters that match at least one listed game, open or running (availableFilterChoices) -->
+  <template v-if="hasChoices">
+    <div class="lobby-filters">
+      <div v-if="choices.sizes.length > 0" class="lobby-filter-group">
+        <div class="create-game-subhead" v-i18n>Players</div>
+        <div class="lobby-filter-chips">
+          <ChoiceChip v-for="size in choices.sizes" :key="size" :label="size === 2 ? '1 vs 1' : String(size)"
+            :selected="modelValue.sizes.includes(size)" @select="toggleSize(size)" />
+        </div>
+      </div>
+      <div v-if="choices.tempos.length > 0" class="lobby-filter-group">
+        <div class="create-game-subhead" v-i18n>Pace</div>
+        <SegmentedControl :class="{'lobby-segmented--any': modelValue.tempo === 'any'}" :modelValue="modelValue.tempo" :options="tempoOptions" @update:modelValue="update({tempo: $event})" />
+      </div>
+      <div v-if="choices.drafts.length > 0" class="lobby-filter-group">
+        <div class="create-game-subhead" v-i18n>Draft</div>
+        <SegmentedControl :class="{'lobby-segmented--any': modelValue.draft === 'any'}" :modelValue="modelValue.draft" :options="draftOptions" @update:modelValue="update({draft: $event})" />
+      </div>
+      <div v-if="expansionChoices.length > 0" class="lobby-filter-group lobby-filter-group--wide">
+        <div class="create-game-subhead" v-i18n>Must include</div>
+        <div class="lobby-filter-chips">
+          <ChoiceChip v-for="choice in expansionChoices" :key="choice.expansion" :label="choice.label" :iconClass="choice.iconClass"
+            :selected="modelValue.expansions.includes(choice.expansion)" @select="toggleExpansion(choice.expansion)" />
+        </div>
       </div>
     </div>
-    <div v-if="choices.tempos.length > 0" class="lobby-filter-group">
-      <div class="create-game-subhead" v-i18n>Pace</div>
-      <SegmentedControl :class="{'lobby-segmented--any': modelValue.tempo === 'any'}" :modelValue="modelValue.tempo" :options="tempoOptions" @update:modelValue="update({tempo: $event})" />
+    <div class="lobby-filter-foot">
+      <span v-if="activeFilterCount(modelValue) === 0" class="lobby-dialog-note" v-i18n>Nothing selected means: all games.</span>
+      <button v-else type="button" class="create-game-small-button" @click="emit('update:modelValue', defaultLobbyFilters())" v-i18n>Reset all filters</button>
     </div>
-    <div v-if="choices.drafts.length > 0" class="lobby-filter-group">
-      <div class="create-game-subhead" v-i18n>Draft</div>
-      <SegmentedControl :class="{'lobby-segmented--any': modelValue.draft === 'any'}" :modelValue="modelValue.draft" :options="draftOptions" @update:modelValue="update({draft: $event})" />
-    </div>
-    <div v-if="expansionChoices.length > 0" class="lobby-filter-group lobby-filter-group--wide">
-      <div class="create-game-subhead" v-i18n>Must include</div>
-      <div class="lobby-filter-chips">
-        <ChoiceChip v-for="choice in expansionChoices" :key="choice.expansion" :label="choice.label" :iconClass="choice.iconClass"
-          :selected="modelValue.expansions.includes(choice.expansion)" @select="toggleExpansion(choice.expansion)" />
-      </div>
-    </div>
-  </div>
-  <p v-else class="lobby-dialog-note" v-i18n>No open game to filter right now.</p>
+  </template>
+  <!-- Nothing listed: one note instead of empty filters -->
+  <p v-else class="lobby-dialog-note" v-i18n>No game to filter right now.</p>
 </template>
 
 <script setup lang="ts">
@@ -35,11 +42,11 @@ import {LobbyRoomModel} from '@/common/lobby/LobbyModel';
 import ChoiceChip from '@/client/components/create/ChoiceChip.vue';
 import SegmentedControl from '@/client/components/create/SegmentedControl.vue';
 import {FAN_EXPANSIONS, OFFICIAL_EXPANSIONS, SegmentOption} from '@/client/components/create/createGameChoices';
-import {availableFilterChoices, LobbyFilters} from './lobbyFilters';
+import {activeFilterCount, availableFilterChoices, defaultLobbyFilters, LobbyFilters} from './lobbyFilters';
 
 const props = defineProps<{
   modelValue: LobbyFilters;
-  /** Every listed room; the choices come from the open ones with a free seat */
+  /** Every listed room: the filter works on both lists, so the choices come from both */
   rooms: ReadonlyArray<LobbyRoomModel>;
 }>();
 

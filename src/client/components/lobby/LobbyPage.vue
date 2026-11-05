@@ -10,9 +10,12 @@
           <span class="create-game-head-label">{{ profile.name }}</span>
         </button>
         <!-- The only way to open a game; on phones only the plus remains -->
-        <button type="button" class="btn btn-rounded lobby-open-button" :title="$t('Open game')" @click="openCreate()">
+        <!-- Same shortcut as the create button in the form (Mod + Enter): once to open it, once more to create.
+             While the form is open only its button carries the shortcut (the dispatcher takes the first one it finds) -->
+        <button type="button" class="btn btn-rounded lobby-open-button" :data-hotkey="createOpen ? undefined : 'create-game'" :title="$t('Create game')" @click="openCreate()">
           <svg class="lobby-open-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
-          <span class="lobby-open-label" v-i18n>Open game</span>
+          <span class="lobby-open-label" v-i18n>Create game</span>
+          <HotkeyKeys action="create-game" class="lobby-open-keys" />
         </button>
       </div>
     </header>
@@ -40,10 +43,6 @@
 
           <div v-if="filtersOpen" class="lobby-filter-panel">
             <LobbyFilterPanel v-model="filters" :rooms="rooms" />
-            <div class="lobby-filter-foot">
-              <span v-if="filterCount === 0" class="lobby-dialog-note" v-i18n>Nothing selected means: all games.</span>
-              <button v-else type="button" class="create-game-small-button" @click="filters = defaultLobbyFilters()" v-i18n>Reset all filters</button>
-            </div>
           </div>
 
           <div v-if="queueing" class="lobby-queue">
@@ -128,6 +127,7 @@ import LobbyProfileDialog from './LobbyProfileDialog.vue';
 import LobbyRoomDialog from './LobbyRoomDialog.vue';
 import LobbyMatchDialog from './LobbyMatchDialog.vue';
 import LobbyChat from './LobbyChat.vue';
+import HotkeyKeys from '@/client/components/hotkeys/HotkeyKeys.vue';
 import {fetchLobby, lobbyAction, lobbyFailureText, LobbyRequest} from './lobbyApi';
 import {activeFilterCount, bestMatch, defaultLobbyFilters, hasFreeSeat, LobbyFilters, matchesFilters} from './lobbyFilters';
 import {loadLobbyProfile, saveLobbyProfile} from './lobbyProfile';

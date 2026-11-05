@@ -24,7 +24,9 @@
     <form class="lobby-chat-form" @submit.prevent="send">
       <div class="lobby-chat-field">
         <input ref="input" v-model="draft" class="lobby-chat-input" type="text" :maxlength="LOBBY_CHAT_MAX_LENGTH"
-          :placeholder="$t('Write a message')" :aria-label="$t('Write a message')">
+          :placeholder="$t('Write a message')" :aria-label="$t('Write a message')" @focus="focused = true" @blur="focused = false">
+        <!-- Enter anywhere on the page jumps into the field (onPageKey); the key cap shows it while the field is idle -->
+        <HotkeyKeys v-if="!focused && draft === ''" :fixed="['Enter']" class="lobby-chat-hotkey" />
         <button type="button" class="lobby-chat-icon-button" :class="{'lobby-chat-icon-button--open': emojisOpen}" :title="$t('Emoji')" :aria-label="$t('Emoji')"
           :aria-expanded="emojisOpen" @click="emojisOpen = !emojisOpen">
           <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M8.5 14.5c.9 1.2 2.1 1.8 3.5 1.8s2.6-.6 3.5-1.8" /><path d="M9 9.5h.01M15 9.5h.01" /></svg>
@@ -49,6 +51,8 @@ import {LobbyProfile} from '@/common/lobby/LobbyModel';
 import LobbyAvatar from './LobbyAvatar.vue';
 import {chatTextParts, fetchLobbyChat, postLobbyChat} from './lobbyChatApi';
 import {CHAT_EMOJIS, isEmojiOnly} from './lobbyChatEmoji';
+import HotkeyKeys from '@/client/components/hotkeys/HotkeyKeys.vue';
+import {hotkeysAvailable} from '@/client/hotkeys/hotkeyAvailability';
 import {lobbyFailureText} from './lobbyApi';
 
 const props = defineProps<{
@@ -67,6 +71,24 @@ const error = ref('');
 const list = ref<HTMLElement | null>(null);
 const input = ref<HTMLInputElement | null>(null);
 const emojisOpen = ref(false);
+const focused = ref(false);
+
+// Enter on the page (not on a button, link or field, and with no dialog open) puts the cursor into the chat
+function onPageKey(event: KeyboardEvent): void {
+  if (event.key !== 'Enter' || event.repeat || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey || !hotkeysAvailable.value) {
+    return;
+  }
+  // Enter on a focused button or link presses it, in a field it does what the field does
+  const target = event.target;
+  if (target instanceof Element && target.closest('button, a, input, textarea, select, [contenteditable]') !== null) {
+    return;
+  }
+  if (document.querySelector('.sidebar-modal-backdrop, .lobby-create-overlay') !== null) {
+    return;
+  }
+  event.preventDefault();
+  input.value?.focus();
+}
 
 // At the cursor (or at the end), then the cursor goes behind the emoji and the field keeps the focus
 async function insertEmoji(emoji: string): Promise<void> {
@@ -142,6 +164,7 @@ function send(): void {
 
 onMounted(() => {
   document.addEventListener('click', onDocumentClick);
+  window.addEventListener('keydown', onPageKey);
   void refresh();
   timer = setInterval(refresh, POLL_MS);
 });
@@ -149,5 +172,6 @@ onMounted(() => {
 onBeforeUnmount(() => {
   clearInterval(timer);
   document.removeEventListener('click', onDocumentClick);
+  window.removeEventListener('keydown', onPageKey);
 });
 </script>

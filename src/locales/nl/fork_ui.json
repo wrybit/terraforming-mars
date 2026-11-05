@@ -1605,7 +1605,6 @@
   "No game is running right now.": "Er loopt nu geen spel.",
   "The game is running.": "Het spel loopt.",
   "AI players are not available with these settings.": "Met deze instellingen zijn geen AI-spelers mogelijk.",
-  "No open game to filter right now.": "Er is nu geen open spel om te filteren.",
   "Chat": "Chat",
   "No messages yet. Say hello!": "Nog geen berichten. Zeg hallo!",
   "Write a message": "Schrijf een bericht",
@@ -1618,5 +1617,6 @@
   "One word per line. A word is also masked at the start of longer words (\"arsch\" also in \"Arschloch\", not in \"Barsch\"). Links to other websites are always blocked.": "Eén woord per regel. Een woord wordt ook aan het begin van langere woorden gemaskeerd (\"arsch\" ook in \"Arschloch\", niet in \"Barsch\"). Links naar andere websites worden altijd geblokkeerd.",
   "Reset to default": "Standaard herstellen",
   "Saved. The chat uses the list right away.": "Opgeslagen. De chat gebruikt de lijst meteen.",
-  "Emoji": "Emoji"
+  "Emoji": "Emoji",
+  "No game to filter right now.": "Er is nu geen spel om te filteren."
 }

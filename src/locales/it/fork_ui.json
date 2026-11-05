@@ -2242,7 +2242,6 @@
   "No game is running right now.": "Al momento non c'è nessuna partita in corso.",
   "The game is running.": "La partita è in corso.",
   "AI players are not available with these settings.": "Con queste impostazioni i giocatori IA non sono disponibili.",
-  "No open game to filter right now.": "Al momento non c'è nessuna partita aperta da filtrare.",
   "Chat": "Chat",
   "No messages yet. Say hello!": "Ancora nessun messaggio. Saluta!",
   "Write a message": "Scrivi un messaggio",
@@ -2255,5 +2254,6 @@
   "One word per line. A word is also masked at the start of longer words (\"arsch\" also in \"Arschloch\", not in \"Barsch\"). Links to other websites are always blocked.": "Una parola per riga. Una parola viene mascherata anche all'inizio di parole più lunghe (\"arsch\" anche in \"Arschloch\", non in \"Barsch\"). I link ad altri siti sono sempre bloccati.",
   "Reset to default": "Ripristina predefiniti",
   "Saved. The chat uses the list right away.": "Salvato. La chat usa subito l'elenco.",
-  "Emoji": "Emoji"
+  "Emoji": "Emoji",
+  "No game to filter right now.": "Al momento non c'è nessuna partita da filtrare."
 }

@@ -1921,7 +1921,6 @@
   "No game is running right now.": "В момента няма текуща игра.",
   "The game is running.": "Играта тече.",
   "AI players are not available with these settings.": "С тези настройки няма играчи ИИ.",
-  "No open game to filter right now.": "В момента няма отворена игра за филтриране.",
   "Chat": "Чат",
   "No messages yet. Say hello!": "Все още няма съобщения. Кажи здравей!",
   "Write a message": "Напиши съобщение",
@@ -1934,5 +1933,6 @@
   "One word per line. A word is also masked at the start of longer words (\"arsch\" also in \"Arschloch\", not in \"Barsch\"). Links to other websites are always blocked.": "По една дума на ред. Думата се маскира и в началото на по-дълги думи („arsch“ и в „Arschloch“, не в „Barsch“). Връзки към други сайтове винаги са блокирани.",
   "Reset to default": "Възстанови по подразбиране",
   "Saved. The chat uses the list right away.": "Запазено. Чатът използва списъка веднага.",
-  "Emoji": "Емоджи"
+  "Emoji": "Емоджи",
+  "No game to filter right now.": "В момента няма игра за филтриране."
 }

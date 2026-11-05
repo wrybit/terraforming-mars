@@ -1130,7 +1130,6 @@
   "No game is running right now.": "Зараз немає жодної гри, що триває.",
   "The game is running.": "Гра триває.",
   "AI players are not available with these settings.": "З цими налаштуваннями гравці ШІ недоступні.",
-  "No open game to filter right now.": "Зараз немає відкритої гри для фільтрування.",
   "Chat": "Чат",
   "No messages yet. Say hello!": "Повідомлень ще немає. Привітайся!",
   "Write a message": "Написати повідомлення",
@@ -1143,5 +1142,6 @@
   "One word per line. A word is also masked at the start of longer words (\"arsch\" also in \"Arschloch\", not in \"Barsch\"). Links to other websites are always blocked.": "Одне слово в рядку. Слово приховується й на початку довших слів («arsch» і в «Arschloch», але не в «Barsch»). Посилання на інші сайти завжди блокуються.",
   "Reset to default": "Скинути до типових",
   "Saved. The chat uses the list right away.": "Збережено. Чат одразу використовує список.",
-  "Emoji": "Емодзі"
+  "Emoji": "Емодзі",
+  "No game to filter right now.": "Зараз немає гри для фільтрування."
 }

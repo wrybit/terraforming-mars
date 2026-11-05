@@ -162,6 +162,11 @@
   font-size: 14px;
 }
 
+.lobby-chat-hotkey {
+  flex: none;
+  margin-right: 4px;
+}
+
 .lobby-chat-icon-button {
   display: inline-grid;
   place-items: center;
@@ -268,9 +273,10 @@
   stroke-linecap: round;
 }
 
-// Phone: profile and "Open game" only as symbols, the header must not overflow
+// Phone: profile and "Create game" only as symbols, the header must not overflow
 @media only screen and (max-width: 600px) {
   .lobby-head .lobby-open-label,
+  .lobby-head .lobby-open-keys,
   .lobby-profile-button .create-game-head-label {
     display: none;
   }
