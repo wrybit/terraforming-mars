@@ -6,7 +6,8 @@
 // Proximity: inside a row 6–8px, between rows a line, between sections 16px
 @lobby-gap-inner: 8px;
 @lobby-gap-section: 16px;
-@lobby-pad: 14px;
+// Inner edge of all lobby cards: the same as the header card (card-list-header), so every content edge sits on one line
+@lobby-pad: var(--lobby-inset);
 @lobby-line: rgba(255, 255, 255, 0.14);
 @lobby-dim: rgba(238, 238, 238, 0.62);
 
@@ -15,6 +16,12 @@
 }
 
 .lobby {
+  --lobby-inset: @page-content-edge;
+
+  @media only screen and (max-width: @card-list-narrow) {
+    --lobby-inset: 12px;
+  }
+
   color: #eee;
   font-size: 16px;
   line-height: 1.35;
@@ -64,6 +71,11 @@
   }
 }
 
+// The actions end on the card's inner edge, also on phones where the box is wider than its buttons
+.lobby-head .create-game-head-actions {
+  justify-content: flex-end;
+}
+
 .lobby-profile-button {
   padding-left: 5px;
 }
@@ -110,6 +122,8 @@
 
 .lobby-filter-toggle {
   position: relative;
+  // Phone: in their own row below the search the buttons stay right-aligned, like everywhere else
+  margin-left: auto;
 
   &.lobby-filter-toggle--open {
     border-color: @bg_action;
@@ -374,7 +388,7 @@
 .lobby-section-title {
   display: flex;
   align-items: baseline;
-  padding: 16px @lobby-pad 8px;
+  padding: 12px @lobby-pad;
   border-bottom: 1px solid @lobby-line;
   color: @lobby-dim;
   font-size: 13px;
