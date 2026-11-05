@@ -24,6 +24,7 @@ import {validateCustomMA} from '../../common/ma/CustomMA';
 import {hasNegativeEscapeVelocityOption, sanitizeEscapeVelocityOptions} from '../../common/game/escapeVelocity';
 import {boardRandom, pickBoard} from '../boards/newGameBoard';
 import {BoardName} from '../../common/boards/BoardName';
+import {GAME_NAME_MAX_LENGTH} from '../../common/game/GameName';
 
 function parseQuotaConfig(struct: any): QuotaConfig {
   let {limit} = struct;
@@ -248,7 +249,8 @@ export class ApiCreateGame extends Handler {
       game = Cloner.clone(gameId, players, firstPlayerIdx, serialized);
     } else {
       const seed = Math.random();
-      game = Game.newInstance(gameId, players, players[firstPlayerIdx], spectatorId, gameOptions, seed, boardRng);
+      const name = typeof gameReq.name === 'string' ? gameReq.name.trim().slice(0, GAME_NAME_MAX_LENGTH) : undefined;
+      game = Game.newInstance(gameId, players, players[firstPlayerIdx], spectatorId, gameOptions, seed, boardRng, name);
     }
     ctx.gameLoader.add(game);
     // Only games that are actually created count against the quota.

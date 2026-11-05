@@ -99,6 +99,5 @@
   "src/client/components/logpanel/aiAnalysis/LogAiRateBar.vue: AI:",
   "src/client/components/turmoil/TurmoilAgenda.vue: Unknown agenda ID",
   "Discord",
-  "src/client/components/lobby/LobbyFilterPanel.vue: AI",
   "src/client/components/lobby/LobbyRoomDialog.vue: AI"
 ]

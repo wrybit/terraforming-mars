@@ -1084,7 +1084,6 @@
   "With": "З",
   "Without": "Без",
   "Must include": "Обов’язково містить",
-  "Only games without AI": "Лише ігри без ШІ",
   "1 vs 1": "1 на 1",
   "running": "триває",
   "just opened": "щойно відкрита",
@@ -1113,8 +1112,6 @@
   "Accept": "Прийняти",
   "Open in lobby": "Відкрити в лобі",
   "Name of the game": "Назва гри",
-  "${0}'s game": "Гра ${0}",
-  "Show in the lobby list": "Показувати у списку лобі",
   "Only players with the invitation link can join.": "Приєднатися можуть лише гравці з посиланням-запрошенням.",
   "Free seat for the lobby": "Вільне місце для лобі",
   "This game is already full": "Ця гра вже заповнена",
@@ -1124,5 +1121,9 @@
   "There are still free seats": "Ще є вільні місця",
   "Please enter a name": "Введіть ім’я",
   "You are not part of this game": "Ви не берете участі в цій грі",
-  "Too many new games right now. Please try again later.": "Зараз забагато нових ігор. Спробуйте пізніше."
+  "Too many new games right now. Please try again later.": "Зараз забагато нових ігор. Спробуйте пізніше.",
+  "Public game": "Відкрита гра",
+  "Click to enter a player yourself": "Натисніть, щоб вписати гравця самому",
+  "Offer this seat in the lobby again": "Знову запропонувати місце в лобі",
+  "entered by the host": "вписаний господарем"
 }

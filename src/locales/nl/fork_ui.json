@@ -1559,7 +1559,6 @@
   "With": "Met",
   "Without": "Zonder",
   "Must include": "Moet erbij zijn",
-  "Only games without AI": "Alleen spellen zonder AI",
   "1 vs 1": "1 tegen 1",
   "running": "bezig",
   "just opened": "net geopend",
@@ -1588,8 +1587,6 @@
   "Accept": "Accepteren",
   "Open in lobby": "In de lobby openen",
   "Name of the game": "Naam van het spel",
-  "${0}'s game": "Spel van ${0}",
-  "Show in the lobby list": "In de lobbylijst tonen",
   "Only players with the invitation link can join.": "Alleen spelers met de uitnodigingslink kunnen meedoen.",
   "Free seat for the lobby": "Vrije plaats voor de lobby",
   "This game is already full": "Dit spel is al vol",
@@ -1599,5 +1596,9 @@
   "There are still free seats": "Er zijn nog plaatsen vrij",
   "Please enter a name": "Voer een naam in",
   "You are not part of this game": "Je doet niet mee aan dit spel",
-  "Too many new games right now. Please try again later.": "Er worden nu te veel nieuwe spellen gemaakt. Probeer het later opnieuw."
+  "Too many new games right now. Please try again later.": "Er worden nu te veel nieuwe spellen gemaakt. Probeer het later opnieuw.",
+  "Public game": "Openbaar spel",
+  "Click to enter a player yourself": "Klik om zelf een speler in te vullen",
+  "Offer this seat in the lobby again": "Deze plaats weer in de lobby aanbieden",
+  "entered by the host": "ingevuld door de gastheer"
 }

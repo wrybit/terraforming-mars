@@ -3,6 +3,8 @@
   <span class="lobby-avatar" :class="['lobby-avatar--' + size, 'lobby-avatar--' + kind, color ? 'lobby-avatar--' + color : '']" :title="title">
     <img v-if="kind === 'human' && image" :src="image" alt="">
     <span v-else-if="kind === 'human'" class="lobby-avatar-emoji" aria-hidden="true">{{ emoji }}</span>
+    <!-- Entered by the host: no picture, the initial on the player color -->
+    <span v-else-if="kind === 'guest'" class="lobby-avatar-initial" aria-hidden="true">{{ (title ?? '?').charAt(0).toUpperCase() }}</span>
     <SeatIcon v-else-if="kind === 'ai'" kind="ai" :size="iconSize" />
   </span>
 </template>
@@ -13,7 +15,7 @@ import {Color} from '@/common/Color';
 import SeatIcon from '@/client/components/create/SeatIcon.vue';
 
 const props = withDefaults(defineProps<{
-  kind: 'human' | 'ai' | 'free';
+  kind: 'human' | 'guest' | 'ai' | 'free';
   color?: Color;
   emoji?: string;
   image?: string;

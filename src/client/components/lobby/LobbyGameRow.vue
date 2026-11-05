@@ -14,7 +14,7 @@
     </div>
     <div class="lobby-game-seats">
       <LobbyAvatar v-for="(seat, index) in room.seats" :key="index" :kind="seat.kind" size="small"
-        :color="seat.kind === 'human' ? seat.color : undefined" :emoji="seat.kind === 'human' ? seat.emoji : undefined"
+        :color="seat.kind === 'human' || seat.kind === 'guest' ? seat.color : undefined" :emoji="seat.kind === 'human' ? seat.emoji : undefined"
         :image="seat.kind === 'human' ? seat.image : undefined" :title="seatTitle(seat)" />
       <span class="lobby-game-count">{{ filled }}/{{ room.seats.length }}</span>
     </div>
@@ -61,7 +61,7 @@ const stateText = computed(() => {
 });
 
 function seatTitle(seat: LobbySeatModel): string {
-  if (seat.kind === 'human') {
+  if (seat.kind === 'human' || seat.kind === 'guest') {
     return seat.name;
   }
   return seat.kind === 'ai' ? 'AI' : translateText('Free seat');

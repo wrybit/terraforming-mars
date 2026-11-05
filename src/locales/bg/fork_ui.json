@@ -1875,7 +1875,6 @@
   "With": "С",
   "Without": "Без",
   "Must include": "Задължително включва",
-  "Only games without AI": "Само игри без AI",
   "1 vs 1": "1 срещу 1",
   "running": "тече",
   "just opened": "току-що отворена",
@@ -1904,8 +1903,6 @@
   "Accept": "Приеми",
   "Open in lobby": "Отвори в лобито",
   "Name of the game": "Име на играта",
-  "${0}'s game": "Играта на ${0}",
-  "Show in the lobby list": "Покажи в списъка на лобито",
   "Only players with the invitation link can join.": "Само играчи с линка за покана могат да се присъединят.",
   "Free seat for the lobby": "Свободно място за лобито",
   "This game is already full": "Тази игра вече е пълна",
@@ -1915,5 +1912,9 @@
   "There are still free seats": "Все още има свободни места",
   "Please enter a name": "Въведи име",
   "You are not part of this game": "Не участваш в тази игра",
-  "Too many new games right now. Please try again later.": "В момента има твърде много нови игри. Опитай отново по-късно."
+  "Too many new games right now. Please try again later.": "В момента има твърде много нови игри. Опитай отново по-късно.",
+  "Public game": "Публична игра",
+  "Click to enter a player yourself": "Кликни, за да въведеш играч сам",
+  "Offer this seat in the lobby again": "Предложи мястото отново в лобито",
+  "entered by the host": "въведен от домакина"
 }

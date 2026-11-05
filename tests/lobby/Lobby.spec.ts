@@ -3,6 +3,8 @@ import {GameStarter, Lobby, PARTICIPANT_TIMEOUT_MS, StartedGame} from '../../src
 import {LobbyError} from '../../src/server/lobby/lobbyValidation';
 import {NewGameConfig} from '../../src/common/game/NewGameConfig';
 import {LobbyProfile} from '../../src/common/lobby/LobbyModel';
+import {memoryStorage} from '../../src/server/lobby/lobbyStorage';
+import {lobbyRoomIdFromPath, lobbyRoomPath} from '../../src/common/lobby/lobbyUrl';
 
 const HOST = 'hosthosthosthost01';
 const GUEST = 'guestguestguest001';
@@ -27,6 +29,7 @@ describe('Lobby', () => {
   let now: number;
   let lobby: Lobby;
   let started: Array<NewGameConfig>;
+  let storage: ReturnType<typeof memoryStorage>;
   const starter: GameStarter = async (gameConfig) => {
     started.push(gameConfig);
     const game: StartedGame = {id: 'g1', spectatorId: 's1', players: gameConfig.players.map((_, index) => ({id: `p${index}` as const}))};
@@ -37,7 +40,8 @@ describe('Lobby', () => {
     now = 1_000_000;
     started = [];
     let next = 0;
-    lobby = new Lobby(() => now, () => 'room' + (next++));
+    storage = memoryStorage();
+    lobby = new Lobby(() => now, () => 'room' + (next++), storage);
   });
 
   it('opens a room with the host, free seats and AI seats', () => {
@@ -122,9 +126,52 @@ describe('Lobby', () => {
     expect(rooms.find((r) => r.id === second.id)?.seats[1].kind).eq('human');
   });
 
+  it('keeps the rooms over a restart, with a fresh heartbeat for everybody', async () => {
+    const room = lobby.open(HOST, profile('Ann'), 'Evening game', true, config(['human', 'human', 'human']));
+    await lobby.join(GUEST, profile('Bob'), room.id, starter);
+    // The server was down longer than the heartbeat timeout
+    now += PARTICIPANT_TIMEOUT_MS * 3;
+    const restarted = new Lobby(() => now, () => 'other', memoryStorage(storage.data));
+    const rooms = restarted.list(OTHER).rooms;
+    expect(rooms).has.length(1);
+    expect(rooms[0].title).eq('Evening game');
+    expect(rooms[0].seats.map((seat) => seat.kind)).deep.eq(['human', 'human', 'free']);
+    const joined = await restarted.join(OTHER, profile('Cid'), room.id, starter);
+    expect(joined.state).eq('started');
+    expect(restarted.list(HOST).rooms[0].yourPlayerId).eq('p0');
+  });
+
+  it('seats guests entered by the host and names the game after the room', async () => {
+    const withGuest = config(['human', 'human', 'human']);
+    withGuest.players[2] = {...withGuest.players[2], name: 'Dora', color: 'green'};
+    const room = lobby.open(HOST, profile('Ann'), 'Evening game', true, withGuest, [1]);
+    expect(room.seats.map((seat) => seat.kind)).deep.eq(['human', 'free', 'guest']);
+    const joined = await lobby.join(GUEST, profile('Bob', 'green'), room.id, starter);
+    expect(joined.state).eq('started');
+    expect(started[0].name).eq('Evening game');
+    expect(started[0].players.map((p) => [p.name, p.color])).deep.eq([['Ann', 'red'], ['Bob', 'yellow'], ['Dora', 'green']]);
+    expect(lobby.list(HOST).rooms[0].hostNeedsLinks).is.true;
+    expect(lobby.list(GUEST).rooms[0].hostNeedsLinks).is.undefined;
+  });
+
   it('drops invalid profile parts', () => {
     const room = lobby.open(HOST, {name: '  Ann  ', color: 'red', emoji: 'nope', image: 'javascript:alert(1)'}, '', true, config(['human', 'human']));
     const host = room.seats[0];
     expect(host.kind === 'human' && [host.name, host.emoji, host.image]).deep.eq(['Ann', '🚀', undefined]);
+  });
+});
+
+describe('lobbyUrl', () => {
+  it('builds readable room paths', () => {
+    expect(lobbyRoomPath('x4m9', 'Spiel für Jürgen & Co.')).eq('lobby/room/x4m9-Spiel_fuer_Juergen_Co');
+    expect(lobbyRoomPath('x4m9', 'Straße  über Élan')).eq('lobby/room/x4m9-Strasse_ueber_Elan');
+    expect(lobbyRoomPath('x4m9', 'Игра Жени')).eq('lobby/room/x4m9-Igra_Zheni');
+    expect(lobbyRoomPath('x4m9', '火星ゲーム')).eq('lobby/room/x4m9');
+  });
+
+  it('reads the room id from the address', () => {
+    expect(lobbyRoomIdFromPath('/lobby/room/x4m9-Spiel_fuer_Juergen')).eq('x4m9');
+    expect(lobbyRoomIdFromPath('/tm/lobby/room/x4m9')).eq('x4m9');
+    expect(lobbyRoomIdFromPath('/lobby')).is.undefined;
   });
 });

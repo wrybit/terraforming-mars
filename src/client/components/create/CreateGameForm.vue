@@ -293,6 +293,11 @@
           <!-- One scroll area for head and cards: the cards slide under the sticky, frosted head -->
           <div class="create-game-players-scroll" @scroll="onPlayerListScroll">
             <div class="create-game-players-head" :class="{'create-game-players-head--over-list': playerListScrolled}">
+              <!-- Name of the game first: the drawn name is the placeholder and used when nothing is typed -->
+              <label class="create-game-name">
+                <span class="create-game-subhead" v-i18n>Name of the game</span>
+                <input class="create-game-text-input" v-model="gameName" :maxlength="gameNameMaxLength" :placeholder="gameNamePlaceholder">
+              </label>
               <h2 v-i18n>Players</h2>
               <!-- Humans and AI players in two aligned rows; together they make up the player count -->
               <div class="create-game-seat-rows">
@@ -311,15 +316,10 @@
                 </div>
                 <SegmentedControl v-else v-model="aiPlayersCount" :options="aiCountOptions" class="create-game-segmented--equal create-game-segmented--seats" />
               </div>
-              <!-- Lobby: further human seats are offered to other players instead of being typed in here -->
-              <template v-if="lobbyMode && humanPlayersCount > 1">
-                <OptionRow class="create-game-players-first" label="Open in lobby"><SwitchInput v-model="lobbyEnabled" /></OptionRow>
-                <template v-if="lobbyEnabled">
-                  <input class="create-game-text-input create-game-lobby-title" v-model="lobbyTitle" :maxlength="lobbyTitleMaxLength"
-                    :placeholder="lobbyTitlePlaceholder" :aria-label="$t('Name of the game')">
-                  <OptionRow class="create-game-players-first" label="Show in the lobby list"><SwitchInput v-model="lobbyListed" /></OptionRow>
-                  <div v-if="!lobbyListed" class="create-game-note" v-i18n>Only players with the invitation link can join.</div>
-                </template>
+              <!-- Lobby: only with seats offered in the lobby; private games are only reachable with their link -->
+              <template v-if="lobbyActive">
+                <OptionRow class="create-game-players-first" label="Public game"><SwitchInput v-model="lobbyPublic" /></OptionRow>
+                <div v-if="!lobbyPublic" class="create-game-note" v-i18n>Only players with the invitation link can join.</div>
               </template>
               <!-- Who starts belongs to the players: switched on, the "Goes first" stars on the player cards disappear -->
               <OptionRow v-if="playersCount > 1" class="create-game-players-first" label="Random first player"><SwitchInput v-model="randomFirstPlayer" /></OptionRow>
@@ -335,11 +335,14 @@
               <!-- Humans stand out (full color, glow); AI players stay quieter (tinted header, thin outline) -->
               <div v-for="(newPlayer, index) in getPlayers()" :key="seatKey(newPlayer)"
                 :class="['create-game-player', isLobbySeat(newPlayer, index) ? 'create-game-player--lobby-seat' : 'create-game-player--' + newPlayer.color, {'create-game-player--ai': newPlayer.aiLevel !== undefined}]">
-                <!-- Lobby: a free seat; name and color are chosen by whoever takes it -->
-                <div v-if="isLobbySeat(newPlayer, index)" class="create-game-lobby-seat">
+                <!-- Lobby: a free seat; name and color are chosen by whoever takes it. Clicking it enters a player by hand -->
+                <button v-if="isLobbySeat(newPlayer, index)" type="button" class="create-game-lobby-seat" @click="setManualSeat(newPlayer, true)">
                   <span class="create-game-player-position"><SeatIcon kind="human" />{{ index + 1 }}</span>
-                  <span v-i18n>Free seat for the lobby</span>
-                </div>
+                  <span class="create-game-lobby-seat-text">
+                    <span v-i18n>Free seat for the lobby</span>
+                    <span class="create-game-lobby-seat-hint" v-i18n>Click to enter a player yourself</span>
+                  </span>
+                </button>
                 <template v-else>
                   <div class="create-game-player-top">
                     <!-- Seat: meeple or robot plus seat number -->
@@ -351,6 +354,9 @@
                       <!-- Fixed AI marker right behind the typed name; not part of the input, so nobody types it twice -->
                       <span v-if="newPlayer.aiLevel !== undefined" class="create-game-player-name-marker" aria-hidden="true"><span class="create-game-player-name-ghost">{{ newPlayer.name || getPlayerNamePlaceholder(index) }}</span> {{ aiMarker(newPlayer.aiLevel) }}</span>
                     </span>
+                    <!-- Entered by hand: back to a free seat of the lobby -->
+                    <button v-if="canReturnToLobby(newPlayer, index)" type="button" class="create-game-to-lobby" :title="$t('Offer this seat in the lobby again')"
+                      :aria-label="$t('Offer this seat in the lobby again')" @click="setManualSeat(newPlayer, false)">↩</button>
                     <button v-if="playersCount > 1 && !randomFirstPlayer" type="button" class="create-game-first"
                       :class="{'create-game-first--selected': firstIndex === index + 1}" :title="$t('Goes First?')"
                       @click="firstIndex = index + 1">
@@ -479,7 +485,9 @@ import {requiredByTooltip, requirementsOf} from './expansionDependencies';
 import {Expansion} from '@/common/cards/GameModule';
 import {arrangeSeats, seatKey} from './seatOrder';
 import {collapseEnter, collapseLeave} from '@/client/utils/collapseAnimation';
-import {LobbyProfile, LOBBY_TITLE_MAX_LENGTH} from '@/common/lobby/LobbyModel';
+import {LobbyProfile} from '@/common/lobby/LobbyModel';
+import {GAME_NAME_MAX_LENGTH, generateGameName} from '@/common/game/GameName';
+import {UnseededRandom} from '@/common/utils/Random';
 
 type Refs = {
   file: HTMLInputElement;
@@ -515,10 +523,13 @@ type FormModel = {
   stopColumnWatch: () => void;
   stopStickyObserver: () => void;
   stopBelowObserver: () => void;
-  /** Lobby modal: offer the further human seats in the lobby (otherwise the classic way: names typed in here) */
-  lobbyEnabled: boolean;
-  lobbyTitle: string;
-  lobbyListed: boolean;
+  /** Own name of the game; empty: the drawn placeholder */
+  gameName: string;
+  gameNamePlaceholder: string;
+  /** Lobby: seats (seatKey) the host fills in by hand instead of offering them in the lobby */
+  manualSeats: Array<number>;
+  /** Lobby: listed for everybody (otherwise only with the invitation link) */
+  lobbyPublic: boolean;
 };
 
 // Distance of the sticky Create card to the bottom edge; same value as bottom in create_game_form.less
@@ -555,9 +566,10 @@ export default defineComponent({
       stopColumnWatch: () => {},
       stopStickyObserver: () => {},
       stopBelowObserver: () => {},
-      lobbyEnabled: true,
-      lobbyTitle: '',
-      lobbyListed: true,
+      gameName: '',
+      gameNamePlaceholder: generateGameName(UnseededRandom.INSTANCE),
+      manualSeats: [],
+      lobbyPublic: true,
     };
   },
   props: {
@@ -731,17 +743,18 @@ export default defineComponent({
       ?.setAttribute('content', this.previousViewport);
   },
   computed: {
-    lobbyTitleMaxLength(): number {
-      return LOBBY_TITLE_MAX_LENGTH;
+    gameNameMaxLength(): number {
+      return GAME_NAME_MAX_LENGTH;
     },
+    /** Some seat is offered in the lobby; otherwise the game is created right away (solo, only AI, everybody entered) */
     lobbyActive(): boolean {
-      return this.lobbyMode && this.lobbyEnabled && this.humanPlayersCount > 1;
+      return this.lobbyMode && this.players.slice(0, this.playersCount).some((player, index) => this.isOfferedSeat(player, index));
+    },
+    gameTitle(): string {
+      return this.gameName.trim() || this.gameNamePlaceholder;
     },
     createButtonTitle(): string {
       return this.lobbyActive ? 'Open in lobby' : 'Create game';
-    },
-    lobbyTitlePlaceholder(): string {
-      return translateTextWithParams('${0}\'s game', [this.players[0]?.name || translateText('Player')]);
     },
     // Arrow paths are used twice (drawn + as mask cut), so they live here once
     importArrowPath(): string {
@@ -1364,7 +1377,17 @@ export default defineComponent({
     },
     /** Lobby: free human seats beyond the own one go to the lobby; solo and "only AI" games start right away */
     isLobbySeat(player: NewPlayerModel, index: number): boolean {
-      return this.lobbyActive && index > 0 && player.aiLevel === undefined;
+      return this.isOfferedSeat(player, index);
+    },
+    isOfferedSeat(player: NewPlayerModel, index: number): boolean {
+      return this.lobbyMode && index > 0 && player.aiLevel === undefined && !this.manualSeats.includes(seatKey(player));
+    },
+    canReturnToLobby(player: NewPlayerModel, index: number): boolean {
+      return this.lobbyMode && index > 0 && player.aiLevel === undefined && this.manualSeats.includes(seatKey(player));
+    },
+    setManualSeat(player: NewPlayerModel, manual: boolean) {
+      const key = seatKey(player);
+      this.manualSeats = manual ? [...this.manualSeats, key] : this.manualSeats.filter((k) => k !== key);
     },
     closeModal() {
       // See openInLobby: emits stay undeclared
@@ -1385,7 +1408,9 @@ export default defineComponent({
       // Seat order as on the page (own seat first, humans before AI players); the server places the joining
       // players and draws the first player itself
       const config = this.newGameConfig;
-      const players = this.players.slice(0, this.playersCount).map((player) => ({...player, first: false}));
+      const seats = this.players.slice(0, this.playersCount);
+      const players = seats.map((player) => ({...player, first: false}));
+      const freeSeats = seats.flatMap((player, index) => this.isOfferedSeat(player, index) ? [index] : []);
       if (this.rememberSettings) {
         createGameSettingsStorage.save({...config, players});
       }
@@ -1395,12 +1420,14 @@ export default defineComponent({
         config: {
           ...config,
           players,
+          name: this.gameTitle,
           clonedGamedId: undefined,
           boardSeed: this.boardSeed,
           escapeVelocity: config.escapeVelocity === undefined ? undefined : sanitizeEscapeVelocityOptions(config.escapeVelocity),
         },
-        title: this.lobbyTitle.trim() || this.lobbyTitlePlaceholder,
-        listed: this.lobbyListed,
+        title: this.gameTitle,
+        listed: this.lobbyPublic,
+        freeSeats,
       });
     },
     async createGame() {
@@ -1426,7 +1453,7 @@ export default defineComponent({
         }
       };
 
-      fetchOrFail(paths.API_CREATEGAME, {'method': 'POST', 'body': JSON.stringify({...newGameConfig, boardSeed: this.boardSeed}), 'headers': {'Content-Type': 'application/json'}})
+      fetchOrFail(paths.API_CREATEGAME, {'method': 'POST', 'body': JSON.stringify({...newGameConfig, name: this.gameTitle, boardSeed: this.boardSeed}), 'headers': {'Content-Type': 'application/json'}})
         .then((response) => response.json())
         .then(onSuccess)
         .catch((error: unknown) => {

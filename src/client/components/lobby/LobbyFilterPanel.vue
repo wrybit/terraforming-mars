@@ -23,20 +23,13 @@
           :selected="modelValue.expansions.includes(choice.expansion)" @select="toggleExpansion(choice.expansion)" />
       </div>
     </div>
-    <div class="lobby-filter-group">
-      <!-- "AI" in every language (no translation) -->
-      <div class="create-game-subhead">AI</div>
-      <OptionRow label="Only games without AI"><SwitchInput :modelValue="modelValue.noAi" @update:modelValue="update({noAi: $event})" /></OptionRow>
-    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import {Expansion} from '@/common/cards/GameModule';
 import ChoiceChip from '@/client/components/create/ChoiceChip.vue';
-import OptionRow from '@/client/components/create/OptionRow.vue';
 import SegmentedControl from '@/client/components/create/SegmentedControl.vue';
-import SwitchInput from '@/client/components/create/SwitchInput.vue';
 import {OFFICIAL_EXPANSIONS, SegmentOption} from '@/client/components/create/createGameChoices';
 import {LobbyFilters} from './lobbyFilters';
 

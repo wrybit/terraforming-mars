@@ -7,7 +7,7 @@
         <div class="lobby-match-title">{{ room.title }}</div>
         <div class="lobby-match-seats">
           <LobbyAvatar v-for="(seat, index) in room.seats" :key="index" :kind="seat.kind" size="large"
-            :color="seat.kind === 'human' ? seat.color : undefined" :emoji="seat.kind === 'human' ? seat.emoji : undefined"
+            :color="seat.kind === 'human' || seat.kind === 'guest' ? seat.color : undefined" :title="seat.kind === 'guest' ? seat.name : undefined" :emoji="seat.kind === 'human' ? seat.emoji : undefined"
             :image="seat.kind === 'human' ? seat.image : undefined" />
         </div>
         <GameSetupChips :chips="chips" />

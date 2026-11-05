@@ -26,6 +26,8 @@ import {ApiGames} from '../routes/ApiGames';
 import {ApiHeapSnapshot} from '../routes/ApiHeapSnapshot';
 import {ApiIPs} from '../routes/ApiIPs';
 import {ApiLobby} from '../routes/ApiLobby';
+import {LobbyRoomPage} from '../routes/LobbyRoomPage';
+import {LOBBY_ROOM_PATH} from '../../common/lobby/lobbyUrl';
 import {ApiLogout} from '../routes/ApiLogout';
 import {ApiAdminLogout} from '../routes/ApiAdminLogout';
 import {ApiAdminSession} from '../routes/ApiAdminSession';
@@ -192,6 +194,10 @@ function getHandler(pathname: string): IHandler | undefined {
   }
   if (pathname.startsWith('chunks/')) {
     return ServeAsset.INSTANCE;
+  }
+  // Invitation links of the lobby carry the room in the path (lobby/room/<id>-<name>)
+  if (pathname.startsWith(LOBBY_ROOM_PATH)) {
+    return LobbyRoomPage.INSTANCE;
   }
   return undefined;
 }

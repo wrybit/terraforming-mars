@@ -983,7 +983,6 @@
   "With": "Avec",
   "Without": "Sans",
   "Must include": "Doit inclure",
-  "Only games without AI": "Seulement les parties sans IA",
   "1 vs 1": "1 contre 1",
   "running": "en cours",
   "just opened": "tout juste ouverte",
@@ -1012,8 +1011,6 @@
   "Accept": "Accepter",
   "Open in lobby": "Ouvrir dans le salon",
   "Name of the game": "Nom de la partie",
-  "${0}'s game": "Partie de ${0}",
-  "Show in the lobby list": "Afficher dans la liste du salon",
   "Only players with the invitation link can join.": "Seuls les joueurs avec le lien d’invitation peuvent rejoindre.",
   "Free seat for the lobby": "Place libre pour le salon",
   "This game is already full": "Cette partie est déjà complète",
@@ -1023,5 +1020,9 @@
   "There are still free seats": "Il reste des places libres",
   "Please enter a name": "Merci de saisir un nom",
   "You are not part of this game": "Tu ne fais pas partie de cette partie",
-  "Too many new games right now. Please try again later.": "Trop de nouvelles parties en ce moment. Réessaie plus tard."
+  "Too many new games right now. Please try again later.": "Trop de nouvelles parties en ce moment. Réessaie plus tard.",
+  "Public game": "Partie publique",
+  "Click to enter a player yourself": "Clique pour saisir toi-même un joueur",
+  "Offer this seat in the lobby again": "Proposer à nouveau cette place dans le salon",
+  "entered by the host": "saisi par l’hôte"
 }

@@ -12,6 +12,11 @@
               <span v-if="seat.host" class="lobby-seat-host" v-i18n>Host</span>
               <span class="lobby-seat-state" :class="{'lobby-seat-state--ready': seat.ready}">{{ $t(seat.ready ? 'ready' : 'not ready yet') }}</span>
             </template>
+            <template v-else-if="seat.kind === 'guest'">
+              <LobbyAvatar kind="guest" :color="seat.color" :title="seat.name" size="large" />
+              <span class="lobby-seat-name">{{ seat.name }}</span>
+              <span class="lobby-seat-state" v-i18n>entered by the host</span>
+            </template>
             <template v-else-if="seat.kind === 'ai'">
               <LobbyAvatar kind="ai" size="large" />
               <span class="lobby-seat-name">AI</span>
@@ -57,6 +62,7 @@ import AppButton from '@/client/components/common/AppButton.vue';
 import GameSetupChips from '@/client/components/common/GameSetupChips.vue';
 import LobbyAvatar from './LobbyAvatar.vue';
 import {lobbySetupChips} from './lobbySetupChips';
+import {lobbyRoomPath} from '@/common/lobby/lobbyUrl';
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 import {AI_LEVEL_OPTIONS} from '@/client/components/create/createGameChoices';
 
@@ -83,7 +89,7 @@ const you = computed(() => {
 const isHost = computed(() => you.value?.host === true);
 const filled = computed(() => props.room?.seats.filter((seat) => seat.kind !== 'free').length ?? 0);
 const freeSeats = computed(() => (props.room?.seats.length ?? 0) - filled.value);
-const inviteLink = computed(() => props.room === undefined ? '' : new URL(`lobby?room=${props.room.id}`, document.baseURI).href);
+const inviteLink = computed(() => props.room === undefined ? '' : new URL(lobbyRoomPath(props.room.id, props.room.title), document.baseURI).href);
 const statusText = computed(() => {
   if (freeSeats.value === 1) {
     return translateText('1 seat is free. The game starts as soon as all seats are taken and everybody is ready.');

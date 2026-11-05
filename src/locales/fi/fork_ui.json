@@ -928,7 +928,6 @@
   "With": "Kyllä",
   "Without": "Ei",
   "Must include": "Pakko sisältää",
-  "Only games without AI": "Vain pelit ilman tekoälyä",
   "1 vs 1": "1 vastaan 1",
   "running": "käynnissä",
   "just opened": "juuri avattu",
@@ -957,8 +956,6 @@
   "Accept": "Hyväksy",
   "Open in lobby": "Avaa aulassa",
   "Name of the game": "Pelin nimi",
-  "${0}'s game": "${0}:n peli",
-  "Show in the lobby list": "Näytä aulan listassa",
   "Only players with the invitation link can join.": "Vain kutsulinkin saaneet pelaajat voivat liittyä.",
   "Free seat for the lobby": "Vapaa paikka aulalle",
   "This game is already full": "Tämä peli on jo täynnä",
@@ -968,5 +965,9 @@
   "There are still free seats": "Vapaita paikkoja on vielä",
   "Please enter a name": "Anna nimi",
   "You are not part of this game": "Et ole mukana tässä pelissä",
-  "Too many new games right now. Please try again later.": "Liian monta uutta peliä juuri nyt. Yritä myöhemmin uudelleen."
+  "Too many new games right now. Please try again later.": "Liian monta uutta peliä juuri nyt. Yritä myöhemmin uudelleen.",
+  "Public game": "Julkinen peli",
+  "Click to enter a player yourself": "Napsauta lisätäksesi pelaajan itse",
+  "Offer this seat in the lobby again": "Tarjoa paikkaa taas aulassa",
+  "entered by the host": "isännän lisäämä"
 }

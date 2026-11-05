@@ -1110,7 +1110,6 @@
   "With": "Van",
   "Without": "Nincs",
   "Must include": "Kötelező",
-  "Only games without AI": "Csak AI nélküli játékok",
   "1 vs 1": "1 az 1 ellen",
   "running": "folyamatban",
   "just opened": "épp most nyílt",
@@ -1139,8 +1138,6 @@
   "Accept": "Elfogadás",
   "Open in lobby": "Megnyitás a lobbiban",
   "Name of the game": "A játék neve",
-  "${0}'s game": "${0} játéka",
-  "Show in the lobby list": "Megjelenítés a lobbilistában",
   "Only players with the invitation link can join.": "Csak a meghívó linkkel rendelkező játékosok csatlakozhatnak.",
   "Free seat for the lobby": "Szabad hely a lobbinak",
   "This game is already full": "Ez a játék már betelt",
@@ -1150,5 +1147,9 @@
   "There are still free seats": "Még vannak szabad helyek",
   "Please enter a name": "Adj meg egy nevet",
   "You are not part of this game": "Nem vagy része ennek a játéknak",
-  "Too many new games right now. Please try again later.": "Most túl sok új játék indul. Próbáld újra később."
+  "Too many new games right now. Please try again later.": "Most túl sok új játék indul. Próbáld újra később.",
+  "Public game": "Nyilvános játék",
+  "Click to enter a player yourself": "Kattints, hogy magad adj meg egy játékost",
+  "Offer this seat in the lobby again": "A hely ismételt felkínálása a lobbiban",
+  "entered by the host": "a házigazda adta meg"
 }

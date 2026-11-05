@@ -441,8 +441,14 @@ each(@players, {
   font-size: 52px;
 }
 
-.lobby-avatar-emoji {
+.lobby-avatar-emoji,
+.lobby-avatar-initial {
   line-height: 1;
+}
+
+.lobby-avatar-initial {
+  color: #fff;
+  font-weight: bold;
 }
 
 // ---------- Dialogs ----------
@@ -697,7 +703,18 @@ each(@players, {
     font-size: 18px;
   }
 
-  .create-game-lobby-title {
+}
+
+// Name of the game above the players (create form, also outside the lobby)
+.create-game-name {
+  display: block;
+  margin-bottom: 14px;
+
+  .create-game-subhead {
+    margin: 0 0 6px;
+  }
+
+  .create-game-text-input {
     margin: 0;
   }
 }
@@ -711,6 +728,45 @@ each(@players, {
   display: flex;
   align-items: center;
   gap: 10px;
+  width: 100%;
   padding: 12px;
+  border: 0;
+  background: transparent;
   color: @lobby-dim;
+  text-align: left;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #eee;
+  }
+}
+
+.create-game-lobby-seat-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.create-game-lobby-seat-hint {
+  font-size: 12px;
+  opacity: 0.75;
+}
+
+// Player entered by hand: back to a free lobby seat
+.create-game-to-lobby {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.25);
+  color: #fff;
+  font-size: 15px;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.15);
+  }
 }

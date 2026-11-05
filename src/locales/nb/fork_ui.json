@@ -1296,7 +1296,6 @@
   "With": "Med",
   "Without": "Uten",
   "Must include": "Må være med",
-  "Only games without AI": "Bare spill uten AI",
   "1 vs 1": "1 mot 1",
   "running": "pågår",
   "just opened": "nettopp åpnet",
@@ -1325,8 +1324,6 @@
   "Accept": "Godta",
   "Open in lobby": "Åpne i lobbyen",
   "Name of the game": "Navn på spillet",
-  "${0}'s game": "${0} sitt spill",
-  "Show in the lobby list": "Vis i lobbylisten",
   "Only players with the invitation link can join.": "Bare spillere med invitasjonslenken kan bli med.",
   "Free seat for the lobby": "Ledig plass for lobbyen",
   "This game is already full": "Dette spillet er allerede fullt",
@@ -1336,5 +1333,9 @@
   "There are still free seats": "Det er fortsatt ledige plasser",
   "Please enter a name": "Skriv inn et navn",
   "You are not part of this game": "Du er ikke med i dette spillet",
-  "Too many new games right now. Please try again later.": "For mange nye spill akkurat nå. Prøv igjen senere."
+  "Too many new games right now. Please try again later.": "For mange nye spill akkurat nå. Prøv igjen senere.",
+  "Public game": "Offentlig spill",
+  "Click to enter a player yourself": "Klikk for å legge inn en spiller selv",
+  "Offer this seat in the lobby again": "Tilby plassen i lobbyen igjen",
+  "entered by the host": "lagt inn av verten"
 }

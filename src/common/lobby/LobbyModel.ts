@@ -34,6 +34,8 @@ export const LOBBY_EMOJIS: ReadonlyArray<string> = [
 export type LobbySeatModel =
   | {kind: 'free'}
   | {kind: 'ai', aiLevel: AiLevel}
+  /** Entered by the host for somebody who does not use the lobby; gets the link from the host after the start */
+  | {kind: 'guest', name: string, color: Color}
   | {
     kind: 'human',
     name: string,
@@ -71,6 +73,8 @@ export type LobbyRoomModel = {
   gameId?: GameId;
   /** Started rooms: the game of the asking participant */
   yourPlayerId?: PlayerId;
+  /** Started rooms: the host gets the page with every player's link when guests have to be sent theirs */
+  hostNeedsLinks?: boolean;
 };
 
 export type LobbyListModel = {
@@ -80,7 +84,8 @@ export type LobbyListModel = {
 };
 
 export type LobbyAction =
-  | {action: 'open', me: string, profile: LobbyProfile, title: string, listed: boolean, config: NewGameConfig}
+  /** config.players: seat 0 is the host; freeSeats lists the human seats offered in the lobby, other humans are guests */
+  | {action: 'open', me: string, profile: LobbyProfile, title: string, listed: boolean, config: NewGameConfig, freeSeats: ReadonlyArray<number>}
   | {action: 'join', me: string, profile: LobbyProfile, roomId: string}
   | {action: 'profile', me: string, profile: LobbyProfile, roomId: string}
   | {action: 'leave', me: string, roomId: string}

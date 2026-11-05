@@ -1911,7 +1911,6 @@
   "With": "有",
   "Without": "无",
   "Must include": "必须包含",
-  "Only games without AI": "仅限无 AI 的游戏",
   "1 vs 1": "1 对 1",
   "running": "进行中",
   "just opened": "刚刚开设",
@@ -1940,8 +1939,6 @@
   "Accept": "接受",
   "Open in lobby": "在大厅开设",
   "Name of the game": "游戏名称",
-  "${0}'s game": "${0} 的游戏",
-  "Show in the lobby list": "在大厅列表中显示",
   "Only players with the invitation link can join.": "只有拥有邀请链接的玩家才能加入。",
   "Free seat for the lobby": "留给大厅的空位",
   "This game is already full": "这个游戏已满",
@@ -1951,5 +1948,9 @@
   "There are still free seats": "还有空位",
   "Please enter a name": "请输入名字",
   "You are not part of this game": "你不在这个游戏中",
-  "Too many new games right now. Please try again later.": "当前新游戏过多，请稍后再试。"
+  "Too many new games right now. Please try again later.": "当前新游戏过多，请稍后再试。",
+  "Public game": "公开游戏",
+  "Click to enter a player yourself": "点击以自行填写玩家",
+  "Offer this seat in the lobby again": "重新在大厅提供此座位",
+  "entered by the host": "由房主填写"
 }

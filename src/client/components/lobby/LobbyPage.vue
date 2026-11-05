@@ -113,6 +113,7 @@ import LobbyMatchDialog from './LobbyMatchDialog.vue';
 import {fetchLobby, lobbyAction, LobbyRequest} from './lobbyApi';
 import {activeFilterCount, bestMatch, defaultLobbyFilters, hasFreeSeat, LobbyFilters, matchesFilters} from './lobbyFilters';
 import {loadLobbyProfile, saveLobbyProfile} from './lobbyProfile';
+import {lobbyRoomIdFromPath} from '@/common/lobby/lobbyUrl';
 import {setDocumentTitle} from '@/client/utils/documentTitle';
 import {describeFailure, failureOf} from '@/client/utils/requestFailure';
 import {showAlert} from '@/client/components/showAlert';
@@ -147,7 +148,8 @@ const offeredRoom = ref<LobbyRoomModel | undefined>();
 const offerIsInvitation = ref(false);
 // Rooms declined while waiting are not offered again
 const declinedRooms = new Set<string>();
-const invitedRoomId = new URLSearchParams(window.location.search).get('room') ?? undefined;
+// Invitation link: lobby/room/<id>-<name> (lobbyUrl.ts)
+const invitedRoomId = lobbyRoomIdFromPath(window.location.pathname);
 let invitationHandled = false;
 let pollTimer: ReturnType<typeof setInterval> | undefined;
 let clockTimer: ReturnType<typeof setInterval> | undefined;
@@ -189,7 +191,12 @@ async function refresh(): Promise<void> {
     return;
   }
   const mine = myRoom.value;
-  // The game started: everybody goes to their own player page
+  // The game started: everybody goes to their own player page; a host with players entered by hand first
+  // gets the page with every player's link, to send them theirs
+  if (mine?.state === 'started' && mine.hostNeedsLinks && mine.gameId !== undefined) {
+    window.location.href = 'game?id=' + mine.gameId;
+    return;
+  }
   if (mine?.state === 'started' && mine.yourPlayerId !== undefined) {
     window.location.href = 'player?id=' + mine.yourPlayerId;
     return;
@@ -314,7 +321,7 @@ function openCreate(): void {
   withProfile(() => createOpen.value = true);
 }
 
-async function openInLobby(request: {config: NewGameConfig, title: string, listed: boolean}): Promise<void> {
+async function openInLobby(request: {config: NewGameConfig, title: string, listed: boolean, freeSeats: Array<number>}): Promise<void> {
   const room = await act({action: 'open', profile: profile.value, ...request});
   if (room !== undefined) {
     createOpen.value = false;

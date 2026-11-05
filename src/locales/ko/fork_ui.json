@@ -1178,7 +1178,6 @@
   "With": "있음",
   "Without": "없음",
   "Must include": "반드시 포함",
-  "Only games without AI": "AI 없는 게임만",
   "1 vs 1": "1 대 1",
   "running": "진행 중",
   "just opened": "방금 열림",
@@ -1207,8 +1206,6 @@
   "Accept": "수락",
   "Open in lobby": "로비에 열기",
   "Name of the game": "게임 이름",
-  "${0}'s game": "${0}의 게임",
-  "Show in the lobby list": "로비 목록에 표시",
   "Only players with the invitation link can join.": "초대 링크가 있는 플레이어만 참가할 수 있습니다.",
   "Free seat for the lobby": "로비용 빈자리",
   "This game is already full": "이 게임은 이미 가득 찼습니다",
@@ -1218,5 +1215,9 @@
   "There are still free seats": "아직 빈자리가 있습니다",
   "Please enter a name": "이름을 입력하세요",
   "You are not part of this game": "이 게임의 참가자가 아닙니다",
-  "Too many new games right now. Please try again later.": "지금 새 게임이 너무 많습니다. 나중에 다시 시도하세요."
+  "Too many new games right now. Please try again later.": "지금 새 게임이 너무 많습니다. 나중에 다시 시도하세요.",
+  "Public game": "공개 게임",
+  "Click to enter a player yourself": "클릭해서 직접 플레이어 입력",
+  "Offer this seat in the lobby again": "이 자리를 다시 로비에 내놓기",
+  "entered by the host": "호스트가 입력함"
 }

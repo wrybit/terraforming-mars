@@ -13,16 +13,14 @@ export type LobbyFilters = {
   expansions: Array<Expansion>;
   tempo: LobbyTempo;
   draft: LobbyDraft;
-  /** Hide games with AI seats */
-  noAi: boolean;
 };
 
 export function defaultLobbyFilters(): LobbyFilters {
-  return {sizes: [], expansions: [], tempo: 'any', draft: 'any', noAi: false};
+  return {sizes: [], expansions: [], tempo: 'any', draft: 'any'};
 }
 
 export function activeFilterCount(filters: LobbyFilters): number {
-  return [filters.sizes.length > 0, filters.expansions.length > 0, filters.tempo !== 'any', filters.draft !== 'any', filters.noAi]
+  return [filters.sizes.length > 0, filters.expansions.length > 0, filters.tempo !== 'any', filters.draft !== 'any']
     .filter(Boolean).length;
 }
 
@@ -38,9 +36,6 @@ export function matchesFilters(room: LobbyRoomModel, filters: LobbyFilters): boo
     return false;
   }
   if (filters.draft !== 'any' && (filters.draft === 'on') !== options.draftVariant) {
-    return false;
-  }
-  if (filters.noAi && room.seats.some((seat) => seat.kind === 'ai')) {
     return false;
   }
   return true;

@@ -1300,7 +1300,6 @@
   "With": "あり",
   "Without": "なし",
   "Must include": "必須",
-  "Only games without AI": "AIなしのゲームのみ",
   "1 vs 1": "1対1",
   "running": "進行中",
   "just opened": "開いたばかり",
@@ -1329,8 +1328,6 @@
   "Accept": "受ける",
   "Open in lobby": "ロビーで開く",
   "Name of the game": "ゲーム名",
-  "${0}'s game": "${0}のゲーム",
-  "Show in the lobby list": "ロビーの一覧に表示",
   "Only players with the invitation link can join.": "招待リンクを持つプレイヤーのみ参加できます。",
   "Free seat for the lobby": "ロビー用の空席",
   "This game is already full": "このゲームは満席です",
@@ -1340,5 +1337,9 @@
   "There are still free seats": "まだ空席があります",
   "Please enter a name": "名前を入力してください",
   "You are not part of this game": "このゲームの参加者ではありません",
-  "Too many new games right now. Please try again later.": "現在、新しいゲームが多すぎます。後でもう一度お試しください。"
+  "Too many new games right now. Please try again later.": "現在、新しいゲームが多すぎます。後でもう一度お試しください。",
+  "Public game": "公開ゲーム",
+  "Click to enter a player yourself": "クリックしてプレイヤーを自分で入力",
+  "Offer this seat in the lobby again": "この席を再びロビーで募集",
+  "entered by the host": "ホストが入力"
 }
