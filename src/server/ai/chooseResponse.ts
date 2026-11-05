@@ -20,6 +20,9 @@ import {tuningOf} from './aiTuning';
 import {clearFollowUpPlan, plannedFollowUp} from './followUpPlan';
 import {SelectColony} from '../inputs/SelectColony';
 import {chooseColony} from './colonyChoice';
+import {SelectParty} from '../inputs/SelectParty';
+import {SelectDelegate} from '../inputs/SelectDelegate';
+import {chooseDelegate, chooseParty} from './partyChoice';
 
 // Entry point of the rule-based AI (stage 1): which answer to give for the current input.
 
@@ -84,6 +87,19 @@ function decide(input: PlayerInput, player: IPlayer, level: AiLevel): InputRespo
   // Colonies: trade and build choices valued on a game copy (colonyChoice.ts) instead of a random colony.
   if (input instanceof SelectColony && tuningOf(player).colonyChoice > 0) {
     const response = chooseColony(input, player);
+    if (response !== undefined) {
+      return response;
+    }
+  }
+  // Turmoil: party for the own delegate by chairman and ruling-bonus outlook, rival delegates before own (partyChoice.ts).
+  if (input instanceof SelectParty && tuningOf(player).partyChoice > 0 && !isSimulating()) {
+    const response = chooseParty(input, player);
+    if (response !== undefined) {
+      return response;
+    }
+  }
+  if (input instanceof SelectDelegate && tuningOf(player).partyChoice > 0) {
+    const response = chooseDelegate(input, player);
     if (response !== undefined) {
       return response;
     }

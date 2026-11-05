@@ -267,6 +267,8 @@ export type AiTuning = {
   worldGovernment: number,
   /** 1: the colony to trade with or build on is tried on a game copy instead of picked at random (colonyChoice.ts); 0 = off. */
   colonyChoice: number,
+  /** 1: the party for an own delegate is valued on a game copy (chairman, ruling bonus) instead of picked at random (partyChoice.ts); 0 = off. */
+  partyChoice: number,
   /** 1: OR questions right after a move are tried once per option on game copies (followUpPlan.ts); 0 = first option. */
   followUpChoice: number,
   /** 1: OR questions also with single-card choices (copy targets, card to take) are tried on copies; 0 = quick rule. */
@@ -583,6 +585,8 @@ export const BASELINE_TUNING: AiTuning = {
   worldGovernment: 1,
   // Training package p3 (colonies): random colony choice replaced by a valuation on a game copy (rule fix).
   colonyChoice: 1,
+  // Training package p4 (Turmoil): random party choice replaced by chairman and ruling-bonus outlook (rule fix).
+  partyChoice: 1,
   // Round 74 (1200 mirrored 1v1 games, base and Venus): followUpChoice +0.38 (z +0.58) – adopted (fixes first-option follow-ups).
   followUpChoice: 1,
   followUpCards: 0,
@@ -905,6 +909,7 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   worldGovernment: {worldGovernment: 1},
   noWorldGovernment: {worldGovernment: 0},
   noColonyChoice: {colonyChoice: 0},
+  noPartyChoice: {partyChoice: 0},
   followUpChoice: {followUpChoice: 1},
   noFollowUpChoice: {followUpChoice: 0},
   followUpCards: {followUpCards: 1},
