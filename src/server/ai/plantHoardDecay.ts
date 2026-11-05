@@ -3,6 +3,7 @@ import {TileType} from '../../common/TileType';
 import {tuningOf} from './aiTuning';
 import {incomeCityPlan} from './cityFirstWithIncome';
 import {plantFactor} from './playerTraits';
+import {BoardName} from '../../common/boards/BoardName';
 
 // Plants on hand counted at their full value however many there were, so a greenery that the lonely-greenery
 // penalty (boardPotential.ts) and city first (cityFirstAction.ts) make look slightly worse lost against keeping the
@@ -31,15 +32,25 @@ export function hasCityPlan(player: IPlayer): boolean {
   return player.cardsInHand.some((card) => card.tilesBuilt.includes(TileType.CITY) && player.canPlay(card));
 }
 
+/**
+ * Weight of the rule on this board. Round 179 (packages, random boards): without the rule −1.90 VP on Tharsis
+ * (z −2.27) but +1.84 on the other boards (z +1.87) – other boards have more plant spaces and city spots.
+ */
+function hoardWeight(player: IPlayer): number {
+  const tuning = tuningOf(player);
+  const onTharsis = player.game.gameOptions.boardName === BoardName.THARSIS;
+  return tuning.plantHoardDecay * (onTharsis ? 1 : tuning.plantHoardOtherBoards);
+}
+
 /** True when plantHoardDecay is on and no city is planned: waiting plants for a city makes no sense then. */
 export function hoardingWithoutCityPlan(player: IPlayer): boolean {
   // cityFirstWithIncome: the next production phase can pay the city too (cityFirstWithIncome.ts).
-  return tuningOf(player).plantHoardDecay > 0 && !hasCityPlan(player) && !incomeCityPlan(player);
+  return hoardWeight(player) > 0 && !hasCityPlan(player) && !incomeCityPlan(player);
 }
 
 /** M€ to take off the value of the plants on hand (0 when off). */
 export function plantHoardDiscount(player: IPlayer, remaining: number): number {
-  const weight = tuningOf(player).plantHoardDecay;
+  const weight = hoardWeight(player);
   const need = player.plantsNeededForGreenery;
   const excess = player.plants - need;
   if (weight <= 0 || excess <= 0) {
