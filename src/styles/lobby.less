@@ -494,14 +494,15 @@
 }
 
 // ---------- Rows ----------
+// Top: title and facts | seats | action on one middle axis; below over the full width the progress bar and the
+// settings. Room on the right under the button stays empty on purpose: nothing is squeezed.
 .lobby-game {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto auto;
-  // Seats and action both span the two rows, so the avatars sit on the same middle axis as the button
-  grid-template-areas: "info seats action" "chips seats action";
+  grid-template-areas: "info seats action" "progress progress progress" "chips chips chips";
   align-items: center;
-  gap: 6px 18px;
-  padding: 12px @lobby-pad;
+  gap: 10px 16px;
+  padding: 14px @lobby-pad;
   border-bottom: 1px solid @lobby-line;
   transition: background 0.15s;
 
@@ -517,9 +518,10 @@
     background: fade(@bg_action, 18%);
   }
 
-  @media only screen and (max-width: 700px) {
+  // Phone: the seats get their own row below the title, so the title keeps its width
+  @media only screen and (max-width: 600px) {
     grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-areas: "info action" "seats seats" "chips chips";
+    grid-template-areas: "info action" "seats seats" "progress progress" "chips chips";
   }
 }
 
@@ -536,30 +538,39 @@
   white-space: nowrap;
 }
 
-.lobby-game-meta {
+// Generation, players, AI, time: icon and value close together, the facts further apart (proximity)
+.lobby-game-facts {
   display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 3px;
-  color: @lobby-dim;
+  flex-wrap: wrap;
+  gap: 2px 12px;
+  margin-top: 4px;
+  color: rgba(238, 238, 238, 0.72);
   font-size: 13px;
+
+  > span {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    white-space: nowrap;
+  }
 }
 
-.lobby-game-state::before {
-  content: "";
-  display: inline-block;
-  width: 7px;
-  height: 7px;
-  margin-right: 5px;
-  border-radius: 50%;
-  background: #3ec46d;
-  vertical-align: 1px;
+.lobby-fact-icon {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentcolor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
-.lobby-game-state--running::before {
-  background: @highlight-gold;
+// Open game: how long it waits, green like "come in"
+.lobby-game-waiting {
+  color: #7fd99a;
 }
 
+// One circle per seat: the number of circles is the size of the game, free seats are dashed
 .lobby-game-seats {
   grid-area: seats;
   display: flex;
@@ -567,11 +578,25 @@
   gap: 8px;
 }
 
-.lobby-game-count {
-  min-width: 28px;
-  color: @lobby-dim;
-  font-size: 13px;
-  text-align: right;
+// The host: an orange outline around the own colour ring
+.lobby-avatar.lobby-avatar--host {
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.55), 0 0 0 3.5px var(--lobby-avatar-color), 0 0 0 5px #14151a, 0 0 0 7px #ff9a2e;
+}
+
+.lobby-game-progress {
+  grid-area: progress;
+  position: relative;
+  height: 6px;
+  overflow: hidden;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.1);
+
+  i {
+    position: absolute;
+    inset: 0 auto 0 0;
+    border-radius: 3px;
+    background: linear-gradient(90deg, #c85a2a, #e8a33c);
+  }
 }
 
 .lobby-game-chips {

@@ -35,6 +35,9 @@ export type GameProbe = {
   close(gameId: GameId): Promise<void>;
 };
 
+/** Generation and terraforming of a running game (lobbyGameProbe.ts); undefined: the game is gone */
+export type GameProgressSource = (gameId: GameId) => Promise<{generation: number, terraforming: number} | undefined>;
+
 /** Creates the game exactly as the create form would (ApiCreateGame.createGame) */
 export type GameStarter = (config: NewGameConfig) => Promise<StartedGame>;
 
@@ -159,6 +162,21 @@ export class Lobby {
     if (rooms.length > 0) {
       this.save();
     }
+  }
+
+  /** The list with the progress of the running games (generation and terraforming come from the games themselves) */
+  public async listWithProgress(me: string | undefined, roomId: string | undefined, progressOf: GameProgressSource): Promise<LobbyListModel> {
+    const list = this.list(me, roomId);
+    const now = this.clock();
+    const rooms = await Promise.all(list.rooms.map(async (model) => {
+      const room = this.rooms.get(model.id);
+      if (room === undefined || room.state !== 'started' || room.gameId === undefined) {
+        return model;
+      }
+      const status = await progressOf(room.gameId).catch(() => undefined);
+      return status === undefined ? model : {...model, progress: {...status, playedMs: now - (room.startedAt ?? now)}};
+    }));
+    return {...list, rooms};
   }
 
   /** Rooms for the list: listed open and running ones, plus the room of the asking participant. Also the heartbeat. */

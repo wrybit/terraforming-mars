@@ -9,7 +9,7 @@
   "Milestones points": "里程碑分数",
   "Awards points": "奖项分数",
   "Victory Points": "胜利点数",
-  "Generation": "时代",
+  "Generation": "世代",
   "game id:": "对局 ID：",
   "Spectator": "观战者",
   "Game settings": "对局设置",
@@ -1912,7 +1912,6 @@
   "Without": "无",
   "Must include": "必须包含",
   "1 vs 1": "1 对 1",
-  "running": "进行中",
   "just opened": "刚刚开设",
   "waiting for ${0} min": "已等待 ${0} 分钟",
   "Free seat": "空位",
@@ -1970,5 +1969,7 @@
   "Reset to default": "恢复默认",
   "Saved. The chat uses the list right away.": "已保存。聊天立即使用该列表。",
   "Emoji": "表情",
-  "No game to filter right now.": "目前没有可筛选的游戏。"
+  "No game to filter right now.": "目前没有可筛选的游戏。",
+  "Time played": "已玩时间",
+  "Terraforming": "地球化"
 }

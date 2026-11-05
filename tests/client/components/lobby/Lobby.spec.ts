@@ -40,13 +40,22 @@ describe('Lobby components', () => {
     expect(withImage.find('img').exists()).is.true;
   });
 
-  it('LobbyGameRow lists title, host and seats and offers to join', async () => {
+  it('LobbyGameRow shows title, one circle per seat with the host marked, and offers to join', async () => {
     const wrapper = mount(LobbyGameRow, {...globalConfig, props: {room: room([host, {kind: 'free'}, {kind: 'ai', aiLevel: 'hard'}])}});
     expect(wrapper.find('.lobby-game-title').text()).eq('Evening game');
-    expect(wrapper.find('.lobby-game-count').text()).eq('2/3');
-    expect(wrapper.text()).contains('Ann');
+    expect(wrapper.findAll('.lobby-game-seats .lobby-avatar')).has.length(3);
+    expect(wrapper.findAll('.lobby-game-seats .lobby-avatar--free')).has.length(1);
+    expect(wrapper.find('.lobby-avatar--host').exists()).is.true;
+    expect(wrapper.find('.lobby-game-progress').exists()).is.false;
     await wrapper.find('.lobby-game-action button').trigger('click');
     expect(wrapper.emitted('join')).has.length(1);
+  });
+
+  it('LobbyGameRow shows generation, time played and the progress of a running game', () => {
+    const running = room([host, {...host, host: false}], {state: 'started', spectatorId: 's1', progress: {generation: 7, terraforming: 0.5, playedMs: 72 * 60_000}});
+    const wrapper = mount(LobbyGameRow, {...globalConfig, props: {room: running}});
+    expect(wrapper.find('.lobby-game-facts').text()).contains('7').contains('1 h 12 min');
+    expect(wrapper.find('.lobby-game-progress i').attributes('style')).contains('50%');
   });
 
   it('LobbyFilterPanel emits the changed filters', async () => {

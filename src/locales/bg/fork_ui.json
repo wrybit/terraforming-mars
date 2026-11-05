@@ -1876,7 +1876,6 @@
   "Without": "Без",
   "Must include": "Задължително включва",
   "1 vs 1": "1 срещу 1",
-  "running": "тече",
   "just opened": "току-що отворена",
   "waiting for ${0} min": "чака от ${0} мин",
   "Free seat": "Свободно място",
@@ -1934,5 +1933,8 @@
   "Reset to default": "Възстанови по подразбиране",
   "Saved. The chat uses the list right away.": "Запазено. Чатът използва списъка веднага.",
   "Emoji": "Емоджи",
-  "No game to filter right now.": "В момента няма игра за филтриране."
+  "No game to filter right now.": "В момента няма игра за филтриране.",
+  "Generation": "Поколение",
+  "Time played": "Изиграно време",
+  "Terraforming": "Тераформиране"
 }

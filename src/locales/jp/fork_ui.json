@@ -1301,7 +1301,6 @@
   "Without": "なし",
   "Must include": "必須",
   "1 vs 1": "1対1",
-  "running": "進行中",
   "just opened": "開いたばかり",
   "waiting for ${0} min": "${0}分待機中",
   "Free seat": "空席",
@@ -1359,5 +1358,8 @@
   "Reset to default": "既定に戻す",
   "Saved. The chat uses the list right away.": "保存しました。チャットはすぐにこのリストを使います。",
   "Emoji": "絵文字",
-  "No game to filter right now.": "現在フィルターできるゲームはありません。"
+  "No game to filter right now.": "現在フィルターできるゲームはありません。",
+  "Generation": "世代",
+  "Time played": "プレイ時間",
+  "Terraforming": "テラフォーミング"
 }

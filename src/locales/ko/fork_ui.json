@@ -1179,7 +1179,6 @@
   "Without": "없음",
   "Must include": "반드시 포함",
   "1 vs 1": "1 대 1",
-  "running": "진행 중",
   "just opened": "방금 열림",
   "waiting for ${0} min": "${0}분째 대기 중",
   "Free seat": "빈자리",
@@ -1237,5 +1236,8 @@
   "Reset to default": "기본값으로 되돌리기",
   "Saved. The chat uses the list right away.": "저장했습니다. 채팅이 목록을 바로 사용합니다.",
   "Emoji": "이모지",
-  "No game to filter right now.": "지금은 필터링할 게임이 없습니다."
+  "No game to filter right now.": "지금은 필터링할 게임이 없습니다.",
+  "Generation": "세대",
+  "Time played": "플레이 시간",
+  "Terraforming": "테라포밍"
 }

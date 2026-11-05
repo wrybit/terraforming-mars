@@ -1111,7 +1111,6 @@
   "Without": "Nincs",
   "Must include": "Kötelező",
   "1 vs 1": "1 az 1 ellen",
-  "running": "folyamatban",
   "just opened": "épp most nyílt",
   "waiting for ${0} min": "${0} perce vár",
   "Free seat": "Szabad hely",
@@ -1169,5 +1168,8 @@
   "Reset to default": "Alapértelmezett visszaállítása",
   "Saved. The chat uses the list right away.": "Mentve. A csevegés azonnal használja a listát.",
   "Emoji": "Emoji",
-  "No game to filter right now.": "Jelenleg nincs szűrhető játék."
+  "No game to filter right now.": "Jelenleg nincs szűrhető játék.",
+  "Generation": "Generáció",
+  "Time played": "Játékidő",
+  "Terraforming": "Terraformálás"
 }

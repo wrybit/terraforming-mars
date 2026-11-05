@@ -76,6 +76,16 @@ export type LobbyRoomModel = {
   yourPlayerId?: PlayerId;
   /** Started rooms: the host gets the page with every player's link when guests have to be sent theirs */
   hostNeedsLinks?: boolean;
+  /** Started rooms: how far the game is (lobby row: generation, progress bar, time played) */
+  progress?: LobbyGameProgress;
+};
+
+export type LobbyGameProgress = {
+  generation: number;
+  /** Share of the global parameters already raised, 0 … 1 */
+  terraforming: number;
+  /** Milliseconds since the game started */
+  playedMs: number;
 };
 
 export type LobbyListModel = {

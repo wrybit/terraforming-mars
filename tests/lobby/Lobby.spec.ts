@@ -144,6 +144,13 @@ describe('Lobby', () => {
     expect(lobby.list(HOST).rooms[0].seats.map((seat) => seat.kind)).deep.eq(['human', 'free']);
   });
 
+  it('adds the progress of running games to the list', async () => {
+    await lobby.open(HOST, profile('Ann'), '', true, config(['human', 'ai']), starter);
+    now += 90_000;
+    const list = await lobby.listWithProgress(OTHER, undefined, () => Promise.resolve({generation: 4, terraforming: 0.25}));
+    expect(list.rooms[0].progress).deep.eq({generation: 4, terraforming: 0.25, playedMs: 90_000});
+  });
+
   it('drops a room whose game cannot be created', async () => {
     const failing: GameStarter = () => Promise.reject(new LobbyError('no'));
     try {

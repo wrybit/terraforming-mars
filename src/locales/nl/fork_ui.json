@@ -1560,7 +1560,6 @@
   "Without": "Zonder",
   "Must include": "Moet erbij zijn",
   "1 vs 1": "1 tegen 1",
-  "running": "bezig",
   "just opened": "net geopend",
   "waiting for ${0} min": "wacht al ${0} min",
   "Free seat": "Vrije plaats",
@@ -1618,5 +1617,7 @@
   "Reset to default": "Standaard herstellen",
   "Saved. The chat uses the list right away.": "Opgeslagen. De chat gebruikt de lijst meteen.",
   "Emoji": "Emoji",
-  "No game to filter right now.": "Er is nu geen spel om te filteren."
+  "No game to filter right now.": "Er is nu geen spel om te filteren.",
+  "Time played": "Speeltijd",
+  "Terraforming": "Terraforming"
 }

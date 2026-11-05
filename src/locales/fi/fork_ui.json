@@ -929,7 +929,6 @@
   "Without": "Ei",
   "Must include": "Pakko sisältää",
   "1 vs 1": "1 vastaan 1",
-  "running": "käynnissä",
   "just opened": "juuri avattu",
   "waiting for ${0} min": "odottanut ${0} min",
   "Free seat": "Vapaa paikka",
@@ -987,5 +986,8 @@
   "Reset to default": "Palauta oletukset",
   "Saved. The chat uses the list right away.": "Tallennettu. Chat käyttää listaa heti.",
   "Emoji": "Emoji",
-  "No game to filter right now.": "Suodatettavia pelejä ei ole juuri nyt."
+  "No game to filter right now.": "Suodatettavia pelejä ei ole juuri nyt.",
+  "Generation": "Sukupolvi",
+  "Time played": "Peliaika",
+  "Terraforming": "Terraformointi"
 }

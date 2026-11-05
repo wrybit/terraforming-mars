@@ -711,7 +711,6 @@
   "Without": "Ohne",
   "Must include": "Muss dabei sein",
   "1 vs 1": "1 gegen 1",
-  "running": "läuft",
   "just opened": "gerade eröffnet",
   "waiting for ${0} min": "wartet seit ${0} Min.",
   "Free seat": "Freier Platz",
@@ -769,5 +768,8 @@
   "Reset to default": "Auf Standard zurücksetzen",
   "Saved. The chat uses the list right away.": "Gespeichert. Der Chat nutzt die Liste sofort.",
   "Emoji": "Emoji",
-  "No game to filter right now.": "Gerade gibt es keine Partie zum Filtern."
+  "No game to filter right now.": "Gerade gibt es keine Partie zum Filtern.",
+  "Generation": "Generation",
+  "Time played": "Gespielte Zeit",
+  "Terraforming": "Terraforming"
 }

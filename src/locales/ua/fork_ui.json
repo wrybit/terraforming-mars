@@ -1085,7 +1085,6 @@
   "Without": "Без",
   "Must include": "Обов’язково містить",
   "1 vs 1": "1 на 1",
-  "running": "триває",
   "just opened": "щойно відкрита",
   "waiting for ${0} min": "чекає ${0} хв",
   "Free seat": "Вільне місце",
@@ -1143,5 +1142,7 @@
   "Reset to default": "Скинути до типових",
   "Saved. The chat uses the list right away.": "Збережено. Чат одразу використовує список.",
   "Emoji": "Емодзі",
-  "No game to filter right now.": "Зараз немає гри для фільтрування."
+  "No game to filter right now.": "Зараз немає гри для фільтрування.",
+  "Time played": "Час гри",
+  "Terraforming": "Тераформування"
 }

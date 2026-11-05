@@ -8,6 +8,7 @@ import {RouteError} from './RouteError';
 import {ApiCreateGame} from './ApiCreateGame';
 import {GameStarter, Lobby} from '../lobby/Lobby';
 import {LobbyError} from '../lobby/lobbyValidation';
+import {lobbyGameProgress} from '../lobby/lobbyGameProbe';
 import {isParticipantId, LobbyAction} from '../../common/lobby/LobbyModel';
 
 /**
@@ -21,11 +22,10 @@ export class ApiLobby extends Handler {
     super();
   }
 
-  public override get(_req: Request, res: Response, ctx: Context): Promise<void> {
+  public override async get(_req: Request, res: Response, ctx: Context): Promise<void> {
     const me = ctx.urlParams.stringOrUndefined('me');
     const roomId = ctx.urlParams.stringOrUndefined('room');
-    responses.writeJson(res, ctx, this.lobby.list(isParticipantId(me) ? me : undefined, roomId));
-    return Promise.resolve();
+    responses.writeJson(res, ctx, await this.lobby.listWithProgress(isParticipantId(me) ? me : undefined, roomId, lobbyGameProgress(ctx.gameLoader)));
   }
 
   public override async post(req: Request, res: Response, ctx: Context): Promise<void> {

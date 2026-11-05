@@ -1297,7 +1297,6 @@
   "Without": "Uten",
   "Must include": "Må være med",
   "1 vs 1": "1 mot 1",
-  "running": "pågår",
   "just opened": "nettopp åpnet",
   "waiting for ${0} min": "venter i ${0} min",
   "Free seat": "Ledig plass",
@@ -1355,5 +1354,8 @@
   "Reset to default": "Tilbakestill til standard",
   "Saved. The chat uses the list right away.": "Lagret. Chatten bruker listen med en gang.",
   "Emoji": "Emoji",
-  "No game to filter right now.": "Ingen spill å filtrere akkurat nå."
+  "No game to filter right now.": "Ingen spill å filtrere akkurat nå.",
+  "Generation": "Generasjon",
+  "Time played": "Spilletid",
+  "Terraforming": "Terraforming"
 }
