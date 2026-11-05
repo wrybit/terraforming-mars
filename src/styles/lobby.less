@@ -587,6 +587,12 @@
     height: 100dvh;
     overflow: hidden;
 
+    // Footer close to the cards and the window edge: 12px each, no page padding in between
+    > .notice {
+      padding-top: 12px;
+      padding-bottom: 12px;
+    }
+
     > .main-container {
       display: flex;
       flex: 1;
@@ -604,6 +610,7 @@
 
   .lobby-layout {
     flex: 1;
+    padding-bottom: 0;
     grid-template-rows: minmax(0, 1fr);
     align-items: stretch;
     min-height: 0;
