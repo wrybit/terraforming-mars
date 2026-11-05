@@ -355,10 +355,10 @@ async function openInLobby(request: {config: NewGameConfig, title: string, liste
   }
 }
 
-// The dialog of the own room opens by itself when somebody else's action put us there (e.g. after reload),
-// but only while it waits for players: an own game that already runs is not a waiting room any more
+// The dialog of the own room opens by itself when entering the lobby (or when somebody else's action put us
+// there): a waiting room with its controls, an own running game with "Continue" (LobbyRoomDialog.vue)
 watch(yourRoomId, (id, before) => {
-  if (id !== undefined && before === undefined && loaded.value && myRoom.value?.state === 'open') {
+  if (id !== undefined && before === undefined && loaded.value) {
     roomOpen.value = true;
   }
 });

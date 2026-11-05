@@ -10,7 +10,8 @@
               <LobbyAvatar kind="human" :color="seat.color" :emoji="seat.emoji" :image="seat.image" size="large" />
               <span class="lobby-seat-name">{{ seat.name }}<template v-if="seat.you"> ({{ $t('you') }})</template></span>
               <span v-if="seat.host" class="lobby-seat-host" v-i18n>Host</span>
-              <span class="lobby-seat-state" :class="{'lobby-seat-state--ready': seat.ready}">{{ $t(seat.ready ? 'ready' : 'not ready yet') }}</span>
+              <!-- "ready" only matters while waiting -->
+              <span v-if="!started" class="lobby-seat-state" :class="{'lobby-seat-state--ready': seat.ready}">{{ $t(seat.ready ? 'ready' : 'not ready yet') }}</span>
             </template>
             <template v-else-if="seat.kind === 'guest'">
               <LobbyAvatar kind="guest" :color="seat.color" :title="seat.name" size="large" />
