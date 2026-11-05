@@ -333,6 +333,11 @@
 // Room minimized: keep the footer free of the waiting bar
 .lobby--waiting .lobby-layout {
   margin-bottom: 72px;
+
+  // Wide screens: the bar sits in the header, nothing to keep free at the bottom
+  @media only screen and (min-width: 1200px) {
+    margin-bottom: 0;
+  }
 }
 
 .lobby-filter-toggle {
@@ -965,6 +970,14 @@ each(@players, {
   font-size: 15px;
   transform: translateX(-50%);
   cursor: pointer;
+
+  // Wide screens: top centre, its middle on the header's middle axis (header 20px down, 64px high); narrower
+  // screens have no free room between title and buttons there, so it stays at the bottom
+  @media only screen and (min-width: 1200px) {
+    top: 52px;
+    bottom: auto;
+    transform: translate(-50%, -50%);
+  }
 }
 
 // ---------- "Create game" as modal ----------
