@@ -1022,7 +1022,7 @@
   "You are not part of this game": "Tu ne fais pas partie de cette partie",
   "Too many new games right now. Please try again later.": "Trop de nouvelles parties en ce moment. Réessaie plus tard.",
   "Public game": "Partie publique",
-  "Click to enter a player yourself": "Clique pour saisir toi-même un joueur",
   "Offer this seat in the lobby again": "Proposer à nouveau cette place dans le salon",
-  "entered by the host": "saisi par l’hôte"
+  "entered by the host": "saisi par l’hôte",
+  "Enter a player yourself": "Saisir toi-même un joueur"
 }

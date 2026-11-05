@@ -1837,7 +1837,7 @@
   "You are not part of this game": "Вы не участвуете в этой игре",
   "Too many new games right now. Please try again later.": "Сейчас слишком много новых игр. Попробуйте позже.",
   "Public game": "Открытая игра",
-  "Click to enter a player yourself": "Нажмите, чтобы вписать игрока самому",
   "Offer this seat in the lobby again": "Снова предложить место в лобби",
-  "entered by the host": "вписан хозяином"
+  "entered by the host": "вписан хозяином",
+  "Enter a player yourself": "Вписать игрока самому"
 }

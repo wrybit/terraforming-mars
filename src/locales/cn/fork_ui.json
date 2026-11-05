@@ -1950,7 +1950,7 @@
   "You are not part of this game": "你不在这个游戏中",
   "Too many new games right now. Please try again later.": "当前新游戏过多，请稍后再试。",
   "Public game": "公开游戏",
-  "Click to enter a player yourself": "点击以自行填写玩家",
   "Offer this seat in the lobby again": "重新在大厅提供此座位",
-  "entered by the host": "由房主填写"
+  "entered by the host": "由房主填写",
+  "Enter a player yourself": "自行填写玩家"
 }

@@ -1123,7 +1123,7 @@
   "You are not part of this game": "Ви не берете участі в цій грі",
   "Too many new games right now. Please try again later.": "Зараз забагато нових ігор. Спробуйте пізніше.",
   "Public game": "Відкрита гра",
-  "Click to enter a player yourself": "Натисніть, щоб вписати гравця самому",
   "Offer this seat in the lobby again": "Знову запропонувати місце в лобі",
-  "entered by the host": "вписаний господарем"
+  "entered by the host": "вписаний господарем",
+  "Enter a player yourself": "Вписати гравця самому"
 }

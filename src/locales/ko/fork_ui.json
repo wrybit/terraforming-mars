@@ -1217,7 +1217,7 @@
   "You are not part of this game": "이 게임의 참가자가 아닙니다",
   "Too many new games right now. Please try again later.": "지금 새 게임이 너무 많습니다. 나중에 다시 시도하세요.",
   "Public game": "공개 게임",
-  "Click to enter a player yourself": "클릭해서 직접 플레이어 입력",
   "Offer this seat in the lobby again": "이 자리를 다시 로비에 내놓기",
-  "entered by the host": "호스트가 입력함"
+  "entered by the host": "호스트가 입력함",
+  "Enter a player yourself": "직접 플레이어 입력"
 }

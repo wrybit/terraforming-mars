@@ -721,7 +721,11 @@ each(@players, {
 
 // Free seat in the player list of the form: no name or color, those come with the joining player
 .create-game-player--lobby-seat {
+  // The button fills the whole card, so its hover area has the same distance to every edge
+  padding: 0;
   border-style: dashed;
+  // The glow of the human card above reaches 4px below it and would swallow the dashed top edge
+  margin-top: 6px;
 }
 
 .create-game-lobby-seat {
@@ -729,7 +733,8 @@ each(@players, {
   align-items: center;
   gap: 10px;
   width: 100%;
-  padding: 12px;
+  padding: 14px 20px;
+  border-radius: inherit;
   border: 0;
   background: transparent;
   color: @lobby-dim;

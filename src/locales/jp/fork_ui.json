@@ -1339,7 +1339,7 @@
   "You are not part of this game": "このゲームの参加者ではありません",
   "Too many new games right now. Please try again later.": "現在、新しいゲームが多すぎます。後でもう一度お試しください。",
   "Public game": "公開ゲーム",
-  "Click to enter a player yourself": "クリックしてプレイヤーを自分で入力",
   "Offer this seat in the lobby again": "この席を再びロビーで募集",
-  "entered by the host": "ホストが入力"
+  "entered by the host": "ホストが入力",
+  "Enter a player yourself": "プレイヤーを自分で入力"
 }

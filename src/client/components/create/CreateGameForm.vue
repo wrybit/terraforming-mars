@@ -340,7 +340,7 @@
                   <span class="create-game-player-position"><SeatIcon kind="human" />{{ index + 1 }}</span>
                   <span class="create-game-lobby-seat-text">
                     <span v-i18n>Free seat for the lobby</span>
-                    <span class="create-game-lobby-seat-hint" v-i18n>Click to enter a player yourself</span>
+                    <span class="create-game-lobby-seat-hint" v-i18n>Enter a player yourself</span>
                   </span>
                 </button>
                 <template v-else>
