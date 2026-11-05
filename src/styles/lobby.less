@@ -65,10 +65,6 @@
   padding: 0;
   overflow: hidden;
 
-  // Fits the window below the header at first and while it sticks to the top when scrolling
-  @media only screen and (min-width: 1400px) {
-    height: calc(100dvh - 120px);
-  }
 }
 
 .lobby-chat-messages {
@@ -584,12 +580,68 @@
   }
 }
 
-// With the chat sidebar: the game cards reach down as far as the chat (same height as .lobby-chat)
+// With the chat sidebar the page itself does not scroll: header, cards and footer fit the window, and each of
+// the three cards (running, open, chat) scrolls on its own. The chain of flex boxes passes the height down.
+@media only screen and (min-width: 1400px) {
+  .topmost-lobby {
+    height: 100dvh;
+    overflow: hidden;
+
+    > .main-container {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      min-height: 0;
+    }
+  }
+
+  #lobby {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .lobby-layout {
+    flex: 1;
+    grid-template-rows: minmax(0, 1fr);
+    align-items: stretch;
+    min-height: 0;
+  }
+
+  .lobby-columns {
+    grid-template-rows: minmax(0, 1fr);
+    min-height: 0;
+
+    > .lobby-list {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+  }
+
+  .lobby-list-rows {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .lobby-chat-aside {
+    position: static;
+    min-height: 0;
+  }
+
+  .lobby-chat.create-game-card {
+    height: 100%;
+  }
+}
+
 .lobby-main {
   @media only screen and (min-width: 1400px) {
     display: flex;
     flex-direction: column;
-    min-height: calc(100dvh - 120px);
+    min-height: 0;
 
     // In a flex column the card margins no longer collapse: only the columns' margin-top stays
     > .create-game-card {
