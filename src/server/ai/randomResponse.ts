@@ -3,6 +3,7 @@ import {IPlayer} from '../IPlayer';
 import {InputResponse} from '../../common/inputs/InputResponse';
 import {OrOptions} from '../inputs/OrOptions';
 import {AndOptions} from '../inputs/AndOptions';
+import {GainResources} from '../inputs/GainResources';
 import {SelectInitialCards} from '../inputs/SelectInitialCards';
 import {SelectOption} from '../inputs/SelectOption';
 import {SelectCard} from '../inputs/SelectCard';
@@ -118,6 +119,11 @@ export function randomResponse(input: PlayerInput, player: IPlayer, random: Rand
   if (input instanceof OrOptions) {
     const index = chooseOrOptionIndex(input, random);
     return {type: 'or', index, response: randomResponse(input.options[index], player, random)};
+  }
+  // Gain resources of choice: the amounts must add up to the count, so pick one resource for all of them.
+  if (input instanceof GainResources) {
+    const chosen = Math.floor(random() * input.options.length);
+    return {type: 'and', responses: input.options.map((_option, index) => ({type: 'amount', amount: index === chosen ? input.count : 0}))};
   }
   if (input instanceof AndOptions) {
     return {type: 'and', responses: input.options.map((option) => randomResponse(option, player, random))};

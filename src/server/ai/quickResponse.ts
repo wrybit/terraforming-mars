@@ -3,6 +3,7 @@ import {IPlayer} from '../IPlayer';
 import {InputResponse} from '../../common/inputs/InputResponse';
 import {OrOptions} from '../inputs/OrOptions';
 import {AndOptions} from '../inputs/AndOptions';
+import {GainResources} from '../inputs/GainResources';
 import {SelectOption} from '../inputs/SelectOption';
 import {SelectCard} from '../inputs/SelectCard';
 import {SelectCardToPlay} from '../inputs/SelectCardToPlay';
@@ -80,6 +81,11 @@ export function quickResponse(input: PlayerInput, player: IPlayer): InputRespons
     const index = input.options.findIndex((option) => !(option instanceof UndoActionOption) && !isSkipLike(option));
     const chosen = index >= 0 ? index : input.options.findIndex((option) => !(option instanceof UndoActionOption));
     return {type: 'or', index: chosen, response: quickResponse(input.options[chosen], player)};
+  }
+  // Gain resources of choice (e.g. Dry Deserts global event): six amounts that must add up to the count – amounts
+  // chosen one by one never matched and the batch game got stuck (round 180). Everything as M€, usable for anything.
+  if (input instanceof GainResources) {
+    return {type: 'and', responses: input.options.map((_option, index) => ({type: 'amount', amount: index === 0 ? input.count : 0}))};
   }
   if (input instanceof AndOptions) {
     return {type: 'and', responses: input.options.map((option) => quickResponse(option, player))};
