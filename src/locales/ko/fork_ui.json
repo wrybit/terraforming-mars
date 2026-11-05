@@ -1219,5 +1219,6 @@
   "Public game": "공개 게임",
   "Offer this seat in the lobby again": "이 자리를 다시 로비에 내놓기",
   "entered by the host": "호스트가 입력함",
-  "Enter a player yourself": "직접 플레이어 입력"
+  "Enter a player yourself": "직접 플레이어 입력",
+  "Game ${0} was closed on ${1}: its creator left before it began and nobody else joined.": "게임 ${0}이(가) ${1}에 닫혔습니다: 만든 사람이 시작 전에 나갔고 아무도 참가하지 않았습니다."
 }

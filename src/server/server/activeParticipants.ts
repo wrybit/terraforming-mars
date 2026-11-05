@@ -1,4 +1,4 @@
-import {ParticipantId} from '../../common/Types';
+import {GameId, ParticipantId} from '../../common/Types';
 
 // Who is playing right now: game pages of running games poll the server regularly (GET /api/status).
 // The update script of the test server only restarts the server when nobody is playing.
@@ -24,7 +24,21 @@ export function isActiveParticipant(id: ParticipantId, now: number = Date.now())
   return seen !== undefined && now - seen <= ACTIVE_WINDOW_MILLISECONDS;
 }
 
+// The game page (game?id=, links for the players) is open: the creator of a lobby game may sit there
+// instead of on his player page. Kept apart, since it is no player and must not hold back updates.
+const gamePagesSeen = new Map<GameId, number>();
+
+export function noteGamePageVisit(id: GameId, now: number = Date.now()): void {
+  gamePagesSeen.set(id, now);
+}
+
+export function isGamePageOpen(id: GameId, now: number = Date.now()): boolean {
+  const seen = gamePagesSeen.get(id);
+  return seen !== undefined && now - seen <= ACTIVE_WINDOW_MILLISECONDS;
+}
+
 /** Only for tests. */
 export function clearActiveParticipants(): void {
   lastSeen.clear();
+  gamePagesSeen.clear();
 }

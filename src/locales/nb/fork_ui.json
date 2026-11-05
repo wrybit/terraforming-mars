@@ -1337,5 +1337,6 @@
   "Public game": "Offentlig spill",
   "Offer this seat in the lobby again": "Tilby plassen i lobbyen igjen",
   "entered by the host": "lagt inn av verten",
-  "Enter a player yourself": "Legg inn en spiller selv"
+  "Enter a player yourself": "Legg inn en spiller selv",
+  "Game ${0} was closed on ${1}: its creator left before it began and nobody else joined.": "Spillet ${0} ble lukket ${1}: den som opprettet det, gikk før det begynte, og ingen andre ble med."
 }

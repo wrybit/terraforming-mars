@@ -1767,5 +1767,6 @@
   "Public game": "Gra publiczna",
   "Offer this seat in the lobby again": "Zaoferuj to miejsce ponownie w lobby",
   "entered by the host": "wpisany przez gospodarza",
-  "Enter a player yourself": "Wpisz gracza samodzielnie"
+  "Enter a player yourself": "Wpisz gracza samodzielnie",
+  "Game ${0} was closed on ${1}: its creator left before it began and nobody else joined.": "Gra ${0} została zamknięta ${1}: jej twórca odszedł przed rozpoczęciem i nikt inny nie dołączył."
 }

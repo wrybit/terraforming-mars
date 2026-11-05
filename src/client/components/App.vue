@@ -108,7 +108,7 @@ import {lobbyRoomIdFromPath} from '@/common/lobby/lobbyUrl';
 import {PlayerViewModel, ViewModel} from '@/common/models/PlayerModel';
 import {SimpleGameModel} from '@/common/models/SimpleGameModel';
 import {SpectatorModel} from '@/common/models/SpectatorModel';
-import {isPlayerId, isSpectatorId} from '@/common/Types';
+import {isGameId, isPlayerId, isSpectatorId} from '@/common/Types';
 import {hasShowModal, showModal, windowHasHTMLDialogElement} from './HTMLDialogElementCompatibility';
 
 import dialogPolyfill from 'dialog-polyfill';
@@ -368,7 +368,8 @@ export default defineComponent({
     setDocumentTitle();
     // Game pages send their id, so the server knows somebody is playing (no automatic update then)
     const pageId = new URLSearchParams(window.location.search).get('id') ?? '';
-    startServerStatusPolling(isPlayerId(pageId) || isSpectatorId(pageId) ? pageId : undefined);
+    // The game page (links for the players) too: a lobby game whose creator sits there counts as attended
+    startServerStatusPolling(isPlayerId(pageId) || isSpectatorId(pageId) || isGameId(pageId) ? pageId : undefined);
     if (!windowHasHTMLDialogElement()) {
       dialogPolyfill.registerDialog(document.getElementById('alert-dialog') as HTMLDialogElement);
     }

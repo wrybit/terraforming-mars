@@ -34,7 +34,9 @@ export async function describeGameLoadFailure(id: string, err: unknown): Promise
       const when = new Date(deletion.deletedAt).toLocaleString();
       const what = deletion.reason === 'purged-unfinished' ?
         translateTextWithParams('Game ${0} was removed automatically on ${1}: unfinished games are deleted after ${2} days.', [deletion.gameId, when, deletion.maxGameDays ?? '?']) :
-        translateTextWithParams('Game ${0} was deleted in the admin area on ${1}.', [deletion.gameId, when]);
+        deletion.reason === 'closed-unstarted' ?
+          translateTextWithParams('Game ${0} was closed on ${1}: its creator left before it began and nobody else joined.', [deletion.gameId, when]) :
+          translateTextWithParams('Game ${0} was deleted in the admin area on ${1}.', [deletion.gameId, when]);
       return {
         title: translateText('Game deleted'),
         text: what + playersSentence(deletion.playerNames) + '\n' + translateText('Its data no longer exists on this server, so the link no longer works.'),

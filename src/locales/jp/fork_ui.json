@@ -1341,5 +1341,6 @@
   "Public game": "公開ゲーム",
   "Offer this seat in the lobby again": "この席を再びロビーで募集",
   "entered by the host": "ホストが入力",
-  "Enter a player yourself": "プレイヤーを自分で入力"
+  "Enter a player yourself": "プレイヤーを自分で入力",
+  "Game ${0} was closed on ${1}: its creator left before it began and nobody else joined.": "ゲーム ${0} は ${1} に終了しました：作成者が開始前に退出し、他に誰も参加しませんでした。"
 }

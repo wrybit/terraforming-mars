@@ -282,8 +282,8 @@ export class GameLoader implements IGameLoader {
     return Database.getInstance().saveGame(game);
   }
 
-  public async deleteGame(gameId: GameId): Promise<void> {
-    const entry = await this.forgetGame(gameId, 'deleted-in-admin-area');
+  public async deleteGame(gameId: GameId, reason: GameDeletionReason = 'deleted-in-admin-area'): Promise<void> {
+    const entry = await this.forgetGame(gameId, reason);
     // A still-pending move must not write the deleted game back to the database
     this.purgedGames.push(gameId);
     await Database.getInstance().deleteGame(gameId);

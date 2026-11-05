@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {GameStarter, Lobby, PARTICIPANT_TIMEOUT_MS, StartedGame} from '../../src/server/lobby/Lobby';
+import {ABANDONED_AFTER_MS, GameProbe, GameStarter, Lobby, PARTICIPANT_TIMEOUT_MS, StartedGame} from '../../src/server/lobby/Lobby';
 import {LobbyError} from '../../src/server/lobby/lobbyValidation';
 import {NewGameConfig} from '../../src/common/game/NewGameConfig';
 import {LobbyProfile} from '../../src/common/lobby/LobbyModel';
@@ -64,6 +64,69 @@ describe('Lobby', () => {
     expect(lobby.list(OTHER).rooms).has.length(1);
     lobby.forgetGame('g1');
     expect(lobby.list(OTHER).rooms).is.empty;
+  });
+
+  describe('closes abandoned games', () => {
+    let present: Set<string>;
+    let begun: boolean | undefined;
+    let closed: Array<string>;
+    const probe: GameProbe = {
+      isPresent: (id) => present.has(id),
+      hasBegun: () => Promise.resolve(begun),
+      close: (gameId) => {
+        closed.push(gameId);
+        return Promise.resolve();
+      },
+    };
+
+    beforeEach(async () => {
+      present = new Set();
+      begun = false;
+      closed = [];
+      // Host p0 with an AI: starts right away
+      await lobby.open(HOST, profile('Ann'), '', true, config(['human', 'ai']), starter);
+    });
+
+    it('closes the game once the creator is gone long enough', async () => {
+      now += ABANDONED_AFTER_MS - 1;
+      await lobby.closeAbandoned(probe, 0);
+      expect(closed).is.empty;
+      now += 1;
+      await lobby.closeAbandoned(probe, 0);
+      expect(closed).deep.eq(['g1']);
+      expect(lobby.list(OTHER).rooms).is.empty;
+    });
+
+    it('keeps it while the creator is there, after a restart and once it began', async () => {
+      now += ABANDONED_AFTER_MS;
+      present.add('p0');
+      await lobby.closeAbandoned(probe, 0);
+      present.clear();
+      await lobby.closeAbandoned(probe, now);
+      expect(closed).is.empty;
+      begun = true;
+      await lobby.closeAbandoned(probe, 0);
+      begun = false;
+      await lobby.closeAbandoned(probe, 0);
+      expect(closed).is.empty;
+      expect(lobby.list(OTHER).rooms).has.length(1);
+    });
+  });
+
+  it('keeps a game somebody else joined', async () => {
+    const closed: Array<string> = [];
+    let present = ['p1'];
+    const probe: GameProbe = {isPresent: (id) => present.includes(id), hasBegun: () => Promise.resolve(false), close: (gameId) => {
+      closed.push(gameId);
+      return Promise.resolve();
+    }};
+    const room = await lobby.open(HOST, profile('Ann'), '', true, config(['human', 'human']), starter);
+    await lobby.join(GUEST, profile('Bob'), room.id, starter);
+    await lobby.closeAbandoned(probe, 0);
+    present = [];
+    now += ABANDONED_AFTER_MS;
+    await lobby.closeAbandoned(probe, 0);
+    expect(closed).is.empty;
   });
 
   it('drops a room whose game cannot be created', async () => {

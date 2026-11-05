@@ -1125,5 +1125,6 @@
   "Public game": "Відкрита гра",
   "Offer this seat in the lobby again": "Знову запропонувати місце в лобі",
   "entered by the host": "вписаний господарем",
-  "Enter a player yourself": "Вписати гравця самому"
+  "Enter a player yourself": "Вписати гравця самому",
+  "Game ${0} was closed on ${1}: its creator left before it began and nobody else joined.": "Гру ${0} закрито ${1}: її творець пішов до початку, і більше ніхто не приєднався."
 }

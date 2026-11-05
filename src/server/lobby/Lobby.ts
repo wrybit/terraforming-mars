@@ -14,6 +14,8 @@ export const PARTICIPANT_TIMEOUT_MS = 45_000;
  * This is only the safety net for games nobody finishes on a server that never purges them.
  */
 export const STARTED_ROOM_MAX_AGE_MS = 30 * 24 * 60 * 60 * 1000;
+/** A game whose creator is gone this long, before anything happened and with nobody else ever there, is closed */
+export const ABANDONED_AFTER_MS = 3 * 60 * 1000;
 /** Rooms nobody completes are dropped at the latest after this time */
 export const OPEN_ROOM_MAX_AGE_MS = 12 * 60 * 60 * 1000;
 
@@ -23,6 +25,15 @@ export type StartedGame = {
   spectatorId: SpectatorId | undefined;
   players: ReadonlyArray<{id: PlayerId}>;
 };
+/** What the lobby needs to know about running games to close abandoned ones (lobbyGameProbe.ts) */
+export type GameProbe = {
+  /** A player page (player id) or the links page (game id) was open within the last minutes */
+  isPresent(id: PlayerId | GameId): boolean;
+  /** Whether anything happened beyond choosing corporation and starting cards; undefined: the game is gone */
+  hasBegun(gameId: GameId): Promise<boolean | undefined>;
+  close(gameId: GameId): Promise<void>;
+};
+
 /** Creates the game exactly as the create form would (ApiCreateGame.createGame) */
 export type GameStarter = (config: NewGameConfig) => Promise<StartedGame>;
 
@@ -45,6 +56,13 @@ type Room = {
   spectatorId?: SpectatorId;
   /** Participant -> own player id once the game runs */
   playerIds: Record<string, PlayerId>;
+  hostPlayerId?: PlayerId;
+  /** Players besides the host who play themselves (joined in the lobby or entered by hand) */
+  otherPlayerIds?: Array<PlayerId>;
+  /** Somebody besides the host had the game open once: the game is no longer only the host's */
+  joined?: boolean;
+  /** Something happened beyond the initial choice: the game stays, whoever leaves */
+  begun?: boolean;
 };
 
 /**
@@ -93,6 +111,43 @@ export class Lobby {
 
   private save(): void {
     this.storage.save(Array.from(this.rooms.values()));
+  }
+
+  /**
+   * Closes games whose creator left while they were still at the initial choice (corporation and
+   * starting cards) and that nobody else ever opened. Presence is only known since watchingSince
+   * (server start), so nobody counts as gone before ABANDONED_AFTER_MS after that.
+   */
+  public async closeAbandoned(probe: GameProbe, watchingSince: number): Promise<void> {
+    this.ensureLoaded();
+    const now = this.clock();
+    for (const room of Array.from(this.rooms.values())) {
+      const gameId = room.gameId;
+      if (room.state !== 'started' || room.begun || room.joined || gameId === undefined || room.hostPlayerId === undefined) {
+        continue;
+      }
+      if ((room.otherPlayerIds ?? []).some((id) => probe.isPresent(id))) {
+        room.joined = true;
+        this.save();
+        continue;
+      }
+      if (probe.isPresent(room.hostPlayerId) || probe.isPresent(gameId)) {
+        continue;
+      }
+      if (now - Math.max(room.startedAt ?? now, watchingSince) < ABANDONED_AFTER_MS) {
+        continue;
+      }
+      const begun = await probe.hasBegun(gameId);
+      if (begun === true) {
+        room.begun = true;
+        this.save();
+        continue;
+      }
+      if (begun === false) {
+        await probe.close(gameId);
+      }
+      this.forgetGame(gameId);
+    }
   }
 
   /** The game of a room finished or was deleted: the room leaves the "running" list */
@@ -278,11 +333,19 @@ export class Lobby {
       const game = await starter(config);
       room.gameId = game.id;
       room.spectatorId = game.spectatorId;
+      const otherPlayerIds: Array<PlayerId> = [];
       room.seats.forEach((seat, index) => {
+        const playerId = game.players[index].id;
         if (seat.kind === 'human') {
-          room.playerIds[seat.participant] = game.players[index].id;
+          room.playerIds[seat.participant] = playerId;
+        }
+        if (seat.kind === 'human' && seat.participant === room.host) {
+          room.hostPlayerId = playerId;
+        } else if (seat.kind === 'human' || seat.kind === 'guest') {
+          otherPlayerIds.push(playerId);
         }
       });
+      room.otherPlayerIds = otherPlayerIds;
       room.state = 'started';
       room.startedAt = this.clock();
       this.save();
