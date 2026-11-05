@@ -13,7 +13,8 @@
         <!-- Same shortcut as the create button in the form (Mod + Enter): once to open it, once more to create.
              While the form is open only its button carries the shortcut (the dispatcher takes the first one it finds) -->
         <button type="button" class="btn btn-rounded lobby-open-button" :data-hotkey="createOpen ? undefined : 'create-game'" :title="$t('Create game')" @click="openCreate()">
-          <svg class="lobby-open-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
+          <!-- A board hex with a plus: a new game -->
+          <svg class="lobby-open-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7.8 4.5v9L12 21l-7.8-4.5v-9z" /><path d="M12 9v6M9 12h6" /></svg>
           <span class="lobby-open-label" v-i18n>Create game</span>
           <HotkeyKeys action="create-game" class="lobby-open-keys" />
         </button>
