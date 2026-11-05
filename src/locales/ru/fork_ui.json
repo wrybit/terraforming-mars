@@ -1844,5 +1844,17 @@
   "No game is running right now.": "Сейчас нет идущих игр.",
   "The game is running.": "Игра идёт.",
   "AI players are not available with these settings.": "С этими настройками игроки-ИИ недоступны.",
-  "No open game to filter right now.": "Сейчас нет открытых игр для фильтрации."
+  "No open game to filter right now.": "Сейчас нет открытых игр для фильтрации.",
+  "Chat": "Чат",
+  "No messages yet. Say hello!": "Сообщений пока нет. Поздоровайтесь!",
+  "Write a message": "Написать сообщение",
+  "Send": "Отправить",
+  "Please enter a message": "Введите сообщение",
+  "The message is too long": "Сообщение слишком длинное",
+  "Links to other websites are not allowed in the chat": "Ссылки на другие сайты в чате запрещены",
+  "Too many messages. Please wait a moment.": "Слишком много сообщений. Подождите немного.",
+  "Chat: blocked words": "Чат: запрещённые слова",
+  "One word per line. A word is also masked at the start of longer words (\"arsch\" also in \"Arschloch\", not in \"Barsch\"). Links to other websites are always blocked.": "Одно слово в строке. Слово скрывается и в начале более длинных слов («arsch» и в «Arschloch», но не в «Barsch»). Ссылки на другие сайты всегда блокируются.",
+  "Reset to default": "Вернуть по умолчанию",
+  "Saved. The chat uses the list right away.": "Сохранено. Чат сразу использует список."
 }

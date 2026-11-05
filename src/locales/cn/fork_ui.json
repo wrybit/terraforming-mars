@@ -1957,5 +1957,17 @@
   "No game is running right now.": "目前没有进行中的游戏。",
   "The game is running.": "游戏正在进行。",
   "AI players are not available with these settings.": "这些设置下无法使用 AI 玩家。",
-  "No open game to filter right now.": "目前没有可筛选的开放游戏。"
+  "No open game to filter right now.": "目前没有可筛选的开放游戏。",
+  "Chat": "聊天",
+  "No messages yet. Say hello!": "还没有消息。打个招呼吧！",
+  "Write a message": "写消息",
+  "Send": "发送",
+  "Please enter a message": "请输入消息",
+  "The message is too long": "消息太长",
+  "Links to other websites are not allowed in the chat": "聊天中不允许链接到其他网站",
+  "Too many messages. Please wait a moment.": "消息太多。请稍等。",
+  "Chat: blocked words": "聊天：屏蔽词",
+  "One word per line. A word is also masked at the start of longer words (\"arsch\" also in \"Arschloch\", not in \"Barsch\"). Links to other websites are always blocked.": "每行一个词。词也会在更长单词的开头被屏蔽（“arsch”也在“Arschloch”中，不在“Barsch”中）。指向其他网站的链接始终被屏蔽。",
+  "Reset to default": "恢复默认",
+  "Saved. The chat uses the list right away.": "已保存。聊天立即使用该列表。"
 }

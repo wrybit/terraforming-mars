@@ -1,6 +1,7 @@
 import {paths} from '@/common/app/paths';
 import {LobbyAction, LobbyListModel, LobbyRoomModel} from '@/common/lobby/LobbyModel';
-import {fetchOrFail} from '@/client/utils/requestFailure';
+import {describeFailure, failureOf, fetchOrFail} from '@/client/utils/requestFailure';
+import {translateText} from '@/client/directives/i18n';
 import {lobbyParticipantId} from './lobbyProfile';
 
 // Requests of the lobby page (server: routes/ApiLobby.ts). Listing doubles as the heartbeat that keeps the own seat.
@@ -25,4 +26,13 @@ export async function lobbyAction(action: LobbyRequest): Promise<LobbyRoomModel 
   });
   const json = await response.json();
   return json?.id === undefined ? undefined : json;
+}
+
+/**
+ * Text for a failed lobby or chat request. The lobby's own refusals (full, foreign link, too many messages) come as
+ * a bad request with a short text that has a translation; the server writes "Bad request: " in front of it.
+ */
+export function lobbyFailureText(error: unknown): string {
+  const failure = failureOf(error);
+  return failure.kind === 'http' && failure.status === 400 ? translateText(failure.serverText.replace(/^Bad request:\s*/i, '')) : describeFailure(failure);
 }

@@ -26,6 +26,8 @@ import {ApiGames} from '../routes/ApiGames';
 import {ApiHeapSnapshot} from '../routes/ApiHeapSnapshot';
 import {ApiIPs} from '../routes/ApiIPs';
 import {ApiLobby} from '../routes/ApiLobby';
+import {ApiLobbyChat} from '../routes/ApiLobbyChat';
+import {ApiAdminChatWords} from '../routes/ApiAdminChatWords';
 import {LobbyRoomPage} from '../routes/LobbyRoomPage';
 import {LOBBY_ROOM_PATH} from '../../common/lobby/lobbyUrl';
 import {ApiLogout} from '../routes/ApiLogout';
@@ -157,6 +159,8 @@ const handlers: Map<string, IHandler> = new Map(
     [paths.LOAD_GAME, LoadGame.INSTANCE],
     [paths.LOGIN, Login.INSTANCE],
     [paths.API_LOBBY, ApiLobby.INSTANCE],
+    [paths.API_LOBBY_CHAT, ApiLobbyChat.INSTANCE],
+    [paths.API_ADMIN_CHAT_WORDS, ApiAdminChatWords.INSTANCE],
     [paths.API_LOGOUT, ApiLogout.INSTANCE],
     ['main.js', ServeAsset.INSTANCE],
     ['vendors.js', ServeAsset.INSTANCE],

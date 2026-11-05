@@ -1921,5 +1921,17 @@
   "No game is running right now.": "В момента няма текуща игра.",
   "The game is running.": "Играта тече.",
   "AI players are not available with these settings.": "С тези настройки няма играчи ИИ.",
-  "No open game to filter right now.": "В момента няма отворена игра за филтриране."
+  "No open game to filter right now.": "В момента няма отворена игра за филтриране.",
+  "Chat": "Чат",
+  "No messages yet. Say hello!": "Все още няма съобщения. Кажи здравей!",
+  "Write a message": "Напиши съобщение",
+  "Send": "Изпрати",
+  "Please enter a message": "Въведи съобщение",
+  "The message is too long": "Съобщението е твърде дълго",
+  "Links to other websites are not allowed in the chat": "Връзки към други сайтове не са разрешени в чата",
+  "Too many messages. Please wait a moment.": "Твърде много съобщения. Изчакай малко.",
+  "Chat: blocked words": "Чат: забранени думи",
+  "One word per line. A word is also masked at the start of longer words (\"arsch\" also in \"Arschloch\", not in \"Barsch\"). Links to other websites are always blocked.": "По една дума на ред. Думата се маскира и в началото на по-дълги думи („arsch“ и в „Arschloch“, не в „Barsch“). Връзки към други сайтове винаги са блокирани.",
+  "Reset to default": "Възстанови по подразбиране",
+  "Saved. The chat uses the list right away.": "Запазено. Чатът използва списъка веднага."
 }

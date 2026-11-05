@@ -1224,5 +1224,17 @@
   "No game is running right now.": "지금 진행 중인 게임이 없습니다.",
   "The game is running.": "게임이 진행 중입니다.",
   "AI players are not available with these settings.": "이 설정에서는 AI 플레이어를 사용할 수 없습니다.",
-  "No open game to filter right now.": "지금은 필터링할 열린 게임이 없습니다."
+  "No open game to filter right now.": "지금은 필터링할 열린 게임이 없습니다.",
+  "Chat": "채팅",
+  "No messages yet. Say hello!": "아직 메시지가 없습니다. 인사해 보세요!",
+  "Write a message": "메시지 쓰기",
+  "Send": "보내기",
+  "Please enter a message": "메시지를 입력하세요",
+  "The message is too long": "메시지가 너무 깁니다",
+  "Links to other websites are not allowed in the chat": "채팅에서는 다른 웹사이트 링크를 사용할 수 없습니다",
+  "Too many messages. Please wait a moment.": "메시지가 너무 많습니다. 잠시 기다려 주세요.",
+  "Chat: blocked words": "채팅: 차단 단어",
+  "One word per line. A word is also masked at the start of longer words (\"arsch\" also in \"Arschloch\", not in \"Barsch\"). Links to other websites are always blocked.": "한 줄에 한 단어. 더 긴 단어의 앞부분에서도 가려집니다(\"arsch\"는 \"Arschloch\"에서도, \"Barsch\"에서는 아님). 다른 웹사이트 링크는 항상 차단됩니다.",
+  "Reset to default": "기본값으로 되돌리기",
+  "Saved. The chat uses the list right away.": "저장했습니다. 채팅이 목록을 바로 사용합니다."
 }

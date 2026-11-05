@@ -1346,5 +1346,17 @@
   "No game is running right now.": "現在進行中のゲームはありません。",
   "The game is running.": "ゲームは進行中です。",
   "AI players are not available with these settings.": "この設定では AI プレイヤーは使えません。",
-  "No open game to filter right now.": "現在フィルターできる募集中のゲームはありません。"
+  "No open game to filter right now.": "現在フィルターできる募集中のゲームはありません。",
+  "Chat": "チャット",
+  "No messages yet. Say hello!": "まだメッセージはありません。あいさつしてみましょう！",
+  "Write a message": "メッセージを書く",
+  "Send": "送信",
+  "Please enter a message": "メッセージを入力してください",
+  "The message is too long": "メッセージが長すぎます",
+  "Links to other websites are not allowed in the chat": "チャットでは他のサイトへのリンクは使えません",
+  "Too many messages. Please wait a moment.": "メッセージが多すぎます。少し待ってください。",
+  "Chat: blocked words": "チャット：禁止語",
+  "One word per line. A word is also masked at the start of longer words (\"arsch\" also in \"Arschloch\", not in \"Barsch\"). Links to other websites are always blocked.": "1行に1語。長い単語の先頭でも伏せ字になります（「arsch」は「Arschloch」でも、「Barsch」では対象外）。他のサイトへのリンクは常にブロックされます。",
+  "Reset to default": "既定に戻す",
+  "Saved. The chat uses the list right away.": "保存しました。チャットはすぐにこのリストを使います。"
 }

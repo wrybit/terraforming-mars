@@ -2136,5 +2136,17 @@
   "No game is running right now.": "Nenhuma partida em andamento agora.",
   "The game is running.": "A partida está em andamento.",
   "AI players are not available with these settings.": "Jogadores de IA não estão disponíveis com estas configurações.",
-  "No open game to filter right now.": "Nenhuma partida aberta para filtrar agora."
+  "No open game to filter right now.": "Nenhuma partida aberta para filtrar agora.",
+  "Chat": "Chat",
+  "No messages yet. Say hello!": "Ainda não há mensagens. Diga olá!",
+  "Write a message": "Escreva uma mensagem",
+  "Send": "Enviar",
+  "Please enter a message": "Digite uma mensagem",
+  "The message is too long": "A mensagem é longa demais",
+  "Links to other websites are not allowed in the chat": "Links para outros sites não são permitidos no chat",
+  "Too many messages. Please wait a moment.": "Mensagens demais. Aguarde um momento.",
+  "Chat: blocked words": "Chat: palavras bloqueadas",
+  "One word per line. A word is also masked at the start of longer words (\"arsch\" also in \"Arschloch\", not in \"Barsch\"). Links to other websites are always blocked.": "Uma palavra por linha. Uma palavra também é mascarada no início de palavras maiores (\"arsch\" também em \"Arschloch\", não em \"Barsch\"). Links para outros sites são sempre bloqueados.",
+  "Reset to default": "Restaurar padrão",
+  "Saved. The chat uses the list right away.": "Salvo. O chat usa a lista imediatamente."
 }

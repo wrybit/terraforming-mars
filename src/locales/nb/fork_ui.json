@@ -1342,5 +1342,17 @@
   "No game is running right now.": "Ingen spill pågår akkurat nå.",
   "The game is running.": "Spillet pågår.",
   "AI players are not available with these settings.": "AI-spillere er ikke tilgjengelige med disse innstillingene.",
-  "No open game to filter right now.": "Ingen åpne spill å filtrere akkurat nå."
+  "No open game to filter right now.": "Ingen åpne spill å filtrere akkurat nå.",
+  "Chat": "Chat",
+  "No messages yet. Say hello!": "Ingen meldinger ennå. Si hei!",
+  "Write a message": "Skriv en melding",
+  "Send": "Send",
+  "Please enter a message": "Skriv inn en melding",
+  "The message is too long": "Meldingen er for lang",
+  "Links to other websites are not allowed in the chat": "Lenker til andre nettsteder er ikke tillatt i chatten",
+  "Too many messages. Please wait a moment.": "For mange meldinger. Vent litt.",
+  "Chat: blocked words": "Chat: blokkerte ord",
+  "One word per line. A word is also masked at the start of longer words (\"arsch\" also in \"Arschloch\", not in \"Barsch\"). Links to other websites are always blocked.": "Ett ord per linje. Et ord maskeres også i starten av lengre ord («arsch» også i «Arschloch», ikke i «Barsch»). Lenker til andre nettsteder blokkeres alltid.",
+  "Reset to default": "Tilbakestill til standard",
+  "Saved. The chat uses the list right away.": "Lagret. Chatten bruker listen med en gang."
 }

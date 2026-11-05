@@ -1156,5 +1156,17 @@
   "No game is running right now.": "Jelenleg nem fut játék.",
   "The game is running.": "A játék folyamatban van.",
   "AI players are not available with these settings.": "Ezekkel a beállításokkal nem lehet MI-játékos.",
-  "No open game to filter right now.": "Jelenleg nincs szűrhető nyitott játék."
+  "No open game to filter right now.": "Jelenleg nincs szűrhető nyitott játék.",
+  "Chat": "Csevegés",
+  "No messages yet. Say hello!": "Még nincs üzenet. Köszönj!",
+  "Write a message": "Üzenet írása",
+  "Send": "Küldés",
+  "Please enter a message": "Írj be egy üzenetet",
+  "The message is too long": "Az üzenet túl hosszú",
+  "Links to other websites are not allowed in the chat": "Más weboldalakra mutató hivatkozás nem engedélyezett a csevegésben",
+  "Too many messages. Please wait a moment.": "Túl sok üzenet. Várj egy kicsit.",
+  "Chat: blocked words": "Csevegés: tiltott szavak",
+  "One word per line. A word is also masked at the start of longer words (\"arsch\" also in \"Arschloch\", not in \"Barsch\"). Links to other websites are always blocked.": "Soronként egy szó. A szó hosszabb szavak elején is elfedésre kerül („arsch” az „Arschloch”-ban is, a „Barsch”-ban nem). Más weboldalakra mutató hivatkozások mindig tiltottak.",
+  "Reset to default": "Alapértelmezett visszaállítása",
+  "Saved. The chat uses the list right away.": "Mentve. A csevegés azonnal használja a listát."
 }

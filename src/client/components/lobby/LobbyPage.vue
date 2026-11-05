@@ -18,69 +18,75 @@
     </header>
 
     <main class="lobby-layout">
-      <section class="create-game-card lobby-list-card">
-        <div class="lobby-tools">
-          <label class="card-list-search lobby-search">
-            <span class="card-list-search-icon" aria-hidden="true"></span>
-            <input class="card-list-search-input" type="search" v-model="search" :placeholder="$t('Search game or player')">
-          </label>
-          <button type="button" class="create-game-icon-button lobby-filter-toggle" :class="{'lobby-filter-toggle--open': filtersOpen}"
-            :aria-expanded="filtersOpen" @click="filtersOpen = !filtersOpen">
-            <span class="card-list-filter-toggle-icon" aria-hidden="true"></span>
-            <span v-i18n>Filters</span>
-            <span v-if="filterCount > 0" class="lobby-badge">{{ filterCount }}</span>
-            <span class="lobby-chevron" aria-hidden="true"></span>
-          </button>
-          <button type="button" class="create-game-icon-button" :disabled="quickMatch === undefined"
-            :title="quickMatch === undefined ? $t('No open game fits right now') : quickMatch.title" @click="quickStart()">
-            <span aria-hidden="true">⚡</span><span v-i18n>Quick start</span>
-          </button>
-        </div>
-
-        <div v-if="filtersOpen" class="lobby-filter-panel">
-          <LobbyFilterPanel v-model="filters" :rooms="rooms" />
-          <div class="lobby-filter-foot">
-            <span v-if="filterCount === 0" class="lobby-dialog-note" v-i18n>Nothing selected means: all games.</span>
-            <button v-else type="button" class="create-game-small-button" @click="filters = defaultLobbyFilters()" v-i18n>Reset all filters</button>
+      <div class="lobby-main">
+        <section class="create-game-card lobby-list-card">
+          <div class="lobby-tools">
+            <label class="card-list-search lobby-search">
+              <span class="card-list-search-icon" aria-hidden="true"></span>
+              <input class="card-list-search-input" type="search" v-model="search" :placeholder="$t('Search game or player')">
+            </label>
+            <button type="button" class="create-game-icon-button lobby-filter-toggle" :class="{'lobby-filter-toggle--open': filtersOpen}"
+              :aria-expanded="filtersOpen" @click="filtersOpen = !filtersOpen">
+              <span class="card-list-filter-toggle-icon" aria-hidden="true"></span>
+              <span v-i18n>Filters</span>
+              <span v-if="filterCount > 0" class="lobby-badge">{{ filterCount }}</span>
+              <span class="lobby-chevron" aria-hidden="true"></span>
+            </button>
+            <button type="button" class="create-game-icon-button" :disabled="quickMatch === undefined"
+              :title="quickMatch === undefined ? $t('No open game fits right now') : quickMatch.title" @click="quickStart()">
+              <span aria-hidden="true">⚡</span><span v-i18n>Quick start</span>
+            </button>
           </div>
-        </div>
 
-        <div v-if="queueing" class="lobby-queue">
-          <span class="lobby-queue-pulse" aria-hidden="true"></span>
-          <span class="lobby-queue-text">
-            <b>{{ $t('Waiting for players') }} {{ queueTime }}</b>
-            <span v-i18n>As soon as a fitting game is opened, you will be asked to join.</span>
-          </span>
-          <AppButton class="btn-tone-danger" title="Cancel" @click="queueing = false" />
-        </div>
-
-        <p v-if="loadError" class="lobby-error">{{ loadError }}</p>
-      </section>
-
-      <!-- Two cards side by side: left the running games to watch or continue, right the new ones you can take part in -->
-      <div class="lobby-columns">
-        <section class="create-game-card lobby-list-card lobby-list">
-          <div class="lobby-section-title"><span v-i18n>Running games</span><span class="lobby-section-count">{{ runningRooms.length }}</span></div>
-          <LobbyGameRow v-for="(room, index) in runningRooms" :key="room.id" :room="room" :position="index" />
-          <div v-if="runningRooms.length === 0 && loaded" class="lobby-empty">
-            <span v-i18n>No game is running right now.</span>
+          <div v-if="filtersOpen" class="lobby-filter-panel">
+            <LobbyFilterPanel v-model="filters" :rooms="rooms" />
+            <div class="lobby-filter-foot">
+              <span v-if="filterCount === 0" class="lobby-dialog-note" v-i18n>Nothing selected means: all games.</span>
+              <button v-else type="button" class="create-game-small-button" @click="filters = defaultLobbyFilters()" v-i18n>Reset all filters</button>
+            </div>
           </div>
+
+          <div v-if="queueing" class="lobby-queue">
+            <span class="lobby-queue-pulse" aria-hidden="true"></span>
+            <span class="lobby-queue-text">
+              <b>{{ $t('Waiting for players') }} {{ queueTime }}</b>
+              <span v-i18n>As soon as a fitting game is opened, you will be asked to join.</span>
+            </span>
+            <AppButton class="btn-tone-danger" title="Cancel" @click="queueing = false" />
+          </div>
+
+          <p v-if="loadError" class="lobby-error">{{ loadError }}</p>
         </section>
-        <section class="create-game-card lobby-list-card lobby-list">
-          <div class="lobby-section-title"><span v-i18n>Open games</span><span class="lobby-section-count">{{ openRooms.length }}</span></div>
-          <LobbyGameRow v-for="(room, index) in openRooms" :key="room.id" :room="room" :position="runningRooms.length + index" @join="join(room)" @open-room="roomOpen = true" />
-          <div v-if="openRooms.length === 0 && loaded" class="lobby-empty">
-            <template v-if="filterCount > 0 && !queueing">
-              <span v-i18n>No open game fits your filters.</span>
-              <div class="lobby-empty-actions">
-                <AppButton class="btn-tone-quiet" title="Reset filters" @click="filters = defaultLobbyFilters()" />
-                <AppButton title="Wait until one fits" @click="startQueue()" />
-              </div>
-            </template>
-            <span v-else v-i18n>No game is open right now.</span>
-          </div>
-        </section>
+
+        <!-- Two cards side by side: left the running games to watch or continue, right the new ones you can take part in -->
+        <div class="lobby-columns">
+          <section class="create-game-card lobby-list-card lobby-list">
+            <div class="lobby-section-title"><span v-i18n>Running games</span><span class="lobby-section-count">{{ runningRooms.length }}</span></div>
+            <LobbyGameRow v-for="(room, index) in runningRooms" :key="room.id" :room="room" :position="index" />
+            <div v-if="runningRooms.length === 0 && loaded" class="lobby-empty">
+              <span v-i18n>No game is running right now.</span>
+            </div>
+          </section>
+          <section class="create-game-card lobby-list-card lobby-list">
+            <div class="lobby-section-title"><span v-i18n>Open games</span><span class="lobby-section-count">{{ openRooms.length }}</span></div>
+            <LobbyGameRow v-for="(room, index) in openRooms" :key="room.id" :room="room" :position="runningRooms.length + index" @join="join(room)" @open-room="roomOpen = true" />
+            <div v-if="openRooms.length === 0 && loaded" class="lobby-empty">
+              <template v-if="filterCount > 0 && !queueing">
+                <span v-i18n>No open game fits your filters.</span>
+                <div class="lobby-empty-actions">
+                  <AppButton class="btn-tone-quiet" title="Reset filters" @click="filters = defaultLobbyFilters()" />
+                  <AppButton title="Wait until one fits" @click="startQueue()" />
+                </div>
+              </template>
+              <span v-else v-i18n>No game is open right now.</span>
+            </div>
+          </section>
+        </div>
       </div>
+      <!-- Chat with everybody in the lobby: on wide screens a sidebar on the right, otherwise below the games -->
+      <aside class="lobby-chat-aside">
+        <LobbyChat :profile="profile" :withProfile="withProfile" />
+      </aside>
     </main>
 
     <!-- Minimized waiting room -->
@@ -117,7 +123,8 @@ import LobbyGameRow from './LobbyGameRow.vue';
 import LobbyProfileDialog from './LobbyProfileDialog.vue';
 import LobbyRoomDialog from './LobbyRoomDialog.vue';
 import LobbyMatchDialog from './LobbyMatchDialog.vue';
-import {fetchLobby, lobbyAction, LobbyRequest} from './lobbyApi';
+import LobbyChat from './LobbyChat.vue';
+import {fetchLobby, lobbyAction, lobbyFailureText, LobbyRequest} from './lobbyApi';
 import {activeFilterCount, bestMatch, defaultLobbyFilters, hasFreeSeat, LobbyFilters, matchesFilters} from './lobbyFilters';
 import {loadLobbyProfile, saveLobbyProfile} from './lobbyProfile';
 import {lobbyRoomIdFromPath} from '@/common/lobby/lobbyUrl';
@@ -128,7 +135,6 @@ import {isTypingTarget} from '@/client/utils/typingTarget';
 import {setDocumentTitle} from '@/client/utils/documentTitle';
 import {describeFailure, failureOf} from '@/client/utils/requestFailure';
 import {showAlert} from '@/client/components/showAlert';
-import {translateText} from '@/client/directives/i18n';
 
 const CreateGameForm = defineAsyncComponent(() => import(/* webpackChunkName: "create-game" */ '@/client/components/create/CreateGameForm.vue'));
 
@@ -280,9 +286,7 @@ async function act(action: LobbyRequest): Promise<LobbyRoomModel | undefined> {
     await refresh();
     return room;
   } catch (error) {
-    // The lobby's own refusals (full, closed, already started) come as short texts that have translations
-    const failure = failureOf(error);
-    const text = failure.kind === 'http' && failure.status === 400 ? translateText(failure.serverText) : describeFailure(failure);
+    const text = lobbyFailureText(error);
     if (instance !== null) {
       showAlert(instance.proxy as ComponentPublicInstance, 'Lobby', {text});
     }
