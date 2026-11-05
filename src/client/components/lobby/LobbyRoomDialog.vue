@@ -26,7 +26,10 @@
             <template v-else>
               <LobbyAvatar kind="free" size="large" />
               <span class="lobby-seat-name" v-i18n>Free seat</span>
-              <button v-if="isHost" type="button" class="create-game-small-button" @click="emit('seat-ai', index)" v-i18n>Seat an AI</button>
+              <!-- Settings the AI cannot handle: disabled, the tooltip names them (on the wrapper: disabled buttons get no mouse events) -->
+              <span v-if="isHost" v-glass-tooltip="aiBlockedText">
+                <button type="button" class="create-game-small-button" :disabled="aiBlockedText !== ''" @click="emit('seat-ai', index)" v-i18n>Seat an AI</button>
+              </span>
               <span v-else class="lobby-seat-state" v-i18n>waiting for a player</span>
             </template>
           </div>
@@ -50,7 +53,9 @@
         <div v-else class="lobby-room-foot">
           <AppButton class="btn-tone-danger" :title="isHost ? 'Close game' : 'Leave'" @click="emit('leave')" />
           <span class="lobby-room-foot-gap"></span>
-          <AppButton v-if="isHost && freeSeats > 0" class="btn-tone-quiet" title="Fill with AI and start" @click="emit('fill-ai')" />
+          <span v-if="isHost && freeSeats > 0" v-glass-tooltip="aiBlockedText">
+            <AppButton class="btn-tone-quiet" title="Fill with AI and start" :disabled="aiBlockedText !== ''" @click="emit('fill-ai')" />
+          </span>
           <AppButton v-if="isHost" title="Start now" :disabled="freeSeats > 0" @click="emit('start')" />
           <AppButton v-else :class="you?.ready ? 'btn-tone-quiet' : 'btn-tone-success'" :title="you?.ready ? 'Not ready' : 'Ready'" @click="emit('ready', !you?.ready)" />
         </div>
@@ -71,6 +76,8 @@ import LobbyAvatar from './LobbyAvatar.vue';
 import {lobbySetupChips} from './lobbySetupChips';
 import {lobbyRoomPath} from '@/common/lobby/lobbyUrl';
 import {continueHref, playerLinksHref} from './lobbyLinks';
+import {aiUnsupportedReasons} from '@/common/ai/aiSupport';
+import {glassTooltip as vGlassTooltip} from '@/client/directives/GlassTooltip';
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 import {AI_LEVEL_OPTIONS} from '@/client/components/create/createGameChoices';
 
@@ -98,6 +105,12 @@ const isHost = computed(() => you.value?.host === true);
 const filled = computed(() => props.room?.seats.filter((seat) => seat.kind !== 'free').length ?? 0);
 const freeSeats = computed(() => (props.room?.seats.length ?? 0) - filled.value);
 const inviteLink = computed(() => props.room === undefined ? '' : new URL(lobbyRoomPath(props.room.id, props.room.title), document.baseURI).href);
+// Same check as the create form and the server (aiSupport.ts); empty = AI players possible
+const aiBlockedText = computed(() => {
+  const setup = props.room?.setup;
+  const reasons = setup === undefined ? [] : aiUnsupportedReasons({expansions: setup.expansions, twoCorpsVariant: setup.options.twoCorpsVariant});
+  return reasons.length === 0 ? '' : translateText('AI not yet compatible with:') + ' ' + reasons.map((reason) => translateText(reason)).join(', ');
+});
 const started = computed(() => props.room?.state === 'started');
 const continueLink = computed(() => props.room === undefined ? undefined : continueHref(props.room));
 const playerLinks = computed(() => props.room === undefined ? undefined : playerLinksHref(props.room));

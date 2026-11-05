@@ -57,11 +57,18 @@
         <p v-if="loadError" class="lobby-error">{{ loadError }}</p>
       </section>
 
-      <!-- Two cards side by side: left the new games you can take part in, right the running ones to watch -->
+      <!-- Two cards side by side: left the running games to watch or continue, right the new ones you can take part in -->
       <div class="lobby-columns">
         <section class="create-game-card lobby-list-card lobby-list">
+          <div class="lobby-section-title"><span v-i18n>Running games</span><span class="lobby-section-count">{{ runningRooms.length }}</span></div>
+          <LobbyGameRow v-for="(room, index) in runningRooms" :key="room.id" :room="room" :position="index" />
+          <div v-if="runningRooms.length === 0 && loaded" class="lobby-empty">
+            <span v-i18n>No game is running right now.</span>
+          </div>
+        </section>
+        <section class="create-game-card lobby-list-card lobby-list">
           <div class="lobby-section-title"><span v-i18n>Open games</span><span class="lobby-section-count">{{ openRooms.length }}</span></div>
-          <LobbyGameRow v-for="(room, index) in openRooms" :key="room.id" :room="room" :position="index" @join="join(room)" @open-room="roomOpen = true" />
+          <LobbyGameRow v-for="(room, index) in openRooms" :key="room.id" :room="room" :position="runningRooms.length + index" @join="join(room)" @open-room="roomOpen = true" />
           <div v-if="openRooms.length === 0 && loaded" class="lobby-empty">
             <template v-if="filterCount > 0 && !queueing">
               <span v-i18n>No open game fits your filters.</span>
@@ -71,13 +78,6 @@
               </div>
             </template>
             <span v-else v-i18n>No game is open right now.</span>
-          </div>
-        </section>
-        <section class="create-game-card lobby-list-card lobby-list">
-          <div class="lobby-section-title"><span v-i18n>Running games</span><span class="lobby-section-count">{{ runningRooms.length }}</span></div>
-          <LobbyGameRow v-for="(room, index) in runningRooms" :key="room.id" :room="room" :position="openRooms.length + index" />
-          <div v-if="runningRooms.length === 0 && loaded" class="lobby-empty">
-            <span v-i18n>No game is running right now.</span>
           </div>
         </section>
       </div>

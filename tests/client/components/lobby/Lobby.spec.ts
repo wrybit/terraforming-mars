@@ -81,6 +81,15 @@ describe('Lobby components', () => {
     wrapper.unmount();
   });
 
+  it('LobbyRoomDialog disables the AI buttons for settings the AI cannot handle', () => {
+    const withColonies = room([{...host, you: true}, {kind: 'free'}]);
+    withColonies.setup.expansions = {...withColonies.setup.expansions, colonies: true};
+    const wrapper = mount(LobbyRoomDialog, {...globalConfig, props: {open: true, room: withColonies}, attachTo: document.body});
+    const disabled = Array.from(document.body.querySelectorAll('.lobby-room-dialog button[disabled]')).map((button) => button.textContent?.trim());
+    expect(disabled).to.include.members(['Seat an AI', 'Fill with AI and start']);
+    wrapper.unmount();
+  });
+
   it('LobbyMatchDialog shows the found game', () => {
     const wrapper = mount(LobbyMatchDialog, {...globalConfig, props: {room: room([host, {kind: 'free'}])}, attachTo: document.body});
     expect(document.body.textContent).contains('Evening game');

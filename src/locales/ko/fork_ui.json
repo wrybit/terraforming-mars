@@ -1222,5 +1222,6 @@
   "Enter a player yourself": "직접 플레이어 입력",
   "Game ${0} was closed on ${1}: its creator left before it began and nobody else joined.": "게임 ${0}이(가) ${1}에 닫혔습니다: 만든 사람이 시작 전에 나갔고 아무도 참가하지 않았습니다.",
   "No game is running right now.": "지금 진행 중인 게임이 없습니다.",
-  "The game is running.": "게임이 진행 중입니다."
+  "The game is running.": "게임이 진행 중입니다.",
+  "AI players are not available with these settings.": "이 설정에서는 AI 플레이어를 사용할 수 없습니다."
 }

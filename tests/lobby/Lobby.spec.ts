@@ -129,6 +129,21 @@ describe('Lobby', () => {
     expect(closed).is.empty;
   });
 
+  it('refuses AI seats for settings the AI cannot handle', async () => {
+    const withColonies = config(['human', 'human']);
+    withColonies.expansions = {...withColonies.expansions, colonies: true};
+    const room = await lobby.open(HOST, profile('Ann'), '', true, withColonies, starter);
+    for (const action of [() => lobby.seatAi(HOST, room.id, 1, starter), () => lobby.fillWithAi(HOST, room.id, starter)]) {
+      try {
+        await action();
+        expect.fail('AI seat accepted');
+      } catch (error) {
+        expect(error).instanceOf(LobbyError);
+      }
+    }
+    expect(lobby.list(HOST).rooms[0].seats.map((seat) => seat.kind)).deep.eq(['human', 'free']);
+  });
+
   it('drops a room whose game cannot be created', async () => {
     const failing: GameStarter = () => Promise.reject(new LobbyError('no'));
     try {

@@ -1,4 +1,5 @@
 import {AiLevel, DEFAULT_AI_LEVEL, isAiLevel} from '../../common/ai/AiLevel';
+import {aiUnsupportedReasons} from '../../common/ai/aiSupport';
 import {Color, PLAYER_COLORS} from '../../common/Color';
 import {setupOptionsFromConfig} from '../../common/game/GameSetupOptions';
 import {NewGameConfig, NewPlayerModel} from '../../common/game/NewGameConfig';
@@ -290,15 +291,24 @@ export class Lobby {
     if (room.seats[seatIndex]?.kind !== 'free') {
       throw new LobbyError('This seat is not free');
     }
+    this.assertAiPossible(room);
     room.seats[seatIndex] = {kind: 'ai', aiLevel: DEFAULT_AI_LEVEL};
     this.save();
     await this.startIfComplete(room, starter);
     return this.model(room, me);
   }
 
+  /** No AI seat for settings the AI cannot handle (same check as the create form and ApiCreateGame, aiSupport.ts) */
+  private assertAiPossible(room: Room): void {
+    if (aiUnsupportedReasons({expansions: room.config.expansions, twoCorpsVariant: room.config.twoCorpsVariant}).length > 0) {
+      throw new LobbyError('AI players are not available with these settings.');
+    }
+  }
+
   /** Host only: every free seat becomes an AI player and the game starts */
   public async fillWithAi(me: string, roomId: string, starter: GameStarter): Promise<LobbyRoomModel> {
     const room = this.hostRoom(me, roomId);
+    this.assertAiPossible(room);
     room.seats = room.seats.map((seat) => seat.kind === 'free' ? {kind: 'ai', aiLevel: DEFAULT_AI_LEVEL} : seat);
     this.save();
     await this.start(room, starter);

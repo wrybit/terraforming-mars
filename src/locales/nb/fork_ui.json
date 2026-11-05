@@ -1340,5 +1340,6 @@
   "Enter a player yourself": "Legg inn en spiller selv",
   "Game ${0} was closed on ${1}: its creator left before it began and nobody else joined.": "Spillet ${0} ble lukket ${1}: den som opprettet det, gikk før det begynte, og ingen andre ble med.",
   "No game is running right now.": "Ingen spill pågår akkurat nå.",
-  "The game is running.": "Spillet pågår."
+  "The game is running.": "Spillet pågår.",
+  "AI players are not available with these settings.": "AI-spillere er ikke tilgjengelige med disse innstillingene."
 }

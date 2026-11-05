@@ -1128,5 +1128,6 @@
   "Enter a player yourself": "Вписати гравця самому",
   "Game ${0} was closed on ${1}: its creator left before it began and nobody else joined.": "Гру ${0} закрито ${1}: її творець пішов до початку, і більше ніхто не приєднався.",
   "No game is running right now.": "Зараз немає жодної гри, що триває.",
-  "The game is running.": "Гра триває."
+  "The game is running.": "Гра триває.",
+  "AI players are not available with these settings.": "З цими налаштуваннями гравці ШІ недоступні."
 }
