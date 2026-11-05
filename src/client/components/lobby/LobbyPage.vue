@@ -57,7 +57,7 @@
         <p v-if="loadError" class="lobby-error">{{ loadError }}</p>
 
         <div class="lobby-list">
-          <LobbyGameRow v-for="room in openRooms" :key="room.id" :room="room" @join="join(room)" @open-room="roomOpen = true" />
+          <LobbyGameRow v-for="(room, index) in openRooms" :key="room.id" :room="room" :position="index" @join="join(room)" @open-room="roomOpen = true" />
           <div v-if="openRooms.length === 0 && loaded" class="lobby-empty">
             <template v-if="filterCount > 0 && !queueing">
               <span v-i18n>No open game fits your filters.</span>
@@ -70,7 +70,7 @@
           </div>
           <template v-if="runningRooms.length > 0">
             <div class="lobby-section-title" v-i18n>Running</div>
-            <LobbyGameRow v-for="room in runningRooms" :key="room.id" :room="room" />
+            <LobbyGameRow v-for="(room, index) in runningRooms" :key="room.id" :room="room" :position="openRooms.length + index" />
           </template>
         </div>
       </section>
@@ -114,6 +114,10 @@ import {fetchLobby, lobbyAction, LobbyRequest} from './lobbyApi';
 import {activeFilterCount, bestMatch, defaultLobbyFilters, hasFreeSeat, LobbyFilters, matchesFilters} from './lobbyFilters';
 import {loadLobbyProfile, saveLobbyProfile} from './lobbyProfile';
 import {lobbyRoomIdFromPath} from '@/common/lobby/lobbyUrl';
+import {PICK_CODES} from '@/client/hotkeys/hotkeyActions';
+import {codeOfEvent} from '@/client/hotkeys/hotkeyEvents';
+import {hotkeysAvailable} from '@/client/hotkeys/hotkeyAvailability';
+import {isTypingTarget} from '@/client/utils/typingTarget';
 import {setDocumentTitle} from '@/client/utils/documentTitle';
 import {describeFailure, failureOf} from '@/client/utils/requestFailure';
 import {showAlert} from '@/client/components/showAlert';
@@ -351,7 +355,25 @@ watch(yourRoomId, (id, before) => {
   }
 });
 
+// Alt + 1 … 9, 0 presses the button of that row (as on "Game created"); by position, since on a Mac Alt + 1 types a character
+function onRowKey(event: KeyboardEvent): void {
+  if (!hotkeysAvailable.value || event.repeat || !event.altKey || event.ctrlKey || event.metaKey || event.shiftKey || isTypingTarget(event.target)) {
+    return;
+  }
+  if (document.querySelector('.sidebar-modal-backdrop, .lobby-create-overlay') !== null) {
+    return;
+  }
+  const code = codeOfEvent(event);
+  const index = code === undefined ? -1 : PICK_CODES.indexOf(code);
+  const button = document.querySelectorAll<HTMLElement>('#lobby .lobby-game')[index]?.querySelector<HTMLElement>('.lobby-game-action .btn');
+  if (button !== undefined && button !== null) {
+    event.preventDefault();
+    button.click();
+  }
+}
+
 onMounted(() => {
+  window.addEventListener('keydown', onRowKey);
   setDocumentTitle('Lobby');
   refresh();
   pollTimer = setInterval(refresh, POLL_MS);
@@ -359,6 +381,7 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
+  window.removeEventListener('keydown', onRowKey);
   clearInterval(pollTimer);
   clearInterval(clockTimer);
 });

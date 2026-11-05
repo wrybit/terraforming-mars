@@ -1,5 +1,6 @@
 <template>
-  <!-- One open (or running) game of the lobby: title, host, seats, settings, action on the right -->
+  <!-- One open (or running) game of the lobby: title, host, seats, settings, action on the right.
+       Like "Game created": a CTA only where you take part (waiting room, continue), otherwise a quiet button -->
   <div class="lobby-game" :class="{'lobby-game--running': room.state === 'started', 'lobby-game--mine': isMine}">
     <div class="lobby-game-info">
       <div class="lobby-game-title">{{ room.title }}</div>
@@ -20,11 +21,11 @@
     </div>
     <GameSetupChips class="lobby-game-chips" :chips="chips" compact />
     <div class="lobby-game-action">
-      <AppButton v-if="isMine" title="Waiting room" @click="emit('open-room')" />
+      <AppButton v-if="isMine" title="Waiting room" :fixedHotkey="keys" @click="emit('open-room')" />
       <!-- Own running game: back into it instead of watching -->
-      <a v-else-if="room.state === 'started' && room.yourPlayerId" class="btn btn-rounded lobby-game-watch" :href="'player?id=' + room.yourPlayerId" v-i18n>Continue</a>
-      <a v-else-if="room.state === 'started' && room.spectatorId" class="btn btn-rounded lobby-game-watch" :href="'spectator?id=' + room.spectatorId" v-i18n>Watch</a>
-      <AppButton v-else-if="room.state === 'open'" class="btn-tone-quiet" title="Join" @click="emit('join')" />
+      <a v-else-if="room.state === 'started' && room.yourPlayerId" class="btn btn-rounded btn-primary lobby-game-watch" :href="'player?id=' + room.yourPlayerId"><span v-i18n>Continue</span><HotkeyKeys :fixed="keys" /></a>
+      <a v-else-if="room.state === 'started' && room.spectatorId" class="btn btn-rounded btn-tone-quiet lobby-game-watch" :href="'spectator?id=' + room.spectatorId"><span v-i18n>Watch</span><HotkeyKeys :fixed="keys" /></a>
+      <AppButton v-else-if="room.state === 'open'" class="btn-tone-quiet" title="Join" :fixedHotkey="keys" @click="emit('join')" />
     </div>
   </div>
 </template>
@@ -33,6 +34,8 @@
 import {computed} from 'vue';
 import {LobbyRoomModel, LobbySeatModel} from '@/common/lobby/LobbyModel';
 import AppButton from '@/client/components/common/AppButton.vue';
+import HotkeyKeys from '@/client/components/hotkeys/HotkeyKeys.vue';
+import {HotkeyKeys as HotkeyKeyList, PICK_DIGITS} from '@/client/hotkeys/hotkeyActions';
 import GameSetupChips from '@/client/components/common/GameSetupChips.vue';
 import LobbyAvatar from './LobbyAvatar.vue';
 import {lobbySetupChips} from './lobbySetupChips';
@@ -40,7 +43,11 @@ import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 
 const props = defineProps<{
   room: LobbyRoomModel;
+  // Position in the list: the first ten rows get Alt + 1 … 9, 0 (as on "Game created"), handled by LobbyPage.vue
+  position?: number;
 }>();
+
+const keys = computed<HotkeyKeyList>(() => props.position !== undefined && props.position < PICK_DIGITS.length ? ['Alt', PICK_DIGITS[props.position]] : []);
 
 const emit = defineEmits<{
   (event: 'join'): void;
