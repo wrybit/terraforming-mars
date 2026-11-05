@@ -33,6 +33,8 @@ const props = defineProps<{
   // Element the dialog grows out of and shrinks back into, when it is not the parent of the place of use
   // (e.g. the lobby's waiting room: its list entry or the minimized bar); asked anew on every open and close
   origin?: () => HTMLElement | undefined;
+  // Visible the whole way between origin and place (dialogZoomAnimation.ts), for dialogs that stand for their origin
+  morph?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -56,7 +58,7 @@ function animate(element: Element, direction: 'open' | 'close', done: () => void
     return;
   }
   const origin = props.origin?.() ?? anchor.value?.parentElement ?? undefined;
-  animateDialogZoom({direction, backdrop: element, box, origin}).then(done);
+  animateDialogZoom({direction, backdrop: element, box, origin, morph: props.morph}).then(done);
 }
 
 function onEnter(element: Element, done: () => void) {

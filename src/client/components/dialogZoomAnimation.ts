@@ -20,6 +20,9 @@ export type DialogZoomAnimationOptions = {
   box: HTMLElement;
   // Button the dialog belongs to; measured anew on every call, it may have moved meanwhile
   origin: HTMLElement | undefined;
+  // Morph: the box stays visible the whole way, so it reads as the origin turning into the dialog and back
+  // (lobby: profile button, waiting bar, list entry) instead of a dialog fading in near it
+  morph?: boolean;
 };
 
 // transform that lays the box (transform-origin: center) exactly over the button
@@ -37,7 +40,7 @@ function transformOntoOrigin(box: HTMLElement, origin: HTMLElement | undefined):
 }
 
 export async function animateDialogZoom(options: DialogZoomAnimationOptions): Promise<void> {
-  const {direction, backdrop, box, origin} = options;
+  const {direction, backdrop, box, origin, morph} = options;
   if (!supportsWebAnimations(box)) {
     return;
   }
@@ -47,7 +50,11 @@ export async function animateDialogZoom(options: DialogZoomAnimationOptions): Pr
   // Reduced motion: only fade, no flying
   const collapsed = prefersReducedMotion() ? 'none' : transformOntoOrigin(box, origin);
   // The box is fully visible after the first half of the growth, so the button visibly turns into the dialog
-  const openFrames: Keyframes = [
+  const openFrames: Keyframes = morph === true && collapsed !== 'none' ? [
+    {transform: collapsed, opacity: 0.6, offset: 0},
+    {opacity: 1, offset: 0.15},
+    {transform: 'none', opacity: 1, offset: 1},
+  ] : [
     {transform: collapsed, opacity: 0, offset: 0},
     {opacity: 1, offset: 0.5},
     {transform: 'none', opacity: 1, offset: 1},

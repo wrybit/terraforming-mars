@@ -1,5 +1,5 @@
 <template>
-  <SidebarModal :open="open" :framed="true" :origin="origin" @close="emit('minimize')">
+  <SidebarModal :open="open" :framed="true" :origin="origin" morph @close="emit('minimize')">
     <DialogFrame v-if="room !== undefined" :title="room.title" :width="720" class="lobby-room-dialog" @close="emit('minimize')">
       <GameSetupChips :chips="chips" writtenOut />
       <div class="lobby-room-group">

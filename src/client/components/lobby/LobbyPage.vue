@@ -103,7 +103,7 @@
       <span>{{ $t('Waiting room') }}: <b>{{ myRoom.title }}</b> · {{ seatCount(myRoom) }}</span>
     </button>
 
-    <LobbyProfileDialog :open="profileOpen" :profile="profile" :firstVisit="firstVisit" @close="profileOpen = false" @save="saveProfile" />
+    <LobbyProfileDialog :open="profileOpen" :origin="profileDialogOrigin" :profile="profile" :firstVisit="firstVisit" @close="profileOpen = false" @save="saveProfile" />
     <LobbyRoomDialog :open="roomOpen && myRoom !== undefined" :room="myRoom" :origin="roomDialogOrigin" @minimize="roomOpen = false" @leave="leave()"
       @ready="act({action: 'ready', roomId: myRoom!.id, ready: $event})" @seat-ai="act({action: 'seat-ai', roomId: myRoom!.id, seat: $event})"
       @fill-ai="act({action: 'fill-ai', roomId: myRoom!.id})" @start="act({action: 'start', roomId: myRoom!.id})" />
@@ -375,6 +375,11 @@ watch(yourRoomId, (id, before) => {
     roomOpen.value = true;
   }
 });
+
+// The profile dialog morphs out of and back into the profile button in the header
+function profileDialogOrigin(): HTMLElement | undefined {
+  return document.querySelector<HTMLElement>('#lobby .lobby-profile-button') ?? undefined;
+}
 
 // The room dialog morphs out of and back into what stands for the room on the page: the minimized bar while the
 // room waits for players, otherwise (running game) its entry in the list
