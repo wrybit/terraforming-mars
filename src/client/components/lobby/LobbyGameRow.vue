@@ -15,7 +15,7 @@
     </div>
     <div class="lobby-game-seats">
       <LobbyAvatar v-for="(seat, index) in room.seats" :key="index" :kind="seat.kind" size="medium"
-        :class="{'lobby-avatar--host': seat.kind === 'human' && seat.host}"
+        :class="{'lobby-avatar--host': seat.kind === 'human' && seat.host}" :style="{zIndex: room.seats.length - index}"
         :color="seat.kind === 'human' || seat.kind === 'guest' ? seat.color : undefined" :emoji="seat.kind === 'human' ? seat.emoji : undefined"
         :image="seat.kind === 'human' ? seat.image : undefined" :title="seatTitle(seat)" />
     </div>

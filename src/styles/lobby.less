@@ -570,17 +570,22 @@
   color: #7fd99a;
 }
 
-// One circle per seat: the number of circles is the size of the game, free seats are dashed
+// One circle per seat: the number of circles is the size of the game, free seats are dashed. Slightly overlapping
+// like a group, the left one on top (z-index from the template); the dark ring separates neighbours
 .lobby-game-seats {
   grid-area: seats;
   display: flex;
   align-items: center;
-  gap: 8px;
+
+  .lobby-avatar + .lobby-avatar {
+    // The rings (box-shadow) reach 4px beyond the avatar: -2px makes them overlap by a third of the ring
+    margin-left: -2px;
+  }
 }
 
-// The host: an orange outline around the own colour ring
+// The host: the ring in orange instead of the player colour, same size as everybody's ring
 .lobby-avatar.lobby-avatar--host {
-  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.55), 0 0 0 3.5px var(--lobby-avatar-color), 0 0 0 5px #14151a, 0 0 0 7px #ff9a2e;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.55), 0 0 0 4px #ff9a2e;
 }
 
 .lobby-game-progress {
