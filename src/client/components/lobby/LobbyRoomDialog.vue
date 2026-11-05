@@ -44,6 +44,7 @@
         <!-- The game already runs (e.g. started while the dialog was open): only the way into it -->
         <div v-if="started" class="lobby-room-foot">
           <span class="lobby-room-foot-gap"></span>
+          <a v-if="playerLinks !== undefined" class="btn btn-rounded btn-tone-quiet" :href="playerLinks" v-i18n>Player links</a>
           <a v-if="continueLink !== undefined" class="btn btn-rounded btn-primary" :href="continueLink" v-i18n>Continue</a>
         </div>
         <div v-else class="lobby-room-foot">
@@ -69,7 +70,7 @@ import GameSetupChips from '@/client/components/common/GameSetupChips.vue';
 import LobbyAvatar from './LobbyAvatar.vue';
 import {lobbySetupChips} from './lobbySetupChips';
 import {lobbyRoomPath} from '@/common/lobby/lobbyUrl';
-import {continueHref} from './lobbyLinks';
+import {continueHref, playerLinksHref} from './lobbyLinks';
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 import {AI_LEVEL_OPTIONS} from '@/client/components/create/createGameChoices';
 
@@ -99,6 +100,7 @@ const freeSeats = computed(() => (props.room?.seats.length ?? 0) - filled.value)
 const inviteLink = computed(() => props.room === undefined ? '' : new URL(lobbyRoomPath(props.room.id, props.room.title), document.baseURI).href);
 const started = computed(() => props.room?.state === 'started');
 const continueLink = computed(() => props.room === undefined ? undefined : continueHref(props.room));
+const playerLinks = computed(() => props.room === undefined ? undefined : playerLinksHref(props.room));
 const statusText = computed(() => {
   if (started.value) {
     return translateText('The game is running.');

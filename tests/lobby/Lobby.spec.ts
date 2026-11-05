@@ -237,6 +237,9 @@ describe('Lobby', () => {
     expect(started[0].players.map((p) => [p.name, p.color])).deep.eq([['Ann', 'red'], ['Bob', 'yellow'], ['Dora', 'green']]);
     expect(lobby.list(HOST).rooms[0].hostNeedsLinks).is.true;
     expect(lobby.list(GUEST).rooms[0].hostNeedsLinks).is.undefined;
+    // The game id opens the page with every player's link: only the host gets it
+    expect(lobby.list(HOST).rooms[0].gameId).eq('g1');
+    expect(lobby.list(GUEST).rooms[0].gameId).is.undefined;
   });
 
   it('drops invalid profile parts', async () => {

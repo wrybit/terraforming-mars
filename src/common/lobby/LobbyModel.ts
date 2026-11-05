@@ -70,6 +70,7 @@ export type LobbyRoomModel = {
   setup: LobbySetupModel;
   /** Started rooms: link for spectators */
   spectatorId?: SpectatorId;
+  /** Only for the host: the game page holds every player's link, so nobody else may learn it */
   gameId?: GameId;
   /** Started rooms: the game of the asking participant */
   yourPlayerId?: PlayerId;

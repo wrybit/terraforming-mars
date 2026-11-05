@@ -73,10 +73,11 @@ describe('Lobby components', () => {
   });
 
   it('LobbyRoomDialog offers "Continue" instead of "Start now" once the game runs', () => {
-    const started = room([{...host, you: true}, {kind: 'guest', name: 'Dan', color: 'green'}], {state: 'started', yourPlayerId: 'p1'});
+    const started = room([{...host, you: true}, {kind: 'guest', name: 'Dan', color: 'green'}], {state: 'started', yourPlayerId: 'p1', gameId: 'g1', hostNeedsLinks: true});
     const wrapper = mount(LobbyRoomDialog, {...globalConfig, props: {open: true, room: started}, attachTo: document.body});
     expect(document.body.textContent).not.contains('Start now');
-    expect(document.body.querySelector('.lobby-room-foot a')?.getAttribute('href')).eq('player?id=p1');
+    const links = Array.from(document.body.querySelectorAll('.lobby-room-foot a')).map((link) => link.getAttribute('href'));
+    expect(links).deep.eq(['game?id=g1', 'player?id=p1']);
     wrapper.unmount();
   });
 

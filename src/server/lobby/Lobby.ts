@@ -412,7 +412,7 @@ export class Lobby {
         randomBoard: (config.boards ?? []).length > 1,
         options: setupOptionsFromConfig(config),
       },
-      gameId: room.gameId,
+      gameId: me === room.host ? room.gameId : undefined,
       spectatorId: room.spectatorId,
       yourPlayerId: me === undefined ? undefined : room.playerIds[me],
       hostNeedsLinks: room.state === 'started' && me === room.host && room.seats.some((seat) => seat.kind === 'guest') ? true : undefined,
