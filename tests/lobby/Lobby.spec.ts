@@ -58,6 +58,14 @@ describe('Lobby', () => {
     expect(lobby.list(OTHER).rooms[0].state).eq('started');
   });
 
+  it('keeps a running game listed until it ends', async () => {
+    await lobby.open(HOST, profile('Ann'), '', true, config(['human', 'ai']), starter);
+    now += 7 * 24 * 60 * 60 * 1000;
+    expect(lobby.list(OTHER).rooms).has.length(1);
+    lobby.forgetGame('g1');
+    expect(lobby.list(OTHER).rooms).is.empty;
+  });
+
   it('drops a room whose game cannot be created', async () => {
     const failing: GameStarter = () => Promise.reject(new LobbyError('no'));
     try {

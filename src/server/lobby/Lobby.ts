@@ -9,8 +9,11 @@ import {fileStorage, LobbyStorage} from './lobbyStorage';
 
 /** A participant who stops polling (closed tab, lost connection) loses the seat after this time */
 export const PARTICIPANT_TIMEOUT_MS = 45_000;
-/** Started rooms stay in the list as "running" for spectators */
-export const STARTED_ROOM_KEEP_MS = 6 * 60 * 60 * 1000;
+/**
+ * Started rooms stay in the list as "running" until the game ends or is deleted (forgetGame).
+ * This is only the safety net for games nobody finishes on a server that never purges them.
+ */
+export const STARTED_ROOM_MAX_AGE_MS = 30 * 24 * 60 * 60 * 1000;
 /** Rooms nobody completes are dropped at the latest after this time */
 export const OPEN_ROOM_MAX_AGE_MS = 12 * 60 * 60 * 1000;
 
@@ -90,6 +93,16 @@ export class Lobby {
 
   private save(): void {
     this.storage.save(Array.from(this.rooms.values()));
+  }
+
+  /** The game of a room finished or was deleted: the room leaves the "running" list */
+  public forgetGame(gameId: GameId): void {
+    this.ensureLoaded();
+    const rooms = Array.from(this.rooms.values()).filter((room) => room.gameId === gameId);
+    rooms.forEach((room) => this.rooms.delete(room.id));
+    if (rooms.length > 0) {
+      this.save();
+    }
   }
 
   /** Rooms for the list: listed open and running ones, plus the room of the asking participant. Also the heartbeat. */
@@ -371,7 +384,7 @@ export class Lobby {
     const now = this.clock();
     for (const room of Array.from(this.rooms.values())) {
       if (room.state === 'started') {
-        if (now - (room.startedAt ?? now) > STARTED_ROOM_KEEP_MS) {
+        if (now - (room.startedAt ?? now) > STARTED_ROOM_MAX_AGE_MS) {
           this.rooms.delete(room.id);
         }
         continue;
