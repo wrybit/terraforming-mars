@@ -1917,5 +1917,6 @@
   "Offer this seat in the lobby again": "Предложи мястото отново в лобито",
   "entered by the host": "въведен от домакина",
   "Enter a player yourself": "Въведи играч сам",
-  "Game ${0} was closed on ${1}: its creator left before it began and nobody else joined.": "Играта ${0} беше затворена на ${1}: създателят ѝ напусна преди началото и никой друг не се присъедини."
+  "Game ${0} was closed on ${1}: its creator left before it began and nobody else joined.": "Играта ${0} беше затворена на ${1}: създателят ѝ напусна преди началото и никой друг не се присъедини.",
+  "No game is running right now.": "В момента няма текуща игра."
 }

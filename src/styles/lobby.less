@@ -82,6 +82,11 @@
   padding: 12px @lobby-pad;
   border-bottom: 1px solid @lobby-line;
 
+  // Alone in its card (no filters, no queue), the line would double the card's edge
+  &:last-child {
+    border-bottom: 0;
+  }
+
   .create-game-icon-button[disabled] {
     opacity: 0.45;
     cursor: default;
@@ -270,10 +275,6 @@
     border-bottom: 0;
   }
 
-  &.lobby-game--running {
-    opacity: 0.65;
-  }
-
   &.lobby-game--mine {
     background: fade(@bg_action, 18%);
   }
@@ -348,7 +349,31 @@
   }
 }
 
+// Two cards of equal height: left the open games, right the running ones; stacked once a card would get too narrow for a row
+.lobby-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: @lobby-gap-section;
+  align-items: stretch;
+  margin-top: @lobby-gap-section;
+
+  > .create-game-card {
+    margin: 0;
+  }
+
+  @media only screen and (max-width: 1000px) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.lobby-section-count {
+  margin-left: 8px;
+  color: @lobby-dim;
+}
+
 .lobby-section-title {
+  display: flex;
+  align-items: baseline;
   padding: 16px @lobby-pad 8px;
   border-bottom: 1px solid @lobby-line;
   color: @lobby-dim;

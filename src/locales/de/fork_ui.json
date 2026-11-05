@@ -752,5 +752,6 @@
   "Offer this seat in the lobby again": "Platz wieder in der Lobby anbieten",
   "entered by the host": "vom Gastgeber eingetragen",
   "Enter a player yourself": "Selbst einen Spieler eintragen",
-  "Game ${0} was closed on ${1}: its creator left before it began and nobody else joined.": "Die Partie ${0} wurde am ${1} geschlossen: Ihr Ersteller ist vor dem Start gegangen und niemand sonst ist beigetreten."
+  "Game ${0} was closed on ${1}: its creator left before it began and nobody else joined.": "Die Partie ${0} wurde am ${1} geschlossen: Ihr Ersteller ist vor dem Start gegangen und niemand sonst ist beigetreten.",
+  "No game is running right now.": "Gerade läuft kein Spiel."
 }

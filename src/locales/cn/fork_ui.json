@@ -1953,5 +1953,6 @@
   "Offer this seat in the lobby again": "重新在大厅提供此座位",
   "entered by the host": "由房主填写",
   "Enter a player yourself": "自行填写玩家",
-  "Game ${0} was closed on ${1}: its creator left before it began and nobody else joined.": "游戏 ${0} 已于 ${1} 关闭：创建者在开始前离开，且没有其他人加入。"
+  "Game ${0} was closed on ${1}: its creator left before it began and nobody else joined.": "游戏 ${0} 已于 ${1} 关闭：创建者在开始前离开，且没有其他人加入。",
+  "No game is running right now.": "目前没有进行中的游戏。"
 }

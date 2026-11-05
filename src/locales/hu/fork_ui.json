@@ -1152,5 +1152,6 @@
   "Offer this seat in the lobby again": "A hely ismételt felkínálása a lobbiban",
   "entered by the host": "a házigazda adta meg",
   "Enter a player yourself": "Játékos megadása saját kézzel",
-  "Game ${0} was closed on ${1}: its creator left before it began and nobody else joined.": "A(z) ${0} játék ${1} időpontban bezárult: a létrehozója a kezdés előtt távozott, és senki más nem csatlakozott."
+  "Game ${0} was closed on ${1}: its creator left before it began and nobody else joined.": "A(z) ${0} játék ${1} időpontban bezárult: a létrehozója a kezdés előtt távozott, és senki más nem csatlakozott.",
+  "No game is running right now.": "Jelenleg nem fut játék."
 }
