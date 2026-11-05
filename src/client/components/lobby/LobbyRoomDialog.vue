@@ -1,7 +1,7 @@
 <template>
   <SidebarModal :open="open" :framed="true" @close="emit('minimize')">
     <DialogFrame v-if="room !== undefined" :title="room.title" :width="720" class="lobby-room-dialog" @close="emit('minimize')">
-      <GameSetupChips :chips="chips" />
+      <GameSetupChips :chips="chips" writtenOut />
       <div class="lobby-room-group">
         <div class="create-game-subhead">{{ $t('Seats') }} {{ filled }}/{{ room.seats.length }}</div>
         <div class="lobby-seats">

@@ -19,7 +19,7 @@
         :image="seat.kind === 'human' ? seat.image : undefined" :title="seatTitle(seat)" />
       <span class="lobby-game-count">{{ filled }}/{{ room.seats.length }}</span>
     </div>
-    <GameSetupChips class="lobby-game-chips" :chips="chips" compact />
+    <GameSetupChips class="lobby-game-chips" :chips="chips" compact writtenOut />
     <div class="lobby-game-action">
       <AppButton v-if="isMine" title="Waiting room" :fixedHotkey="keys" @click="emit('open-room')" />
       <!-- Own running game: back into it instead of watching -->

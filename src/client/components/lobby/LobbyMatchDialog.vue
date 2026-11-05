@@ -10,7 +10,7 @@
             :color="seat.kind === 'human' || seat.kind === 'guest' ? seat.color : undefined" :title="seat.kind === 'guest' ? seat.name : undefined" :emoji="seat.kind === 'human' ? seat.emoji : undefined"
             :image="seat.kind === 'human' ? seat.image : undefined" />
         </div>
-        <GameSetupChips :chips="chips" />
+        <GameSetupChips :chips="chips" writtenOut />
         <div v-if="!invitation" class="lobby-match-countdown" :style="{'--progress': secondsLeft / ACCEPT_SECONDS}">{{ secondsLeft }}</div>
       </div>
       <template #footer>
