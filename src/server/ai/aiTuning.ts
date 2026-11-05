@@ -152,6 +152,8 @@ export type AiTuning = {
   spareMoneyDraw: number,
   /** Weight of the value lost by plants above one greenery while no city is planned, and by plants the remaining generations cannot convert; also lifts city first without a city plan (plantHoardDecay.ts); 0 = off. */
   plantHoardDecay: number,
+  /** Factor on plantHoardDecay on boards other than Tharsis (plantHoardDecay.ts); 1 = same everywhere. */
+  plantHoardOtherBoards: number,
   /** Extra M€ per playable hand card (at most 3) a standard project gives up in the last three generations before the last (lateStandardRestraint.ts); 0 = off. */
   lateStandardRestraint: number,
   /** VP per own adjacent greenery and per city an opponent leads by, for an own city spot (cityRaceAdapt.ts); 0 = off. */
@@ -267,6 +269,8 @@ export type AiTuning = {
   worldGovernment: number,
   /** 1: the colony to trade with or build on is tried on a game copy instead of picked at random (colonyChoice.ts); 0 = off. */
   colonyChoice: number,
+  /** 1: the party for an own delegate is valued on a game copy (chairman, ruling bonus) instead of picked at random (partyChoice.ts); 0 = off. */
+  partyChoice: number,
   /** 1: OR questions right after a move are tried once per option on game copies (followUpPlan.ts); 0 = first option. */
   followUpChoice: number,
   /** 1: OR questions also with single-card choices (copy targets, card to take) are tried on copies; 0 = quick rule. */
@@ -452,6 +456,7 @@ export const BASELINE_TUNING: AiTuning = {
   lateProductionFloor: 0,
   spareMoneyDraw: 0,
   plantHoardDecay: 1,
+  plantHoardOtherBoards: 1,
   lateStandardRestraint: 0,
   cityRaceAdapt: 0,
   drawStop: 0,
@@ -583,6 +588,8 @@ export const BASELINE_TUNING: AiTuning = {
   worldGovernment: 1,
   // Training package p3 (colonies): random colony choice replaced by a valuation on a game copy (rule fix).
   colonyChoice: 1,
+  // Training package p4 (Turmoil): random party choice replaced by chairman and ruling-bonus outlook (rule fix).
+  partyChoice: 1,
   // Round 74 (1200 mirrored 1v1 games, base and Venus): followUpChoice +0.38 (z +0.58) – adopted (fixes first-option follow-ups).
   followUpChoice: 1,
   followUpCards: 0,
@@ -905,6 +912,7 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   worldGovernment: {worldGovernment: 1},
   noWorldGovernment: {worldGovernment: 0},
   noColonyChoice: {colonyChoice: 0},
+  noPartyChoice: {partyChoice: 0},
   followUpChoice: {followUpChoice: 1},
   noFollowUpChoice: {followUpChoice: 0},
   followUpCards: {followUpCards: 1},
@@ -1042,6 +1050,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   plantHoardDecay: {plantHoardDecay: 1},
   // Round 156: plantHoardDecay adopted (+0.73, z +1.35; cards played +0.64, z +2.35 – card rule); check.
   noPlantHoardDecay: {plantHoardDecay: 0},
+  // Round 180: round 179 without the rule −1.90 on Tharsis (z −2.27), +1.84 on other boards (z +1.87) – Tharsis only.
+  plantHoardTharsisOnly: {plantHoardOtherBoards: 0},
   // Round 159 (batch analysis handLeftover.py): late standard projects while hand cards were playable (~70 M€ per game).
   lateStandardRestraint: {lateStandardRestraint: 2},
   // Round 163 (human games 29.–31.10.): opponents put 2.9 cities per game next to AI greeneries, AI nests 3.85.
