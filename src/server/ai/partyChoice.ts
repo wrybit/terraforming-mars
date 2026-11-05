@@ -57,7 +57,9 @@ function isTerraformLeader(player: IPlayer): boolean {
 /** Value in M€ of sending the own delegate to a party (exported for tests). */
 export function partyValue(player: IPlayer, partyName: PartyName): number | undefined {
   const outlook = outlookAfter(player, partyName);
-  if (outlook === undefined) return undefined;
+  if (outlook === undefined) {
+    return undefined;
+  }
   const victoryPoint = valuationContext(player.game, player).victoryPoint;
   const newLeaderships = outlook.leaderships - leadershipsOf(player.game, player);
   // Reds as ruling party: their tax hits whoever terraforms most; their bonus (+1 TR for the lowest TR) is in ownBonus.
@@ -82,6 +84,8 @@ export function chooseParty(input: SelectParty, player: IPlayer): InputResponse 
 export function chooseDelegate(input: SelectDelegate, player: IPlayer): InputResponse | undefined {
   const rival = input.players.find((delegate) => delegate !== 'NEUTRAL' && delegate.id !== player.id);
   const choice = rival ?? input.players.find((delegate) => delegate === 'NEUTRAL') ?? input.players[0];
-  if (choice === undefined) return undefined;
+  if (choice === undefined) {
+    return undefined;
+  }
   return {type: 'delegate', player: choice === 'NEUTRAL' ? 'NEUTRAL' : choice.color};
 }
