@@ -758,20 +758,35 @@ each(@players, {
   opacity: 0.75;
 }
 
-// Player entered by hand: back to a free lobby seat
+// Player entered by hand: ✕ at the top right, back to a free lobby seat
 .create-game-to-lobby {
   flex: none;
+  margin-left: auto;
   width: 28px;
   height: 28px;
   padding: 0;
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  border: 0;
   border-radius: 6px;
-  background: rgba(0, 0, 0, 0.25);
-  color: #fff;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.85);
   font-size: 15px;
   cursor: pointer;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(0, 0, 0, 0.3);
+    color: #fff;
+  }
+}
+
+// Turning back into a free seat (and into a player) shows itself: the card's content fades in
+.create-game-lobby-seat,
+.create-game-player--manual .create-game-player-top {
+  animation: create-game-seat-swap 0.3s ease-out;
+}
+
+@keyframes create-game-seat-swap {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
   }
 }

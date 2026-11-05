@@ -334,7 +334,7 @@
               <!-- Neutral card; the header shows the chosen player color -->
               <!-- Humans stand out (full color, glow); AI players stay quieter (tinted header, thin outline) -->
               <div v-for="(newPlayer, index) in getPlayers()" :key="seatKey(newPlayer)"
-                :class="['create-game-player', isLobbySeat(newPlayer, index) ? 'create-game-player--lobby-seat' : 'create-game-player--' + newPlayer.color, {'create-game-player--ai': newPlayer.aiLevel !== undefined}]">
+                :class="['create-game-player', isLobbySeat(newPlayer, index) ? 'create-game-player--lobby-seat' : 'create-game-player--' + newPlayer.color, {'create-game-player--ai': newPlayer.aiLevel !== undefined, 'create-game-player--manual': canReturnToLobby(newPlayer, index)}]">
                 <!-- Lobby: a free seat; name and color are chosen by whoever takes it. Clicking it enters a player by hand -->
                 <button v-if="isLobbySeat(newPlayer, index)" type="button" class="create-game-lobby-seat" @click="setManualSeat(newPlayer, true)">
                   <span class="create-game-player-position"><SeatIcon kind="human" />{{ index + 1 }}</span>
@@ -354,15 +354,15 @@
                       <!-- Fixed AI marker right behind the typed name; not part of the input, so nobody types it twice -->
                       <span v-if="newPlayer.aiLevel !== undefined" class="create-game-player-name-marker" aria-hidden="true"><span class="create-game-player-name-ghost">{{ newPlayer.name || getPlayerNamePlaceholder(index) }}</span> {{ aiMarker(newPlayer.aiLevel) }}</span>
                     </span>
-                    <!-- Entered by hand: back to a free seat of the lobby -->
-                    <button v-if="canReturnToLobby(newPlayer, index)" type="button" class="create-game-to-lobby" :title="$t('Offer this seat in the lobby again')"
-                      :aria-label="$t('Offer this seat in the lobby again')" @click="setManualSeat(newPlayer, false)">↩</button>
                     <button v-if="playersCount > 1 && !randomFirstPlayer" type="button" class="create-game-first"
                       :class="{'create-game-first--selected': firstIndex === index + 1}" :title="$t('Goes First?')"
                       @click="firstIndex = index + 1">
                       <span>{{ firstIndex === index + 1 ? '★' : '☆' }}</span>
                       <span v-if="firstIndex === index + 1" v-i18n>Goes first</span>
                     </button>
+                    <!-- Entered by hand: ✕ at the top right turns the card back into a free seat of the lobby -->
+                    <button v-if="canReturnToLobby(newPlayer, index)" type="button" class="create-game-to-lobby" :title="$t('Offer this seat in the lobby again')"
+                      :aria-label="$t('Offer this seat in the lobby again')" @click="setManualSeat(newPlayer, false)">✕</button>
                   </div>
                   <div class="create-game-swatches">
                     <!-- Colors as player cubes: all lying (top view), the chosen one standing (slightly from above); animated tilt in both directions -->
