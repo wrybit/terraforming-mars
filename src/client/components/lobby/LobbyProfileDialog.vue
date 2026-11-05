@@ -1,5 +1,6 @@
 <template>
-  <SidebarModal :open="open" :framed="true" @close="emit('close')">
+  <!-- Grows out of the profile button and shrinks back into it -->
+  <SidebarModal :open="open" :framed="true" :origin="origin" morph @close="emit('close')">
     <DialogFrame :title="$t(firstVisit ? 'Welcome to the lobby' : 'Your profile')" :width="520" class="lobby-profile-dialog" @close="emit('close')">
       <p v-if="firstVisit" class="lobby-dialog-intro" v-i18n>This is how other players see you in the lobby and in the game.</p>
       <div class="lobby-profile">
@@ -56,6 +57,8 @@ import {readProfileImage} from './lobbyProfile';
 
 const props = defineProps<{
   open: boolean;
+  /** The element the dialog morphs out of and back into (the profile button, LobbyPage.vue) */
+  origin?: () => HTMLElement | undefined;
   profile: LobbyProfile;
   firstVisit: boolean;
 }>();
