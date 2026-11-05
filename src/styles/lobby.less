@@ -87,6 +87,15 @@
   gap: @lobby-gap-inner;
 }
 
+// Avatar in the chat a quarter smaller than the small lobby avatar (20px), level with the name line
+.lobby-chat-message .lobby-avatar {
+  width: 15px;
+  height: 15px;
+  margin-top: 2px;
+  font-size: 8px;
+  box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.55), 0 0 0 2.5px var(--lobby-avatar-color);
+}
+
 .lobby-chat-body {
   min-width: 0;
 }
