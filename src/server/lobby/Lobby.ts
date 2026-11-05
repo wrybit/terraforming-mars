@@ -25,7 +25,7 @@ export type GameStarter = (config: NewGameConfig) => Promise<StartedGame>;
 
 type HumanSeat = {kind: 'human', participant: string, profile: LobbyProfile, ready: boolean, lastSeen: number};
 // Entered by the host by hand; always counts as ready
-type GuestSeat = {kind: 'guest', name: string, color: Color};
+type GuestSeat = {kind: 'guest', name: string, color: Color, handicap?: number};
 type Seat = {kind: 'free'} | {kind: 'ai', aiLevel: AiLevel} | HumanSeat | GuestSeat;
 
 type Room = {
@@ -107,13 +107,18 @@ export class Lobby {
     return {rooms, yourRoomId: yourRoom?.id};
   }
 
-  public open(me: string, profile: LobbyProfile, title: string, listed: boolean, config: NewGameConfig, freeSeats?: ReadonlyArray<number>): LobbyRoomModel {
+  /**
+   * Every game of the lobby page goes through here, also the ones without free seats (solo, only AI, everybody
+   * entered by hand): those start right away and are listed as running when public.
+   */
+  public async open(me: string, profile: LobbyProfile, title: string, listed: boolean, config: NewGameConfig,
+    starter: GameStarter, freeSeats?: ReadonlyArray<number>): Promise<LobbyRoomModel> {
     this.ensureLoaded();
     this.prune();
     const cleanProfile = sanitizeProfile(profile);
     const players = Array.isArray(config?.players) ? config.players : [];
-    if (players.length < 2 || players.length > LOBBY_MAX_SEATS) {
-      throw new LobbyError('A lobby game needs 2 to 6 seats');
+    if (players.length < 1 || players.length > LOBBY_MAX_SEATS) {
+      throw new LobbyError('A game needs 1 to 6 seats');
     }
     if (isAiLevel(players[0].aiLevel)) {
       throw new LobbyError('The first seat belongs to the host');
@@ -132,11 +137,8 @@ export class Lobby {
         return {kind: 'free'};
       }
       const guest = sanitizeProfile({name: player.name || capitalize(player.color), color: player.color, emoji: ''});
-      return {kind: 'guest', name: guest.name, color: guest.color};
+      return {kind: 'guest', name: guest.name, color: guest.color, handicap: Number(player.handicap) || 0};
     });
-    if (!seats.some((seat) => seat.kind === 'free')) {
-      throw new LobbyError('A lobby game needs at least one free seat');
-    }
     this.leaveAll(me);
     let id = this.newId();
     for (let attempt = 0; this.rooms.has(id) && attempt < 50; attempt++) {
@@ -155,6 +157,14 @@ export class Lobby {
     };
     this.rooms.set(room.id, room);
     this.save();
+    try {
+      await this.startIfComplete(room, starter);
+    } catch (error) {
+      // Not startable (e.g. settings the AI cannot handle): no half room stays behind
+      this.rooms.delete(room.id);
+      this.save();
+      throw error;
+    }
     return this.model(room, me);
   }
 
@@ -274,17 +284,21 @@ export class Lobby {
     const humanColors = new Set(room.seats.flatMap((seat) => seat.kind === 'human' ? [seat.profile.color] : seat.kind === 'guest' ? [seat.color] : []));
     const freeColors = PLAYER_COLORS.filter((color) => !humanColors.has(color));
     const players: Array<NewPlayerModel> = room.seats.map((seat) => {
+      // TR boost as set in the form (host and players entered by hand); joining players start without
       if (seat.kind === 'human') {
-        return {name: seat.profile.name, color: seat.profile.color, beginner: false, handicap: 0, first: false};
+        const handicap = seat.participant === room.host ? Number(room.config.players[0]?.handicap) || 0 : 0;
+        return {name: seat.profile.name, color: seat.profile.color, beginner: false, handicap, first: false};
       }
       if (seat.kind === 'guest') {
-        return {name: seat.name, color: seat.color, beginner: false, handicap: 0, first: false};
+        return {name: seat.name, color: seat.color, beginner: false, handicap: seat.handicap ?? 0, first: false};
       }
       const color = freeColors.shift() as Color;
       const aiLevel = seat.kind === 'ai' ? seat.aiLevel : DEFAULT_AI_LEVEL;
       return {name: capitalize(color), color, beginner: false, handicap: 0, first: false, aiLevel};
     });
-    const firstIndex = room.config.randomFirstPlayer ? Math.floor(Math.random() * players.length) : 0;
+    // Seat order is the form's order, so its "goes first" star still points at the right seat
+    const chosenFirst = room.config.players.findIndex((player) => player.first === true);
+    const firstIndex = room.config.randomFirstPlayer ? Math.floor(Math.random() * players.length) : Math.max(0, chosenFirst);
     players[firstIndex].first = true;
     return {...room.config, name: room.title, players, clonedGamedId: undefined};
   }

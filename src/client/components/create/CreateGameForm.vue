@@ -316,10 +316,10 @@
                 </div>
                 <SegmentedControl v-else v-model="aiPlayersCount" :options="aiCountOptions" class="create-game-segmented--equal create-game-segmented--seats" />
               </div>
-              <!-- Lobby: only with seats offered in the lobby; private games are only reachable with their link -->
-              <template v-if="lobbyActive">
+              <!-- Lobby: every game is listed there (running ones too) unless it is private -->
+              <template v-if="lobbyMode">
                 <OptionRow class="create-game-players-first" label="Public game"><SwitchInput v-model="lobbyPublic" /></OptionRow>
-                <div v-if="!lobbyPublic" class="create-game-note" v-i18n>Only players with the invitation link can join.</div>
+                <div v-if="!lobbyPublic && lobbyActive" class="create-game-note" v-i18n>Only players with the invitation link can join.</div>
               </template>
               <!-- Who starts belongs to the players: switched on, the "Goes first" stars on the player cards disappear -->
               <OptionRow v-if="playersCount > 1" class="create-game-players-first" label="Random first player"><SwitchInput v-model="randomFirstPlayer" /></OptionRow>
@@ -1395,7 +1395,8 @@ export default defineComponent({
       this.$emit('close');
     },
     submit() {
-      if (this.lobbyActive) {
+      // From the lobby every game goes through the lobby, so public ones are listed there
+      if (this.lobbyMode) {
         this.openInLobby();
       } else {
         this.createGame();

@@ -44,19 +44,33 @@ describe('Lobby', () => {
     lobby = new Lobby(() => now, () => 'room' + (next++), storage);
   });
 
-  it('opens a room with the host, free seats and AI seats', () => {
-    const room = lobby.open(HOST, profile('Ann'), 'Evening game', true, config(['human', 'human', 'ai']));
+  it('opens a room with the host, free seats and AI seats', async () => {
+    const room = await lobby.open(HOST, profile('Ann'), 'Evening game', true, config(['human', 'human', 'ai']), starter);
     expect(room.title).eq('Evening game');
     expect(room.seats.map((seat) => seat.kind)).deep.eq(['human', 'free', 'ai']);
     expect(room.seats[0]).to.include({host: true, you: true, name: 'Ann'});
   });
 
-  it('refuses a room without free seats', () => {
-    expect(() => lobby.open(HOST, profile('Ann'), '', true, config(['human', 'ai']))).to.throw(LobbyError);
+  it('starts a game without free seats right away and lists it as running', async () => {
+    const room = await lobby.open(HOST, profile('Ann'), '', true, config(['human', 'ai']), starter);
+    expect(room.state).eq('started');
+    expect(started[0].players.map((p) => p.name)).deep.eq(['Ann', 'Green']);
+    expect(lobby.list(OTHER).rooms[0].state).eq('started');
+  });
+
+  it('drops a room whose game cannot be created', async () => {
+    const failing: GameStarter = () => Promise.reject(new LobbyError('no'));
+    try {
+      await lobby.open(HOST, profile('Ann'), '', true, config(['human', 'ai']), failing);
+      expect.fail('opened');
+    } catch (error) {
+      expect(error).instanceOf(LobbyError);
+    }
+    expect(lobby.list(HOST).rooms).has.length(0);
   });
 
   it('starts the game once the last seat is taken, in seat order', async () => {
-    const room = lobby.open(HOST, profile('Ann'), '', true, config(['human', 'human', 'ai']));
+    const room = await lobby.open(HOST, profile('Ann'), '', true, config(['human', 'human', 'ai']), starter);
     const joined = await lobby.join(GUEST, profile('Bob'), room.id, starter);
     expect(joined.state).eq('started');
     expect(joined.yourPlayerId).eq('p1');
@@ -67,14 +81,14 @@ describe('Lobby', () => {
   });
 
   it('gives a joining player a free color when the preferred one is taken', async () => {
-    const room = lobby.open(HOST, profile('Ann', 'red'), '', true, config(['human', 'human', 'human']));
+    const room = await lobby.open(HOST, profile('Ann', 'red'), '', true, config(['human', 'human', 'human']), starter);
     const joined = await lobby.join(GUEST, profile('Bob', 'red'), room.id, starter);
     const bob = joined.seats[1];
     expect(bob.kind === 'human' && bob.color).not.eq('red');
   });
 
   it('waits for everybody to be ready', async () => {
-    const room = lobby.open(HOST, profile('Ann'), '', true, config(['human', 'human', 'human']));
+    const room = await lobby.open(HOST, profile('Ann'), '', true, config(['human', 'human', 'human']), starter);
     await lobby.join(GUEST, profile('Bob'), room.id, starter);
     await lobby.setReady(GUEST, room.id, false, starter);
     await lobby.join(OTHER, profile('Cid'), room.id, starter);
@@ -84,7 +98,7 @@ describe('Lobby', () => {
   });
 
   it('lets only the host fill the free seats with AI players and start', async () => {
-    const room = lobby.open(HOST, profile('Ann'), '', true, config(['human', 'human', 'human']));
+    const room = await lobby.open(HOST, profile('Ann'), '', true, config(['human', 'human', 'human']), starter);
     await lobby.join(GUEST, profile('Bob'), room.id, starter);
     await lobby.setReady(GUEST, room.id, false, starter);
     try {
@@ -99,7 +113,7 @@ describe('Lobby', () => {
   });
 
   it('frees the seat of a participant who stopped polling, and closes the room without host', async () => {
-    const room = lobby.open(HOST, profile('Ann'), '', true, config(['human', 'human', 'human']));
+    const room = await lobby.open(HOST, profile('Ann'), '', true, config(['human', 'human', 'human']), starter);
     await lobby.join(GUEST, profile('Bob'), room.id, starter);
     now += PARTICIPANT_TIMEOUT_MS / 2;
     lobby.list(HOST);
@@ -109,16 +123,16 @@ describe('Lobby', () => {
     expect(lobby.list(undefined).rooms).has.length(0);
   });
 
-  it('lists unlisted rooms only for their participants or with their id', () => {
-    const room = lobby.open(HOST, profile('Ann'), '', false, config(['human', 'human']));
+  it('lists unlisted rooms only for their participants or with their id', async () => {
+    const room = await lobby.open(HOST, profile('Ann'), '', false, config(['human', 'human']), starter);
     expect(lobby.list(OTHER).rooms).has.length(0);
     expect(lobby.list(OTHER, room.id).rooms).has.length(1);
     expect(lobby.list(HOST).yourRoomId).eq(room.id);
   });
 
   it('keeps a participant in one room only', async () => {
-    const first = lobby.open(HOST, profile('Ann'), '', true, config(['human', 'human', 'human']));
-    const second = lobby.open(OTHER, profile('Cid'), '', true, config(['human', 'human', 'human']));
+    const first = await lobby.open(HOST, profile('Ann'), '', true, config(['human', 'human', 'human']), starter);
+    const second = await lobby.open(OTHER, profile('Cid'), '', true, config(['human', 'human', 'human']), starter);
     await lobby.join(GUEST, profile('Bob'), first.id, starter);
     await lobby.join(GUEST, profile('Bob'), second.id, starter);
     const rooms = lobby.list(undefined).rooms;
@@ -127,7 +141,7 @@ describe('Lobby', () => {
   });
 
   it('keeps the rooms over a restart, with a fresh heartbeat for everybody', async () => {
-    const room = lobby.open(HOST, profile('Ann'), 'Evening game', true, config(['human', 'human', 'human']));
+    const room = await lobby.open(HOST, profile('Ann'), 'Evening game', true, config(['human', 'human', 'human']), starter);
     await lobby.join(GUEST, profile('Bob'), room.id, starter);
     // The server was down longer than the heartbeat timeout
     now += PARTICIPANT_TIMEOUT_MS * 3;
@@ -144,7 +158,7 @@ describe('Lobby', () => {
   it('seats guests entered by the host and names the game after the room', async () => {
     const withGuest = config(['human', 'human', 'human']);
     withGuest.players[2] = {...withGuest.players[2], name: 'Dora', color: 'green'};
-    const room = lobby.open(HOST, profile('Ann'), 'Evening game', true, withGuest, [1]);
+    const room = await lobby.open(HOST, profile('Ann'), 'Evening game', true, withGuest, starter, [1]);
     expect(room.seats.map((seat) => seat.kind)).deep.eq(['human', 'free', 'guest']);
     const joined = await lobby.join(GUEST, profile('Bob', 'green'), room.id, starter);
     expect(joined.state).eq('started');
@@ -154,8 +168,8 @@ describe('Lobby', () => {
     expect(lobby.list(GUEST).rooms[0].hostNeedsLinks).is.undefined;
   });
 
-  it('drops invalid profile parts', () => {
-    const room = lobby.open(HOST, {name: '  Ann  ', color: 'red', emoji: 'nope', image: 'javascript:alert(1)'}, '', true, config(['human', 'human']));
+  it('drops invalid profile parts', async () => {
+    const room = await lobby.open(HOST, {name: '  Ann  ', color: 'red', emoji: 'nope', image: 'javascript:alert(1)'}, '', true, config(['human', 'human']), starter);
     const host = room.seats[0];
     expect(host.kind === 'human' && [host.name, host.emoji, host.image]).deep.eq(['Ann', '🚀', undefined]);
   });

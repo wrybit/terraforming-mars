@@ -326,7 +326,8 @@ async function openInLobby(request: {config: NewGameConfig, title: string, liste
   if (room !== undefined) {
     createOpen.value = false;
     queueing.value = false;
-    roomOpen.value = true;
+    // Without free seats the game already runs: refresh() leads to it
+    roomOpen.value = room.state === 'open';
   }
 }
 
