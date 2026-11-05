@@ -64,7 +64,7 @@
       <HelpOverlay v-else-if="screen === 'help'" />
     </div>
     <!-- In game views the notice sits in the sidebar's info window; on the results page it is dropped (Jens' request) -->
-    <!-- Start page and "Create game" share the same footer (Jens' request): build facts left, notice right -->
+    <!-- Start page, lobby, "Create game" and "Game created" share the same footer (Jens' request): build facts left, notice right -->
     <footer v-if="screen !== 'player-home' && screen !== 'spectator-home' && screen !== 'the-end'" class="notice" :class="{'notice--split': hasStartScreenFooter, 'notice--online': screen === 'start-screen'}">
       <StartScreenFooter v-if="hasStartScreenFooter" />
       <!-- Start page: how many are playing right now, in the middle of the footer -->
@@ -235,7 +235,8 @@ export default defineComponent({
       return SCREENS_WITH_BACKGROUND_CREDIT.includes(this.screen);
     },
     hasStartScreenFooter(): boolean {
-      return this.screen === 'start-screen' || this.screen === 'create-game-form';
+      // Same footer everywhere outside the game (Jens' request): start page, lobby, "Create game", "Game created"
+      return this.screen === 'start-screen' || this.screen === 'create-game-form' || this.screen === 'lobby' || this.screen === 'game-home';
     },
     isMobileLayout(): boolean {
       return mobileLayout.value;

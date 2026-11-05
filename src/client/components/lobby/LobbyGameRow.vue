@@ -21,6 +21,8 @@
     <GameSetupChips class="lobby-game-chips" :chips="chips" compact />
     <div class="lobby-game-action">
       <AppButton v-if="isMine" title="Waiting room" @click="emit('open-room')" />
+      <!-- Own running game: back into it instead of watching -->
+      <a v-else-if="room.state === 'started' && room.yourPlayerId" class="btn btn-rounded lobby-game-watch" :href="'player?id=' + room.yourPlayerId" v-i18n>Continue</a>
       <a v-else-if="room.state === 'started' && room.spectatorId" class="btn btn-rounded lobby-game-watch" :href="'spectator?id=' + room.spectatorId" v-i18n>Watch</a>
       <AppButton v-else-if="room.state === 'open'" class="btn-tone-quiet" title="Join" @click="emit('join')" />
     </div>

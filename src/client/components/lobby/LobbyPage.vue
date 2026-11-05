@@ -152,6 +152,10 @@ const declinedRooms = new Set<string>();
 const invitedRoomId = lobbyRoomIdFromPath(window.location.pathname);
 let invitationHandled = false;
 let pollTimer: ReturnType<typeof setInterval> | undefined;
+// Rooms we sat in while they were still open on this page: their start leads into the game
+const waitedIn = new Set<string>();
+// Set by our own open/join click: a game that starts right away (no free seats left) leads into it too
+let followNextStart = false;
 let clockTimer: ReturnType<typeof setInterval> | undefined;
 
 const filterCount = computed(() => activeFilterCount(filters.value));
@@ -191,15 +195,22 @@ async function refresh(): Promise<void> {
     return;
   }
   const mine = myRoom.value;
-  // The game started: everybody goes to their own player page; a host with players entered by hand first
-  // gets the page with every player's link, to send them theirs
-  if (mine?.state === 'started' && mine.hostNeedsLinks && mine.gameId !== undefined) {
-    window.location.href = 'game?id=' + mine.gameId;
-    return;
+  if (mine?.state === 'open') {
+    waitedIn.add(mine.id);
   }
-  if (mine?.state === 'started' && mine.yourPlayerId !== undefined) {
-    window.location.href = 'player?id=' + mine.yourPlayerId;
-    return;
+  // The game started while we waited for it (or was started by our own click): everybody goes to their own
+  // player page, a host with players entered by hand first to the page with every player's link.
+  // An earlier game of ours does not pull a later visit of the lobby away: it is listed with "Continue".
+  if (mine?.state === 'started' && (waitedIn.has(mine.id) || followNextStart)) {
+    followNextStart = false;
+    if (mine.hostNeedsLinks && mine.gameId !== undefined) {
+      window.location.href = 'game?id=' + mine.gameId;
+      return;
+    }
+    if (mine.yourPlayerId !== undefined) {
+      window.location.href = 'player?id=' + mine.yourPlayerId;
+      return;
+    }
   }
   offerInvitation();
   offerQueueMatch();
@@ -271,6 +282,7 @@ async function act(action: LobbyRequest): Promise<LobbyRoomModel | undefined> {
 
 function join(room: LobbyRoomModel): void {
   withProfile(async () => {
+    followNextStart = true;
     const joined = await act({action: 'join', roomId: room.id, profile: profile.value});
     if (joined !== undefined) {
       queueing.value = false;
@@ -322,6 +334,7 @@ function openCreate(): void {
 }
 
 async function openInLobby(request: {config: NewGameConfig, title: string, listed: boolean, freeSeats: Array<number>}): Promise<void> {
+  followNextStart = true;
   const room = await act({action: 'open', profile: profile.value, ...request});
   if (room !== undefined) {
     createOpen.value = false;
