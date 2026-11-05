@@ -288,8 +288,15 @@
 @media only screen and (max-width: 600px) {
   .lobby-head .lobby-open-label,
   .lobby-head .lobby-open-keys,
-  .lobby-profile-button .create-game-head-label {
+  .lobby-profile-button .create-game-head-label,
+  .lobby-profile-chevron {
     display: none;
+  }
+
+  .lobby-head .lobby-profile-button {
+    width: @toolbar-button-size;
+    padding: 0;
+    justify-content: center;
   }
 
   .lobby-head .lobby-open-button {
@@ -304,8 +311,41 @@
   justify-content: flex-end;
 }
 
-.lobby-profile-button {
-  padding-left: 5px;
+// Profile as a pill: avatar without ring at the left edge, name, arrow. Further from "Create game" than the
+// buttons of one group are from each other: profile and creating are two different things
+.lobby-head .lobby-profile-button {
+  gap: 8px;
+  margin-right: 8px;
+  padding: 0 12px 0 5px;
+  border-radius: (@toolbar-button-size / 2);
+
+  .lobby-avatar {
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
+    box-shadow: none;
+  }
+  // Clearly reacts to the pointer: lighter surface and edge, the arrow fully visible
+  &:hover {
+    border-color: rgba(255, 255, 255, 0.45);
+    background: rgba(255, 255, 255, 0.14);
+
+    .lobby-profile-chevron {
+      opacity: 1;
+    }
+  }
+}
+
+.lobby-profile-chevron {
+  width: 14px;
+  height: 14px;
+  flex: none;
+  fill: none;
+  stroke: currentcolor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.7;
 }
 
 // ---------- List card ----------

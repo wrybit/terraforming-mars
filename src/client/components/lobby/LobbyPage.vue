@@ -8,6 +8,8 @@
         <button type="button" class="create-game-icon-button lobby-profile-button" :title="$t('Your profile')" @click="profileOpen = true">
           <LobbyAvatar kind="human" :color="profile.color" :emoji="profile.emoji" :image="profile.image" size="small" />
           <span class="create-game-head-label">{{ profile.name }}</span>
+          <!-- The arrow says: this opens something (the profile) -->
+          <svg class="lobby-profile-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>
         </button>
         <!-- The only way to open a game; on phones only the plus remains -->
         <!-- Same shortcut as the create button in the form (Mod + Enter): once to open it, once more to create.
