@@ -26,6 +26,7 @@
       <CreateGameForm
         v-else-if="screen === 'create-game-form'"
       />
+      <LobbyPage v-else-if="screen === 'lobby'" />
       <GameHome
         v-else-if="screen === 'game-home' && game !== undefined"
         :game="game"
@@ -96,6 +97,7 @@ const PlayerHome = defineAsyncComponent(() => import(/* webpackChunkName: "playe
 const MobilePlayerHome = defineAsyncComponent(() => import(/* webpackChunkName: "mobile-player-home" */ '@/client/components/mobile/MobilePlayerHome.vue'));
 const MobileSpectatorHome = defineAsyncComponent(() => import(/* webpackChunkName: "mobile-spectator-home" */ '@/client/components/mobile/MobileSpectatorHome.vue'));
 const SpectatorHome = defineAsyncComponent(() => import(/* webpackChunkName: "spectator-home" */ '@/client/components/SpectatorHome.vue'));
+const LobbyPage = defineAsyncComponent(() => import(/* webpackChunkName: "lobby" */ '@/client/components/lobby/LobbyPage.vue'));
 const StatsPage = defineAsyncComponent(() => import(/* webpackChunkName: "stats" */ '@/client/components/stats/StatsPage.vue'));
 const StartScreenFooter = defineAsyncComponent(() => import(/* webpackChunkName: "start-screen" */ '@/client/components/StartScreenFooter.vue'));
 const OnlinePlayers = defineAsyncComponent(() => import(/* webpackChunkName: "start-screen" */ '@/client/components/OnlinePlayers.vue'));
@@ -136,6 +138,7 @@ type Screen = 'admin-settings' |
             'games-overview' |
             'help' |
             'login-home' |
+            'lobby' |
             'player-home' |
             'spectator-home' |
             'start-screen' |
@@ -143,7 +146,7 @@ type Screen = 'admin-settings' |
             'the-end';
 // Screens shown on the Milky Way background (AppBackground.vue); the rest keeps the plain page color
 const SCREENS_WITH_BACKGROUND: ReadonlyArray<Screen> = [
-  'start-screen', 'create-game-form', 'game-home', 'player-home', 'spectator-home', 'the-end', 'games-overview', 'cards', 'stats',
+  'start-screen', 'create-game-form', 'lobby', 'game-home', 'player-home', 'spectator-home', 'the-end', 'games-overview', 'cards', 'stats',
 ];
 // Image credit only where the top right corner is free; all other views have their own page header there
 const SCREENS_WITH_BACKGROUND_CREDIT: ReadonlyArray<Screen> = [
@@ -207,6 +210,7 @@ export default defineComponent({
     StartScreenFooter,
     OnlinePlayers,
     CreateGameForm,
+    LobbyPage,
     GameHome,
     PlayerHome,
     MobilePlayerHome,
@@ -401,6 +405,8 @@ export default defineComponent({
       app.screen = 'games-overview';
     } else if (currentPathname === paths.NEW_GAME) {
       app.screen = 'create-game-form';
+    } else if (currentPathname === paths.LOBBY) {
+      app.screen = 'lobby';
     } else if (currentPathname === paths.CARDS) {
       app.screen = 'cards';
     } else if (currentPathname === paths.STATS) {

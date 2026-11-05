@@ -1,10 +1,10 @@
 <template>
-  <div id="create-game" class="create-game">
+  <div id="create-game" class="create-game" :class="{'create-game--lobby': lobbyMode}">
     <!-- Header like card list/statistics: title, file buttons, language and settings in one header card -->
     <header class="card-list-header card-list-header--plain create-game-head">
       <!-- Menu at the top left, as in the game -->
-      <PageToolbar />
-      <PageTitle title="Create New Game" />
+      <PageToolbar v-if="!lobbyMode" />
+      <PageTitle :title="lobbyMode ? 'Open game' : 'Create New Game'" />
       <div class="create-game-head-actions">
         <label class="create-game-icon-button" :title="$t('Load settings from file')">
           <!-- Import/export icons: arrow perpendicular to a hex edge, into the tile (import) or out of it (export);
@@ -21,8 +21,10 @@
           <polygon class="create-game-head-icon-filled" mask="url(#create-game-export-cut)" points="12.5,5.2 19.43,9.2 19.43,17.2 12.5,21.2 5.57,17.2 5.57,9.2" /><path :d="exportArrowPath" />
         </svg><span class="create-game-head-label" v-i18n>Export</span></button>
         <!-- Share link: the URL already carries the settings anyway, the button just copies it -->
-        <button type="button" class="create-game-icon-button" :title="$t('Copy link with these settings')" @click="copySettingsLink()"><svg class="create-game-head-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" /></svg><span class="create-game-head-label">{{ $t(settingsLinkCopied ? 'Link copied' : 'Copy link') }}</span></button>
+        <button v-if="!lobbyMode" type="button" class="create-game-icon-button" :title="$t('Copy link with these settings')" @click="copySettingsLink()"><svg class="create-game-head-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" /></svg><span class="create-game-head-label">{{ $t(settingsLinkCopied ? 'Link copied' : 'Copy link') }}</span></button>
         <AppButton class="create-game-reset btn-tone-quiet" title="Reset" @click="resetSettings" />
+        <!-- Lobby: the form is a modal over the lobby (LobbyPage.vue) -->
+        <button v-if="lobbyMode" type="button" class="create-game-icon-button create-game-close" :aria-label="$t('Close')" @click="closeModal()">✕</button>
       </div>
     </header>
     <div class="create-game-layout">
@@ -309,6 +311,16 @@
                 </div>
                 <SegmentedControl v-else v-model="aiPlayersCount" :options="aiCountOptions" class="create-game-segmented--equal create-game-segmented--seats" />
               </div>
+              <!-- Lobby: further human seats are offered to other players instead of being typed in here -->
+              <template v-if="lobbyMode && humanPlayersCount > 1">
+                <OptionRow class="create-game-players-first" label="Open in lobby"><SwitchInput v-model="lobbyEnabled" /></OptionRow>
+                <template v-if="lobbyEnabled">
+                  <input class="create-game-text-input create-game-lobby-title" v-model="lobbyTitle" :maxlength="lobbyTitleMaxLength"
+                    :placeholder="lobbyTitlePlaceholder" :aria-label="$t('Name of the game')">
+                  <OptionRow class="create-game-players-first" label="Show in the lobby list"><SwitchInput v-model="lobbyListed" /></OptionRow>
+                  <div v-if="!lobbyListed" class="create-game-note" v-i18n>Only players with the invitation link can join.</div>
+                </template>
+              </template>
               <!-- Who starts belongs to the players: switched on, the "Goes first" stars on the player cards disappear -->
               <OptionRow v-if="playersCount > 1" class="create-game-players-first" label="Random first player"><SwitchInput v-model="randomFirstPlayer" /></OptionRow>
               <!-- Analysis game: only with AI players; the log then shows the AI's cards and decisions, which humans can rate -->
@@ -322,50 +334,57 @@
               <!-- Neutral card; the header shows the chosen player color -->
               <!-- Humans stand out (full color, glow); AI players stay quieter (tinted header, thin outline) -->
               <div v-for="(newPlayer, index) in getPlayers()" :key="seatKey(newPlayer)"
-                :class="['create-game-player', 'create-game-player--' + newPlayer.color, {'create-game-player--ai': newPlayer.aiLevel !== undefined}]">
-                <div class="create-game-player-top">
-                  <!-- Seat: meeple or robot plus seat number -->
-                  <span class="create-game-player-position">
-                    <SeatIcon :kind="newPlayer.aiLevel !== undefined ? 'ai' : 'human'" />{{ index + 1 }}
-                  </span>
-                  <span class="create-game-player-name-field">
-                    <input class="create-game-player-name" :placeholder="getPlayerNamePlaceholder(index)" v-model="newPlayer.name">
-                    <!-- Fixed AI marker right behind the typed name; not part of the input, so nobody types it twice -->
-                    <span v-if="newPlayer.aiLevel !== undefined" class="create-game-player-name-marker" aria-hidden="true"><span class="create-game-player-name-ghost">{{ newPlayer.name || getPlayerNamePlaceholder(index) }}</span> {{ aiMarker(newPlayer.aiLevel) }}</span>
-                  </span>
-                  <button v-if="playersCount > 1 && !randomFirstPlayer" type="button" class="create-game-first"
-                    :class="{'create-game-first--selected': firstIndex === index + 1}" :title="$t('Goes First?')"
-                    @click="firstIndex = index + 1">
-                    <span>{{ firstIndex === index + 1 ? '★' : '☆' }}</span>
-                    <span v-if="firstIndex === index + 1" v-i18n>Goes first</span>
-                  </button>
+                :class="['create-game-player', isLobbySeat(newPlayer, index) ? 'create-game-player--lobby-seat' : 'create-game-player--' + newPlayer.color, {'create-game-player--ai': newPlayer.aiLevel !== undefined}]">
+                <!-- Lobby: a free seat; name and color are chosen by whoever takes it -->
+                <div v-if="isLobbySeat(newPlayer, index)" class="create-game-lobby-seat">
+                  <span class="create-game-player-position"><SeatIcon kind="human" />{{ index + 1 }}</span>
+                  <span v-i18n>Free seat for the lobby</span>
                 </div>
-                <div class="create-game-swatches">
-                  <!-- Colors as player cubes: all lying (top view), the chosen one standing (slightly from above); animated tilt in both directions -->
-                  <button v-for="color in PLAYER_COLORS" :key="color" type="button"
-                    :class="['create-game-swatch', {'create-game-swatch--selected': newPlayer.color === color}]"
-                    :disabled="isColorTaken(color, index)" :title="$t(color)" :aria-pressed="newPlayer.color === color"
-                    @click="newPlayer.color = color">
-                    <PlayerCube :color="color" :view="newPlayer.color === color ? 'slight' : 'top'" :size="newPlayer.color === color ? 17 : 16" animated />
-                  </button>
-                </div>
-                <div v-if="newPlayer.aiLevel !== undefined" class="create-game-ai-strength">
-                  <span v-i18n>Strength</span>
-                  <SegmentedControl v-model="newPlayer.aiLevel" :options="AI_LEVEL_OPTIONS" class="create-game-segmented--equal" />
-                </div>
-                <div class="create-game-player-extra">
-                  <!-- The beginner corporation is a help for humans; AI players do not need it -->
-                  <label v-if="isBeginnerToggleEnabled() && newPlayer.aiLevel === undefined" class="create-game-player-toggle">
-                    <SwitchInput v-model="newPlayer.beginner" />
-                    <span v-i18n>Beginner?</span>
-                    <InfoLink :href="wikiUrls.beginnerCorporation" />
-                  </label>
-                  <span class="create-game-player-toggle">
-                    <span v-i18n>TR Boost</span>
-                    <InfoLink :href="wikiUrls.trBoost" />
-                    <NumberStepper v-model="newPlayer.handicap" :min="0" :max="10" />
-                  </span>
-                </div>
+                <template v-else>
+                  <div class="create-game-player-top">
+                    <!-- Seat: meeple or robot plus seat number -->
+                    <span class="create-game-player-position">
+                      <SeatIcon :kind="newPlayer.aiLevel !== undefined ? 'ai' : 'human'" />{{ index + 1 }}
+                    </span>
+                    <span class="create-game-player-name-field">
+                      <input class="create-game-player-name" :placeholder="getPlayerNamePlaceholder(index)" v-model="newPlayer.name">
+                      <!-- Fixed AI marker right behind the typed name; not part of the input, so nobody types it twice -->
+                      <span v-if="newPlayer.aiLevel !== undefined" class="create-game-player-name-marker" aria-hidden="true"><span class="create-game-player-name-ghost">{{ newPlayer.name || getPlayerNamePlaceholder(index) }}</span> {{ aiMarker(newPlayer.aiLevel) }}</span>
+                    </span>
+                    <button v-if="playersCount > 1 && !randomFirstPlayer" type="button" class="create-game-first"
+                      :class="{'create-game-first--selected': firstIndex === index + 1}" :title="$t('Goes First?')"
+                      @click="firstIndex = index + 1">
+                      <span>{{ firstIndex === index + 1 ? '★' : '☆' }}</span>
+                      <span v-if="firstIndex === index + 1" v-i18n>Goes first</span>
+                    </button>
+                  </div>
+                  <div class="create-game-swatches">
+                    <!-- Colors as player cubes: all lying (top view), the chosen one standing (slightly from above); animated tilt in both directions -->
+                    <button v-for="color in PLAYER_COLORS" :key="color" type="button"
+                      :class="['create-game-swatch', {'create-game-swatch--selected': newPlayer.color === color}]"
+                      :disabled="isColorTaken(color, index)" :title="$t(color)" :aria-pressed="newPlayer.color === color"
+                      @click="newPlayer.color = color">
+                      <PlayerCube :color="color" :view="newPlayer.color === color ? 'slight' : 'top'" :size="newPlayer.color === color ? 17 : 16" animated />
+                    </button>
+                  </div>
+                  <div v-if="newPlayer.aiLevel !== undefined" class="create-game-ai-strength">
+                    <span v-i18n>Strength</span>
+                    <SegmentedControl v-model="newPlayer.aiLevel" :options="AI_LEVEL_OPTIONS" class="create-game-segmented--equal" />
+                  </div>
+                  <div class="create-game-player-extra">
+                    <!-- The beginner corporation is a help for humans; AI players do not need it -->
+                    <label v-if="isBeginnerToggleEnabled() && newPlayer.aiLevel === undefined" class="create-game-player-toggle">
+                      <SwitchInput v-model="newPlayer.beginner" />
+                      <span v-i18n>Beginner?</span>
+                      <InfoLink :href="wikiUrls.beginnerCorporation" />
+                    </label>
+                    <span class="create-game-player-toggle">
+                      <span v-i18n>TR Boost</span>
+                      <InfoLink :href="wikiUrls.trBoost" />
+                      <NumberStepper v-model="newPlayer.handicap" :min="0" :max="10" />
+                    </span>
+                  </div>
+                </template>
               </div>
             </TransitionGroup>
           </div>
@@ -375,7 +394,7 @@
           <!-- Same chips as the game list of the statistics (gameSetupChips.ts) -->
           <GameSetupChips :chips="summaryChips" />
           <div ref="createRow" class="create-game-create-row">
-            <AppButton hotkey="create-game" class="create-game-create" title="Create game" size="big" @click="createGame" :disabled="hasBlockingValidationErrors" />
+            <AppButton hotkey="create-game" class="create-game-create" :title="createButtonTitle" size="big" @click="submit" :disabled="hasBlockingValidationErrors" />
           </div>
           <!-- Below the button: about the next visit, not a setting of this game (upstream: "Remember" next to Create game) -->
           <OptionRow label="Remember settings" class="create-game-remember"><SwitchInput v-model="rememberSettings" data-test="remember-settings" /></OptionRow>
@@ -385,7 +404,7 @@
       <!-- One column (phone): the Create card stays at the end of the page; only the button follows along at the
            bottom edge until the card's own button comes into view – summary and warnings would cover the settings -->
       <div v-if="createButtonBelow" class="create-game-create-float">
-        <AppButton class="create-game-create" title="Create game" size="big" @click="createGame" :disabled="hasBlockingValidationErrors" />
+        <AppButton class="create-game-create" :title="createButtonTitle" size="big" @click="submit" :disabled="hasBlockingValidationErrors" />
       </div>
     </div>
 
@@ -460,6 +479,7 @@ import {requiredByTooltip, requirementsOf} from './expansionDependencies';
 import {Expansion} from '@/common/cards/GameModule';
 import {arrangeSeats, seatKey} from './seatOrder';
 import {collapseEnter, collapseLeave} from '@/client/utils/collapseAnimation';
+import {LobbyProfile, LOBBY_TITLE_MAX_LENGTH} from '@/common/lobby/LobbyModel';
 
 type Refs = {
   file: HTMLInputElement;
@@ -495,6 +515,10 @@ type FormModel = {
   stopColumnWatch: () => void;
   stopStickyObserver: () => void;
   stopBelowObserver: () => void;
+  /** Lobby modal: offer the further human seats in the lobby (otherwise the classic way: names typed in here) */
+  lobbyEnabled: boolean;
+  lobbyTitle: string;
+  lobbyListed: boolean;
 };
 
 // Distance of the sticky Create card to the bottom edge; same value as bottom in create_game_form.less
@@ -531,8 +555,24 @@ export default defineComponent({
       stopColumnWatch: () => {},
       stopStickyObserver: () => {},
       stopBelowObserver: () => {},
+      lobbyEnabled: true,
+      lobbyTitle: '',
+      lobbyListed: true,
     };
   },
+  props: {
+    // Shown as the "Open game" modal of the lobby (LobbyPage.vue)
+    lobbyMode: {
+      type: Boolean,
+      default: false,
+    },
+    // Lobby: name and color of the own seat
+    lobbyProfile: {
+      type: Object as () => LobbyProfile | undefined,
+      default: undefined,
+    },
+  },
+  // Lobby: 'close' and 'open-in-lobby' (not declared as emits: typed emits would break showAlert(this))
   components: {
     GameSetupChips,
     AppButton,
@@ -629,12 +669,24 @@ export default defineComponent({
     // Restore before the first render: restoring in mounted() painted the default seat (red "Player 1")
     // first, which then animated out while the saved seats animated in.
     // A shared link takes precedence over the most recently used settings.
-    if (!this.restoreSettingsFromLink()) {
+    // The lobby's address carries no settings: there the last used settings are the start
+    if (this.lobbyMode || !this.restoreSettingsFromLink()) {
       this.restoreLastSettings();
+    }
+    // The own seat carries the lobby profile
+    if (this.lobbyMode && this.lobbyProfile !== undefined) {
+      this.players[0].name = this.lobbyProfile.name;
+      this.players[0].color = this.lobbyProfile.color;
+    }
+    // Opened from the lobby, a game is meant for several people: at least one free seat (solo stays one click away)
+    if (this.lobbyMode && this.humanPlayersCount < 2) {
+      this.humanPlayersCount = 2;
     }
   },
   mounted() {
-    setDocumentTitle('New game');
+    if (!this.lobbyMode) {
+      setDocumentTitle('New game');
+    }
     this.stopStickyObserver = observeStickyBottom(this.$refs.createCard as HTMLElement, CREATE_CARD_BOTTOM_PX, (stuck) => {
       this.createCardStuck = stuck;
     });
@@ -647,6 +699,10 @@ export default defineComponent({
       this.columnCount = columnCount;
     });
     nextTick(() => {
+      // The lobby keeps its own address: no settings in the URL
+      if (this.lobbyMode) {
+        return;
+      }
       this.settingsLinkReady = true;
       if (!this.uploading) {
         replaceSettingsHash(this.currentSettingsHash);
@@ -675,6 +731,18 @@ export default defineComponent({
       ?.setAttribute('content', this.previousViewport);
   },
   computed: {
+    lobbyTitleMaxLength(): number {
+      return LOBBY_TITLE_MAX_LENGTH;
+    },
+    lobbyActive(): boolean {
+      return this.lobbyMode && this.lobbyEnabled && this.humanPlayersCount > 1;
+    },
+    createButtonTitle(): string {
+      return this.lobbyActive ? 'Open in lobby' : 'Create game';
+    },
+    lobbyTitlePlaceholder(): string {
+      return translateTextWithParams('${0}\'s game', [this.players[0]?.name || translateText('Player')]);
+    },
     // Arrow paths are used twice (drawn + as mask cut), so they live here once
     importArrowPath(): string {
       return 'M5.44 2.7L11.75 13.63M12.33 10.89L11.75 13.63L9.09 12.77';
@@ -1293,6 +1361,47 @@ export default defineComponent({
         clonedGamedId,
         escapeVelocity: config.escapeVelocity === undefined ? undefined : sanitizeEscapeVelocityOptions(config.escapeVelocity),
       };
+    },
+    /** Lobby: free human seats beyond the own one go to the lobby; solo and "only AI" games start right away */
+    isLobbySeat(player: NewPlayerModel, index: number): boolean {
+      return this.lobbyActive && index > 0 && player.aiLevel === undefined;
+    },
+    closeModal() {
+      // See openInLobby: emits stay undeclared
+      // eslint-disable-next-line vue/require-explicit-emits
+      this.$emit('close');
+    },
+    submit() {
+      if (this.lobbyActive) {
+        this.openInLobby();
+      } else {
+        this.createGame();
+      }
+    },
+    openInLobby() {
+      if (this.hasBlockingValidationErrors) {
+        return;
+      }
+      // Seat order as on the page (own seat first, humans before AI players); the server places the joining
+      // players and draws the first player itself
+      const config = this.newGameConfig;
+      const players = this.players.slice(0, this.playersCount).map((player) => ({...player, first: false}));
+      if (this.rememberSettings) {
+        createGameSettingsStorage.save({...config, players});
+      }
+      // Not declared as emits on purpose: typed emits would break showAlert(this) in this component
+      // eslint-disable-next-line vue/require-explicit-emits
+      this.$emit('open-in-lobby', {
+        config: {
+          ...config,
+          players,
+          clonedGamedId: undefined,
+          boardSeed: this.boardSeed,
+          escapeVelocity: config.escapeVelocity === undefined ? undefined : sanitizeEscapeVelocityOptions(config.escapeVelocity),
+        },
+        title: this.lobbyTitle.trim() || this.lobbyTitlePlaceholder,
+        listed: this.lobbyListed,
+      });
     },
     async createGame() {
       if (this.hasBlockingValidationErrors) {

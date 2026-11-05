@@ -1,0 +1,374 @@
+import {AiLevel, DEFAULT_AI_LEVEL, isAiLevel} from '../../common/ai/AiLevel';
+import {Color, PLAYER_COLORS} from '../../common/Color';
+import {setupOptionsFromConfig} from '../../common/game/GameSetupOptions';
+import {NewGameConfig, NewPlayerModel} from '../../common/game/NewGameConfig';
+import {LobbyListModel, LobbyProfile, LobbyRoomModel, LobbySeatModel, LOBBY_MAX_SEATS} from '../../common/lobby/LobbyModel';
+import {GameId, PlayerId, SpectatorId} from '../../common/Types';
+import {LobbyError, sanitizeProfile, sanitizeTitle} from './lobbyValidation';
+
+/** A participant who stops polling (closed tab, lost connection) loses the seat after this time */
+export const PARTICIPANT_TIMEOUT_MS = 45_000;
+/** Started rooms stay in the list as "running" for spectators */
+export const STARTED_ROOM_KEEP_MS = 6 * 60 * 60 * 1000;
+/** Rooms nobody completes are dropped at the latest after this time */
+export const OPEN_ROOM_MAX_AGE_MS = 12 * 60 * 60 * 1000;
+
+/** The part of a created game the lobby needs (IGame satisfies it) */
+export type StartedGame = {
+  id: GameId;
+  spectatorId: SpectatorId | undefined;
+  players: ReadonlyArray<{id: PlayerId}>;
+};
+/** Creates the game exactly as the create form would (ApiCreateGame.createGame) */
+export type GameStarter = (config: NewGameConfig) => Promise<StartedGame>;
+
+type HumanSeat = {kind: 'human', participant: string, profile: LobbyProfile, ready: boolean, lastSeen: number};
+type Seat = {kind: 'free'} | {kind: 'ai', aiLevel: AiLevel} | HumanSeat;
+
+type Room = {
+  id: string;
+  title: string;
+  createdAt: number;
+  listed: boolean;
+  host: string;
+  config: NewGameConfig;
+  seats: Array<Seat>;
+  state: 'open' | 'starting' | 'started';
+  startedAt?: number;
+  gameId?: GameId;
+  spectatorId?: SpectatorId;
+  playerIds: Map<string, PlayerId>;
+};
+
+/**
+ * Open games waiting for players, kept in memory: a room only lives until its game starts
+ * (or for a while afterwards as "running"); the game itself is stored like every other game.
+ */
+export class Lobby {
+  public static readonly INSTANCE = new Lobby();
+  private readonly rooms = new Map<string, Room>();
+
+  constructor(private readonly clock: () => number = Date.now, private readonly newId: () => string = randomRoomId) {}
+
+  /** Rooms for the list: listed open and running ones, plus the room of the asking participant. Also the heartbeat. */
+  public list(me: string | undefined, roomId?: string): LobbyListModel {
+    this.prune();
+    if (me !== undefined) {
+      this.touch(me);
+    }
+    const yourRoom = me === undefined ? undefined : this.roomOf(me);
+    const rooms = Array.from(this.rooms.values())
+      .filter((room) => room.listed || room === yourRoom || room.id === roomId)
+      .sort((a, b) => b.createdAt - a.createdAt)
+      .map((room) => this.model(room, me));
+    return {rooms, yourRoomId: yourRoom?.id};
+  }
+
+  public open(me: string, profile: LobbyProfile, title: string, listed: boolean, config: NewGameConfig): LobbyRoomModel {
+    this.prune();
+    const cleanProfile = sanitizeProfile(profile);
+    const players = Array.isArray(config?.players) ? config.players : [];
+    if (players.length < 2 || players.length > LOBBY_MAX_SEATS) {
+      throw new LobbyError('A lobby game needs 2 to 6 seats');
+    }
+    if (isAiLevel(players[0].aiLevel)) {
+      throw new LobbyError('The first seat belongs to the host');
+    }
+    // Seat 0 is the host; further humans are free seats, AI players stay AI players
+    const seats: Array<Seat> = players.map((player, index): Seat => {
+      if (index === 0) {
+        return this.humanSeat(me, cleanProfile, true);
+      }
+      return isAiLevel(player.aiLevel) ? {kind: 'ai', aiLevel: player.aiLevel} : {kind: 'free'};
+    });
+    if (!seats.some((seat) => seat.kind === 'free')) {
+      throw new LobbyError('A lobby game needs at least one free seat');
+    }
+    this.leaveAll(me);
+    const room: Room = {
+      id: this.newId(),
+      title: sanitizeTitle(title) || defaultTitle(cleanProfile.name),
+      createdAt: this.clock(),
+      listed: listed !== false,
+      host: me,
+      config: {...config, clonedGamedId: undefined},
+      seats,
+      state: 'open',
+      playerIds: new Map(),
+    };
+    this.rooms.set(room.id, room);
+    return this.model(room, me);
+  }
+
+  public async join(me: string, profile: LobbyProfile, roomId: string, starter: GameStarter): Promise<LobbyRoomModel> {
+    this.prune();
+    const room = this.openRoom(roomId);
+    const cleanProfile = sanitizeProfile(profile);
+    if (this.seatIndexOf(room, me) < 0) {
+      const free = room.seats.findIndex((seat) => seat.kind === 'free');
+      if (free < 0) {
+        throw new LobbyError('This game is already full');
+      }
+      this.leaveAll(me);
+      // Preferred color if nobody else has it, otherwise the first free one
+      const color = this.freeColor(room, cleanProfile.color);
+      // Joining is a deliberate click: the seat is ready right away (can be taken back in the waiting room)
+      room.seats[free] = this.humanSeat(me, {...cleanProfile, color}, true);
+    }
+    await this.startIfComplete(room, starter);
+    return this.model(room, me);
+  }
+
+  /** Name, picture or color changed while waiting */
+  public updateProfile(me: string, profile: LobbyProfile, roomId: string): LobbyRoomModel {
+    const room = this.openRoom(roomId);
+    const seat = this.humanSeatOf(room, me);
+    const cleanProfile = sanitizeProfile(profile);
+    seat.profile = {...cleanProfile, color: this.freeColor(room, cleanProfile.color, me)};
+    return this.model(room, me);
+  }
+
+  public leave(me: string, roomId: string): void {
+    const room = this.rooms.get(roomId);
+    if (room === undefined || room.state !== 'open') {
+      return;
+    }
+    this.removeParticipant(room, me);
+  }
+
+  public async setReady(me: string, roomId: string, ready: boolean, starter: GameStarter): Promise<LobbyRoomModel> {
+    const room = this.openRoom(roomId);
+    this.humanSeatOf(room, me).ready = ready === true;
+    await this.startIfComplete(room, starter);
+    return this.model(room, me);
+  }
+
+  /** Host only: a free seat becomes an AI player */
+  public async seatAi(me: string, roomId: string, seatIndex: number, starter: GameStarter): Promise<LobbyRoomModel> {
+    const room = this.hostRoom(me, roomId);
+    if (room.seats[seatIndex]?.kind !== 'free') {
+      throw new LobbyError('This seat is not free');
+    }
+    room.seats[seatIndex] = {kind: 'ai', aiLevel: DEFAULT_AI_LEVEL};
+    await this.startIfComplete(room, starter);
+    return this.model(room, me);
+  }
+
+  /** Host only: every free seat becomes an AI player and the game starts */
+  public async fillWithAi(me: string, roomId: string, starter: GameStarter): Promise<LobbyRoomModel> {
+    const room = this.hostRoom(me, roomId);
+    room.seats = room.seats.map((seat) => seat.kind === 'free' ? {kind: 'ai', aiLevel: DEFAULT_AI_LEVEL} : seat);
+    await this.start(room, starter);
+    return this.model(room, me);
+  }
+
+  /** Host only: start with everybody seated, even if not everyone pressed "Ready" */
+  public async startNow(me: string, roomId: string, starter: GameStarter): Promise<LobbyRoomModel> {
+    const room = this.hostRoom(me, roomId);
+    if (room.seats.some((seat) => seat.kind === 'free')) {
+      throw new LobbyError('There are still free seats');
+    }
+    await this.start(room, starter);
+    return this.model(room, me);
+  }
+
+  private async startIfComplete(room: Room, starter: GameStarter): Promise<void> {
+    const complete = room.seats.every((seat) => seat.kind === 'ai' || (seat.kind === 'human' && seat.ready));
+    if (complete) {
+      await this.start(room, starter);
+    }
+  }
+
+  private async start(room: Room, starter: GameStarter): Promise<void> {
+    if (room.state !== 'open') {
+      return;
+    }
+    // While the game is being created, no second request may start it again
+    room.state = 'starting';
+    try {
+      const config = this.gameConfig(room);
+      const game = await starter(config);
+      room.gameId = game.id;
+      room.spectatorId = game.spectatorId;
+      room.seats.forEach((seat, index) => {
+        if (seat.kind === 'human') {
+          room.playerIds.set(seat.participant, game.players[index].id);
+        }
+      });
+      room.state = 'started';
+      room.startedAt = this.clock();
+    } catch (error) {
+      room.state = 'open';
+      throw error;
+    }
+  }
+
+  /** The create form's settings with the seated players, in seat order */
+  private gameConfig(room: Room): NewGameConfig {
+    const humanColors = new Set(room.seats.flatMap((seat) => seat.kind === 'human' ? [seat.profile.color] : []));
+    const freeColors = PLAYER_COLORS.filter((color) => !humanColors.has(color));
+    const players: Array<NewPlayerModel> = room.seats.map((seat) => {
+      if (seat.kind === 'human') {
+        return {name: seat.profile.name, color: seat.profile.color, beginner: false, handicap: 0, first: false};
+      }
+      const color = freeColors.shift() as Color;
+      const aiLevel = seat.kind === 'ai' ? seat.aiLevel : DEFAULT_AI_LEVEL;
+      return {name: capitalize(color), color, beginner: false, handicap: 0, first: false, aiLevel};
+    });
+    const firstIndex = room.config.randomFirstPlayer ? Math.floor(Math.random() * players.length) : 0;
+    players[firstIndex].first = true;
+    return {...room.config, players, clonedGamedId: undefined};
+  }
+
+  private model(room: Room, me: string | undefined): LobbyRoomModel {
+    const seats = room.seats.map((seat): LobbySeatModel => {
+      if (seat.kind !== 'human') {
+        return seat.kind === 'ai' ? {kind: 'ai', aiLevel: seat.aiLevel} : {kind: 'free'};
+      }
+      return {
+        kind: 'human',
+        name: seat.profile.name,
+        color: seat.profile.color,
+        emoji: seat.profile.emoji,
+        image: seat.profile.image,
+        ready: seat.ready,
+        host: seat.participant === room.host,
+        you: seat.participant === me,
+      };
+    });
+    const config = room.config;
+    return {
+      id: room.id,
+      title: room.title,
+      ageMs: this.clock() - room.createdAt,
+      state: room.state === 'started' ? 'started' : 'open',
+      listed: room.listed,
+      seats,
+      setup: {
+        expansions: config.expansions,
+        boards: config.boards ?? [],
+        randomBoard: (config.boards ?? []).length > 1,
+        options: setupOptionsFromConfig(config),
+      },
+      gameId: room.gameId,
+      spectatorId: room.spectatorId,
+      yourPlayerId: me === undefined ? undefined : room.playerIds.get(me),
+    };
+  }
+
+  private touch(me: string): void {
+    const now = this.clock();
+    for (const room of this.rooms.values()) {
+      for (const seat of room.seats) {
+        if (seat.kind === 'human' && seat.participant === me) {
+          seat.lastSeen = now;
+        }
+      }
+    }
+  }
+
+  /** Drops participants who stopped polling, rooms without host and rooms that are too old */
+  private prune(): void {
+    const now = this.clock();
+    for (const room of Array.from(this.rooms.values())) {
+      if (room.state === 'started') {
+        if (now - (room.startedAt ?? now) > STARTED_ROOM_KEEP_MS) {
+          this.rooms.delete(room.id);
+        }
+        continue;
+      }
+      if (room.state !== 'open') {
+        continue;
+      }
+      if (now - room.createdAt > OPEN_ROOM_MAX_AGE_MS) {
+        this.rooms.delete(room.id);
+        continue;
+      }
+      for (const seat of room.seats) {
+        if (seat.kind === 'human' && now - seat.lastSeen > PARTICIPANT_TIMEOUT_MS) {
+          this.removeParticipant(room, seat.participant);
+        }
+      }
+    }
+  }
+
+  /** The host leaving dissolves the room; anybody else frees the seat */
+  private removeParticipant(room: Room, participant: string): void {
+    if (participant === room.host) {
+      this.rooms.delete(room.id);
+      return;
+    }
+    const index = this.seatIndexOf(room, participant);
+    if (index >= 0) {
+      room.seats[index] = {kind: 'free'};
+    }
+  }
+
+  private leaveAll(me: string): void {
+    for (const room of Array.from(this.rooms.values())) {
+      if (room.state === 'open') {
+        this.removeParticipant(room, me);
+      }
+    }
+  }
+
+  private roomOf(me: string): Room | undefined {
+    const rooms = Array.from(this.rooms.values()).filter((room) => this.seatIndexOf(room, me) >= 0);
+    // An open room counts before a game that already runs
+    return rooms.find((room) => room.state !== 'started') ?? rooms.sort((a, b) => (b.startedAt ?? 0) - (a.startedAt ?? 0))[0];
+  }
+
+  private seatIndexOf(room: Room, me: string): number {
+    return room.seats.findIndex((seat) => seat.kind === 'human' && seat.participant === me);
+  }
+
+  private humanSeatOf(room: Room, me: string): HumanSeat {
+    const seat = room.seats[this.seatIndexOf(room, me)];
+    if (seat === undefined || seat.kind !== 'human') {
+      throw new LobbyError('You are not part of this game');
+    }
+    return seat;
+  }
+
+  private openRoom(roomId: string): Room {
+    const room = this.rooms.get(roomId);
+    if (room === undefined) {
+      throw new LobbyError('This game no longer exists. The host may have closed it.');
+    }
+    if (room.state !== 'open') {
+      throw new LobbyError('This game has already started');
+    }
+    return room;
+  }
+
+  private hostRoom(me: string, roomId: string): Room {
+    const room = this.openRoom(roomId);
+    if (room.host !== me) {
+      throw new LobbyError('Only the host can do this');
+    }
+    return room;
+  }
+
+  private humanSeat(me: string, profile: LobbyProfile, ready: boolean): HumanSeat {
+    return {kind: 'human', participant: me, profile, ready, lastSeen: this.clock()};
+  }
+
+  private freeColor(room: Room, preferred: Color, except?: string): Color {
+    const taken = new Set(room.seats.flatMap((seat) =>
+      seat.kind === 'human' && seat.participant !== except ? [seat.profile.color] : []));
+    return taken.has(preferred) ? (PLAYER_COLORS.find((color) => !taken.has(color)) ?? preferred) : preferred;
+  }
+}
+
+function capitalize(text: string): string {
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+// The client always sends a (translated) title; only a direct API call falls back to the host's name
+function defaultTitle(name: string): string {
+  return name;
+}
+
+function randomRoomId(): string {
+  return 'l' + Math.random().toString(36).slice(2, 10);
+}

@@ -55,7 +55,7 @@ describe('GameMenu', () => {
     const wrapper = mount(GameMenu, {...globalConfig, attachTo: document.body});
     await wrapper.find('.game-menu-button').trigger('click');
     const links = document.body.querySelectorAll<HTMLAnchorElement>('nav.game-menu-panel a.game-menu-item');
-    expect(Array.from(links).map((link) => link.getAttribute('href'))).deep.eq(['new-game', 'stats', 'cards',
+    expect(Array.from(links).map((link) => link.getAttribute('href'))).deep.eq(['lobby', 'stats', 'cards',
       'https://github.com/terraforming-mars/terraforming-mars/wiki/Rulebooks', 'https://boardgamegeek.com/boardgame/167791/terraforming-mars']);
     expect(Array.from(links).every((link) => link.target === '_blank')).is.true;
     wrapper.unmount();
@@ -68,7 +68,7 @@ describe('GameMenu', () => {
       await wrapper.find('.game-menu-button').trigger('click');
       const links = document.body.querySelectorAll<HTMLAnchorElement>('nav.game-menu-panel a.game-menu-item');
       const hrefs = Array.from(links).map((link) => link.getAttribute('href'));
-      expect(hrefs.slice(0, 2)).deep.eq(['./', 'new-game']);
+      expect(hrefs.slice(0, 2)).deep.eq(['./', 'lobby']);
       expect(hrefs).not.include('stats');
       expect(links[0].textContent).contains('Start page');
       wrapper.unmount();

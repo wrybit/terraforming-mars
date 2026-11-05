@@ -163,8 +163,7 @@ export class ApiCreateGame extends Handler {
   // TODO(kberg): much of this code can be moved outside of handler, and that
   // would be better.
   public override async post(req: Request, res: Response, ctx: Context): Promise<void> {
-    const withinQuota = this.quotaHandlers.every((handler) => handler.isWithinQuota(ctx));
-    if (!withinQuota) {
+    if (!this.isWithinQuota(ctx)) {
       responses.quotaExceeded(req, res);
       return;
     }
@@ -172,67 +171,7 @@ export class ApiCreateGame extends Handler {
     const body = await readBody(req);
     try {
       const gameReq = JSON.parse(body) as NewGameConfig;
-      this.validateCustomLists(gameReq);
-      if (gameReq.escapeVelocity !== undefined && hasNegativeEscapeVelocityOption(gameReq.escapeVelocity)) {
-        throw RouteError.badRequest('Escape Velocity values cannot be negative.');
-      }
-      // Older API clients send only `board` (see pickBoard), so `boards` may be missing
-      if (Array.isArray(gameReq.boards) && gameReq.boards.length === 0) {
-        throw RouteError.badRequest('Must select at least one board');
-      }
-      // Same rule as the create-game form (common/ai/aiSupport.ts): no AI players with settings it cannot handle
-      const aiBlockers = aiUnsupportedReasons({expansions: gameReq.expansions, twoCorpsVariant: gameReq.twoCorpsVariant});
-      if (aiBlockers.length > 0 && gameReq.players.some((p) => isAiLevel(p.aiLevel))) {
-        throw RouteError.badRequest(`AI players are not available with: ${aiBlockers.join(', ')}`);
-      }
-      // A game of AI players only plays itself without pause and keeps the server busy for everyone.
-      // The create form always has at least one human; only an admin may start such a game (e.g. for tests).
-      if (gameReq.players.every((p) => isAiLevel(p.aiLevel)) && !this.isServerIdValid(ctx)) {
-        throw RouteError.badRequest('A game needs at least one human player');
-      }
-      const gameId = safeCast(generateRandomId('g'), isGameId);
-      const spectatorId = safeCast(generateRandomId('s'), isSpectatorId);
-      const players = gameReq.players.map((p) => {
-        const aiLevel = isAiLevel(p.aiLevel) ? p.aiLevel : undefined;
-        const player = new Player(
-          aiLevel === undefined ? p.name : aiPlayerName(p.name, aiLevel),
-          p.color,
-          p.beginner,
-          Number(p.handicap), // For some reason handicap is coming up a string.
-          safeCast(generateRandomId('p'), isPlayerId),
-        );
-        player.aiLevel = aiLevel;
-        return player;
-      });
-      let firstPlayerIdx = 0;
-      for (let i = 0; i < gameReq.players.length; i++) {
-        if (gameReq.players[i].first === true) {
-          firstPlayerIdx = i;
-          break;
-        }
-      }
-
-      // Board drawn from the board seed of the request: the same board the preview on the page showed
-      const boardRng = boardRandom(gameReq.boardSeed);
-      const gameOptions = ApiCreateGame.gameOptions(gameReq, pickBoard(gameReq, boardRng));
-
-      try {
-        validateCustomMA(gameOptions.customMA, gameOptions.randomMA, gameOptions.venusNextExtension);
-      } catch (e) {
-        throw RouteError.badRequest(e instanceof Error ? e.message : String(e));
-      }
-
-      let game: IGame;
-      if (gameOptions.clonedGamedId !== undefined && !gameOptions.clonedGamedId.startsWith('#')) {
-        const serialized = await Database.getInstance().getGameVersion(gameOptions.clonedGamedId, 0);
-        game = Cloner.clone(gameId, players, firstPlayerIdx, serialized);
-      } else {
-        const seed = Math.random();
-        game = Game.newInstance(gameId, players, players[firstPlayerIdx], spectatorId, gameOptions, seed, boardRng);
-      }
-      ctx.gameLoader.add(game);
-      // Only games that are actually created count against the quota.
-      this.quotaHandlers.forEach((handler) => handler.record(ctx));
+      const game = await this.createGame(gameReq, ctx);
       responses.writeJson(res, ctx, Server.getSimpleGameModel(game));
     } catch (error) {
       if (error instanceof RouteError) {
@@ -240,6 +179,81 @@ export class ApiCreateGame extends Handler {
       }
       responses.internalServerError(req, res, error);
     }
+  }
+
+  /** Whether one more game fits into the quota (GAME_QUOTA) of this client */
+  public isWithinQuota(ctx: Context): boolean {
+    return this.quotaHandlers.every((handler) => handler.isWithinQuota(ctx));
+  }
+
+  /**
+   * Validates the request and creates the game; shared by this route and the lobby (server/lobby), which
+   * starts a game with the create form's settings once all seats are taken. Counts against the quota.
+   * Throws a `RouteError` for invalid settings.
+   */
+  public async createGame(gameReq: NewGameConfig, ctx: Context): Promise<IGame> {
+    this.validateCustomLists(gameReq);
+    if (gameReq.escapeVelocity !== undefined && hasNegativeEscapeVelocityOption(gameReq.escapeVelocity)) {
+      throw RouteError.badRequest('Escape Velocity values cannot be negative.');
+    }
+    // Older API clients send only `board` (see pickBoard), so `boards` may be missing
+    if (Array.isArray(gameReq.boards) && gameReq.boards.length === 0) {
+      throw RouteError.badRequest('Must select at least one board');
+    }
+    // Same rule as the create-game form (common/ai/aiSupport.ts): no AI players with settings it cannot handle
+    const aiBlockers = aiUnsupportedReasons({expansions: gameReq.expansions, twoCorpsVariant: gameReq.twoCorpsVariant});
+    if (aiBlockers.length > 0 && gameReq.players.some((p) => isAiLevel(p.aiLevel))) {
+      throw RouteError.badRequest(`AI players are not available with: ${aiBlockers.join(', ')}`);
+    }
+    // A game of AI players only plays itself without pause and keeps the server busy for everyone.
+    // The create form always has at least one human; only an admin may start such a game (e.g. for tests).
+    if (gameReq.players.every((p) => isAiLevel(p.aiLevel)) && !this.isServerIdValid(ctx)) {
+      throw RouteError.badRequest('A game needs at least one human player');
+    }
+    const gameId = safeCast(generateRandomId('g'), isGameId);
+    const spectatorId = safeCast(generateRandomId('s'), isSpectatorId);
+    const players = gameReq.players.map((p) => {
+      const aiLevel = isAiLevel(p.aiLevel) ? p.aiLevel : undefined;
+      const player = new Player(
+        aiLevel === undefined ? p.name : aiPlayerName(p.name, aiLevel),
+        p.color,
+        p.beginner,
+        Number(p.handicap), // For some reason handicap is coming up a string.
+        safeCast(generateRandomId('p'), isPlayerId),
+      );
+      player.aiLevel = aiLevel;
+      return player;
+    });
+    let firstPlayerIdx = 0;
+    for (let i = 0; i < gameReq.players.length; i++) {
+      if (gameReq.players[i].first === true) {
+        firstPlayerIdx = i;
+        break;
+      }
+    }
+
+    // Board drawn from the board seed of the request: the same board the preview on the page showed
+    const boardRng = boardRandom(gameReq.boardSeed);
+    const gameOptions = ApiCreateGame.gameOptions(gameReq, pickBoard(gameReq, boardRng));
+
+    try {
+      validateCustomMA(gameOptions.customMA, gameOptions.randomMA, gameOptions.venusNextExtension);
+    } catch (e) {
+      throw RouteError.badRequest(e instanceof Error ? e.message : String(e));
+    }
+
+    let game: IGame;
+    if (gameOptions.clonedGamedId !== undefined && !gameOptions.clonedGamedId.startsWith('#')) {
+      const serialized = await Database.getInstance().getGameVersion(gameOptions.clonedGamedId, 0);
+      game = Cloner.clone(gameId, players, firstPlayerIdx, serialized);
+    } else {
+      const seed = Math.random();
+      game = Game.newInstance(gameId, players, players[firstPlayerIdx], spectatorId, gameOptions, seed, boardRng);
+    }
+    ctx.gameLoader.add(game);
+    // Only games that are actually created count against the quota.
+    this.quotaHandlers.forEach((handler) => handler.record(ctx));
+    return game;
   }
 }
 
