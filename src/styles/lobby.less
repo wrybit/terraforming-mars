@@ -579,8 +579,9 @@
 
   // No colour ring in the rows (the fill already is the player colour): only a thin dark edge that separates the
   // overlapping circles; the host alone gets the orange ring
+  // A soft shadow to the right lies on the next circle below, so the stacking reads as depth
   .lobby-avatar:not(.lobby-avatar--free) {
-    box-shadow: 0 0 0 2px #1a1b21;
+    box-shadow: 0 0 0 2px #1a1b21, 3px 0 6px rgba(0, 0, 0, 0.55);
   }
 
   .lobby-avatar + .lobby-avatar {
@@ -588,9 +589,9 @@
   }
 }
 
-// The host: an orange ring, the only outline in the row
+// The host: an orange ring with a dark gap inside and outside, the only outline in the row
 .lobby-game-seats .lobby-avatar.lobby-avatar--host {
-  box-shadow: 0 0 0 2px #1a1b21, 0 0 0 4px #ff9a2e;
+  box-shadow: 0 0 0 2px #1a1b21, 0 0 0 4px #ff9a2e, 0 0 0 6px #1a1b21, 5px 0 8px rgba(0, 0, 0, 0.55);
 }
 
 .lobby-game-progress {
