@@ -1956,5 +1956,6 @@
   "Game ${0} was closed on ${1}: its creator left before it began and nobody else joined.": "游戏 ${0} 已于 ${1} 关闭：创建者在开始前离开，且没有其他人加入。",
   "No game is running right now.": "目前没有进行中的游戏。",
   "The game is running.": "游戏正在进行。",
-  "AI players are not available with these settings.": "这些设置下无法使用 AI 玩家。"
+  "AI players are not available with these settings.": "这些设置下无法使用 AI 玩家。",
+  "No open game to filter right now.": "目前没有可筛选的开放游戏。"
 }

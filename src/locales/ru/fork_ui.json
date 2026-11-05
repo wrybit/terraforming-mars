@@ -1843,5 +1843,6 @@
   "Game ${0} was closed on ${1}: its creator left before it began and nobody else joined.": "Игра ${0} закрыта ${1}: её создатель ушёл до начала, и никто больше не присоединился.",
   "No game is running right now.": "Сейчас нет идущих игр.",
   "The game is running.": "Игра идёт.",
-  "AI players are not available with these settings.": "С этими настройками игроки-ИИ недоступны."
+  "AI players are not available with these settings.": "С этими настройками игроки-ИИ недоступны.",
+  "No open game to filter right now.": "Сейчас нет открытых игр для фильтрации."
 }

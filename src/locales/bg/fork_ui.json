@@ -1920,5 +1920,6 @@
   "Game ${0} was closed on ${1}: its creator left before it began and nobody else joined.": "Играта ${0} беше затворена на ${1}: създателят ѝ напусна преди началото и никой друг не се присъедини.",
   "No game is running right now.": "В момента няма текуща игра.",
   "The game is running.": "Играта тече.",
-  "AI players are not available with these settings.": "С тези настройки няма играчи ИИ."
+  "AI players are not available with these settings.": "С тези настройки няма играчи ИИ.",
+  "No open game to filter right now.": "В момента няма отворена игра за филтриране."
 }

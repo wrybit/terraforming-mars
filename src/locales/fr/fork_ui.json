@@ -1028,5 +1028,6 @@
   "Game ${0} was closed on ${1}: its creator left before it began and nobody else joined.": "La partie ${0} a été fermée le ${1} : son créateur est parti avant le début et personne d'autre ne l'a rejointe.",
   "No game is running right now.": "Aucune partie n'est en cours.",
   "The game is running.": "La partie est en cours.",
-  "AI players are not available with these settings.": "Les joueurs IA ne sont pas disponibles avec ces réglages."
+  "AI players are not available with these settings.": "Les joueurs IA ne sont pas disponibles avec ces réglages.",
+  "No open game to filter right now.": "Aucune partie ouverte à filtrer pour l'instant."
 }

@@ -38,7 +38,7 @@
         </div>
 
         <div v-if="filtersOpen" class="lobby-filter-panel">
-          <LobbyFilterPanel v-model="filters" />
+          <LobbyFilterPanel v-model="filters" :rooms="rooms" />
           <div class="lobby-filter-foot">
             <span v-if="filterCount === 0" class="lobby-dialog-note" v-i18n>Nothing selected means: all games.</span>
             <button v-else type="button" class="create-game-small-button" @click="filters = defaultLobbyFilters()" v-i18n>Reset all filters</button>

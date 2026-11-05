@@ -7,7 +7,7 @@ import LobbyFilterPanel from '@/client/components/lobby/LobbyFilterPanel.vue';
 import LobbyRoomDialog from '@/client/components/lobby/LobbyRoomDialog.vue';
 import LobbyMatchDialog from '@/client/components/lobby/LobbyMatchDialog.vue';
 import LobbyProfileDialog from '@/client/components/lobby/LobbyProfileDialog.vue';
-import {activeFilterCount, bestMatch, defaultLobbyFilters, matchesFilters} from '@/client/components/lobby/lobbyFilters';
+import {activeFilterCount, availableFilterChoices, bestMatch, defaultLobbyFilters, matchesFilters} from '@/client/components/lobby/lobbyFilters';
 import {LobbyRoomModel, LobbySeatModel} from '@/common/lobby/LobbyModel';
 import {RandomMAOptionType} from '@/common/ma/RandomMAOptionType';
 import {GameSetupOptions} from '@/common/game/GameSetupOptions';
@@ -49,10 +49,20 @@ describe('Lobby components', () => {
   });
 
   it('LobbyFilterPanel emits the changed filters', async () => {
-    const wrapper = mount(LobbyFilterPanel, {...globalConfig, props: {modelValue: defaultLobbyFilters()}});
+    const wrapper = mount(LobbyFilterPanel, {...globalConfig, props: {modelValue: defaultLobbyFilters(), rooms: [room([host, {kind: 'free'}])]}});
     await wrapper.findAll('.create-game-chip')[0].trigger('click');
     const filters = wrapper.emitted('update:modelValue')?.[0]?.[0] as ReturnType<typeof defaultLobbyFilters>;
     expect(filters.sizes).deep.eq([2]);
+  });
+
+  it('lobby filters offer only what the open games have, plus what is selected', () => {
+    const open = room([host, {kind: 'free'}, {kind: 'free'}]);
+    const full = room([host, {...host, host: false}], {setup: {...open.setup, expansions: {...open.setup.expansions, colonies: true}}});
+    const choices = availableFilterChoices([open, full], {...defaultLobbyFilters(), sizes: [5]}, ['corpera', 'prelude', 'venus', 'colonies']);
+    expect(choices.sizes).deep.eq([3, 5]);
+    expect(choices.expansions).deep.eq(['corpera', 'prelude']);
+    expect(choices.drafts).deep.eq(['on']);
+    expect(choices.tempos).deep.eq(['normal']);
   });
 
   it('lobby filters: nothing selected shows every game, the fullest fitting game comes first', () => {

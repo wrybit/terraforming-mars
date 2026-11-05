@@ -41,6 +41,42 @@ export function matchesFilters(room: LobbyRoomModel, filters: LobbyFilters): boo
   return true;
 }
 
+/** What the open games offer: the panel shows only filters that match at least one of them */
+export type LobbyFilterChoices = {
+  sizes: Array<number>;
+  expansions: Array<Expansion>;
+  tempos: Array<Exclude<LobbyTempo, 'any'>>;
+  drafts: Array<Exclude<LobbyDraft, 'any'>>;
+};
+
+/**
+ * Choices from the joinable open games; what is selected stays visible too, so it can be switched off again.
+ * Expansions come in the given order (the create form's order).
+ */
+export function availableFilterChoices(rooms: ReadonlyArray<LobbyRoomModel>, filters: LobbyFilters, expansionOrder: ReadonlyArray<Expansion>): LobbyFilterChoices {
+  const open = rooms.filter(hasFreeSeat);
+  const sizes = new Set<number>(filters.sizes);
+  const expansions = new Set<Expansion>(filters.expansions);
+  const tempos = new Set<string>(filters.tempo === 'any' ? [] : [filters.tempo]);
+  const drafts = new Set<string>(filters.draft === 'any' ? [] : [filters.draft]);
+  for (const room of open) {
+    sizes.add(room.seats.length);
+    for (const expansion of expansionOrder) {
+      if (room.setup.expansions[expansion]) {
+        expansions.add(expansion);
+      }
+    }
+    tempos.add(room.setup.options.fastModeOption ? 'fast' : 'normal');
+    drafts.add(room.setup.options.draftVariant ? 'on' : 'off');
+  }
+  return {
+    sizes: Array.from(sizes).sort((a, b) => a - b),
+    expansions: expansionOrder.filter((expansion) => expansions.has(expansion)),
+    tempos: (['normal', 'fast'] as const).filter((tempo) => tempos.has(tempo)),
+    drafts: (['on', 'off'] as const).filter((draft) => drafts.has(draft)),
+  };
+}
+
 export function hasFreeSeat(room: LobbyRoomModel): boolean {
   return room.state === 'open' && room.seats.some((seat) => seat.kind === 'free');
 }

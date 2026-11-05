@@ -973,5 +973,6 @@
   "Game ${0} was closed on ${1}: its creator left before it began and nobody else joined.": "Peli ${0} suljettiin ${1}: sen luoja poistui ennen alkua, eikä kukaan muu liittynyt.",
   "No game is running right now.": "Yhtään peliä ei ole käynnissä juuri nyt.",
   "The game is running.": "Peli on käynnissä.",
-  "AI players are not available with these settings.": "Näillä asetuksilla tekoälypelaajat eivät ole käytettävissä."
+  "AI players are not available with these settings.": "Näillä asetuksilla tekoälypelaajat eivät ole käytettävissä.",
+  "No open game to filter right now.": "Suodatettavia avoimia pelejä ei ole juuri nyt."
 }
