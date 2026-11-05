@@ -313,7 +313,9 @@ export class Game implements IGame, Logger {
     partialOptions: Partial<GameOptions> = {},
     seed = 0,
     // Own random source for the board (see newGameBoard.ts); without it the board comes from the game seed as before
-    boardRandom?: Random): Game {
+    boardRandom?: Random,
+    // Name chosen in the create form; without it a random name is drawn
+    customName?: string): Game {
     const gameOptions = Game.resolveOptions(partialOptions);
 
     if (gameOptions.clonedGamedId !== undefined) {
@@ -364,7 +366,7 @@ export class Game implements IGame, Logger {
       players[0].setTerraformRating(14);
     }
 
-    const name = generateGameName(UnseededRandom.INSTANCE);
+    const name = customName?.trim() || generateGameName(UnseededRandom.INSTANCE);
     const marsBotPlayer = gameOptions.automa ? AutomaGameSetup.createMarsBotPlayer(id) : undefined;
     const game = new Game(id, name, players, marsBotPlayer, firstPlayer, activePlayer, spectatorId, gameOptions, rng, board, projectDeck, corporationDeck, preludeDeck, ceoDeck, Array.from(tags));
     // This evaluation of created time doesn't match what's stored in the database, but that's fine.

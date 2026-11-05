@@ -65,7 +65,7 @@ async function poll(participantId: string | undefined): Promise<void> {
   }
 }
 
-/** participantId: the player or spectator id of a game page, so the server knows somebody is playing. */
+/** participantId: the player, spectator or game id of a game page, so the server knows somebody is playing. */
 export function startServerStatusPolling(participantId: string | undefined): void {
   if (timer !== undefined) {
     return;

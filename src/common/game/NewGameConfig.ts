@@ -36,6 +36,8 @@ export type EscapeVelocityOptions = {
  * Like GameOptions, but the data structure sent from the new game page.
  */
 export type NewGameConfig = {
+  /** Own name of the game; empty or missing: the server draws one (common/game/GameName.ts) */
+  name?: string;
   players: Array<NewPlayerModel>;
   expansions: Record<Expansion, boolean>,
   boards: Array<BoardName>;

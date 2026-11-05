@@ -21,6 +21,9 @@ import {Database} from '@/server/database/Database';
 import {runId, serverId} from '@/server/utils/server-ids';
 import {processRequest} from '@/server/server/requestProcessor';
 import {timeAsync} from '@/server/utils/timer';
+import {onGameGone} from './database/gameGone';
+import {Lobby} from './lobby/Lobby';
+import {lobbyGameProbe} from './lobby/lobbyGameProbe';
 import {GameLoader} from '@/server/database/GameLoader';
 import {globalInitialize} from '@/server/globalInitialize';
 import {SessionManager} from '@/server/server/auth/SessionManager';
@@ -138,6 +141,13 @@ async function start() {
     // Do not fail. Just continue. Stats aren't vital.
     console.error(err);
   }
+  // A finished, deleted or purged game leaves the lobby's "running" list
+  onGameGone((gameId) => Lobby.INSTANCE.forgetGame(gameId));
+  // Lobby games whose creator left at the initial choice, with nobody else ever there, are closed again
+  const watchingSince = Date.now();
+  setInterval(() => {
+    Lobby.INSTANCE.closeAbandoned(lobbyGameProbe(GameLoader.getInstance()), watchingSince).catch((err) => console.error(err));
+  }, 60 * 1000).unref();
   GameLoader.getInstance().maintenance();
   // A flag left by the update script belongs to the server this one replaces
   clearServerUpdateFlag();

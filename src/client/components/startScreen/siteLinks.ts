@@ -20,7 +20,8 @@ export type SiteLink = {
 
 // Order = order of the planet backgrounds on the start page (globe row)
 export const SITE_LINKS: ReadonlyArray<SiteLink> = [
-  {label: 'New game', icon: 'newGame', planet: 'venus', href: 'new-game', external: false, inMenu: true},
+  // The lobby replaces "New game": games are opened there (the create form is its modal); new-game still works directly
+  {label: 'Lobby', icon: 'newGame', planet: 'venus', href: 'lobby', external: false, inMenu: true},
   {label: 'Statistics', icon: 'statistics', planet: 'earth', href: 'stats', external: true, inMenu: true},
   {label: 'Cards list', icon: 'cardsList', planet: 'mars', href: 'cards', external: true, inMenu: true},
   {label: 'Game rules', icon: 'rules', planet: 'jupiter', href: 'https://github.com/terraforming-mars/terraforming-mars/wiki/Rulebooks', external: true, inMenu: true},

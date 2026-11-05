@@ -1,3 +1,4 @@
+import {GameDeletionReason} from '../../common/models/GameDeletionModel';
 import {IGame} from '../IGame';
 import {PlayerId, GameId, SpectatorId} from '../../common/Types';
 import {GameIdLedger} from './IDatabase';
@@ -44,7 +45,7 @@ export interface IGameLoader {
   /**
    * Removes a game from memory and from the database. Later saves of that game are refused.
    */
-  deleteGame(gameId: GameId): Promise<void>;
+  deleteGame(gameId: GameId, reason?: GameDeletionReason): Promise<void>;
   completeGame(game: IGame): Promise<void>;
   maintenance(): Promise<void>;
 }

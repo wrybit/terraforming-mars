@@ -25,6 +25,11 @@ import {ImportedScreenshot} from '../routes/ImportedScreenshot';
 import {ApiGames} from '../routes/ApiGames';
 import {ApiHeapSnapshot} from '../routes/ApiHeapSnapshot';
 import {ApiIPs} from '../routes/ApiIPs';
+import {ApiLobby} from '../routes/ApiLobby';
+import {ApiLobbyChat} from '../routes/ApiLobbyChat';
+import {ApiAdminChatWords} from '../routes/ApiAdminChatWords';
+import {LobbyRoomPage} from '../routes/LobbyRoomPage';
+import {LOBBY_ROOM_PATH} from '../../common/lobby/lobbyUrl';
 import {ApiLogout} from '../routes/ApiLogout';
 import {ApiAdminLogout} from '../routes/ApiAdminLogout';
 import {ApiAdminMusic} from '../routes/ApiAdminMusic';
@@ -158,8 +163,12 @@ const handlers: Map<string, IHandler> = new Map(
     [paths.HELP, ServeApp.INSTANCE],
     [paths.IMPORTED_SCREENSHOT, ImportedScreenshot.INSTANCE],
     [paths.LOAD, ServeApp.INSTANCE],
+    [paths.LOBBY, ServeApp.INSTANCE],
     [paths.LOAD_GAME, LoadGame.INSTANCE],
     [paths.LOGIN, Login.INSTANCE],
+    [paths.API_LOBBY, ApiLobby.INSTANCE],
+    [paths.API_LOBBY_CHAT, ApiLobbyChat.INSTANCE],
+    [paths.API_ADMIN_CHAT_WORDS, ApiAdminChatWords.INSTANCE],
     [paths.API_LOGOUT, ApiLogout.INSTANCE],
     ['main.js', ServeAsset.INSTANCE],
     ['vendors.js', ServeAsset.INSTANCE],
@@ -201,6 +210,10 @@ function getHandler(pathname: string): IHandler | undefined {
   }
   if (pathname.startsWith('chunks/')) {
     return ServeAsset.INSTANCE;
+  }
+  // Invitation links of the lobby carry the room in the path (lobby/room/<id>-<name>)
+  if (pathname.startsWith(LOBBY_ROOM_PATH)) {
+    return LobbyRoomPage.INSTANCE;
   }
   return undefined;
 }

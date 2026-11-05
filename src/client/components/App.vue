@@ -28,6 +28,7 @@
         v-else-if="screen === 'create-game-form'"
         :key="createGameFormKey + '-' + themeKey"
       />
+      <LobbyPage v-else-if="screen === 'lobby'" />
       <GameHome
         v-else-if="screen === 'game-home' && game !== undefined"
         :game="game"
@@ -71,7 +72,7 @@
       <HelpOverlay v-else-if="screen === 'help'" />
     </div>
     <!-- In game views the notice sits in the sidebar's info window; on the results page it is dropped (Jens' request) -->
-    <!-- Start page and "Create game" share the same footer (Jens' request): build facts left, notice right -->
+    <!-- Start page, lobby, "Create game" and "Game created" share the same footer (Jens' request): build facts left, notice right -->
     <footer v-if="screen !== 'player-home' && screen !== 'spectator-home' && screen !== 'the-end'" class="notice" :class="{'notice--split': hasStartScreenFooter, 'notice--online': screen === 'start-screen'}">
       <StartScreenFooter v-if="hasStartScreenFooter" />
       <!-- Start page: how many are playing right now, in the middle of the footer -->
@@ -106,6 +107,7 @@ const PlayerHome = defineAsyncComponent(() => import(/* webpackChunkName: "playe
 const MobilePlayerHome = defineAsyncComponent(() => import(/* webpackChunkName: "mobile-player-home" */ '@/client/components/mobile/MobilePlayerHome.vue'));
 const MobileSpectatorHome = defineAsyncComponent(() => import(/* webpackChunkName: "mobile-spectator-home" */ '@/client/components/mobile/MobileSpectatorHome.vue'));
 const SpectatorHome = defineAsyncComponent(() => import(/* webpackChunkName: "spectator-home" */ '@/client/components/SpectatorHome.vue'));
+const LobbyPage = defineAsyncComponent(() => import(/* webpackChunkName: "lobby" */ '@/client/components/lobby/LobbyPage.vue'));
 const StatsPage = defineAsyncComponent(() => import(/* webpackChunkName: "stats" */ '@/client/components/stats/StatsPage.vue'));
 const StartScreenFooter = defineAsyncComponent(() => import(/* webpackChunkName: "start-screen" */ '@/client/components/StartScreenFooter.vue'));
 const OnlinePlayers = defineAsyncComponent(() => import(/* webpackChunkName: "start-screen" */ '@/client/components/OnlinePlayers.vue'));
@@ -116,10 +118,11 @@ import {enterGameMusic} from '@/client/music/gameMusic';
 import {applyChosenTheme} from '@/client/theme/themeChoice';
 import {Theme} from '@/common/theme/Theme';
 import {paths} from '@/common/app/paths';
+import {lobbyRoomIdFromPath} from '@/common/lobby/lobbyUrl';
 import {PlayerViewModel, ViewModel} from '@/common/models/PlayerModel';
 import {SimpleGameModel} from '@/common/models/SimpleGameModel';
 import {SpectatorModel} from '@/common/models/SpectatorModel';
-import {isPlayerId, isSpectatorId} from '@/common/Types';
+import {isGameId, isPlayerId, isSpectatorId} from '@/common/Types';
 import {hasShowModal, showModal, windowHasHTMLDialogElement} from './HTMLDialogElementCompatibility';
 
 import dialogPolyfill from 'dialog-polyfill';
@@ -152,6 +155,7 @@ type Screen = 'admin-settings' |
             'games-overview' |
             'help' |
             'login-home' |
+            'lobby' |
             'player-home' |
             'spectator-home' |
             'start-screen' |
@@ -159,7 +163,7 @@ type Screen = 'admin-settings' |
             'the-end';
 // Screens shown on the Milky Way background (AppBackground.vue); the rest keeps the plain page color
 const SCREENS_WITH_BACKGROUND: ReadonlyArray<Screen> = [
-  'start-screen', 'create-game-form', 'game-home', 'player-home', 'spectator-home', 'the-end', 'games-overview', 'cards', 'stats',
+  'start-screen', 'create-game-form', 'lobby', 'game-home', 'player-home', 'spectator-home', 'the-end', 'games-overview', 'cards', 'stats',
 ];
 // Image credit only where the top right corner is free; all other views have their own page header there
 const SCREENS_WITH_BACKGROUND_CREDIT: ReadonlyArray<Screen> = [
@@ -226,6 +230,7 @@ export default defineComponent({
     StartScreenFooter,
     OnlinePlayers,
     CreateGameForm,
+    LobbyPage,
     GameHome,
     PlayerHome,
     MobilePlayerHome,
@@ -258,7 +263,8 @@ export default defineComponent({
       return SCREENS_WITH_BACKGROUND_CREDIT.includes(this.screen);
     },
     hasStartScreenFooter(): boolean {
-      return this.screen === 'start-screen' || this.screen === 'create-game-form';
+      // Same footer everywhere outside the game (Jens' request): start page, lobby, "Create game", "Game created"
+      return this.screen === 'start-screen' || this.screen === 'create-game-form' || this.screen === 'lobby' || this.screen === 'game-home';
     },
     isMobileLayout(): boolean {
       return mobileLayout.value;
@@ -410,7 +416,8 @@ export default defineComponent({
     setDocumentTitle();
     // Game pages send their id, so the server knows somebody is playing (no automatic update then)
     const pageId = new URLSearchParams(window.location.search).get('id') ?? '';
-    startServerStatusPolling(isPlayerId(pageId) || isSpectatorId(pageId) ? pageId : undefined);
+    // The game page (links for the players) too: a lobby game whose creator sits there counts as attended
+    startServerStatusPolling(isPlayerId(pageId) || isSpectatorId(pageId) || isGameId(pageId) ? pageId : undefined);
     if (!windowHasHTMLDialogElement()) {
       dialogPolyfill.registerDialog(document.getElementById('alert-dialog') as HTMLDialogElement);
     }
@@ -449,6 +456,8 @@ export default defineComponent({
       app.screen = 'games-overview';
     } else if (currentPathname === paths.NEW_GAME) {
       app.screen = 'create-game-form';
+    } else if (currentPathname === paths.LOBBY || lobbyRoomIdFromPath(window.location.pathname) !== undefined) {
+      app.screen = 'lobby';
     } else if (currentPathname === paths.CARDS || currentPathname === paths.STATS) {
       // Both pages carry the Mars/Dune switch: they open in the theme picked last (themeChoice.ts), texts loaded first
       const screen = currentPathname === paths.CARDS ? 'cards' : 'stats';

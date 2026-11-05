@@ -126,5 +126,6 @@
   "src/client/components/create/CreateGameForm.vue: AI",
   "src/client/components/logpanel/aiAnalysis/LogAiRateBar.vue: AI:",
   "src/client/components/turmoil/TurmoilAgenda.vue: Unknown agenda ID",
-  "Discord"
+  "Discord",
+  "src/client/components/lobby/LobbyRoomDialog.vue: AI"
 ]

@@ -32,7 +32,7 @@ describe('StartScreen', () => {
     expect(new Set(icons.map((icon) => icon.attributes('name'))).size).eq(8);
   });
 
-  it('opens everything except "New game" in a new tab', () => {
+  it('opens everything except the lobby in a new tab', () => {
     const wrapper = shallowMount(StartScreen, {
       ...globalConfig,
     });

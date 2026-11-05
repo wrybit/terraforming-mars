@@ -18,7 +18,7 @@
       <!-- Links as buttons: navigation stays a real link (middle click, new tab) -->
       <div class="game_end_navigation">
         <!-- Icon + text like the other action buttons; rounded corners (btn-rounded), height grows with wrapped text -->
-        <a href="new-game" class="btn btn-lg btn-rounded btn-tone-success game-end-nav-button">
+        <a href="lobby" class="btn btn-lg btn-rounded btn-tone-success game-end-nav-button">
           <svg class="game-end-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
           <span v-i18n>Create New Game</span>
         </a>

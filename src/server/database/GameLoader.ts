@@ -14,6 +14,7 @@ import {Clock} from '../../common/Timer';
 import {recordDeletedGames, DeletedGameEntry} from './deletedGamesLog';
 import {GameDeletionReason} from '../../common/models/GameDeletionModel';
 import {isUsableDaysSetting} from './utils';
+import {notifyGameGone} from './gameGone';
 
 const metrics = {
   initialize: new prometheus.Gauge({
@@ -266,6 +267,7 @@ export class GameLoader implements IGameLoader {
     try {
       this.mark(game.id);
       await database.markFinished(game.id);
+      notifyGameGone(game.id);
       metrics.gamesFinished.inc({players: String(game.players.length)});
       await this.maintenance();
     } catch (err) {
@@ -280,8 +282,8 @@ export class GameLoader implements IGameLoader {
     return Database.getInstance().saveGame(game);
   }
 
-  public async deleteGame(gameId: GameId): Promise<void> {
-    const entry = await this.forgetGame(gameId, 'deleted-in-admin-area');
+  public async deleteGame(gameId: GameId, reason: GameDeletionReason = 'deleted-in-admin-area'): Promise<void> {
+    const entry = await this.forgetGame(gameId, reason);
     // A still-pending move must not write the deleted game back to the database
     this.purgedGames.push(gameId);
     await Database.getInstance().deleteGame(gameId);
@@ -301,6 +303,7 @@ export class GameLoader implements IGameLoader {
       .filter(([, participantGameId]) => participantGameId === gameId)
       .map(([participantId]) => participantId);
     participantIds.forEach((participantId) => d.participantIds.delete(participantId));
+    notifyGameGone(gameId);
     return {
       gameId,
       participantIds,
