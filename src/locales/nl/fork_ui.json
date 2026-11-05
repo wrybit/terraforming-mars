@@ -1602,5 +1602,6 @@
   "entered by the host": "ingevuld door de gastheer",
   "Enter a player yourself": "Zelf een speler invullen",
   "Game ${0} was closed on ${1}: its creator left before it began and nobody else joined.": "Spel ${0} is op ${1} gesloten: de maker vertrok voordat het begon en niemand anders deed mee.",
-  "No game is running right now.": "Er loopt nu geen spel."
+  "No game is running right now.": "Er loopt nu geen spel.",
+  "The game is running.": "Het spel loopt."
 }

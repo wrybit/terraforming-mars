@@ -23,7 +23,7 @@
     <div class="lobby-game-action">
       <AppButton v-if="isMine" title="Waiting room" :fixedHotkey="keys" @click="emit('open-room')" />
       <!-- Own running game: back into it instead of watching -->
-      <a v-else-if="room.state === 'started' && room.yourPlayerId" class="btn btn-rounded btn-primary lobby-game-watch" :href="'player?id=' + room.yourPlayerId"><span v-i18n>Continue</span><HotkeyKeys :fixed="keys" /></a>
+      <a v-else-if="continueLink !== undefined" class="btn btn-rounded btn-primary lobby-game-watch" :href="continueLink"><span v-i18n>Continue</span><HotkeyKeys :fixed="keys" /></a>
       <a v-else-if="room.state === 'started' && room.spectatorId" class="btn btn-rounded btn-tone-quiet lobby-game-watch" :href="'spectator?id=' + room.spectatorId"><span v-i18n>Watch</span><HotkeyKeys :fixed="keys" /></a>
       <AppButton v-else-if="room.state === 'open'" class="btn-tone-quiet" title="Join" :fixedHotkey="keys" @click="emit('join')" />
     </div>
@@ -39,6 +39,7 @@ import {HotkeyKeys as HotkeyKeyList, PICK_DIGITS} from '@/client/hotkeys/hotkeyA
 import GameSetupChips from '@/client/components/common/GameSetupChips.vue';
 import LobbyAvatar from './LobbyAvatar.vue';
 import {lobbySetupChips} from './lobbySetupChips';
+import {continueHref} from './lobbyLinks';
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 
 const props = defineProps<{
@@ -59,6 +60,7 @@ const host = computed(() => {
   return seat?.kind === 'human' ? seat : undefined;
 });
 const isMine = computed(() => props.room.state === 'open' && props.room.seats.some((seat) => seat.kind === 'human' && seat.you));
+const continueLink = computed(() => continueHref(props.room));
 const filled = computed(() => props.room.seats.filter((seat) => seat.kind !== 'free').length);
 const chips = computed(() => lobbySetupChips(props.room));
 const stateText = computed(() => {

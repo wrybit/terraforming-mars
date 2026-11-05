@@ -1026,5 +1026,6 @@
   "entered by the host": "saisi par l’hôte",
   "Enter a player yourself": "Saisir toi-même un joueur",
   "Game ${0} was closed on ${1}: its creator left before it began and nobody else joined.": "La partie ${0} a été fermée le ${1} : son créateur est parti avant le début et personne d'autre ne l'a rejointe.",
-  "No game is running right now.": "Aucune partie n'est en cours."
+  "No game is running right now.": "Aucune partie n'est en cours.",
+  "The game is running.": "La partie est en cours."
 }

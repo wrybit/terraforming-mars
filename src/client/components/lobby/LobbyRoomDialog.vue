@@ -32,7 +32,7 @@
         </div>
         <p class="lobby-dialog-note">{{ statusText }}</p>
       </div>
-      <div v-if="freeSeats > 0" class="lobby-room-group">
+      <div v-if="freeSeats > 0 && !started" class="lobby-room-group">
         <div class="create-game-subhead" v-i18n>Invite friends</div>
         <div class="lobby-invite">
           <input class="create-game-text-input" :value="inviteLink" readonly @focus="($event.target as HTMLInputElement).select()">
@@ -40,7 +40,12 @@
         </div>
       </div>
       <template #footer>
-        <div class="lobby-room-foot">
+        <!-- The game already runs (e.g. started while the dialog was open): only the way into it -->
+        <div v-if="started" class="lobby-room-foot">
+          <span class="lobby-room-foot-gap"></span>
+          <a v-if="continueLink !== undefined" class="btn btn-rounded btn-primary" :href="continueLink" v-i18n>Continue</a>
+        </div>
+        <div v-else class="lobby-room-foot">
           <AppButton class="btn-tone-danger" :title="isHost ? 'Close game' : 'Leave'" @click="emit('leave')" />
           <span class="lobby-room-foot-gap"></span>
           <AppButton v-if="isHost && freeSeats > 0" class="btn-tone-quiet" title="Fill with AI and start" @click="emit('fill-ai')" />
@@ -63,6 +68,7 @@ import GameSetupChips from '@/client/components/common/GameSetupChips.vue';
 import LobbyAvatar from './LobbyAvatar.vue';
 import {lobbySetupChips} from './lobbySetupChips';
 import {lobbyRoomPath} from '@/common/lobby/lobbyUrl';
+import {continueHref} from './lobbyLinks';
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 import {AI_LEVEL_OPTIONS} from '@/client/components/create/createGameChoices';
 
@@ -90,7 +96,12 @@ const isHost = computed(() => you.value?.host === true);
 const filled = computed(() => props.room?.seats.filter((seat) => seat.kind !== 'free').length ?? 0);
 const freeSeats = computed(() => (props.room?.seats.length ?? 0) - filled.value);
 const inviteLink = computed(() => props.room === undefined ? '' : new URL(lobbyRoomPath(props.room.id, props.room.title), document.baseURI).href);
+const started = computed(() => props.room?.state === 'started');
+const continueLink = computed(() => props.room === undefined ? undefined : continueHref(props.room));
 const statusText = computed(() => {
+  if (started.value) {
+    return translateText('The game is running.');
+  }
   if (freeSeats.value === 1) {
     return translateText('1 seat is free. The game starts as soon as all seats are taken and everybody is ready.');
   }

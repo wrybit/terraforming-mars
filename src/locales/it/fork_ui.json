@@ -2239,5 +2239,6 @@
   "entered by the host": "inserito dall’host",
   "Enter a player yourself": "Inserisci tu un giocatore",
   "Game ${0} was closed on ${1}: its creator left before it began and nobody else joined.": "La partita ${0} è stata chiusa il ${1}: il creatore se n'è andato prima dell'inizio e nessun altro si è unito.",
-  "No game is running right now.": "Al momento non c'è nessuna partita in corso."
+  "No game is running right now.": "Al momento non c'è nessuna partita in corso.",
+  "The game is running.": "La partita è in corso."
 }

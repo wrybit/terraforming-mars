@@ -971,5 +971,6 @@
   "entered by the host": "isännän lisäämä",
   "Enter a player yourself": "Lisää pelaaja itse",
   "Game ${0} was closed on ${1}: its creator left before it began and nobody else joined.": "Peli ${0} suljettiin ${1}: sen luoja poistui ennen alkua, eikä kukaan muu liittynyt.",
-  "No game is running right now.": "Yhtään peliä ei ole käynnissä juuri nyt."
+  "No game is running right now.": "Yhtään peliä ei ole käynnissä juuri nyt.",
+  "The game is running.": "Peli on käynnissä."
 }

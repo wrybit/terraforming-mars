@@ -1841,5 +1841,6 @@
   "entered by the host": "вписан хозяином",
   "Enter a player yourself": "Вписать игрока самому",
   "Game ${0} was closed on ${1}: its creator left before it began and nobody else joined.": "Игра ${0} закрыта ${1}: её создатель ушёл до начала, и никто больше не присоединился.",
-  "No game is running right now.": "Сейчас нет идущих игр."
+  "No game is running right now.": "Сейчас нет идущих игр.",
+  "The game is running.": "Игра идёт."
 }

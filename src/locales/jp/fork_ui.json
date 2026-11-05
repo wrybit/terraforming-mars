@@ -1343,5 +1343,6 @@
   "entered by the host": "ホストが入力",
   "Enter a player yourself": "プレイヤーを自分で入力",
   "Game ${0} was closed on ${1}: its creator left before it began and nobody else joined.": "ゲーム ${0} は ${1} に終了しました：作成者が開始前に退出し、他に誰も参加しませんでした。",
-  "No game is running right now.": "現在進行中のゲームはありません。"
+  "No game is running right now.": "現在進行中のゲームはありません。",
+  "The game is running.": "ゲームは進行中です。"
 }

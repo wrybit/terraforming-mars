@@ -1769,5 +1769,6 @@
   "entered by the host": "wpisany przez gospodarza",
   "Enter a player yourself": "Wpisz gracza samodzielnie",
   "Game ${0} was closed on ${1}: its creator left before it began and nobody else joined.": "Gra ${0} została zamknięta ${1}: jej twórca odszedł przed rozpoczęciem i nikt inny nie dołączył.",
-  "No game is running right now.": "Obecnie nie trwa żadna gra."
+  "No game is running right now.": "Obecnie nie trwa żadna gra.",
+  "The game is running.": "Gra trwa."
 }
