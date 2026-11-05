@@ -10,6 +10,8 @@
           <span class="create-game-head-label">{{ profile.name }}</span>
           <!-- The arrow says: this opens something (the profile) -->
           <svg class="lobby-profile-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>
+          <!-- Phone: pencil on the profile picture instead of name and arrow -->
+          <span class="lobby-profile-badge" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 20l4-1 10-10-3-3L5 16z" /></svg></span>
         </button>
         <!-- The only way to open a game; on phones only the plus remains -->
         <!-- Same shortcut as the create button in the form (Mod + Enter): once to open it, once more to create.

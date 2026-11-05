@@ -293,12 +293,6 @@
     display: none;
   }
 
-  .lobby-head .lobby-profile-button {
-    width: @toolbar-button-size;
-    padding: 0;
-    justify-content: center;
-  }
-
   .lobby-head .lobby-open-button {
     width: @toolbar-button-size;
     padding: 0;
@@ -325,6 +319,34 @@
     font-size: 16px;
     box-shadow: none;
   }
+  // Phone: only the round profile picture, as big as the button, with a pencil badge (like profile pictures in apps).
+  // Here, after the pill rules, so their padding and gap do not push the picture off centre
+  @media only screen and (max-width: 600px) {
+    position: relative;
+    justify-content: center;
+    width: @toolbar-button-size;
+    padding: 0;
+    gap: 0;
+    border: 0;
+    background: none;
+
+    .lobby-avatar {
+      width: @toolbar-button-size;
+      height: @toolbar-button-size;
+      font-size: 21px;
+      box-shadow: 0 0 0 2px #14151a, 0 0 0 3.5px rgba(255, 255, 255, 0.25);
+    }
+
+    &:hover {
+      border: 0;
+      background: none;
+
+      .lobby-avatar {
+        box-shadow: 0 0 0 2px #14151a, 0 0 0 3.5px @bg_action;
+      }
+    }
+  }
+
   // Clearly reacts to the pointer: lighter surface and edge, the arrow fully visible
   &:hover {
     border-color: rgba(255, 255, 255, 0.45);
@@ -332,6 +354,34 @@
 
     .lobby-profile-chevron {
       opacity: 1;
+    }
+  }
+}
+
+// Pencil badge of the phone's profile picture: hidden on wider screens, where name and arrow say the same
+.lobby-profile-badge {
+  display: none;
+
+  @media only screen and (max-width: 600px) {
+    position: absolute;
+    right: -3px;
+    bottom: -3px;
+    display: grid;
+    place-items: center;
+    width: 17px;
+    height: 17px;
+    border: 2px solid #14151a;
+    border-radius: 50%;
+    background: #2a2b33;
+
+    svg {
+      width: 10px;
+      height: 10px;
+      fill: none;
+      stroke: #eee;
+      stroke-width: 2.4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
     }
   }
 }
