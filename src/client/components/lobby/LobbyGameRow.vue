@@ -1,7 +1,7 @@
 <template>
   <!-- One open (or running) game of the lobby: title, host, seats, settings, action on the right.
        Like "Game created": a CTA only where you take part (waiting room, continue), otherwise a quiet button -->
-  <div class="lobby-game" :class="{'lobby-game--running': room.state === 'started', 'lobby-game--mine': isMine}">
+  <div class="lobby-game" :data-room-id="room.id" :class="{'lobby-game--running': room.state === 'started', 'lobby-game--mine': isMine}">
     <div class="lobby-game-info">
       <div class="lobby-game-title">{{ room.title }}</div>
       <div class="lobby-game-meta">

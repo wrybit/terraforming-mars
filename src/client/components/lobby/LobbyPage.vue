@@ -93,14 +93,14 @@
       </aside>
     </main>
 
-    <!-- Minimized waiting room -->
-    <button v-if="myRoom !== undefined && myRoom.state === 'open' && !roomOpen" type="button" class="lobby-wait-bar" @click="roomOpen = true">
+    <!-- Minimized waiting room. Stays in the page (hidden) while the dialog is open: the dialog grows out of it and shrinks back into it -->
+    <button v-if="myRoom !== undefined && myRoom.state === 'open'" type="button" class="lobby-wait-bar" :class="{'lobby-wait-bar--hidden': roomOpen}" :aria-hidden="roomOpen" @click="roomOpen = true">
       <span class="lobby-queue-pulse" aria-hidden="true"></span>
       <span>{{ $t('Waiting room') }}: <b>{{ myRoom.title }}</b> · {{ seatCount(myRoom) }}</span>
     </button>
 
     <LobbyProfileDialog :open="profileOpen" :profile="profile" :firstVisit="firstVisit" @close="profileOpen = false" @save="saveProfile" />
-    <LobbyRoomDialog :open="roomOpen && myRoom !== undefined" :room="myRoom" @minimize="roomOpen = false" @leave="leave()"
+    <LobbyRoomDialog :open="roomOpen && myRoom !== undefined" :room="myRoom" :origin="roomDialogOrigin" @minimize="roomOpen = false" @leave="leave()"
       @ready="act({action: 'ready', roomId: myRoom!.id, ready: $event})" @seat-ai="act({action: 'seat-ai', roomId: myRoom!.id, seat: $event})"
       @fill-ai="act({action: 'fill-ai', roomId: myRoom!.id})" @start="act({action: 'start', roomId: myRoom!.id})" />
     <LobbyMatchDialog :room="offeredRoom" :invitation="offerIsInvitation" @accept="acceptOffer()" @decline="declineOffer()" />
@@ -371,6 +371,17 @@ watch(yourRoomId, (id, before) => {
     roomOpen.value = true;
   }
 });
+
+// The room dialog morphs out of and back into what stands for the room on the page: the minimized bar while the
+// room waits for players, otherwise (running game) its entry in the list
+function roomDialogOrigin(): HTMLElement | undefined {
+  const bar = document.querySelector<HTMLElement>('.lobby-wait-bar');
+  if (bar !== null) {
+    return bar;
+  }
+  const id = myRoom.value?.id;
+  return id === undefined ? undefined : document.querySelector<HTMLElement>(`#lobby .lobby-game[data-room-id="${id}"]`) ?? undefined;
+}
 
 // Alt + 1 … 9, 0 presses the button of that row (as on "Game created"); by position, since on a Mac Alt + 1 types a character
 function onRowKey(event: KeyboardEvent): void {

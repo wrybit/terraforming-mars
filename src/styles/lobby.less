@@ -1018,6 +1018,11 @@ each(@players, {
 }
 
 // Minimized waiting room: pill at the bottom edge, opens the room again
+// While the dialog is open the bar stays measurable for its animation, but invisible and not clickable
+.lobby-wait-bar--hidden {
+  visibility: hidden;
+}
+
 .lobby-wait-bar {
   position: fixed;
   left: 50%;

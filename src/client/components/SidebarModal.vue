@@ -30,6 +30,9 @@ const props = defineProps<{
   bare?: boolean;
   // Content is a DialogFrame (header with title and ✕, scrolling content, footer): box without padding
   framed?: boolean;
+  // Element the dialog grows out of and shrinks back into, when it is not the parent of the place of use
+  // (e.g. the lobby's waiting room: its list entry or the minimized bar); asked anew on every open and close
+  origin?: () => HTMLElement | undefined;
 }>();
 
 const emit = defineEmits<{
@@ -52,7 +55,7 @@ function animate(element: Element, direction: 'open' | 'close', done: () => void
     done();
     return;
   }
-  const origin = anchor.value?.parentElement ?? undefined;
+  const origin = props.origin?.() ?? anchor.value?.parentElement ?? undefined;
   animateDialogZoom({direction, backdrop: element, box, origin}).then(done);
 }
 

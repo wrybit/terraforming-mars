@@ -1,5 +1,5 @@
 <template>
-  <SidebarModal :open="open" :framed="true" @close="emit('minimize')">
+  <SidebarModal :open="open" :framed="true" :origin="origin" @close="emit('minimize')">
     <DialogFrame v-if="room !== undefined" :title="room.title" :width="720" class="lobby-room-dialog" @close="emit('minimize')">
       <GameSetupChips :chips="chips" writtenOut />
       <div class="lobby-room-group">
@@ -84,6 +84,8 @@ import {AI_LEVEL_OPTIONS} from '@/client/components/create/createGameChoices';
 const props = defineProps<{
   open: boolean;
   room: LobbyRoomModel | undefined;
+  /** Where the dialog comes from and goes to: the room's entry in the list or the minimized bar (LobbyPage.vue) */
+  origin?: () => HTMLElement | undefined;
 }>();
 
 const emit = defineEmits<{
