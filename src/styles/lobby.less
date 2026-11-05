@@ -577,15 +577,20 @@
   display: flex;
   align-items: center;
 
+  // No colour ring in the rows (the fill already is the player colour): only a thin dark edge that separates the
+  // overlapping circles; the host alone gets the orange ring
+  .lobby-avatar:not(.lobby-avatar--free) {
+    box-shadow: 0 0 0 2px #1a1b21;
+  }
+
   .lobby-avatar + .lobby-avatar {
-    // The rings (box-shadow) reach 4px beyond the avatar: -2px makes them overlap by a third of the ring
-    margin-left: -2px;
+    margin-left: -4px;
   }
 }
 
-// The host: the ring in orange instead of the player colour, same size as everybody's ring
-.lobby-avatar.lobby-avatar--host {
-  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.55), 0 0 0 4px #ff9a2e;
+// The host: an orange ring, the only outline in the row
+.lobby-game-seats .lobby-avatar.lobby-avatar--host {
+  box-shadow: 0 0 0 2px #1a1b21, 0 0 0 4px #ff9a2e;
 }
 
 .lobby-game-progress {
