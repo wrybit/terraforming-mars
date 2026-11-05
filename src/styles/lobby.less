@@ -274,7 +274,8 @@
 .lobby-game {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto auto;
-  grid-template-areas: "info seats action" "chips chips action";
+  // Seats and action both span the two rows, so the avatars sit on the same middle axis as the button
+  grid-template-areas: "info seats action" "chips seats action";
   align-items: center;
   gap: 6px 18px;
   padding: 12px @lobby-pad;
