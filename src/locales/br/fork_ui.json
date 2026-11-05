@@ -2148,5 +2148,6 @@
   "Chat: blocked words": "Chat: palavras bloqueadas",
   "One word per line. A word is also masked at the start of longer words (\"arsch\" also in \"Arschloch\", not in \"Barsch\"). Links to other websites are always blocked.": "Uma palavra por linha. Uma palavra também é mascarada no início de palavras maiores (\"arsch\" também em \"Arschloch\", não em \"Barsch\"). Links para outros sites são sempre bloqueados.",
   "Reset to default": "Restaurar padrão",
-  "Saved. The chat uses the list right away.": "Salvo. O chat usa a lista imediatamente."
+  "Saved. The chat uses the list right away.": "Salvo. O chat usa a lista imediatamente.",
+  "Emoji": "Emoji"
 }

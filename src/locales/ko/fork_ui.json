@@ -1236,5 +1236,6 @@
   "Chat: blocked words": "채팅: 차단 단어",
   "One word per line. A word is also masked at the start of longer words (\"arsch\" also in \"Arschloch\", not in \"Barsch\"). Links to other websites are always blocked.": "한 줄에 한 단어. 더 긴 단어의 앞부분에서도 가려집니다(\"arsch\"는 \"Arschloch\"에서도, \"Barsch\"에서는 아님). 다른 웹사이트 링크는 항상 차단됩니다.",
   "Reset to default": "기본값으로 되돌리기",
-  "Saved. The chat uses the list right away.": "저장했습니다. 채팅이 목록을 바로 사용합니다."
+  "Saved. The chat uses the list right away.": "저장했습니다. 채팅이 목록을 바로 사용합니다.",
+  "Emoji": "이모지"
 }

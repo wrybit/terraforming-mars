@@ -1358,5 +1358,6 @@
   "Chat: blocked words": "チャット：禁止語",
   "One word per line. A word is also masked at the start of longer words (\"arsch\" also in \"Arschloch\", not in \"Barsch\"). Links to other websites are always blocked.": "1行に1語。長い単語の先頭でも伏せ字になります（「arsch」は「Arschloch」でも、「Barsch」では対象外）。他のサイトへのリンクは常にブロックされます。",
   "Reset to default": "既定に戻す",
-  "Saved. The chat uses the list right away.": "保存しました。チャットはすぐにこのリストを使います。"
+  "Saved. The chat uses the list right away.": "保存しました。チャットはすぐにこのリストを使います。",
+  "Emoji": "絵文字"
 }

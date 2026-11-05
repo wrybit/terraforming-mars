@@ -1354,5 +1354,6 @@
   "Chat: blocked words": "Chat: blokkerte ord",
   "One word per line. A word is also masked at the start of longer words (\"arsch\" also in \"Arschloch\", not in \"Barsch\"). Links to other websites are always blocked.": "Ett ord per linje. Et ord maskeres også i starten av lengre ord («arsch» også i «Arschloch», ikke i «Barsch»). Lenker til andre nettsteder blokkeres alltid.",
   "Reset to default": "Tilbakestill til standard",
-  "Saved. The chat uses the list right away.": "Lagret. Chatten bruker listen med en gang."
+  "Saved. The chat uses the list right away.": "Lagret. Chatten bruker listen med en gang.",
+  "Emoji": "Emoji"
 }

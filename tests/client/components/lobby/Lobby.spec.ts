@@ -7,6 +7,7 @@ import LobbyFilterPanel from '@/client/components/lobby/LobbyFilterPanel.vue';
 import LobbyRoomDialog from '@/client/components/lobby/LobbyRoomDialog.vue';
 import LobbyMatchDialog from '@/client/components/lobby/LobbyMatchDialog.vue';
 import LobbyProfileDialog from '@/client/components/lobby/LobbyProfileDialog.vue';
+import {isEmojiOnly} from '@/client/components/lobby/lobbyChatEmoji';
 import {activeFilterCount, availableFilterChoices, bestMatch, defaultLobbyFilters, matchesFilters} from '@/client/components/lobby/lobbyFilters';
 import {LobbyRoomModel, LobbySeatModel} from '@/common/lobby/LobbyModel';
 import {RandomMAOptionType} from '@/common/ma/RandomMAOptionType';
@@ -98,6 +99,14 @@ describe('Lobby components', () => {
     const disabled = Array.from(document.body.querySelectorAll('.lobby-room-dialog button[disabled]')).map((button) => button.textContent?.trim());
     expect(disabled).to.include.members(['Seat an AI', 'Fill with AI and start']);
     wrapper.unmount();
+  });
+
+  it('chat: only 1 to 3 emojis count as an emoji message', () => {
+    expect(isEmojiOnly('👍')).is.true;
+    expect(isEmojiOnly(' 🎉 🚀 👍🏽 ')).is.true;
+    expect(isEmojiOnly('👍👍👍👍')).is.false;
+    expect(isEmojiOnly('ok 👍')).is.false;
+    expect(isEmojiOnly('')).is.false;
   });
 
   it('LobbyMatchDialog shows the found game', () => {

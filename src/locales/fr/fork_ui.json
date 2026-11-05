@@ -1041,5 +1041,6 @@
   "Chat: blocked words": "Discussion : mots bloqués",
   "One word per line. A word is also masked at the start of longer words (\"arsch\" also in \"Arschloch\", not in \"Barsch\"). Links to other websites are always blocked.": "Un mot par ligne. Un mot est aussi masqué au début de mots plus longs (« arsch » aussi dans « Arschloch », pas dans « Barsch »). Les liens vers d'autres sites sont toujours bloqués.",
   "Reset to default": "Rétablir la liste par défaut",
-  "Saved. The chat uses the list right away.": "Enregistré. La discussion utilise la liste immédiatement."
+  "Saved. The chat uses the list right away.": "Enregistré. La discussion utilise la liste immédiatement.",
+  "Emoji": "Émoji"
 }

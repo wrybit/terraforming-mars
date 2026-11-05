@@ -986,5 +986,6 @@
   "Chat: blocked words": "Chat: estetyt sanat",
   "One word per line. A word is also masked at the start of longer words (\"arsch\" also in \"Arschloch\", not in \"Barsch\"). Links to other websites are always blocked.": "Yksi sana riviä kohden. Sana peitetään myös pidempien sanojen alussa (”arsch” myös sanassa ”Arschloch”, ei sanassa ”Barsch”). Linkit muille sivustoille estetään aina.",
   "Reset to default": "Palauta oletukset",
-  "Saved. The chat uses the list right away.": "Tallennettu. Chat käyttää listaa heti."
+  "Saved. The chat uses the list right away.": "Tallennettu. Chat käyttää listaa heti.",
+  "Emoji": "Emoji"
 }

@@ -1856,5 +1856,6 @@
   "Chat: blocked words": "Чат: запрещённые слова",
   "One word per line. A word is also masked at the start of longer words (\"arsch\" also in \"Arschloch\", not in \"Barsch\"). Links to other websites are always blocked.": "Одно слово в строке. Слово скрывается и в начале более длинных слов («arsch» и в «Arschloch», но не в «Barsch»). Ссылки на другие сайты всегда блокируются.",
   "Reset to default": "Вернуть по умолчанию",
-  "Saved. The chat uses the list right away.": "Сохранено. Чат сразу использует список."
+  "Saved. The chat uses the list right away.": "Сохранено. Чат сразу использует список.",
+  "Emoji": "Эмодзи"
 }

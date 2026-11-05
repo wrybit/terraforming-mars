@@ -119,6 +119,12 @@
   overflow-wrap: anywhere;
   font-size: 14px;
 
+  // Only 1 to 3 emojis: three times as large, like a reaction
+  &.lobby-chat-text--emoji {
+    font-size: 42px;
+    line-height: 1.15;
+  }
+
   a {
     color: inherit;
     text-decoration: underline;
@@ -126,23 +132,120 @@
 }
 
 .lobby-chat-form {
-  display: flex;
-  gap: @lobby-gap-inner;
   margin: 0;
   padding: 12px @lobby-pad;
   border-top: 1px solid @lobby-line;
+}
 
-  .btn {
-    margin: 0;
+// Looks like one text field; the emoji and the send button sit inside on the right
+.lobby-chat-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: @toolbar-button-size;
+  padding: 0 4px 0 10px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.3);
+
+  &:focus-within {
+    border-color: rgba(255, 255, 255, 0.45);
   }
 }
 
-.lobby-chat-input.create-game-text-input {
+.lobby-chat-input {
   flex: 1;
   min-width: 0;
-  height: @toolbar-button-size;
-  margin: 0;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: none;
+  color: #eee;
   font-size: 14px;
+}
+
+.lobby-chat-icon-button {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: @lobby-dim;
+  cursor: pointer;
+
+  svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentcolor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  &:hover,
+  &.lobby-chat-icon-button--open {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+  }
+
+  &:focus-visible {
+    outline: 2px solid @highlight-gold;
+  }
+
+  &[disabled] {
+    opacity: 0.4;
+    cursor: default;
+
+    &:hover {
+      background: none;
+      color: @lobby-dim;
+    }
+  }
+}
+
+// Send in the accent color as soon as there is something to send
+.lobby-chat-send:not([disabled]) {
+  color: lighten(@bg_action, 18%);
+}
+
+.lobby-chat-emojis {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 8px);
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(7, 36px);
+  gap: 2px;
+  padding: 8px;
+  border: 1px solid @lobby-line;
+  border-radius: 10px;
+  background: #24262e;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.lobby-chat-emoji {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    background: rgba(255, 255, 255, 0.1);
+    outline: none;
+  }
 }
 
 .lobby-chat-error {
@@ -473,6 +576,24 @@
 
   .btn {
     margin: 0;
+  }
+}
+
+// With the chat sidebar: the game cards reach down as far as the chat (same height as .lobby-chat)
+.lobby-main {
+  @media only screen and (min-width: 1400px) {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100dvh - 120px);
+
+    // In a flex column the card margins no longer collapse: only the columns' margin-top stays
+    > .create-game-card {
+      margin-bottom: 0;
+    }
+
+    .lobby-columns {
+      flex: 1;
+    }
   }
 }
 

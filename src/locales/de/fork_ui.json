@@ -768,5 +768,6 @@
   "Chat: blocked words": "Chat: gesperrte Wörter",
   "One word per line. A word is also masked at the start of longer words (\"arsch\" also in \"Arschloch\", not in \"Barsch\"). Links to other websites are always blocked.": "Ein Wort pro Zeile. Ein Wort wird auch am Anfang längerer Wörter maskiert („arsch“ auch in „Arschloch“, nicht in „Barsch“). Links zu anderen Websites sind immer gesperrt.",
   "Reset to default": "Auf Standard zurücksetzen",
-  "Saved. The chat uses the list right away.": "Gespeichert. Der Chat nutzt die Liste sofort."
+  "Saved. The chat uses the list right away.": "Gespeichert. Der Chat nutzt die Liste sofort.",
+  "Emoji": "Emoji"
 }

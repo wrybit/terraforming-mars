@@ -1933,5 +1933,6 @@
   "Chat: blocked words": "Чат: забранени думи",
   "One word per line. A word is also masked at the start of longer words (\"arsch\" also in \"Arschloch\", not in \"Barsch\"). Links to other websites are always blocked.": "По една дума на ред. Думата се маскира и в началото на по-дълги думи („arsch“ и в „Arschloch“, не в „Barsch“). Връзки към други сайтове винаги са блокирани.",
   "Reset to default": "Възстанови по подразбиране",
-  "Saved. The chat uses the list right away.": "Запазено. Чатът използва списъка веднага."
+  "Saved. The chat uses the list right away.": "Запазено. Чатът използва списъка веднага.",
+  "Emoji": "Емоджи"
 }
