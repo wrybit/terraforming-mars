@@ -28,6 +28,15 @@ describe('DashboardCommits', () => {
     expect(wrapper.text()).contains('Restart server');
   });
 
+  it('counts a local build merge (side branch + main) by the branch commit it contains', () => {
+    const dashboard = dashboardWith('fffffffff', ['ccccccccc', 'bbbbbbbbb', 'aaaaaaaaa']);
+    // Build log: local merge commit, a main commit, then the branch commit
+    dashboard.commits = [commit('fffffffff'), commit('eeeeeeeee'), commit('bbbbbbbbb')];
+    const wrapper = mount(DashboardCommits, {...globalConfig, props: {dashboard}});
+    expect(wrapper.find('.server-dashboard-commit-live').text()).contains('Commit bbbbbbbbb');
+    expect(wrapper.find('.server-dashboard-deploy-status').text()).eq('1 commits behind');
+  });
+
   it('asks before restarting and names the players online', async () => {
     const wrapper = mount(DashboardCommits, {...globalConfig, props: {dashboard: dashboardWith('bbbbbbbbb')}});
     // Without the deploy branch only the built commits, no status

@@ -21,10 +21,26 @@ function sameCommit(hash: string, head: string): boolean {
   return hash !== '' && head !== '' && (hash.startsWith(head) || head.startsWith(hash));
 }
 
+/**
+ * The deploy branch commit the running build contains. A side branch (e.g. dune on AK1) is built with main merged
+ * in locally, so the build head is a merge commit that is not on GitHub: then the newest commit of the build that
+ * is on the deploy branch counts. Without that the dashboard showed "25+ commits behind" and the update found
+ * nothing to do.
+ */
+function liveHash(dashboard: ServerDashboard, commits: ReadonlyArray<DashboardCommit>): string {
+  const head = dashboard.build.head;
+  if (commits.some((commit) => sameCommit(commit.hash, head))) {
+    return head;
+  }
+  const contained = dashboard.commits.find((built) => commits.some((commit) => sameCommit(commit.hash, built.hash)));
+  return contained?.hash ?? head;
+}
+
 /** Commits to list and how far the running build is behind the deploy branch. */
 export function deployState(dashboard: ServerDashboard): DeployState {
   const commits = dashboard.upstream?.commits ?? dashboard.commits;
-  const rows = commits.map((commit) => ({commit, live: sameCommit(commit.hash, dashboard.build.head)}));
+  const live = liveHash(dashboard, commits);
+  const rows = commits.map((commit) => ({commit, live: sameCommit(commit.hash, live)}));
   if (dashboard.upstream === undefined) {
     return {rows};
   }
@@ -103,5 +119,6 @@ export function deployStatusText(dashboard: ServerDashboard): string {
 export function liveCommitTime(dashboard: ServerDashboard): string | undefined {
   // Build list as fallback: an old build has dropped out of the deploy branch list
   const commits = [...(dashboard.upstream?.commits ?? []), ...dashboard.commits];
-  return commits.find((commit) => sameCommit(commit.hash, dashboard.build.head))?.time;
+  const live = liveHash(dashboard, commits);
+  return commits.find((commit) => sameCommit(commit.hash, live))?.time;
 }
