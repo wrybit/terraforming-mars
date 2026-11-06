@@ -49,6 +49,7 @@ export class LobbyChat {
         const you = participant === me;
         return {...message, you, editable: admin || (you && now - message.at < LOBBY_CHAT_EDIT_MS)};
       }),
+      ...(admin ? {admin: true as const} : {}),
     };
   }
 
@@ -107,6 +108,21 @@ export class LobbyChat {
       }
       this.storage.save(this.all());
     }
+    return this.list(me, admin);
+  }
+
+  /** Removes a message for everybody; only an admin may (moderation) */
+  public remove(me: string, id: unknown, admin: boolean): LobbyChatModel {
+    if (!admin) {
+      throw new LobbyError('Only an admin can delete messages');
+    }
+    const messages = this.all();
+    const index = messages.findIndex((message) => message.id === id);
+    if (index < 0) {
+      throw new LobbyError('This message no longer exists');
+    }
+    messages.splice(index, 1);
+    this.storage.save(messages);
     return this.list(me, admin);
   }
 }

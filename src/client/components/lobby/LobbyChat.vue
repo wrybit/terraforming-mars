@@ -18,6 +18,8 @@
             <textarea ref="editField" v-model="editDraft" v-auto-grow class="lobby-chat-edit-field" rows="1" :maxlength="LOBBY_CHAT_MAX_LENGTH"
               :aria-label="$t('Edit message')" @keydown.enter.exact.prevent="saveEdit(message)" @keydown.esc.stop.prevent="cancelEdit"></textarea>
             <div class="lobby-chat-edit-actions">
+              <!-- Admins only (login on the admin page): removes the message for everybody -->
+              <AppButton v-if="admin" size="small" class="btn-tone-danger lobby-chat-delete" title="Delete" :disabled="saving" @click="removeMessage(message)" />
               <AppButton size="small" class="btn-tone-quiet" title="Cancel" :fixedHotkey="['Escape']" @click="cancelEdit" />
               <AppButton size="small" title="Save" :fixedHotkey="['Enter']" :disabled="editDraft.trim() === '' || saving" @click="saveEdit(message)" />
             </div>
@@ -67,7 +69,7 @@ import {nextTick, onBeforeUnmount, onMounted, ref} from 'vue';
 import {LOBBY_CHAT_MAX_LENGTH, LobbyChatMessage} from '@/common/lobby/LobbyChatModel';
 import {LobbyProfile} from '@/common/lobby/LobbyModel';
 import LobbyAvatar from './LobbyAvatar.vue';
-import {chatTextParts, editLobbyChat, fetchLobbyChat, postLobbyChat} from './lobbyChatApi';
+import {chatTextParts, editLobbyChat, fetchLobbyChat, postLobbyChat, removeLobbyChat} from './lobbyChatApi';
 import AppButton from '@/client/components/common/AppButton.vue';
 import {CHAT_EMOJIS, isEmojiOnly} from './lobbyChatEmoji';
 import HotkeyKeys from '@/client/components/hotkeys/HotkeyKeys.vue';
@@ -94,6 +96,8 @@ const emojisOpen = ref(false);
 const focused = ref(false);
 const editingId = ref<number | undefined>(undefined);
 const editDraft = ref('');
+// Logged in on the admin page (the server says so with every list): may delete messages
+const admin = ref(false);
 const saving = ref(false);
 // Briefly highlights the message just saved, so one sees the change arrived
 const updatedId = ref<number | undefined>(undefined);
@@ -116,6 +120,24 @@ async function startEdit(message: LobbyChatMessage): Promise<void> {
 function cancelEdit(): void {
   editingId.value = undefined;
   editDraft.value = '';
+}
+
+async function removeMessage(message: LobbyChatMessage): Promise<void> {
+  if (saving.value) {
+    return;
+  }
+  saving.value = true;
+  error.value = '';
+  try {
+    const model = await removeLobbyChat(message.id);
+    cancelEdit();
+    await show(model.messages);
+    admin.value = model.admin === true;
+  } catch (failure) {
+    error.value = lobbyFailureText(failure);
+  } finally {
+    saving.value = false;
+  }
 }
 
 async function saveEdit(message: LobbyChatMessage): Promise<void> {
@@ -214,7 +236,9 @@ async function show(next: Array<LobbyChatMessage>): Promise<void> {
 
 async function refresh(): Promise<void> {
   try {
-    await show((await fetchLobbyChat()).messages);
+    const model = await fetchLobbyChat();
+    admin.value = model.admin === true;
+    await show(model.messages);
   } catch {
     // The lobby list shows connection problems already
   }

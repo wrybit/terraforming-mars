@@ -30,6 +30,16 @@ export async function editLobbyChat(id: number, text: string): Promise<LobbyChat
   return response.json();
 }
 
+/** Deletes a message for everybody (admins only: the server checks the admin login) */
+export async function removeLobbyChat(id: number): Promise<LobbyChatModel> {
+  const response = await fetchOrFail(paths.API_LOBBY_CHAT, {
+    method: 'PUT',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({me: lobbyParticipantId(), id, remove: true}),
+  });
+  return response.json();
+}
+
 export type ChatTextPart = {text: string, href?: string, tag?: true};
 
 // A hashtag starts at the beginning or after white space, so "#" inside a word or an address stays plain text

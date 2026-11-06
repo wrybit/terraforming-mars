@@ -24,6 +24,8 @@ export type LobbyChatMessage = {
 
 export type LobbyChatModel = {
   messages: Array<LobbyChatMessage>;
+  /** The asker is logged in on the admin page: may also delete messages */
+  admin?: true;
 };
 
 /** Admin page: the words the chat masks (routes/ApiAdminChatWords.ts) */

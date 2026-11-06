@@ -10,7 +10,7 @@ import {LobbyError} from '../lobby/lobbyValidation';
 import {isParticipantId} from '../../common/lobby/LobbyModel';
 import {LobbyChatModel} from '../../common/lobby/LobbyChatModel';
 
-/** Lobby chat (server/lobby/LobbyChat.ts): GET the messages (?me=), POST {me, profile, text} writes one, PUT {me, id, text} changes one */
+/** Lobby chat (server/lobby/LobbyChat.ts): GET the messages (?me=), POST {me, profile, text} writes one, PUT {me, id, text} changes one, PUT {me, id, remove: true} deletes one (admin) */
 export class ApiLobbyChat extends Handler {
   public static readonly INSTANCE = new ApiLobbyChat();
 
@@ -32,14 +32,17 @@ export class ApiLobbyChat extends Handler {
   // Admins (login cookie of the admin page) may change every message
   public override async put(req: Request, res: Response, ctx: Context): Promise<void> {
     const body = await readRequest(req);
-    answer(res, ctx, () => this.chat.edit(body.me, body.id, body.text, req.headers.host, this.isServerIdValid(ctx)));
+    const admin = this.isServerIdValid(ctx);
+    answer(res, ctx, () => body.remove === true ?
+      this.chat.remove(body.me, body.id, admin) :
+      this.chat.edit(body.me, body.id, body.text, req.headers.host, admin));
   }
 }
 
-type ChatRequest = {me: string, profile?: unknown, id?: unknown, text?: unknown};
+type ChatRequest = {me: string, profile?: unknown, id?: unknown, text?: unknown, remove?: unknown};
 
 async function readRequest(req: Request): Promise<ChatRequest> {
-  let body: {me?: unknown, profile?: unknown, id?: unknown, text?: unknown};
+  let body: {me?: unknown, profile?: unknown, id?: unknown, text?: unknown, remove?: unknown};
   try {
     body = JSON.parse(await readBody(req));
   } catch {
