@@ -2154,5 +2154,12 @@
   "This message no longer exists": "Esta mensagem não existe mais",
   "This message can no longer be edited": "Esta mensagem não pode mais ser editada",
   "${0} joined your game": "${0} entrou no seu jogo",
-  "Your game in the lobby is waiting for you.": "Seu jogo no lobby está esperando por você."
+  "Your game in the lobby is waiting for you.": "Seu jogo no lobby está esperando por você.",
+  "Faces": "Rostos",
+  "Gestures": "Gestos",
+  "Celebration": "Comemoração",
+  "Nature": "Natureza",
+  "Food & drink": "Comida e bebida",
+  "Objects": "Objetos",
+  "Symbols": "Símbolos"
 }

@@ -992,5 +992,12 @@
   "This message no longer exists": "Tätä viestiä ei ole enää olemassa",
   "This message can no longer be edited": "Tätä viestiä ei voi enää muokata",
   "${0} joined your game": "${0} liittyi peliisi",
-  "Your game in the lobby is waiting for you.": "Pelisi aulassa odottaa sinua."
+  "Your game in the lobby is waiting for you.": "Pelisi aulassa odottaa sinua.",
+  "Faces": "Kasvot",
+  "Gestures": "Eleet",
+  "Celebration": "Juhlat",
+  "Nature": "Luonto",
+  "Food & drink": "Ruoka ja juoma",
+  "Objects": "Esineet",
+  "Symbols": "Symbolit"
 }

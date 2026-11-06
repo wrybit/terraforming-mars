@@ -380,14 +380,40 @@
   right: 0;
   bottom: calc(100% + 8px);
   z-index: 2;
-  display: grid;
-  grid-template-columns: repeat(7, 36px);
-  gap: 2px;
-  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  // Many groups: the popover scrolls instead of growing out of the window. Below the games (narrow screens) the
+  // chat card is lower and cuts off what sticks out above it
+  max-height: min(420px, 60vh);
+
+  @media only screen and (max-width: 1399px) {
+    max-height: 340px;
+  }
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 8px 8px 10px;
   border: 1px solid @lobby-line;
   border-radius: 10px;
   background: #24262e;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.lobby-chat-emoji-group {
+  display: grid;
+  grid-template-columns: repeat(7, 36px);
+  gap: 2px;
+}
+
+// Heading of a group: the word with a line below, across the whole row
+.lobby-chat-emoji-heading {
+  grid-column: 1 / -1;
+  margin: 0 4px 4px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid @lobby-line;
+  color: @lobby-dim;
+  font-size: 12px;
+  font-weight: 500;
 }
 
 .lobby-chat-emoji {

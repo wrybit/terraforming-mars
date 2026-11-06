@@ -1175,5 +1175,12 @@
   "This message no longer exists": "Ez az üzenet már nem létezik",
   "This message can no longer be edited": "Ez az üzenet már nem szerkeszthető",
   "${0} joined your game": "${0} csatlakozott a játékodhoz",
-  "Your game in the lobby is waiting for you.": "A játékod az előcsarnokban vár rád."
+  "Your game in the lobby is waiting for you.": "A játékod az előcsarnokban vár rád.",
+  "Faces": "Arcok",
+  "Gestures": "Gesztusok",
+  "Celebration": "Ünneplés",
+  "Nature": "Természet",
+  "Food & drink": "Étel és ital",
+  "Objects": "Tárgyak",
+  "Symbols": "Szimbólumok"
 }
