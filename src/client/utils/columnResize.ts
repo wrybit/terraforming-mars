@@ -40,7 +40,7 @@ export const LOBBY_CHAT_SPLIT: ColumnSplit = {
   storageKey: 'lobby_chat_share',
   mainVariable: '--lobby-main-share',
   sideVariable: '--lobby-chat-share',
-  defaultShare: 20,
+  defaultShare: 25,
   minShare: 16,
   maxShare: 40,
 };
