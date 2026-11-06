@@ -177,9 +177,7 @@ export class ServeAsset extends Handler {
     case 'vendors.js':
       return this.toMainFile(urlPath, encodings);
 
-    // sw.js is empty. Although not confirmed, it seems sw.js is necessary
-    // for mobile notifications. If confirmed that it is not necessary, this
-    // can be removed.
+    // Service worker (client/sw.ts): lobby push messages, and the notification fallback of the game
     case 'sw.js':
     case '/sw.js':
       return this.toServiceWorkerFile(urlPath);

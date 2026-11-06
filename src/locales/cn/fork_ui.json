@@ -1975,5 +1975,7 @@
   "(edited)": "(已编辑)",
   "Edit message": "编辑消息",
   "This message no longer exists": "此消息已不存在",
-  "This message can no longer be edited": "此消息已无法编辑"
+  "This message can no longer be edited": "此消息已无法编辑",
+  "${0} joined your game": "${0} 加入了你的游戏",
+  "Your game in the lobby is waiting for you.": "你在大厅里的游戏正在等你。"
 }

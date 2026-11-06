@@ -1357,5 +1357,7 @@
   "(edited)": "(redigert)",
   "Edit message": "Rediger melding",
   "This message no longer exists": "Denne meldingen finnes ikke lenger",
-  "This message can no longer be edited": "Denne meldingen kan ikke lenger redigeres"
+  "This message can no longer be edited": "Denne meldingen kan ikke lenger redigeres",
+  "${0} joined your game": "${0} ble med i spillet ditt",
+  "Your game in the lobby is waiting for you.": "Spillet ditt i lobbyen venter på deg."
 }
