@@ -2253,7 +2253,6 @@
   "No game is running right now.": "Ahora mismo no hay ninguna partida en curso.",
   "The game is running.": "La partida está en curso.",
   "AI players are not available with these settings.": "Con estos ajustes no hay jugadores IA.",
-  "Chat": "Chat",
   "No messages yet. Say hello!": "Aún no hay mensajes. ¡Saluda!",
   "Write a message": "Escribe un mensaje",
   "Send": "Enviar",
@@ -2265,7 +2264,6 @@
   "One word per line. A word is also masked at the start of longer words (\"arsch\" also in \"Arschloch\", not in \"Barsch\"). Links to other websites are always blocked.": "Una palabra por línea. Una palabra también se oculta al inicio de palabras más largas («arsch» también en «Arschloch», no en «Barsch»). Los enlaces a otros sitios web siempre se bloquean.",
   "Reset to default": "Restablecer valores predeterminados",
   "Saved. The chat uses the list right away.": "Guardado. El chat usa la lista de inmediato.",
-  "Emoji": "Emoji",
   "No game to filter right now.": "Ahora mismo no hay ninguna partida que filtrar.",
   "Time played": "Tiempo jugado",
   "Terraforming": "Terraformación"
