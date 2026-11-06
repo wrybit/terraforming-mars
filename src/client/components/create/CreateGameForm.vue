@@ -291,8 +291,8 @@
       <aside class="create-game-side">
         <section class="create-game-players">
           <!-- One scroll area for head and cards: the cards slide under the sticky, frosted head -->
-          <div class="create-game-players-scroll" @scroll="onPlayerListScroll">
-            <div class="create-game-players-head" :class="{'create-game-players-head--over-list': playerListScrolled}">
+          <div class="create-game-players-scroll">
+            <div class="create-game-players-head">
               <!-- Name of the game first: the drawn name is the placeholder and used when nothing is typed -->
               <label class="create-game-name">
                 <span class="create-game-subhead" v-i18n>Name of the game</span>
@@ -397,8 +397,11 @@
         </section>
         <!-- Sticks to the bottom edge while the page is too short for it; then with an extra shadow -->
         <section ref="createCard" class="create-game-card create-game-create-card" :class="{'create-game-create-card--stuck': createCardStuck}">
-          <!-- Same chips as the game list of the statistics (gameSetupChips.ts) -->
-          <GameSetupChips :chips="summaryChips" />
+          <!-- Same chips as the game list of the statistics (gameSetupChips.ts).
+               Collapsible: on low screens (< TALL_VIEWPORT_PX) closed by default, so players and settings keep their room -->
+          <CollapsibleSection variant="subhead" title="Game settings" storageKey="summary" :remember="false" :defaultOpen="summaryOpenByDefault">
+            <GameSetupChips :chips="summaryChips" />
+          </CollapsibleSection>
           <div ref="createRow" class="create-game-create-row">
             <AppButton hotkey="create-game" class="create-game-create" :title="createButtonTitle" size="big" @click="submit" :disabled="hasBlockingValidationErrors" />
           </div>
@@ -512,10 +515,10 @@ type FormModel = {
   drawnBoard: BoardName | undefined;
   /** Create card sticks to the bottom edge (stickyBottomObserver.ts) */
   createCardStuck: boolean;
+  /** Summary chips start open (viewport at least TALL_VIEWPORT_PX high) */
+  summaryOpenByDefault: boolean;
   /** The Create card's button lies below the visible area (belowViewportObserver.ts); one column shows the floating button then */
   createButtonBelow: boolean;
-  /** Player list scrolled: its cards slide under the fixed head, which then casts a shadow */
-  playerListScrolled: boolean;
   /** Settings columns for the window width (createGameColumns.ts) */
   columnCount: ColumnCount;
   /** The column elements exist: from now on the cards can move into them */
@@ -538,6 +541,9 @@ const CREATE_CARD_BOTTOM_PX = 12;
 // How long the button shows "Link copied"
 const LINK_COPIED_FEEDBACK_MS = 2000;
 
+// From this viewport height on the summary chips above the Create button start open; below they start closed
+const TALL_VIEWPORT_PX = 1200;
+
 // Column elements of each form (CreateGameForm.vue instance -> column number -> element)
 const columnElements = new WeakMap<object, Record<number, HTMLElement>>();
 
@@ -559,8 +565,8 @@ export default defineComponent({
       boardSeed: Math.random(),
       drawnBoard: undefined,
       createCardStuck: false,
+      summaryOpenByDefault: typeof window === 'undefined' || window.innerHeight >= TALL_VIEWPORT_PX,
       createButtonBelow: false,
-      playerListScrolled: false,
       columnCount: currentColumnCount(),
       columnsMounted: false,
       stopColumnWatch: () => {},
@@ -1243,9 +1249,6 @@ export default defineComponent({
     },
     cardStyle(card: SettingsCard): Record<string, number> {
       return {order: placementOf(card, this.columnCount).order};
-    },
-    onPlayerListScroll(event: Event) {
-      this.playerListScrolled = (event.target as HTMLElement).scrollTop > 0;
     },
     getPlayers(): Array<NewPlayerModel> {
       return this.players.slice(0, this.playersCount);

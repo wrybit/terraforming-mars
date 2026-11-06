@@ -35,12 +35,17 @@ const props = withDefaults(defineProps<{
   collapsible?: boolean,
   // Open on the first visit (until the viewer closes it once)
   defaultOpen?: boolean,
-}>(), {changed: undefined, variant: 'card', collapsible: true, defaultOpen: false});
+  // false: always starts in defaultOpen (e.g. when the default depends on the screen), toggling is not stored
+  remember?: boolean,
+}>(), {changed: undefined, variant: 'card', collapsible: true, defaultOpen: false, remember: true});
 
 const STORAGE_PREFIX = 'create-game-open-';
 
 // Only a convenience for this browser: without storage (private mode) every area starts in its default state
 function loadOpen(): boolean {
+  if (!props.remember) {
+    return props.defaultOpen;
+  }
   try {
     const stored = localStorage.getItem(STORAGE_PREFIX + props.storageKey);
     return stored === null ? props.defaultOpen : stored === '1';
@@ -54,6 +59,9 @@ const isOpen = computed(() => !props.collapsible || open.value);
 
 function toggle() {
   open.value = !open.value;
+  if (!props.remember) {
+    return;
+  }
   try {
     localStorage.setItem(STORAGE_PREFIX + props.storageKey, open.value ? '1' : '0');
   } catch {
