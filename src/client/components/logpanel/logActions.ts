@@ -1,3 +1,4 @@
+import {Phase as GamePhase} from '@/common/Phase';
 import {Color} from '@/common/Color';
 import {CardName} from '@/common/cards/CardName';
 import {CardType} from '@/common/cards/CardType';
@@ -58,7 +59,8 @@ export type LogAction = {
 
 export type LogRow =
   | {type: 'action', action: LogAction, indexes: Array<number>}
-  | {type: 'research', entries: Array<{player: Color, amount: number}>, indexes: Array<number>}
+  // pending: the research phase still runs – the server holds back the counts until everyone has bought
+  | {type: 'research', entries: Array<{player: Color, amount: number}>, indexes: Array<number>, pending?: boolean}
   // follows: a consequence of the action row above (same player, e.g. the cards a card let them draw) – indented with ↳
   | {type: 'message', message: LogMessage, indexes: Array<number>, follows?: boolean, action?: LogAction}
   | {type: 'phase', indexes: Array<number>}
@@ -776,6 +778,17 @@ export function groupLogMessages(messages: ReadonlyArray<LogMessage>, context: L
     }
   }
   return withPhaseLines(rows);
+}
+
+// Research phase still running in this generation: one row saying that players are buying, in place of the counts
+export function withPendingResearch(rows: Array<LogRow>, generation: number, game: {phase: GamePhase, generation: number}): Array<LogRow> {
+  // Generation 1 starts with its own selection (corporation, preludes, cards); its purchase has no count row
+  if (game.phase !== GamePhase.RESEARCH || generation !== game.generation || generation === 1) {
+    return rows;
+  }
+  const pending: LogRow = {type: 'research', entries: [], indexes: [], pending: true};
+  const existing = rows.findIndex((row) => row.type === 'research');
+  return existing === -1 ? [...rows, pending] : rows.map((row, index) => index === existing ? pending : row);
 }
 
 // Divider after the card purchase, and in generation 1 after the corporations and after the preludes

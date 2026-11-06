@@ -43,9 +43,14 @@
   <div v-else-if="row.type === 'research'" class="log-row log-row--research" data-test="log-research-row">
     <!-- Card purchase at the start of a generation, all players in one line -->
     <span class="log-row-muted">{{ $t('Research phase') }}</span>
-    <span v-for="entry in row.entries" :key="entry.player" class="log-row-research-entry">
-      <span :class="['log-row-name', 'log-row-name--' + entry.player]">{{ playerName(entry.player) }}</span>&nbsp;{{ entry.amount }}
-    </span>
+    <!-- Still running: nobody sees the counts before everyone has bought (server holds them back) -->
+    <span v-if="row.pending === true" class="log-row-research-pending" data-test="log-research-pending">{{ $t('Players are buying cards') }}<span
+      class="log-row-research-dots" aria-hidden="true"><i>.</i><i>.</i><i>.</i></span></span>
+    <template v-else>
+      <span v-for="entry in row.entries" :key="entry.player" class="log-row-research-entry">
+        <span :class="['log-row-name', 'log-row-name--' + entry.player]">{{ playerName(entry.player) }}</span>&nbsp;{{ entry.amount }}
+      </span>
+    </template>
   </div>
 </template>
 

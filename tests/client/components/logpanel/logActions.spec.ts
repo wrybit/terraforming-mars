@@ -4,7 +4,8 @@ import {LogMessageType} from '@/common/logs/LogMessageType';
 import {LogMessageDataType} from '@/common/logs/LogMessageDataType';
 import {LogMessageData} from '@/common/logs/LogMessageData';
 import {CardName} from '@/common/cards/CardName';
-import {groupLogMessages, mergeEffects} from '@/client/components/logpanel/logActions';
+import {groupLogMessages, LogRow, mergeEffects, withPendingResearch} from '@/client/components/logpanel/logActions';
+import {Phase} from '@/common/Phase';
 
 const player = (value: string): LogMessageData => ({type: LogMessageDataType.PLAYER, value} as LogMessageData);
 const card = (value: CardName): LogMessageData => ({type: LogMessageDataType.CARD, value});
@@ -368,5 +369,27 @@ describe('logActions', () => {
       message('${0} gained ${1} ${2}', player('red'), raw('4'), text('M€')),
     ], {tableau: {red: [CardName.CREDICOR]}});
     expect(actionAt(rows, 0).effects).deep.eq([{resource: 'power', amount: -1, production: true}, {resource: 'megacredit', amount: 4, cause: CardName.CREDICOR}]);
+  });
+
+  describe('withPendingResearch', () => {
+    const research: LogRow = {type: 'research', indexes: [0], entries: [{player: 'red', amount: 2}]};
+    const phase: LogRow = {type: 'phase', indexes: []};
+
+    it('adds a pending row while the current generation still buys', () => {
+      const rows = withPendingResearch([phase], 3, {phase: Phase.RESEARCH, generation: 3});
+      expect(rows.map((row) => row.type)).deep.eq(['phase', 'research']);
+      expect(rows[1]).deep.eq({type: 'research', indexes: [], entries: [], pending: true});
+    });
+
+    it('replaces a research row that is already there', () => {
+      const rows = withPendingResearch([research], 3, {phase: Phase.RESEARCH, generation: 3});
+      expect(rows).deep.eq([{type: 'research', indexes: [], entries: [], pending: true}]);
+    });
+
+    it('leaves earlier generations, other phases and generation 1 alone', () => {
+      expect(withPendingResearch([research], 2, {phase: Phase.RESEARCH, generation: 3})).deep.eq([research]);
+      expect(withPendingResearch([research], 3, {phase: Phase.ACTION, generation: 3})).deep.eq([research]);
+      expect(withPendingResearch([], 1, {phase: Phase.RESEARCH, generation: 1})).deep.eq([]);
+    });
   });
 });
