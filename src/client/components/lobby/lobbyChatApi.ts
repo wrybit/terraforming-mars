@@ -30,14 +30,37 @@ export async function editLobbyChat(id: number, text: string): Promise<LobbyChat
   return response.json();
 }
 
-/** Text split into plain parts and links to this server (the only links the server lets through) */
-export function chatTextParts(text: string, origin: string = window.location.origin): Array<{text: string, href?: string}> {
-  const parts: Array<{text: string, href?: string}> = [];
+export type ChatTextPart = {text: string, href?: string, tag?: true};
+
+// A hashtag starts at the beginning or after white space, so "#" inside a word or an address stays plain text
+const TAG_PATTERN = /(^|\s)(#[\p{L}\p{N}_-]+)/gu;
+
+// Plain text split into text and hashtags (#looking-for-game); the tags only look different, they do nothing
+function withTags(text: string): Array<ChatTextPart> {
+  const parts: Array<ChatTextPart> = [];
+  let rest = 0;
+  for (const match of text.matchAll(TAG_PATTERN)) {
+    const start = (match.index ?? 0) + match[1].length;
+    if (start > rest) {
+      parts.push({text: text.slice(rest, start)});
+    }
+    parts.push({text: match[2], tag: true});
+    rest = start + match[2].length;
+  }
+  if (rest < text.length) {
+    parts.push({text: text.slice(rest)});
+  }
+  return parts;
+}
+
+/** Text split into plain parts, hashtags and links to this server (the only links the server lets through) */
+export function chatTextParts(text: string, origin: string = window.location.origin): Array<ChatTextPart> {
+  const parts: Array<ChatTextPart> = [];
   let rest = text;
   const pattern = /https?:\/\/[^\s]+/i;
   for (let match = pattern.exec(rest); match !== null; match = pattern.exec(rest)) {
     if (match.index > 0) {
-      parts.push({text: rest.slice(0, match.index)});
+      parts.push(...withTags(rest.slice(0, match.index)));
     }
     const link = match[0];
     let sameServer = false;
@@ -50,7 +73,7 @@ export function chatTextParts(text: string, origin: string = window.location.ori
     rest = rest.slice(match.index + link.length);
   }
   if (rest !== '') {
-    parts.push({text: rest});
+    parts.push(...withTags(rest));
   }
   return parts;
 }

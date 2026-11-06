@@ -257,6 +257,14 @@
   }
 }
 
+// Hashtags (#looking-for-game): only coloured, not clickable. One block, so a line never breaks at the hyphen
+// inside a tag; only a tag longer than the line still breaks
+.lobby-chat-tag {
+  display: inline-block;
+  color: mix(#fff, @bg_action, 45%);
+  font-weight: 500;
+}
+
 .lobby-chat-form {
   margin: 0;
   padding: 12px @lobby-pad;
