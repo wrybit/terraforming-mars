@@ -25,6 +25,7 @@
           <div v-else class="lobby-chat-text" :class="{'lobby-chat-text--emoji': isEmojiOnly(message.text)}">
             <template v-for="(part, index) in chatTextParts(message.text)" :key="index">
               <a v-if="part.href !== undefined" :href="part.href">{{ part.text }}</a>
+              <span v-else-if="part.tag" class="lobby-chat-tag">{{ part.text }}</span>
               <template v-else>{{ part.text }}</template>
             </template>
           </div>
