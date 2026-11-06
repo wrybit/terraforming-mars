@@ -38,7 +38,7 @@
       </div>
       <p class="lobby-dialog-note" v-i18n>No account, no login: name and picture are only stored in this browser.</p>
       <template #footer>
-        <AppButton :title="firstVisit ? 'Let\'s go' : 'Save'" :disabled="draft.name.trim() === ''" @click="save()" />
+        <AppButton :title="firstVisit ? 'Enter the lobby' : 'Save'" :disabled="draft.name.trim() === ''" @click="save()" />
       </template>
     </DialogFrame>
   </SidebarModal>

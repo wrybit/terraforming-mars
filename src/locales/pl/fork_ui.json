@@ -1709,7 +1709,6 @@
   "Picture": "Obrazek",
   "Upload your own picture": "Prześlij własny obrazek",
   "No account, no login: name and picture are only stored in this browser.": "Bez konta i logowania: nazwa i obrazek są zapisane tylko w tej przeglądarce.",
-  "Let's go": "Zaczynamy",
   "Search game or player": "Szukaj gry lub gracza",
   "Quick start": "Szybki start",
   "No open game fits right now": "Teraz nie pasuje żadna otwarta gra",
@@ -1785,5 +1784,6 @@
   "No game to filter right now.": "Obecnie nie ma gry do filtrowania.",
   "Time played": "Czas gry",
   "Terraforming": "Terraformowanie",
-  "Send message": "Wyślij wiadomość"
+  "Send message": "Wyślij wiadomość",
+  "Enter the lobby": "Do lobby"
 }

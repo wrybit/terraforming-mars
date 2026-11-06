@@ -1542,7 +1542,6 @@
   "Picture": "Afbeelding",
   "Upload your own picture": "Eigen afbeelding uploaden",
   "No account, no login: name and picture are only stored in this browser.": "Geen account, geen login: naam en afbeelding worden alleen in deze browser opgeslagen.",
-  "Let's go": "Aan de slag",
   "Search game or player": "Spel of speler zoeken",
   "Quick start": "Snelstart",
   "No open game fits right now": "Er past nu geen open spel",
@@ -1616,5 +1615,6 @@
   "Saved. The chat uses the list right away.": "Opgeslagen. De chat gebruikt de lijst meteen.",
   "No game to filter right now.": "Er is nu geen spel om te filteren.",
   "Time played": "Speeltijd",
-  "Send message": "Bericht versturen"
+  "Send message": "Bericht versturen",
+  "Enter the lobby": "Naar de lobby"
 }

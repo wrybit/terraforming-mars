@@ -1161,7 +1161,6 @@
   "Picture": "사진",
   "Upload your own picture": "내 사진 업로드",
   "No account, no login: name and picture are only stored in this browser.": "계정도 로그인도 없습니다. 이름과 사진은 이 브라우저에만 저장됩니다.",
-  "Let's go": "시작하기",
   "Search game or player": "게임 또는 플레이어 검색",
   "Quick start": "빠른 시작",
   "No open game fits right now": "지금은 맞는 열린 게임이 없습니다",
@@ -1238,5 +1237,6 @@
   "No game to filter right now.": "지금은 필터링할 게임이 없습니다.",
   "Time played": "플레이 시간",
   "Terraforming": "테라포밍",
-  "Send message": "메시지 보내기"
+  "Send message": "메시지 보내기",
+  "Enter the lobby": "로비로"
 }

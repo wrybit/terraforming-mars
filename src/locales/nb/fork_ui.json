@@ -1279,7 +1279,6 @@
   "Picture": "Bilde",
   "Upload your own picture": "Last opp ditt eget bilde",
   "No account, no login: name and picture are only stored in this browser.": "Ingen konto, ingen innlogging: navn og bilde lagres bare i denne nettleseren.",
-  "Let's go": "Kjør",
   "Search game or player": "Søk etter spill eller spiller",
   "Quick start": "Hurtigstart",
   "No open game fits right now": "Ingen åpne spill passer akkurat nå",
@@ -1353,5 +1352,6 @@
   "Saved. The chat uses the list right away.": "Lagret. Chatten bruker listen med en gang.",
   "No game to filter right now.": "Ingen spill å filtrere akkurat nå.",
   "Time played": "Spilletid",
-  "Send message": "Send melding"
+  "Send message": "Send melding",
+  "Enter the lobby": "Til lobbyen"
 }

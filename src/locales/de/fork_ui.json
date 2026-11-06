@@ -693,7 +693,6 @@
   "Picture": "Bild",
   "Upload your own picture": "Eigenes Bild hochladen",
   "No account, no login: name and picture are only stored in this browser.": "Kein Konto, kein Login: Name und Bild werden nur in diesem Browser gespeichert.",
-  "Let's go": "Los geht’s",
   "Search game or player": "Spiel oder Spieler suchen",
   "Quick start": "Schnellstart",
   "No open game fits right now": "Gerade passt kein offenes Spiel",
@@ -767,5 +766,6 @@
   "Saved. The chat uses the list right away.": "Gespeichert. Der Chat nutzt die Liste sofort.",
   "No game to filter right now.": "Gerade gibt es keine Partie zum Filtern.",
   "Time played": "Gespielte Zeit",
-  "Send message": "Nachricht senden"
+  "Send message": "Nachricht senden",
+  "Enter the lobby": "Zur Lobby"
 }

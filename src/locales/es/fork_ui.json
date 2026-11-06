@@ -2191,7 +2191,6 @@
   "Picture": "Imagen",
   "Upload your own picture": "Subir tu propia imagen",
   "No account, no login: name and picture are only stored in this browser.": "Sin cuenta ni inicio de sesión: el nombre y la imagen solo se guardan en este navegador.",
-  "Let's go": "¡Vamos!",
   "Search game or player": "Buscar partida o jugador",
   "Quick start": "Inicio rápido",
   "No open game fits right now": "Ahora no encaja ninguna partida abierta",
@@ -2266,5 +2265,6 @@
   "No game to filter right now.": "Ahora mismo no hay ninguna partida que filtrar.",
   "Time played": "Tiempo jugado",
   "Terraforming": "Terraformación",
-  "Send message": "Enviar mensaje"
+  "Send message": "Enviar mensaje",
+  "Enter the lobby": "Ir al lobby"
 }
