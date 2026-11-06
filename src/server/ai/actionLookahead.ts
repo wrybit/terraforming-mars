@@ -37,6 +37,8 @@ import {handOutlookMap} from './liveOutlook';
 import {sellToAffordResponses} from './sellToAfford';
 import {lastGenerationSaleResponses} from './lastGenerationSale';
 import {isSimulating} from './simulationSandbox';
+import {SelectParty} from '../inputs/SelectParty';
+import {chooseParty} from './partyChoice';
 import {CardName} from '../../common/cards/CardName';
 import {clearFollowUpPlan, followUpChoices, setFollowUpPlan} from './followUpPlan';
 
@@ -104,6 +106,13 @@ function responsesFor(input: PlayerInput, player: IPlayer): Array<InputResponse>
   }
   if (input instanceof SelectOption) {
     return [{type: 'option'}];
+  }
+  // Turmoil lobby (the free delegate every generation): the party inside the action menu was the quick (random)
+  // answer – round 181 showed 435 lobby moves in 20 games against 18 separate party questions, so partyChoice
+  // almost never acted. The valued party goes into the move search instead (not inside simulations: copies per party).
+  if (input instanceof SelectParty && tuningOf(player).partyChoice > 0 && !isSimulating()) {
+    const valued = chooseParty(input, player);
+    if (valued !== undefined) return [valued];
   }
   if (input instanceof SelectCardToPlay) {
     return input.cards
