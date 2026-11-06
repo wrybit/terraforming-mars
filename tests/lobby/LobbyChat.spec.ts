@@ -79,6 +79,19 @@ describe('LobbyChat', () => {
   });
 });
 
+describe('LobbyChat deleting', () => {
+  it('lets only an admin delete a message', () => {
+    const chat = new LobbyChat(() => 1_000_000_000, () => [], memoryStorage());
+    chat.post(OTHER, profile, 'Spam', HOST);
+    const id = chat.list(ME).messages[0].id;
+    expect(chat.list(ME).admin).is.undefined;
+    expect(chat.list(ME, true).admin).is.true;
+    expect(() => chat.remove(OTHER, id, false)).to.throw(LobbyError);
+    expect(chat.remove(ME, id, true).messages).is.empty;
+    expect(() => chat.remove(ME, id, true)).to.throw(LobbyError);
+  });
+});
+
 describe('chat filters', () => {
   it('finds foreign links but no ordinary dots', () => {
     expect(hasForeignLink('Hallo.Wie geht es? z.B. so', HOST)).is.false;
