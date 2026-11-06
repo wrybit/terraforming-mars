@@ -1,4 +1,5 @@
-// Split of a two-column page (game view: game left, board + log right; results page: results left, board, charts, log right)
+// Split of a two-column page (game view: game left, board + log right; results page: results left, board, charts, log right;
+// lobby: games left, chat right)
 // via a drag handle (ColumnResizeHandle.vue). The right column's share ends up as CSS variables on the column container
 // (contract with player_home_columns.less / game_end_columns.less) and in the browser, so it survives a reload.
 import {loadStoredNumber, saveStoredNumber} from '@/client/utils/layoutStorage';
@@ -32,6 +33,16 @@ export const GAME_END_SPLIT: ColumnSplit = {
   defaultShare: 50,
   minShare: 30,
   maxShare: 70,
+};
+
+// Lobby (LobbyPage.vue): games left, chat right; the chat may grow at the expense of the two game lists
+export const LOBBY_CHAT_SPLIT: ColumnSplit = {
+  storageKey: 'lobby_chat_share',
+  mainVariable: '--lobby-main-share',
+  sideVariable: '--lobby-chat-share',
+  defaultShare: 20,
+  minShare: 16,
+  maxShare: 40,
 };
 
 // Step size for the arrow keys on the handle
