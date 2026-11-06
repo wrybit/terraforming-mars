@@ -1353,5 +1353,10 @@
   "No game to filter right now.": "Ingen spill å filtrere akkurat nå.",
   "Time played": "Spilletid",
   "Send message": "Send melding",
-  "Enter the lobby": "Til lobbyen"
+  "Enter the lobby": "Til lobbyen",
+  "(edited)": "(redigert)",
+  "Edit message": "Rediger melding",
+  "Esc cancels": "Esc avbryter",
+  "This message no longer exists": "Denne meldingen finnes ikke lenger",
+  "This message can no longer be edited": "Denne meldingen kan ikke lenger redigeres"
 }

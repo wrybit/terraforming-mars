@@ -1144,5 +1144,10 @@
   "Time played": "Час гри",
   "Terraforming": "Тераформування",
   "Send message": "Надіслати повідомлення",
-  "Enter the lobby": "До лобі"
+  "Enter the lobby": "До лобі",
+  "(edited)": "(змінено)",
+  "Edit message": "Редагувати повідомлення",
+  "Esc cancels": "Esc — скасувати",
+  "This message no longer exists": "Цього повідомлення більше немає",
+  "This message can no longer be edited": "Це повідомлення більше не можна змінити"
 }

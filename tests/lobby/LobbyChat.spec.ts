@@ -4,6 +4,7 @@ import {hasForeignLink} from '../../src/server/lobby/chatLinks';
 import {maskWords, normalizeChatWords} from '../../src/server/lobby/chatWords';
 import {memoryStorage} from '../../src/server/lobby/lobbyStorage';
 import {LobbyError} from '../../src/server/lobby/lobbyValidation';
+import {LOBBY_CHAT_EDIT_MS} from '../../src/common/lobby/LobbyChatModel';
 
 const ME = 'pme0000000000';
 const OTHER = 'pother0000000';
@@ -45,6 +46,31 @@ describe('LobbyChat', () => {
     chat.post(OTHER, profile, 'others may still write', HOST);
     now += CHAT_KEEP_MS + 1;
     expect(chat.list(ME).messages).is.empty;
+  });
+
+  it('lets the author edit within the hour and marks the message as edited', () => {
+    chat.post(ME, profile, 'Um 20 Uhr?', HOST);
+    const id = chat.list(ME).messages[0].id;
+    expect(chat.list(ME).messages[0].editable).is.true;
+    expect(chat.list(OTHER).messages[0].editable).is.false;
+    refused(() => chat.edit(OTHER, id, 'gekapert', HOST));
+    refused(() => chat.edit(ME, id, '   ', HOST));
+    refused(() => chat.edit(ME, id, 'siehe www.example.com', HOST));
+    expect(chat.edit(ME, id, 'Um 20:30, arsch?', HOST).messages[0]).to.include({text: 'Um 20:30, *****?', edited: true});
+    now += LOBBY_CHAT_EDIT_MS;
+    expect(chat.list(ME).messages[0].editable).is.false;
+    refused(() => chat.edit(ME, id, 'zu spät', HOST));
+  });
+
+  it('lets an admin edit every message at any time without a mark', () => {
+    chat.post(OTHER, profile, 'Tippfehlr', HOST);
+    const id = chat.list(ME).messages[0].id;
+    now += LOBBY_CHAT_EDIT_MS * 2;
+    expect(chat.list(ME, true).messages[0].editable).is.true;
+    const message = chat.edit(ME, id, 'Tippfehler', HOST, true).messages[0];
+    expect(message.text).eq('Tippfehler');
+    expect(message.edited).is.undefined;
+    refused(() => chat.edit(ME, 999, 'gibt es nicht', HOST, true));
   });
 });
 

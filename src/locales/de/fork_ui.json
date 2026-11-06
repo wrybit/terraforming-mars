@@ -767,5 +767,10 @@
   "No game to filter right now.": "Gerade gibt es keine Partie zum Filtern.",
   "Time played": "Gespielte Zeit",
   "Send message": "Nachricht senden",
-  "Enter the lobby": "Zur Lobby"
+  "Enter the lobby": "Zur Lobby",
+  "(edited)": "(bearbeitet)",
+  "Edit message": "Nachricht bearbeiten",
+  "Esc cancels": "Esc bricht ab",
+  "This message no longer exists": "Diese Nachricht gibt es nicht mehr",
+  "This message can no longer be edited": "Diese Nachricht kann nicht mehr bearbeitet werden"
 }

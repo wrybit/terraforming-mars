@@ -1785,5 +1785,10 @@
   "Time played": "Czas gry",
   "Terraforming": "Terraformowanie",
   "Send message": "Wyślij wiadomość",
-  "Enter the lobby": "Do lobby"
+  "Enter the lobby": "Do lobby",
+  "(edited)": "(edytowano)",
+  "Edit message": "Edytuj wiadomość",
+  "Esc cancels": "Esc anuluje",
+  "This message no longer exists": "Ta wiadomość już nie istnieje",
+  "This message can no longer be edited": "Tej wiadomości nie można już edytować"
 }

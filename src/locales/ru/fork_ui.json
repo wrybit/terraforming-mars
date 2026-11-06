@@ -1858,5 +1858,10 @@
   "Time played": "Время игры",
   "Terraforming": "Терраформирование",
   "Send message": "Отправить сообщение",
-  "Enter the lobby": "В лобби"
+  "Enter the lobby": "В лобби",
+  "(edited)": "(изменено)",
+  "Edit message": "Редактировать сообщение",
+  "Esc cancels": "Esc — отмена",
+  "This message no longer exists": "Этого сообщения больше нет",
+  "This message can no longer be edited": "Это сообщение больше нельзя изменить"
 }
