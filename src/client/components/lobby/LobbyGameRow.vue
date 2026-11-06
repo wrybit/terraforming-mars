@@ -2,7 +2,11 @@
   <!-- One open (or running) game of the lobby. Top: title with the facts (generation, players, AI, time), the seats
        (one circle each, free ones dashed, the host outlined) and the action; below over the full width the progress
        of a running game and the settings. Like "Game created": a CTA only where you take part, otherwise a quiet button -->
-  <div class="lobby-game" :data-room-id="room.id" :class="{'lobby-game--running': room.state === 'started', 'lobby-game--mine': isMine}">
+  <!-- Games you opened yourself are set off by a background, the others stay neutral.
+       The own waiting room opens its dialog on a click anywhere on the entry, not only on the button -->
+  <div class="lobby-game" :data-room-id="room.id"
+    :class="{'lobby-game--running': room.state === 'started', 'lobby-game--hosted': isHost, 'lobby-game--clickable': isMine}"
+    @click="isMine && emit('open-room')">
     <div class="lobby-game-info">
       <div class="lobby-game-title">{{ room.title }}</div>
       <div class="lobby-game-facts">
@@ -25,7 +29,8 @@
     </div>
     <GameSetupChips class="lobby-game-chips" :chips="chips" compact writtenOut />
     <div class="lobby-game-action">
-      <AppButton v-if="isMine" title="Waiting room" :fixedHotkey="keys" @click="emit('open-room')" />
+      <!-- The click reaches the entry anyway (opens the dialog there), so the button needs no handler of its own -->
+      <AppButton v-if="isMine" title="Waiting room" :fixedHotkey="keys" />
       <!-- Own running game: back into it instead of watching -->
       <a v-else-if="continueLink !== undefined" class="btn btn-rounded btn-primary lobby-game-watch" :href="continueLink"><span v-i18n>Continue</span><HotkeyKeys :fixed="keys" /></a>
       <a v-else-if="room.state === 'started' && room.spectatorId" class="btn btn-rounded btn-tone-quiet lobby-game-watch" :href="'spectator?id=' + room.spectatorId"><span v-i18n>Watch</span><HotkeyKeys :fixed="keys" /></a>
@@ -61,6 +66,8 @@ const emit = defineEmits<{
 }>();
 
 const isMine = computed(() => props.room.state === 'open' && props.room.seats.some((seat) => seat.kind === 'human' && seat.you));
+// Opened by you (host), open or already running
+const isHost = computed(() => props.room.seats.some((seat) => seat.kind === 'human' && seat.you && seat.host));
 const continueLink = computed(() => continueHref(props.room));
 const humans = computed(() => props.room.seats.filter((seat) => seat.kind === 'human' || seat.kind === 'guest').length);
 const aiPlayers = computed(() => props.room.seats.filter((seat) => seat.kind === 'ai').length);

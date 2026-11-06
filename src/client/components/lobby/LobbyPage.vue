@@ -124,7 +124,7 @@
 import {askLobbyPushPermission, subscribeLobbyPush} from './lobbyPush';
 import ColumnResizeHandle from '@/client/components/ColumnResizeHandle.vue';
 import {LOBBY_CHAT_SPLIT} from '@/client/utils/columnResize';
-import {ComponentPublicInstance, computed, defineAsyncComponent, getCurrentInstance, onBeforeUnmount, onMounted, ref, watch} from 'vue';
+import {ComponentPublicInstance, computed, defineAsyncComponent, getCurrentInstance, onBeforeUnmount, onMounted, nextTick, ref, watch} from 'vue';
 import {LobbyProfile, LobbyRoomModel} from '@/common/lobby/LobbyModel';
 import {NewGameConfig} from '@/common/game/NewGameConfig';
 import PageToolbar from '@/client/components/PageToolbar.vue';
@@ -187,6 +187,8 @@ let pollTimer: ReturnType<typeof setInterval> | undefined;
 const waitedIn = new Set<string>();
 // Set by our own open/join click: a game that starts right away (no free seats left) leads into it too
 let followNextStart = false;
+// Set while our own "Open in lobby" runs: the new room stays in the list, its dialog opens only on a click
+let openingOwnRoom = false;
 let clockTimer: ReturnType<typeof setInterval> | undefined;
 
 const filterCount = computed(() => activeFilterCount(filters.value));
@@ -367,22 +369,27 @@ async function openInLobby(request: {config: NewGameConfig, title: string, liste
   // Still inside the click: browsers ask for the permission only then. With it the host may leave the lobby
   // and still learns by push message when somebody joins
   const permission = askLobbyPushPermission();
+  openingOwnRoom = true;
   const room = await act({action: 'open', profile: profile.value, ...request});
+  // The watcher of yourRoomId runs before the next tick: only then the flag may go
+  await nextTick();
+  openingOwnRoom = false;
   if (permission !== undefined) {
     void permission.then(subscribeLobbyPush);
   }
   if (room !== undefined) {
     createOpen.value = false;
     queueing.value = false;
-    // Without free seats the game already runs: refresh() leads to it
-    roomOpen.value = room.state === 'open';
+    // Stays on the list: the own entry (or the waiting bar) opens the dialog. Without free seats the game
+    // already runs and refresh() leads into it
+    roomOpen.value = false;
   }
 }
 
 // The dialog of the own room opens by itself when entering the lobby (or when somebody else's action put us
-// there): a waiting room with its controls, an own running game with "Continue" (LobbyRoomDialog.vue)
+// there; not after our own "Open in lobby"): a waiting room with its controls, an own running game with "Continue" (LobbyRoomDialog.vue)
 watch(yourRoomId, (id, before) => {
-  if (id !== undefined && before === undefined && loaded.value) {
+  if (id !== undefined && before === undefined && loaded.value && !openingOwnRoom) {
     roomOpen.value = true;
   }
 });
