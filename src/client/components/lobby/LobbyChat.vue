@@ -15,7 +15,7 @@
           </div>
           <!-- Inline edit: Enter saves, Esc cancels; the server checks the hour and the admin login again -->
           <form v-if="editingId === message.id" class="lobby-chat-edit" @submit.prevent="saveEdit(message)">
-            <textarea ref="editField" v-model="editDraft" class="lobby-chat-edit-field" rows="2" :maxlength="LOBBY_CHAT_MAX_LENGTH"
+            <textarea ref="editField" v-model="editDraft" v-auto-grow class="lobby-chat-edit-field" rows="1" :maxlength="LOBBY_CHAT_MAX_LENGTH"
               :aria-label="$t('Edit message')" @keydown.enter.exact.prevent="saveEdit(message)" @keydown.esc.stop.prevent="cancelEdit"></textarea>
             <div class="lobby-chat-edit-actions">
               <AppButton size="small" class="btn-tone-quiet" title="Cancel" :fixedHotkey="['Escape']" @click="cancelEdit" />
@@ -38,11 +38,12 @@
     <!-- One field with the emoji and the send button inside; Enter sends too -->
     <form class="lobby-chat-form" @submit.prevent="send">
       <div class="lobby-chat-field">
-        <input ref="input" v-model="draft" class="lobby-chat-input" type="text" :maxlength="LOBBY_CHAT_MAX_LENGTH"
+        <!-- Grows with the text up to five lines; Enter sends, Shift+Enter starts a new line -->
+        <textarea ref="input" v-model="draft" v-auto-grow class="lobby-chat-input" rows="1" :maxlength="LOBBY_CHAT_MAX_LENGTH"
           :placeholder="$t('Write a message')" :aria-label="$t('Write a message')" @focus="focused = true" @blur="focused = false"
-          @keydown.esc="leaveField">
+          @keydown.enter.exact.prevent="send" @keydown.esc="leaveField"></textarea>
         <!-- Enter anywhere on the page jumps into the field (onPageKey); the key cap shows it while the field is idle -->
-        <HotkeyKeys v-if="!focused && draft === ''" :fixed="['Enter']" class="lobby-chat-hotkey" />
+        <HotkeyKeys v-if="!focused && draft === ''" :fixed="['Enter']" />
         <button type="button" class="lobby-chat-icon-button" :class="{'lobby-chat-icon-button--open': emojisOpen}" :title="$t('Emoji')" :aria-label="$t('Emoji')"
           :aria-expanded="emojisOpen" @click="emojisOpen = !emojisOpen">
           <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M8.5 14.5c.9 1.2 2.1 1.8 3.5 1.8s2.6-.6 3.5-1.8" /><path d="M9 9.5h.01M15 9.5h.01" /></svg>
@@ -69,6 +70,7 @@ import {chatTextParts, editLobbyChat, fetchLobbyChat, postLobbyChat} from './lob
 import AppButton from '@/client/components/common/AppButton.vue';
 import {CHAT_EMOJIS, isEmojiOnly} from './lobbyChatEmoji';
 import HotkeyKeys from '@/client/components/hotkeys/HotkeyKeys.vue';
+import {vAutoGrow} from '@/client/directives/AutoGrow';
 import {hotkeysAvailable} from '@/client/hotkeys/hotkeyAvailability';
 import {lobbyFailureText} from './lobbyApi';
 
@@ -86,7 +88,7 @@ const draft = ref('');
 const sending = ref(false);
 const error = ref('');
 const list = ref<HTMLElement | null>(null);
-const input = ref<HTMLInputElement | null>(null);
+const input = ref<HTMLTextAreaElement | null>(null);
 const emojisOpen = ref(false);
 const focused = ref(false);
 const editingId = ref<number | undefined>(undefined);

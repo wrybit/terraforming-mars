@@ -54,7 +54,10 @@ export class LobbyChat {
 
   /** Same checks for new and changed text: not empty, not too long, no links to other websites */
   private cleanText(text: unknown, serverHost: string | undefined): string {
-    const clean = typeof text === 'string' ? text.replace(/\s+/g, ' ').trim() : '';
+    // Line breaks stay (Shift+Enter), but at most one empty line in a row; other white space becomes one space
+    const clean = typeof text === 'string' ?
+      text.replace(/\r\n?/g, '\n').replace(/[^\S\n]+/g, ' ').replace(/ ?\n ?/g, '\n').replace(/\n{3,}/g, '\n\n').trim() :
+      '';
     if (clean === '') {
       throw new LobbyError('Please enter a message');
     }

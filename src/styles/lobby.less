@@ -179,7 +179,6 @@
   display: block;
   box-sizing: border-box;
   width: 100%;
-  min-height: 52px;
   margin-top: 4px;
   padding: 6px 8px;
   border: 1px solid rgba(255, 255, 255, 0.35);
@@ -188,6 +187,7 @@
   color: inherit;
   font: inherit;
   font-size: 14px;
+  line-height: @lobby-chat-line;
   resize: none;
 
   &:focus {
@@ -241,6 +241,8 @@
 
 .lobby-chat-text {
   overflow-wrap: anywhere;
+  // Line breaks typed with Shift+Enter stay
+  white-space: pre-line;
   font-size: 14px;
 
   // Only 1 to 3 emojis: three times as large, like a reaction
@@ -265,9 +267,10 @@
 .lobby-chat-field {
   position: relative;
   display: flex;
-  align-items: center;
+  // The field grows upwards with the text (autoGrow.ts); the buttons stay at the last line, where one types
+  align-items: flex-end;
   gap: 2px;
-  height: @toolbar-button-size;
+  min-height: @toolbar-button-size;
   padding: 0 4px 0 10px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 6px;
@@ -281,17 +284,30 @@
 .lobby-chat-input {
   flex: 1;
   min-width: 0;
-  height: 100%;
-  padding: 0;
+  // One line centred in the field: (field minus border minus line) / 2 above and below
+  padding: ((@toolbar-button-size - 2px - @lobby-chat-line) / 2) 0;
   border: 0;
   outline: none;
   background: none;
   color: #eee;
+  font: inherit;
   font-size: 14px;
+  line-height: @lobby-chat-line;
+  resize: none;
 }
 
-.lobby-chat-hotkey {
+@lobby-chat-line: 20px;
+// Buttons and key cap centred on the last line of the field
+@lobby-chat-button-offset: ((@toolbar-button-size - 2px - 30px) / 2);
+
+.lobby-chat-field > .lobby-chat-icon-button {
+  margin-bottom: @lobby-chat-button-offset;
+}
+
+// Key cap of the Enter hotkey: HotkeyKeys.vue begins with a comment, so a class on it does not arrive
+.lobby-chat-field > .hotkey-keys {
   flex: none;
+  align-self: center;
   margin-right: 4px;
 }
 
