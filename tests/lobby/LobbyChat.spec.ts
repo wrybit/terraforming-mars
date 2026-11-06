@@ -30,6 +30,11 @@ describe('LobbyChat', () => {
     expect(chat.list(OTHER).messages[0].you).is.false;
   });
 
+  it('keeps line breaks, but no more than one empty line', () => {
+    chat.post(ME, profile, ' Zeile 1  \r\n\n\n\n  Zeile\t2\n', HOST);
+    expect(chat.list(ME).messages[0].text).eq('Zeile 1\n\nZeile 2');
+  });
+
   it('allows links to this server only', () => {
     chat.post(ME, profile, 'Komm in http://localhost:8123/lobby/room/ab12-Spiel', HOST);
     refused(() => chat.post(ME, profile, 'Schau www.example.com', HOST));
