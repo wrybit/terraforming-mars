@@ -1226,7 +1226,6 @@
   "Chat": "채팅",
   "No messages yet. Say hello!": "아직 메시지가 없습니다. 인사해 보세요!",
   "Write a message": "메시지 쓰기",
-  "Send": "보내기",
   "Please enter a message": "메시지를 입력하세요",
   "The message is too long": "메시지가 너무 깁니다",
   "Links to other websites are not allowed in the chat": "채팅에서는 다른 웹사이트 링크를 사용할 수 없습니다",
@@ -1238,5 +1237,6 @@
   "Emoji": "이모지",
   "No game to filter right now.": "지금은 필터링할 게임이 없습니다.",
   "Time played": "플레이 시간",
-  "Terraforming": "테라포밍"
+  "Terraforming": "테라포밍",
+  "Send message": "메시지 보내기"
 }

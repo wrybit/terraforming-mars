@@ -1774,7 +1774,6 @@
   "Chat": "Czat",
   "No messages yet. Say hello!": "Jeszcze brak wiadomości. Przywitaj się!",
   "Write a message": "Napisz wiadomość",
-  "Send": "Wyślij",
   "Please enter a message": "Wpisz wiadomość",
   "The message is too long": "Wiadomość jest za długa",
   "Links to other websites are not allowed in the chat": "Linki do innych stron są na czacie niedozwolone",
@@ -1785,5 +1784,6 @@
   "Saved. The chat uses the list right away.": "Zapisano. Czat od razu używa listy.",
   "No game to filter right now.": "Obecnie nie ma gry do filtrowania.",
   "Time played": "Czas gry",
-  "Terraforming": "Terraformowanie"
+  "Terraforming": "Terraformowanie",
+  "Send message": "Wyślij wiadomość"
 }

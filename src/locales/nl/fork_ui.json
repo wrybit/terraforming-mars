@@ -1606,7 +1606,6 @@
   "AI players are not available with these settings.": "Met deze instellingen zijn geen AI-spelers mogelijk.",
   "No messages yet. Say hello!": "Nog geen berichten. Zeg hallo!",
   "Write a message": "Schrijf een bericht",
-  "Send": "Versturen",
   "Please enter a message": "Voer een bericht in",
   "The message is too long": "Het bericht is te lang",
   "Links to other websites are not allowed in the chat": "Links naar andere websites zijn niet toegestaan in de chat",
@@ -1616,5 +1615,6 @@
   "Reset to default": "Standaard herstellen",
   "Saved. The chat uses the list right away.": "Opgeslagen. De chat gebruikt de lijst meteen.",
   "No game to filter right now.": "Er is nu geen spel om te filteren.",
-  "Time played": "Speeltijd"
+  "Time played": "Speeltijd",
+  "Send message": "Bericht versturen"
 }

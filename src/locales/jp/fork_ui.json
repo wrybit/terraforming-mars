@@ -1348,7 +1348,6 @@
   "Chat": "チャット",
   "No messages yet. Say hello!": "まだメッセージはありません。あいさつしてみましょう！",
   "Write a message": "メッセージを書く",
-  "Send": "送信",
   "Please enter a message": "メッセージを入力してください",
   "The message is too long": "メッセージが長すぎます",
   "Links to other websites are not allowed in the chat": "チャットでは他のサイトへのリンクは使えません",
@@ -1360,5 +1359,6 @@
   "Emoji": "絵文字",
   "No game to filter right now.": "現在フィルターできるゲームはありません。",
   "Time played": "プレイ時間",
-  "Terraforming": "テラフォーミング"
+  "Terraforming": "テラフォーミング",
+  "Send message": "メッセージを送信"
 }

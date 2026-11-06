@@ -757,7 +757,6 @@
   "AI players are not available with these settings.": "Mit diesen Einstellungen sind keine KI-Spieler möglich.",
   "No messages yet. Say hello!": "Noch keine Nachrichten. Sag Hallo!",
   "Write a message": "Nachricht schreiben",
-  "Send": "Senden",
   "Please enter a message": "Bitte gib eine Nachricht ein",
   "The message is too long": "Die Nachricht ist zu lang",
   "Links to other websites are not allowed in the chat": "Links zu anderen Websites sind im Chat nicht erlaubt",
@@ -767,5 +766,6 @@
   "Reset to default": "Auf Standard zurücksetzen",
   "Saved. The chat uses the list right away.": "Gespeichert. Der Chat nutzt die Liste sofort.",
   "No game to filter right now.": "Gerade gibt es keine Partie zum Filtern.",
-  "Time played": "Gespielte Zeit"
+  "Time played": "Gespielte Zeit",
+  "Send message": "Nachricht senden"
 }

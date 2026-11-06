@@ -1132,7 +1132,6 @@
   "Chat": "Чат",
   "No messages yet. Say hello!": "Повідомлень ще немає. Привітайся!",
   "Write a message": "Написати повідомлення",
-  "Send": "Надіслати",
   "Please enter a message": "Введіть повідомлення",
   "The message is too long": "Повідомлення задовге",
   "Links to other websites are not allowed in the chat": "Посилання на інші сайти в чаті заборонені",
@@ -1144,5 +1143,6 @@
   "Emoji": "Емодзі",
   "No game to filter right now.": "Зараз немає гри для фільтрування.",
   "Time played": "Час гри",
-  "Terraforming": "Тераформування"
+  "Terraforming": "Тераформування",
+  "Send message": "Надіслати повідомлення"
 }

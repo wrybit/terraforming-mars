@@ -2137,7 +2137,6 @@
   "AI players are not available with these settings.": "Jogadores de IA não estão disponíveis com estas configurações.",
   "No messages yet. Say hello!": "Ainda não há mensagens. Diga olá!",
   "Write a message": "Escreva uma mensagem",
-  "Send": "Enviar",
   "Please enter a message": "Digite uma mensagem",
   "The message is too long": "A mensagem é longa demais",
   "Links to other websites are not allowed in the chat": "Links para outros sites não são permitidos no chat",
@@ -2148,5 +2147,6 @@
   "Saved. The chat uses the list right away.": "Salvo. O chat usa a lista imediatamente.",
   "No game to filter right now.": "Nenhuma partida para filtrar agora.",
   "Time played": "Tempo jogado",
-  "Terraforming": "Terraformação"
+  "Terraforming": "Terraformação",
+  "Send message": "Enviar mensagem"
 }

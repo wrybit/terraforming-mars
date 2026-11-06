@@ -1923,7 +1923,6 @@
   "Chat": "Чат",
   "No messages yet. Say hello!": "Все още няма съобщения. Кажи здравей!",
   "Write a message": "Напиши съобщение",
-  "Send": "Изпрати",
   "Please enter a message": "Въведи съобщение",
   "The message is too long": "Съобщението е твърде дълго",
   "Links to other websites are not allowed in the chat": "Връзки към други сайтове не са разрешени в чата",
@@ -1935,5 +1934,6 @@
   "Emoji": "Емоджи",
   "No game to filter right now.": "В момента няма игра за филтриране.",
   "Time played": "Изиграно време",
-  "Terraforming": "Тераформиране"
+  "Terraforming": "Тераформиране",
+  "Send message": "Изпрати съобщение"
 }

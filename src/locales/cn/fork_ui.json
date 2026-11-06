@@ -1959,7 +1959,6 @@
   "Chat": "聊天",
   "No messages yet. Say hello!": "还没有消息。打个招呼吧！",
   "Write a message": "写消息",
-  "Send": "发送",
   "Please enter a message": "请输入消息",
   "The message is too long": "消息太长",
   "Links to other websites are not allowed in the chat": "聊天中不允许链接到其他网站",
@@ -1971,5 +1970,6 @@
   "Emoji": "表情",
   "No game to filter right now.": "目前没有可筛选的游戏。",
   "Time played": "已玩时间",
-  "Terraforming": "地球化"
+  "Terraforming": "地球化",
+  "Send message": "发送消息"
 }
