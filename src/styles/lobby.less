@@ -42,7 +42,7 @@
   // (ColumnResizeHandle.vue, LOBBY_CHAT_SPLIT in columnResize.ts sets the two shares)
   @media only screen and (min-width: 1400px) {
     display: grid;
-    grid-template-columns: minmax(0, var(--lobby-main-share, 80fr)) @lobby-resizer-width minmax(0, var(--lobby-chat-share, 20fr));
+    grid-template-columns: minmax(0, var(--lobby-main-share, 75fr)) @lobby-resizer-width minmax(0, var(--lobby-chat-share, 25fr));
     // Rows as usual; across, the handle sits in the middle of the usual gap (half the rest on each side)
     gap: @lobby-gap-section ((@lobby-gap-section - @lobby-resizer-width) / 2);
     align-items: start;
