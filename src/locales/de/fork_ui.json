@@ -771,5 +771,7 @@
   "(edited)": "(bearbeitet)",
   "Edit message": "Nachricht bearbeiten",
   "This message no longer exists": "Diese Nachricht gibt es nicht mehr",
-  "This message can no longer be edited": "Diese Nachricht kann nicht mehr bearbeitet werden"
+  "This message can no longer be edited": "Diese Nachricht kann nicht mehr bearbeitet werden",
+  "${0} joined your game": "${0} ist deinem Spiel beigetreten",
+  "Your game in the lobby is waiting for you.": "Dein Spiel in der Lobby wartet auf dich."
 }

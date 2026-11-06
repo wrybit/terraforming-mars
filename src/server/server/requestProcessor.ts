@@ -27,6 +27,7 @@ import {ApiHeapSnapshot} from '../routes/ApiHeapSnapshot';
 import {ApiIPs} from '../routes/ApiIPs';
 import {ApiLobby} from '../routes/ApiLobby';
 import {ApiLobbyChat} from '../routes/ApiLobbyChat';
+import {ApiLobbyPush} from '../routes/ApiLobbyPush';
 import {ApiAdminChatWords} from '../routes/ApiAdminChatWords';
 import {LobbyRoomPage} from '../routes/LobbyRoomPage';
 import {LOBBY_ROOM_PATH} from '../../common/lobby/lobbyUrl';
@@ -160,10 +161,13 @@ const handlers: Map<string, IHandler> = new Map(
     [paths.LOGIN, Login.INSTANCE],
     [paths.API_LOBBY, ApiLobby.INSTANCE],
     [paths.API_LOBBY_CHAT, ApiLobbyChat.INSTANCE],
+    [paths.API_LOBBY_PUSH, ApiLobbyPush.INSTANCE],
     [paths.API_ADMIN_CHAT_WORDS, ApiAdminChatWords.INSTANCE],
     [paths.API_LOGOUT, ApiLogout.INSTANCE],
     ['main.js', ServeAsset.INSTANCE],
     ['vendors.js', ServeAsset.INSTANCE],
+    // Service worker (client/sw.ts): push messages of the lobby, notification fallback of the game
+    ['sw.js', ServeAsset.INSTANCE],
     [paths.AUTH_DISCORD_CALLBACK, DiscordAuth.INSTANCE],
     [paths.NEW_GAME, ServeApp.INSTANCE],
     [paths.PLAYER, ServeApp.INSTANCE],

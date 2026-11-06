@@ -23,6 +23,7 @@ import {processRequest} from '@/server/server/requestProcessor';
 import {timeAsync} from '@/server/utils/timer';
 import {onGameGone} from './database/gameGone';
 import {Lobby} from './lobby/Lobby';
+import {LobbyPush} from './lobby/LobbyPush';
 import {lobbyGameProbe} from './lobby/lobbyGameProbe';
 import {GameLoader} from '@/server/database/GameLoader';
 import {globalInitialize} from '@/server/globalInitialize';
@@ -141,6 +142,13 @@ async function start() {
     // Do not fail. Just continue. Stats aren't vital.
     console.error(err);
   }
+  // Hosts with the lobby in the background or closed learn by push message that somebody joined
+  Lobby.INSTANCE.setNotifier({
+    canReach: (participant) => LobbyPush.INSTANCE.canReach(participant),
+    joined: (host, room, name) => {
+      LobbyPush.INSTANCE.joined(host, room, name).catch((err) => console.error('Lobby push failed', err));
+    },
+  });
   // A finished, deleted or purged game leaves the lobby's "running" list
   onGameGone((gameId) => Lobby.INSTANCE.forgetGame(gameId));
   // Lobby games whose creator left at the initial choice, with nobody else ever there, are closed again

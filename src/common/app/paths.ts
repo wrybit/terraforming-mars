@@ -28,6 +28,7 @@ export const paths = {
   API_METRICS: 'api/metrics',
   API_LOBBY: 'api/lobby',
   API_LOBBY_CHAT: 'api/lobby-chat',
+  API_LOBBY_PUSH: 'api/lobby-push',
   API_LOGOUT: 'api/logout',
   API_PLAYER: 'api/player',
   API_PROFILE: 'api/profile',
