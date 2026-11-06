@@ -2270,5 +2270,7 @@
   "(edited)": "(editado)",
   "Edit message": "Editar mensaje",
   "This message no longer exists": "Este mensaje ya no existe",
-  "This message can no longer be edited": "Este mensaje ya no se puede editar"
+  "This message can no longer be edited": "Este mensaje ya no se puede editar",
+  "${0} joined your game": "${0} se ha unido a tu partida",
+  "Your game in the lobby is waiting for you.": "Tu partida en el lobby te está esperando."
 }

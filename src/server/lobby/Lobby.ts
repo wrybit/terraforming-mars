@@ -6,6 +6,7 @@ import {NewGameConfig, NewPlayerModel} from '../../common/game/NewGameConfig';
 import {LobbyListModel, LobbyProfile, LobbyRoomModel, LobbySeatModel, LOBBY_MAX_SEATS} from '../../common/lobby/LobbyModel';
 import {GameId, PlayerId, SpectatorId} from '../../common/Types';
 import {LobbyError, sanitizeProfile, sanitizeTitle} from './lobbyValidation';
+import {lobbyRoomPath} from '../../common/lobby/lobbyUrl';
 import {fileStorage, LobbyStorage} from './lobbyStorage';
 
 /** A participant who stops polling (closed tab, lost connection) loses the seat after this time */
@@ -15,6 +16,11 @@ export const PARTICIPANT_TIMEOUT_MS = 45_000;
  * This is only the safety net for games nobody finishes on a server that never purges them.
  */
 export const STARTED_ROOM_MAX_AGE_MS = 30 * 24 * 60 * 60 * 1000;
+/**
+ * A host who can be reached by push message (LobbyPush) keeps the open game this long without the lobby open:
+ * the message about a join can still bring the host back.
+ */
+export const REACHABLE_HOST_TIMEOUT_MS = 30 * 60 * 1000;
 /** A game whose creator is gone this long, before anything happened and with nobody else ever there, is closed */
 export const ABANDONED_AFTER_MS = 3 * 60 * 1000;
 /** Rooms nobody completes are dropped at the latest after this time */
@@ -37,6 +43,13 @@ export type GameProbe = {
 
 /** Generation and terraforming of a running game (lobbyGameProbe.ts); undefined: the game is gone */
 export type GameProgressSource = (gameId: GameId) => Promise<{generation: number, terraforming: number} | undefined>;
+
+/** Push messages to hosts (LobbyPush.ts); the lobby itself only knows when to send one */
+export type LobbyNotifier = {
+  canReach(participant: string): boolean;
+  joined(host: string, room: {id: string, path: string}, name: string): void;
+};
+const NO_NOTIFIER: LobbyNotifier = {canReach: () => false, joined: () => {}};
 
 /** Creates the game exactly as the create form would (ApiCreateGame.createGame) */
 export type GameStarter = (config: NewGameConfig) => Promise<StartedGame>;
@@ -77,12 +90,17 @@ export class Lobby {
   public static readonly INSTANCE = new Lobby();
   private readonly rooms = new Map<string, Room>();
   private loaded = false;
+  private notifier: LobbyNotifier = NO_NOTIFIER;
 
   constructor(
     private readonly clock: () => number = Date.now,
     private readonly newId: () => string = randomRoomId,
     private readonly storage: LobbyStorage = fileStorage(),
   ) {}
+
+  public setNotifier(notifier: LobbyNotifier): void {
+    this.notifier = notifier;
+  }
 
   /** Rooms of the last run, read on first use. Everybody gets a fresh heartbeat: the restart was not their fault */
   private ensureLoaded(): void {
@@ -271,6 +289,7 @@ export class Lobby {
       // Joining is a deliberate click: the seat is ready right away (can be taken back in the waiting room)
       room.seats[free] = this.humanSeat(me, {...cleanProfile, color}, true);
       this.save();
+      this.notifier.joined(room.host, {id: room.id, path: lobbyRoomPath(room.id, room.title)}, cleanProfile.name);
     }
     await this.startIfComplete(room, starter);
     return this.model(room, me);
@@ -488,11 +507,16 @@ export class Lobby {
         continue;
       }
       for (const seat of room.seats) {
-        if (seat.kind === 'human' && now - seat.lastSeen > PARTICIPANT_TIMEOUT_MS) {
+        if (seat.kind === 'human' && now - seat.lastSeen > this.timeoutOf(room, seat.participant)) {
           this.removeParticipant(room, seat.participant);
         }
       }
     }
+  }
+
+  // The host may close the tab and wait for the push message; everybody else must keep the lobby open
+  private timeoutOf(room: Room, participant: string): number {
+    return participant === room.host && this.notifier.canReach(participant) ? REACHABLE_HOST_TIMEOUT_MS : PARTICIPANT_TIMEOUT_MS;
   }
 
   /** The host leaving dissolves the room; anybody else frees the seat */

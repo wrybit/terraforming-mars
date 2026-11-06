@@ -1173,5 +1173,7 @@
   "(edited)": "(szerkesztve)",
   "Edit message": "Üzenet szerkesztése",
   "This message no longer exists": "Ez az üzenet már nem létezik",
-  "This message can no longer be edited": "Ez az üzenet már nem szerkeszthető"
+  "This message can no longer be edited": "Ez az üzenet már nem szerkeszthető",
+  "${0} joined your game": "${0} csatlakozott a játékodhoz",
+  "Your game in the lobby is waiting for you.": "A játékod az előcsarnokban vár rád."
 }

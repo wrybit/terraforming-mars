@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {ABANDONED_AFTER_MS, GameProbe, GameStarter, Lobby, PARTICIPANT_TIMEOUT_MS, StartedGame} from '../../src/server/lobby/Lobby';
+import {ABANDONED_AFTER_MS, GameProbe, GameStarter, Lobby, PARTICIPANT_TIMEOUT_MS, REACHABLE_HOST_TIMEOUT_MS, StartedGame} from '../../src/server/lobby/Lobby';
 import {LobbyError} from '../../src/server/lobby/lobbyValidation';
 import {NewGameConfig} from '../../src/common/game/NewGameConfig';
 import {LobbyProfile} from '../../src/common/lobby/LobbyModel';
@@ -213,6 +213,22 @@ describe('Lobby', () => {
     now += PARTICIPANT_TIMEOUT_MS / 2 + 1;
     expect(lobby.list(HOST).rooms[0].seats[1].kind).eq('free');
     now += PARTICIPANT_TIMEOUT_MS + 1;
+    expect(lobby.list(undefined).rooms).has.length(0);
+  });
+
+  it('keeps the room of a host reachable by push and tells the host about a join', async () => {
+    const joins: Array<string> = [];
+    lobby.setNotifier({canReach: (participant) => participant === HOST, joined: (host, room, name) => joins.push(`${host} ${room.path} ${name}`)});
+    const room = await lobby.open(HOST, profile('Ann'), 'Evening', true, config(['human', 'human', 'human']), starter);
+    now += PARTICIPANT_TIMEOUT_MS * 10;
+    expect(lobby.list(undefined).rooms).has.length(1);
+    await lobby.join(GUEST, profile('Bob'), room.id, starter);
+    expect(joins).deep.eq([`${HOST} ${lobbyRoomPath(room.id, 'Evening')} Bob`]);
+    // Joining again (already seated) sends nothing
+    await lobby.join(GUEST, profile('Bob'), room.id, starter);
+    expect(joins).has.length(1);
+    lobby.list(GUEST);
+    now += REACHABLE_HOST_TIMEOUT_MS;
     expect(lobby.list(undefined).rooms).has.length(0);
   });
 

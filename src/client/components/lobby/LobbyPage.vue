@@ -119,6 +119,7 @@
 </template>
 
 <script setup lang="ts">
+import {askLobbyPushPermission, subscribeLobbyPush} from './lobbyPush';
 import {ComponentPublicInstance, computed, defineAsyncComponent, getCurrentInstance, onBeforeUnmount, onMounted, ref, watch} from 'vue';
 import {LobbyProfile, LobbyRoomModel} from '@/common/lobby/LobbyModel';
 import {NewGameConfig} from '@/common/game/NewGameConfig';
@@ -359,7 +360,13 @@ function openCreate(): void {
 
 async function openInLobby(request: {config: NewGameConfig, title: string, listed: boolean, freeSeats: Array<number>}): Promise<void> {
   followNextStart = true;
+  // Still inside the click: browsers ask for the permission only then. With it the host may leave the lobby
+  // and still learns by push message when somebody joins
+  const permission = askLobbyPushPermission();
   const room = await act({action: 'open', profile: profile.value, ...request});
+  if (permission !== undefined) {
+    void permission.then(subscribeLobbyPush);
+  }
   if (room !== undefined) {
     createOpen.value = false;
     queueing.value = false;
@@ -413,6 +420,8 @@ onMounted(() => {
   window.addEventListener('keydown', onRowKey);
   setDocumentTitle('Lobby');
   refresh();
+  // Renews an existing permission's subscription (language, key of the server)
+  void subscribeLobbyPush();
   pollTimer = setInterval(refresh, POLL_MS);
   clockTimer = setInterval(() => now.value = Date.now(), 1000);
 });
