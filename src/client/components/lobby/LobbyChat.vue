@@ -18,9 +18,8 @@
             <textarea ref="editField" v-model="editDraft" class="lobby-chat-edit-field" rows="2" :maxlength="LOBBY_CHAT_MAX_LENGTH"
               :aria-label="$t('Edit message')" @keydown.enter.exact.prevent="saveEdit(message)" @keydown.esc.stop.prevent="cancelEdit"></textarea>
             <div class="lobby-chat-edit-actions">
-              <span class="lobby-chat-edit-hint" v-i18n>Esc cancels</span>
-              <AppButton size="small" class="btn-tone-quiet" title="Cancel" @click="cancelEdit" />
-              <AppButton size="small" title="Save" :disabled="editDraft.trim() === '' || saving" @click="saveEdit(message)" />
+              <AppButton size="small" class="btn-tone-quiet" title="Cancel" :fixedHotkey="['Escape']" @click="cancelEdit" />
+              <AppButton size="small" title="Save" :fixedHotkey="['Enter']" :disabled="editDraft.trim() === '' || saving" @click="saveEdit(message)" />
             </div>
           </form>
           <div v-else class="lobby-chat-text" :class="{'lobby-chat-text--emoji': isEmojiOnly(message.text)}">
