@@ -975,7 +975,6 @@
   "AI players are not available with these settings.": "Näillä asetuksilla tekoälypelaajat eivät ole käytettävissä.",
   "No messages yet. Say hello!": "Ei vielä viestejä. Sano hei!",
   "Write a message": "Kirjoita viesti",
-  "Send": "Lähetä",
   "Please enter a message": "Kirjoita viesti",
   "The message is too long": "Viesti on liian pitkä",
   "Links to other websites are not allowed in the chat": "Linkit muille sivustoille eivät ole sallittuja chatissa",
@@ -986,5 +985,6 @@
   "Saved. The chat uses the list right away.": "Tallennettu. Chat käyttää listaa heti.",
   "No game to filter right now.": "Suodatettavia pelejä ei ole juuri nyt.",
   "Time played": "Peliaika",
-  "Terraforming": "Terraformointi"
+  "Terraforming": "Terraformointi",
+  "Send message": "Lähetä viesti"
 }

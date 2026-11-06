@@ -31,7 +31,7 @@
           :aria-expanded="emojisOpen" @click="emojisOpen = !emojisOpen">
           <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M8.5 14.5c.9 1.2 2.1 1.8 3.5 1.8s2.6-.6 3.5-1.8" /><path d="M9 9.5h.01M15 9.5h.01" /></svg>
         </button>
-        <button type="submit" class="lobby-chat-icon-button lobby-chat-send" :title="$t('Send')" :aria-label="$t('Send')" :disabled="draft.trim() === '' || sending">
+        <button type="submit" class="lobby-chat-icon-button lobby-chat-send" :title="$t('Send message')" :aria-label="$t('Send message')" :disabled="draft.trim() === '' || sending">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12 20 4l-4 16-4-6.5L4 12Z" /><path d="M12 13.5 20 4" /></svg>
         </button>
         <!-- Popover above the field; a click outside or Escape closes it -->

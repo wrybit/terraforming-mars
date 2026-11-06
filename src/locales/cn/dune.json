@@ -225,7 +225,6 @@
   "Bazaar: buy ${0} for ${1} M€": "集市：以 ${1} M€ 购买 ${0}",
   "Nothing worth trading": "没有可交换的资源",
   "No offer at the moment": "目前没有报价",
-  "Accept": "接受",
   "Withdraw": "撤回",
   "CHOAM: accept offer ${0}": "CHOAM：接受报价 ${0}",
   "CHOAM: withdraw offer ${0}": "CHOAM：撤回报价 ${0}",

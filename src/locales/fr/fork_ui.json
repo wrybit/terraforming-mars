@@ -1031,7 +1031,6 @@
   "Chat": "Discussion",
   "No messages yet. Say hello!": "Pas encore de messages. Dites bonjour !",
   "Write a message": "Écrire un message",
-  "Send": "Envoyer",
   "Please enter a message": "Veuillez saisir un message",
   "The message is too long": "Le message est trop long",
   "Links to other websites are not allowed in the chat": "Les liens vers d'autres sites ne sont pas autorisés dans la discussion",
@@ -1043,5 +1042,6 @@
   "Emoji": "Émoji",
   "No game to filter right now.": "Aucune partie à filtrer pour l'instant.",
   "Time played": "Temps de jeu",
-  "Terraforming": "Terraformation"
+  "Terraforming": "Terraformation",
+  "Send message": "Envoyer le message"
 }

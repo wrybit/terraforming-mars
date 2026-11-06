@@ -224,7 +224,6 @@
   "Bazaar: buy ${0} for ${1} M€": "Базар: купити ${0} за ${1} M€",
   "Nothing worth trading": "Нічого обміняти",
   "No offer at the moment": "Наразі немає пропозиції",
-  "Accept": "Прийняти",
   "Withdraw": "Відкликати",
   "CHOAM: accept offer ${0}": "CHOAM: прийняти пропозицію ${0}",
   "CHOAM: withdraw offer ${0}": "CHOAM: відкликати пропозицію ${0}",

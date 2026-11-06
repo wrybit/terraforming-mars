@@ -1158,7 +1158,6 @@
   "Chat": "Csevegés",
   "No messages yet. Say hello!": "Még nincs üzenet. Köszönj!",
   "Write a message": "Üzenet írása",
-  "Send": "Küldés",
   "Please enter a message": "Írj be egy üzenetet",
   "The message is too long": "Az üzenet túl hosszú",
   "Links to other websites are not allowed in the chat": "Más weboldalakra mutató hivatkozás nem engedélyezett a csevegésben",
@@ -1169,5 +1168,6 @@
   "Saved. The chat uses the list right away.": "Mentve. A csevegés azonnal használja a listát.",
   "No game to filter right now.": "Jelenleg nincs szűrhető játék.",
   "Time played": "Játékidő",
-  "Terraforming": "Terraformálás"
+  "Terraforming": "Terraformálás",
+  "Send message": "Üzenet küldése"
 }

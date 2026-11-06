@@ -223,7 +223,6 @@
   "Bazaar: buy ${0} for ${1} M€": "Bazar: comprar ${0} por ${1} M€",
   "Nothing worth trading": "Nada que cambiar",
   "No offer at the moment": "Sin oferta por ahora",
-  "Accept": "Aceptar",
   "Withdraw": "Retirar",
   "CHOAM: accept offer ${0}": "CHOAM: aceptar la oferta ${0}",
   "CHOAM: withdraw offer ${0}": "CHOAM: retirar la oferta ${0}",

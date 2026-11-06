@@ -225,7 +225,6 @@
   "Bazaar: buy ${0} for ${1} M€": "Базар: купи ${0} за ${1} M€",
   "Nothing worth trading": "Нищо за размяна",
   "No offer at the moment": "В момента няма оферта",
-  "Accept": "Приеми",
   "Withdraw": "Оттегли",
   "CHOAM: accept offer ${0}": "CHOAM: приеми оферта ${0}",
   "CHOAM: withdraw offer ${0}": "CHOAM: оттегли оферта ${0}",

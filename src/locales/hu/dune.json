@@ -222,7 +222,6 @@
   "Bazaar: buy ${0} for ${1} M€": "Bazár: ${0} megvétele ${1} M€-ért",
   "Nothing worth trading": "Nincs mit cserélni",
   "No offer at the moment": "Jelenleg nincs ajánlat",
-  "Accept": "Elfogadás",
   "Withdraw": "Visszavonás",
   "CHOAM: accept offer ${0}": "CHOAM: ${0}. ajánlat elfogadása",
   "CHOAM: withdraw offer ${0}": "CHOAM: ${0}. ajánlat visszavonása",

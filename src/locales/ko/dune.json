@@ -224,7 +224,6 @@
   "Bazaar: buy ${0} for ${1} M€": "시장: ${0}을(를) ${1} M€에 구매",
   "Nothing worth trading": "교환할 것이 없습니다",
   "No offer at the moment": "현재 제안 없음",
-  "Accept": "수락",
   "Withdraw": "철회",
   "CHOAM: accept offer ${0}": "CHOAM: 제안 ${0} 수락",
   "CHOAM: withdraw offer ${0}": "CHOAM: 제안 ${0} 철회",

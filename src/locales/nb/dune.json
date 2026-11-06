@@ -220,7 +220,6 @@
   "Bazaar: buy ${0} for ${1} M€": "Basar: kjøp ${0} for ${1} M€",
   "Nothing worth trading": "Ingenting å bytte",
   "No offer at the moment": "Ingen tilbud akkurat nå",
-  "Accept": "Godta",
   "Withdraw": "Trekk tilbake",
   "CHOAM: accept offer ${0}": "CHOAM: godta tilbud ${0}",
   "CHOAM: withdraw offer ${0}": "CHOAM: trekk tilbake tilbud ${0}",

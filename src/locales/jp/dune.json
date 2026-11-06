@@ -224,7 +224,6 @@
   "Bazaar: buy ${0} for ${1} M€": "バザール：${0}を${1} M€で買う",
   "Nothing worth trading": "交換できるものがありません",
   "No offer at the moment": "現在オファーなし",
-  "Accept": "受け入れる",
   "Withdraw": "取り下げる",
   "CHOAM: accept offer ${0}": "CHOAM：オファー${0}を受け入れる",
   "CHOAM: withdraw offer ${0}": "CHOAM：オファー${0}を取り下げる",

@@ -1846,7 +1846,6 @@
   "Chat": "Чат",
   "No messages yet. Say hello!": "Сообщений пока нет. Поздоровайтесь!",
   "Write a message": "Написать сообщение",
-  "Send": "Отправить",
   "Please enter a message": "Введите сообщение",
   "The message is too long": "Сообщение слишком длинное",
   "Links to other websites are not allowed in the chat": "Ссылки на другие сайты в чате запрещены",
@@ -1858,5 +1857,6 @@
   "Emoji": "Эмодзи",
   "No game to filter right now.": "Сейчас нет игр для фильтрации.",
   "Time played": "Время игры",
-  "Terraforming": "Терраформирование"
+  "Terraforming": "Терраформирование",
+  "Send message": "Отправить сообщение"
 }

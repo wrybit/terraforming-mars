@@ -222,7 +222,6 @@
   "Bazaar: buy ${0} for ${1} M€": "Basaari: osta ${0} hintaan ${1} M€",
   "Nothing worth trading": "Ei mitään vaihdettavaa",
   "No offer at the moment": "Ei tarjousta juuri nyt",
-  "Accept": "Hyväksy",
   "Withdraw": "Peru",
   "CHOAM: accept offer ${0}": "CHOAM: hyväksy tarjous ${0}",
   "CHOAM: withdraw offer ${0}": "CHOAM: peru tarjous ${0}",
