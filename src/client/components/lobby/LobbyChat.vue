@@ -24,7 +24,8 @@
     <form class="lobby-chat-form" @submit.prevent="send">
       <div class="lobby-chat-field">
         <input ref="input" v-model="draft" class="lobby-chat-input" type="text" :maxlength="LOBBY_CHAT_MAX_LENGTH"
-          :placeholder="$t('Write a message')" :aria-label="$t('Write a message')" @focus="focused = true" @blur="focused = false">
+          :placeholder="$t('Write a message')" :aria-label="$t('Write a message')" @focus="focused = true" @blur="focused = false"
+          @keydown.esc="leaveField">
         <!-- Enter anywhere on the page jumps into the field (onPageKey); the key cap shows it while the field is idle -->
         <HotkeyKeys v-if="!focused && draft === ''" :fixed="['Enter']" class="lobby-chat-hotkey" />
         <button type="button" class="lobby-chat-icon-button" :class="{'lobby-chat-icon-button--open': emojisOpen}" :title="$t('Emoji')" :aria-label="$t('Emoji')"
@@ -72,6 +73,16 @@ const list = ref<HTMLElement | null>(null);
 const input = ref<HTMLInputElement | null>(null);
 const emojisOpen = ref(false);
 const focused = ref(false);
+
+// Esc leaves the field (the emoji popover first, if open); Enter brings you back in
+function leaveField(event: KeyboardEvent): void {
+  event.stopPropagation();
+  if (emojisOpen.value) {
+    emojisOpen.value = false;
+    return;
+  }
+  input.value?.blur();
+}
 
 // Enter on the page (not on a button, link or field, and with no dialog open) puts the cursor into the chat
 function onPageKey(event: KeyboardEvent): void {
