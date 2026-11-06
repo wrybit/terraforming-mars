@@ -973,7 +973,6 @@
   "No game is running right now.": "Yhtään peliä ei ole käynnissä juuri nyt.",
   "The game is running.": "Peli on käynnissä.",
   "AI players are not available with these settings.": "Näillä asetuksilla tekoälypelaajat eivät ole käytettävissä.",
-  "Chat": "Chat",
   "No messages yet. Say hello!": "Ei vielä viestejä. Sano hei!",
   "Write a message": "Kirjoita viesti",
   "Send": "Lähetä",
@@ -985,9 +984,7 @@
   "One word per line. A word is also masked at the start of longer words (\"arsch\" also in \"Arschloch\", not in \"Barsch\"). Links to other websites are always blocked.": "Yksi sana riviä kohden. Sana peitetään myös pidempien sanojen alussa (”arsch” myös sanassa ”Arschloch”, ei sanassa ”Barsch”). Linkit muille sivustoille estetään aina.",
   "Reset to default": "Palauta oletukset",
   "Saved. The chat uses the list right away.": "Tallennettu. Chat käyttää listaa heti.",
-  "Emoji": "Emoji",
   "No game to filter right now.": "Suodatettavia pelejä ei ole juuri nyt.",
-  "Generation": "Sukupolvi",
   "Time played": "Peliaika",
   "Terraforming": "Terraformointi"
 }
