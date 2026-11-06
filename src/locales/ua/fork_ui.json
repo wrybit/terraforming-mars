@@ -1150,5 +1150,12 @@
   "This message no longer exists": "Цього повідомлення більше немає",
   "This message can no longer be edited": "Це повідомлення більше не можна змінити",
   "${0} joined your game": "${0} приєднався до вашої гри",
-  "Your game in the lobby is waiting for you.": "Ваша гра в лобі чекає на вас."
+  "Your game in the lobby is waiting for you.": "Ваша гра в лобі чекає на вас.",
+  "Faces": "Обличчя",
+  "Gestures": "Жести",
+  "Celebration": "Свято",
+  "Nature": "Природа",
+  "Food & drink": "Їжа та напої",
+  "Objects": "Предмети",
+  "Symbols": "Символи"
 }

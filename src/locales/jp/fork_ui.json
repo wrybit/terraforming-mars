@@ -1366,5 +1366,12 @@
   "This message no longer exists": "このメッセージはもう存在しません",
   "This message can no longer be edited": "このメッセージはもう編集できません",
   "${0} joined your game": "${0} がゲームに参加しました",
-  "Your game in the lobby is waiting for you.": "ロビーであなたのゲームが待っています。"
+  "Your game in the lobby is waiting for you.": "ロビーであなたのゲームが待っています。",
+  "Faces": "顔",
+  "Gestures": "ジェスチャー",
+  "Celebration": "お祝い",
+  "Nature": "自然",
+  "Food & drink": "食べ物と飲み物",
+  "Objects": "物",
+  "Symbols": "記号"
 }

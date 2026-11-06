@@ -1,9 +1,42 @@
-// Emojis of the chat's emoji popover (LobbyChat.vue), and the check for messages that are only emojis
+// Emojis of the chat's emoji popover (LobbyChat.vue) in groups, and the check for messages that are only emojis
 
-export const CHAT_EMOJIS: ReadonlyArray<string> = [
-  '😀', '😂', '😅', '😉', '😊', '😍', '😎', '🤔', '😮', '😬', '😢', '😡', '😴', '🤯',
-  '👍', '👎', '👏', '🙏', '💪', '👋', '🤝', '🎉', '🔥', '⭐', '❤️', '💔', '✅', '❌', '⏳',
-  '🚀', '🪐', '🌍', '🌱', '🌳', '💧', '🌡️', '⚡', '🏭', '🏙️', '🛰️', '🎲', '🏆',
+/** One heading of the popover with its emojis; the title is an English text key (translated in the popover) */
+export type ChatEmojiGroup = {title: string, emojis: ReadonlyArray<string>};
+
+// Rows of seven in the popover: every group fills whole rows
+export const CHAT_EMOJI_GROUPS: ReadonlyArray<ChatEmojiGroup> = [
+  {title: 'Faces', emojis: [
+    '😀', '😃', '😄', '😁', '😆', '😂', '🤣', '😅', '😊', '😇', '🙂', '😉', '😍', '🥰',
+    '😘', '😋', '😜', '🤪', '😎', '🤓', '🤗', '🤔', '🤨', '😐', '😶', '🙄', '😏', '😬',
+    '😮', '😲', '😳', '🥺', '😢', '😭', '😤', '😡', '🤬', '🤯', '😱', '😴', '🥱', '🤐',
+  ]},
+  {title: 'Gestures', emojis: [
+    '👍', '👎', '👏', '🙌', '🙏', '💪', '👋', '🤝', '👌', '✌️', '🤞', '🤟', '🤘', '👊',
+    '✊', '🫡', '👉', '👈', '👆', '👇', '🫶',
+  ]},
+  {title: 'Celebration', emojis: [
+    '🎉', '🎊', '🥳', '🎈', '🎁', '🏆', '🥇', '🥈', '🥉', '🏅', '🎖️', '👑', '💯', '✨',
+  ]},
+  {title: 'Space', emojis: [
+    '🚀', '🛸', '🛰️', '🪐', '🌍', '🌎', '🌏', '🌑', '🌕', '🌙', '☀️', '⭐', '🌟', '💫',
+    '☄️', '🌌', '🔭', '👽', '👾', '🧑‍🚀', '🌋',
+  ]},
+  {title: 'Nature', emojis: [
+    '🌱', '🌿', '🍀', '🌳', '🌲', '🌴', '🌵', '🌾', '🌻', '🌸', '🍄', '🦠', '🐛', '🐝',
+    '🐟', '🐸', '🐾', '💧', '🌊', '🔥', '❄️', '🌡️', '⚡', '🌪️', '🌈', '☁️', '🌧️', '🏔️',
+  ]},
+  {title: 'Food & drink', emojis: [
+    '☕', '🍵', '🍺', '🍻', '🍷', '🥂', '🍾', '🍕', '🍔', '🍟', '🌮', '🍿', '🍩', '🍪',
+    '🍫', '🍰', '🍎', '🍌', '🥕', '🥔', '🧀',
+  ]},
+  {title: 'Objects', emojis: [
+    '🎲', '♟️', '🃏', '🧩', '🎮', '⏳', '⌛', '⏰', '💰', '💎', '🔧', '🔨', '⚙️', '🧪',
+    '🏭', '🏙️', '🏗️', '🏛️', '⚓', '📈', '📉',
+  ]},
+  {title: 'Symbols', emojis: [
+    '❤️', '🧡', '💛', '💚', '💙', '💜', '🖤', '🤍', '💔', '❣️', '✅', '❌', '❓', '❗',
+    '⚠️', '🚫', '💤', '💬', '👀', '🆗', '🔝',
+  ]},
 ];
 
 const PICTOGRAPHIC = /\p{Extended_Pictographic}/u;

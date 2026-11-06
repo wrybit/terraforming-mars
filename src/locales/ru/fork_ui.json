@@ -1864,5 +1864,12 @@
   "This message no longer exists": "Этого сообщения больше нет",
   "This message can no longer be edited": "Это сообщение больше нельзя изменить",
   "${0} joined your game": "${0} присоединился к вашей игре",
-  "Your game in the lobby is waiting for you.": "Ваша игра в лобби ждёт вас."
+  "Your game in the lobby is waiting for you.": "Ваша игра в лобби ждёт вас.",
+  "Faces": "Лица",
+  "Gestures": "Жесты",
+  "Celebration": "Праздник",
+  "Nature": "Природа",
+  "Food & drink": "Еда и напитки",
+  "Objects": "Предметы",
+  "Symbols": "Символы"
 }

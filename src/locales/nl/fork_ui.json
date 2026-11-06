@@ -1622,5 +1622,12 @@
   "This message no longer exists": "Dit bericht bestaat niet meer",
   "This message can no longer be edited": "Dit bericht kan niet meer worden bewerkt",
   "${0} joined your game": "${0} doet mee aan je spel",
-  "Your game in the lobby is waiting for you.": "Je spel in de lobby wacht op je."
+  "Your game in the lobby is waiting for you.": "Je spel in de lobby wacht op je.",
+  "Faces": "Gezichten",
+  "Gestures": "Gebaren",
+  "Celebration": "Feest",
+  "Nature": "Natuur",
+  "Food & drink": "Eten en drinken",
+  "Objects": "Voorwerpen",
+  "Symbols": "Symbolen"
 }

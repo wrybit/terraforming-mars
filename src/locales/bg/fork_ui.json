@@ -1941,5 +1941,12 @@
   "This message no longer exists": "Това съобщение вече не съществува",
   "This message can no longer be edited": "Това съобщение вече не може да се редактира",
   "${0} joined your game": "${0} се присъедини към твоята игра",
-  "Your game in the lobby is waiting for you.": "Твоята игра в лобито те чака."
+  "Your game in the lobby is waiting for you.": "Твоята игра в лобито те чака.",
+  "Faces": "Лица",
+  "Gestures": "Жестове",
+  "Celebration": "Празник",
+  "Nature": "Природа",
+  "Food & drink": "Храна и напитки",
+  "Objects": "Предмети",
+  "Symbols": "Символи"
 }

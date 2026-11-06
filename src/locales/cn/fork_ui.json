@@ -1977,5 +1977,12 @@
   "This message no longer exists": "此消息已不存在",
   "This message can no longer be edited": "此消息已无法编辑",
   "${0} joined your game": "${0} 加入了你的游戏",
-  "Your game in the lobby is waiting for you.": "你在大厅里的游戏正在等你。"
+  "Your game in the lobby is waiting for you.": "你在大厅里的游戏正在等你。",
+  "Faces": "表情",
+  "Gestures": "手势",
+  "Celebration": "庆祝",
+  "Nature": "自然",
+  "Food & drink": "食物和饮料",
+  "Objects": "物品",
+  "Symbols": "符号"
 }

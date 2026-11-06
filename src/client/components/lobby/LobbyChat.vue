@@ -56,7 +56,11 @@
         </button>
         <!-- Popover above the field; a click outside or Escape closes it -->
         <div v-if="emojisOpen" class="lobby-chat-emojis" role="listbox" :aria-label="$t('Emoji')" @keydown.esc.stop="emojisOpen = false">
-          <button v-for="emoji in CHAT_EMOJIS" :key="emoji" type="button" class="lobby-chat-emoji" role="option" @click="insertEmoji(emoji)">{{ emoji }}</button>
+          <!-- In groups, each with its heading; the popover scrolls -->
+          <div v-for="group in CHAT_EMOJI_GROUPS" :key="group.title" class="lobby-chat-emoji-group" role="group" :aria-label="$t(group.title)">
+            <div class="lobby-chat-emoji-heading">{{ $t(group.title) }}</div>
+            <button v-for="emoji in group.emojis" :key="emoji" type="button" class="lobby-chat-emoji" role="option" @click="insertEmoji(emoji)">{{ emoji }}</button>
+          </div>
         </div>
       </div>
     </form>
@@ -71,7 +75,7 @@ import {LobbyProfile} from '@/common/lobby/LobbyModel';
 import LobbyAvatar from './LobbyAvatar.vue';
 import {chatTextParts, editLobbyChat, fetchLobbyChat, postLobbyChat, removeLobbyChat} from './lobbyChatApi';
 import AppButton from '@/client/components/common/AppButton.vue';
-import {CHAT_EMOJIS, isEmojiOnly} from './lobbyChatEmoji';
+import {CHAT_EMOJI_GROUPS, isEmojiOnly} from './lobbyChatEmoji';
 import HotkeyKeys from '@/client/components/hotkeys/HotkeyKeys.vue';
 import {vAutoGrow} from '@/client/directives/AutoGrow';
 import {hotkeysAvailable} from '@/client/hotkeys/hotkeyAvailability';

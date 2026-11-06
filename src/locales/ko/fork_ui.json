@@ -1244,5 +1244,12 @@
   "This message no longer exists": "이 메시지는 더 이상 존재하지 않습니다",
   "This message can no longer be edited": "이 메시지는 더 이상 수정할 수 없습니다",
   "${0} joined your game": "${0}님이 게임에 참가했습니다",
-  "Your game in the lobby is waiting for you.": "로비에서 게임이 기다리고 있습니다."
+  "Your game in the lobby is waiting for you.": "로비에서 게임이 기다리고 있습니다.",
+  "Faces": "얼굴",
+  "Gestures": "제스처",
+  "Celebration": "축하",
+  "Nature": "자연",
+  "Food & drink": "음식과 음료",
+  "Objects": "사물",
+  "Symbols": "기호"
 }
