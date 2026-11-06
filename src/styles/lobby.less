@@ -399,6 +399,57 @@
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
 }
 
+// Suggestions while typing :name: (LobbyEmojiSuggestions.vue), above the chat field or the edit field
+.lobby-chat-edit-box {
+  position: relative;
+}
+
+.lobby-emoji-suggestions {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 6px);
+  left: 0;
+  z-index: 3;
+  margin: 0;
+  padding: 4px;
+  border: 1px solid @lobby-line;
+  border-radius: 10px;
+  background: #24262e;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  list-style: none;
+}
+
+.lobby-emoji-suggestion {
+  display: flex;
+  align-items: center;
+  gap: @lobby-gap-inner;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  &.lobby-emoji-suggestion--active {
+    background: fade(@bg_action, 35%);
+  }
+}
+
+.lobby-emoji-suggestion__emoji {
+  font-size: 18px;
+  line-height: 1.2;
+}
+
+.lobby-emoji-suggestion__name {
+  min-width: 0;
+  overflow: hidden;
+  color: @lobby-dim;
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .lobby-chat-emoji-group {
   display: grid;
   grid-template-columns: repeat(7, 36px);
