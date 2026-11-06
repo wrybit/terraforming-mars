@@ -2,6 +2,7 @@
 // Builds on the create form's surfaces and controls (create_game_form.less), so both pages look the same.
 @import (reference) "./variables.less";
 @import (reference) "./modal_surface.less";
+@import (reference) "./resize_handle.less";
 
 // Proximity: inside a row 6–8px, between rows a line, between sections 16px
 @lobby-gap-inner: 8px;
@@ -37,12 +38,26 @@
 .lobby-layout {
   .page-content();
 
-  // Wide screens: the chat as a sidebar on the right; the two game cards keep enough width for their rows
+  // Wide screens: the chat as a sidebar on the right; its width is dragged with the handle between them
+  // (ColumnResizeHandle.vue, LOBBY_CHAT_SPLIT in columnResize.ts sets the two shares)
   @media only screen and (min-width: 1400px) {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 320px;
-    gap: @lobby-gap-section;
+    grid-template-columns: minmax(0, var(--lobby-main-share, 80fr)) @lobby-resizer-width minmax(0, var(--lobby-chat-share, 20fr));
+    // Rows as usual; across, the handle sits in the middle of the usual gap (half the rest on each side)
+    gap: @lobby-gap-section ((@lobby-gap-section - @lobby-resizer-width) / 2);
     align-items: start;
+  }
+}
+
+@lobby-resizer-width: 12px;
+
+.lobby-chat-resizer {
+  @media only screen and (min-width: 1400px) {
+    .column-resize-handle-shown(0);
+    // As high as the two neighbours instead of the window
+    position: relative;
+    align-self: stretch;
+    height: auto;
   }
 }
 

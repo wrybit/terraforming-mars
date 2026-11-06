@@ -91,6 +91,8 @@
           </section>
         </div>
       </div>
+      <!-- Wide screens: drag handle between games and chat (double click: default width) -->
+      <ColumnResizeHandle class="lobby-chat-resizer" :split="LOBBY_CHAT_SPLIT" />
       <!-- Chat with everybody in the lobby: on wide screens a sidebar on the right, otherwise below the games -->
       <aside class="lobby-chat-aside">
         <LobbyChat :profile="profile" :withProfile="withProfile" />
@@ -120,6 +122,8 @@
 
 <script setup lang="ts">
 import {askLobbyPushPermission, subscribeLobbyPush} from './lobbyPush';
+import ColumnResizeHandle from '@/client/components/ColumnResizeHandle.vue';
+import {LOBBY_CHAT_SPLIT} from '@/client/utils/columnResize';
 import {ComponentPublicInstance, computed, defineAsyncComponent, getCurrentInstance, onBeforeUnmount, onMounted, ref, watch} from 'vue';
 import {LobbyProfile, LobbyRoomModel} from '@/common/lobby/LobbyModel';
 import {NewGameConfig} from '@/common/game/NewGameConfig';
