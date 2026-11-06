@@ -82,9 +82,119 @@
 }
 
 .lobby-chat-message {
+  position: relative;
   display: flex;
   align-items: flex-start;
   gap: @lobby-gap-inner;
+  // Room for the hover and edit surface, without moving the text
+  margin: -4px -8px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  transition: background-color 0.4s;
+
+  &:has(.lobby-chat-edit-button):hover,
+  &:has(.lobby-chat-edit-button):focus-within {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  &.lobby-chat-message--editing {
+    background: fade(@bg_action, 12%);
+    outline: 1px solid fade(@bg_action, 50%);
+  }
+
+  &.lobby-chat-message--updated {
+    background: rgba(127, 217, 154, 0.12);
+  }
+
+  .lobby-chat-body {
+    flex: 1;
+  }
+}
+
+// Pencil at the end of the line: only on hover (or keyboard focus), the shadow to the left fades the text out below it
+.lobby-chat-edit-button {
+  position: absolute;
+  top: 50%;
+  right: 6px;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 6px;
+  background: #2a2b33;
+  box-shadow: -10px 0 12px 4px #23242b, 0 2px 6px rgba(0, 0, 0, 0.5);
+  color: #eee;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(-50%);
+  transition: opacity 0.15s;
+
+  svg {
+    width: 13px;
+    height: 13px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  &:hover {
+    background: #34353f;
+  }
+
+  .lobby-chat-message:hover &,
+  &:focus-visible {
+    opacity: 1;
+  }
+
+  // Touch screens know no hover: the pencil stays visible there
+  @media (hover: none) {
+    opacity: 1;
+  }
+}
+
+.lobby-chat-edited {
+  color: @lobby-dim;
+  font-size: 11px;
+}
+
+.lobby-chat-edit-field {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 52px;
+  margin-top: 4px;
+  padding: 6px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.35);
+  color: inherit;
+  font: inherit;
+  font-size: 14px;
+  resize: none;
+
+  &:focus {
+    border-color: @bg_action;
+    outline: none;
+  }
+}
+
+.lobby-chat-edit-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: @lobby-gap-inner;
+  margin-top: 6px;
+}
+
+.lobby-chat-edit-hint {
+  margin-right: auto;
+  color: @lobby-dim;
+  font-size: 11px;
+  white-space: nowrap;
 }
 
 // Avatar in the chat a quarter smaller than the small lobby avatar (20px), level with the name line

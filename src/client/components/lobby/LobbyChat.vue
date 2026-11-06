@@ -4,20 +4,36 @@
     <div class="lobby-section-title"><span v-i18n>Chat</span></div>
     <div ref="list" class="lobby-chat-messages" aria-live="polite">
       <p v-if="messages.length === 0" class="lobby-dialog-note lobby-chat-empty" v-i18n>No messages yet. Say hello!</p>
-      <div v-for="message in messages" :key="message.id" class="lobby-chat-message" :class="{'lobby-chat-message--you': message.you}">
+      <div v-for="message in messages" :key="message.id" class="lobby-chat-message"
+        :class="{'lobby-chat-message--you': message.you, 'lobby-chat-message--editing': editingId === message.id, 'lobby-chat-message--updated': updatedId === message.id}">
         <LobbyAvatar kind="human" :color="message.color" :emoji="message.emoji" size="small" />
         <div class="lobby-chat-body">
           <div class="lobby-chat-meta">
             <span class="lobby-chat-name">{{ message.name }}</span>
             <time class="lobby-chat-time" :datetime="new Date(message.at).toISOString()">{{ clockTime(message.at) }}</time>
+            <span v-if="message.edited" class="lobby-chat-edited" v-i18n>(edited)</span>
           </div>
-          <div class="lobby-chat-text" :class="{'lobby-chat-text--emoji': isEmojiOnly(message.text)}">
+          <!-- Inline edit: Enter saves, Esc cancels; the server checks the hour and the admin login again -->
+          <form v-if="editingId === message.id" class="lobby-chat-edit" @submit.prevent="saveEdit(message)">
+            <textarea ref="editField" v-model="editDraft" class="lobby-chat-edit-field" rows="2" :maxlength="LOBBY_CHAT_MAX_LENGTH"
+              :aria-label="$t('Edit message')" @keydown.enter.exact.prevent="saveEdit(message)" @keydown.esc.stop.prevent="cancelEdit"></textarea>
+            <div class="lobby-chat-edit-actions">
+              <span class="lobby-chat-edit-hint" v-i18n>Esc cancels</span>
+              <AppButton size="small" class="btn-tone-quiet" title="Cancel" @click="cancelEdit" />
+              <AppButton size="small" title="Save" :disabled="editDraft.trim() === '' || saving" @click="saveEdit(message)" />
+            </div>
+          </form>
+          <div v-else class="lobby-chat-text" :class="{'lobby-chat-text--emoji': isEmojiOnly(message.text)}">
             <template v-for="(part, index) in chatTextParts(message.text)" :key="index">
               <a v-if="part.href !== undefined" :href="part.href">{{ part.text }}</a>
               <template v-else>{{ part.text }}</template>
             </template>
           </div>
         </div>
+        <button v-if="message.editable && editingId !== message.id" type="button" class="lobby-chat-edit-button"
+          :title="$t('Edit message')" :aria-label="$t('Edit message')" @click="startEdit(message)">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l4-1 10-10-3-3L5 16z" /><path d="M13 7l3 3" /></svg>
+        </button>
       </div>
     </div>
     <!-- One field with the emoji and the send button inside; Enter sends too -->
@@ -50,7 +66,8 @@ import {nextTick, onBeforeUnmount, onMounted, ref} from 'vue';
 import {LOBBY_CHAT_MAX_LENGTH, LobbyChatMessage} from '@/common/lobby/LobbyChatModel';
 import {LobbyProfile} from '@/common/lobby/LobbyModel';
 import LobbyAvatar from './LobbyAvatar.vue';
-import {chatTextParts, fetchLobbyChat, postLobbyChat} from './lobbyChatApi';
+import {chatTextParts, editLobbyChat, fetchLobbyChat, postLobbyChat} from './lobbyChatApi';
+import AppButton from '@/client/components/common/AppButton.vue';
 import {CHAT_EMOJIS, isEmojiOnly} from './lobbyChatEmoji';
 import HotkeyKeys from '@/client/components/hotkeys/HotkeyKeys.vue';
 import {hotkeysAvailable} from '@/client/hotkeys/hotkeyAvailability';
@@ -73,6 +90,55 @@ const list = ref<HTMLElement | null>(null);
 const input = ref<HTMLInputElement | null>(null);
 const emojisOpen = ref(false);
 const focused = ref(false);
+const editingId = ref<number | undefined>(undefined);
+const editDraft = ref('');
+const saving = ref(false);
+// Briefly highlights the message just saved, so one sees the change arrived
+const updatedId = ref<number | undefined>(undefined);
+const editField = ref<Array<HTMLTextAreaElement>>([]);
+const UPDATED_FLASH_MS = 1500;
+let updatedTimer: ReturnType<typeof setTimeout> | undefined;
+
+async function startEdit(message: LobbyChatMessage): Promise<void> {
+  editingId.value = message.id;
+  editDraft.value = message.text;
+  error.value = '';
+  await nextTick();
+  const field = editField.value[0];
+  // The buttons below the field must be visible too, also at the bottom of the list
+  field?.closest('.lobby-chat-message')?.scrollIntoView({block: 'nearest'});
+  field?.focus({preventScroll: true});
+  field?.setSelectionRange(field.value.length, field.value.length);
+}
+
+function cancelEdit(): void {
+  editingId.value = undefined;
+  editDraft.value = '';
+}
+
+async function saveEdit(message: LobbyChatMessage): Promise<void> {
+  const text = editDraft.value.trim();
+  if (text === '' || saving.value) {
+    return;
+  }
+  if (text === message.text) {
+    cancelEdit();
+    return;
+  }
+  saving.value = true;
+  error.value = '';
+  try {
+    await show((await editLobbyChat(message.id, text)).messages);
+    cancelEdit();
+    updatedId.value = message.id;
+    clearTimeout(updatedTimer);
+    updatedTimer = setTimeout(() => updatedId.value = undefined, UPDATED_FLASH_MS);
+  } catch (failure) {
+    error.value = lobbyFailureText(failure);
+  } finally {
+    saving.value = false;
+  }
+}
 
 // Esc leaves the field (the emoji popover first, if open); Enter brings you back in
 function leaveField(event: KeyboardEvent): void {
@@ -182,6 +248,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   clearInterval(timer);
+  clearTimeout(updatedTimer);
   document.removeEventListener('click', onDocumentClick);
   window.removeEventListener('keydown', onPageKey);
 });

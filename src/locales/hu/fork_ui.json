@@ -1169,5 +1169,10 @@
   "Time played": "Játékidő",
   "Terraforming": "Terraformálás",
   "Send message": "Üzenet küldése",
-  "Enter the lobby": "Irány a lobby"
+  "Enter the lobby": "Irány a lobby",
+  "(edited)": "(szerkesztve)",
+  "Edit message": "Üzenet szerkesztése",
+  "Esc cancels": "Esc: mégse",
+  "This message no longer exists": "Ez az üzenet már nem létezik",
+  "This message can no longer be edited": "Ez az üzenet már nem szerkeszthető"
 }

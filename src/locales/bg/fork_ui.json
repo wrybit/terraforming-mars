@@ -1935,5 +1935,10 @@
   "Time played": "Изиграно време",
   "Terraforming": "Тераформиране",
   "Send message": "Изпрати съобщение",
-  "Enter the lobby": "Към лобито"
+  "Enter the lobby": "Към лобито",
+  "(edited)": "(редактирано)",
+  "Edit message": "Редактиране на съобщението",
+  "Esc cancels": "Esc отказва",
+  "This message no longer exists": "Това съобщение вече не съществува",
+  "This message can no longer be edited": "Това съобщение вече не може да се редактира"
 }

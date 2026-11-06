@@ -1360,5 +1360,10 @@
   "Time played": "プレイ時間",
   "Terraforming": "テラフォーミング",
   "Send message": "メッセージを送信",
-  "Enter the lobby": "ロビーへ"
+  "Enter the lobby": "ロビーへ",
+  "(edited)": "(編集済み)",
+  "Edit message": "メッセージを編集",
+  "Esc cancels": "Esc でキャンセル",
+  "This message no longer exists": "このメッセージはもう存在しません",
+  "This message can no longer be edited": "このメッセージはもう編集できません"
 }

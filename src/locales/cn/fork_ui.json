@@ -1971,5 +1971,10 @@
   "Time played": "已玩时间",
   "Terraforming": "地球化",
   "Send message": "发送消息",
-  "Enter the lobby": "进入大厅"
+  "Enter the lobby": "进入大厅",
+  "(edited)": "(已编辑)",
+  "Edit message": "编辑消息",
+  "Esc cancels": "Esc 取消",
+  "This message no longer exists": "此消息已不存在",
+  "This message can no longer be edited": "此消息已无法编辑"
 }
