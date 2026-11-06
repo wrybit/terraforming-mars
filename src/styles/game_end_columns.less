@@ -22,7 +22,6 @@
 @game-end-sticky-top: 10px; // column handle stays in view while scrolling
 @game-end-log-min-height: 220px; // generation tabs, search and a few log lines; the log takes all room above that
 @game-end-fixed-chart-height: 160px; // window-high layout: lower charts by default, so the board keeps room
-@game-end-solo-image-max-height: 34vh;
 @game-end-header-height: 40px; // height of the menu button (PageToolbar), the other header elements follow it
 @game-end-winner-font-size: 26px;
 // Total points: largest number on the page, on its own dark surface
@@ -494,17 +493,6 @@ html.tm-mobile #game-end .game-end-box.game-end-solo {
 
     .game-end-charts .victory-point-chart-container {
       height: var(--game-end-chart-height, @game-end-fixed-chart-height);
-    }
-
-    // Solo picture at most a third of the window high (whole picture, centered on the card's ground colour),
-    // so the table and the details still fit beside the board
-    .game-end-solo__image {
-      width: auto;
-      max-width: 100%;
-      max-height: @game-end-solo-image-max-height;
-      margin: 0 auto;
-      // Narrower than the card: soft side edges into the ground colour, like the fade at the bottom
-      mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
     }
 
     // Header compact, the room goes to the cards: buttons as high as the menu button, winner line smaller

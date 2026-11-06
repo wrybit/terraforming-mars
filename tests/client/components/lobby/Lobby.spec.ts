@@ -58,6 +58,21 @@ describe('Lobby components', () => {
     expect(wrapper.find('.lobby-game-progress i').attributes('style')).contains('50%');
   });
 
+  it('LobbyGameRow: own game set off, a click on the entry opens its dialog; games of others stay neutral', async () => {
+    const own = mount(LobbyGameRow, {...globalConfig, props: {room: room([{...host, you: true}, {kind: 'free'}])}});
+    expect(own.find('.lobby-game').classes()).contains('lobby-game--hosted');
+    await own.find('.lobby-game-title').trigger('click');
+    expect(own.emitted('open-room')).has.length(1);
+
+    const joined = mount(LobbyGameRow, {...globalConfig, props: {room: room([host, {...host, host: false, you: true}, {kind: 'free'}])}});
+    expect(joined.find('.lobby-game').classes()).not.contains('lobby-game--hosted');
+
+    const others = mount(LobbyGameRow, {...globalConfig, props: {room: room([host, {kind: 'free'}])}});
+    expect(others.find('.lobby-game').classes()).not.contains('lobby-game--hosted');
+    await others.find('.lobby-game-title').trigger('click');
+    expect(others.emitted('open-room')).is.undefined;
+  });
+
   it('LobbyFilterPanel emits the changed filters', async () => {
     const wrapper = mount(LobbyFilterPanel, {...globalConfig, props: {modelValue: defaultLobbyFilters(), rooms: [room([host, {kind: 'free'}])]}});
     await wrapper.findAll('.create-game-chip')[0].trigger('click');

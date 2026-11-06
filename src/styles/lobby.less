@@ -840,8 +840,16 @@
     border-bottom: 0;
   }
 
-  &.lobby-game--mine {
+  &.lobby-game--hosted {
     background: fade(@bg_action, 18%);
+  }
+
+  &.lobby-game--clickable {
+    cursor: pointer;
+  }
+
+  &.lobby-game--hosted.lobby-game--clickable:hover {
+    background: fade(@bg_action, 24%);
   }
 
   // Phone: the seats get their own row below the title, so the title keeps its width
