@@ -911,7 +911,6 @@
   "Picture": "Kuva",
   "Upload your own picture": "Lataa oma kuva",
   "No account, no login: name and picture are only stored in this browser.": "Ei tiliä, ei kirjautumista: nimi ja kuva tallennetaan vain tähän selaimeen.",
-  "Let's go": "Aloitetaan",
   "Search game or player": "Hae peliä tai pelaajaa",
   "Quick start": "Pikakäynnistys",
   "No open game fits right now": "Mikään avoin peli ei sovi juuri nyt",
@@ -986,5 +985,6 @@
   "No game to filter right now.": "Suodatettavia pelejä ei ole juuri nyt.",
   "Time played": "Peliaika",
   "Terraforming": "Terraformointi",
-  "Send message": "Lähetä viesti"
+  "Send message": "Lähetä viesti",
+  "Enter the lobby": "Aulaan"
 }

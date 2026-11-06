@@ -1067,7 +1067,6 @@
   "Picture": "Зображення",
   "Upload your own picture": "Завантажити своє зображення",
   "No account, no login: name and picture are only stored in this browser.": "Без акаунта та входу: ім’я та зображення зберігаються лише в цьому браузері.",
-  "Let's go": "Почнімо",
   "Search game or player": "Пошук гри або гравця",
   "Quick start": "Швидкий старт",
   "No open game fits right now": "Зараз немає відповідної відкритої гри",
@@ -1144,5 +1143,6 @@
   "No game to filter right now.": "Зараз немає гри для фільтрування.",
   "Time played": "Час гри",
   "Terraforming": "Тераформування",
-  "Send message": "Надіслати повідомлення"
+  "Send message": "Надіслати повідомлення",
+  "Enter the lobby": "До лобі"
 }

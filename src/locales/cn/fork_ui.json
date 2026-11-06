@@ -1894,7 +1894,6 @@
   "Picture": "头像",
   "Upload your own picture": "上传自己的图片",
   "No account, no login: name and picture are only stored in this browser.": "无需账号或登录：名字和头像只保存在此浏览器中。",
-  "Let's go": "开始吧",
   "Search game or player": "搜索游戏或玩家",
   "Quick start": "快速开始",
   "No open game fits right now": "目前没有合适的开放游戏",
@@ -1971,5 +1970,6 @@
   "No game to filter right now.": "目前没有可筛选的游戏。",
   "Time played": "已玩时间",
   "Terraforming": "地球化",
-  "Send message": "发送消息"
+  "Send message": "发送消息",
+  "Enter the lobby": "进入大厅"
 }

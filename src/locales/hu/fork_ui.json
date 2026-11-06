@@ -1093,7 +1093,6 @@
   "Picture": "Kép",
   "Upload your own picture": "Saját kép feltöltése",
   "No account, no login: name and picture are only stored in this browser.": "Nincs fiók, nincs belépés: a név és a kép csak ebben a böngészőben tárolódik.",
-  "Let's go": "Kezdjük",
   "Search game or player": "Játék vagy játékos keresése",
   "Quick start": "Gyorsindítás",
   "No open game fits right now": "Most nincs megfelelő nyitott játék",
@@ -1169,5 +1168,6 @@
   "No game to filter right now.": "Jelenleg nincs szűrhető játék.",
   "Time played": "Játékidő",
   "Terraforming": "Terraformálás",
-  "Send message": "Üzenet küldése"
+  "Send message": "Üzenet küldése",
+  "Enter the lobby": "Irány a lobby"
 }

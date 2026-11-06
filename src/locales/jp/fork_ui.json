@@ -1283,7 +1283,6 @@
   "Picture": "画像",
   "Upload your own picture": "自分の画像をアップロード",
   "No account, no login: name and picture are only stored in this browser.": "アカウントもログインも不要：名前と画像はこのブラウザにのみ保存されます。",
-  "Let's go": "はじめる",
   "Search game or player": "ゲームまたはプレイヤーを検索",
   "Quick start": "クイックスタート",
   "No open game fits right now": "今は条件に合う募集中のゲームがありません",
@@ -1360,5 +1359,6 @@
   "No game to filter right now.": "現在フィルターできるゲームはありません。",
   "Time played": "プレイ時間",
   "Terraforming": "テラフォーミング",
-  "Send message": "メッセージを送信"
+  "Send message": "メッセージを送信",
+  "Enter the lobby": "ロビーへ"
 }

@@ -1781,7 +1781,6 @@
   "Picture": "Картинка",
   "Upload your own picture": "Загрузить своё изображение",
   "No account, no login: name and picture are only stored in this browser.": "Без аккаунта и входа: имя и картинка хранятся только в этом браузере.",
-  "Let's go": "Поехали",
   "Search game or player": "Найти игру или игрока",
   "Quick start": "Быстрый старт",
   "No open game fits right now": "Сейчас нет подходящей открытой игры",
@@ -1858,5 +1857,6 @@
   "No game to filter right now.": "Сейчас нет игр для фильтрации.",
   "Time played": "Время игры",
   "Terraforming": "Терраформирование",
-  "Send message": "Отправить сообщение"
+  "Send message": "Отправить сообщение",
+  "Enter the lobby": "В лобби"
 }
