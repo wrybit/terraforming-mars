@@ -15,8 +15,11 @@
           </div>
           <!-- Inline edit: Enter saves, Esc cancels; the server checks the hour and the admin login again -->
           <form v-if="editingId === message.id" class="lobby-chat-edit" @submit.prevent="saveEdit(message)">
-            <textarea ref="editField" v-model="editDraft" v-auto-grow class="lobby-chat-edit-field" rows="1" :maxlength="LOBBY_CHAT_MAX_LENGTH"
-              :aria-label="$t('Edit message')" @keydown.enter.exact.prevent="saveEdit(message)" @keydown.esc.stop.prevent="cancelEdit"></textarea>
+            <div class="lobby-chat-edit-box">
+              <textarea ref="editField" v-model="editDraft" v-auto-grow class="lobby-chat-edit-field" rows="1" :maxlength="LOBBY_CHAT_MAX_LENGTH"
+                :aria-label="$t('Edit message')" @input="editCompletion.update" @blur="editCompletion.close" @keydown="onEditKey($event, message)"></textarea>
+              <LobbyEmojiSuggestions :suggestions="editCompletion.suggestions.value" :active="editCompletion.active.value" @choose="editCompletion.choose" />
+            </div>
             <div class="lobby-chat-edit-actions">
               <!-- Admins only (login on the admin page): removes the message for everybody -->
               <AppButton v-if="admin" size="small" class="btn-tone-danger lobby-chat-delete" title="Delete" :disabled="saving" @click="removeMessage(message)" />
@@ -41,10 +44,11 @@
     <!-- One field with the emoji and the send button inside; Enter sends too -->
     <form class="lobby-chat-form" @submit.prevent="send">
       <div class="lobby-chat-field">
-        <!-- Grows with the text up to five lines; Enter sends, Shift+Enter starts a new line -->
+        <!-- Grows with the text up to five lines; Enter sends, Shift+Enter starts a new line, :name: writes an emoji -->
         <textarea ref="input" v-model="draft" v-auto-grow class="lobby-chat-input" rows="1" :maxlength="LOBBY_CHAT_MAX_LENGTH"
-          :placeholder="$t('Write a message')" :aria-label="$t('Write a message')" @focus="focused = true" @blur="focused = false"
-          @keydown.enter.exact.prevent="send" @keydown.esc="leaveField"></textarea>
+          :placeholder="$t('Write a message')" :aria-label="$t('Write a message')" @focus="focused = true" @blur="focused = false; draftCompletion.close()"
+          @input="draftCompletion.update" @keydown="onDraftKey"></textarea>
+        <LobbyEmojiSuggestions :suggestions="draftCompletion.suggestions.value" :active="draftCompletion.active.value" @choose="draftCompletion.choose" />
         <!-- Enter anywhere on the page jumps into the field (onPageKey); the key cap shows it while the field is idle -->
         <HotkeyKeys v-if="!focused && draft === ''" :fixed="['Enter']" />
         <button type="button" class="lobby-chat-icon-button" :class="{'lobby-chat-icon-button--open': emojisOpen}" :title="$t('Emoji')" :aria-label="$t('Emoji')"
@@ -59,7 +63,7 @@
           <!-- In groups, each with its heading; the popover scrolls -->
           <div v-for="group in CHAT_EMOJI_GROUPS" :key="group.title" class="lobby-chat-emoji-group" role="group" :aria-label="$t(group.title)">
             <div class="lobby-chat-emoji-heading">{{ $t(group.title) }}</div>
-            <button v-for="emoji in group.emojis" :key="emoji" type="button" class="lobby-chat-emoji" role="option" @click="insertEmoji(emoji)">{{ emoji }}</button>
+            <button v-for="entry in group.emojis" :key="entry.emoji" type="button" class="lobby-chat-emoji" role="option" :title="`:${entry.name}:`" @click="insertEmoji(entry.emoji)">{{ entry.emoji }}</button>
           </div>
         </div>
       </div>
@@ -78,6 +82,8 @@ import AppButton from '@/client/components/common/AppButton.vue';
 import {CHAT_EMOJI_GROUPS, isEmojiOnly} from './lobbyChatEmoji';
 import HotkeyKeys from '@/client/components/hotkeys/HotkeyKeys.vue';
 import {vAutoGrow} from '@/client/directives/AutoGrow';
+import LobbyEmojiSuggestions from './LobbyEmojiSuggestions.vue';
+import {useEmojiCompletion} from './useEmojiCompletion';
 import {hotkeysAvailable} from '@/client/hotkeys/hotkeyAvailability';
 import {lobbyFailureText} from './lobbyApi';
 
@@ -122,6 +128,7 @@ async function startEdit(message: LobbyChatMessage): Promise<void> {
 }
 
 function cancelEdit(): void {
+  editCompletion.close();
   editingId.value = undefined;
   editDraft.value = '';
 }
@@ -165,6 +172,40 @@ async function saveEdit(message: LobbyChatMessage): Promise<void> {
     error.value = lobbyFailureText(failure);
   } finally {
     saving.value = false;
+  }
+}
+
+// :name: emojis while typing, in the chat field and in the edit field
+const draftCompletion = useEmojiCompletion(() => input.value ?? undefined, draft);
+const editCompletion = useEmojiCompletion(() => editField.value[0], editDraft);
+
+const plainEnter = (event: KeyboardEvent) => event.key === 'Enter' && !event.shiftKey && !event.altKey && !event.ctrlKey && !event.metaKey && !event.isComposing;
+
+// Open suggestions take the keys first; otherwise Enter sends and Esc leaves the field
+function onDraftKey(event: KeyboardEvent): void {
+  if (draftCompletion.onKey(event)) {
+    return;
+  }
+  if (plainEnter(event)) {
+    event.preventDefault();
+    send();
+  } else if (event.key === 'Escape') {
+    leaveField(event);
+  }
+}
+
+// Same in the edit field: Enter saves, Esc cancels
+function onEditKey(event: KeyboardEvent, message: LobbyChatMessage): void {
+  if (editCompletion.onKey(event)) {
+    return;
+  }
+  if (plainEnter(event)) {
+    event.preventDefault();
+    void saveEdit(message);
+  } else if (event.key === 'Escape') {
+    event.preventDefault();
+    event.stopPropagation();
+    cancelEdit();
   }
 }
 
