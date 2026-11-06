@@ -1049,12 +1049,12 @@
   font-size: 14px;
 }
 
-// Shadow of a part that lies over scrolled content (stuck Create card, players head); @direction 1 = down, -1 = up
+// Shadow of a part that lies over scrolled content (stuck Create card); @direction 1 = down, -1 = up
 .create-game-float-shadow(@direction) {
   @shadow: 0 (@direction * 6px) 22px rgba(0, 0, 0, 0.6);
 }
 
-// Head and cards scroll together, so the cards can pass under the sticky head
+// Head and cards scroll together: only the Create card below stays in place, so the whole players area gets the room
 .create-game-players-scroll {
   flex: 1;
   min-height: 0;
@@ -1063,21 +1063,7 @@
 }
 
 .create-game-players-head {
-  // Stays on top while the cards scroll; frosted glass like the Create card, so they shine through blurred
-  .frosted-surface();
-  position: sticky;
-  top: 0;
-  z-index: 2; // above the cards, so the shadow falls onto them
   padding: 12px 14px 10px;
-  border-radius: @create-game-radius @create-game-radius 0 0;
-  background: @create-game-surface-strong;
-  transition: box-shadow 0.2s;
-
-  // Cards scroll under the head: same shadow as the stuck Create card, only downwards (clip-path cuts the sides)
-  &--over-list {
-    box-shadow: .create-game-float-shadow(1)[@shadow];
-    clip-path: inset(0 0 -40px 0);
-  }
 
   .create-game-players-first {
     margin-top: @create-game-gap-inner;
@@ -1315,6 +1301,16 @@ each(@players, {
   background: @create-game-surface-strong;
   transition: box-shadow 0.2s;
 
+  // Summary as accordion: the head is the first line of the card, so no room above it;
+  // closed, no room below either (the card gap separates it from the button)
+  > .create-game-collapsible > .create-game-subhead {
+    margin-top: 0;
+  }
+
+  > .create-game-collapsible:not(.create-game-collapsible--open) > .create-game-subhead {
+    margin-bottom: 0;
+  }
+
   // Lies over the content: the shadow shows that it sits in front
   &--stuck {
     box-shadow: .create-game-float-shadow(-1)[@shadow], 0 0 0 1px rgba(255, 255, 255, 0.06);
@@ -1537,14 +1533,9 @@ a.create-game-summary-chip:hover {
     order: -1;
   }
 
-  // Page scrolls instead of the list: nothing slides under the head, so it stays in place
+  // Page scrolls instead of the list
   .create-game-players-scroll {
     overflow: visible;
-  }
-
-  .create-game-players-head {
-    position: relative;
-    background: none; // no own surface needed: it is part of the card again
   }
 
   // Create card at the end of the page, not sticky: with summary and warnings it would cover half the screen.

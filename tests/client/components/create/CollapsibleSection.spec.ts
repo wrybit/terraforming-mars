@@ -24,4 +24,18 @@ describe('CollapsibleSection', () => {
     expect(wrapper.find('button').exists()).is.false;
     expect(wrapper.find('.create-game-changed').exists()).is.false;
   });
+
+  it('remember false: starts in defaultOpen every time and does not store the toggle', async () => {
+    localStorage.setItem('create-game-open-test3', '1');
+    const wrapper = mount(CollapsibleSection, {...globalConfig, props: {title: 'Game settings', storageKey: 'test3', remember: false, defaultOpen: false}});
+    expect(wrapper.find('.create-game-collapsible').classes()).not.contains('create-game-collapsible--open');
+
+    await wrapper.find('button.create-game-collapsible-toggle').trigger('click');
+    expect(wrapper.find('.create-game-collapsible').classes()).contains('create-game-collapsible--open');
+    expect(localStorage.getItem('create-game-open-test3')).eq('1');
+
+    const open = mount(CollapsibleSection, {...globalConfig, props: {title: 'Game settings', storageKey: 'test3', remember: false, defaultOpen: true}});
+    await open.find('button.create-game-collapsible-toggle').trigger('click');
+    expect(localStorage.getItem('create-game-open-test3')).eq('1');
+  });
 });
