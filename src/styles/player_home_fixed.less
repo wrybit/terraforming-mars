@@ -134,6 +134,26 @@
     margin-bottom: 0;
   }
 
+  // Spectator: the separate milestones & awards box keeps the table height or the height dragged via the handle
+  // below it (milestonesBoxResize.ts); the general rule for tab boxes in the left column (below) would stretch it.
+  // Its table scrolls inside when the box is dragged smaller.
+  .player-home--fixed .player-home-columns__main .log-milestones-box.or-tab-panel {
+    flex: none;
+  }
+
+  // Handle in the middle of the 16 px gap between the milestones box and the log (box margin: milestone_award_table.less)
+  .player-home--fixed .log-milestones-box + .row-resize-handle {
+    margin: (-16px + 8px - @resize-handle-thickness / 2) 0 (8px - @resize-handle-thickness / 2);
+  }
+
+  // Spectator: Mars is alone in the right column, so its card takes the full height; Mars sits centred in it
+  // (.board-tabs-panel below centres vertically)
+  #spectator-home.player-home--fixed .player-home-columns__mars {
+    flex: 1 1 auto;
+    min-height: 0;
+    margin-bottom: 0;
+  }
+
   // Start phase: starting card selection fills the rest like the action menu
   .player-home--fixed .player-home-columns__main > .player_home_block--setup {
     flex: 1 1 0;
