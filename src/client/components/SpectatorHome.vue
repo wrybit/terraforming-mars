@@ -41,7 +41,7 @@
         <!-- Height of the players card, the log below gets the rest (only in the fixed layout) -->
         <RowResizeHandle kind="players" />
         <div class="player_home_block nofloat player-home-columns__log player_home_block--spectator-log">
-          <LogPanel :viewModel="spectator" milestonesAwards @spaceClicked="onSpaceClicked" />
+          <LogPanel :viewModel="spectator" milestonesAwards resizableMilestones @spaceClicked="onSpaceClicked" />
         </div>
       </template>
     </HomeColumns>

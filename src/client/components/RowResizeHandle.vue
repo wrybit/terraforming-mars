@@ -18,12 +18,13 @@ import {KEYBOARD_ROW_STEP, RowResizeTarget, clampHeight, startRowResize} from '@
 import {loadStoredNumber, saveStoredNumber} from '@/client/utils/layoutStorage';
 import {observePlayersCardWidth, playersCardTarget} from '@/client/utils/playersCardFit';
 import {marsCardTarget} from '@/client/utils/rightColumnFit';
+import {milestonesBoxTarget} from '@/client/utils/milestonesBoxResize';
 import {boardTarget, chartTarget, observeBoardFit, tableTarget} from '@/client/utils/gameEndResize';
 import {tween} from '@/client/utils/tween';
 
-// Which card the handle resizes: game view – player table (left), Mars (right);
-// results page – victory point table, board, charts
-export type RowResizeKind = 'players' | 'mars' | 'game-end-table' | 'game-end-board' | 'game-end-chart';
+// Which card the handle resizes: game view – player table (left), Mars (right), separate milestones & awards box
+// above the log (spectator); results page – victory point table, board, charts
+export type RowResizeKind = 'players' | 'mars' | 'milestones' | 'game-end-table' | 'game-end-board' | 'game-end-chart';
 
 type KindSetup = {
   storageKey: string;
@@ -57,6 +58,10 @@ const KINDS: Record<RowResizeKind, KindSetup> = {
       const column = handle.closest<HTMLElement>('.player-home-columns__board');
       return column === null ? undefined : marsCardTarget(column, card);
     },
+  },
+  'milestones': {
+    storageKey: 'spectator_milestones_height',
+    target: (card) => milestonesBoxTarget(card),
   },
   'game-end-table': {
     storageKey: 'game_end_table_height',

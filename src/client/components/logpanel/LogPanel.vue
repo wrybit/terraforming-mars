@@ -13,6 +13,8 @@
         <!-- Transposed table (narrow box): no free corner, the switch goes below the table -->
         <LogMilestonesSwitches v-if="!tableSplit" separateOnly :separate="true" @separate="setSeparateMilestonesLog" />
       </div>
+      <!-- Spectator: height of the box via drag handle, the log below takes the rest -->
+      <RowResizeHandle v-if="resizableMilestones" kind="milestones" />
     </template>
     <LogGenerationList
       ref="generationList"
@@ -146,6 +148,7 @@ import {isSpoiler, isSpoilerHidden, toggleSpoiler} from '@/client/components/log
 import {withViewerNamed} from '@/client/components/logpanel/logViewerName';
 import {AiFeedbackEntry} from '@/common/ai/AiFeedback';
 import {isTypingTarget} from '@/client/utils/typingTarget';
+import RowResizeHandle from '@/client/components/RowResizeHandle.vue';
 
 // Touch: a second tap on the same AI row within this time opens the rating instead of the cards
 const DOUBLE_TAP_MS = 350;
@@ -266,6 +269,11 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    // Separate milestones & awards box gets a drag handle below it (spectator view)
+    resizableMilestones: {
+      type: Boolean,
+      default: false,
+    },
     // Mobile view: tapping opens the line's cards as a carousel in a modal, no hover preview
     zoomCarousel: {
       type: Boolean,
@@ -306,6 +314,7 @@ export default defineComponent({
     LogMilestonesSwitches,
     LogAiRatings,
     LogAiRateBar,
+    RowResizeHandle,
   },
   // drawnCards / drawnCardsClosed: newly drawn cards open by themselves and closed again (mobile switches to the log and back)
   emits: ['spaceClicked', 'drawnCards', 'drawnCardsClosed'],
