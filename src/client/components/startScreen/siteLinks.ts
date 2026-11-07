@@ -1,8 +1,8 @@
 import {GlyphName} from '@/client/components/mobile/mobileGlyphs';
 import {PlanetStripeName} from '@/client/components/startScreen/planetStripes';
 import * as constants from '@/common/constants';
-import {UPSTREAM_REPOSITORY_URL} from '@/client/utils/RepositoryLinks';
 import {FEATURE_LOG_URL} from '@/client/utils/ShowcaseLinks';
+import {LOBBY_CREATE_PATH} from '@/common/lobby/lobbyUrl';
 
 // One list for the start page buttons and the navigation box of the game menu (GameMenu.vue),
 // so labels, icons and targets stay identical in both places.
@@ -20,15 +20,18 @@ export type SiteLink = {
 
 // Order = order of the planet backgrounds on the start page (globe row)
 export const SITE_LINKS: ReadonlyArray<SiteLink> = [
+  // Straight into the create form, as an overlay above the lobby (address lobby/create, lobbyUrl.ts).
+  // Not in the game menu: there "Start page" already sits on top and two "Start" entries would be confused
+  {label: 'Start a game', icon: 'newGame', planet: 'venus', href: LOBBY_CREATE_PATH, external: false, inMenu: false},
   // The lobby replaces "New game": games are opened there (the create form is its modal); new-game still works directly
-  {label: 'Lobby', icon: 'newGame', planet: 'venus', href: 'lobby', external: false, inMenu: true},
-  {label: 'Statistics', icon: 'statistics', planet: 'earth', href: 'stats', external: true, inMenu: true},
-  {label: 'Cards list', icon: 'cardsList', planet: 'mars', href: 'cards', external: true, inMenu: true},
-  {label: 'Game rules', icon: 'rules', planet: 'jupiter', href: 'https://github.com/terraforming-mars/terraforming-mars/wiki/Rulebooks', external: true, inMenu: true},
-  {label: 'Board game', icon: 'boardGame', planet: 'saturn', href: 'https://boardgamegeek.com/boardgame/167791/terraforming-mars', external: true, inMenu: true},
-  {label: 'Updates', icon: 'updates', planet: 'darkBlue', href: FEATURE_LOG_URL, external: true, inMenu: false},
-  {label: 'Discord', icon: 'discord', planet: 'neptune', href: constants.DISCORD_INVITE, external: true, inMenu: false},
-  {label: 'Team', icon: 'about', planet: 'moon', href: UPSTREAM_REPOSITORY_URL + '#-contributors-', external: true, inMenu: false},
+  // "Game lobby", not "Lobby": that key is Turmoil's lobby (political) and translates differently, e.g. in Chinese
+  {label: 'Game lobby', icon: 'lobby', planet: 'earth', href: 'lobby', external: false, inMenu: true},
+  {label: 'Statistics', icon: 'statistics', planet: 'mars', href: 'stats', external: true, inMenu: true},
+  {label: 'Cards list', icon: 'cardsList', planet: 'jupiter', href: 'cards', external: true, inMenu: true},
+  {label: 'Game rules', icon: 'rules', planet: 'saturn', href: 'https://github.com/terraforming-mars/terraforming-mars/wiki/Rulebooks', external: true, inMenu: true},
+  {label: 'Board game', icon: 'boardGame', planet: 'darkBlue', href: 'https://boardgamegeek.com/boardgame/167791/terraforming-mars', external: true, inMenu: true},
+  {label: 'Updates', icon: 'updates', planet: 'neptune', href: FEATURE_LOG_URL, external: true, inMenu: false},
+  {label: 'Discord', icon: 'discord', planet: 'moon', href: constants.DISCORD_INVITE, external: true, inMenu: false},
 ];
 
 // Only in the game menu, above "New game": the way back to the start page from every other page.

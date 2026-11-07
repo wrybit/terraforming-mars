@@ -12,13 +12,14 @@ describe('StartScreen', () => {
     expect(wrapper.exists()).to.be.true;
   });
 
-  it('lists statistics second and gives every button its own background row', () => {
+  it('starts with the create form, then the lobby, and gives every button its own background row', () => {
     const wrapper = shallowMount(StartScreen, {
       ...globalConfig,
     });
     const links = wrapper.findAll('a.start-screen-link');
     expect(links).has.length(8);
-    expect(links[1].attributes('href')).eq('stats');
+    expect(links[0].attributes('href')).eq('lobby/create');
+    expect(links[1].attributes('href')).eq('lobby');
     expect(links.map((link) => link.attributes('style'))).to.deep.eq(
       [1, 2, 3, 4, 5, 6, 7, 8].map((row) => `--sprite-row: ${row};`));
   });
@@ -32,12 +33,12 @@ describe('StartScreen', () => {
     expect(new Set(icons.map((icon) => icon.attributes('name'))).size).eq(8);
   });
 
-  it('opens everything except the lobby in a new tab', () => {
+  it('opens everything except the lobby pages in a new tab', () => {
     const wrapper = shallowMount(StartScreen, {
       ...globalConfig,
     });
     const targets = wrapper.findAll('a.start-screen-link').map((link) => link.attributes('target'));
-    expect(targets).to.deep.eq([undefined, ...Array(7).fill('_blank')]);
+    expect(targets).to.deep.eq([undefined, undefined, ...Array(6).fill('_blank')]);
   });
 
   it('highlights on the first tap and opens the link on the second tap', async () => {

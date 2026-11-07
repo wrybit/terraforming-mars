@@ -3,7 +3,7 @@
     <!-- Header like "Create game": menu, title, then the own profile and the one way to open a game -->
     <header class="card-list-header card-list-header--plain lobby-head">
       <PageToolbar />
-      <PageTitle title="Lobby" />
+      <PageTitle title="Game lobby" />
       <div class="create-game-head-actions">
         <button type="button" class="create-game-icon-button lobby-profile-button" :title="$t('Your profile')" @click="profileOpen = true">
           <LobbyAvatar kind="human" :color="profile.color" :emoji="profile.emoji" :image="profile.image" size="small" />
@@ -141,7 +141,8 @@ import HotkeyKeys from '@/client/components/hotkeys/HotkeyKeys.vue';
 import {fetchLobby, lobbyAction, lobbyFailureText, LobbyRequest} from './lobbyApi';
 import {activeFilterCount, bestMatch, defaultLobbyFilters, hasFreeSeat, LobbyFilters, matchesFilters} from './lobbyFilters';
 import {loadLobbyProfile, saveLobbyProfile} from './lobbyProfile';
-import {lobbyRoomIdFromPath} from '@/common/lobby/lobbyUrl';
+import {isLobbyCreatePath, LOBBY_CREATE_PATH, lobbyRoomIdFromPath} from '@/common/lobby/lobbyUrl';
+import {paths} from '@/common/app/paths';
 import {PICK_CODES} from '@/client/hotkeys/hotkeyActions';
 import {codeOfEvent} from '@/client/hotkeys/hotkeyEvents';
 import {hotkeysAvailable} from '@/client/hotkeys/hotkeyAvailability';
@@ -304,7 +305,7 @@ async function act(action: LobbyRequest): Promise<LobbyRoomModel | undefined> {
   } catch (error) {
     const text = lobbyFailureText(error);
     if (instance !== null) {
-      showAlert(instance.proxy as ComponentPublicInstance, 'Lobby', {text});
+      showAlert(instance.proxy as ComponentPublicInstance, 'Game lobby', {text});
     }
     await refresh();
     return undefined;
@@ -363,6 +364,21 @@ async function leave(): Promise<void> {
 function openCreate(): void {
   withProfile(() => createOpen.value = true);
 }
+
+// The open form has its own address lobby/create (start page item "Start" links there): a reload keeps it open,
+// closing it returns to the address it was opened from. Relative addresses resolve against the page's base (app root)
+let addressBeforeCreate: string | undefined;
+watch(createOpen, (open) => {
+  if (open) {
+    if (!isLobbyCreatePath(window.location.pathname)) {
+      addressBeforeCreate = window.location.href;
+      window.history.replaceState(window.history.state, '', LOBBY_CREATE_PATH);
+    }
+  } else if (isLobbyCreatePath(window.location.pathname)) {
+    window.history.replaceState(window.history.state, '', addressBeforeCreate ?? paths.LOBBY);
+    addressBeforeCreate = undefined;
+  }
+});
 
 async function openInLobby(request: {config: NewGameConfig, title: string, listed: boolean, freeSeats: Array<number>}): Promise<void> {
   followNextStart = true;
@@ -429,7 +445,10 @@ function onRowKey(event: KeyboardEvent): void {
 
 onMounted(() => {
   window.addEventListener('keydown', onRowKey);
-  setDocumentTitle('Lobby');
+  setDocumentTitle('Game lobby');
+  if (isLobbyCreatePath(window.location.pathname)) {
+    openCreate();
+  }
   refresh();
   // Renews an existing permission's subscription (language, key of the server)
   void subscribeLobbyPush();

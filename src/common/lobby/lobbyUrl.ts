@@ -3,6 +3,9 @@
 
 export const LOBBY_ROOM_PATH = 'lobby/room/';
 
+// Lobby with the "Create game" form open above it (start page item "Start")
+export const LOBBY_CREATE_PATH = 'lobby/create';
+
 /** Room ids: 4 characters, lower-case letters and digits */
 export const LOBBY_ROOM_ID = /^[a-z0-9]{4}$/;
 
@@ -48,6 +51,11 @@ export function lobbyRoomSlug(title: string): string {
 export function lobbyRoomPath(id: string, title: string): string {
   const slug = lobbyRoomSlug(title);
   return LOBBY_ROOM_PATH + (slug === '' ? id : `${id}-${slug}`);
+}
+
+/** True for a page address like /lobby/create (also behind a path prefix) */
+export function isLobbyCreatePath(pathname: string): boolean {
+  return /(?:^|\/)lobby\/create\/?$/.test(pathname);
 }
 
 /** Room id of a page address like /lobby/room/x4m9-Name (also behind a path prefix); undefined for other pages */

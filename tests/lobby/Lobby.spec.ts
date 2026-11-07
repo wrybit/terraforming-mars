@@ -4,7 +4,7 @@ import {LobbyError} from '../../src/server/lobby/lobbyValidation';
 import {NewGameConfig} from '../../src/common/game/NewGameConfig';
 import {LobbyProfile} from '../../src/common/lobby/LobbyModel';
 import {memoryStorage} from '../../src/server/lobby/lobbyStorage';
-import {lobbyRoomIdFromPath, lobbyRoomPath} from '../../src/common/lobby/lobbyUrl';
+import {isLobbyCreatePath, lobbyRoomIdFromPath, lobbyRoomPath} from '../../src/common/lobby/lobbyUrl';
 
 const HOST = 'hosthosthosthost01';
 const GUEST = 'guestguestguest001';
@@ -299,5 +299,12 @@ describe('lobbyUrl', () => {
     expect(lobbyRoomIdFromPath('/lobby/room/x4m9-Spiel_fuer_Juergen')).eq('x4m9');
     expect(lobbyRoomIdFromPath('/tm/lobby/room/x4m9')).eq('x4m9');
     expect(lobbyRoomIdFromPath('/lobby')).is.undefined;
+  });
+
+  it('recognizes the address of the create form', () => {
+    expect(isLobbyCreatePath('/lobby/create')).is.true;
+    expect(isLobbyCreatePath('/tm/lobby/create/')).is.true;
+    expect(isLobbyCreatePath('/lobby')).is.false;
+    expect(isLobbyCreatePath('/lobby/room/x4m9-create')).is.false;
   });
 });

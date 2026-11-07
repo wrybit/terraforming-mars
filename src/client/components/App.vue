@@ -104,7 +104,7 @@ const OnlinePlayers = defineAsyncComponent(() => import(/* webpackChunkName: "st
 const StartScreen = defineAsyncComponent(() => import(/* webpackChunkName: "start-screen" */ '@/client/components/StartScreen.vue'));
 import {$t, setTranslationContext, translateTextWithParams} from '@/client/directives/i18n';
 import {paths} from '@/common/app/paths';
-import {lobbyRoomIdFromPath} from '@/common/lobby/lobbyUrl';
+import {isLobbyCreatePath, lobbyRoomIdFromPath} from '@/common/lobby/lobbyUrl';
 import {PlayerViewModel, ViewModel} from '@/common/models/PlayerModel';
 import {SimpleGameModel} from '@/common/models/SimpleGameModel';
 import {SpectatorModel} from '@/common/models/SpectatorModel';
@@ -408,7 +408,7 @@ export default defineComponent({
       app.screen = 'games-overview';
     } else if (currentPathname === paths.NEW_GAME) {
       app.screen = 'create-game-form';
-    } else if (currentPathname === paths.LOBBY || lobbyRoomIdFromPath(window.location.pathname) !== undefined) {
+    } else if (currentPathname === paths.LOBBY || lobbyRoomIdFromPath(window.location.pathname) !== undefined || isLobbyCreatePath(window.location.pathname)) {
       app.screen = 'lobby';
     } else if (currentPathname === paths.CARDS) {
       app.screen = 'cards';

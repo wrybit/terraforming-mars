@@ -33,8 +33,9 @@
         <canvas class="start-screen-link-planet" :ref="(element) => setCanvas(index, element)" aria-hidden="true"></canvas>
         <span class="start-screen-link-content">
           <MobileGlyph class="start-screen-link-icon" :name="link.icon" :strokeWidth="2" />
-          <!-- v-i18n on the text span: the translation looks up the exact text content, the icon would interfere -->
-          <span v-i18n>{{ link.label }}</span>
+          <!-- $t instead of v-i18n: the directive translates its own output again on re-render,
+               and "Start a game" -> "Start" would then become the in-game "Start" button text -->
+          <span>{{ $t(link.label) }}</span>
         </span>
       </a>
     </div>

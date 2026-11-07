@@ -92,8 +92,8 @@
             <a v-for="link in navigationLinks" :key="link.label" :href="link.href" target="_blank" rel="noopener"
               role="menuitem" class="game-menu-item" @click="closeMenu">
               <span class="game-menu-item-icon"><MobileGlyph :name="link.icon" :strokeWidth="2" /></span>
-              <!-- v-i18n on the text span: the translation looks up the exact text content -->
-              <span v-i18n>{{ link.label }}</span>
+              <!-- $t, not v-i18n: some labels translate via an English override ("Game lobby" -> "Lobby") and the directive would translate its own output again -->
+              <span>{{ $t(link.label) }}</span>
             </a>
           </nav>
 
