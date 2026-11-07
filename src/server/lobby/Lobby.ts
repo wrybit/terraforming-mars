@@ -4,7 +4,7 @@ import {aiUnsupportedReasons} from '../../common/ai/aiSupport';
 import {Color, PLAYER_COLORS} from '../../common/Color';
 import {setupOptionsFromConfig} from '../../common/game/GameSetupOptions';
 import {NewGameConfig, NewPlayerModel} from '../../common/game/NewGameConfig';
-import {LobbyListModel, LobbyProfile, LobbyRoomModel, LobbySeatModel, LOBBY_MAX_SEATS} from '../../common/lobby/LobbyModel';
+import {LobbyGameProgress, LobbyListModel, LobbyProfile, LobbyRoomModel, LobbySeatModel, LOBBY_MAX_SEATS} from '../../common/lobby/LobbyModel';
 import {GameId, PlayerId, SpectatorId} from '../../common/Types';
 import {LobbyError, sanitizeProfile, sanitizeTitle} from './lobbyValidation';
 import {lobbyRoomPath} from '../../common/lobby/lobbyUrl';
@@ -44,8 +44,8 @@ export type GameProbe = {
   close(gameId: GameId): Promise<void>;
 };
 
-/** Generation and terraforming of a running game (lobbyGameProbe.ts); undefined: the game is gone */
-export type GameProgressSource = (gameId: GameId) => Promise<{generation: number, terraforming: number} | undefined>;
+/** Generation, terraforming and course of a running game (lobbyGameProbe.ts); undefined: the game is gone */
+export type GameProgressSource = (gameId: GameId) => Promise<Omit<LobbyGameProgress, 'playedMs'> | undefined>;
 
 /** Push messages to hosts (LobbyPush.ts); the lobby itself only knows when to send one */
 export type LobbyNotifier = {

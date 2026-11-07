@@ -1827,5 +1827,9 @@
   "AI test runs in the lobby": "Testy AI w lobby",
   "Address of the AI test run feed with the name of this computer, e.g. http://…/api/lobby-feed?instance=ak1. The lobby shows its running games and the last finished ones. Empty: none.": "Adres kanału testów AI z nazwą tego komputera, np. http://…/api/lobby-feed?instance=ak1. Lobby pokazuje jego trwające i ostatnio zakończone gry. Puste: brak.",
   "Training": "Trening",
-  "The AI is playing this game right now. It can be watched as soon as it is finished.": "AI właśnie rozgrywa tę grę. Można ją oglądać, gdy się skończy."
+  "The AI is playing this game right now. It can be watched as soon as it is finished.": "AI właśnie rozgrywa tę grę. Można ją oglądać, gdy się skończy.",
+  "${0} % terraformed": "${0} % sterraformowane",
+  "about ${0} left": "zostało ok. ${0}",
+  "No parameter raised": "Żaden parametr nie wzrósł",
+  "G${0}": "P${0}"
 }

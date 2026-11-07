@@ -99,6 +99,35 @@ export type LobbyGameProgress = {
   terraforming: number;
   /** Milliseconds since the game started */
   playedMs: number;
+  /** Lobby games: one entry per generation so far, the last one still running (LobbyGameTimeline.vue) */
+  generations?: ReadonlyArray<LobbyGeneration>;
+  /** Lobby games: claimed milestones and funded awards, in the order they happened */
+  marks?: ReadonlyArray<LobbyGameMark>;
+  /** Lobby games: estimated milliseconds until the game ends (pace of the recent generations) */
+  remainingMs?: number;
+};
+
+/** Global parameters shown in the lobby timeline, in the order they are stacked */
+export const LOBBY_PARAMETERS = ['temperature', 'oxygen', 'oceans', 'venus'] as const;
+export type LobbyParameter = typeof LOBBY_PARAMETERS[number];
+
+export type LobbyGeneration = {
+  number: number;
+  /** Length of the generation; the running one: so far */
+  durationMs: number;
+  /** Steps raised in this generation (temperature and Venus: one step = 2 °C or 2 %) */
+  steps: Partial<Record<LobbyParameter, number>>;
+};
+
+export type LobbyGameMark = {
+  kind: 'milestone' | 'award';
+  /** Milestone or award name (translated on the client) */
+  name: string;
+  player: string;
+  color: Color;
+  generation: number;
+  /** Milliseconds after the game started */
+  atMs: number;
 };
 
 /** What the create form needs to change a waiting game (host only): its settings, name, visibility and the seats entered by hand */

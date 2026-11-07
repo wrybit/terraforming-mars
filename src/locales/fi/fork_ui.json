@@ -1029,5 +1029,9 @@
   "AI test runs in the lobby": "AI-testiajot aulassa",
   "Address of the AI test run feed with the name of this computer, e.g. http://…/api/lobby-feed?instance=ak1. The lobby shows its running games and the last finished ones. Empty: none.": "AI-testisyötteen osoite tämän koneen nimellä, esim. http://…/api/lobby-feed?instance=ak1. Aula näyttää sen käynnissä olevat ja viimeksi päättyneet pelit. Tyhjä: ei mitään.",
   "Training": "Harjoitus",
-  "The AI is playing this game right now. It can be watched as soon as it is finished.": "AI pelaa tätä peliä juuri nyt. Sitä voi katsoa heti, kun se on päättynyt."
+  "The AI is playing this game right now. It can be watched as soon as it is finished.": "AI pelaa tätä peliä juuri nyt. Sitä voi katsoa heti, kun se on päättynyt.",
+  "${0} % terraformed": "${0} % terraformoitu",
+  "about ${0} left": "noin ${0} jäljellä",
+  "No parameter raised": "Yhtään parametria ei nostettu",
+  "G${0}": "S${0}"
 }
