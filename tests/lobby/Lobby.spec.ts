@@ -173,6 +173,24 @@ describe('Lobby', () => {
     expect(lobby.list(HOST).rooms[0].yourPlayerId).eq('p0');
   });
 
+  it('keeps the color and name chosen for an AI in the create form', async () => {
+    const gameConfig = config(['human', 'ai', 'ai']);
+    gameConfig.players[1].color = 'yellow';
+    gameConfig.players[2].color = 'blue';
+    gameConfig.players[2].name = 'Robo';
+    await lobby.open(HOST, profile('Ann'), '', true, gameConfig, starter);
+    expect(started[0].players.map((p) => p.color)).deep.eq(['red', 'yellow', 'blue']);
+    expect(started[0].players.map((p) => p.name)).deep.eq(['Ann', 'Yellow', 'Robo']);
+  });
+
+  it('gives an AI another color when a human took its color', async () => {
+    const gameConfig = config(['human', 'human', 'ai']);
+    gameConfig.players[2].color = 'yellow';
+    const room = await lobby.open(HOST, profile('Ann'), '', true, gameConfig, starter);
+    await lobby.join(GUEST, profile('Bob', 'yellow'), room.id, starter);
+    expect(started[0].players.map((p) => p.color)).deep.eq(['red', 'yellow', 'green']);
+  });
+
   it('gives a joining player a free color when the preferred one is taken', async () => {
     const room = await lobby.open(HOST, profile('Ann', 'red'), '', true, config(['human', 'human', 'human']), starter);
     const joined = await lobby.join(GUEST, profile('Bob', 'red'), room.id, starter);

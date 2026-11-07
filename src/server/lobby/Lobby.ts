@@ -57,7 +57,9 @@ export type GameStarter = (config: NewGameConfig) => Promise<StartedGame>;
 type HumanSeat = {kind: 'human', participant: string, profile: LobbyProfile, ready: boolean, lastSeen: number};
 // Entered by the host by hand; always counts as ready
 type GuestSeat = {kind: 'guest', name: string, color: Color, handicap?: number};
-type Seat = {kind: 'free'} | {kind: 'ai', aiLevel: AiLevel} | HumanSeat | GuestSeat;
+// Color and name as chosen in the create form; seats turned into AI in the lobby have none
+type AiSeat = {kind: 'ai', aiLevel: AiLevel, color?: Color, name?: string};
+type Seat = {kind: 'free'} | AiSeat | HumanSeat | GuestSeat;
 
 type Room = {
   id: string;
@@ -236,7 +238,9 @@ export class Lobby {
         return this.humanSeat(me, cleanProfile, true);
       }
       if (isAiLevel(player.aiLevel)) {
-        return {kind: 'ai', aiLevel: player.aiLevel};
+        // Same cleanup as a guest's name and color; an empty name stays empty so the AI is named after its color
+        const chosen = sanitizeProfile({name: player.name || capitalize(player.color), color: player.color, emoji: ''});
+        return {kind: 'ai', aiLevel: player.aiLevel, color: chosen.color, name: player.name ? chosen.name : undefined};
       }
       if (free.has(index)) {
         return {kind: 'free'};
@@ -405,7 +409,15 @@ export class Lobby {
   /** The create form's settings with the seated players, in seat order */
   private gameConfig(room: Room): NewGameConfig {
     const humanColors = new Set(room.seats.flatMap((seat) => seat.kind === 'human' ? [seat.profile.color] : seat.kind === 'guest' ? [seat.color] : []));
-    const freeColors = PLAYER_COLORS.filter((color) => !humanColors.has(color));
+    // An AI keeps the color chosen in the form unless a human took it in the meantime or another AI has it already
+    const aiColors = new Set<Color>();
+    for (const seat of room.seats) {
+      if (seat.kind === 'ai' && seat.color !== undefined && !humanColors.has(seat.color)) {
+        aiColors.add(seat.color);
+      }
+    }
+    const freeColors = PLAYER_COLORS.filter((color) => !humanColors.has(color) && !aiColors.has(color));
+    const keptAiColors = new Set(aiColors);
     const players: Array<NewPlayerModel> = room.seats.map((seat) => {
       // TR boost as set in the form (host and players entered by hand); joining players start without
       if (seat.kind === 'human') {
@@ -415,9 +427,12 @@ export class Lobby {
       if (seat.kind === 'guest') {
         return {name: seat.name, color: seat.color, beginner: false, handicap: seat.handicap ?? 0, first: false};
       }
-      const color = freeColors.shift() as Color;
+      const ownColor = seat.kind === 'ai' && seat.color !== undefined && keptAiColors.delete(seat.color) ? seat.color : undefined;
+      const color = ownColor ?? freeColors.shift() as Color;
       const aiLevel = seat.kind === 'ai' ? seat.aiLevel : DEFAULT_AI_LEVEL;
-      return {name: capitalize(color), color, beginner: false, handicap: 0, first: false, aiLevel};
+      // A name of its own stays; otherwise the AI is named after its color, as in the create form
+      const name = seat.kind === 'ai' && seat.name !== undefined && ownColor !== undefined ? seat.name : capitalize(color);
+      return {name, color, beginner: false, handicap: 0, first: false, aiLevel};
     });
     // Seat order is the form's order, so its "goes first" star still points at the right seat
     const chosenFirst = room.config.players.findIndex((player) => player.first === true);
