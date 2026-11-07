@@ -1276,5 +1276,10 @@
   "You removed this player twice. If you decline, ${0} can never join this game again.": "이 플레이어를 두 번 제외했습니다. 거절하면 ${0}님은 이 게임에 다시는 참가할 수 없습니다.",
   "Link for spectators": "관전자용 링크",
   "The game is running. Send the players you entered by hand their own link.": "게임이 진행 중입니다. 직접 입력한 플레이어에게 각자의 링크를 보내세요.",
-  "More options": "추가 옵션"
+  "More options": "추가 옵션",
+  "Game ${0} was removed on ${1}: the lobby keeps only the last ${2} AI training games.": "게임 ${0}이(가) ${1}에 삭제되었습니다: 로비는 최근 AI 훈련 게임 ${2}개만 보관합니다.",
+  "AI test runs in the lobby": "로비의 AI 테스트",
+  "Address of the AI test run feed with the name of this computer, e.g. http://…/api/lobby-feed?instance=ak1. The lobby shows its running games and the last finished ones. Empty: none.": "이 컴퓨터 이름이 포함된 AI 테스트 피드 주소, 예: http://…/api/lobby-feed?instance=ak1. 로비에 진행 중인 게임과 최근 끝난 게임이 표시됩니다. 비우면: 없음.",
+  "Training": "훈련 중",
+  "The AI is playing this game right now. It can be watched as soon as it is finished.": "AI가 지금 이 게임을 하고 있습니다. 끝나면 바로 관전할 수 있습니다."
 }

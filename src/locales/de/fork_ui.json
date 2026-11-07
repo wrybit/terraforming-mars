@@ -804,5 +804,9 @@
   "You removed this player twice. If you decline, ${0} can never join this game again.": "Du hast diesen Spieler zweimal entfernt. Lehnst du ab, kann ${0} diesem Spiel nie wieder beitreten.",
   "Link for spectators": "Link für Zuschauer",
   "The game is running. Send the players you entered by hand their own link.": "Das Spiel läuft. Schick den von dir eingetragenen Spielern ihren eigenen Link.",
-  "More options": "Weitere Optionen"
+  "More options": "Weitere Optionen",
+  "Game ${0} was removed on ${1}: the lobby keeps only the last ${2} AI training games.": "Die Partie ${0} wurde am ${1} entfernt: Die Lobby behält nur die letzten ${2} AI-Trainingspartien.",
+  "AI test runs in the lobby": "AI-Testläufe in der Lobby",
+  "Address of the AI test run feed with the name of this computer, e.g. http://…/api/lobby-feed?instance=ak1. The lobby shows its running games and the last finished ones. Empty: none.": "Adresse des AI-Testlauf-Feeds mit dem Namen dieses Rechners, z. B. http://…/api/lobby-feed?instance=ak1. Die Lobby zeigt seine laufenden und die zuletzt fertigen Partien. Leer: keine.",
+  "The AI is playing this game right now. It can be watched as soon as it is finished.": "Die AI spielt diese Partie gerade. Zusehen kann man, sobald sie fertig ist."
 }

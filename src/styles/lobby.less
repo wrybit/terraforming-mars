@@ -870,6 +870,47 @@
   font-weight: 500;
   text-overflow: ellipsis;
   white-space: nowrap;
+
+  // AI training names end with the running number, the part that tells them apart: wrap instead of cutting it off
+  .lobby-game--training & {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+}
+
+// AI training rows: "Training" (running) and "Watch" (finished) equally wide, so the seats line up
+.lobby-game--training .lobby-game-action .btn {
+  justify-content: center;
+  min-width: 128px;
+}
+
+// Running AI training game: disabled, the spinner shows that it is being played right now
+.lobby-game-training {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lobby-game-spinner {
+  display: inline-block;
+  box-sizing: border-box;
+  width: 14px;
+  height: 14px;
+  flex: none;
+  border: 2px solid currentcolor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: lobby-game-spin 0.9s linear infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation-duration: 3s;
+  }
+}
+
+@keyframes lobby-game-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 // Generation, players, AI, time: icon and value close together, the facts further apart (proximity)

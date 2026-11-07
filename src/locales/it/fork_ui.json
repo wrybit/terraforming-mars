@@ -2291,5 +2291,10 @@
   "You removed this player twice. If you decline, ${0} can never join this game again.": "Hai rimosso questo giocatore due volte. Se rifiuti, ${0} non potrà mai più unirsi a questa partita.",
   "Link for spectators": "Link per gli spettatori",
   "The game is running. Send the players you entered by hand their own link.": "La partita è in corso. Invia ai giocatori che hai inserito a mano il loro link personale.",
-  "More options": "Altre opzioni"
+  "More options": "Altre opzioni",
+  "Game ${0} was removed on ${1}: the lobby keeps only the last ${2} AI training games.": "La partita ${0} è stata rimossa il ${1}: la lobby conserva solo le ultime ${2} partite di allenamento dell'AI.",
+  "AI test runs in the lobby": "Test dell'AI nella lobby",
+  "Address of the AI test run feed with the name of this computer, e.g. http://…/api/lobby-feed?instance=ak1. The lobby shows its running games and the last finished ones. Empty: none.": "Indirizzo del feed dei test dell'AI con il nome di questo computer, ad es. http://…/api/lobby-feed?instance=ak1. La lobby mostra le sue partite in corso e le ultime terminate. Vuoto: nessuno.",
+  "Training": "Allenamento",
+  "The AI is playing this game right now. It can be watched as soon as it is finished.": "L'AI sta giocando questa partita in questo momento. Si potrà guardare appena sarà finita."
 }

@@ -4,8 +4,11 @@
        of a running game and the settings. A CTA only where you take part, otherwise a quiet button -->
   <!-- Games you opened yourself are set off by a background, the others stay neutral.
        The own waiting room opens its dialog on a click anywhere on the entry, not only on the button -->
+  <!-- AI training games of this server (aiTraining): running ones are only information (no button, no hotkey),
+       finished ones can be watched like any other game -->
   <div class="lobby-game" :data-room-id="room.id"
-    :class="{'lobby-game--running': room.state === 'started', 'lobby-game--hosted': isHost, 'lobby-game--clickable': isMine}"
+    :class="{'lobby-game--running': room.state === 'started', 'lobby-game--hosted': isHost, 'lobby-game--clickable': isMine,
+             'lobby-game--training': room.aiTraining !== undefined, 'lobby-game--info': isLiveTraining}"
     @click="isMine && emit('open-room')">
     <div class="lobby-game-info">
       <div class="lobby-game-title">{{ room.title }}</div>
@@ -15,6 +18,7 @@
         <span v-if="aiPlayers > 0" title="AI"><LobbyFactIcon kind="ai" />{{ aiPlayers }}</span>
         <span v-if="room.progress !== undefined" :title="$t('Time played')"><LobbyFactIcon kind="time" />{{ playedText }}</span>
         <span v-else class="lobby-game-waiting"><LobbyFactIcon kind="time" />{{ waitingText }}</span>
+        <span v-if="room.aiTraining?.finished" v-i18n>Finished</span>
       </div>
     </div>
     <div class="lobby-game-seats">
@@ -38,6 +42,13 @@
       <span v-else-if="room.state === 'open' && room.yourAccess === 'declined'" class="lobby-game-declined" v-i18n>Declined by the host</span>
       <!-- Removed twice before: joining asks the host first -->
       <AppButton v-else-if="room.state === 'open'" class="btn-tone-quiet" :title="room.yourAccess === 'request' ? 'Ask to join' : 'Join'" :fixedHotkey="keys" @click="emit('join')" />
+      <!-- Running AI training game: where "Watch" will be, a disabled button with a spinner says it is still being played
+           (on the wrapper the tooltip also works for the disabled button) -->
+      <span v-else-if="isLiveTraining" v-glass-tooltip="$t('The AI is playing this game right now. It can be watched as soon as it is finished.')">
+        <button type="button" class="btn btn-rounded btn-tone-quiet lobby-game-watch lobby-game-training" disabled>
+          <span class="lobby-game-spinner" aria-hidden="true"></span><span v-i18n>Training</span>
+        </button>
+      </span>
     </div>
   </div>
 </template>
@@ -54,6 +65,7 @@ import LobbyFactIcon from './LobbyFactIcon.vue';
 import {lobbySetupChips} from './lobbySetupChips';
 import {continueHref} from './lobbyLinks';
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
+import {glassTooltip as vGlassTooltip} from '@/client/directives/GlassTooltip';
 
 const props = defineProps<{
   room: LobbyRoomModel;
@@ -68,6 +80,7 @@ const emit = defineEmits<{
   (event: 'open-room'): void;
 }>();
 
+const isLiveTraining = computed(() => props.room.aiTraining !== undefined && !props.room.aiTraining.finished);
 const isMine = computed(() => props.room.state === 'open' && props.room.seats.some((seat) => seat.kind === 'human' && seat.you));
 // Opened by you (host), open or already running
 const isHost = computed(() => props.room.seats.some((seat) => seat.kind === 'human' && seat.you && seat.host));
@@ -81,7 +94,12 @@ const waitingText = computed(() => {
 });
 // "6 min", "1 h 12 min"
 const playedText = computed(() => {
-  const minutes = Math.floor((props.room.progress?.playedMs ?? 0) / 60_000);
+  const milliseconds = props.room.progress?.playedMs ?? 0;
+  // AI training games take seconds to minutes: below a minute the seconds tell more than "0 min"
+  if (props.room.aiTraining !== undefined && milliseconds < 60_000) {
+    return `${Math.floor(milliseconds / 1000)} s`;
+  }
+  const minutes = Math.floor(milliseconds / 60_000);
   return minutes < 60 ? `${minutes} min` : `${Math.floor(minutes / 60)} h ${minutes % 60} min`;
 });
 

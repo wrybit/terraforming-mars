@@ -85,6 +85,8 @@ const BASE_SETTINGS: ReadonlyArray<ServerSettingDefinition> = [
     description: 'So players can follow what the AI just did. Empty: 2000.'},
   {key: 'AI_DECISION_LOG_DIR', group: 'AI opponents', kind: 'text', label: 'Folder for decision logs',
     description: 'The AI writes every decision there (for training). Empty: no logs.'},
+  {key: 'AI_TRAINING_FEED', group: 'AI opponents', kind: 'text', label: 'AI test runs in the lobby',
+    description: 'Address of the AI test run feed with the name of this computer, e.g. http://…/api/lobby-feed?instance=ak1. The lobby shows its running games and the last finished ones. Empty: none.'},
 
   {key: 'SERVER_ID', group: 'Access', kind: 'secret', label: 'Admin passphrase (serverId)',
     description: 'Log in to the admin pages with it. Changing it ends every admin login. Empty: a new random one at every start.'},

@@ -86,6 +86,11 @@ export type LobbyRoomModel = {
   config?: NewGameConfig;
   /** Started rooms: how far the game is (lobby row: generation, progress bar, time played) */
   progress?: LobbyGameProgress;
+  /**
+   * Not a room but a game of the AI test batches on this server (server/aiTraining): shown among the running
+   * games as information; finished ones can be watched (spectatorId), running ones not (they last seconds).
+   */
+  aiTraining?: {finished: boolean};
 };
 
 export type LobbyGameProgress = {

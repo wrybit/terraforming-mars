@@ -1207,5 +1207,10 @@
   "You removed this player twice. If you decline, ${0} can never join this game again.": "Kétszer eltávolítottad ezt a játékost. Ha elutasítod, ${0} soha többé nem csatlakozhat ehhez a játékhoz.",
   "Link for spectators": "Link a nézőknek",
   "The game is running. Send the players you entered by hand their own link.": "A játék fut. Küldd el a kézzel beírt játékosoknak a saját linkjüket.",
-  "More options": "További lehetőségek"
+  "More options": "További lehetőségek",
+  "Game ${0} was removed on ${1}: the lobby keeps only the last ${2} AI training games.": "A(z) ${0} játékot ${1} időpontban eltávolítottuk: a lobbi csak az utolsó ${2} AI-edzőjátékot őrzi meg.",
+  "AI test runs in the lobby": "AI-tesztek a lobbiban",
+  "Address of the AI test run feed with the name of this computer, e.g. http://…/api/lobby-feed?instance=ak1. The lobby shows its running games and the last finished ones. Empty: none.": "Az AI-tesztcsatorna címe ennek a gépnek a nevével, pl. http://…/api/lobby-feed?instance=ak1. A lobbi mutatja a futó és a legutóbb befejezett játékait. Üres: nincs.",
+  "Training": "Edzés",
+  "The AI is playing this game right now. It can be watched as soon as it is finished.": "Az AI éppen ezt a játékot játssza. Amint véget ér, megnézhető."
 }

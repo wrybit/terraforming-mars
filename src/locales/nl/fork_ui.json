@@ -1654,5 +1654,9 @@
   "You removed this player twice. If you decline, ${0} can never join this game again.": "Je hebt deze speler twee keer verwijderd. Als je weigert, kan ${0} nooit meer aan dit spel meedoen.",
   "Link for spectators": "Link voor toeschouwers",
   "The game is running. Send the players you entered by hand their own link.": "Het spel loopt. Stuur de spelers die je zelf hebt ingevoerd hun eigen link.",
-  "More options": "Meer opties"
+  "More options": "Meer opties",
+  "Game ${0} was removed on ${1}: the lobby keeps only the last ${2} AI training games.": "Spel ${0} is op ${1} verwijderd: de lobby bewaart alleen de laatste ${2} AI-trainingsspellen.",
+  "AI test runs in the lobby": "AI-testruns in de lobby",
+  "Address of the AI test run feed with the name of this computer, e.g. http://…/api/lobby-feed?instance=ak1. The lobby shows its running games and the last finished ones. Empty: none.": "Adres van de AI-testfeed met de naam van deze computer, bijv. http://…/api/lobby-feed?instance=ak1. De lobby toont de lopende en de laatst afgeronde spellen. Leeg: geen.",
+  "The AI is playing this game right now. It can be watched as soon as it is finished.": "De AI speelt dit spel nu. Kijken kan zodra het afgelopen is."
 }

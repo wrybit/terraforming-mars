@@ -67,7 +67,7 @@
           <section class="create-game-card lobby-list-card lobby-list">
             <div class="lobby-section-title"><span v-i18n>Running games</span><span class="lobby-section-count">{{ runningRooms.length }}</span></div>
             <div class="lobby-list-rows">
-              <LobbyGameRow v-for="(room, index) in runningRooms" :key="room.id" :room="room" :position="index" />
+              <LobbyGameRow v-for="room in runningRooms" :key="room.id" :room="room" :position="keyPosition(room)" />
               <div v-if="runningRooms.length === 0 && loaded" class="lobby-empty">
                 <span v-i18n>No game is running right now.</span>
               </div>
@@ -76,7 +76,7 @@
           <section class="create-game-card lobby-list-card lobby-list">
             <div class="lobby-section-title"><span v-i18n>Open games</span><span class="lobby-section-count">{{ openRooms.length }}</span></div>
             <div class="lobby-list-rows">
-              <LobbyGameRow v-for="(room, index) in openRooms" :key="room.id" :room="room" :position="runningRooms.length + index" @join="join(room)" @open-room="roomOpen = true" />
+              <LobbyGameRow v-for="(room, index) in openRooms" :key="room.id" :room="room" :position="keyedRunningRooms.length + index" @join="join(room)" @open-room="roomOpen = true" />
               <div v-if="openRooms.length === 0 && loaded" class="lobby-empty">
                 <template v-if="filterCount > 0 && !queueing">
                   <span v-i18n>No open game fits your filters.</span>
@@ -230,6 +230,12 @@ const openRooms = computed(() => {
   return mine !== undefined && mine.state === 'open' && !open.includes(mine) ? [mine, ...open] : open;
 });
 const runningRooms = computed(() => visibleRooms.value.filter((room) => room.state === 'started'));
+// Running AI training games are only information: no button, so they take no hotkey position
+const keyedRunningRooms = computed(() => runningRooms.value.filter((room) => room.aiTraining === undefined || room.aiTraining.finished));
+function keyPosition(room: LobbyRoomModel): number | undefined {
+  const position = keyedRunningRooms.value.indexOf(room);
+  return position < 0 ? undefined : position;
+}
 const quickMatch = computed(() => bestMatch(rooms.value, filters.value));
 const queueTime = computed(() => {
   const seconds = Math.max(0, Math.floor((now.value - queueStartedAt.value) / 1000));
@@ -524,7 +530,7 @@ function onRowKey(event: KeyboardEvent): void {
   }
   const code = codeOfEvent(event);
   const index = code === undefined ? -1 : PICK_CODES.indexOf(code);
-  const button = document.querySelectorAll<HTMLElement>('#lobby .lobby-game')[index]?.querySelector<HTMLElement>('.lobby-game-action .btn');
+  const button = document.querySelectorAll<HTMLElement>('#lobby .lobby-game:not(.lobby-game--info)')[index]?.querySelector<HTMLElement>('.lobby-game-action .btn');
   if (button !== undefined && button !== null) {
     event.preventDefault();
     button.click();

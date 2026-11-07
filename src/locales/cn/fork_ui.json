@@ -2008,5 +2008,10 @@
   "You removed this player twice. If you decline, ${0} can never join this game again.": "你已两次移出该玩家。如果拒绝，${0} 将再也无法加入此游戏。",
   "Link for spectators": "观众链接",
   "The game is running. Send the players you entered by hand their own link.": "游戏正在进行。请把各自的链接发给你手动添加的玩家。",
-  "More options": "更多选项"
+  "More options": "更多选项",
+  "Game ${0} was removed on ${1}: the lobby keeps only the last ${2} AI training games.": "游戏 ${0} 已于 ${1} 移除：大厅只保留最近 ${2} 局 AI 训练游戏。",
+  "AI test runs in the lobby": "大厅中的 AI 测试",
+  "Address of the AI test run feed with the name of this computer, e.g. http://…/api/lobby-feed?instance=ak1. The lobby shows its running games and the last finished ones. Empty: none.": "此计算机名称对应的 AI 测试数据源地址，例如 http://…/api/lobby-feed?instance=ak1。大厅会显示其正在进行和最近完成的游戏。留空：不显示。",
+  "Training": "训练中",
+  "The AI is playing this game right now. It can be watched as soon as it is finished.": "AI 正在进行这局游戏。结束后即可观看。"
 }

@@ -1024,5 +1024,10 @@
   "You removed this player twice. If you decline, ${0} can never join this game again.": "Poistit tämän pelaajan kahdesti. Jos hylkäät, ${0} ei voi enää koskaan liittyä tähän peliin.",
   "Link for spectators": "Linkki katsojille",
   "The game is running. Send the players you entered by hand their own link.": "Peli on käynnissä. Lähetä itse lisäämillesi pelaajille heidän oma linkkinsä.",
-  "More options": "Lisää vaihtoehtoja"
+  "More options": "Lisää vaihtoehtoja",
+  "Game ${0} was removed on ${1}: the lobby keeps only the last ${2} AI training games.": "Peli ${0} poistettiin ${1}: aula säilyttää vain viimeiset ${2} AI:n harjoituspeliä.",
+  "AI test runs in the lobby": "AI-testiajot aulassa",
+  "Address of the AI test run feed with the name of this computer, e.g. http://…/api/lobby-feed?instance=ak1. The lobby shows its running games and the last finished ones. Empty: none.": "AI-testisyötteen osoite tämän koneen nimellä, esim. http://…/api/lobby-feed?instance=ak1. Aula näyttää sen käynnissä olevat ja viimeksi päättyneet pelit. Tyhjä: ei mitään.",
+  "Training": "Harjoitus",
+  "The AI is playing this game right now. It can be watched as soon as it is finished.": "AI pelaa tätä peliä juuri nyt. Sitä voi katsoa heti, kun se on päättynyt."
 }
