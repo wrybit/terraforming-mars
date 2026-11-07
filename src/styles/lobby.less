@@ -1286,7 +1286,6 @@ each(@players, {
     background: transparent;
     box-shadow: none;
     font-size: 17px;
-    transition: transform 0.12s;
   }
 
   // Emoji glyphs are wider (advance about 1.25em) than their picture, which sits at the left of that width:
@@ -1297,12 +1296,6 @@ each(@players, {
     height: 1em;
     line-height: 1em;
     white-space: nowrap;
-  }
-
-  // Without a ring the emoji itself shows that it can be clicked
-  &:hover .lobby-avatar,
-  &[aria-expanded="true"] .lobby-avatar {
-    transform: scale(1.15);
   }
 }
 
