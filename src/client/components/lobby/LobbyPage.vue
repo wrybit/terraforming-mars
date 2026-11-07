@@ -114,7 +114,7 @@
     <!-- "Create game" as a modal: the same form, with seats offered in the lobby -->
     <Teleport to="body">
       <div v-if="createOpen" class="lobby-create-overlay" @keydown.esc="createOpen = false">
-        <CreateGameForm lobbyMode :lobbyProfile="profile.name.trim() === '' ? undefined : profile" @close="createOpen = false" @open-in-lobby="openInLobby" />
+        <CreateGameForm lobbyMode :lobbyProfile="profile.name.trim() === '' ? undefined : profile" @close="createOpen = false" @open-in-lobby="openInLobby" @host-profile="takeHostProfile" />
       </div>
     </Teleport>
   </div>
@@ -383,6 +383,13 @@ watch(createOpen, (open) => {
   }
 });
 
+// The own seat of "Create game" is the profile: taken over with every keystroke, kept when the form is closed
+function takeHostProfile(next: LobbyProfile): void {
+  profile.value = next;
+  firstVisit.value = false;
+  saveLobbyProfile(next);
+}
+
 async function openInLobby(request: {config: NewGameConfig, title: string, listed: boolean, freeSeats: Array<number>, hostPicture: {emoji: string, image?: string}}): Promise<void> {
   // The own seat of the form is the host: its name, color and picture become the lobby profile, so creating a game
   // never stops at the profile dialog and the profile always matches what was entered there
@@ -392,9 +399,7 @@ async function openInLobby(request: {config: NewGameConfig, title: string, liste
     return;
   }
   const fromSeat: LobbyProfile = {name: ownSeat.name.trim().slice(0, LOBBY_NAME_MAX_LENGTH), color: ownSeat.color, emoji: request.hostPicture.emoji, image: request.hostPicture.image};
-  profile.value = fromSeat;
-  firstVisit.value = false;
-  saveLobbyProfile(fromSeat);
+  takeHostProfile(fromSeat);
   followNextStart = true;
   // Still inside the click: browsers ask for the permission only then. With it the host may leave the lobby
   // and still learns by push message when somebody joins

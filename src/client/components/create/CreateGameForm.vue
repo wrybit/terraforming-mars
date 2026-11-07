@@ -492,7 +492,7 @@ import {requiredByTooltip, requirementsOf} from './expansionDependencies';
 import {Expansion} from '@/common/cards/GameModule';
 import {arrangeSeats, seatKey} from './seatOrder';
 import {collapseEnter, collapseLeave} from '@/client/utils/collapseAnimation';
-import {LOBBY_EMOJIS, LobbyProfile} from '@/common/lobby/LobbyModel';
+import {LOBBY_EMOJIS, LOBBY_NAME_MAX_LENGTH, LobbyProfile} from '@/common/lobby/LobbyModel';
 import {GAME_NAME_MAX_LENGTH, generateGameName} from '@/common/game/GameName';
 import {UnseededRandom} from '@/common/utils/Random';
 
@@ -624,6 +624,15 @@ export default defineComponent({
     ValidationProblems,
   },
   watch: {
+    // Lobby: the own seat is the lobby profile; every keystroke (and color or picture) goes straight to it,
+    // so the lobby uses the name even when the form is closed without opening a game
+    hostProfile(profile: LobbyProfile | undefined) {
+      if (profile !== undefined) {
+        // See openInLobby: emits stay undeclared
+        // eslint-disable-next-line vue/require-explicit-emits
+        this.$emit('host-profile', profile);
+      }
+    },
     // customMA is only valid with MANUAL; any other choice drops it
     randomMA(value: RandomMAOptionType) {
       if (value !== RandomMAOptionType.MANUAL) {
@@ -762,6 +771,14 @@ export default defineComponent({
       ?.setAttribute('content', this.previousViewport);
   },
   computed: {
+    // Lobby: name, color and picture of the own seat; undefined without a name (the lobby needs one)
+    hostProfile(): LobbyProfile | undefined {
+      const own = this.players[0];
+      if (!this.lobbyMode || own === undefined || own.name.trim() === '') {
+        return undefined;
+      }
+      return {name: own.name.trim().slice(0, LOBBY_NAME_MAX_LENGTH), color: own.color, emoji: this.hostEmoji, image: this.hostImage};
+    },
     gameNameMaxLength(): number {
       return GAME_NAME_MAX_LENGTH;
     },

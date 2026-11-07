@@ -96,6 +96,19 @@ describe('CreateGameForm', () => {
     expect(request.config.players[0].name).eq('Jens');
   });
 
+  it('lobby: every change of the own seat goes to the lobby profile right away', async () => {
+    const wrapper = shallowMount(CreateGameForm, {...globalConfig, props: {lobbyMode: true}});
+    const vm = wrapper.vm as any;
+    vm.getPlayers()[0].name = 'Je';
+    await nextTick();
+    vm.getPlayers()[0].name = 'Jens';
+    vm.pickHostEmoji('🪐');
+    await nextTick();
+    const profiles = (wrapper.emitted('host-profile') as Array<Array<any>>).map(([profile]) => profile);
+    expect(profiles.map((profile) => profile.name)).deep.eq(['Je', 'Jens']);
+    expect(profiles[1].emoji).eq('🪐');
+  });
+
   it('lobby without a profile: the host picture is drawn at random', () => {
     const vm = shallowMount(CreateGameForm, {...globalConfig, props: {lobbyMode: true}}).vm as any;
     expect(vm.hostEmoji).is.a('string').with.length.greaterThan(0);
