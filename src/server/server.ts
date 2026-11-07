@@ -142,11 +142,14 @@ async function start() {
     // Do not fail. Just continue. Stats aren't vital.
     console.error(err);
   }
-  // Hosts with the lobby in the background or closed learn by push message that somebody joined
+  // Participants with the lobby in the background or closed learn by push message what happened to their game.
+  // Every outcome goes to the log: a missing message can only be traced there
   Lobby.INSTANCE.setNotifier({
     canReach: (participant) => LobbyPush.INSTANCE.canReach(participant),
-    joined: (host, room, name) => {
-      LobbyPush.INSTANCE.joined(host, room, name).catch((err) => console.error('Lobby push failed', err));
+    notify: (participant, kind, room, name) => {
+      LobbyPush.INSTANCE.notify(participant, kind, room, name)
+        .then((result) => console.log(`Lobby push ${kind} (room ${room.id}) to ${participant.slice(0, 6)}…: ${result}`))
+        .catch((err) => console.error(`Lobby push ${kind} (room ${room.id}) to ${participant.slice(0, 6)}… failed`, err));
     },
   });
   // A finished, deleted or purged game leaves the lobby's "running" list

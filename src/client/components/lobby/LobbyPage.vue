@@ -359,8 +359,14 @@ async function act(action: LobbyRequest): Promise<LobbyRoomModel | undefined> {
 function join(room: LobbyRoomModel): void {
   withProfile(async () => {
     followNextStart = true;
+    // Still inside the click, as when opening a game: with the permission the player may leave the lobby
+    // and still learns by push message when the game starts
+    const permission = askLobbyPushPermission();
     const seatToken = room.id === invitedRoomId ? invitedSeatToken : undefined;
     const joined = await act({action: 'join', roomId: room.id, profile: profile.value, seatToken});
+    if (permission !== undefined) {
+      void permission.then(subscribeLobbyPush);
+    }
     if (joined !== undefined && requestedRoomId.value === room.id && instance !== null) {
       showAlert(instance.proxy as ComponentPublicInstance, 'Game lobby', {text: translateText('The host removed you from this game twice: your request to join was sent, the host decides.')});
       return;

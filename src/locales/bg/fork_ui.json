@@ -1982,5 +1982,9 @@
   "about ${0} left": "остават около ${0}",
   "No parameter raised": "Няма повишен параметър",
   "G${0}": "П${0}",
-  "Last activity": "Последна активност"
+  "Last activity": "Последна активност",
+  "${0} wants to join your game": "${0} иска да се присъедини към играта ти",
+  "Open the lobby to let them in or decline.": "Отвори лобито, за да приемеш или откажеш.",
+  "Your game has started": "Играта ти започна",
+  "The game is waiting for you.": "Играта те чака."
 }

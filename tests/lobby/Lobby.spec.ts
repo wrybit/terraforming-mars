@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {ABANDONED_AFTER_MS, GameProbe, GameStarter, Lobby, PARTICIPANT_TIMEOUT_MS, REACHABLE_HOST_TIMEOUT_MS, StartedGame} from '../../src/server/lobby/Lobby';
+import {ABANDONED_AFTER_MS, GameProbe, GameStarter, Lobby, PARTICIPANT_TIMEOUT_MS, REACHABLE_TIMEOUT_MS, StartedGame} from '../../src/server/lobby/Lobby';
 import {LobbyError} from '../../src/server/lobby/lobbyValidation';
 import {NewGameConfig} from '../../src/common/game/NewGameConfig';
 import {LobbyProfile} from '../../src/common/lobby/LobbyModel';
@@ -384,18 +384,31 @@ describe('Lobby', () => {
 
   it('keeps the room of a host reachable by push and tells the host about a join', async () => {
     const joins: Array<string> = [];
-    lobby.setNotifier({canReach: (participant) => participant === HOST, joined: (host, room, name) => joins.push(`${host} ${room.path} ${name}`)});
+    lobby.setNotifier({canReach: (participant) => participant === HOST, notify: (host, kind, room, name) => joins.push(`${kind} ${host} ${room.path} ${name}`)});
     const room = await lobby.open(HOST, profile('Ann'), 'Evening', true, config(['human', 'human', 'human']), starter);
     now += PARTICIPANT_TIMEOUT_MS * 10;
     expect(lobby.list(undefined).rooms).has.length(1);
     await lobby.join(GUEST, profile('Bob'), room.id, starter);
-    expect(joins).deep.eq([`${HOST} ${lobbyRoomPath(room.id, 'Evening')} Bob`]);
+    expect(joins).deep.eq([`joined ${HOST} ${lobbyRoomPath(room.id, 'Evening')} Bob`]);
     // Joining again (already seated) sends nothing
     await lobby.join(GUEST, profile('Bob'), room.id, starter);
     expect(joins).has.length(1);
     lobby.list(GUEST);
-    now += REACHABLE_HOST_TIMEOUT_MS;
+    now += REACHABLE_TIMEOUT_MS;
     expect(lobby.list(undefined).rooms).has.length(0);
+  });
+
+  it('tells everybody seated except whoever started it that the game started', async () => {
+    const messages: Array<string> = [];
+    lobby.setNotifier({canReach: () => true, notify: (participant, kind, _room, name) => messages.push(`${kind} ${participant} ${name}`)});
+    const room = await lobby.open(HOST, profile('Ann'), 'Evening', true, config(['human', 'human', 'human']), starter);
+    await lobby.join(GUEST, profile('Bob'), room.id, starter);
+    // A joiner reachable by push keeps the seat with the lobby closed, to be called back by the start
+    now += PARTICIPANT_TIMEOUT_MS * 10;
+    lobby.list(HOST);
+    expect(lobby.list(HOST).rooms[0].seats[1].kind).eq('human');
+    await lobby.startNow(HOST, room.id, starter);
+    expect(messages).deep.eq([`joined ${HOST} Bob`, `started ${GUEST} Ann`]);
   });
 
   it('lists unlisted rooms only for their participants or with their id', async () => {

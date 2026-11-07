@@ -1905,5 +1905,9 @@
   "about ${0} left": "осталось около ${0}",
   "No parameter raised": "Параметры не повышались",
   "G${0}": "П${0}",
-  "Last activity": "Последняя активность"
+  "Last activity": "Последняя активность",
+  "${0} wants to join your game": "${0} хочет присоединиться к вашей игре",
+  "Open the lobby to let them in or decline.": "Откройте лобби, чтобы принять или отклонить.",
+  "Your game has started": "Ваша игра началась",
+  "The game is waiting for you.": "Игра ждёт вас."
 }

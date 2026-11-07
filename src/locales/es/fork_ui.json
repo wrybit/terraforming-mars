@@ -2312,5 +2312,9 @@
   "${0} % terraformed": "${0} % terraformado",
   "about ${0} left": "quedan aprox. ${0}",
   "No parameter raised": "Ningún parámetro aumentado",
-  "Last activity": "Última actividad"
+  "Last activity": "Última actividad",
+  "${0} wants to join your game": "${0} quiere unirse a tu partida",
+  "Open the lobby to let them in or decline.": "Abre el lobby para aceptar o rechazar.",
+  "Your game has started": "Tu partida ha comenzado",
+  "The game is waiting for you.": "La partida te está esperando."
 }

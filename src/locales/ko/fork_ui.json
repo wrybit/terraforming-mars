@@ -1286,5 +1286,9 @@
   "about ${0} left": "약 ${0} 남음",
   "No parameter raised": "올린 매개변수 없음",
   "G${0}": "${0}세대",
-  "Last activity": "마지막 활동"
+  "Last activity": "마지막 활동",
+  "${0} wants to join your game": "${0}님이 게임에 참가하려고 합니다",
+  "Open the lobby to let them in or decline.": "로비를 열어 수락하거나 거절하세요.",
+  "Your game has started": "게임이 시작되었습니다",
+  "The game is waiting for you.": "게임이 기다리고 있습니다."
 }

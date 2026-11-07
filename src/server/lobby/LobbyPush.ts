@@ -1,13 +1,17 @@
 import * as path from 'path';
 import * as webpush from 'web-push';
-import {LobbyPushMessage, LobbyPushSubscription, LobbyPushTexts} from '../../common/lobby/LobbyPushModel';
+import {LOBBY_PUSH_KINDS, LobbyPushKind, LobbyPushMessage, LobbyPushSubscription, LobbyPushText, LobbyPushTexts} from '../../common/lobby/LobbyPushModel';
 import {fileStorage, LobbyStorage} from './lobbyStorage';
 import {LobbyError} from './lobbyValidation';
 
 /** A subscription nobody renewed (the page renews it on every visit) is forgotten after this time */
 export const PUSH_SUBSCRIPTION_MAX_AGE_MS = 30 * 24 * 60 * 60 * 1000;
 const MAX_TEXT_LENGTH = 200;
-const DEFAULT_TEXTS: LobbyPushTexts = {joinedTitle: '${0} joined your game', joinedBody: 'Your game in the lobby is waiting for you.'};
+const DEFAULT_TEXTS: LobbyPushTexts = {
+  joined: {title: '${0} joined your game', body: 'Your game in the lobby is waiting for you.'},
+  request: {title: '${0} wants to join your game', body: 'Open the lobby to let them in or decline.'},
+  started: {title: 'Your game has started', body: 'The game is waiting for you.'},
+};
 
 export type VapidKeys = {publicKey: string, privateKey: string};
 type Subscriber = {subscription: LobbyPushSubscription, texts: LobbyPushTexts, at: number};
@@ -46,14 +50,20 @@ function isSubscription(value: unknown): value is LobbyPushSubscription {
     candidate.keys.p256dh.length < 200 && candidate.keys.auth.length < 100;
 }
 
+// Missing or broken texts (also those stored before a kind existed) fall back to English
 function cleanTexts(value: unknown): LobbyPushTexts {
-  const texts = value as Partial<LobbyPushTexts> | undefined;
+  const texts = value as Partial<Record<LobbyPushKind, Partial<LobbyPushText>>> | undefined;
   const clean = (text: unknown, fallback: string) => typeof text === 'string' && text.trim() !== '' ? text.trim().slice(0, MAX_TEXT_LENGTH) : fallback;
-  return {joinedTitle: clean(texts?.joinedTitle, DEFAULT_TEXTS.joinedTitle), joinedBody: clean(texts?.joinedBody, DEFAULT_TEXTS.joinedBody)};
+  const result = {} as LobbyPushTexts;
+  for (const kind of LOBBY_PUSH_KINDS) {
+    result[kind] = {title: clean(texts?.[kind]?.title, DEFAULT_TEXTS[kind].title), body: clean(texts?.[kind]?.body, DEFAULT_TEXTS[kind].body)};
+  }
+  return result;
 }
 
 /**
- * Push messages of the lobby: a host whose tab is in the background or closed learns that somebody joined.
+ * Push messages of the lobby: a participant whose tab is in the background or closed learns what happened to the
+ * own game (somebody joined or asks to join, the game started).
  * The key pair of the server (VAPID) and the subscriptions per participant live in db/lobby-push.json;
  * the key pair is made on first use and must stay, or every subscription stops working.
  */
@@ -106,23 +116,27 @@ export class LobbyPush {
     return subscriber !== undefined && this.clock() - subscriber.at < PUSH_SUBSCRIPTION_MAX_AGE_MS;
   }
 
-  /** Tells the host that somebody joined; whether the host is looking at the lobby right now decides the service worker */
-  public async joined(host: string, room: {id: string, path: string}, name: string): Promise<void> {
+  /** Whether the participant is looking at the lobby right now decides the service worker */
+  public async notify(participant: string, kind: LobbyPushKind, room: {id: string, path: string}, name: string): Promise<'sent' | 'gone' | 'unreachable'> {
     const data = this.stored();
-    const subscriber = data.subscribers[host];
-    if (subscriber === undefined || !this.canReach(host)) {
-      return;
+    const subscriber = data.subscribers[participant];
+    if (subscriber === undefined || !this.canReach(participant)) {
+      return 'unreachable';
     }
+    // Stored before the kind existed: English until the next visit of the lobby renews the texts
+    const text = cleanTexts(subscriber.texts)[kind];
     const message: LobbyPushMessage = {
-      title: subscriber.texts.joinedTitle.replace('${0}', name),
-      body: subscriber.texts.joinedBody.replace('${0}', name),
+      title: text.title.replace('${0}', name),
+      body: text.body.replace('${0}', name),
       url: room.path,
       tag: 'lobby-' + room.id,
     };
-    if (await this.send(subscriber.subscription, message, data.vapid) === 'gone') {
-      delete data.subscribers[host];
+    const result = await this.send(subscriber.subscription, message, data.vapid);
+    if (result === 'gone') {
+      delete data.subscribers[participant];
       this.storage.save(data);
     }
+    return result;
   }
 
   private forgetOld(): void {

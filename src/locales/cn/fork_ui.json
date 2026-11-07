@@ -2018,5 +2018,9 @@
   "about ${0} left": "约剩 ${0}",
   "No parameter raised": "未提升任何参数",
   "G${0}": "${0}代",
-  "Last activity": "最后活动"
+  "Last activity": "最后活动",
+  "${0} wants to join your game": "${0} 想加入你的游戏",
+  "Open the lobby to let them in or decline.": "打开大厅以同意或拒绝。",
+  "Your game has started": "你的游戏已开始",
+  "The game is waiting for you.": "游戏正在等你。"
 }

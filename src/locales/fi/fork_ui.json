@@ -1034,5 +1034,9 @@
   "about ${0} left": "noin ${0} jäljellä",
   "No parameter raised": "Yhtään parametria ei nostettu",
   "G${0}": "S${0}",
-  "Last activity": "Viimeisin toiminta"
+  "Last activity": "Viimeisin toiminta",
+  "${0} wants to join your game": "${0} haluaa liittyä peliisi",
+  "Open the lobby to let them in or decline.": "Avaa aula hyväksyäksesi tai hylätäksesi.",
+  "Your game has started": "Pelisi on alkanut",
+  "The game is waiting for you.": "Peli odottaa sinua."
 }

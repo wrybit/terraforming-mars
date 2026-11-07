@@ -8,6 +8,7 @@ import {LobbyGameProgress, LobbyListModel, LobbyProfile, LobbyRoomModel, LobbySe
 import {GameId, PlayerId, SpectatorId} from '../../common/Types';
 import {LobbyError, sanitizeProfile, sanitizeTitle} from './lobbyValidation';
 import {lobbyRoomPath} from '../../common/lobby/lobbyUrl';
+import {LobbyPushKind} from '../../common/lobby/LobbyPushModel';
 import {fileStorage, LobbyStorage} from './lobbyStorage';
 
 /** A participant who stops polling (closed tab, lost connection) loses the seat after this time */
@@ -18,10 +19,10 @@ export const PARTICIPANT_TIMEOUT_MS = 45_000;
  */
 export const STARTED_ROOM_MAX_AGE_MS = 30 * 24 * 60 * 60 * 1000;
 /**
- * A host who can be reached by push message (LobbyPush) keeps the open game this long without the lobby open:
- * the message about a join can still bring the host back.
+ * A participant who can be reached by push message (LobbyPush) keeps the seat this long without the lobby open:
+ * the message about a join (host) or the start (everybody else) can still bring them back.
  */
-export const REACHABLE_HOST_TIMEOUT_MS = 30 * 60 * 1000;
+export const REACHABLE_TIMEOUT_MS = 30 * 60 * 1000;
 /** A game whose creator is gone this long, before anything happened and with nobody else ever there, is closed */
 export const ABANDONED_AFTER_MS = 3 * 60 * 1000;
 /** Rooms nobody completes are dropped at the latest after this time */
@@ -47,12 +48,13 @@ export type GameProbe = {
 /** Generation, terraforming and course of a running game (lobbyGameProbe.ts); undefined: the game is gone */
 export type GameProgressSource = (gameId: GameId) => Promise<Omit<LobbyGameProgress, 'playedMs'> | undefined>;
 
-/** Push messages to hosts (LobbyPush.ts); the lobby itself only knows when to send one */
+/** Push messages to participants (LobbyPush.ts); the lobby itself only knows when to send one */
 export type LobbyNotifier = {
   canReach(participant: string): boolean;
-  joined(host: string, room: {id: string, path: string}, name: string): void;
+  /** name: whoever caused the event (joined, asks to join, started) */
+  notify(participant: string, kind: LobbyPushKind, room: {id: string, path: string}, name: string): void;
 };
-const NO_NOTIFIER: LobbyNotifier = {canReach: () => false, joined: () => {}};
+const NO_NOTIFIER: LobbyNotifier = {canReach: () => false, notify: () => {}};
 
 /** Creates the game exactly as the create form would (ApiCreateGame.createGame) */
 export type GameStarter = (config: NewGameConfig) => Promise<StartedGame>;
@@ -293,7 +295,7 @@ export class Lobby {
     this.rooms.set(room.id, room);
     this.save();
     try {
-      await this.startIfComplete(room, starter);
+      await this.startIfComplete(room, starter, me);
     } catch (error) {
       // Not startable (e.g. settings the AI cannot handle): no half room stays behind
       this.rooms.delete(room.id);
@@ -320,6 +322,7 @@ export class Lobby {
       room.requests = (room.requests ?? []).filter((request) => request.participant !== me);
       room.requests.push({participant: me, profile: cleanProfile, lastSeen: this.clock()});
       this.save();
+      this.notify(room.host, 'request', room, cleanProfile.name);
       return this.model(room, me);
     }
     const reserved = seatToken === undefined ? -1 : room.seats.findIndex((seat) => seat.kind === 'guest' && seat.token === seatToken);
@@ -330,7 +333,7 @@ export class Lobby {
       const color = this.freeColor(room, guest.color);
       room.seats[reserved] = this.humanSeat(me, {...cleanProfile, color}, true);
       this.save();
-      this.notifier.joined(room.host, {id: room.id, path: lobbyRoomPath(room.id, room.title)}, cleanProfile.name);
+      this.notify(room.host, 'joined', room, cleanProfile.name);
     } else if (this.seatIndexOf(room, me) < 0) {
       const free = room.seats.findIndex((seat) => seat.kind === 'free');
       if (free < 0) {
@@ -342,9 +345,9 @@ export class Lobby {
       // Joining is a deliberate click: the seat is ready right away (can be taken back in the waiting room)
       room.seats[free] = this.humanSeat(me, {...cleanProfile, color}, true);
       this.save();
-      this.notifier.joined(room.host, {id: room.id, path: lobbyRoomPath(room.id, room.title)}, cleanProfile.name);
+      this.notify(room.host, 'joined', room, cleanProfile.name);
     }
-    await this.startIfComplete(room, starter);
+    await this.startIfComplete(room, starter, me);
     return this.model(room, me);
   }
 
@@ -376,7 +379,7 @@ export class Lobby {
     const room = this.openRoom(roomId);
     this.humanSeatOf(room, me).ready = ready === true;
     this.save();
-    await this.startIfComplete(room, starter);
+    await this.startIfComplete(room, starter, me);
     return this.model(room, me);
   }
 
@@ -390,7 +393,7 @@ export class Lobby {
     this.analysisWithFirstAi(room);
     room.seats[seatIndex] = {kind: 'ai', aiLevel: DEFAULT_AI_LEVEL};
     this.save();
-    await this.startIfComplete(room, starter);
+    await this.startIfComplete(room, starter, me);
     return this.model(room, me);
   }
 
@@ -428,7 +431,7 @@ export class Lobby {
     room.requests = room.requests?.filter((candidate) => candidate !== request);
     room.seats[free] = this.humanSeat(participant, {...request.profile, color: this.freeColor(room, request.profile.color)}, true);
     this.save();
-    await this.startIfComplete(room, starter);
+    await this.startIfComplete(room, starter, me);
     return this.model(room, me);
   }
 
@@ -535,7 +538,7 @@ export class Lobby {
     }
     room.seats = room.seats.map((seat) => seat.kind === 'free' ? {kind: 'ai', aiLevel: DEFAULT_AI_LEVEL} : seat);
     this.save();
-    await this.start(room, starter);
+    await this.start(room, starter, me);
     return this.model(room, me);
   }
 
@@ -546,18 +549,19 @@ export class Lobby {
   public async startNow(me: string, roomId: string, starter: GameStarter): Promise<LobbyRoomModel> {
     const room = this.hostRoom(me, roomId);
     room.seats = room.seats.filter((seat) => seat.kind !== 'free');
-    await this.start(room, starter);
+    await this.start(room, starter, me);
     return this.model(room, me);
   }
 
-  private async startIfComplete(room: Room, starter: GameStarter): Promise<void> {
+  private async startIfComplete(room: Room, starter: GameStarter, actor: string): Promise<void> {
     const complete = room.seats.every((seat) => seat.kind === 'ai' || seat.kind === 'guest' || (seat.kind === 'human' && seat.ready));
     if (complete) {
-      await this.start(room, starter);
+      await this.start(room, starter, actor);
     }
   }
 
-  private async start(room: Room, starter: GameStarter): Promise<void> {
+  /** actor: whoever caused the start; everybody else seated gets a push message */
+  private async start(room: Room, starter: GameStarter, actor: string): Promise<void> {
     if (room.state !== 'open') {
       return;
     }
@@ -587,6 +591,12 @@ export class Lobby {
       room.state = 'started';
       room.startedAt = this.clock();
       this.save();
+      const actorName = room.seats.find((seat): seat is HumanSeat => seat.kind === 'human' && seat.participant === actor)?.profile.name ?? '';
+      for (const seat of room.seats) {
+        if (seat.kind === 'human' && seat.participant !== actor) {
+          this.notify(seat.participant, 'started', room, actorName);
+        }
+      }
     } catch (error) {
       room.state = 'open';
       throw error;
@@ -732,9 +742,14 @@ export class Lobby {
     }
   }
 
-  // The host may close the tab and wait for the push message; everybody else must keep the lobby open
-  private timeoutOf(room: Room, participant: string): number {
-    return participant === room.host && this.notifier.canReach(participant) ? REACHABLE_HOST_TIMEOUT_MS : PARTICIPANT_TIMEOUT_MS;
+  // Whoever can be reached by push message may close the tab and wait for it (host: a join, others: the start);
+  // without push messages the lobby must stay open
+  private timeoutOf(_room: Room, participant: string): number {
+    return this.notifier.canReach(participant) ? REACHABLE_TIMEOUT_MS : PARTICIPANT_TIMEOUT_MS;
+  }
+
+  private notify(participant: string, kind: LobbyPushKind, room: Room, name: string): void {
+    this.notifier.notify(participant, kind, {id: room.id, path: lobbyRoomPath(room.id, room.title)}, name);
   }
 
   /** The host leaving dissolves the room; anybody else frees the seat */
