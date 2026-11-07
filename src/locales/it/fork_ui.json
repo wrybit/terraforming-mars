@@ -2271,5 +2271,7 @@
   "Players are buying cards": "I giocatori stanno comprando carte",
   "Game ${0} was removed on ${1}: the lobby keeps only the last ${2} AI training games.": "La partita ${0} è stata rimossa il ${1}: la lobby conserva solo le ultime ${2} partite di allenamento dell'AI.",
   "AI test runs in the lobby": "Test dell'AI nella lobby",
-  "Address of the AI test run feed with the name of this computer, e.g. http://…/api/lobby-feed?instance=ak1. The lobby shows its running games and the last finished ones. Empty: none.": "Indirizzo del feed dei test dell'AI con il nome di questo computer, ad es. http://…/api/lobby-feed?instance=ak1. La lobby mostra le sue partite in corso e le ultime terminate. Vuoto: nessuno."
+  "Address of the AI test run feed with the name of this computer, e.g. http://…/api/lobby-feed?instance=ak1. The lobby shows its running games and the last finished ones. Empty: none.": "Indirizzo del feed dei test dell'AI con il nome di questo computer, ad es. http://…/api/lobby-feed?instance=ak1. La lobby mostra le sue partite in corso e le ultime terminate. Vuoto: nessuno.",
+  "Training": "Allenamento",
+  "The AI is playing this game right now. It can be watched as soon as it is finished.": "L'AI sta giocando questa partita in questo momento. Si potrà guardare appena sarà finita."
 }

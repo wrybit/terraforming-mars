@@ -39,8 +39,13 @@
       <a v-else-if="continueLink !== undefined" class="btn btn-rounded btn-primary lobby-game-watch" :href="continueLink"><span v-i18n>Continue</span><HotkeyKeys :fixed="keys" /></a>
       <a v-else-if="room.state === 'started' && room.spectatorId" class="btn btn-rounded btn-tone-quiet lobby-game-watch" :href="'spectator?id=' + room.spectatorId"><span v-i18n>Watch</span><HotkeyKeys :fixed="keys" /></a>
       <AppButton v-else-if="room.state === 'open'" class="btn-tone-quiet" title="Join" :fixedHotkey="keys" @click="emit('join')" />
-      <!-- Running AI training game: no button, but the same room as "Watch", so its seats line up with the finished ones below -->
-      <span v-else-if="isLiveTraining" class="btn btn-rounded lobby-game-watch lobby-game-action-spacer" aria-hidden="true"><span v-i18n>Watch</span><HotkeyKeys :fixed="['Alt', '0']" /></span>
+      <!-- Running AI training game: where "Watch" will be, a disabled button with a spinner says it is still being played
+           (on the wrapper the tooltip also works for the disabled button) -->
+      <span v-else-if="isLiveTraining" v-glass-tooltip="$t('The AI is playing this game right now. It can be watched as soon as it is finished.')">
+        <button type="button" class="btn btn-rounded btn-tone-quiet lobby-game-watch lobby-game-training" disabled>
+          <span class="lobby-game-spinner" aria-hidden="true"></span><span v-i18n>Training</span>
+        </button>
+      </span>
     </div>
   </div>
 </template>
@@ -57,6 +62,7 @@ import LobbyFactIcon from './LobbyFactIcon.vue';
 import {lobbySetupChips} from './lobbySetupChips';
 import {continueHref} from './lobbyLinks';
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
+import {glassTooltip as vGlassTooltip} from '@/client/directives/GlassTooltip';
 
 const props = defineProps<{
   room: LobbyRoomModel;

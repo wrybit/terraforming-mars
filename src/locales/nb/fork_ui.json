@@ -1370,5 +1370,7 @@
   "Players are buying cards": "Spillerne kjøper kort",
   "Game ${0} was removed on ${1}: the lobby keeps only the last ${2} AI training games.": "Spillet ${0} ble fjernet ${1}: lobbyen beholder bare de siste ${2} AI-treningsspillene.",
   "AI test runs in the lobby": "AI-testkjøringer i lobbyen",
-  "Address of the AI test run feed with the name of this computer, e.g. http://…/api/lobby-feed?instance=ak1. The lobby shows its running games and the last finished ones. Empty: none.": "Adressen til AI-testfeeden med navnet på denne maskinen, f.eks. http://…/api/lobby-feed?instance=ak1. Lobbyen viser pågående og sist fullførte spill. Tomt: ingen."
+  "Address of the AI test run feed with the name of this computer, e.g. http://…/api/lobby-feed?instance=ak1. The lobby shows its running games and the last finished ones. Empty: none.": "Adressen til AI-testfeeden med navnet på denne maskinen, f.eks. http://…/api/lobby-feed?instance=ak1. Lobbyen viser pågående og sist fullførte spill. Tomt: ingen.",
+  "Training": "Trening",
+  "The AI is playing this game right now. It can be watched as soon as it is finished.": "AI spiller dette spillet akkurat nå. Det kan ses så snart det er ferdig."
 }

@@ -63,8 +63,9 @@ describe('Lobby components', () => {
     const progress = {generation: 9, terraforming: 0.6, playedMs: 42_000};
     const live = mount(LobbyGameRow, {...globalConfig, props: {room: room([ai, ai], {state: 'started', progress, aiTraining: {finished: false}}), position: 0}});
     expect(live.find('.lobby-game').classes()).contains('lobby-game--info');
-    expect(live.find('.lobby-game-action a, .lobby-game-action button').exists()).is.false;
-    expect(live.find('.lobby-game-action-spacer').attributes('aria-hidden')).eq('true');
+    expect(live.find('.lobby-game-action a').exists()).is.false;
+    expect(live.find('.lobby-game-training').attributes('disabled')).is.not.undefined;
+    expect(live.find('.lobby-game-training').text()).eq('Training');
     expect(live.find('.lobby-game-facts').text()).contains('42 s').not.contains('Finished');
     const finished = mount(LobbyGameRow, {...globalConfig, props: {room: room([ai, ai], {state: 'started', spectatorId: 's9', progress, aiTraining: {finished: true}})}});
     expect(finished.find('.lobby-game').classes()).not.contains('lobby-game--info');

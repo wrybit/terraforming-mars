@@ -1161,5 +1161,7 @@
   "Players are buying cards": "Гравці купують карти",
   "Game ${0} was removed on ${1}: the lobby keeps only the last ${2} AI training games.": "Гру ${0} видалено ${1}: лобі зберігає лише останні ${2} тренувальні ігри AI.",
   "AI test runs in the lobby": "Тести AI у лобі",
-  "Address of the AI test run feed with the name of this computer, e.g. http://…/api/lobby-feed?instance=ak1. The lobby shows its running games and the last finished ones. Empty: none.": "Адреса стрічки тестів AI з назвою цього комп’ютера, напр. http://…/api/lobby-feed?instance=ak1. Лобі показує його поточні та останні завершені ігри. Порожньо: немає."
+  "Address of the AI test run feed with the name of this computer, e.g. http://…/api/lobby-feed?instance=ak1. The lobby shows its running games and the last finished ones. Empty: none.": "Адреса стрічки тестів AI з назвою цього комп’ютера, напр. http://…/api/lobby-feed?instance=ak1. Лобі показує його поточні та останні завершені ігри. Порожньо: немає.",
+  "Training": "Тренування",
+  "The AI is playing this game right now. It can be watched as soon as it is finished.": "AI саме зараз грає цю партію. Переглянути її можна, щойно вона завершиться."
 }

@@ -878,12 +878,38 @@
   }
 }
 
-// Holds the room of the "Watch" button in running AI training rows (seats aligned); on phones the seats get their own row
-.lobby-game-action-spacer {
-  visibility: hidden;
+// AI training rows: "Training" (running) and "Watch" (finished) equally wide, so the seats line up
+.lobby-game--training .lobby-game-action .btn {
+  justify-content: center;
+  min-width: 128px;
+}
 
-  @media only screen and (max-width: 600px) {
-    display: none;
+// Running AI training game: disabled, the spinner shows that it is being played right now
+.lobby-game-training {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lobby-game-spinner {
+  display: inline-block;
+  box-sizing: border-box;
+  width: 14px;
+  height: 14px;
+  flex: none;
+  border: 2px solid currentcolor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: lobby-game-spin 0.9s linear infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation-duration: 3s;
+  }
+}
+
+@keyframes lobby-game-spin {
+  to {
+    transform: rotate(360deg);
   }
 }
 
