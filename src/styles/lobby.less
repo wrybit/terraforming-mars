@@ -1279,15 +1279,14 @@ each(@players, {
   background: none;
   cursor: pointer;
 
-  // Only the emoji in a thin ring: no player-color disc inside the colored name field
+  // Only the emoji: no player-color disc and no ring inside the colored name field
   .lobby-avatar {
-    box-sizing: border-box;
     width: 26px;
     height: 26px;
-    border: 1.5px solid rgba(255, 255, 255, 0.45);
     background: transparent;
     box-shadow: none;
-    font-size: 15px;
+    font-size: 17px;
+    transition: transform 0.12s;
   }
 
   // Emoji glyphs are wider (advance about 1.25em) than their picture, which sits at the left of that width:
@@ -1300,9 +1299,10 @@ each(@players, {
     white-space: nowrap;
   }
 
+  // Without a ring the emoji itself shows that it can be clicked
   &:hover .lobby-avatar,
   &[aria-expanded="true"] .lobby-avatar {
-    border-color: @bg_action;
+    transform: scale(1.15);
   }
 }
 
