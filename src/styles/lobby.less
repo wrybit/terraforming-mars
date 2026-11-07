@@ -870,6 +870,47 @@
   font-weight: 500;
   text-overflow: ellipsis;
   white-space: nowrap;
+
+  // AI training names end with the running number, the part that tells them apart: wrap instead of cutting it off
+  .lobby-game--training & {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+}
+
+// AI training rows: "Training" (running) and "Watch" (finished) equally wide, so the seats line up
+.lobby-game--training .lobby-game-action .btn {
+  justify-content: center;
+  min-width: 128px;
+}
+
+// Running AI training game: disabled, the spinner shows that it is being played right now
+.lobby-game-training {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lobby-game-spinner {
+  display: inline-block;
+  box-sizing: border-box;
+  width: 14px;
+  height: 14px;
+  flex: none;
+  border: 2px solid currentcolor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: lobby-game-spin 0.9s linear infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation-duration: 3s;
+  }
+}
+
+@keyframes lobby-game-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 // Generation, players, AI, time: icon and value close together, the facts further apart (proximity)
@@ -1246,11 +1287,139 @@ each(@players, {
   }
 }
 
+// Own seat of "Create game": picture at the start of the name field, the choice opens as a panel below it
+.lobby-emoji-picker {
+  display: inline-flex;
+  flex: none;
+}
+
+.create-game-player-name-field--host {
+  .lobby-emoji-picker {
+    position: absolute;
+    top: 50%;
+    left: 4px;
+    z-index: 1;
+    transform: translateY(-50%);
+  }
+
+  // Name and [Host] marker start behind the picture (the marker 1 px further: the input has a border)
+  .create-game-player-name {
+    padding-left: 36px;
+  }
+
+  .create-game-player-name-marker {
+    padding-left: 37px;
+  }
+}
+
+.lobby-emoji-picker-button {
+  display: inline-flex;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+
+  // Only the emoji: no player-color disc and no ring inside the colored name field
+  .lobby-avatar {
+    width: 26px;
+    height: 26px;
+    background: transparent;
+    box-shadow: none;
+    font-size: 17px;
+  }
+
+  // Emoji glyphs are wider (advance about 1.25em) than their picture, which sits at the left of that width:
+  // a box of exactly 1em is centered instead, the glyph starts at its left edge and so lands in the middle
+  .lobby-avatar-emoji {
+    display: block;
+    width: 1em;
+    height: 1em;
+    line-height: 1em;
+    white-space: nowrap;
+  }
+}
+
+.lobby-emoji-picker-popover {
+  position: fixed;
+  // Above the "Create game" overlay it opens from
+  z-index: (@modal-z-index + 1);
+  padding: 12px 12px 0;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  background: @modal-background;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+}
+
 .lobby-emoji--upload {
   border: 1.5px dashed rgba(255, 255, 255, 0.35);
   background: transparent;
   color: @lobby-dim;
   font-size: 20px;
+}
+
+// Host: ✕ in the seat's top right corner frees it again (same button as in the create form)
+.lobby-seat-remove {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 24px;
+  height: 24px;
+  font-size: 12px;
+}
+
+// Request of a player removed twice: one card (who, the decision on the right, what declining means)
+.lobby-request {
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.07);
+
+  & + .lobby-request {
+    margin-top: 8px;
+  }
+}
+
+.lobby-request-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  .lobby-request-name {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.lobby-request-note {
+  margin: 8px 0 0;
+  color: @lobby-dim;
+  font-size: 12px;
+}
+
+// Declined by the host: plain text where the join button would be
+.lobby-game-declined {
+  color: @lobby-dim;
+  font-size: 13px;
+}
+
+// Own link of a player the host entered by hand: link icon plus text, below the seat
+.lobby-seat-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+
+  svg {
+    width: 13px;
+    height: 13px;
+    fill: none;
+    stroke: currentcolor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
 }
 
 // Waiting room
@@ -1262,14 +1431,44 @@ each(@players, {
   }
 }
 
+// Seats in rows of three of the same width, short rows centered: 1 and 2 seats in the middle, 3 in one row,
+// 4 as 2 + 2, 5 as 3 + 2, 6 as 3 + 3. Six grid columns, each seat spans two; centered seats start one column later.
+// Phones: rows of two, an odd last seat in the middle.
 .lobby-seats {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 10px;
   margin-bottom: 10px;
+
+  > .lobby-seat {
+    grid-column: span 2;
+  }
+
+  @media only screen and (min-width: 601px) {
+    &.lobby-seats--count-1 > .lobby-seat {
+      grid-column: 3 / span 2;
+    }
+
+    &.lobby-seats--count-2 > .lobby-seat:nth-child(1),
+    &.lobby-seats--count-4 > .lobby-seat:nth-child(odd),
+    &.lobby-seats--count-5 > .lobby-seat:nth-child(4) {
+      grid-column: 2 / span 2;
+    }
+  }
+
+  @media only screen and (max-width: 600px) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+
+    &.lobby-seats--count-1 > .lobby-seat,
+    &.lobby-seats--count-3 > .lobby-seat:nth-child(3),
+    &.lobby-seats--count-5 > .lobby-seat:nth-child(5) {
+      grid-column: 2 / span 2;
+    }
+  }
 }
 
 .lobby-seat {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1283,6 +1482,12 @@ each(@players, {
 
   .create-game-small-button {
     margin: 0;
+  }
+
+  // The seat's button (copy link, seat an AI, AI strength) sits at the bottom: all buttons of a row on one line
+  > .create-game-small-button,
+  > span:has(> .create-game-small-button) {
+    margin-top: auto;
   }
 }
 
@@ -1314,6 +1519,17 @@ each(@players, {
 
 .lobby-seat-state--ready {
   color: #58db7f;
+}
+
+// AI strength in the waiting room (host): a small drop-down in the look of the seat buttons, with its own arrow
+.lobby-seat-level {
+  margin: 0;
+  padding-right: 26px;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23eee' stroke-width='1.5'/%3E%3C/svg%3E");
+  background-position: right 9px center;
+  background-repeat: no-repeat;
+  color-scheme: dark;
 }
 
 .lobby-invite {
@@ -1420,6 +1636,11 @@ each(@players, {
     bottom: auto;
     transform: translate(-50%, -50%);
   }
+}
+
+// Waiting for the host's approval: information only, nothing to click
+.lobby-wait-bar--request {
+  cursor: default;
 }
 
 // ---------- "Create game" as modal ----------

@@ -1,6 +1,7 @@
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 import {paths} from '@/common/app/paths';
 import {GameDeletionModel} from '@/common/models/GameDeletionModel';
+import {AI_TRAINING_FINISHED_GAMES} from '@/common/lobby/AiTrainingFeed';
 import {describeFailure, failureOf} from '@/client/utils/requestFailure';
 
 export type GameLoadFailureReport = {
@@ -36,7 +37,9 @@ export async function describeGameLoadFailure(id: string, err: unknown): Promise
         translateTextWithParams('Game ${0} was removed automatically on ${1}: unfinished games are deleted after ${2} days.', [deletion.gameId, when, deletion.maxGameDays ?? '?']) :
         deletion.reason === 'closed-unstarted' ?
           translateTextWithParams('Game ${0} was closed on ${1}: its creator left before it began and nobody else joined.', [deletion.gameId, when]) :
-          translateTextWithParams('Game ${0} was deleted in the admin area on ${1}.', [deletion.gameId, when]);
+          deletion.reason === 'replaced-ai-training' ?
+            translateTextWithParams('Game ${0} was removed on ${1}: the lobby keeps only the last ${2} AI training games.', [deletion.gameId, when, String(AI_TRAINING_FINISHED_GAMES)]) :
+            translateTextWithParams('Game ${0} was deleted in the admin area on ${1}.', [deletion.gameId, when]);
       return {
         title: translateText('Game deleted'),
         text: what + playersSentence(deletion.playerNames) + '\n' + translateText('Its data no longer exists on this server, so the link no longer works.'),

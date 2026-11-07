@@ -25,16 +25,13 @@
       </div>
       <div class="lobby-profile-group">
         <span class="create-game-subhead" v-i18n>Picture</span>
-        <div class="lobby-emoji-grid">
+        <LobbyEmojiGrid :color="draft.color" :selected="draft.image === undefined ? draft.emoji : undefined" @pick="pickEmoji">
           <label class="lobby-emoji lobby-emoji--upload" :class="{'lobby-emoji--selected': draft.image !== undefined}" :title="$t('Upload your own picture')">
             <img v-if="draft.image" :src="draft.image" alt="">
             <span v-else aria-hidden="true">＋</span>
             <input type="file" accept="image/*" hidden @change="upload">
           </label>
-          <button v-for="emoji in LOBBY_EMOJIS" :key="emoji" type="button" class="lobby-emoji"
-            :class="['lobby-emoji--' + draft.color, {'lobby-emoji--selected': draft.image === undefined && draft.emoji === emoji}]"
-            @click="pickEmoji(emoji)">{{ emoji }}</button>
-        </div>
+        </LobbyEmojiGrid>
       </div>
       <p class="lobby-dialog-note" v-i18n>No account, no login: name and picture are only stored in this browser.</p>
       <template #footer>
@@ -47,12 +44,13 @@
 <script setup lang="ts">
 import {nextTick, ref, watch} from 'vue';
 import {PLAYER_COLORS} from '@/common/Color';
-import {LobbyProfile, LOBBY_EMOJIS, LOBBY_NAME_MAX_LENGTH} from '@/common/lobby/LobbyModel';
+import {LobbyProfile, LOBBY_NAME_MAX_LENGTH} from '@/common/lobby/LobbyModel';
 import SidebarModal from '@/client/components/SidebarModal.vue';
 import DialogFrame from '@/client/components/DialogFrame.vue';
 import AppButton from '@/client/components/common/AppButton.vue';
 import PlayerCube from '@/client/components/common/PlayerCube.vue';
 import LobbyAvatar from './LobbyAvatar.vue';
+import LobbyEmojiGrid from './LobbyEmojiGrid.vue';
 import {readProfileImage} from './lobbyProfile';
 
 const props = defineProps<{

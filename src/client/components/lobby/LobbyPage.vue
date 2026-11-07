@@ -67,7 +67,7 @@
           <section class="create-game-card lobby-list-card lobby-list">
             <div class="lobby-section-title"><span v-i18n>Running games</span><span class="lobby-section-count">{{ runningRooms.length }}</span></div>
             <div class="lobby-list-rows">
-              <LobbyGameRow v-for="(room, index) in runningRooms" :key="room.id" :room="room" :position="index" />
+              <LobbyGameRow v-for="room in runningRooms" :key="room.id" :room="room" :position="keyPosition(room)" />
               <div v-if="runningRooms.length === 0 && loaded" class="lobby-empty">
                 <span v-i18n>No game is running right now.</span>
               </div>
@@ -76,7 +76,7 @@
           <section class="create-game-card lobby-list-card lobby-list">
             <div class="lobby-section-title"><span v-i18n>Open games</span><span class="lobby-section-count">{{ openRooms.length }}</span></div>
             <div class="lobby-list-rows">
-              <LobbyGameRow v-for="(room, index) in openRooms" :key="room.id" :room="room" :position="runningRooms.length + index" @join="join(room)" @open-room="roomOpen = true" />
+              <LobbyGameRow v-for="(room, index) in openRooms" :key="room.id" :room="room" :position="keyedRunningRooms.length + index" @join="join(room)" @open-room="roomOpen = true" />
               <div v-if="openRooms.length === 0 && loaded" class="lobby-empty">
                 <template v-if="filterCount > 0 && !queueing">
                   <span v-i18n>No open game fits your filters.</span>
@@ -99,6 +99,12 @@
       </aside>
     </main>
 
+    <!-- Removed twice before: the host decides; until then a quiet status at the place of the waiting bar -->
+    <div v-if="requestedRoom !== undefined && myRoom === undefined" class="lobby-wait-bar lobby-wait-bar--request" role="status">
+      <span class="lobby-queue-pulse" aria-hidden="true"></span>
+      <span>{{ $t('Waiting for the host to approve') }}: <b>{{ requestedRoom.title }}</b></span>
+    </div>
+
     <!-- Minimized waiting room. Stays in the page (hidden) while the dialog is open: the dialog grows out of it and shrinks back into it -->
     <button v-if="myRoom !== undefined && myRoom.state === 'open'" type="button" class="lobby-wait-bar" :class="{'lobby-wait-bar--hidden': roomOpen}" :aria-hidden="roomOpen" @click="roomOpen = true">
       <span class="lobby-queue-pulse" aria-hidden="true"></span>
@@ -108,13 +114,20 @@
     <LobbyProfileDialog :open="profileOpen" :origin="profileDialogOrigin" :profile="profile" :firstVisit="firstVisit" @close="profileOpen = false" @save="saveProfile" />
     <LobbyRoomDialog :open="roomOpen && myRoom !== undefined" :room="myRoom" :origin="roomDialogOrigin" @minimize="roomOpen = false" @leave="leave()"
       @ready="act({action: 'ready', roomId: myRoom!.id, ready: $event})" @seat-ai="act({action: 'seat-ai', roomId: myRoom!.id, seat: $event})"
-      @fill-ai="act({action: 'fill-ai', roomId: myRoom!.id})" @start="act({action: 'start', roomId: myRoom!.id})" />
+      @ai-level="(seat, aiLevel) => act({action: 'ai-level', roomId: myRoom!.id, seat, aiLevel})"
+      @remove="act({action: 'remove', roomId: myRoom!.id, seat: $event})" @approve="act({action: 'approve', roomId: myRoom!.id, participant: $event})"
+      @decline="act({action: 'decline', roomId: myRoom!.id, participant: $event})"
+      @start="act({action: 'start', roomId: myRoom!.id})" @edit="openEdit()" />
     <LobbyMatchDialog :room="offeredRoom" :invitation="offerIsInvitation" @accept="acceptOffer()" @decline="declineOffer()" />
 
     <!-- "Create game" as a modal: the same form, with seats offered in the lobby -->
     <Teleport to="body">
       <div v-if="createOpen" class="lobby-create-overlay" @keydown.esc="createOpen = false">
-        <CreateGameForm lobbyMode :lobbyProfile="profile" @close="createOpen = false" @open-in-lobby="openInLobby" />
+        <CreateGameForm :lobbyProfile="profile.name.trim() === '' ? undefined : profile" @close="createOpen = false" @open-in-lobby="openInLobby" @host-profile="takeHostProfile" />
+      </div>
+      <!-- Host: the same form for the waiting game; saving changes it (Lobby.edit) and returns to the waiting room -->
+      <div v-if="editRoom !== undefined" class="lobby-create-overlay" @keydown.esc="editRoom = undefined">
+        <CreateGameForm :lobbyProfile="profile" :editRoom="editRoom" @close="editRoom = undefined" @open-in-lobby="saveEdit" @host-profile="takeHostProfile" />
       </div>
     </Teleport>
   </div>
@@ -125,7 +138,7 @@ import {askLobbyPushPermission, subscribeLobbyPush} from './lobbyPush';
 import ColumnResizeHandle from '@/client/components/ColumnResizeHandle.vue';
 import {LOBBY_CHAT_SPLIT} from '@/client/utils/columnResize';
 import {ComponentPublicInstance, computed, defineAsyncComponent, getCurrentInstance, onBeforeUnmount, onMounted, nextTick, ref, watch} from 'vue';
-import {LobbyProfile, LobbyRoomModel} from '@/common/lobby/LobbyModel';
+import {LOBBY_NAME_MAX_LENGTH, LobbyEditRoom, LobbyProfile, LobbyRoomModel} from '@/common/lobby/LobbyModel';
 import {NewGameConfig} from '@/common/game/NewGameConfig';
 import PageToolbar from '@/client/components/PageToolbar.vue';
 import PageTitle from '@/client/components/common/PageTitle.vue';
@@ -141,8 +154,9 @@ import HotkeyKeys from '@/client/components/hotkeys/HotkeyKeys.vue';
 import {fetchLobby, lobbyAction, lobbyFailureText, LobbyRequest} from './lobbyApi';
 import {activeFilterCount, bestMatch, defaultLobbyFilters, hasFreeSeat, LobbyFilters, matchesFilters} from './lobbyFilters';
 import {loadLobbyProfile, saveLobbyProfile} from './lobbyProfile';
-import {isLobbyCreatePath, LOBBY_CREATE_PATH, lobbyRoomIdFromPath} from '@/common/lobby/lobbyUrl';
+import {isLobbyCreatePath, LOBBY_CREATE_PATH, LOBBY_SEAT_PARAMETER, lobbyRoomIdFromPath} from '@/common/lobby/lobbyUrl';
 import {paths} from '@/common/app/paths';
+import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 import {PICK_CODES} from '@/client/hotkeys/hotkeyActions';
 import {codeOfEvent} from '@/client/hotkeys/hotkeyEvents';
 import {hotkeysAvailable} from '@/client/hotkeys/hotkeyAvailability';
@@ -160,12 +174,16 @@ const instance = getCurrentInstance();
 const storedProfile = loadLobbyProfile();
 const firstVisit = ref(storedProfile === undefined);
 const profile = ref<LobbyProfile>(storedProfile ?? {name: '', color: 'red', emoji: '🚀'});
-const profileOpen = ref(firstVisit.value);
+// First visit: the welcome asks for the profile, but not when the visitor came to create a game (start page
+// "Start", lobby/create): the form's own seat carries name and color, and the profile is taken from it (openInLobby)
+const profileOpen = ref(firstVisit.value && !isLobbyCreatePath(window.location.pathname));
 // After the first profile: the action that asked for it goes on
 let afterProfile: (() => void) | undefined;
 
 const rooms = ref<ReadonlyArray<LobbyRoomModel>>([]);
 const yourRoomId = ref<string | undefined>();
+// Removed twice before: the room whose host still has to approve us
+const requestedRoomId = ref<string | undefined>();
 const loaded = ref(false);
 const loadError = ref('');
 const search = ref('');
@@ -173,6 +191,8 @@ const filters = ref<LobbyFilters>(defaultLobbyFilters());
 const filtersOpen = ref(false);
 const roomOpen = ref(false);
 const createOpen = ref(false);
+// Host: the waiting game opened in the create form to change it
+const editRoom = ref<LobbyEditRoom | undefined>();
 const queueing = ref(false);
 const queueStartedAt = ref(0);
 const now = ref(Date.now());
@@ -182,6 +202,8 @@ const offerIsInvitation = ref(false);
 const declinedRooms = new Set<string>();
 // Invitation link: lobby/room/<id>-<name> (lobbyUrl.ts)
 const invitedRoomId = lobbyRoomIdFromPath(window.location.pathname);
+// Invitation link of a seat the host entered by hand (lobby/room/<id>?seat=<token>): joining takes exactly that seat
+const invitedSeatToken = new URLSearchParams(window.location.search).get(LOBBY_SEAT_PARAMETER) ?? undefined;
 let invitationHandled = false;
 let pollTimer: ReturnType<typeof setInterval> | undefined;
 // Rooms we sat in while they were still open on this page: their start leads into the game
@@ -193,6 +215,7 @@ let openingOwnRoom = false;
 let clockTimer: ReturnType<typeof setInterval> | undefined;
 
 const filterCount = computed(() => activeFilterCount(filters.value));
+const requestedRoom = computed(() => rooms.value.find((room) => room.id === requestedRoomId.value));
 const myRoom = computed(() => rooms.value.find((room) => room.id === yourRoomId.value));
 const visibleRooms = computed(() => {
   const query = search.value.trim().toLowerCase();
@@ -207,6 +230,12 @@ const openRooms = computed(() => {
   return mine !== undefined && mine.state === 'open' && !open.includes(mine) ? [mine, ...open] : open;
 });
 const runningRooms = computed(() => visibleRooms.value.filter((room) => room.state === 'started'));
+// Running AI training games are only information: no button, so they take no hotkey position
+const keyedRunningRooms = computed(() => runningRooms.value.filter((room) => room.aiTraining === undefined || room.aiTraining.finished));
+function keyPosition(room: LobbyRoomModel): number | undefined {
+  const position = keyedRunningRooms.value.indexOf(room);
+  return position < 0 ? undefined : position;
+}
 const quickMatch = computed(() => bestMatch(rooms.value, filters.value));
 const queueTime = computed(() => {
   const seconds = Math.max(0, Math.floor((now.value - queueStartedAt.value) / 1000));
@@ -222,7 +251,20 @@ async function refresh(): Promise<void> {
     const list = await fetchLobby(invitedRoomId);
     rooms.value = list.rooms;
     yourRoomId.value = list.yourRoomId;
+    const wasRequested = requestedRoomId.value;
+    requestedRoomId.value = list.requestedRoomId;
     loaded.value = true;
+    // Approved: the seat is ours, the waiting room opens as after joining
+    if (wasRequested !== undefined && list.yourRoomId === wasRequested) {
+      roomOpen.value = true;
+    }
+    if (list.removedFrom !== undefined && instance !== null) {
+      roomOpen.value = false;
+      showAlert(instance.proxy as ComponentPublicInstance, 'Game lobby', {text: translateTextWithParams('The host removed you from the game "${0}".', [list.removedFrom])});
+    }
+    if (list.declinedFrom !== undefined && instance !== null) {
+      showAlert(instance.proxy as ComponentPublicInstance, 'Game lobby', {text: translateTextWithParams('The host declined your request to join "${0}": you cannot join this game any more.', [list.declinedFrom])});
+    }
     loadError.value = '';
   } catch (error) {
     loadError.value = describeFailure(failureOf(error));
@@ -233,12 +275,13 @@ async function refresh(): Promise<void> {
     waitedIn.add(mine.id);
   }
   // The game started while we waited for it (or was started by our own click): everybody goes to their own
-  // player page, a host with players entered by hand first to the page with every player's link.
+  // player page. A host with players entered by hand stays in the room dialog first: it holds their links.
   // An earlier game of ours does not pull a later visit of the lobby away: it is listed with "Continue".
   if (mine?.state === 'started' && (waitedIn.has(mine.id) || followNextStart)) {
     followNextStart = false;
-    if (mine.hostNeedsLinks && mine.gameId !== undefined) {
-      window.location.href = 'game?id=' + mine.gameId;
+    waitedIn.delete(mine.id);
+    if (mine.seats.some((seat) => seat.kind === 'guest' && seat.playerId !== undefined)) {
+      roomOpen.value = true;
       return;
     }
     if (mine.yourPlayerId !== undefined) {
@@ -256,7 +299,8 @@ function offerInvitation(): void {
   }
   invitationHandled = true;
   const room = rooms.value.find((r) => r.id === invitedRoomId);
-  if (room !== undefined && room.id !== yourRoomId.value && hasFreeSeat(room)) {
+  // A reserved seat is no free seat, but the link holder may take it
+  if (room !== undefined && room.id !== yourRoomId.value && room.state === 'open' && room.yourAccess !== 'declined' && (hasFreeSeat(room) || invitedSeatToken !== undefined)) {
     offerIsInvitation.value = true;
     offeredRoom.value = room;
   }
@@ -315,7 +359,12 @@ async function act(action: LobbyRequest): Promise<LobbyRoomModel | undefined> {
 function join(room: LobbyRoomModel): void {
   withProfile(async () => {
     followNextStart = true;
-    const joined = await act({action: 'join', roomId: room.id, profile: profile.value});
+    const seatToken = room.id === invitedRoomId ? invitedSeatToken : undefined;
+    const joined = await act({action: 'join', roomId: room.id, profile: profile.value, seatToken});
+    if (joined !== undefined && requestedRoomId.value === room.id && instance !== null) {
+      showAlert(instance.proxy as ComponentPublicInstance, 'Game lobby', {text: translateText('The host removed you from this game twice: your request to join was sent, the host decides.')});
+      return;
+    }
     if (joined !== undefined) {
       queueing.value = false;
       roomOpen.value = joined.state === 'open';
@@ -361,8 +410,9 @@ async function leave(): Promise<void> {
   }
 }
 
+// No profile needed to fill in the form: whoever creates a game names the own seat there
 function openCreate(): void {
-  withProfile(() => createOpen.value = true);
+  createOpen.value = true;
 }
 
 // The open form has its own address lobby/create (start page item "Start" links there): a reload keeps it open,
@@ -380,13 +430,57 @@ watch(createOpen, (open) => {
   }
 });
 
-async function openInLobby(request: {config: NewGameConfig, title: string, listed: boolean, freeSeats: Array<number>}): Promise<void> {
+function openEdit(): void {
+  const room = myRoom.value;
+  if (room === undefined || room.config === undefined) {
+    return;
+  }
+  editRoom.value = {
+    title: room.title,
+    listed: room.listed,
+    config: room.config,
+    manualSeats: room.seats.flatMap((seat, index) => seat.kind === 'guest' ? [index] : []),
+  };
+  roomOpen.value = false;
+}
+
+async function saveEdit(request: {config: NewGameConfig, title: string, listed: boolean, freeSeats: Array<number>, hostPicture: {emoji: string, image?: string}}): Promise<void> {
+  const room = myRoom.value;
+  if (room === undefined) {
+    editRoom.value = undefined;
+    return;
+  }
+  const changed = await act({action: 'edit', roomId: room.id, config: request.config, title: request.title, listed: request.listed, freeSeats: request.freeSeats});
+  // Refused (e.g. too few free seats for the joined players): the form stays open, the alert says why
+  if (changed !== undefined) {
+    editRoom.value = undefined;
+    roomOpen.value = true;
+  }
+}
+
+// The own seat of "Create game" is the profile: taken over with every keystroke, kept when the form is closed
+function takeHostProfile(next: LobbyProfile): void {
+  profile.value = next;
+  firstVisit.value = false;
+  saveLobbyProfile(next);
+}
+
+async function openInLobby(request: {config: NewGameConfig, title: string, listed: boolean, freeSeats: Array<number>, hostPicture: {emoji: string, image?: string}}): Promise<void> {
+  // The own seat of the form is the host: its name, color and picture become the lobby profile, so creating a game
+  // never stops at the profile dialog and the profile always matches what was entered there
+  const ownSeat = request.config.players[0];
+  if (ownSeat === undefined || ownSeat.name.trim() === '') {
+    withProfile(() => void openInLobby({...request, hostPicture: {emoji: profile.value.emoji, image: profile.value.image}, config: {...request.config, players: [{...request.config.players[0], name: profile.value.name}, ...request.config.players.slice(1)]}}));
+    return;
+  }
+  const fromSeat: LobbyProfile = {name: ownSeat.name.trim().slice(0, LOBBY_NAME_MAX_LENGTH), color: ownSeat.color, emoji: request.hostPicture.emoji, image: request.hostPicture.image};
+  takeHostProfile(fromSeat);
   followNextStart = true;
   // Still inside the click: browsers ask for the permission only then. With it the host may leave the lobby
   // and still learns by push message when somebody joins
   const permission = askLobbyPushPermission();
   openingOwnRoom = true;
-  const room = await act({action: 'open', profile: profile.value, ...request});
+  const room = await act({action: 'open', profile: profile.value, config: request.config, title: request.title, listed: request.listed, freeSeats: request.freeSeats});
   // The watcher of yourRoomId runs before the next tick: only then the flag may go
   await nextTick();
   openingOwnRoom = false;
@@ -426,7 +520,7 @@ function roomDialogOrigin(): HTMLElement | undefined {
   return id === undefined ? undefined : document.querySelector<HTMLElement>(`#lobby .lobby-game[data-room-id="${id}"]`) ?? undefined;
 }
 
-// Alt + 1 … 9, 0 presses the button of that row (as on "Game created"); by position, since on a Mac Alt + 1 types a character
+// Alt + 1 … 9, 0 presses the button of that row; by position, since on a Mac Alt + 1 types a character
 function onRowKey(event: KeyboardEvent): void {
   if (!hotkeysAvailable.value || event.repeat || !event.altKey || event.ctrlKey || event.metaKey || event.shiftKey || isTypingTarget(event.target)) {
     return;
@@ -436,7 +530,7 @@ function onRowKey(event: KeyboardEvent): void {
   }
   const code = codeOfEvent(event);
   const index = code === undefined ? -1 : PICK_CODES.indexOf(code);
-  const button = document.querySelectorAll<HTMLElement>('#lobby .lobby-game')[index]?.querySelector<HTMLElement>('.lobby-game-action .btn');
+  const button = document.querySelectorAll<HTMLElement>('#lobby .lobby-game:not(.lobby-game--info)')[index]?.querySelector<HTMLElement>('.lobby-game-action .btn');
   if (button !== undefined && button !== null) {
     event.preventDefault();
     button.click();

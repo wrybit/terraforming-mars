@@ -1,0 +1,46 @@
+// Split button (SplitButton.vue): two halves of the same button look, joined; the arrow half opens the menu
+.split-button {
+  display: inline-flex;
+  align-items: stretch;
+
+  .split-button-main {
+    margin: 0;
+  }
+
+  &:not(.split-button--single) .split-button-main {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  .split-button-toggle {
+    display: inline-flex;
+    align-items: center;
+    margin: 0;
+    padding: 0 6px;
+    border-left-color: rgba(255, 255, 255, 0.08);
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+
+    svg {
+      width: 12px;
+      height: 12px;
+      fill: none;
+      stroke: currentcolor;
+      stroke-width: 3;
+    }
+  }
+}
+
+// The menu sits at the body with a fixed position (floatingPanel.ts), above dialogs
+.split-button-menu {
+  top: auto;
+  left: auto;
+  z-index: (@modal-z-index + 1);
+  gap: 2px;
+  padding: 6px;
+
+  .card-sort-menu__manual {
+    white-space: nowrap;
+    text-decoration: none;
+  }
+}

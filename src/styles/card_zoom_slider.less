@@ -67,6 +67,11 @@ html:not(.tm-mobile) :is(.player_home_block--actions, .player_home_block--hand, 
   // the milestone/award tiles likewise (--choice-zoom there)
 }
 
+// Played cards of a player (OtherPlayer.vue): its filter row has the slider too, so the cards follow it
+html:not(.tm-mobile) .other_player_cont .other-player-cards > .cardbox {
+  zoom: var(--card-zoom, 1);
+}
+
 // Row without filter and sorting: the slider sits at the right edge, where the sorting would be
 .card-filter-bar--zoom-only .card-zoom-slider {
   margin-left: auto;

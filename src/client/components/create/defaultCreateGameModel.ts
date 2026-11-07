@@ -1,4 +1,5 @@
 import * as constants from '@/common/constants';
+import {AI_ANALYSIS_DEFAULT} from '@/common/ai/aiAnalysisDefault';
 import {BoardName} from '@/common/boards/BoardName';
 import {DEFAULT_EXPANSIONS} from '@/common/cards/GameModule';
 import {RandomMAOptionType} from '@/common/ma/RandomMAOptionType';
@@ -50,7 +51,7 @@ export function defaultCreateGameModel(): CreateGameModel {
     undoOption: false,
     showTimers: true,
     // On by default with AI players: ratings of real games are the best training data; players switch it off
-    aiAnalysis: true,
+    aiAnalysis: AI_ANALYSIS_DEFAULT,
     fastModeOption: false,
     removeNegativeGlobalEventsOption: false,
     includeFanMA: false,

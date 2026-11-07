@@ -28,6 +28,6 @@ describe('documentTitle', () => {
 
 describe('shortDocumentTitle', () => {
   it('joins non-empty parts', () => {
-    expect(shortDocumentTitle(['Game created', undefined, 'Remote Plasma Trace'])).to.eq('Game created · Remote Plasma Trace | TM');
+    expect(shortDocumentTitle(['Game lobby', undefined, 'Remote Plasma Trace'])).to.eq('Game lobby · Remote Plasma Trace | TM');
   });
 });

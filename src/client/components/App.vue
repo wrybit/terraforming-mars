@@ -23,16 +23,9 @@
     </section>
     <div class="main-container">
       <StartScreen v-if="screen === 'start-screen'" />
-      <!-- Key: a theme switch renders the form anew in the theme's wording (ThemeSwitch.vue, CreateGameForm.switchTheme) -->
-      <CreateGameForm
-        v-else-if="screen === 'create-game-form'"
-        :key="createGameFormKey + '-' + themeKey"
-      />
-      <LobbyPage v-else-if="screen === 'lobby'" />
-      <GameHome
-        v-else-if="screen === 'game-home' && game !== undefined"
-        :game="game"
-      />
+      <!-- Key: a theme switch in its "Create game" renders the page anew in the theme's wording (CreateGameForm.switchTheme);
+           the form reopens from the address lobby/create#s=… with its settings -->
+      <LobbyPage v-else-if="screen === 'lobby'" :key="'lobby-' + createGameFormKey + '-' + themeKey" />
       <!-- Touch devices (phone, tablet) get the mobile view, see mobileLayout.ts -->
       <MobilePlayerHome
         v-else-if="screen === 'player-home' && playerView !== undefined && isMobileLayout"
@@ -72,7 +65,7 @@
       <HelpOverlay v-else-if="screen === 'help'" />
     </div>
     <!-- In game views the notice sits in the sidebar's info window; on the results page it is dropped (Jens' request) -->
-    <!-- Start page, lobby, "Create game" and "Game created" share the same footer (Jens' request): build facts left, notice right -->
+    <!-- Start page and lobby (with its "Create game") share the same footer (Jens' request): build facts left, notice right -->
     <footer v-if="screen !== 'player-home' && screen !== 'spectator-home' && screen !== 'the-end'" class="notice" :class="{'notice--split': hasStartScreenFooter, 'notice--online': screen === 'start-screen'}">
       <StartScreenFooter v-if="hasStartScreenFooter" />
       <!-- Start page: how many are playing right now, in the middle of the footer -->
@@ -96,9 +89,7 @@ const AdminRaw = defineAsyncComponent(() => import(/* webpackChunkName: "admin" 
 const AdminMusic = defineAsyncComponent(() => import(/* webpackChunkName: "admin" */ '@/client/components/admin/AdminMusic.vue'));
 const AdminDashboard = defineAsyncComponent(() => import(/* webpackChunkName: "admin" */ '@/client/components/admin/AdminDashboard.vue'));
 const CardList = defineAsyncComponent(() => import(/* webpackChunkName: "card-list" */ '@/client/components/cardlist/CardList.vue'));
-const CreateGameForm = defineAsyncComponent(() => import(/* webpackChunkName: "create-game" */ '@/client/components/create/CreateGameForm.vue'));
 const GameEnd = defineAsyncComponent(() => import(/* webpackChunkName: "game-end" */ '@/client/components/GameEnd.vue'));
-const GameHome = defineAsyncComponent(() => import(/* webpackChunkName: "game-home" */ '@/client/components/GameHome.vue'));
 const GamesOverview = defineAsyncComponent(() => import(/* webpackChunkName: "games-overview" */ '@/client/components/GamesOverview.vue'));
 // Fork: new help with page tree and search; the upstream content lives inside it
 const HelpOverlay = defineAsyncComponent(() => import(/* webpackChunkName: "help" */ '@/client/components/helpOverlay/HelpOverlay.vue'));
@@ -118,11 +109,10 @@ import {enterGameMusic} from '@/client/music/gameMusic';
 import {applyChosenTheme} from '@/client/theme/themeChoice';
 import {Theme} from '@/common/theme/Theme';
 import {paths} from '@/common/app/paths';
-import {isLobbyCreatePath, lobbyRoomIdFromPath} from '@/common/lobby/lobbyUrl';
+import {isLobbyCreatePath, LOBBY_CREATE_PATH, lobbyRoomIdFromPath} from '@/common/lobby/lobbyUrl';
 import {PlayerViewModel, ViewModel} from '@/common/models/PlayerModel';
-import {SimpleGameModel} from '@/common/models/SimpleGameModel';
 import {SpectatorModel} from '@/common/models/SpectatorModel';
-import {isGameId, isPlayerId, isSpectatorId} from '@/common/Types';
+import {isPlayerId, isSpectatorId} from '@/common/Types';
 import {hasShowModal, showModal, windowHasHTMLDialogElement} from './HTMLDialogElementCompatibility';
 
 import dialogPolyfill from 'dialog-polyfill';
@@ -148,10 +138,8 @@ type Screen = 'admin-settings' |
             'admin-raw' |
             'admin-music' |
             'admin-dashboard' |
-            'create-game-form' |
             'cards' |
             'empty' |
-            'game-home' |
             'games-overview' |
             'help' |
             'login-home' |
@@ -163,7 +151,7 @@ type Screen = 'admin-settings' |
             'the-end';
 // Screens shown on the Milky Way background (AppBackground.vue); the rest keeps the plain page color
 const SCREENS_WITH_BACKGROUND: ReadonlyArray<Screen> = [
-  'start-screen', 'create-game-form', 'lobby', 'game-home', 'player-home', 'spectator-home', 'the-end', 'games-overview', 'cards', 'stats',
+  'start-screen', 'lobby', 'player-home', 'spectator-home', 'the-end', 'games-overview', 'cards', 'stats',
 ];
 // Image credit only where the top right corner is free; all other views have their own page header there
 const SCREENS_WITH_BACKGROUND_CREDIT: ReadonlyArray<Screen> = [
@@ -182,7 +170,6 @@ export type MainAppData = {
     playerView?: PlayerViewModel;
     isServerSideRequestInProgress: boolean;
     componentsVisibility: {[x: string]: boolean};
-    game: SimpleGameModel | undefined;
     login: string | undefined;
     /** Changes when the create-game form must render anew (theme switch) */
     createGameFormKey: number;
@@ -212,7 +199,6 @@ export default defineComponent({
         'pinned_player_4': false,
         'turmoil_parties': false,
       } as {[x: string]: boolean},
-      game: undefined as SimpleGameModel | undefined,
       playerView: undefined,
       spectator: undefined,
       login: undefined,
@@ -229,9 +215,7 @@ export default defineComponent({
     StartScreen,
     StartScreenFooter,
     OnlinePlayers,
-    CreateGameForm,
     LobbyPage,
-    GameHome,
     PlayerHome,
     MobilePlayerHome,
     MobileSpectatorHome,
@@ -263,8 +247,8 @@ export default defineComponent({
       return SCREENS_WITH_BACKGROUND_CREDIT.includes(this.screen);
     },
     hasStartScreenFooter(): boolean {
-      // Same footer everywhere outside the game (Jens' request): start page, lobby, "Create game", "Game created"
-      return this.screen === 'start-screen' || this.screen === 'create-game-form' || this.screen === 'lobby' || this.screen === 'game-home';
+      // Same footer everywhere outside the game (Jens' request): start page and lobby (with "Create game")
+      return this.screen === 'start-screen' || this.screen === 'lobby';
     },
     isMobileLayout(): boolean {
       return mobileLayout.value;
@@ -288,7 +272,7 @@ export default defineComponent({
       const report = await describeGameLoadFailure(id, err);
       this.showAlert(report.title, {text: report.text}, report.leadsToStartPage ? () => window.location.assign('./') : undefined);
     },
-    /** Renders the create-game form anew; it restores its settings from the link in the address bar */
+    /** Renders the lobby with its create-game form anew; the form restores its settings from the link in the address bar */
     remountCreateGameForm(): void {
       this.createGameFormKey++;
     },
@@ -416,8 +400,7 @@ export default defineComponent({
     setDocumentTitle();
     // Game pages send their id, so the server knows somebody is playing (no automatic update then)
     const pageId = new URLSearchParams(window.location.search).get('id') ?? '';
-    // The game page (links for the players) too: a lobby game whose creator sits there counts as attended
-    startServerStatusPolling(isPlayerId(pageId) || isSpectatorId(pageId) || isGameId(pageId) ? pageId : undefined);
+    startServerStatusPolling(isPlayerId(pageId) || isSpectatorId(pageId) ? pageId : undefined);
     if (!windowHasHTMLDialogElement()) {
       dialogPolyfill.registerDialog(document.getElementById('alert-dialog') as HTMLDialogElement);
     }
@@ -435,27 +418,14 @@ export default defineComponent({
       } else {
         this.showAlert('Invalid link', {text: translateTextWithParams('The address contains no valid player or spectator ID ("${0}"). These IDs start with p (player) or s (spectator). Check whether the link was copied completely.', [id])});
       }
-    } else if (currentPathname === paths.GAME) {
-      const url = paths.API_GAME + window.location.search;
-      fetchOrFail(url)
-        .then((resp) => resp.json())
-        .then((appGame: SimpleGameModel) => {
-          app.screen = 'game-home';
-          app.game = appGame;
-          window.history.replaceState(
-            appGame,
-            `${constants.APP_NAME} - Game`,
-            `${paths.GAME}?id=${appGame.id}`,
-          );
-        })
-        .catch((err) => {
-          this.showGameLoadError(err);
-        });
     } else if (currentPathname === paths.GAMES_OVERVIEW || currentPathname === paths.LOAD) {
       // Loading a game lives in the games overview now; the old address still leads there
       app.screen = 'games-overview';
-    } else if (currentPathname === paths.NEW_GAME) {
-      app.screen = 'create-game-form';
+    } else if (currentPathname === paths.NEW_GAME || currentPathname === paths.GAME) {
+      // Every game is opened and handed out in the lobby: the old form address opens its "Create game"
+      // (a settings link keeps its #s=…), the old page with the player links leads to the lobby, whose room dialog has them
+      // A real redirect: lobby/create lies one level deeper, its page resolves the script chunks from there
+      window.location.replace(currentPathname === paths.NEW_GAME ? LOBBY_CREATE_PATH + window.location.hash : paths.LOBBY);
     } else if (currentPathname === paths.LOBBY || lobbyRoomIdFromPath(window.location.pathname) !== undefined || isLobbyCreatePath(window.location.pathname)) {
       app.screen = 'lobby';
     } else if (currentPathname === paths.CARDS || currentPathname === paths.STATS) {

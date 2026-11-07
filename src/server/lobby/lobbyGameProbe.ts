@@ -1,7 +1,6 @@
 import {Phase} from '../../common/Phase';
-import {isGameId} from '../../common/Types';
 import {IGameLoader} from '../database/IGameLoader';
-import {isActiveParticipant, isGamePageOpen} from '../server/activeParticipants';
+import {isActiveParticipant} from '../server/activeParticipants';
 import {GameProbe, GameProgressSource} from './Lobby';
 import {terraformingProgress} from '../ai/gameProgress';
 
@@ -11,7 +10,7 @@ const INITIAL_CHOICE_PHASES: ReadonlyArray<Phase> = [Phase.INITIALDRAFTING, Phas
 /** Real game data for Lobby.closeAbandoned: presence from the status polls, phase from the game */
 export function lobbyGameProbe(gameLoader: IGameLoader): GameProbe {
   return {
-    isPresent: (id) => isGameId(id) ? isGamePageOpen(id) : isActiveParticipant(id),
+    isPresent: (id) => isActiveParticipant(id),
     hasBegun: async (gameId) => {
       const game = await gameLoader.getGame(gameId);
       if (game === undefined) {
