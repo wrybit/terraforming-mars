@@ -1022,5 +1022,6 @@
   "Ask to join": "Pyydä liittymistä",
   "You removed this player twice. If you decline, ${0} can never join this game again.": "Poistit tämän pelaajan kahdesti. Jos hylkäät, ${0} ei voi enää koskaan liittyä tähän peliin.",
   "Link for spectators": "Linkki katsojille",
-  "The game is running. Send the players you entered by hand their own link.": "Peli on käynnissä. Lähetä itse lisäämillesi pelaajille heidän oma linkkinsä."
+  "The game is running. Send the players you entered by hand their own link.": "Peli on käynnissä. Lähetä itse lisäämillesi pelaajille heidän oma linkkinsä.",
+  "More options": "Lisää vaihtoehtoja"
 }

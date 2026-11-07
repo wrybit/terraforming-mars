@@ -1205,5 +1205,6 @@
   "Ask to join": "Csatlakozás kérése",
   "You removed this player twice. If you decline, ${0} can never join this game again.": "Kétszer eltávolítottad ezt a játékost. Ha elutasítod, ${0} soha többé nem csatlakozhat ehhez a játékhoz.",
   "Link for spectators": "Link a nézőknek",
-  "The game is running. Send the players you entered by hand their own link.": "A játék fut. Küldd el a kézzel beírt játékosoknak a saját linkjüket."
+  "The game is running. Send the players you entered by hand their own link.": "A játék fut. Küldd el a kézzel beírt játékosoknak a saját linkjüket.",
+  "More options": "További lehetőségek"
 }

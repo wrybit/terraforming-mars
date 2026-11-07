@@ -1652,5 +1652,6 @@
   "Ask to join": "Vragen om mee te doen",
   "You removed this player twice. If you decline, ${0} can never join this game again.": "Je hebt deze speler twee keer verwijderd. Als je weigert, kan ${0} nooit meer aan dit spel meedoen.",
   "Link for spectators": "Link voor toeschouwers",
-  "The game is running. Send the players you entered by hand their own link.": "Het spel loopt. Stuur de spelers die je zelf hebt ingevoerd hun eigen link."
+  "The game is running. Send the players you entered by hand their own link.": "Het spel loopt. Stuur de spelers die je zelf hebt ingevoerd hun eigen link.",
+  "More options": "Meer opties"
 }

@@ -1970,5 +1970,6 @@
   "Ask to join": "Поискай участие",
   "You removed this player twice. If you decline, ${0} can never join this game again.": "Премахна този играч два пъти. Ако откажеш, ${0} никога повече няма да може да се присъедини към тази игра.",
   "Link for spectators": "Линк за зрители",
-  "The game is running. Send the players you entered by hand their own link.": "Играта тече. Изпрати на ръчно въведените играчи техния собствен линк."
+  "The game is running. Send the players you entered by hand their own link.": "Играта тече. Изпрати на ръчно въведените играчи техния собствен линк.",
+  "More options": "Още опции"
 }

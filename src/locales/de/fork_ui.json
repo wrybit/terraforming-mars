@@ -802,5 +802,6 @@
   "Ask to join": "Beitritt anfragen",
   "You removed this player twice. If you decline, ${0} can never join this game again.": "Du hast diesen Spieler zweimal entfernt. Lehnst du ab, kann ${0} diesem Spiel nie wieder beitreten.",
   "Link for spectators": "Link für Zuschauer",
-  "The game is running. Send the players you entered by hand their own link.": "Das Spiel läuft. Schick den von dir eingetragenen Spielern ihren eigenen Link."
+  "The game is running. Send the players you entered by hand their own link.": "Das Spiel läuft. Schick den von dir eingetragenen Spielern ihren eigenen Link.",
+  "More options": "Weitere Optionen"
 }

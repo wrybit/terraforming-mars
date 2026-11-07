@@ -1389,5 +1389,6 @@
   "Ask to join": "Be om å bli med",
   "You removed this player twice. If you decline, ${0} can never join this game again.": "Du har fjernet denne spilleren to ganger. Hvis du avslår, kan ${0} aldri bli med i dette spillet igjen.",
   "Link for spectators": "Lenke for tilskuere",
-  "The game is running. Send the players you entered by hand their own link.": "Spillet er i gang. Send spillerne du la inn selv, sin egen lenke."
+  "The game is running. Send the players you entered by hand their own link.": "Spillet er i gang. Send spillerne du la inn selv, sin egen lenke.",
+  "More options": "Flere valg"
 }

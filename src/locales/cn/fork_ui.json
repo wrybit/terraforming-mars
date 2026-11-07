@@ -2006,5 +2006,6 @@
   "Ask to join": "申请加入",
   "You removed this player twice. If you decline, ${0} can never join this game again.": "你已两次移出该玩家。如果拒绝，${0} 将再也无法加入此游戏。",
   "Link for spectators": "观众链接",
-  "The game is running. Send the players you entered by hand their own link.": "游戏正在进行。请把各自的链接发给你手动添加的玩家。"
+  "The game is running. Send the players you entered by hand their own link.": "游戏正在进行。请把各自的链接发给你手动添加的玩家。",
+  "More options": "更多选项"
 }

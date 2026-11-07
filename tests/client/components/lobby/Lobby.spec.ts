@@ -173,16 +173,22 @@ describe('Lobby components', () => {
     const waiting = room([{...host, you: true}, {kind: 'guest', name: 'Klaus', color: 'green', inviteToken: 'abc123abc123'}, {kind: 'free'}]);
     mount(LobbyRoomDialog, {...globalConfig, props: {open: true, room: waiting}, attachTo: document.body});
     expect(document.querySelector('.lobby-seat-link')?.textContent).contains('Copy link');
+    // Waiting, there is nothing else to do with the link: no arrow
+    expect(document.querySelector('.split-button-toggle')).is.null;
   });
 
-  it('LobbyRoomDialog offers "Continue" instead of "Start now" once the game runs', () => {
+  it('LobbyRoomDialog offers "Continue" instead of "Start now" once the game runs', async () => {
     const started = room([{...host, you: true}, {kind: 'guest', name: 'Dan', color: 'green', playerId: 'p2'}], {state: 'started', yourPlayerId: 'p1', spectatorId: 's1'});
     const wrapper = mount(LobbyRoomDialog, {...globalConfig, props: {open: true, room: started}, attachTo: document.body});
     expect(document.body.textContent).not.contains('Start now');
     const links = Array.from(document.body.querySelectorAll('.lobby-room-foot a')).map((link) => link.getAttribute('href'));
     expect(links).deep.eq(['player?id=p1']);
-    // The host passes on the link of the player entered by hand; spectators get their own link
-    expect(document.querySelector('.lobby-seat-link')?.textContent).contains('Copy link');
+    // The host passes on the link of the player entered by hand; behind the arrow it opens here (several players at one device)
+    expect(document.querySelector('.split-button-main')?.textContent).contains('Copy link');
+    document.querySelector<HTMLButtonElement>('.split-button-toggle')?.click();
+    await nextTick();
+    expect(document.querySelector('.split-button-menu a')?.getAttribute('href')).contains('player?id=p2');
+    // Spectators get their own link
     expect(document.querySelector<HTMLInputElement>('.lobby-invite input')?.value).contains('spectator?id=s1');
     wrapper.unmount();
   });

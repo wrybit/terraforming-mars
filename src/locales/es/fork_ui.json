@@ -2301,5 +2301,6 @@
   "Ask to join": "Pedir unirse",
   "You removed this player twice. If you decline, ${0} can never join this game again.": "Has quitado a este jugador dos veces. Si rechazas, ${0} nunca podrá volver a unirse a esta partida.",
   "Link for spectators": "Enlace para espectadores",
-  "The game is running. Send the players you entered by hand their own link.": "La partida está en curso. Envía a los jugadores que añadiste a mano su propio enlace."
+  "The game is running. Send the players you entered by hand their own link.": "La partida está en curso. Envía a los jugadores que añadiste a mano su propio enlace.",
+  "More options": "Más opciones"
 }

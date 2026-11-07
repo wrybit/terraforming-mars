@@ -20,11 +20,13 @@
               <LobbyAvatar kind="guest" :color="seat.color" :title="seat.name" size="large" />
               <span class="lobby-seat-name">{{ seat.name }}</span>
               <span class="lobby-seat-state" v-i18n>entered by the host</span>
-              <!-- Host: this player's own link to pass on (waiting: takes this seat in the lobby; running: the player page) -->
-              <button v-if="guestLink(seat) !== undefined" type="button" class="create-game-small-button lobby-seat-link" @click="copyGuestLink(index, seat)">
+              <!-- Host: this player's own link to pass on (waiting: takes this seat in the lobby; running: the player page).
+                   Running, the arrow also offers to open it here: the rare case of several players at one device in several tabs -->
+              <SplitButton v-if="guestLink(seat) !== undefined" buttonClass="create-game-small-button lobby-seat-link" menuLabel="More options"
+                :options="started ? [{label: 'Play', href: guestLink(seat)!}] : []" @click="copyGuestLink(index, seat)">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" /></svg>
                 <span>{{ $t(copiedSeat === index ? 'Link copied' : 'Copy link') }}</span>
-              </button>
+              </SplitButton>
             </template>
             <template v-else-if="seat.kind === 'ai'">
               <LobbyAvatar kind="ai" size="large" />
@@ -99,6 +101,7 @@ import {LobbyRoomModel, LobbySeatModel} from '@/common/lobby/LobbyModel';
 import SidebarModal from '@/client/components/SidebarModal.vue';
 import DialogFrame from '@/client/components/DialogFrame.vue';
 import AppButton from '@/client/components/common/AppButton.vue';
+import SplitButton from '@/client/components/common/SplitButton.vue';
 import GameSetupChips from '@/client/components/common/GameSetupChips.vue';
 import LobbyAvatar from './LobbyAvatar.vue';
 import {lobbySetupChips} from './lobbySetupChips';

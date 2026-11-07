@@ -1396,5 +1396,6 @@
   "Ask to join": "参加をリクエスト",
   "You removed this player twice. If you decline, ${0} can never join this game again.": "このプレイヤーを2回外しました。拒否すると、${0} はこのゲームに二度と参加できません。",
   "Link for spectators": "観戦用リンク",
-  "The game is running. Send the players you entered by hand their own link.": "ゲームは進行中です。手動で追加したプレイヤーにそれぞれのリンクを送ってください。"
+  "The game is running. Send the players you entered by hand their own link.": "ゲームは進行中です。手動で追加したプレイヤーにそれぞれのリンクを送ってください。",
+  "More options": "その他のオプション"
 }

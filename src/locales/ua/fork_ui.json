@@ -1180,5 +1180,6 @@
   "Ask to join": "Попросити участі",
   "You removed this player twice. If you decline, ${0} can never join this game again.": "Ти двічі прибирав цього гравця. Якщо відхилиш, ${0} більше ніколи не зможе приєднатися до цієї гри.",
   "Link for spectators": "Посилання для глядачів",
-  "The game is running. Send the players you entered by hand their own link.": "Гра триває. Надішли гравцям, яких ти додав вручну, їхні власні посилання."
+  "The game is running. Send the players you entered by hand their own link.": "Гра триває. Надішли гравцям, яких ти додав вручну, їхні власні посилання.",
+  "More options": "Інші варіанти"
 }
