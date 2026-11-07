@@ -1290,11 +1290,14 @@ each(@players, {
     font-size: 15px;
   }
 
-  // Emoji glyphs carry font metrics (ascent/descent): as a block of their own height they sit in the middle
+  // Emoji glyphs are wider (advance about 1.25em) than their picture, which sits at the left of that width:
+  // a box of exactly 1em is centered instead, the glyph starts at its left edge and so lands in the middle
   .lobby-avatar-emoji {
     display: block;
+    width: 1em;
     height: 1em;
     line-height: 1em;
+    white-space: nowrap;
   }
 
   &:hover .lobby-avatar,
