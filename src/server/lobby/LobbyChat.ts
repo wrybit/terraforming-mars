@@ -10,7 +10,7 @@ import * as path from 'path';
  * Obergrenze des Chats: Nachrichten verfallen nicht nach Zeit, sondern erst, wenn es mehr werden –
  * dann verdrängt jede neue Nachricht die älteste. So bleibt auch ein ruhiger Chat lesbar.
  */
-export const CHAT_KEEP_MESSAGES = 100;
+export const CHAT_KEEP_MESSAGES = 300;
 /** Against flooding: at most this many messages per participant within the window */
 export const CHAT_RATE_LIMIT = 5;
 export const CHAT_RATE_WINDOW_MS = 15_000;
