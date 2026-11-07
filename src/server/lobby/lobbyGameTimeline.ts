@@ -1,7 +1,7 @@
 import {IGame} from '../IGame';
 import {GlobalParameter} from '../../common/GlobalParameter';
 import {LogMessageDataType} from '../../common/logs/LogMessageDataType';
-import {LobbyGameMark, LobbyGeneration, LobbyParameter, LOBBY_PARAMETERS} from '../../common/lobby/LobbyModel';
+import {LobbyGameCourse, LobbyGameMark, LobbyGeneration, LobbyParameter, LOBBY_PARAMETERS} from '../../common/lobby/LobbyModel';
 import {MIN_OXYGEN_LEVEL, MIN_TEMPERATURE, MIN_VENUS_SCALE} from '../../common/constants';
 import {Phase} from '../../common/Phase';
 import {remainingProductionPhases} from '../ai/gameProgress';
@@ -10,11 +10,7 @@ import {remainingProductionPhases} from '../ai/gameProgress';
 // terraformed in it, when milestones were claimed and awards funded, and roughly how long the game still runs.
 // Everything comes from what the game keeps anyway: the log (timestamps) and globalsPerGeneration.
 
-export type LobbyGameTimeline = {
-  generations: Array<LobbyGeneration>;
-  marks: Array<LobbyGameMark>;
-  remainingMs: number;
-};
+export type LobbyGameTimeline = LobbyGameCourse;
 
 type ParameterLevels = Partial<Record<GlobalParameter, number>>;
 
@@ -95,6 +91,11 @@ function marksOf(game: IGame, start: number): Array<LobbyGameMark> {
     marks.push({kind, name: String(name), player: player.name, color: player.color, generation, atMs: Math.max(0, message.timestamp - start)});
   }
   return marks;
+}
+
+/** Moment of the last log line: "now" of a finished game (the running generation ends there) */
+export function lastLogTime(game: IGame): number {
+  return game.gameLog[game.gameLog.length - 1]?.timestamp ?? Date.now();
 }
 
 /** The timeline at the moment `now` (milliseconds since 1970) */

@@ -1,5 +1,5 @@
 import {AI_TRAINING_FINISHED_GAMES, AiTrainingFeed, AiTrainingFeedGame, AiTrainingFinishedGame, aiTrainingTitle} from '../../common/lobby/AiTrainingFeed';
-import {LobbyRoomModel, LobbySetupModel} from '../../common/lobby/LobbyModel';
+import {LobbyGameCourse, LobbyRoomModel, LobbySetupModel} from '../../common/lobby/LobbyModel';
 import {IGameLoader} from '../database/IGameLoader';
 import {Database} from '../database/Database';
 import {IGame} from '../IGame';
@@ -9,6 +9,7 @@ import {AiTrainingFeedSource, configuredFeedSource} from './aiTrainingFeedSource
 import {AiTrainingStorage, StoredAiTrainingGame, fileTrainingStorage} from './aiTrainingStore';
 import {aiTrainingSetup} from './aiTrainingSetup';
 import {importAiTrainingGame} from './importAiTrainingGame';
+import {lastLogTime, lobbyGameTimeline} from '../lobby/lobbyGameTimeline';
 
 // The lobby polls every 2.5 s; the coordinator is asked at most this often
 const FEED_MAX_AGE_MS = 5000;
@@ -17,6 +18,8 @@ const FEED_MAX_AGE_MS = 5000;
 export type GameKeeper = {
   keep(game: IGame): Promise<void>;
   remove(gameId: StoredAiTrainingGame['gameId']): Promise<void>;
+  /** For games imported before the course was stored: computed once from the game itself */
+  load?(gameId: StoredAiTrainingGame['gameId']): Promise<IGame | undefined>;
 };
 
 export function databaseKeeper(gameLoader: IGameLoader): GameKeeper {
@@ -27,8 +30,12 @@ export function databaseKeeper(gameLoader: IGameLoader): GameKeeper {
       await Database.getInstance().markFinished(game.id);
     },
     remove: (gameId) => gameLoader.deleteGame(gameId, 'replaced-ai-training'),
+    load: (gameId) => gameLoader.getGame(gameId),
   };
 }
+
+/** Course of a finished game: its running generation ends with the last log line */
+const courseOf = (game: IGame): LobbyGameCourse => ({...lobbyGameTimeline(game, lastLogTime(game)), remainingMs: 0});
 
 const feedKey = (feed: AiTrainingFeed, game: {index: number}) => `${feed.batch.id}/${game.index}`;
 
@@ -57,9 +64,25 @@ export class AiTrainingGames {
       this.refreshing ??= this.refresh(this.source, keeper).finally(() => this.refreshing = undefined);
       await this.refreshing;
     }
+    await this.addMissingCourses(keeper);
     const live = (this.feed?.live ?? []).map((game) => this.liveRoom(this.feed as AiTrainingFeed, game));
     const finished = [...this.games()].sort((a, b) => b.finishedAt - a.finishedAt).map((game) => this.finishedRoom(game));
     return [...live, ...finished];
+  }
+
+  // Games imported before the course was stored get it once from the stored game
+  private async addMissingCourses(keeper: GameKeeper): Promise<void> {
+    const missing = this.games().filter((game) => game.course === undefined);
+    if (missing.length === 0 || keeper.load === undefined) {
+      return;
+    }
+    for (const stored of missing) {
+      const game = await keeper.load(stored.gameId).catch(() => undefined);
+      if (game !== undefined) {
+        stored.course = courseOf(game);
+      }
+    }
+    this.storage.save(this.games());
   }
 
   private games(): Array<StoredAiTrainingGame> {
@@ -107,6 +130,7 @@ export class AiTrainingGames {
       generation: game.generation,
       elapsedMs: finished.elapsedMs,
       setup: aiTrainingSetup(game.gameOptions),
+      course: courseOf(game),
     });
     games.sort((a, b) => a.finishedAt - b.finishedAt);
     const replaced = games.splice(0, Math.max(0, games.length - AI_TRAINING_FINISHED_GAMES));
@@ -118,19 +142,20 @@ export class AiTrainingGames {
 
   private liveRoom(feed: AiTrainingFeed, game: AiTrainingFeedGame): LobbyRoomModel {
     return this.room(`ai-training-${feedKey(feed, game).replace(/\W/g, '-')}`, aiTrainingTitle(feed.batch.commit, game.variants),
-      game.playerCount, game.level, aiTrainingSetup(Game.resolveOptions({...game.gameOptions} as Partial<GameOptions>)), false, game.generation, game.terraforming, game.elapsedMs);
+      game.playerCount, game.level, aiTrainingSetup(Game.resolveOptions({...game.gameOptions} as Partial<GameOptions>)), false, game.generation, game.terraforming, game.elapsedMs,
+      game.course);
   }
 
   private finishedRoom(game: StoredAiTrainingGame): LobbyRoomModel {
     return {
-      ...this.room(`ai-training-${game.number}`, game.title, game.playerCount, game.level, game.setup, true, game.generation, 1, game.elapsedMs),
+      ...this.room(`ai-training-${game.number}`, game.title, game.playerCount, game.level, game.setup, true, game.generation, 1, game.elapsedMs, game.course),
       spectatorId: game.spectatorId,
       ageMs: this.clock() - game.finishedAt,
     };
   }
 
   private room(id: string, title: string, playerCount: number, level: StoredAiTrainingGame['level'], setup: LobbySetupModel,
-    finished: boolean, generation: number, terraforming: number, playedMs: number): LobbyRoomModel {
+    finished: boolean, generation: number, terraforming: number, playedMs: number, course: LobbyGameCourse | undefined): LobbyRoomModel {
     return {
       id,
       title,
@@ -139,7 +164,7 @@ export class AiTrainingGames {
       listed: true,
       seats: Array.from({length: playerCount}, () => ({kind: 'ai', aiLevel: level})),
       setup,
-      progress: {generation, terraforming, playedMs},
+      progress: {generation, terraforming, playedMs, ...course},
       aiTraining: {finished},
     };
   }
