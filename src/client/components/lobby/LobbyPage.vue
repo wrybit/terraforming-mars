@@ -114,7 +114,7 @@
     <!-- "Create game" as a modal: the same form, with seats offered in the lobby -->
     <Teleport to="body">
       <div v-if="createOpen" class="lobby-create-overlay" @keydown.esc="createOpen = false">
-        <CreateGameForm lobbyMode :lobbyProfile="profile" @close="createOpen = false" @open-in-lobby="openInLobby" />
+        <CreateGameForm lobbyMode :lobbyProfile="profile.name.trim() === '' ? undefined : profile" @close="createOpen = false" @open-in-lobby="openInLobby" />
       </div>
     </Teleport>
   </div>
@@ -125,7 +125,7 @@ import {askLobbyPushPermission, subscribeLobbyPush} from './lobbyPush';
 import ColumnResizeHandle from '@/client/components/ColumnResizeHandle.vue';
 import {LOBBY_CHAT_SPLIT} from '@/client/utils/columnResize';
 import {ComponentPublicInstance, computed, defineAsyncComponent, getCurrentInstance, onBeforeUnmount, onMounted, nextTick, ref, watch} from 'vue';
-import {LobbyProfile, LobbyRoomModel} from '@/common/lobby/LobbyModel';
+import {LOBBY_NAME_MAX_LENGTH, LobbyProfile, LobbyRoomModel} from '@/common/lobby/LobbyModel';
 import {NewGameConfig} from '@/common/game/NewGameConfig';
 import PageToolbar from '@/client/components/PageToolbar.vue';
 import PageTitle from '@/client/components/common/PageTitle.vue';
@@ -160,7 +160,9 @@ const instance = getCurrentInstance();
 const storedProfile = loadLobbyProfile();
 const firstVisit = ref(storedProfile === undefined);
 const profile = ref<LobbyProfile>(storedProfile ?? {name: '', color: 'red', emoji: '🚀'});
-const profileOpen = ref(firstVisit.value);
+// First visit: the welcome asks for the profile, but not when the visitor came to create a game (start page
+// "Start", lobby/create): the form's own seat carries name and color, and the profile is taken from it (openInLobby)
+const profileOpen = ref(firstVisit.value && !isLobbyCreatePath(window.location.pathname));
 // After the first profile: the action that asked for it goes on
 let afterProfile: (() => void) | undefined;
 
@@ -361,8 +363,9 @@ async function leave(): Promise<void> {
   }
 }
 
+// No profile needed to fill in the form: whoever creates a game names the own seat there
 function openCreate(): void {
-  withProfile(() => createOpen.value = true);
+  createOpen.value = true;
 }
 
 // The open form has its own address lobby/create (start page item "Start" links there): a reload keeps it open,
@@ -381,6 +384,19 @@ watch(createOpen, (open) => {
 });
 
 async function openInLobby(request: {config: NewGameConfig, title: string, listed: boolean, freeSeats: Array<number>}): Promise<void> {
+  // Without a profile yet the own seat of the form becomes it (name and color as entered there), so creating
+  // a game never stops at the profile dialog; the picture can be changed later via the profile button
+  if (profile.value.name.trim() === '') {
+    const ownSeat = request.config.players[0];
+    if (ownSeat === undefined || ownSeat.name.trim() === '') {
+      withProfile(() => void openInLobby(request));
+      return;
+    }
+    const fromSeat: LobbyProfile = {...profile.value, name: ownSeat.name.trim().slice(0, LOBBY_NAME_MAX_LENGTH), color: ownSeat.color};
+    profile.value = fromSeat;
+    firstVisit.value = false;
+    saveLobbyProfile(fromSeat);
+  }
   followNextStart = true;
   // Still inside the click: browsers ask for the permission only then. With it the host may leave the lobby
   // and still learns by push message when somebody joins
