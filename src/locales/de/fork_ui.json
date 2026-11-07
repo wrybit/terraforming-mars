@@ -811,5 +811,6 @@
   "The AI is playing this game right now. It can be watched as soon as it is finished.": "Die AI spielt diese Partie gerade. Zusehen kann man, sobald sie fertig ist.",
   "${0} % terraformed": "${0} % terraformt",
   "about ${0} left": "noch ca. ${0}",
-  "No parameter raised": "Kein Parameter erhöht"
+  "No parameter raised": "Kein Parameter erhöht",
+  "Last activity": "Letzte Aktivität"
 }

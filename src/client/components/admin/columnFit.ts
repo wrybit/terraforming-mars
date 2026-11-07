@@ -30,10 +30,13 @@ export function emptyColumnsInDropOrder(columns: ReadonlyArray<PlayerColumn>, ga
     .reverse();
 }
 
+// Status, game, generation, last activity, delete (their widths come in measure.fixedWidth)
+const FIXED_COLUMN_COUNT = 5;
+
 // Fixed columns plus spectator and the player columns, with the spacing around every cell
 function requiredWidth(playerColumnCount: number, measure: ColumnFitMeasure): number {
   const sharedColumns = playerColumnCount + 1;
-  const cells = sharedColumns + 4;
+  const cells = sharedColumns + FIXED_COLUMN_COUNT;
   return measure.fixedWidth + sharedColumns * measure.columnWidth + (cells + 1) * measure.spacing;
 }
 

@@ -1285,5 +1285,6 @@
   "${0} % terraformed": "${0} % 테라포밍됨",
   "about ${0} left": "약 ${0} 남음",
   "No parameter raised": "올린 매개변수 없음",
-  "G${0}": "${0}세대"
+  "G${0}": "${0}세대",
+  "Last activity": "마지막 활동"
 }

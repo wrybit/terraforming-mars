@@ -187,7 +187,7 @@
   // Minimum width measured from the content of the columns shown (GamesTableCard.vue, columnFit.ts);
   // the fallback until then grows with the delete column (long languages)
   width: 100%;
-  min-width: var(--games-overview-min-width, calc(1112px + var(--games-overview-actions-width, 128px)));
+  min-width: var(--games-overview-min-width, calc(1208px + var(--games-overview-actions-width, 128px)));
   table-layout: fixed;
   border-collapse: separate;
   border-spacing: @games-overview-gap-cell;
@@ -220,6 +220,16 @@
 
 .games-overview-table .games-overview-generation {
   width: 48px;
+}
+
+// "vor 23 Std." / "47 hr. ago" fit; the header wraps in long languages instead of widening the column
+.games-overview-table .games-overview-activity {
+  width: 96px;
+  white-space: normal;
+}
+
+td.games-overview-activity {
+  color: @games-overview-dim;
 }
 
 .games-overview-game {

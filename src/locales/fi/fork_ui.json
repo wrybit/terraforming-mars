@@ -1033,5 +1033,6 @@
   "${0} % terraformed": "${0} % terraformoitu",
   "about ${0} left": "noin ${0} jäljellä",
   "No parameter raised": "Yhtään parametria ei nostettu",
-  "G${0}": "S${0}"
+  "G${0}": "S${0}",
+  "Last activity": "Viimeisin toiminta"
 }

@@ -119,6 +119,7 @@ export class Game implements IGame, Logger {
   public spectatorId: SpectatorId;
   public deferredActions: DeferredActionsQueue = new DeferredActionsQueue();
   public createdTime: Date = new Date(0);
+  public lastActivityTime: Date = new Date(0);
   public gameAge: number = 0; // Each log event increases it
   // Number of AI decisions so far: running part of the decision id ("<gameId>:<n>"), kept with the game
   public aiDecisionCount: number = 0;
@@ -366,6 +367,7 @@ export class Game implements IGame, Logger {
     const game = new Game(id, name, players, marsBotPlayer, firstPlayer, activePlayer, spectatorId, gameOptions, rng, board, projectDeck, corporationDeck, preludeDeck, ceoDeck, Array.from(tags));
     // This evaluation of created time doesn't match what's stored in the database, but that's fine.
     game.createdTime = new Date();
+    game.lastActivityTime = game.createdTime;
     // Initialize Ares data
     if (gameOptions.aresExtension) {
       game.aresData = AresSetup.initialData(gameOptions.aresHazards, players);
@@ -536,6 +538,7 @@ export class Game implements IGame, Logger {
       globalsPerGeneration: this.globalsPerGeneration,
       id: this.id,
       initialDraftIteration: this.initialDraftIteration,
+      lastActivityTimeMs: this.lastActivityTime.getTime(),
       lastSaveId: this.lastSaveId,
       milestones: this.milestones.map(toName),
       moonData: MoonData.serialize(this.moonData),
@@ -1872,6 +1875,8 @@ export class Game implements IGame, Logger {
     game.gameAge = d.gameAge;
     game.aiDecisionCount = d.aiDecisionCount ?? 0;
     game.gameLog = d.gameLog;
+    // Games saved before the field existed: the newest log line comes closest to the last move
+    game.lastActivityTime = new Date(d.lastActivityTimeMs ?? d.gameLog.at(-1)?.timestamp ?? d.createdTimeMs);
     game.generation = d.generation;
     game.phase = d.phase;
     game.oxygenLevel = d.oxygenLevel;

@@ -1831,5 +1831,6 @@
   "${0} % terraformed": "${0} % sterraformowane",
   "about ${0} left": "zostało ok. ${0}",
   "No parameter raised": "Żaden parametr nie wzrósł",
-  "G${0}": "P${0}"
+  "G${0}": "P${0}",
+  "Last activity": "Ostatnia aktywność"
 }

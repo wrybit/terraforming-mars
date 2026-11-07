@@ -1661,5 +1661,6 @@
   "The AI is playing this game right now. It can be watched as soon as it is finished.": "De AI speelt dit spel nu. Kijken kan zodra het afgelopen is.",
   "${0} % terraformed": "${0} % geterraformd",
   "about ${0} left": "nog ca. ${0}",
-  "No parameter raised": "Geen parameter verhoogd"
+  "No parameter raised": "Geen parameter verhoogd",
+  "Last activity": "Laatste activiteit"
 }

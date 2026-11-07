@@ -14,6 +14,8 @@
     </td>
     <!-- 0 = unknown (e.g. screenshot without generation info) -->
     <td class="games-overview-generation">{{ summary.generation > 0 ? summary.generation : '–' }}</td>
+    <!-- Time since the last human move, exact time in the tooltip; imports have none -->
+    <td class="games-overview-activity" :title="activityTitle">{{ activityText }}</td>
     <td>
       <!-- Finished: only the result is left to look at; running: watch as a spectator -->
       <a v-if="summary.isFinished && resultUrl !== undefined" :href="resultUrl" target="_blank" class="games-overview-chip games-overview-chip--spectator" v-i18n>Show</a>
@@ -49,6 +51,13 @@ import {LANGUAGES} from '@/common/constants';
 import {translateText} from '@/client/directives/i18n';
 import DeleteGameButton from '@/client/components/admin/DeleteGameButton.vue';
 import LanguageFlag from '@/client/components/LanguageFlag.vue';
+import {relativeTimeText} from '@/client/utils/relativeTime';
+import {gameLocaleToIntlLocale} from '@/client/utils/LocaleUtils';
+import {getPreferences} from '@/client/utils/PreferencesManager';
+
+function shortDateTime(timeMs: number): string {
+  return new Date(timeMs).toLocaleString(undefined, {dateStyle: 'short', timeStyle: 'short'});
+}
 
 export default defineComponent({
   name: 'GameOverview',
@@ -70,6 +79,11 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    // Passed in by the table, which advances it every minute: the relative times stay current
+    nowMs: {
+      type: Number,
+      default: () => Date.now(),
+    },
   },
   computed: {
     importedResultUrl(): string {
@@ -80,7 +94,14 @@ export default defineComponent({
         (this.summary.importedParticipantId === undefined ? undefined : this.importedResultUrl);
     },
     dateText(): string {
-      return new Date(this.summary.createdTimeMs).toLocaleString(undefined, {dateStyle: 'short', timeStyle: 'short'});
+      return shortDateTime(this.summary.createdTimeMs);
+    },
+    activityText(): string {
+      const timeMs = this.summary.lastActivityTimeMs;
+      return timeMs === undefined ? '–' : relativeTimeText(timeMs, this.nowMs, gameLocaleToIntlLocale(getPreferences().lang));
+    },
+    activityTitle(): string | undefined {
+      return this.summary.lastActivityTimeMs === undefined ? undefined : shortDateTime(this.summary.lastActivityTimeMs);
     },
   },
   methods: {

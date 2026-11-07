@@ -843,6 +843,7 @@ describe('Game', () => {
 
     const unserializedFieldsInGame: Array<keyof Game> = [
       'createdTime',
+      'lastActivityTime',
       'discardedColonies',
       'inDoubleDown',
       'inputsThisRound',
@@ -862,7 +863,8 @@ describe('Game', () => {
     const serializedValuesNotInGame: Array<keyof SerializedGame> = [
       'seed',
       'currentSeed',
-      'createdTimeMs'];
+      'createdTimeMs',
+      'lastActivityTimeMs'];
 
     const gameKeys = Object.keys(game);
 

@@ -1399,5 +1399,6 @@
   "The AI is playing this game right now. It can be watched as soon as it is finished.": "AI spiller dette spillet akkurat nå. Det kan ses så snart det er ferdig.",
   "${0} % terraformed": "${0} % terraformet",
   "about ${0} left": "ca. ${0} igjen",
-  "No parameter raised": "Ingen parameter økt"
+  "No parameter raised": "Ingen parameter økt",
+  "Last activity": "Siste aktivitet"
 }

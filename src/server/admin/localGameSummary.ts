@@ -31,6 +31,7 @@ export function localGameSummary(game: IGame): AdminGameSummary {
     importedParticipantId: undefined,
     screenshotUrl: undefined,
     resultUrl: isFinished ? `${paths.THE_END}?id=${game.playersInGenerationOrder[0].id}` : undefined,
+    lastActivityTimeMs: game.lastActivityTime.getTime(),
     playedCardCount: game.players.reduce((sum, player) => sum + player.playedCards.asArray().filter(isIProjectCard).length, 0),
     players: toAdminPlayerSummaries(scores, isFinished, game.isSoloModeWin()),
   };

@@ -47,6 +47,7 @@ export type SerializedGame = {
     globalsPerGeneration: Array<Partial<Record<GlobalParameter, number>>>;
     id: GameId;
     initialDraftIteration: number;
+    lastActivityTimeMs?: number;
     lastSaveId: number;
     milestones: Array<MilestoneName>;
     moonData: SerializedMoonData | undefined;
