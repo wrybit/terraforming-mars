@@ -80,6 +80,27 @@ describe('CreateGameForm', () => {
     expect(wrapper.exists()).to.be.true;
   });
 
+  it('lobby: the own seat is the host with a picture that goes along when the game is opened', () => {
+    const wrapper = shallowMount(CreateGameForm, {
+      ...globalConfig,
+      props: {lobbyMode: true, lobbyProfile: {name: 'Jens', color: 'blue', emoji: '🌕'}},
+    });
+    const vm = wrapper.vm as any;
+    expect(vm.isHostSeat(0)).is.true;
+    expect(vm.isHostSeat(1)).is.false;
+    expect(vm.hostEmoji).eq('🌕');
+    vm.pickHostEmoji('🪐');
+    vm.openInLobby();
+    const request = (wrapper.emitted('open-in-lobby') as Array<Array<any>>)[0][0];
+    expect(request.hostPicture).deep.eq({emoji: '🪐', image: undefined});
+    expect(request.config.players[0].name).eq('Jens');
+  });
+
+  it('lobby without a profile: the host picture is drawn at random', () => {
+    const vm = shallowMount(CreateGameForm, {...globalConfig, props: {lobbyMode: true}}).vm as any;
+    expect(vm.hostEmoji).is.a('string').with.length.greaterThan(0);
+  });
+
   it('adds AI players after the humans and keeps at most six players', () => {
     const wrapper = shallowMount(CreateGameForm, {
       ...globalConfig,

@@ -349,10 +349,13 @@
                     <span class="create-game-player-position">
                       <SeatIcon :kind="newPlayer.aiLevel !== undefined ? 'ai' : 'human'" />{{ index + 1 }}
                     </span>
+                    <!-- Lobby: the own seat is the host; its picture is chosen here and becomes the lobby profile -->
+                    <LobbyEmojiPicker v-if="isHostSeat(index)" :color="newPlayer.color" :emoji="hostEmoji" :image="hostImage" @pick="pickHostEmoji" />
                     <span class="create-game-player-name-field">
                       <input class="create-game-player-name" :placeholder="getPlayerNamePlaceholder(index)" v-model="newPlayer.name">
-                      <!-- Fixed AI marker right behind the typed name; not part of the input, so nobody types it twice -->
+                      <!-- Fixed marker right behind the typed name ([AI], lobby: [Host]); not part of the input, so nobody types it twice -->
                       <span v-if="newPlayer.aiLevel !== undefined" class="create-game-player-name-marker" aria-hidden="true"><span class="create-game-player-name-ghost">{{ newPlayer.name || getPlayerNamePlaceholder(index) }}</span> {{ aiMarker(newPlayer.aiLevel) }}</span>
+                      <span v-else-if="isHostSeat(index)" class="create-game-player-name-marker" aria-hidden="true"><span class="create-game-player-name-ghost">{{ newPlayer.name || getPlayerNamePlaceholder(index) }}</span> [{{ $t('Host') }}]</span>
                     </span>
                     <button v-if="playersCount > 1 && !randomFirstPlayer" type="button" class="create-game-first"
                       :class="{'create-game-first--selected': firstIndex === index + 1}" :title="$t('Goes First?')"
@@ -474,6 +477,7 @@ import {validateNewGameConfig, ValidationErrors} from '@/common/game/validateNew
 import ValidationProblems from './ValidationProblems.vue';
 import {boxProblemKeys, hasBlockingProblem} from './validationProblemKeys';
 import ChoiceChip from './ChoiceChip.vue';
+import LobbyEmojiPicker from '@/client/components/lobby/LobbyEmojiPicker.vue';
 import ExpansionGroupMenu from './ExpansionGroupMenu.vue';
 import InfoLink from './InfoLink.vue';
 import NumberStepper from './NumberStepper.vue';
@@ -488,7 +492,7 @@ import {requiredByTooltip, requirementsOf} from './expansionDependencies';
 import {Expansion} from '@/common/cards/GameModule';
 import {arrangeSeats, seatKey} from './seatOrder';
 import {collapseEnter, collapseLeave} from '@/client/utils/collapseAnimation';
-import {LobbyProfile} from '@/common/lobby/LobbyModel';
+import {LOBBY_EMOJIS, LobbyProfile} from '@/common/lobby/LobbyModel';
 import {GAME_NAME_MAX_LENGTH, generateGameName} from '@/common/game/GameName';
 import {UnseededRandom} from '@/common/utils/Random';
 
@@ -533,6 +537,9 @@ type FormModel = {
   manualSeats: Array<number>;
   /** Lobby: listed for everybody (otherwise only with the invitation link) */
   lobbyPublic: boolean;
+  /** Lobby: picture of the own seat (host) */
+  hostEmoji: string;
+  hostImage: string | undefined;
 };
 
 // Distance of the sticky Create card to the bottom edge; same value as bottom in create_game_form.less
@@ -576,6 +583,9 @@ export default defineComponent({
       gameNamePlaceholder: generateGameName(UnseededRandom.INSTANCE),
       manualSeats: [],
       lobbyPublic: true,
+      // Lobby: picture of the own seat (host), from the profile or drawn at random when there is none yet
+      hostEmoji: LOBBY_EMOJIS[Math.floor(Math.random() * LOBBY_EMOJIS.length)],
+      hostImage: undefined,
     };
   },
   props: {
@@ -592,6 +602,7 @@ export default defineComponent({
   },
   // Lobby: 'close' and 'open-in-lobby' (not declared as emits: typed emits would break showAlert(this))
   components: {
+    LobbyEmojiPicker,
     GameSetupChips,
     AppButton,
     CollapsibleSection,
@@ -695,6 +706,8 @@ export default defineComponent({
     if (this.lobbyMode && this.lobbyProfile !== undefined) {
       this.players[0].name = this.lobbyProfile.name;
       this.players[0].color = this.lobbyProfile.color;
+      this.hostEmoji = this.lobbyProfile.emoji;
+      this.hostImage = this.lobbyProfile.image;
     }
     // Opened from the lobby, a game is meant for several people: at least one free seat (solo stays one click away)
     if (this.lobbyMode && this.humanPlayersCount < 2) {
@@ -1385,6 +1398,13 @@ export default defineComponent({
     isOfferedSeat(player: NewPlayerModel, index: number): boolean {
       return this.lobbyMode && index > 0 && player.aiLevel === undefined && !this.manualSeats.includes(seatKey(player));
     },
+    isHostSeat(index: number): boolean {
+      return this.lobbyMode && index === 0;
+    },
+    pickHostEmoji(emoji: string) {
+      this.hostEmoji = emoji;
+      this.hostImage = undefined;
+    },
     canReturnToLobby(player: NewPlayerModel, index: number): boolean {
       return this.lobbyMode && index > 0 && player.aiLevel === undefined && this.manualSeats.includes(seatKey(player));
     },
@@ -1432,6 +1452,7 @@ export default defineComponent({
         title: this.gameTitle,
         listed: this.lobbyPublic,
         freeSeats,
+        hostPicture: {emoji: this.hostEmoji, image: this.hostImage},
       });
     },
     async createGame() {

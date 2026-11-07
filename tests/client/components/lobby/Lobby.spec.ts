@@ -1,5 +1,6 @@
 import {mount} from '@vue/test-utils';
 import {expect} from 'chai';
+import {nextTick} from 'vue';
 import {globalConfig} from '../getLocalVue';
 import LobbyAvatar from '@/client/components/lobby/LobbyAvatar.vue';
 import LobbyGameRow from '@/client/components/lobby/LobbyGameRow.vue';
@@ -7,6 +8,8 @@ import LobbyFilterPanel from '@/client/components/lobby/LobbyFilterPanel.vue';
 import LobbyRoomDialog from '@/client/components/lobby/LobbyRoomDialog.vue';
 import LobbyMatchDialog from '@/client/components/lobby/LobbyMatchDialog.vue';
 import LobbyProfileDialog from '@/client/components/lobby/LobbyProfileDialog.vue';
+import LobbyEmojiPicker from '@/client/components/lobby/LobbyEmojiPicker.vue';
+import {LOBBY_EMOJIS} from '@/common/lobby/LobbyModel';
 import {isEmojiOnly} from '@/client/components/lobby/lobbyChatEmoji';
 import {activeFilterCount, availableFilterChoices, bestMatch, defaultLobbyFilters, matchesFilters} from '@/client/components/lobby/lobbyFilters';
 import {LobbyRoomModel, LobbySeatModel} from '@/common/lobby/LobbyModel';
@@ -34,6 +37,20 @@ function room(seats: Array<LobbySeatModel>, change: Partial<LobbyRoomModel> = {}
 }
 
 describe('Lobby components', () => {
+  it('LobbyEmojiPicker shows the picture and lets the host pick another emoji', async () => {
+    const wrapper = mount(LobbyEmojiPicker, {...globalConfig, props: {color: 'red', emoji: '🌕'}, attachTo: document.body});
+    expect(wrapper.find('.lobby-emoji-picker-button').text()).eq('🌕');
+    expect(document.querySelector('.lobby-emoji-picker-popover')).is.null;
+    await wrapper.find('.lobby-emoji-picker-button').trigger('click');
+    const emojis = document.querySelectorAll<HTMLButtonElement>('.lobby-emoji-picker-popover .lobby-emoji');
+    expect(emojis).has.length(LOBBY_EMOJIS.length);
+    expect(document.querySelector('.lobby-emoji-picker-popover .lobby-emoji--selected')?.textContent).eq('🌕');
+    emojis[0].click();
+    await nextTick();
+    expect(wrapper.emitted('pick')).deep.eq([[LOBBY_EMOJIS[0]]]);
+    expect(document.querySelector('.lobby-emoji-picker-popover')).is.null;
+  });
+
   it('LobbyAvatar shows the emoji, or the picture when there is one', () => {
     expect(mount(LobbyAvatar, {...globalConfig, props: {kind: 'human', color: 'red', emoji: '🪐'}}).text()).eq('🪐');
     const withImage = mount(LobbyAvatar, {...globalConfig, props: {kind: 'human', color: 'red', emoji: '🪐', image: 'data:image/png;base64,AA'}});

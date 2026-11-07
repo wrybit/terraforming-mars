@@ -383,26 +383,24 @@ watch(createOpen, (open) => {
   }
 });
 
-async function openInLobby(request: {config: NewGameConfig, title: string, listed: boolean, freeSeats: Array<number>}): Promise<void> {
-  // Without a profile yet the own seat of the form becomes it (name and color as entered there), so creating
-  // a game never stops at the profile dialog; the picture can be changed later via the profile button
-  if (profile.value.name.trim() === '') {
-    const ownSeat = request.config.players[0];
-    if (ownSeat === undefined || ownSeat.name.trim() === '') {
-      withProfile(() => void openInLobby(request));
-      return;
-    }
-    const fromSeat: LobbyProfile = {...profile.value, name: ownSeat.name.trim().slice(0, LOBBY_NAME_MAX_LENGTH), color: ownSeat.color};
-    profile.value = fromSeat;
-    firstVisit.value = false;
-    saveLobbyProfile(fromSeat);
+async function openInLobby(request: {config: NewGameConfig, title: string, listed: boolean, freeSeats: Array<number>, hostPicture: {emoji: string, image?: string}}): Promise<void> {
+  // The own seat of the form is the host: its name, color and picture become the lobby profile, so creating a game
+  // never stops at the profile dialog and the profile always matches what was entered there
+  const ownSeat = request.config.players[0];
+  if (ownSeat === undefined || ownSeat.name.trim() === '') {
+    withProfile(() => void openInLobby({...request, hostPicture: {emoji: profile.value.emoji, image: profile.value.image}, config: {...request.config, players: [{...request.config.players[0], name: profile.value.name}, ...request.config.players.slice(1)]}}));
+    return;
   }
+  const fromSeat: LobbyProfile = {name: ownSeat.name.trim().slice(0, LOBBY_NAME_MAX_LENGTH), color: ownSeat.color, emoji: request.hostPicture.emoji, image: request.hostPicture.image};
+  profile.value = fromSeat;
+  firstVisit.value = false;
+  saveLobbyProfile(fromSeat);
   followNextStart = true;
   // Still inside the click: browsers ask for the permission only then. With it the host may leave the lobby
   // and still learns by push message when somebody joins
   const permission = askLobbyPushPermission();
   openingOwnRoom = true;
-  const room = await act({action: 'open', profile: profile.value, ...request});
+  const room = await act({action: 'open', profile: profile.value, config: request.config, title: request.title, listed: request.listed, freeSeats: request.freeSeats});
   // The watcher of yourRoomId runs before the next tick: only then the flag may go
   await nextTick();
   openingOwnRoom = false;

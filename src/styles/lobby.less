@@ -1246,6 +1246,45 @@ each(@players, {
   }
 }
 
+// Own seat of "Create game": picture in front of the name, the choice opens as a panel below it
+.lobby-emoji-picker {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+}
+
+.lobby-emoji-picker-button {
+  display: inline-flex;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+
+  .lobby-avatar {
+    width: 30px;
+    height: 30px;
+    font-size: 17px;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.35);
+  }
+
+  &:hover .lobby-avatar,
+  &[aria-expanded="true"] .lobby-avatar {
+    box-shadow: 0 0 0 2px @bg_action;
+  }
+}
+
+.lobby-emoji-picker-popover {
+  position: fixed;
+  // Above the "Create game" overlay it opens from
+  z-index: (@modal-z-index + 1);
+  padding: 12px 12px 0;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  background: @modal-background;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+}
+
 .lobby-emoji--upload {
   border: 1.5px dashed rgba(255, 255, 255, 0.35);
   background: transparent;
