@@ -5,7 +5,8 @@ import {fetchOrFail} from '@/client/utils/requestFailure';
 import {lobbyParticipantId} from './lobbyProfile';
 
 // Push messages of the lobby (server: lobby/LobbyPush.ts, routes/ApiLobbyPush.ts; display: client/sw.ts).
-// A host learns that somebody joined, also with the lobby in the background or closed.
+// Participants learn what happened to their game (joined, asks to join, started), also with the lobby in the
+// background or closed.
 
 function pushSupported(): boolean {
   return window.isSecureContext && 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
@@ -74,7 +75,11 @@ export async function subscribeLobbyPush(): Promise<void> {
     subscription = subscription ?? await registration.pushManager.subscribe({userVisibleOnly: true, applicationServerKey: key});
     await send({
       subscription: subscription.toJSON() as LobbyPushSubscription,
-      texts: {joinedTitle: translateText('${0} joined your game'), joinedBody: translateText('Your game in the lobby is waiting for you.')},
+      texts: {
+        joined: {title: translateText('${0} joined your game'), body: translateText('Your game in the lobby is waiting for you.')},
+        request: {title: translateText('${0} wants to join your game'), body: translateText('Open the lobby to let them in or decline.')},
+        started: {title: translateText('Your game has started'), body: translateText('The game is waiting for you.')},
+      },
     });
   } catch (error) {
     console.warn('Lobby push messages are not available', error);

@@ -8,7 +8,7 @@ describe('columnFit', () => {
   // Two humans and one AI: players 3–6 and AI 2–5 are empty
   const games = [game('Jens', 'Daniel', 'Yellow [AI+]')];
   const label = (index: number) => PLAYER_COLUMNS.indexOf(emptyColumnsInDropOrder(PLAYER_COLUMNS, games)[index]);
-  // 12 shared columns × 80 + 300 fixed + 17 × 4 spacing = 1328 for all eleven player columns
+  // 12 shared columns × 80 + 300 fixed + 19 × 4 spacing = 1336 for all eleven player columns
   const measure = {fixedWidth: 300, columnWidth: 80, spacing: 4};
 
   it('empty columns are dropped from the back: AI 5 first, then towards Player 3', () => {
@@ -19,14 +19,14 @@ describe('columnFit', () => {
   it('keeps every column while there is room', () => {
     const fit = fitColumns(PLAYER_COLUMNS, games, {...measure, available: 1400});
     expect(fit.columns).has.length(11);
-    expect(fit.minWidth).eq(1328);
+    expect(fit.minWidth).eq(1336);
   });
 
   it('drops only as many empty columns as needed', () => {
     // Each dropped column frees 84 px: two are enough for 1200
     const fit = fitColumns(PLAYER_COLUMNS, games, {...measure, available: 1200});
     expect(fit.columns).has.length(9);
-    expect(fit.minWidth).eq(1160);
+    expect(fit.minWidth).eq(1168);
   });
 
   it('never drops a column with players; then the table scrolls', () => {

@@ -1661,5 +1661,10 @@
   "The AI is playing this game right now. It can be watched as soon as it is finished.": "De AI speelt dit spel nu. Kijken kan zodra het afgelopen is.",
   "${0} % terraformed": "${0} % geterraformd",
   "about ${0} left": "nog ca. ${0}",
-  "No parameter raised": "Geen parameter verhoogd"
+  "No parameter raised": "Geen parameter verhoogd",
+  "Last activity": "Laatste activiteit",
+  "${0} wants to join your game": "${0} wil meedoen aan je spel",
+  "Open the lobby to let them in or decline.": "Open de lobby om toe te laten of te weigeren.",
+  "Your game has started": "Je spel is begonnen",
+  "The game is waiting for you.": "Het spel wacht op je."
 }

@@ -1191,5 +1191,10 @@
   "${0} % terraformed": "${0} % тераформовано",
   "about ${0} left": "залишилось близько ${0}",
   "No parameter raised": "Жоден параметр не підвищено",
-  "G${0}": "П${0}"
+  "G${0}": "П${0}",
+  "Last activity": "Остання активність",
+  "${0} wants to join your game": "${0} хоче приєднатися до вашої гри",
+  "Open the lobby to let them in or decline.": "Відкрийте лобі, щоб прийняти або відхилити.",
+  "Your game has started": "Ваша гра почалася",
+  "The game is waiting for you.": "Гра чекає на вас."
 }

@@ -1088,5 +1088,10 @@
   "The AI is playing this game right now. It can be watched as soon as it is finished.": "L'AI joue cette partie en ce moment. Vous pourrez la regarder dès qu'elle sera terminée.",
   "${0} % terraformed": "${0} % terraformé",
   "about ${0} left": "encore env. ${0}",
-  "No parameter raised": "Aucun paramètre augmenté"
+  "No parameter raised": "Aucun paramètre augmenté",
+  "Last activity": "Dernière activité",
+  "${0} wants to join your game": "${0} veut rejoindre ta partie",
+  "Open the lobby to let them in or decline.": "Ouvre le lobby pour accepter ou refuser.",
+  "Your game has started": "Ta partie a commencé",
+  "The game is waiting for you.": "La partie t’attend."
 }

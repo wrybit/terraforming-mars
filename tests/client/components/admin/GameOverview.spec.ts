@@ -41,8 +41,8 @@ describe('GameOverview', () => {
 
   it('one cell per column, empty where the player did not play', () => {
     const cells = mountRow().findAll('td').map((cell) => cell.text());
-    // Theme, status, game, generation, spectators/result, players 1–6, AI 1–5, delete
-    expect(cells.slice(5, 16)).deep.eq(['Jens🏆76 VP', 'Daniel66 VP', '', '', '', '', '', '', '', '', '']);
+    // Theme, status, game, generation, last activity, spectators/result, players 1–6, AI 1–5, delete
+    expect(cells.slice(6, 17)).deep.eq(['Jens🏆76 VP', 'Daniel66 VP', '', '', '', '', '', '', '', '', '']);
   });
 
   it('finished: shows the result instead of watching; running: watch as spectator', () => {
@@ -90,5 +90,14 @@ describe('GameOverview', () => {
     expect(flags).has.length(1);
     expect(flags[0].attributes('src')).eq('assets/flags/ua.svg');
     expect(row.find('.games-overview-players .games-overview-chip').attributes('title')).contains('Українська');
+  });
+
+  it('last activity relative to now, exact time in the tooltip; none for imports', () => {
+    const nowMs = Date.UTC(2026, 10, 7, 18);
+    const local = mount(GameOverview, {...globalConfig, attachTo: document.createElement('tbody'),
+      props: {summary: {...summary, lastActivityTimeMs: nowMs - 3 * 60 * 60 * 1000}, columns: PLAYER_COLUMNS, nowMs}});
+    expect(local.find('td.games-overview-activity').text()).eq('3 hr. ago');
+    expect(local.find('td.games-overview-activity').attributes('title')).is.not.undefined;
+    expect(mountRow().find('td.games-overview-activity').text()).eq('–');
   });
 });

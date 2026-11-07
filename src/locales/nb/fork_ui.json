@@ -1399,5 +1399,10 @@
   "The AI is playing this game right now. It can be watched as soon as it is finished.": "AI spiller dette spillet akkurat nå. Det kan ses så snart det er ferdig.",
   "${0} % terraformed": "${0} % terraformet",
   "about ${0} left": "ca. ${0} igjen",
-  "No parameter raised": "Ingen parameter økt"
+  "No parameter raised": "Ingen parameter økt",
+  "Last activity": "Siste aktivitet",
+  "${0} wants to join your game": "${0} vil bli med i spillet ditt",
+  "Open the lobby to let them in or decline.": "Åpne lobbyen for å slippe inn eller avslå.",
+  "Your game has started": "Spillet ditt har startet",
+  "The game is waiting for you.": "Spillet venter på deg."
 }

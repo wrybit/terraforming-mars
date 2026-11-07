@@ -164,7 +164,7 @@ const handlers: Map<string, IHandler> = new Map(
     [paths.HELP, ServeApp.INSTANCE],
     [paths.IMPORTED_SCREENSHOT, ImportedScreenshot.INSTANCE],
     [paths.LOAD, ServeApp.INSTANCE],
-    [paths.LOBBY, ServeApp.INSTANCE],
+    [paths.LOBBY, LobbySubPage.LOBBY],
     [paths.LOAD_GAME, LoadGame.INSTANCE],
     [paths.LOGIN, Login.INSTANCE],
     [paths.API_LOBBY, ApiLobby.INSTANCE],

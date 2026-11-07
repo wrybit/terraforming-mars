@@ -6,7 +6,7 @@ import {Response} from '../Response';
 import {withServerIdentity} from '../server/serverIdentity';
 
 /**
- * The app page at the lobby's own addresses below lobby/ (common/lobby/lobbyUrl.ts). The page loads everything
+ * The app page at the lobby's addresses (lobby and below lobby/, common/lobby/lobbyUrl.ts). The page loads everything
  * with relative addresses (scripts, styles, api/...); below lobby/ these would point into that folder. A base
  * back up to the app root keeps them working, also when the app runs behind a path prefix.
  */
@@ -15,6 +15,9 @@ export class LobbySubPage extends Handler {
   public static readonly ROOM = new LobbySubPage('../../');
   // lobby/create: one folder deep
   public static readonly CREATE = new LobbySubPage('../');
+  // lobby itself: the page switches its address to lobby/create and back (form open); without a base every
+  // relative address (api/lobby, sw.js) would then point into lobby/ and fail
+  public static readonly LOBBY = new LobbySubPage('./');
   private constructor(private readonly base: string) {
     super();
   }

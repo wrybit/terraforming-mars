@@ -1831,5 +1831,10 @@
   "${0} % terraformed": "${0} % sterraformowane",
   "about ${0} left": "zostało ok. ${0}",
   "No parameter raised": "Żaden parametr nie wzrósł",
-  "G${0}": "P${0}"
+  "G${0}": "P${0}",
+  "Last activity": "Ostatnia aktywność",
+  "${0} wants to join your game": "${0} chce dołączyć do twojej gry",
+  "Open the lobby to let them in or decline.": "Otwórz lobby, aby wpuścić lub odrzucić.",
+  "Your game has started": "Twoja gra się rozpoczęła",
+  "The game is waiting for you.": "Gra czeka na ciebie."
 }

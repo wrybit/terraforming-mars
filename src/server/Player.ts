@@ -1763,6 +1763,10 @@ export class Player implements IPlayer {
     if (this.waitingFor === undefined || this.waitingForCb === undefined) {
       throw new Error('Not waiting for anything');
     }
+    // Only human answers count: the admin overview shows how long nobody has played (AI moves follow anyway)
+    if (this.aiLevel === undefined) {
+      this.game.lastActivityTime = new Date();
+    }
     const waitingFor = this.waitingFor;
     const waitingForCb = this.waitingForCb;
     const requestId = this.requestId;

@@ -56,6 +56,8 @@ export interface IGame extends Logger {
   /** Run every deferred action, including any added while running them, and then call `cb`. */
   drainQueue(cb: () => void): void;
   createdTime: Date;
+  /** Time of the last answer of a human player (Player.process). */
+  lastActivityTime: Date;
   gameAge: number; // Each log event increases it
   /** Number of AI decisions so far: running part of the decision id ("<gameId>:<n>"). */
   aiDecisionCount: number;

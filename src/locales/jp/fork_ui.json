@@ -1407,5 +1407,10 @@
   "${0} % terraformed": "${0} % テラフォーミング済み",
   "about ${0} left": "残り約 ${0}",
   "No parameter raised": "パラメータ上昇なし",
-  "G${0}": "${0}世代"
+  "G${0}": "${0}世代",
+  "Last activity": "最終アクティビティ",
+  "${0} wants to join your game": "${0}さんがゲームへの参加を希望しています",
+  "Open the lobby to let them in or decline.": "ロビーを開いて承認または拒否してください。",
+  "Your game has started": "ゲームが始まりました",
+  "The game is waiting for you.": "ゲームが待っています。"
 }

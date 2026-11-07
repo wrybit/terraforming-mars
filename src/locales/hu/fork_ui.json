@@ -1215,5 +1215,10 @@
   "The AI is playing this game right now. It can be watched as soon as it is finished.": "Az AI éppen ezt a játékot játssza. Amint véget ér, megnézhető.",
   "${0} % terraformed": "${0} % terraformálva",
   "about ${0} left": "még kb. ${0}",
-  "No parameter raised": "Egy paraméter sem nőtt"
+  "No parameter raised": "Egy paraméter sem nőtt",
+  "Last activity": "Utolsó aktivitás",
+  "${0} wants to join your game": "${0} csatlakozni szeretne a játékodhoz",
+  "Open the lobby to let them in or decline.": "Nyisd meg az előcsarnokot az elfogadáshoz vagy elutasításhoz.",
+  "Your game has started": "A játékod elkezdődött",
+  "The game is waiting for you.": "A játék vár rád."
 }

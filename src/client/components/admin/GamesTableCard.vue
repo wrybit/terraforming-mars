@@ -17,6 +17,7 @@
             <th class="games-overview-status"></th>
             <th class="games-overview-game" v-i18n>Game</th>
             <th class="games-overview-generation" v-i18n>Gen</th>
+            <th class="games-overview-activity" v-i18n>Last activity</th>
             <!-- Finished games can no longer be watched, only their result shown -->
             <th>{{ spectatorLabel }}</th>
             <th v-for="column in shownColumns" :key="column.kind + column.seat">{{ columnLabel(column) }}</th>
@@ -24,7 +25,7 @@
           </tr>
         </thead>
         <tbody>
-          <GameOverview v-for="summary in games" :key="summary.id" :summary="summary" :columns="shownColumns" :isDeleting="deletingIds.includes(summary.id)" @delete="$emit('delete', $event)" />
+          <GameOverview v-for="summary in games" :key="summary.id" :summary="summary" :columns="shownColumns" :isDeleting="deletingIds.includes(summary.id)" :nowMs="nowMs" @delete="$emit('delete', $event)" />
         </tbody>
       </table>
     </div>
@@ -60,6 +61,8 @@ export default defineComponent({
       actionsWidth: undefined as number | undefined,
       fitMeasure: undefined as ColumnFitMeasure | undefined,
       resizeObserver: undefined as ResizeObserver | undefined,
+      nowMs: Date.now(),
+      clockTimer: undefined as number | undefined,
     };
   },
   computed: {
@@ -91,6 +94,10 @@ export default defineComponent({
       this.observeLayout();
     }
     this.updateLayout();
+    // "vor 3 Std." must not freeze while the page stays open
+    this.clockTimer = window.setInterval(() => {
+      this.nowMs = Date.now();
+    }, 60 * 1000);
   },
   updated() {
     // New rows bring new buttons: observe them too
@@ -98,6 +105,7 @@ export default defineComponent({
   },
   beforeUnmount() {
     this.resizeObserver?.disconnect();
+    window.clearInterval(this.clockTimer);
   },
   methods: {
     scrollElement(): HTMLElement | undefined {
@@ -133,7 +141,7 @@ export default defineComponent({
       if (table === null || table === undefined || head === null || head === undefined || scroll.clientWidth === 0) {
         return;
       }
-      const fixedWidth = ['theme', 'status', 'game', 'generation', 'actions']
+      const fixedWidth = ['theme', 'status', 'game', 'generation', 'activity', 'actions']
         .map((name) => head.querySelector<HTMLElement>('.games-overview-' + name)?.offsetWidth ?? 0)
         .reduce((sum, width) => sum + width, 0);
       // Labels of all columns, also the dropped ones, measured as text in the font of the head

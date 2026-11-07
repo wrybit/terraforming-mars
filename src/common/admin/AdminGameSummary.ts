@@ -39,6 +39,8 @@ export type AdminGameSummary = {
   screenshotUrl: string | undefined;
   /** Results page of a finished local game (the-end?id=…); imports use importedParticipantId / screenshotUrl. */
   resultUrl?: string;
+  /** Last answer of a human player in a local game – shows how long nobody has played. */
+  lastActivityTimeMs?: number;
   /** Project cards played by all players together (local games only) – tells barely started games apart. */
   playedCardCount?: number;
   /** Theme the game is played in; missing means Mars (imports, games stored before themes existed). */
