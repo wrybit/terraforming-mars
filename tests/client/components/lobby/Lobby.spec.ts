@@ -199,10 +199,17 @@ describe('Lobby components', () => {
     const links = Array.from(document.body.querySelectorAll('.lobby-room-foot a')).map((link) => link.getAttribute('href'));
     expect(links).deep.eq(['player?id=p1']);
     // The host passes on the link of the player entered by hand; behind the arrow it opens here (several players at one device)
-    expect(document.querySelector('.split-button-main')?.textContent).contains('Copy link');
-    document.querySelector<HTMLButtonElement>('.split-button-toggle')?.click();
+    const guest = document.querySelectorAll<HTMLElement>('.lobby-seat')[1];
+    expect(guest.querySelector('.split-button-main')?.textContent).contains('Copy link');
+    guest.querySelector<HTMLButtonElement>('.split-button-toggle')?.click();
     await nextTick();
     expect(document.querySelector('.split-button-menu a')?.getAttribute('href')).contains('player?id=p2');
+    // The own seat the other way round: playing first, copying the own link behind the arrow
+    const own = document.querySelectorAll<HTMLElement>('.lobby-seat')[0];
+    expect(own.querySelector('a.split-button-main')?.getAttribute('href')).eq('player?id=p1');
+    own.querySelector<HTMLButtonElement>('.split-button-toggle')?.click();
+    await nextTick();
+    expect(Array.from(document.querySelectorAll('.split-button-menu button')).map((button) => button.textContent)).deep.eq(['Copy link']);
     // Spectators get their own link
     expect(document.querySelector<HTMLInputElement>('.lobby-invite input')?.value).contains('spectator?id=s1');
     wrapper.unmount();
