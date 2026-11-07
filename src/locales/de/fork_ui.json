@@ -1,4 +1,7 @@
 {
+  "Community chat": "Chat",
+  "Game lobby": "Lobby",
+  "Start a game": "Start",
   "Decrease your plant production 1 step and increase your M€ production 4 steps": "Senke deine Pflanzen-Produktion um 1 und erhöhe deine M€-Produktion um 4",
   "(Optional variant: draft the cards. Pick one pass to the player below in even generation and above in odd generation. Repeat until you have four cards.)": "(Optionale Variante: Draften der Karten. Behalte eine und gib den Rest in geraden Generationen an den Spieler unter dir weiter, in ungeraden an den Spieler über dir. Wiederhole dies, bis du vier Karten hast.)",
   "(If playing solo, the game ends after 14 generations.)": "(Im Solospiel endet die Partie nach 14 Generationen.)",
@@ -347,7 +350,6 @@
   "Spacefarer4": "Raumfahrer4",
   "Terran5": "Terraner5",
   "Tycoon10": "Magnat10",
-  "Updates": "Aktualisierungen",
   "${0} (Turmoil ${1})": "${0} (Aufruhr ${1})",
   "Select where to send delegate": "Wähle, wohin du einen Delegierten entsendest",
   "Delta Project (5VP)": "Delta Project (5SP)",

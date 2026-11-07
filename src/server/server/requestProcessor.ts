@@ -29,8 +29,8 @@ import {ApiLobby} from '../routes/ApiLobby';
 import {ApiLobbyChat} from '../routes/ApiLobbyChat';
 import {ApiLobbyPush} from '../routes/ApiLobbyPush';
 import {ApiAdminChatWords} from '../routes/ApiAdminChatWords';
-import {LobbyRoomPage} from '../routes/LobbyRoomPage';
-import {LOBBY_ROOM_PATH} from '../../common/lobby/lobbyUrl';
+import {LobbySubPage} from '../routes/LobbySubPage';
+import {LOBBY_CREATE_PATH, LOBBY_ROOM_PATH} from '../../common/lobby/lobbyUrl';
 import {ApiLogout} from '../routes/ApiLogout';
 import {ApiAdminLogout} from '../routes/ApiAdminLogout';
 import {ApiAdminMusic} from '../routes/ApiAdminMusic';
@@ -217,7 +217,10 @@ function getHandler(pathname: string): IHandler | undefined {
   }
   // Invitation links of the lobby carry the room in the path (lobby/room/<id>-<name>)
   if (pathname.startsWith(LOBBY_ROOM_PATH)) {
-    return LobbyRoomPage.INSTANCE;
+    return LobbySubPage.ROOM;
+  }
+  if (pathname === LOBBY_CREATE_PATH || pathname === LOBBY_CREATE_PATH + '/') {
+    return LobbySubPage.CREATE;
   }
   return undefined;
 }

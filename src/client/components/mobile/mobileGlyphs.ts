@@ -15,7 +15,7 @@ export type Glyph = {
 
 export type GlyphName = 'mars' | 'hand' | 'players' | 'log' | 'rocket' |
   'cardActions' | 'playCard' | 'standardProjects' | 'sellPatents' | 'greenery' | 'temperature' | 'milestone' | 'award' | 'colonyTrade' | 'more' |
-  'newGame' | 'rules' | 'statistics' | 'cardsList' | 'boardGame' | 'about' | 'updates' | 'discord' | 'admin';
+  'newGame' | 'lobby' | 'rules' | 'statistics' | 'cardsList' | 'boardGame' | 'updates' | 'discord' | 'admin';
 
 const circle = (cx: number, cy: number, r: number): SvgShape => ({tag: 'circle', attributes: {cx: String(cx), cy: String(cy), r: String(r)}});
 const path = (d: string): SvgShape => ({tag: 'path', attributes: {d}});
@@ -55,11 +55,18 @@ export const GLYPHS: Record<GlyphName, Glyph> = {
   more: {layers: [[{tag: 'rect', attributes: {x: '3.5', y: '3.5', width: '17', height: '17', rx: '4'}}]], details: [dot(8, 12), dot(12, 12), dot(16, 12)]},
   // Start page (StartScreen.vue): one icon per menu item, single-layer only, because covers stood out on the photo background
   newGame: {layers: [[circle(12, 12, 8.5)]], details: [path('M12 8v8M8 12h8')]},
+  // Two people side by side without overlap: single layer, so no line crosses another
+  lobby: {
+    layers: [[
+      circle(7, 8.5, 2.8), path('M2.5 19.5c0-3.3 2-5.7 4.5-5.7s4.5 2.4 4.5 5.7z'),
+      circle(17, 8.5, 2.8), path('M12.5 19.5c0-3.3 2-5.7 4.5-5.7s4.5 2.4 4.5 5.7z'),
+    ]],
+    details: [],
+  },
   rules: {layers: [[path('M3.5 5.5c2.8-1.4 5.7-1.4 8.5 0 2.8-1.4 5.7-1.4 8.5 0v13c-2.8-1.4-5.7-1.4-8.5 0-2.8-1.4-5.7-1.4-8.5 0z')]], details: [path('M12 5.5v13')]},
   statistics: {layers: [[rect(4, 12, 4, 8.5, 1), rect(10, 7, 4, 13.5, 1), rect(16, 3.5, 4, 17, 1)]], details: []},
   cardsList: {layers: [[rect(3.5, 3.5, 7.5, 7.5, 1.6), rect(13, 3.5, 7.5, 7.5, 1.6), rect(3.5, 13, 7.5, 7.5, 1.6), rect(13, 13, 7.5, 7.5, 1.6)]], details: []},
   boardGame: {layers: [[rect(3.5, 3.5, 17, 17, 3.5)]], details: [dot(8, 8), dot(16, 8), dot(12, 12), dot(8, 16), dot(16, 16)]},
-  about: {layers: [[circle(12, 12, 8.5)]], details: [path('M12 11v5.5'), dot(12, 7.8)]},
   // Shield with a check mark: the protected admin area
   admin: {layers: [[path('M12 2.8l7.5 3.1v5.3c0 4.7-3.2 8.4-7.5 10-4.3-1.6-7.5-5.3-7.5-10V5.9z')]], details: [path('M8.6 12.2l2.4 2.4 4.4-4.6')]},
   updates: {layers: [[path('M12 3l2.2 6.8L21 12l-6.8 2.2L12 21l-2.2-6.8L3 12l6.8-2.2z')]], details: []},

@@ -118,7 +118,7 @@ import {enterGameMusic} from '@/client/music/gameMusic';
 import {applyChosenTheme} from '@/client/theme/themeChoice';
 import {Theme} from '@/common/theme/Theme';
 import {paths} from '@/common/app/paths';
-import {lobbyRoomIdFromPath} from '@/common/lobby/lobbyUrl';
+import {isLobbyCreatePath, lobbyRoomIdFromPath} from '@/common/lobby/lobbyUrl';
 import {PlayerViewModel, ViewModel} from '@/common/models/PlayerModel';
 import {SimpleGameModel} from '@/common/models/SimpleGameModel';
 import {SpectatorModel} from '@/common/models/SpectatorModel';
@@ -456,7 +456,7 @@ export default defineComponent({
       app.screen = 'games-overview';
     } else if (currentPathname === paths.NEW_GAME) {
       app.screen = 'create-game-form';
-    } else if (currentPathname === paths.LOBBY || lobbyRoomIdFromPath(window.location.pathname) !== undefined) {
+    } else if (currentPathname === paths.LOBBY || lobbyRoomIdFromPath(window.location.pathname) !== undefined || isLobbyCreatePath(window.location.pathname)) {
       app.screen = 'lobby';
     } else if (currentPathname === paths.CARDS || currentPathname === paths.STATS) {
       // Both pages carry the Mars/Dune switch: they open in the theme picked last (themeChoice.ts), texts loaded first
