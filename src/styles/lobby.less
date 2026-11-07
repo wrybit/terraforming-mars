@@ -1327,16 +1327,21 @@ each(@players, {
   font-size: 12px;
 }
 
-// Request of a player removed twice: picture and name, the decision on the right
+// Request of a player removed twice: one card (who, the decision on the right, what declining means)
 .lobby-request {
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.07);
+
+  & + .lobby-request {
+    margin-top: 8px;
+  }
+}
+
+.lobby-request-row {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 8px 0;
-
-  & + .lobby-request {
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-  }
 
   .lobby-request-name {
     flex: 1;
@@ -1345,6 +1350,18 @@ each(@players, {
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+}
+
+.lobby-request-note {
+  margin: 8px 0 0;
+  color: @lobby-dim;
+  font-size: 12px;
+}
+
+// Declined by the host: plain text where the join button would be
+.lobby-game-declined {
+  color: @lobby-dim;
+  font-size: 13px;
 }
 
 // Own link of a player the host entered by hand: link icon plus text, below the seat

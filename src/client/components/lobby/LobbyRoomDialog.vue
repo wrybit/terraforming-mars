@@ -53,11 +53,15 @@
       <!-- Host: players removed twice before ask to come back; declined ones can never join this game again -->
       <div v-if="isHost && !started && (room.requests?.length ?? 0) > 0" class="lobby-room-group">
         <div class="create-game-subhead" v-i18n>Wants to join</div>
+        <!-- One card per request: who asks, the decision, and what declining means -->
         <div v-for="request in room.requests" :key="request.participant" class="lobby-request">
-          <LobbyAvatar kind="human" :color="request.color" :emoji="request.emoji" :image="request.image" size="medium" />
-          <span class="lobby-request-name">{{ request.name }}</span>
-          <AppButton class="btn-tone-danger" title="Decline" @click="emit('decline', request.participant)" />
-          <AppButton class="btn-tone-success" title="Approve" @click="emit('approve', request.participant)" />
+          <div class="lobby-request-row">
+            <LobbyAvatar kind="human" :color="request.color" :emoji="request.emoji" :image="request.image" size="medium" />
+            <span class="lobby-request-name">{{ request.name }}</span>
+            <AppButton class="btn-tone-danger" title="Decline" @click="emit('decline', request.participant)" />
+            <AppButton class="btn-tone-success" title="Approve" @click="emit('approve', request.participant)" />
+          </div>
+          <p class="lobby-request-note">{{ requestNote(request.name) }}</p>
         </div>
       </div>
       <div v-if="freeSeats > 0 && !started" class="lobby-room-group">
@@ -163,6 +167,10 @@ function aiLevelLabel(level: AiLevel): string {
 }
 
 const copiedSeat = ref<number | undefined>();
+
+function requestNote(name: string): string {
+  return translateTextWithParams('You removed this player twice. If you decline, ${0} can never join this game again.', [name]);
+}
 
 function guestLink(seat: LobbySeatModel): string | undefined {
   if (seat.kind !== 'guest' || props.room === undefined) {

@@ -1995,11 +1995,15 @@
   "Wants to join": "想要加入",
   "Approve": "批准",
   "Waiting for the host to approve": "等待房主批准",
-  "The host removed you from the game ${0}.": "房主已将你移出游戏 ${0}。",
   "The host removed you from this game twice: your request to join was sent, the host decides.": "房主已两次将你移出此游戏：加入请求已发送，由房主决定。",
   "The host declined your request: you cannot join this game.": "房主拒绝了你的请求：你无法加入此游戏。",
   "There is no free seat for this player.": "没有可供该玩家使用的空位。",
   "This seat cannot be removed": "无法移除此座位",
   "This request no longer exists": "该请求已不存在",
-  "This seat is not an AI player": "此座位不是 AI 玩家"
+  "This seat is not an AI player": "此座位不是 AI 玩家",
+  "The host removed you from the game \"${0}\".": "房主已将你移出游戏“${0}”。",
+  "The host declined your request to join \"${0}\": you cannot join this game any more.": "房主拒绝了你加入“${0}”的请求：你无法再加入此游戏。",
+  "Declined by the host": "已被房主拒绝",
+  "Ask to join": "申请加入",
+  "You removed this player twice. If you decline, ${0} can never join this game again.": "你已两次移出该玩家。如果拒绝，${0} 将再也无法加入此游戏。"
 }

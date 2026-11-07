@@ -1882,11 +1882,15 @@
   "Wants to join": "Хочет присоединиться",
   "Approve": "Принять",
   "Waiting for the host to approve": "Ожидание одобрения хоста",
-  "The host removed you from the game ${0}.": "Хост убрал вас из игры ${0}.",
   "The host removed you from this game twice: your request to join was sent, the host decides.": "Хост дважды убирал вас из этой игры: запрос отправлен, решает хост.",
   "The host declined your request: you cannot join this game.": "Хост отклонил ваш запрос: вы не можете присоединиться к этой игре.",
   "There is no free seat for this player.": "Для этого игрока нет свободного места.",
   "This seat cannot be removed": "Это место нельзя освободить",
   "This request no longer exists": "Этого запроса больше нет",
-  "This seat is not an AI player": "На этом месте нет AI"
+  "This seat is not an AI player": "На этом месте нет AI",
+  "The host removed you from the game \"${0}\".": "Хост убрал вас из игры «${0}».",
+  "The host declined your request to join \"${0}\": you cannot join this game any more.": "Хост отклонил ваш запрос на участие в «${0}»: вы больше не можете присоединиться к этой игре.",
+  "Declined by the host": "Отклонено хостом",
+  "Ask to join": "Попросить участия",
+  "You removed this player twice. If you decline, ${0} can never join this game again.": "Вы дважды убирали этого игрока. Если отклоните, ${0} больше никогда не сможет присоединиться к этой игре."
 }

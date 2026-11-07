@@ -106,6 +106,8 @@ export class Lobby {
   private notifier: LobbyNotifier = NO_NOTIFIER;
   /** Participant -> name of the game the host just removed them from; told once with the next list */
   private readonly removedFrom = new Map<string, string>();
+  /** Participant -> name of the game whose host just declined their request; told once with the next list */
+  private readonly declinedFrom = new Map<string, string>();
 
   constructor(
     private readonly clock: () => number = Date.now,
@@ -226,10 +228,12 @@ export class Lobby {
       .sort((a, b) => b.createdAt - a.createdAt)
       .map((room) => this.model(room, me));
     const removedFrom = me === undefined ? undefined : this.removedFrom.get(me);
+    const declinedFrom = me === undefined ? undefined : this.declinedFrom.get(me);
     if (me !== undefined) {
       this.removedFrom.delete(me);
+      this.declinedFrom.delete(me);
     }
-    return {rooms, yourRoomId: yourRoom?.id, requestedRoomId: requested?.id, removedFrom};
+    return {rooms, yourRoomId: yourRoom?.id, requestedRoomId: requested?.id, removedFrom, declinedFrom};
   }
 
   /**
@@ -426,6 +430,7 @@ export class Lobby {
     const room = this.hostRoom(me, roomId);
     room.requests = room.requests?.filter((candidate) => candidate.participant !== participant);
     room.declined = [...(room.declined ?? []), participant];
+    this.declinedFrom.set(participant, room.title);
     this.save();
     return this.model(room, me);
   }
@@ -637,6 +642,8 @@ export class Lobby {
       },
       gameId: me === room.host ? room.gameId : undefined,
       config: me === room.host && room.state === 'open' ? room.config : undefined,
+      yourAccess: me === undefined ? undefined : room.declined?.includes(me) ? 'declined' :
+        (room.removals?.[me] ?? 0) >= KICKS_BEFORE_REQUEST ? 'request' : undefined,
       requests: me === room.host && room.state === 'open' && (room.requests?.length ?? 0) > 0 ?
         room.requests?.map((request) => ({participant: request.participant, name: request.profile.name, color: request.profile.color, emoji: request.profile.emoji, image: request.profile.image})) :
         undefined,

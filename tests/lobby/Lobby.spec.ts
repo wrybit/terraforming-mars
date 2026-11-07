@@ -221,6 +221,7 @@ describe('Lobby', () => {
       // Told once
       expect(lobby.list(GUEST).removedFrom).is.undefined;
     }
+    expect(lobby.list(GUEST).rooms[0].yourAccess).eq('request');
     // Third time: a request instead of a seat
     const asked = await lobby.join(GUEST, profile('Bob', 'blue'), room.id, starter);
     expect(asked.seats.filter((seat) => seat.kind === 'human')).has.length(1);
@@ -232,6 +233,9 @@ describe('Lobby', () => {
     lobby.removeSeat(HOST, room.id, 1);
     await lobby.join(GUEST, profile('Bob', 'blue'), room.id, starter);
     lobby.declineRequest(HOST, room.id, GUEST);
+    const declined = lobby.list(GUEST);
+    expect(declined.declinedFrom).eq(room.title);
+    expect(declined.rooms[0].yourAccess).eq('declined');
     try {
       await lobby.join(GUEST, profile('Bob', 'blue'), room.id, starter);
       expect.fail('a declined player joined');

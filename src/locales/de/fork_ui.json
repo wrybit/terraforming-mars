@@ -790,11 +790,15 @@
   "Wants to join": "Möchte mitspielen",
   "Approve": "Zulassen",
   "Waiting for the host to approve": "Warte auf Zulassung durch den Host",
-  "The host removed you from the game ${0}.": "Der Host hat dich aus dem Spiel ${0} entfernt.",
   "The host removed you from this game twice: your request to join was sent, the host decides.": "Der Host hat dich zweimal aus diesem Spiel entfernt: Deine Anfrage ist gesendet, der Host entscheidet.",
   "The host declined your request: you cannot join this game.": "Der Host hat deine Anfrage abgelehnt: Du kannst diesem Spiel nicht beitreten.",
   "There is no free seat for this player.": "Für diesen Spieler ist kein Platz frei.",
   "This seat cannot be removed": "Dieser Platz kann nicht entfernt werden",
   "This request no longer exists": "Diese Anfrage gibt es nicht mehr",
-  "This seat is not an AI player": "Auf diesem Platz sitzt keine AI"
+  "This seat is not an AI player": "Auf diesem Platz sitzt keine AI",
+  "The host removed you from the game \"${0}\".": "Der Host hat dich aus dem Spiel „${0}“ entfernt.",
+  "The host declined your request to join \"${0}\": you cannot join this game any more.": "Der Host hat deine Anfrage für „${0}“ abgelehnt: Du kannst diesem Spiel nicht mehr beitreten.",
+  "Declined by the host": "Vom Host abgelehnt",
+  "Ask to join": "Beitritt anfragen",
+  "You removed this player twice. If you decline, ${0} can never join this game again.": "Du hast diesen Spieler zweimal entfernt. Lehnst du ab, kann ${0} diesem Spiel nie wieder beitreten."
 }

@@ -1168,11 +1168,15 @@
   "Wants to join": "Хоче приєднатися",
   "Approve": "Схвалити",
   "Waiting for the host to approve": "Очікування схвалення господаря",
-  "The host removed you from the game ${0}.": "Господар прибрав тебе з гри ${0}.",
   "The host removed you from this game twice: your request to join was sent, the host decides.": "Господар двічі прибирав тебе з цієї гри: запит надіслано, вирішує господар.",
   "The host declined your request: you cannot join this game.": "Господар відхилив твій запит: ти не можеш приєднатися до цієї гри.",
   "There is no free seat for this player.": "Для цього гравця немає вільного місця.",
   "This seat cannot be removed": "Це місце не можна прибрати",
   "This request no longer exists": "Цього запиту вже немає",
-  "This seat is not an AI player": "На цьому місці немає AI"
+  "This seat is not an AI player": "На цьому місці немає AI",
+  "The host removed you from the game \"${0}\".": "Господар прибрав тебе з гри «${0}».",
+  "The host declined your request to join \"${0}\": you cannot join this game any more.": "Господар відхилив твій запит до «${0}»: ти більше не можеш приєднатися до цієї гри.",
+  "Declined by the host": "Відхилено господарем",
+  "Ask to join": "Попросити участі",
+  "You removed this player twice. If you decline, ${0} can never join this game again.": "Ти двічі прибирав цього гравця. Якщо відхилиш, ${0} більше ніколи не зможе приєднатися до цієї гри."
 }

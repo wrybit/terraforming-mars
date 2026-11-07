@@ -1377,11 +1377,15 @@
   "Wants to join": "Vil bli med",
   "Approve": "Godkjenn",
   "Waiting for the host to approve": "Venter på godkjenning fra verten",
-  "The host removed you from the game ${0}.": "Verten fjernet deg fra spillet ${0}.",
   "The host removed you from this game twice: your request to join was sent, the host decides.": "Verten har fjernet deg to ganger fra dette spillet: forespørselen er sendt, verten bestemmer.",
   "The host declined your request: you cannot join this game.": "Verten avslo forespørselen din: du kan ikke bli med i dette spillet.",
   "There is no free seat for this player.": "Det er ingen ledig plass til denne spilleren.",
   "This seat cannot be removed": "Denne plassen kan ikke fjernes",
   "This request no longer exists": "Denne forespørselen finnes ikke lenger",
-  "This seat is not an AI player": "Denne plassen er ikke en AI-spiller"
+  "This seat is not an AI player": "Denne plassen er ikke en AI-spiller",
+  "The host removed you from the game \"${0}\".": "Verten fjernet deg fra spillet «${0}».",
+  "The host declined your request to join \"${0}\": you cannot join this game any more.": "Verten avslo forespørselen din om «${0}»: du kan ikke lenger bli med i dette spillet.",
+  "Declined by the host": "Avslått av verten",
+  "Ask to join": "Be om å bli med",
+  "You removed this player twice. If you decline, ${0} can never join this game again.": "Du har fjernet denne spilleren to ganger. Hvis du avslår, kan ${0} aldri bli med i dette spillet igjen."
 }

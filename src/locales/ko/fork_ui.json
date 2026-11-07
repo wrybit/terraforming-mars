@@ -1262,11 +1262,15 @@
   "Wants to join": "참가 희망",
   "Approve": "승인",
   "Waiting for the host to approve": "호스트의 승인을 기다리는 중",
-  "The host removed you from the game ${0}.": "호스트가 게임 ${0}에서 당신을 제외했습니다.",
   "The host removed you from this game twice: your request to join was sent, the host decides.": "호스트가 이 게임에서 당신을 두 번 제외했습니다: 참가 요청을 보냈으며 호스트가 결정합니다.",
   "The host declined your request: you cannot join this game.": "호스트가 요청을 거절했습니다: 이 게임에 참가할 수 없습니다.",
   "There is no free seat for this player.": "이 플레이어를 위한 빈자리가 없습니다.",
   "This seat cannot be removed": "이 자리는 제거할 수 없습니다",
   "This request no longer exists": "이 요청은 더 이상 존재하지 않습니다",
-  "This seat is not an AI player": "이 자리는 AI 플레이어가 아닙니다"
+  "This seat is not an AI player": "이 자리는 AI 플레이어가 아닙니다",
+  "The host removed you from the game \"${0}\".": "호스트가 게임 \"${0}\"에서 당신을 제외했습니다.",
+  "The host declined your request to join \"${0}\": you cannot join this game any more.": "호스트가 \"${0}\" 참가 요청을 거절했습니다: 이 게임에 더 이상 참가할 수 없습니다.",
+  "Declined by the host": "호스트가 거절함",
+  "Ask to join": "참가 요청",
+  "You removed this player twice. If you decline, ${0} can never join this game again.": "이 플레이어를 두 번 제외했습니다. 거절하면 ${0}님은 이 게임에 다시는 참가할 수 없습니다."
 }

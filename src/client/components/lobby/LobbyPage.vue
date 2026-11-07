@@ -254,7 +254,10 @@ async function refresh(): Promise<void> {
     }
     if (list.removedFrom !== undefined && instance !== null) {
       roomOpen.value = false;
-      showAlert(instance.proxy as ComponentPublicInstance, 'Game lobby', {text: translateTextWithParams('The host removed you from the game ${0}.', [list.removedFrom])});
+      showAlert(instance.proxy as ComponentPublicInstance, 'Game lobby', {text: translateTextWithParams('The host removed you from the game "${0}".', [list.removedFrom])});
+    }
+    if (list.declinedFrom !== undefined && instance !== null) {
+      showAlert(instance.proxy as ComponentPublicInstance, 'Game lobby', {text: translateTextWithParams('The host declined your request to join "${0}": you cannot join this game any more.', [list.declinedFrom])});
     }
     loadError.value = '';
   } catch (error) {
@@ -290,7 +293,7 @@ function offerInvitation(): void {
   invitationHandled = true;
   const room = rooms.value.find((r) => r.id === invitedRoomId);
   // A reserved seat is no free seat, but the link holder may take it
-  if (room !== undefined && room.id !== yourRoomId.value && room.state === 'open' && (hasFreeSeat(room) || invitedSeatToken !== undefined)) {
+  if (room !== undefined && room.id !== yourRoomId.value && room.state === 'open' && room.yourAccess !== 'declined' && (hasFreeSeat(room) || invitedSeatToken !== undefined)) {
     offerIsInvitation.value = true;
     offeredRoom.value = room;
   }

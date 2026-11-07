@@ -75,6 +75,14 @@ describe('Lobby components', () => {
     expect(wrapper.find('.lobby-game-progress i').attributes('style')).contains('50%');
   });
 
+  it('LobbyGameRow: removed twice asks to join, declined shows it instead of a button', () => {
+    const asking = mount(LobbyGameRow, {...globalConfig, props: {room: room([host, {kind: 'free'}], {yourAccess: 'request'})}});
+    expect(asking.find('.lobby-game-action').text()).contains('Ask to join');
+    const declined = mount(LobbyGameRow, {...globalConfig, props: {room: room([host, {kind: 'free'}], {yourAccess: 'declined'})}});
+    expect(declined.find('.lobby-game-action button').exists()).is.false;
+    expect(declined.find('.lobby-game-declined').text()).eq('Declined by the host');
+  });
+
   it('LobbyGameRow: own game set off, a click on the entry opens its dialog; games of others stay neutral', async () => {
     const own = mount(LobbyGameRow, {...globalConfig, props: {room: room([{...host, you: true}, {kind: 'free'}])}});
     expect(own.find('.lobby-game').classes()).contains('lobby-game--hosted');

@@ -82,6 +82,8 @@ export type LobbyRoomModel = {
   yourPlayerId?: PlayerId;
   /** Started rooms: the host gets the page with every player's link when guests have to be sent theirs */
   hostNeedsLinks?: boolean;
+  /** The asking participant was removed twice (joining becomes a request) or declined by the host (never again) */
+  yourAccess?: 'request' | 'declined';
   /** Only for the host: players removed twice who ask to come back (approve or decline) */
   requests?: ReadonlyArray<LobbyJoinRequest>;
   /** Only for the host of a waiting room: the settings, to change them in the create form (edit) */
@@ -117,6 +119,8 @@ export type LobbyListModel = {
   requestedRoomId?: string;
   /** The host just removed the asking participant from this game (its name); told once */
   removedFrom?: string;
+  /** The host just declined the asking participant's request for this game (its name); told once */
+  declinedFrom?: string;
 };
 
 export type LobbyAction =

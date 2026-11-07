@@ -2278,11 +2278,15 @@
   "Wants to join": "Vuole unirsi",
   "Approve": "Approva",
   "Waiting for the host to approve": "In attesa dell'approvazione dell'host",
-  "The host removed you from the game ${0}.": "L'host ti ha rimosso dalla partita ${0}.",
   "The host removed you from this game twice: your request to join was sent, the host decides.": "L'host ti ha rimosso due volte da questa partita: la richiesta è stata inviata, decide l'host.",
   "The host declined your request: you cannot join this game.": "L'host ha rifiutato la tua richiesta: non puoi unirti a questa partita.",
   "There is no free seat for this player.": "Non ci sono posti liberi per questo giocatore.",
   "This seat cannot be removed": "Questo posto non può essere rimosso",
   "This request no longer exists": "Questa richiesta non esiste più",
-  "This seat is not an AI player": "Questo posto non è un giocatore AI"
+  "This seat is not an AI player": "Questo posto non è un giocatore AI",
+  "The host removed you from the game \"${0}\".": "L'host ti ha rimosso dalla partita «${0}».",
+  "The host declined your request to join \"${0}\": you cannot join this game any more.": "L'host ha rifiutato la tua richiesta per «${0}»: non puoi più unirti a questa partita.",
+  "Declined by the host": "Rifiutato dall'host",
+  "Ask to join": "Chiedi di unirti",
+  "You removed this player twice. If you decline, ${0} can never join this game again.": "Hai rimosso questo giocatore due volte. Se rifiuti, ${0} non potrà mai più unirsi a questa partita."
 }
