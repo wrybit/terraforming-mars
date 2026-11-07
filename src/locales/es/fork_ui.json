@@ -1630,7 +1630,6 @@
   "Traveller": "Trotamundos",
   "Suburbian": "Suburbano",
   "Blacksmith": "Forjador",
-  "Copy URL": "Copiar URL",
   "vp": "pv",
   "tr": "vt",
   "cards": "cartas",
@@ -2300,5 +2299,7 @@
   "The host declined your request to join \"${0}\": you cannot join this game any more.": "El anfitrión ha rechazado tu solicitud para «${0}»: ya no puedes unirte a esta partida.",
   "Declined by the host": "Rechazado por el anfitrión",
   "Ask to join": "Pedir unirse",
-  "You removed this player twice. If you decline, ${0} can never join this game again.": "Has quitado a este jugador dos veces. Si rechazas, ${0} nunca podrá volver a unirse a esta partida."
+  "You removed this player twice. If you decline, ${0} can never join this game again.": "Has quitado a este jugador dos veces. Si rechazas, ${0} nunca podrá volver a unirse a esta partida.",
+  "Link for spectators": "Enlace para espectadores",
+  "The game is running. Send the players you entered by hand their own link.": "La partida está en curso. Envía a los jugadores que añadiste a mano su propio enlace."
 }

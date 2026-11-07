@@ -1195,7 +1195,6 @@
   "Kingpin": "Главарь",
   "Excavator": "Землекоп",
   "Rugged": "Стойкий",
-  "Copy URL": "Копировать ссылку",
   "vp": "ПО",
   "tr": "РТ",
   "cards": "карты",
@@ -1892,5 +1891,7 @@
   "The host declined your request to join \"${0}\": you cannot join this game any more.": "Хост отклонил ваш запрос на участие в «${0}»: вы больше не можете присоединиться к этой игре.",
   "Declined by the host": "Отклонено хостом",
   "Ask to join": "Попросить участия",
-  "You removed this player twice. If you decline, ${0} can never join this game again.": "Вы дважды убирали этого игрока. Если отклоните, ${0} больше никогда не сможет присоединиться к этой игре."
+  "You removed this player twice. If you decline, ${0} can never join this game again.": "Вы дважды убирали этого игрока. Если отклоните, ${0} больше никогда не сможет присоединиться к этой игре.",
+  "Link for spectators": "Ссылка для зрителей",
+  "The game is running. Send the players you entered by hand their own link.": "Игра идёт. Отправь игрокам, которых ты добавил вручную, их собственные ссылки."
 }

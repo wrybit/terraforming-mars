@@ -1185,7 +1185,6 @@
   "Electrician": "Elektryk",
   "Manufacturer": "Wytwórca",
   "Politician": "Polityk",
-  "Copy URL": "Kopiuj URL",
   "influence-count": "Liczba Wpływu",
   "corruption-count": "Liczba korupcji",
   "microbe2": "2 mikroby",
@@ -1819,5 +1818,7 @@
   "The host declined your request to join \"${0}\": you cannot join this game any more.": "Gospodarz odrzucił twoją prośbę o dołączenie do „${0}”: nie możesz już dołączyć do tej gry.",
   "Declined by the host": "Odrzucone przez gospodarza",
   "Ask to join": "Poproś o dołączenie",
-  "You removed this player twice. If you decline, ${0} can never join this game again.": "Usunąłeś tego gracza dwa razy. Jeśli odrzucisz, ${0} nigdy więcej nie dołączy do tej gry."
+  "You removed this player twice. If you decline, ${0} can never join this game again.": "Usunąłeś tego gracza dwa razy. Jeśli odrzucisz, ${0} nigdy więcej nie dołączy do tej gry.",
+  "Link for spectators": "Link dla widzów",
+  "The game is running. Send the players you entered by hand their own link.": "Gra trwa. Wyślij graczom wpisanym ręcznie ich własny link."
 }

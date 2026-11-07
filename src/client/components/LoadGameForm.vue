@@ -17,7 +17,6 @@ import {defineComponent} from 'vue';
 import * as constants from '@/common/constants';
 import {LoadGameFormModel} from '@/common/models/LoadGameFormModel';
 import {SimpleGameModel} from '@/common/models/SimpleGameModel';
-import {vueRoot} from '@/client/components/vueRoot';
 import {showAlert} from '@/client/components/showAlert';
 import {GameId} from '@/common/Types';
 import {paths} from '@/common/app/paths';
@@ -58,14 +57,9 @@ export default defineComponent({
       })
         .then((resp) => resp.json())
         .then((response: SimpleGameModel) => {
-          if (response.players.length === 1) {
-            window.location.href = 'player?id=' + response.players[0].id;
-            return;
-          } else {
-            window.history.replaceState(response, `${constants.APP_NAME} - Game`, 'game?id=' + response.id);
-            vueRoot(this).game = response;
-            vueRoot(this).screen = 'game-home';
-          }
+          // Loading keeps the ids: the players go on with their own links. Solo straight into the game,
+          // otherwise into it as spectator to check the loaded state
+          window.location.href = response.players.length === 1 ? 'player?id=' + response.players[0].id : 'spectator?id=' + response.spectatorId;
         })
         .catch((err) => {
           console.error(err);

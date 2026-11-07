@@ -1076,5 +1076,7 @@
   "The host declined your request to join \"${0}\": you cannot join this game any more.": "L'hôte a refusé votre demande pour « ${0} » : vous ne pouvez plus rejoindre cette partie.",
   "Declined by the host": "Refusé par l'hôte",
   "Ask to join": "Demander à rejoindre",
-  "You removed this player twice. If you decline, ${0} can never join this game again.": "Vous avez retiré ce joueur deux fois. Si vous refusez, ${0} ne pourra plus jamais rejoindre cette partie."
+  "You removed this player twice. If you decline, ${0} can never join this game again.": "Vous avez retiré ce joueur deux fois. Si vous refusez, ${0} ne pourra plus jamais rejoindre cette partie.",
+  "Link for spectators": "Lien pour les spectateurs",
+  "The game is running. Send the players you entered by hand their own link.": "La partie est en cours. Envoie aux joueurs que tu as saisis toi-même leur propre lien."
 }

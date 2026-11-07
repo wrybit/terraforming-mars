@@ -176,11 +176,14 @@ describe('Lobby components', () => {
   });
 
   it('LobbyRoomDialog offers "Continue" instead of "Start now" once the game runs', () => {
-    const started = room([{...host, you: true}, {kind: 'guest', name: 'Dan', color: 'green'}], {state: 'started', yourPlayerId: 'p1', gameId: 'g1', hostNeedsLinks: true});
+    const started = room([{...host, you: true}, {kind: 'guest', name: 'Dan', color: 'green', playerId: 'p2'}], {state: 'started', yourPlayerId: 'p1', spectatorId: 's1'});
     const wrapper = mount(LobbyRoomDialog, {...globalConfig, props: {open: true, room: started}, attachTo: document.body});
     expect(document.body.textContent).not.contains('Start now');
     const links = Array.from(document.body.querySelectorAll('.lobby-room-foot a')).map((link) => link.getAttribute('href'));
-    expect(links).deep.eq(['game?id=g1', 'player?id=p1']);
+    expect(links).deep.eq(['player?id=p1']);
+    // The host passes on the link of the player entered by hand, or opens it here (hot seat); spectators get their own link
+    expect(document.querySelector('.lobby-seat-play')?.getAttribute('href')).contains('player?id=p2');
+    expect(document.querySelector<HTMLInputElement>('.lobby-invite input')?.value).contains('spectator?id=s1');
     wrapper.unmount();
   });
 

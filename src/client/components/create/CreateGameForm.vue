@@ -1,10 +1,9 @@
 <template>
-  <div id="create-game" class="create-game" :class="{'create-game--lobby': lobbyMode}">
+  <!-- Always the "Create game" modal of the lobby (LobbyPage.vue): every game is opened there -->
+  <div id="create-game" class="create-game create-game--lobby">
     <!-- Header like card list/statistics: title, file buttons, language and settings in one header card -->
     <header class="card-list-header card-list-header--plain create-game-head">
-      <!-- Menu at the top left, as in the game -->
-      <PageToolbar v-if="!lobbyMode" />
-      <PageTitle :title="editRoom !== undefined ? 'Edit game' : lobbyMode ? 'Create game' : 'Create New Game'" />
+      <PageTitle :title="editRoom !== undefined ? 'Edit game' : 'Create game'" />
       <div class="create-game-head-actions">
         <label class="create-game-icon-button" :title="$t('Load settings from file')">
           <!-- Import/export icons: arrow perpendicular to a hex edge, into the tile (import) or out of it (export);
@@ -20,11 +19,12 @@
           <mask id="create-game-export-cut" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24"><rect width="24" height="24" fill="#fff" /><path :d="exportArrowPath" stroke="#000" stroke-width="6" /></mask>
           <polygon class="create-game-head-icon-filled" mask="url(#create-game-export-cut)" points="12.5,5.2 19.43,9.2 19.43,17.2 12.5,21.2 5.57,17.2 5.57,9.2" /><path :d="exportArrowPath" />
         </svg><span class="create-game-head-label" v-i18n>Export</span></button>
-        <!-- Share link: the URL already carries the settings anyway, the button just copies it -->
-        <button v-if="!lobbyMode" type="button" class="create-game-icon-button" :title="$t('Copy link with these settings')" @click="copySettingsLink()"><svg class="create-game-head-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" /></svg><span class="create-game-head-label">{{ $t(settingsLinkCopied ? 'Link copied' : 'Copy link') }}</span></button>
+        <!-- Share link: the URL (lobby/create#s=…) already carries the settings anyway, the button just copies it.
+             Not while editing a waiting game: that has its invitation link -->
+        <button v-if="editRoom === undefined" type="button" class="create-game-icon-button" :title="$t('Copy link with these settings')" @click="copySettingsLink()"><svg class="create-game-head-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" /></svg><span class="create-game-head-label">{{ $t(settingsLinkCopied ? 'Link copied' : 'Copy link') }}</span></button>
         <AppButton class="create-game-reset btn-tone-quiet" title="Reset" @click="resetSettings" />
         <!-- Lobby: the form is a modal over the lobby (LobbyPage.vue) -->
-        <button v-if="lobbyMode" type="button" class="create-game-icon-button create-game-close" :aria-label="$t('Close')" @click="closeModal()">✕</button>
+        <button type="button" class="create-game-icon-button create-game-close" :aria-label="$t('Close')" @click="closeModal()">✕</button>
       </div>
     </header>
     <div class="create-game-layout">
@@ -317,10 +317,8 @@
                 <SegmentedControl v-else v-model="aiPlayersCount" :options="aiCountOptions" class="create-game-segmented--equal create-game-segmented--seats" />
               </div>
               <!-- Lobby: every game is listed there (running ones too) unless it is private -->
-              <template v-if="lobbyMode">
-                <OptionRow class="create-game-players-first" label="Public game"><SwitchInput v-model="lobbyPublic" /></OptionRow>
-                <div v-if="!lobbyPublic && lobbyActive" class="create-game-note" v-i18n>Only players with the invitation link can join.</div>
-              </template>
+              <OptionRow class="create-game-players-first" label="Public game"><SwitchInput v-model="lobbyPublic" /></OptionRow>
+              <div v-if="!lobbyPublic && lobbyActive" class="create-game-note" v-i18n>Only players with the invitation link can join.</div>
               <!-- Who starts belongs to the players: switched on, the "Goes first" stars on the player cards disappear -->
               <OptionRow v-if="playersCount > 1" class="create-game-players-first" label="Random first player"><SwitchInput v-model="randomFirstPlayer" /></OptionRow>
               <!-- Analysis game: only with AI players; the log then shows the AI's cards and decisions, which humans can rate -->
@@ -424,7 +422,6 @@
 </template>
 
 <script lang="ts">
-import * as constants from '@/common/constants';
 
 import {defineComponent, nextTick} from 'vue';
 import {Color, PLAYER_COLORS} from '@/common/Color';
@@ -439,7 +436,7 @@ import CollapsibleSection from '@/client/components/create/CollapsibleSection.vu
 import {cardPoolChanged, expansionOptionsChanged, milestonesChanged} from '@/client/components/create/changedFromDefault';
 import {ColumnCount, currentColumnCount, placementOf, SettingsCard, watchColumnCount} from '@/client/components/create/createGameColumns';
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
-import {describeFailure, failureFromResponse, failureOf, fetchOrFail, RequestFailedError} from '@/client/utils/requestFailure';
+import {describeFailure, failureFromResponse, failureOf, RequestFailedError} from '@/client/utils/requestFailure';
 import {AI_SUPPORTED_EXPANSIONS, aiUnsupportedReasons} from '@/common/ai/aiSupport';
 import ColoniesFilter from '@/client/components/create/ColoniesFilter.vue';
 import {ColonyName} from '@/common/colonies/ColonyName';
@@ -454,7 +451,6 @@ import {setupOptionsFromConfig} from '@/common/game/GameSetupOptions';
 import {boardColorClass} from './boardColorClass';
 import {RandomMAOptionType} from '@/common/ma/RandomMAOptionType';
 import {GameId, JSONObject} from '@/common/Types';
-import PageToolbar from '@/client/components/PageToolbar.vue';
 import PageTitle from '@/client/components/common/PageTitle.vue';
 import {getCard} from '@/client/cards/ClientCardManifest';
 import {NewGameConfig, NewPlayerModel} from '@/common/game/NewGameConfig';
@@ -471,7 +467,6 @@ import {getPreferences, PreferencesManager} from '@/client/utils/PreferencesMana
 import {readSettingsFromHash, replaceSettingsHash, settingsHash} from './settingsLink/settingsLinkHash';
 import {getColony} from '@/client/colonies/ClientColonyManifest';
 import {RULEBOOK_URLS, WIKI_URLS} from '@/client/utils/WikiLinks';
-import {setDocumentTitle} from '@/client/utils/documentTitle';
 import {sanitizeEscapeVelocityOptions} from '@/common/game/escapeVelocity';
 import {validateNewGameConfig, ValidationErrors} from '@/common/game/validateNewGameConfig';
 import ValidationProblems from './ValidationProblems.vue';
@@ -590,11 +585,6 @@ export default defineComponent({
     };
   },
   props: {
-    // Shown as the "Create game" modal of the lobby (LobbyPage.vue)
-    lobbyMode: {
-      type: Boolean,
-      default: false,
-    },
     // Lobby: name and color of the own seat
     lobbyProfile: {
       type: Object as () => LobbyProfile | undefined,
@@ -623,7 +613,6 @@ export default defineComponent({
     InfoLink,
     NumberStepper,
     OptionRow,
-    PageToolbar,
     PageTitle,
     SegmentedControl,
     SwitchInput,
@@ -712,29 +701,27 @@ export default defineComponent({
   created() {
     // Restore before the first render: restoring in mounted() painted the default seat (red "Player 1")
     // first, which then animated out while the saved seats animated in.
-    // A shared link takes precedence over the most recently used settings.
-    // The lobby's address carries no settings: there the last used settings are the start
+    // A shared link (lobby/create#s=…) takes precedence over the most recently used settings
+    const fromLink = this.editRoom === undefined && this.restoreSettingsFromLink();
     if (this.editRoom !== undefined) {
       this.restoreEditRoom(this.editRoom);
-    } else if (this.lobbyMode || !this.restoreSettingsFromLink()) {
+    } else if (!fromLink) {
       this.restoreLastSettings();
     }
     // The own seat carries the lobby profile
-    if (this.lobbyMode && this.lobbyProfile !== undefined) {
+    if (this.lobbyProfile !== undefined) {
       this.players[0].name = this.lobbyProfile.name;
       this.players[0].color = this.lobbyProfile.color;
       this.hostEmoji = this.lobbyProfile.emoji;
       this.hostImage = this.lobbyProfile.image;
     }
-    // Opened from the lobby, a game is meant for several people: at least one free seat (solo stays one click away)
-    if (this.lobbyMode && this.humanPlayersCount < 2) {
+    // Opened from the lobby, a game is meant for several people: at least one free seat (solo stays one click away).
+    // A shared link keeps its seats
+    if (!fromLink && this.humanPlayersCount < 2) {
       this.humanPlayersCount = 2;
     }
   },
   mounted() {
-    if (!this.lobbyMode) {
-      setDocumentTitle('New game');
-    }
     this.stopStickyObserver = observeStickyBottom(this.$refs.createCard as HTMLElement, CREATE_CARD_BOTTOM_PX, (stuck) => {
       this.createCardStuck = stuck;
     });
@@ -747,8 +734,8 @@ export default defineComponent({
       this.columnCount = columnCount;
     });
     nextTick(() => {
-      // The lobby keeps its own address: no settings in the URL
-      if (this.lobbyMode) {
+      // Editing a waiting game keeps the address of the lobby: no settings in the URL
+      if (this.editRoom !== undefined) {
         return;
       }
       this.settingsLinkReady = true;
@@ -782,7 +769,7 @@ export default defineComponent({
     // Lobby: name, color and picture of the own seat; undefined without a name (the lobby needs one)
     hostProfile(): LobbyProfile | undefined {
       const own = this.players[0];
-      if (!this.lobbyMode || own === undefined || own.name.trim() === '') {
+      if (own === undefined || own.name.trim() === '') {
         return undefined;
       }
       return {name: own.name.trim().slice(0, LOBBY_NAME_MAX_LENGTH), color: own.color, emoji: this.hostEmoji, image: this.hostImage};
@@ -792,7 +779,7 @@ export default defineComponent({
     },
     /** Some seat is offered in the lobby; otherwise the game is created right away (solo, only AI, everybody entered) */
     lobbyActive(): boolean {
-      return this.lobbyMode && this.players.slice(0, this.playersCount).some((player, index) => this.isOfferedSeat(player, index));
+      return this.players.slice(0, this.playersCount).some((player, index) => this.isOfferedSeat(player, index));
     },
     gameTitle(): string {
       return this.gameName.trim() || this.gameNamePlaceholder;
@@ -1438,17 +1425,17 @@ export default defineComponent({
       return this.isOfferedSeat(player, index);
     },
     isOfferedSeat(player: NewPlayerModel, index: number): boolean {
-      return this.lobbyMode && index > 0 && player.aiLevel === undefined && !this.manualSeats.includes(seatKey(player));
+      return index > 0 && player.aiLevel === undefined && !this.manualSeats.includes(seatKey(player));
     },
     isHostSeat(index: number): boolean {
-      return this.lobbyMode && index === 0;
+      return index === 0;
     },
     pickHostEmoji(emoji: string) {
       this.hostEmoji = emoji;
       this.hostImage = undefined;
     },
     canReturnToLobby(player: NewPlayerModel, index: number): boolean {
-      return this.lobbyMode && index > 0 && player.aiLevel === undefined && this.manualSeats.includes(seatKey(player));
+      return index > 0 && player.aiLevel === undefined && this.manualSeats.includes(seatKey(player));
     },
     setManualSeat(player: NewPlayerModel, manual: boolean) {
       const key = seatKey(player);
@@ -1459,17 +1446,22 @@ export default defineComponent({
       // eslint-disable-next-line vue/require-explicit-emits
       this.$emit('close');
     },
+    // Every game goes through the lobby, so public ones are listed there; without offered seats it starts right away
     submit() {
-      // From the lobby every game goes through the lobby, so public ones are listed there
-      if (this.lobbyMode) {
-        this.openInLobby();
-      } else {
-        this.createGame();
-      }
+      this.openInLobby();
     },
-    openInLobby() {
+    async openInLobby() {
       if (this.hasBlockingValidationErrors) {
         return;
+      }
+      // Predefined game: checked like every saved setting (exists, same player count); it is cloned at the start
+      let clonedGamedId: GameId | undefined;
+      if (this.seededGame) {
+        const checked = await this.serializeSettings();
+        if (checked === undefined) {
+          return;
+        }
+        clonedGamedId = checked.clonedGamedId;
       }
       // Seat order as on the page (own seat first, humans before AI players); the server places the joining
       // players and draws the first player itself
@@ -1487,7 +1479,7 @@ export default defineComponent({
           ...config,
           players,
           name: this.gameTitle,
-          clonedGamedId: undefined,
+          clonedGamedId,
           boardSeed: this.boardSeed,
           escapeVelocity: config.escapeVelocity === undefined ? undefined : sanitizeEscapeVelocityOptions(config.escapeVelocity),
         },
@@ -1496,37 +1488,6 @@ export default defineComponent({
         freeSeats,
         hostPicture: {emoji: this.hostEmoji, image: this.hostImage},
       });
-    },
-    async createGame() {
-      if (this.hasBlockingValidationErrors) {
-        return;
-      }
-      const newGameConfig = await this.serializeSettings();
-
-      if (newGameConfig === undefined) {
-        return;
-      }
-      if (this.rememberSettings) {
-        createGameSettingsStorage.save(newGameConfig);
-      }
-      const onSuccess = (json: any) => {
-        if (json.players.length === 1) {
-          window.location.href = 'player?id=' + json.players[0].id;
-          return;
-        } else {
-          window.history.replaceState(json, `${constants.APP_NAME} - Game`, 'game?id=' + json.id);
-          vueRoot(this).game = json;
-          vueRoot(this).screen = 'game-home';
-        }
-      };
-
-      fetchOrFail(paths.API_CREATEGAME, {'method': 'POST', 'body': JSON.stringify({...newGameConfig, name: this.gameTitle, boardSeed: this.boardSeed}), 'headers': {'Content-Type': 'application/json'}})
-        .then((response) => response.json())
-        .then(onSuccess)
-        .catch((error: unknown) => {
-          console.error(error);
-          showAlert(this, 'Game could not be created', {text: describeFailure(failureOf(error))});
-        });
     },
   },
 });

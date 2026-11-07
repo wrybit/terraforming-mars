@@ -1272,5 +1272,7 @@
   "The host declined your request to join \"${0}\": you cannot join this game any more.": "호스트가 \"${0}\" 참가 요청을 거절했습니다: 이 게임에 더 이상 참가할 수 없습니다.",
   "Declined by the host": "호스트가 거절함",
   "Ask to join": "참가 요청",
-  "You removed this player twice. If you decline, ${0} can never join this game again.": "이 플레이어를 두 번 제외했습니다. 거절하면 ${0}님은 이 게임에 다시는 참가할 수 없습니다."
+  "You removed this player twice. If you decline, ${0} can never join this game again.": "이 플레이어를 두 번 제외했습니다. 거절하면 ${0}님은 이 게임에 다시는 참가할 수 없습니다.",
+  "Link for spectators": "관전자용 링크",
+  "The game is running. Send the players you entered by hand their own link.": "게임이 진행 중입니다. 직접 입력한 플레이어에게 각자의 링크를 보내세요."
 }

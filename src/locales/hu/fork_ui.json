@@ -1203,5 +1203,7 @@
   "The host declined your request to join \"${0}\": you cannot join this game any more.": "A házigazda elutasította a(z) „${0}” játékhoz való csatlakozási kérésedet: többé nem csatlakozhatsz.",
   "Declined by the host": "A házigazda elutasította",
   "Ask to join": "Csatlakozás kérése",
-  "You removed this player twice. If you decline, ${0} can never join this game again.": "Kétszer eltávolítottad ezt a játékost. Ha elutasítod, ${0} soha többé nem csatlakozhat ehhez a játékhoz."
+  "You removed this player twice. If you decline, ${0} can never join this game again.": "Kétszer eltávolítottad ezt a játékost. Ha elutasítod, ${0} soha többé nem csatlakozhat ehhez a játékhoz.",
+  "Link for spectators": "Link a nézőknek",
+  "The game is running. Send the players you entered by hand their own link.": "A játék fut. Küldd el a kézzel beírt játékosoknak a saját linkjüket."
 }

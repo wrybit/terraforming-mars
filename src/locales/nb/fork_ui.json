@@ -1387,5 +1387,7 @@
   "The host declined your request to join \"${0}\": you cannot join this game any more.": "Verten avslo forespørselen din om «${0}»: du kan ikke lenger bli med i dette spillet.",
   "Declined by the host": "Avslått av verten",
   "Ask to join": "Be om å bli med",
-  "You removed this player twice. If you decline, ${0} can never join this game again.": "Du har fjernet denne spilleren to ganger. Hvis du avslår, kan ${0} aldri bli med i dette spillet igjen."
+  "You removed this player twice. If you decline, ${0} can never join this game again.": "Du har fjernet denne spilleren to ganger. Hvis du avslår, kan ${0} aldri bli med i dette spillet igjen.",
+  "Link for spectators": "Lenke for tilskuere",
+  "The game is running. Send the players you entered by hand their own link.": "Spillet er i gang. Send spillerne du la inn selv, sin egen lenke."
 }

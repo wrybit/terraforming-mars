@@ -1271,7 +1271,6 @@
   "terraformRating": "Рейтинг на тераформиране",
   "Star Wars": "Междузвездни войни",
   "anyresource1": "1 ресурс по избор (без наука)",
-  "Copy URL": "Копирай URL",
   "vp": "ТП",
   "tr": "ТР",
   "cards": "карти",
@@ -1969,5 +1968,7 @@
   "The host declined your request to join \"${0}\": you cannot join this game any more.": "Домакинът отказа молбата ти за „${0}“: вече не можеш да се присъединиш към тази игра.",
   "Declined by the host": "Отказано от домакина",
   "Ask to join": "Поискай участие",
-  "You removed this player twice. If you decline, ${0} can never join this game again.": "Премахна този играч два пъти. Ако откажеш, ${0} никога повече няма да може да се присъедини към тази игра."
+  "You removed this player twice. If you decline, ${0} can never join this game again.": "Премахна този играч два пъти. Ако откажеш, ${0} никога повече няма да може да се присъедини към тази игра.",
+  "Link for spectators": "Линк за зрители",
+  "The game is running. Send the players you entered by hand their own link.": "Играта тече. Изпрати на ръчно въведените играчи техния собствен линк."
 }

@@ -37,8 +37,8 @@ export type StartedGame = {
 };
 /** What the lobby needs to know about running games to close abandoned ones (lobbyGameProbe.ts) */
 export type GameProbe = {
-  /** A player page (player id) or the links page (game id) was open within the last minutes */
-  isPresent(id: PlayerId | GameId): boolean;
+  /** A player page was open within the last minutes */
+  isPresent(id: PlayerId): boolean;
   /** Whether anything happened beyond choosing corporation and starting cards; undefined: the game is gone */
   hasBegun(gameId: GameId): Promise<boolean | undefined>;
   close(gameId: GameId): Promise<void>;
@@ -170,7 +170,7 @@ export class Lobby {
         this.save();
         continue;
       }
-      if (probe.isPresent(room.hostPlayerId) || probe.isPresent(gameId)) {
+      if (probe.isPresent(room.hostPlayerId) || this.hostInLobby(room, now)) {
         continue;
       }
       if (now - Math.max(room.startedAt ?? now, watchingSince) < ABANDONED_AFTER_MS) {
@@ -187,6 +187,11 @@ export class Lobby {
       }
       this.forgetGame(gameId);
     }
+  }
+
+  /** The host still has the lobby open, e.g. the room dialog with the links of the players entered by hand */
+  private hostInLobby(room: Room, now: number): boolean {
+    return room.seats.some((seat) => seat.kind === 'human' && seat.participant === room.host && now - seat.lastSeen <= PARTICIPANT_TIMEOUT_MS);
   }
 
   /** The game of a room finished or was deleted: the room leaves the "running" list */
@@ -278,7 +283,7 @@ export class Lobby {
       createdAt: this.clock(),
       listed: listed !== false,
       host: me,
-      config: {...config, clonedGamedId: undefined},
+      config,
       seats,
       state: 'open',
       playerIds: {},
@@ -491,7 +496,7 @@ export class Lobby {
       throw new LobbyError('Players have already joined: keep a free seat for each of them.');
     }
     room.seats = seats;
-    room.config = {...config, clonedGamedId: undefined};
+    room.config = config;
     room.title = sanitizeTitle(title) || sanitizeTitle(config.name) || room.title;
     room.listed = listed !== false;
     this.save();
@@ -600,7 +605,8 @@ export class Lobby {
     const chosenFirst = room.config.players.findIndex((player) => player.first === true);
     const firstIndex = room.config.randomFirstPlayer ? Math.floor(Math.random() * players.length) : Math.max(0, chosenFirst);
     players[firstIndex].first = true;
-    return {...room.config, name: room.title, players, clonedGamedId: undefined};
+    // A predefined game (clonedGamedId) is cloned at the start; the seat count has to match it then (Cloner)
+    return {...room.config, name: room.title, players};
   }
 
   private model(room: Room, me: string | undefined): LobbyRoomModel {
@@ -640,7 +646,6 @@ export class Lobby {
         randomBoard: (config.boards ?? []).length > 1,
         options: setupOptionsFromConfig(config),
       },
-      gameId: me === room.host ? room.gameId : undefined,
       config: me === room.host && room.state === 'open' ? room.config : undefined,
       yourAccess: me === undefined ? undefined : room.declined?.includes(me) ? 'declined' :
         (room.removals?.[me] ?? 0) >= KICKS_BEFORE_REQUEST ? 'request' : undefined,
@@ -649,7 +654,6 @@ export class Lobby {
         undefined,
       spectatorId: room.spectatorId,
       yourPlayerId: me === undefined ? undefined : room.playerIds[me],
-      hostNeedsLinks: room.state === 'started' && me === room.host && room.seats.some((seat) => seat.kind === 'guest') ? true : undefined,
     };
   }
 

@@ -20,11 +20,15 @@
               <LobbyAvatar kind="guest" :color="seat.color" :title="seat.name" size="large" />
               <span class="lobby-seat-name">{{ seat.name }}</span>
               <span class="lobby-seat-state" v-i18n>entered by the host</span>
-              <!-- Host: this player's own link to pass on (waiting: takes this seat in the lobby; running: the player page) -->
-              <button v-if="guestLink(seat) !== undefined" type="button" class="create-game-small-button lobby-seat-link" @click="copyGuestLink(index, seat)">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" /></svg>
-                <span>{{ $t(copiedSeat === index ? 'Link copied' : 'Copy link') }}</span>
-              </button>
+              <!-- Host: this player's own link to pass on (waiting: takes this seat in the lobby; running: the player page).
+                   Running, "Play" opens it here: several players at one device (hot seat) -->
+              <div v-if="guestLink(seat) !== undefined" class="lobby-seat-actions">
+                <button type="button" class="create-game-small-button lobby-seat-link" @click="copyGuestLink(index, seat)">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" /></svg>
+                  <span>{{ $t(copiedSeat === index ? 'Link copied' : 'Copy link') }}</span>
+                </button>
+                <a v-if="started" class="create-game-small-button lobby-seat-play" :href="guestLink(seat)" v-i18n>Play</a>
+              </div>
             </template>
             <template v-else-if="seat.kind === 'ai'">
               <LobbyAvatar kind="ai" size="large" />
@@ -64,18 +68,18 @@
           <p class="lobby-request-note">{{ requestNote(request.name) }}</p>
         </div>
       </div>
-      <div v-if="freeSeats > 0 && !started" class="lobby-room-group">
-        <div class="create-game-subhead" v-i18n>Invite friends</div>
+      <!-- One link to pass on: waiting with free seats the invitation, running the page for spectators -->
+      <div v-if="shareLink !== undefined" class="lobby-room-group">
+        <div class="create-game-subhead">{{ $t(shareLink.title) }}</div>
         <div class="lobby-invite">
-          <input class="create-game-text-input" :value="inviteLink" readonly @focus="($event.target as HTMLInputElement).select()">
-          <button type="button" class="create-game-icon-button" @click="copyInvite">{{ $t(copied ? 'Link copied' : 'Copy link') }}</button>
+          <input class="create-game-text-input" :value="shareLink.url" readonly @focus="($event.target as HTMLInputElement).select()">
+          <button type="button" class="create-game-icon-button" @click="copyShareLink">{{ $t(copied ? 'Link copied' : 'Copy link') }}</button>
         </div>
       </div>
       <template #footer>
         <!-- The game already runs (e.g. started while the dialog was open): only the way into it -->
         <div v-if="started" class="lobby-room-foot">
           <span class="lobby-room-foot-gap"></span>
-          <a v-if="playerLinks !== undefined" class="btn btn-rounded btn-tone-quiet" :href="playerLinks" v-i18n>Player links</a>
           <a v-if="continueLink !== undefined" class="btn btn-rounded btn-primary" :href="continueLink" v-i18n>Continue</a>
         </div>
         <div v-else class="lobby-room-foot">
@@ -103,7 +107,7 @@ import GameSetupChips from '@/client/components/common/GameSetupChips.vue';
 import LobbyAvatar from './LobbyAvatar.vue';
 import {lobbySetupChips} from './lobbySetupChips';
 import {lobbyRoomPath, lobbySeatInvitePath} from '@/common/lobby/lobbyUrl';
-import {continueHref, playerLinksHref} from './lobbyLinks';
+import {continueHref} from './lobbyLinks';
 import {aiUnsupportedReasons} from '@/common/ai/aiSupport';
 import {glassTooltip as vGlassTooltip} from '@/client/directives/GlassTooltip';
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
@@ -138,8 +142,16 @@ const you = computed(() => {
 const isHost = computed(() => you.value?.host === true);
 const filled = computed(() => props.room?.seats.filter((seat) => seat.kind !== 'free').length ?? 0);
 const freeSeats = computed(() => (props.room?.seats.length ?? 0) - filled.value);
-// "Start now" once every seat is taken; otherwise the button says with how many the game starts
-const inviteLink = computed(() => props.room === undefined ? '' : new URL(lobbyRoomPath(props.room.id, props.room.title), document.baseURI).href);
+const shareLink = computed((): {title: string, url: string} | undefined => {
+  const room = props.room;
+  if (room === undefined) {
+    return undefined;
+  }
+  if (room.state === 'started') {
+    return room.spectatorId === undefined ? undefined : {title: 'Link for spectators', url: new URL('spectator?id=' + room.spectatorId, document.baseURI).href};
+  }
+  return freeSeats.value > 0 ? {title: 'Invite friends', url: new URL(lobbyRoomPath(room.id, room.title), document.baseURI).href} : undefined;
+});
 // Same check as the create form and the server (aiSupport.ts); empty = AI players possible
 const aiBlockedText = computed(() => {
   const setup = props.room?.setup;
@@ -148,10 +160,11 @@ const aiBlockedText = computed(() => {
 });
 const started = computed(() => props.room?.state === 'started');
 const continueLink = computed(() => props.room === undefined ? undefined : continueHref(props.room));
-const playerLinks = computed(() => props.room === undefined ? undefined : playerLinksHref(props.room));
 const statusText = computed(() => {
   if (started.value) {
-    return translateText('The game is running.');
+    // Players entered by hand only get into the game with their link
+    const guests = props.room?.seats.some((seat) => seat.kind === 'guest' && seat.playerId !== undefined) === true;
+    return translateText(guests ? 'The game is running. Send the players you entered by hand their own link.' : 'The game is running.');
   }
   if (freeSeats.value === 1) {
     return translateText('1 seat is free. The game starts as soon as all seats are taken and everybody is ready.');
@@ -196,9 +209,12 @@ async function copyGuestLink(index: number, seat: LobbySeatModel): Promise<void>
   }
 }
 
-async function copyInvite(): Promise<void> {
+async function copyShareLink(): Promise<void> {
+  if (shareLink.value === undefined) {
+    return;
+  }
   try {
-    await navigator.clipboard.writeText(inviteLink.value);
+    await navigator.clipboard.writeText(shareLink.value.url);
     copied.value = true;
     setTimeout(() => copied.value = false, 2000);
   } catch {

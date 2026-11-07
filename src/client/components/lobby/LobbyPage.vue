@@ -123,11 +123,11 @@
     <!-- "Create game" as a modal: the same form, with seats offered in the lobby -->
     <Teleport to="body">
       <div v-if="createOpen" class="lobby-create-overlay" @keydown.esc="createOpen = false">
-        <CreateGameForm lobbyMode :lobbyProfile="profile.name.trim() === '' ? undefined : profile" @close="createOpen = false" @open-in-lobby="openInLobby" @host-profile="takeHostProfile" />
+        <CreateGameForm :lobbyProfile="profile.name.trim() === '' ? undefined : profile" @close="createOpen = false" @open-in-lobby="openInLobby" @host-profile="takeHostProfile" />
       </div>
       <!-- Host: the same form for the waiting game; saving changes it (Lobby.edit) and returns to the waiting room -->
       <div v-if="editRoom !== undefined" class="lobby-create-overlay" @keydown.esc="editRoom = undefined">
-        <CreateGameForm lobbyMode :lobbyProfile="profile" :editRoom="editRoom" @close="editRoom = undefined" @open-in-lobby="saveEdit" @host-profile="takeHostProfile" />
+        <CreateGameForm :lobbyProfile="profile" :editRoom="editRoom" @close="editRoom = undefined" @open-in-lobby="saveEdit" @host-profile="takeHostProfile" />
       </div>
     </Teleport>
   </div>
@@ -269,12 +269,13 @@ async function refresh(): Promise<void> {
     waitedIn.add(mine.id);
   }
   // The game started while we waited for it (or was started by our own click): everybody goes to their own
-  // player page, a host with players entered by hand first to the page with every player's link.
+  // player page. A host with players entered by hand stays in the room dialog first: it holds their links.
   // An earlier game of ours does not pull a later visit of the lobby away: it is listed with "Continue".
   if (mine?.state === 'started' && (waitedIn.has(mine.id) || followNextStart)) {
     followNextStart = false;
-    if (mine.hostNeedsLinks && mine.gameId !== undefined) {
-      window.location.href = 'game?id=' + mine.gameId;
+    waitedIn.delete(mine.id);
+    if (mine.seats.some((seat) => seat.kind === 'guest' && seat.playerId !== undefined)) {
+      roomOpen.value = true;
       return;
     }
     if (mine.yourPlayerId !== undefined) {
@@ -513,7 +514,7 @@ function roomDialogOrigin(): HTMLElement | undefined {
   return id === undefined ? undefined : document.querySelector<HTMLElement>(`#lobby .lobby-game[data-room-id="${id}"]`) ?? undefined;
 }
 
-// Alt + 1 … 9, 0 presses the button of that row (as on "Game created"); by position, since on a Mac Alt + 1 types a character
+// Alt + 1 … 9, 0 presses the button of that row; by position, since on a Mac Alt + 1 types a character
 function onRowKey(event: KeyboardEvent): void {
   if (!hotkeysAvailable.value || event.repeat || !event.altKey || event.ctrlKey || event.metaKey || event.shiftKey || isTypingTarget(event.target)) {
     return;

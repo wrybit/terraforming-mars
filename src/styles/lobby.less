@@ -1381,6 +1381,21 @@ each(@players, {
   }
 }
 
+// Below a seat entered by hand: copy its link, and once the game runs open it here (hot seat)
+.lobby-seat-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+}
+
+// A link styled as the button next to it: same box, text centered
+.lobby-seat-play {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
 // Waiting room
 .lobby-room-group {
   margin-top: @lobby-gap-section;
@@ -1445,7 +1460,8 @@ each(@players, {
 
   // The seat's button (copy link, seat an AI, AI strength) sits at the bottom: all buttons of a row on one line
   > .create-game-small-button,
-  > span:has(> .create-game-small-button) {
+  > span:has(> .create-game-small-button),
+  > .lobby-seat-actions {
     margin-top: auto;
   }
 }

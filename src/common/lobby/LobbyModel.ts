@@ -4,7 +4,7 @@ import {Expansion} from '../cards/GameModule';
 import {Color} from '../Color';
 import {GameSetupOptions} from '../game/GameSetupOptions';
 import {NewGameConfig} from '../game/NewGameConfig';
-import {GameId, PlayerId, SpectatorId} from '../Types';
+import {PlayerId, SpectatorId} from '../Types';
 
 // Contract between the lobby page (client/components/lobby) and the lobby routes (server/lobby).
 // Both sides test against these types and limits.
@@ -76,12 +76,8 @@ export type LobbyRoomModel = {
   setup: LobbySetupModel;
   /** Started rooms: link for spectators */
   spectatorId?: SpectatorId;
-  /** Only for the host: the game page holds every player's link, so nobody else may learn it */
-  gameId?: GameId;
   /** Started rooms: the game of the asking participant */
   yourPlayerId?: PlayerId;
-  /** Started rooms: the host gets the page with every player's link when guests have to be sent theirs */
-  hostNeedsLinks?: boolean;
   /** The asking participant was removed twice (joining becomes a request) or declined by the host (never again) */
   yourAccess?: 'request' | 'declined';
   /** Only for the host: players removed twice who ask to come back (approve or decline) */

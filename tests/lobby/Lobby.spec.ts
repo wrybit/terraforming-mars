@@ -111,6 +111,13 @@ describe('Lobby', () => {
       expect(closed).is.empty;
       expect(lobby.list(OTHER).rooms).has.length(1);
     });
+
+    it('keeps it while the creator has the lobby open (room dialog with the players\' links)', async () => {
+      now += ABANDONED_AFTER_MS;
+      lobby.list(HOST);
+      await lobby.closeAbandoned(probe, 0);
+      expect(closed).is.empty;
+    });
   });
 
   it('keeps a game somebody else joined', async () => {
@@ -414,11 +421,16 @@ describe('Lobby', () => {
     expect(joined.state).eq('started');
     expect(started[0].name).eq('Evening game');
     expect(started[0].players.map((p) => [p.name, p.color])).deep.eq([['Ann', 'red'], ['Bob', 'yellow'], ['Dora', 'green']]);
-    expect(lobby.list(HOST).rooms[0].hostNeedsLinks).is.true;
-    expect(lobby.list(GUEST).rooms[0].hostNeedsLinks).is.undefined;
-    // The game id opens the page with every player's link: only the host gets it
-    expect(lobby.list(HOST).rooms[0].gameId).eq('g1');
-    expect(lobby.list(GUEST).rooms[0].gameId).is.undefined;
+    // The guest's player link is passed on by the host in the room dialog: only the host gets it
+    const guestFor = (me: string) => lobby.list(me).rooms[0].seats[2];
+    expect(guestFor(HOST)).deep.include({kind: 'guest', playerId: 'p2'});
+    expect(guestFor(GUEST)).deep.include({kind: 'guest', playerId: undefined});
+  });
+
+  it('passes a predefined game on to the start', async () => {
+    const predefined = {...config(['human', 'ai']), clonedGamedId: 'g99' as const};
+    await lobby.open(HOST, profile('Ann'), 'Replay', true, predefined, starter, []);
+    expect(started[0].clonedGamedId).eq('g99');
   });
 
   it('drops invalid profile parts', async () => {

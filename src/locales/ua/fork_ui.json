@@ -1178,5 +1178,7 @@
   "The host declined your request to join \"${0}\": you cannot join this game any more.": "Господар відхилив твій запит до «${0}»: ти більше не можеш приєднатися до цієї гри.",
   "Declined by the host": "Відхилено господарем",
   "Ask to join": "Попросити участі",
-  "You removed this player twice. If you decline, ${0} can never join this game again.": "Ти двічі прибирав цього гравця. Якщо відхилиш, ${0} більше ніколи не зможе приєднатися до цієї гри."
+  "You removed this player twice. If you decline, ${0} can never join this game again.": "Ти двічі прибирав цього гравця. Якщо відхилиш, ${0} більше ніколи не зможе приєднатися до цієї гри.",
+  "Link for spectators": "Посилання для глядачів",
+  "The game is running. Send the players you entered by hand their own link.": "Гра триває. Надішли гравцям, яких ти додав вручну, їхні власні посилання."
 }
