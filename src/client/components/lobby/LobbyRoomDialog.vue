@@ -26,7 +26,13 @@
             <template v-else-if="seat.kind === 'ai'">
               <LobbyAvatar kind="ai" size="large" />
               <span class="lobby-seat-name">AI</span>
-              <span class="lobby-seat-state lobby-seat-state--ready">{{ $t(aiLevelLabel(seat.aiLevel)) }}</span>
+              <!-- Host, while waiting: strength to choose (a compact list: three segments do not fit a seat card on phones
+                   or in longer languages); everybody else sees it as text -->
+              <select v-if="isHost && !started" class="create-game-small-button lobby-seat-level" :value="seat.aiLevel" :aria-label="$t('Strength')"
+                @change="emit('ai-level', index, ($event.target as HTMLSelectElement).value as AiLevel)">
+                <option v-for="option in AI_LEVEL_OPTIONS" :key="option.value" :value="option.value">{{ $t(option.label) }}</option>
+              </select>
+              <span v-else class="lobby-seat-state lobby-seat-state--ready">{{ $t(aiLevelLabel(seat.aiLevel)) }}</span>
             </template>
             <template v-else>
               <LobbyAvatar kind="free" size="large" />
@@ -98,6 +104,7 @@ const emit = defineEmits<{
   (event: 'leave'): void;
   (event: 'ready', ready: boolean): void;
   (event: 'seat-ai', seat: number): void;
+  (event: 'ai-level', seat: number, aiLevel: AiLevel): void;
   (event: 'start'): void;
   (event: 'edit'): void;
 }>();

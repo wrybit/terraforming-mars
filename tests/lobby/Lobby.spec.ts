@@ -205,6 +205,25 @@ describe('Lobby', () => {
     expect(filled.seats.map((seat) => seat.kind)).deep.eq(['human', 'human', 'ai']);
   });
 
+  it('lets only the host change the strength of an AI player while waiting', async () => {
+    const room = await lobby.open(HOST, profile('Ann'), '', true, config(['human', 'human', 'ai']), starter);
+    try {
+      lobby.setAiLevel(GUEST, room.id, 2, 'easy');
+      expect.fail('a guest changed the AI');
+    } catch (error) {
+      expect(error).instanceOf(LobbyError);
+    }
+    try {
+      lobby.setAiLevel(HOST, room.id, 1, 'easy');
+      expect.fail('a free seat got a strength');
+    } catch (error) {
+      expect(error).instanceOf(LobbyError);
+    }
+    expect(lobby.setAiLevel(HOST, room.id, 2, 'easy').seats[2]).deep.eq({kind: 'ai', aiLevel: 'easy'});
+    await lobby.startNow(HOST, room.id, starter);
+    expect(started[0].players[1].aiLevel).eq('easy');
+  });
+
   it('turns on the analysis game when the first AI player is seated in the waiting room', async () => {
     const room = await lobby.open(HOST, profile('Ann'), '', true, config(['human', 'human', 'human']), starter);
     await lobby.seatAi(HOST, room.id, 2, starter);

@@ -133,6 +133,21 @@ describe('Lobby components', () => {
     expect(buttons.some((button) => button.textContent?.includes('Fill with AI'))).is.false;
   });
 
+  it('LobbyRoomDialog: the host sets the strength of an AI player, the others only see it', async () => {
+    const withAi = room([{...host, you: true}, {kind: 'ai', aiLevel: 'hard'}]);
+    const wrapper = mount(LobbyRoomDialog, {...globalConfig, props: {open: true, room: withAi}, attachTo: document.body});
+    const level = document.querySelector<HTMLSelectElement>('select.lobby-seat-level');
+    expect(level?.value).eq('hard');
+    if (level !== null) {
+      level.value = 'easy';
+      level.dispatchEvent(new Event('change'));
+    }
+    expect(wrapper.emitted('ai-level')).deep.eq([[1, 'easy']]);
+    wrapper.unmount();
+    mount(LobbyRoomDialog, {...globalConfig, props: {open: true, room: room([host, {...host, host: false, you: true}, {kind: 'ai', aiLevel: 'hard'}])}, attachTo: document.body});
+    expect(document.querySelector('.lobby-seat-level')).is.null;
+  });
+
   it('LobbyRoomDialog: the host copies the own link of a player entered by hand', () => {
     const waiting = room([{...host, you: true}, {kind: 'guest', name: 'Klaus', color: 'green', inviteToken: 'abc123abc123'}, {kind: 'free'}]);
     mount(LobbyRoomDialog, {...globalConfig, props: {open: true, room: waiting}, attachTo: document.body});

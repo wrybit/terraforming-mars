@@ -122,6 +122,7 @@ export type LobbyAction =
   | {action: 'leave', me: string, roomId: string}
   | {action: 'ready', me: string, roomId: string, ready: boolean}
   | {action: 'seat-ai', me: string, roomId: string, seat: number}
+  | {action: 'ai-level', me: string, roomId: string, seat: number, aiLevel: AiLevel}
   | {action: 'fill-ai', me: string, roomId: string}
   | {action: 'start', me: string, roomId: string};
 

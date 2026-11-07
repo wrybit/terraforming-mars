@@ -108,6 +108,7 @@
     <LobbyProfileDialog :open="profileOpen" :origin="profileDialogOrigin" :profile="profile" :firstVisit="firstVisit" @close="profileOpen = false" @save="saveProfile" />
     <LobbyRoomDialog :open="roomOpen && myRoom !== undefined" :room="myRoom" :origin="roomDialogOrigin" @minimize="roomOpen = false" @leave="leave()"
       @ready="act({action: 'ready', roomId: myRoom!.id, ready: $event})" @seat-ai="act({action: 'seat-ai', roomId: myRoom!.id, seat: $event})"
+      @ai-level="(seat, aiLevel) => act({action: 'ai-level', roomId: myRoom!.id, seat, aiLevel})"
       @start="act({action: 'start', roomId: myRoom!.id})" @edit="openEdit()" />
     <LobbyMatchDialog :room="offeredRoom" :invitation="offerIsInvitation" @accept="acceptOffer()" @decline="declineOffer()" />
 

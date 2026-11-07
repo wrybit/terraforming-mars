@@ -351,6 +351,18 @@ export class Lobby {
     return this.model(room, me);
   }
 
+  /** Host only, while waiting: strength of a seated AI player */
+  public setAiLevel(me: string, roomId: string, seatIndex: number, aiLevel: unknown): LobbyRoomModel {
+    const room = this.hostRoom(me, roomId);
+    const seat = room.seats[seatIndex];
+    if (seat?.kind !== 'ai' || !isAiLevel(aiLevel)) {
+      throw new LobbyError('This seat is not an AI player');
+    }
+    seat.aiLevel = aiLevel;
+    this.save();
+    return this.model(room, me);
+  }
+
   /**
    * The first AI player seated in the waiting room makes it an analysis game, like switching on AI players in the
    * create form (AI_ANALYSIS_DEFAULT). Once AI players are there, the host's own choice stays.

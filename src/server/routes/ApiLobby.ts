@@ -72,6 +72,8 @@ export class ApiLobby extends Handler {
       return this.lobby.setReady(action.me, action.roomId, action.ready, starter);
     case 'seat-ai':
       return this.lobby.seatAi(action.me, action.roomId, Number(action.seat), starter);
+    case 'ai-level':
+      return Promise.resolve(this.lobby.setAiLevel(action.me, action.roomId, Number(action.seat), action.aiLevel));
     case 'fill-ai':
       return this.lobby.fillWithAi(action.me, action.roomId, starter);
     case 'start':
