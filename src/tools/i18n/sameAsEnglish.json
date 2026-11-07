@@ -42,6 +42,7 @@
   ],
   "cn": [
     "${0} AI",
+    "AI",
     "AI ${0}",
     "Alt",
     "AltGr",
@@ -53,6 +54,7 @@
   "de": [
     "${0} AI",
     "&nbsp;Cheung Shing",
+    "AI",
     "AI ${0}",
     "Alt",
     "AltGr",
@@ -262,6 +264,7 @@
   ],
   "jp": [
     "${0} AI",
+    "AI",
     "AI ${0}",
     "Alt",
     "AltGr",
@@ -272,6 +275,7 @@
   ],
   "ko": [
     "${0} AI",
+    "AI",
     "AI ${0}",
     "Alt",
     "AltGr",
@@ -337,6 +341,7 @@
     "1 titanium / 2 °C",
     "2 titanium",
     "2x bonus",
+    "AI",
     "AI ${0}",
     "Alt",
     "AltGr",

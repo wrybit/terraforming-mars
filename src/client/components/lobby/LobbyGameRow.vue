@@ -15,7 +15,7 @@
       <div class="lobby-game-facts">
         <span v-if="room.progress !== undefined" :title="$t('Generation')"><LobbyFactIcon kind="generation" />{{ $t('Gen') }} {{ room.progress.generation }}</span>
         <span :title="$t('Players')"><LobbyFactIcon kind="players" />{{ humans }}</span>
-        <span v-if="aiPlayers > 0" title="AI"><LobbyFactIcon kind="ai" />{{ aiPlayers }}</span>
+        <span v-if="aiPlayers > 0" :title="$t('AI')"><LobbyFactIcon kind="ai" />{{ aiPlayers }}</span>
         <span v-if="room.progress !== undefined" :title="$t('Time played')"><LobbyFactIcon kind="time" />{{ playedText }}</span>
         <span v-else class="lobby-game-waiting"><LobbyFactIcon kind="time" />{{ waitingText }}</span>
         <span v-if="room.aiTraining?.finished" v-i18n>Finished</span>
