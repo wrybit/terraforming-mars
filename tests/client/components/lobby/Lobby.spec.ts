@@ -107,6 +107,21 @@ describe('Lobby components', () => {
     wrapper.unmount();
   });
 
+  it('LobbyRoomDialog lets the host start with free seats, saying with how many', () => {
+    const waiting = room([{...host, you: true}, {...host, host: false, name: 'Bob'}, {kind: 'free'}]);
+    mount(LobbyRoomDialog, {...globalConfig, props: {open: true, room: waiting}, attachTo: document.body});
+    const start = Array.from(document.querySelectorAll<HTMLButtonElement>('button')).find((button) => button.textContent?.includes('Start with'));
+    expect(start?.textContent).contains('Start with 2 players');
+    expect(start?.disabled).is.false;
+  });
+
+  it('LobbyRoomDialog: the host alone cannot start', () => {
+    const alone = room([{...host, you: true}, {kind: 'free'}]);
+    mount(LobbyRoomDialog, {...globalConfig, props: {open: true, room: alone}, attachTo: document.body});
+    const start = Array.from(document.querySelectorAll<HTMLButtonElement>('button')).find((button) => button.textContent?.includes('Start with'));
+    expect(start?.disabled).is.true;
+  });
+
   it('LobbyRoomDialog offers "Continue" instead of "Start now" once the game runs', () => {
     const started = room([{...host, you: true}, {kind: 'guest', name: 'Dan', color: 'green'}], {state: 'started', yourPlayerId: 'p1', gameId: 'g1', hostNeedsLinks: true});
     const wrapper = mount(LobbyRoomDialog, {...globalConfig, props: {open: true, room: started}, attachTo: document.body});

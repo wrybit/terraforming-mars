@@ -1116,7 +1116,7 @@
   "This game no longer exists. The host may have closed it.": "Цієї гри більше немає. Можливо, господар її закрив.",
   "This game has already started": "Ця гра вже почалася",
   "Only the host can do this": "Це може зробити лише господар",
-  "There are still free seats": "Ще є вільні місця",
+  "At least two players are needed to start.": "Для початку потрібно щонайменше двоє гравців.",
   "Please enter a name": "Введіть ім’я",
   "You are not part of this game": "Ви не берете участі в цій грі",
   "Too many new games right now. Please try again later.": "Зараз забагато нових ігор. Спробуйте пізніше.",
@@ -1158,5 +1158,6 @@
   "Food & drink": "Їжа та напої",
   "Objects": "Предмети",
   "Symbols": "Символи",
-  "Players are buying cards": "Гравці купують карти"
+  "Players are buying cards": "Гравці купують карти",
+  "Start with ${0} players": "Почати з ${0} гравцями"
 }

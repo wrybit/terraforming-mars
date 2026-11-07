@@ -112,3 +112,5 @@ export function isParticipantId(value: unknown): value is string {
 
 /** Players per game, humans and AI together (same as the create form) */
 export const LOBBY_MAX_SEATS = 6;
+/** "Start now" leaves free seats out, but needs at least this many players (no accidental solo game) */
+export const LOBBY_MIN_START_SEATS = 2;

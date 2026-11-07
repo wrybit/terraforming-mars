@@ -56,7 +56,8 @@
           <span v-if="isHost && freeSeats > 0" v-glass-tooltip="aiBlockedText">
             <AppButton class="btn-tone-quiet" title="Fill with AI and start" :disabled="aiBlockedText !== ''" @click="emit('fill-ai')" />
           </span>
-          <AppButton v-if="isHost" title="Start now" :disabled="freeSeats > 0" @click="emit('start')" />
+          <!-- With free seats the host may start anyway: the game is played by those seated (at least two) -->
+          <AppButton v-if="isHost" :title="startTitle" :disabled="filled < LOBBY_MIN_START_SEATS" @click="emit('start')" />
           <AppButton v-else :class="you?.ready ? 'btn-tone-quiet' : 'btn-tone-success'" :title="you?.ready ? 'Not ready' : 'Ready'" @click="emit('ready', !you?.ready)" />
         </div>
       </template>
@@ -67,7 +68,7 @@
 <script setup lang="ts">
 import {computed, ref} from 'vue';
 import {AiLevel} from '@/common/ai/AiLevel';
-import {LobbyRoomModel} from '@/common/lobby/LobbyModel';
+import {LOBBY_MIN_START_SEATS, LobbyRoomModel} from '@/common/lobby/LobbyModel';
 import SidebarModal from '@/client/components/SidebarModal.vue';
 import DialogFrame from '@/client/components/DialogFrame.vue';
 import AppButton from '@/client/components/common/AppButton.vue';
@@ -106,6 +107,8 @@ const you = computed(() => {
 const isHost = computed(() => you.value?.host === true);
 const filled = computed(() => props.room?.seats.filter((seat) => seat.kind !== 'free').length ?? 0);
 const freeSeats = computed(() => (props.room?.seats.length ?? 0) - filled.value);
+// "Start now" once every seat is taken; otherwise the button says with how many the game starts
+const startTitle = computed(() => freeSeats.value === 0 ? 'Start now' : translateTextWithParams('Start with ${0} players', [String(filled.value)]));
 const inviteLink = computed(() => props.room === undefined ? '' : new URL(lobbyRoomPath(props.room.id, props.room.title), document.baseURI).href);
 // Same check as the create form and the server (aiSupport.ts); empty = AI players possible
 const aiBlockedText = computed(() => {

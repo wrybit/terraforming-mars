@@ -1591,7 +1591,7 @@
   "This game no longer exists. The host may have closed it.": "Dit spel bestaat niet meer. De gastheer heeft het misschien opgeheven.",
   "This game has already started": "Dit spel is al begonnen",
   "Only the host can do this": "Alleen de gastheer kan dit doen",
-  "There are still free seats": "Er zijn nog plaatsen vrij",
+  "At least two players are needed to start.": "Er zijn minstens twee spelers nodig om te beginnen.",
   "Please enter a name": "Voer een naam in",
   "You are not part of this game": "Je doet niet mee aan dit spel",
   "Too many new games right now. Please try again later.": "Er worden nu te veel nieuwe spellen gemaakt. Probeer het later opnieuw.",
@@ -1630,5 +1630,6 @@
   "Food & drink": "Eten en drinken",
   "Objects": "Voorwerpen",
   "Symbols": "Symbolen",
-  "Players are buying cards": "Spelers kopen kaarten"
+  "Players are buying cards": "Spelers kopen kaarten",
+  "Start with ${0} players": "Starten met ${0} spelers"
 }

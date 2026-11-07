@@ -3,7 +3,7 @@ import {aiUnsupportedReasons} from '../../common/ai/aiSupport';
 import {Color, PLAYER_COLORS} from '../../common/Color';
 import {setupOptionsFromConfig} from '../../common/game/GameSetupOptions';
 import {NewGameConfig, NewPlayerModel} from '../../common/game/NewGameConfig';
-import {LobbyListModel, LobbyProfile, LobbyRoomModel, LobbySeatModel, LOBBY_MAX_SEATS} from '../../common/lobby/LobbyModel';
+import {LobbyListModel, LobbyProfile, LobbyRoomModel, LobbySeatModel, LOBBY_MAX_SEATS, LOBBY_MIN_START_SEATS} from '../../common/lobby/LobbyModel';
 import {GameId, PlayerId, SpectatorId} from '../../common/Types';
 import {LobbyError, sanitizeProfile, sanitizeTitle} from './lobbyValidation';
 import {lobbyRoomPath} from '../../common/lobby/lobbyUrl';
@@ -352,12 +352,18 @@ export class Lobby {
     return this.model(room, me);
   }
 
-  /** Host only: start with everybody seated, even if not everyone pressed "Ready" */
+  /**
+   * Host only: start with everybody seated, even if not everyone pressed "Ready". Free seats are left out: a game
+   * set up for 4 starts with the 3 who came, without filling the fourth seat with an AI. At least two players,
+   * so nobody ends up in a solo game by accident (solo has rules of its own).
+   */
   public async startNow(me: string, roomId: string, starter: GameStarter): Promise<LobbyRoomModel> {
     const room = this.hostRoom(me, roomId);
-    if (room.seats.some((seat) => seat.kind === 'free')) {
-      throw new LobbyError('There are still free seats');
+    const seated = room.seats.filter((seat) => seat.kind !== 'free');
+    if (seated.length < LOBBY_MIN_START_SEATS) {
+      throw new LobbyError('At least two players are needed to start.');
     }
+    room.seats = seated;
     await this.start(room, starter);
     return this.model(room, me);
   }

@@ -2228,7 +2228,7 @@
   "This game no longer exists. The host may have closed it.": "Questa partita non esiste più. L’host potrebbe averla chiusa.",
   "This game has already started": "Questa partita è già iniziata",
   "Only the host can do this": "Solo l’host può farlo",
-  "There are still free seats": "Ci sono ancora posti liberi",
+  "At least two players are needed to start.": "Servono almeno due giocatori per iniziare.",
   "Please enter a name": "Inserisci un nome",
   "You are not part of this game": "Non fai parte di questa partita",
   "Too many new games right now. Please try again later.": "Troppe nuove partite in questo momento. Riprova più tardi.",
@@ -2268,5 +2268,6 @@
   "Food & drink": "Cibo e bevande",
   "Objects": "Oggetti",
   "Symbols": "Simboli",
-  "Players are buying cards": "I giocatori stanno comprando carte"
+  "Players are buying cards": "I giocatori stanno comprando carte",
+  "Start with ${0} players": "Inizia con ${0} giocatori"
 }

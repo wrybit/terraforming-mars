@@ -205,6 +205,28 @@ describe('Lobby', () => {
     expect(filled.seats.map((seat) => seat.kind)).deep.eq(['human', 'human', 'ai']);
   });
 
+  it('lets the host start with free seats left out, but not alone', async () => {
+    const room = await lobby.open(HOST, profile('Ann'), '', true, config(['human', 'human', 'human', 'human']), starter);
+    try {
+      await lobby.startNow(HOST, room.id, starter);
+      expect.fail('started a solo game');
+    } catch (error) {
+      expect(error).instanceOf(LobbyError);
+    }
+    await lobby.join(GUEST, profile('Bob', 'blue'), room.id, starter);
+    await lobby.join(OTHER, profile('Cid', 'green'), room.id, starter);
+    try {
+      await lobby.startNow(GUEST, room.id, starter);
+      expect.fail('a guest started the game');
+    } catch (error) {
+      expect(error).instanceOf(LobbyError);
+    }
+    const startedRoom = await lobby.startNow(HOST, room.id, starter);
+    expect(startedRoom.state).eq('started');
+    expect(startedRoom.seats.map((seat) => seat.kind)).deep.eq(['human', 'human', 'human']);
+    expect(started[0].players.map((player) => player.name)).deep.eq(['Ann', 'Bob', 'Cid']);
+  });
+
   it('frees the seat of a participant who stopped polling, and closes the room without host', async () => {
     const room = await lobby.open(HOST, profile('Ann'), '', true, config(['human', 'human', 'human']), starter);
     await lobby.join(GUEST, profile('Bob'), room.id, starter);

@@ -1830,7 +1830,7 @@
   "This game no longer exists. The host may have closed it.": "Этой игры больше нет. Возможно, хозяин её закрыл.",
   "This game has already started": "Эта игра уже началась",
   "Only the host can do this": "Это может сделать только хозяин",
-  "There are still free seats": "Ещё есть свободные места",
+  "At least two players are needed to start.": "Для начала нужно не менее двух игроков.",
   "Please enter a name": "Введите имя",
   "You are not part of this game": "Вы не участвуете в этой игре",
   "Too many new games right now. Please try again later.": "Сейчас слишком много новых игр. Попробуйте позже.",
@@ -1872,5 +1872,6 @@
   "Food & drink": "Еда и напитки",
   "Objects": "Предметы",
   "Symbols": "Символы",
-  "Players are buying cards": "Игроки покупают карты"
+  "Players are buying cards": "Игроки покупают карты",
+  "Start with ${0} players": "Начать с ${0} игроками"
 }

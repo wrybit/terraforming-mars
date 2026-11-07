@@ -1142,7 +1142,7 @@
   "This game no longer exists. The host may have closed it.": "Ez a játék már nem létezik. Lehet, hogy a házigazda feloszlatta.",
   "This game has already started": "Ez a játék már elkezdődött",
   "Only the host can do this": "Ezt csak a házigazda teheti meg",
-  "There are still free seats": "Még vannak szabad helyek",
+  "At least two players are needed to start.": "Az indításhoz legalább két játékos kell.",
   "Please enter a name": "Adj meg egy nevet",
   "You are not part of this game": "Nem vagy része ennek a játéknak",
   "Too many new games right now. Please try again later.": "Most túl sok új játék indul. Próbáld újra később.",
@@ -1183,5 +1183,6 @@
   "Food & drink": "Étel és ital",
   "Objects": "Tárgyak",
   "Symbols": "Szimbólumok",
-  "Players are buying cards": "A játékosok kártyákat vásárolnak"
+  "Players are buying cards": "A játékosok kártyákat vásárolnak",
+  "Start with ${0} players": "Indítás ${0} játékossal"
 }
