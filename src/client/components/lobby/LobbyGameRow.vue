@@ -1,7 +1,7 @@
 <template>
   <!-- One open (or running) game of the lobby. Top: title with the facts (generation, players, AI, time), the seats
        (one circle each, free ones dashed, the host outlined) and the action; below over the full width the progress
-       of a running game and the settings. Like "Game created": a CTA only where you take part, otherwise a quiet button -->
+       of a running game and the settings. A CTA only where you take part, otherwise a quiet button -->
   <!-- Games you opened yourself are set off by a background, the others stay neutral.
        The own waiting room opens its dialog on a click anywhere on the entry, not only on the button -->
   <div class="lobby-game" :data-room-id="room.id"
@@ -57,7 +57,7 @@ import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 
 const props = defineProps<{
   room: LobbyRoomModel;
-  // Position in the list: the first ten rows get Alt + 1 … 9, 0 (as on "Game created"), handled by LobbyPage.vue
+  // Position in the list: the first ten rows get Alt + 1 … 9, 0, handled by LobbyPage.vue
   position?: number;
 }>();
 

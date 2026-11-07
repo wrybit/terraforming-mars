@@ -29,7 +29,7 @@ export default defineComponent({
       type: String,
       required: false,
     },
-    // Fixed keys shown as caps when the page handles the key itself (e.g. Ctrl + number on the game created page)
+    // Fixed keys shown as caps when the page handles the key itself (e.g. Alt + number on the lobby rows)
     fixedHotkey: {
       type: Array as () => HotkeyKeyList,
       required: false,
