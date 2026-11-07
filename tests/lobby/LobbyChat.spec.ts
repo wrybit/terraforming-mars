@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {CHAT_KEEP_MS, CHAT_RATE_LIMIT, LobbyChat} from '../../src/server/lobby/LobbyChat';
+import {CHAT_KEEP_MESSAGES, CHAT_RATE_LIMIT, CHAT_RATE_WINDOW_MS, LobbyChat} from '../../src/server/lobby/LobbyChat';
 import {hasForeignLink} from '../../src/server/lobby/chatLinks';
 import {maskWords, normalizeChatWords} from '../../src/server/lobby/chatWords';
 import {memoryStorage} from '../../src/server/lobby/lobbyStorage';
@@ -42,15 +42,29 @@ describe('LobbyChat', () => {
     expect(chat.list(ME).messages).has.length(1);
   });
 
-  it('refuses empty and flooding messages and forgets old ones', () => {
+  it('refuses empty and flooding messages', () => {
     refused(() => chat.post(ME, profile, '   ', HOST));
     for (let i = 0; i < CHAT_RATE_LIMIT; i++) {
       chat.post(ME, profile, 'hi ' + i, HOST);
     }
     refused(() => chat.post(ME, profile, 'one too many', HOST));
     chat.post(OTHER, profile, 'others may still write', HOST);
-    now += CHAT_KEEP_MS + 1;
-    expect(chat.list(ME).messages).is.empty;
+    expect(chat.list(ME).messages).has.length(CHAT_RATE_LIMIT + 1);
+  });
+
+  it('keeps old messages and drops the oldest only beyond the limit', () => {
+    chat.post(ME, profile, 'first', HOST);
+    // Alter allein löscht nichts mehr
+    now += 30 * 24 * 60 * 60 * 1000;
+    expect(chat.list(ME).messages).has.length(1);
+    for (let i = 1; i <= CHAT_KEEP_MESSAGES; i++) {
+      now += CHAT_RATE_WINDOW_MS;
+      chat.post(ME, profile, 'message ' + i, HOST);
+    }
+    const messages = chat.list(ME).messages;
+    expect(messages).has.length(CHAT_KEEP_MESSAGES);
+    expect(messages[0].text).eq('message 1');
+    expect(messages[messages.length - 1].text).eq('message ' + CHAT_KEEP_MESSAGES);
   });
 
   it('lets the author edit within the hour and marks the message as edited', () => {

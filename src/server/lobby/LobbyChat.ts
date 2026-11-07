@@ -6,9 +6,11 @@ import {fileStorage, LobbyStorage} from './lobbyStorage';
 import {LobbyError, sanitizeProfile} from './lobbyValidation';
 import * as path from 'path';
 
-/** The chat keeps the newest messages of the last day; older ones are of no use to anybody arriving now */
+/**
+ * Obergrenze des Chats: Nachrichten verfallen nicht nach Zeit, sondern erst, wenn es mehr werden –
+ * dann verdrängt jede neue Nachricht die älteste. So bleibt auch ein ruhiger Chat lesbar.
+ */
 export const CHAT_KEEP_MESSAGES = 100;
-export const CHAT_KEEP_MS = 24 * 60 * 60 * 1000;
 /** Against flooding: at most this many messages per participant within the window */
 export const CHAT_RATE_LIMIT = 5;
 export const CHAT_RATE_WINDOW_MS = 15_000;
@@ -36,8 +38,7 @@ export class LobbyChat {
       const saved = this.storage.load();
       this.messages = Array.isArray(saved) ? saved as Array<StoredMessage> : [];
     }
-    const oldest = this.clock() - CHAT_KEEP_MS;
-    this.messages = this.messages.filter((message) => message.at >= oldest).slice(-CHAT_KEEP_MESSAGES);
+    this.messages = this.messages.slice(-CHAT_KEEP_MESSAGES);
     return this.messages;
   }
 
