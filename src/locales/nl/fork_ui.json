@@ -1630,5 +1630,8 @@
   "Food & drink": "Eten en drinken",
   "Objects": "Voorwerpen",
   "Symbols": "Symbolen",
-  "Players are buying cards": "Spelers kopen kaarten"
+  "Players are buying cards": "Spelers kopen kaarten",
+  "Game ${0} was removed on ${1}: the lobby keeps only the last ${2} AI training games.": "Spel ${0} is op ${1} verwijderd: de lobby bewaart alleen de laatste ${2} AI-trainingsspellen.",
+  "AI test runs in the lobby": "AI-testruns in de lobby",
+  "Address of the AI test run feed with the name of this computer, e.g. http://…/api/lobby-feed?instance=ak1. The lobby shows its running games and the last finished ones. Empty: none.": "Adres van de AI-testfeed met de naam van deze computer, bijv. http://…/api/lobby-feed?instance=ak1. De lobby toont de lopende en de laatst afgeronde spellen. Leeg: geen."
 }

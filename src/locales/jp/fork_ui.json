@@ -1374,5 +1374,8 @@
   "Food & drink": "食べ物と飲み物",
   "Objects": "物",
   "Symbols": "記号",
-  "Players are buying cards": "プレイヤーがカードを購入中"
+  "Players are buying cards": "プレイヤーがカードを購入中",
+  "Game ${0} was removed on ${1}: the lobby keeps only the last ${2} AI training games.": "ゲーム ${0} は ${1} に削除されました：ロビーは最新の AI 学習ゲームを ${2} 件だけ保持します。",
+  "AI test runs in the lobby": "ロビーの AI テスト",
+  "Address of the AI test run feed with the name of this computer, e.g. http://…/api/lobby-feed?instance=ak1. The lobby shows its running games and the last finished ones. Empty: none.": "このコンピューター名を含む AI テストフィードのアドレス（例: http://…/api/lobby-feed?instance=ak1）。ロビーに進行中と最近終了したゲームが表示されます。空欄: なし。"
 }

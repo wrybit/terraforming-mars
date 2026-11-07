@@ -58,6 +58,20 @@ describe('Lobby components', () => {
     expect(wrapper.find('.lobby-game-progress i').attributes('style')).contains('50%');
   });
 
+  it('LobbyGameRow: a running AI training game is information only, a finished one can be watched', () => {
+    const ai: LobbySeatModel = {kind: 'ai', aiLevel: 'normal'};
+    const progress = {generation: 9, terraforming: 0.6, playedMs: 42_000};
+    const live = mount(LobbyGameRow, {...globalConfig, props: {room: room([ai, ai], {state: 'started', progress, aiTraining: {finished: false}}), position: 0}});
+    expect(live.find('.lobby-game').classes()).contains('lobby-game--info');
+    expect(live.find('.lobby-game-action a, .lobby-game-action button').exists()).is.false;
+    expect(live.find('.lobby-game-action-spacer').attributes('aria-hidden')).eq('true');
+    expect(live.find('.lobby-game-facts').text()).contains('42 s').not.contains('Finished');
+    const finished = mount(LobbyGameRow, {...globalConfig, props: {room: room([ai, ai], {state: 'started', spectatorId: 's9', progress, aiTraining: {finished: true}})}});
+    expect(finished.find('.lobby-game').classes()).not.contains('lobby-game--info');
+    expect(finished.find('.lobby-game-facts').text()).contains('Finished');
+    expect(finished.find('a.lobby-game-watch').attributes('href')).eq('spectator?id=s9');
+  });
+
   it('LobbyGameRow: own game set off, a click on the entry opens its dialog; games of others stay neutral', async () => {
     const own = mount(LobbyGameRow, {...globalConfig, props: {room: room([{...host, you: true}, {kind: 'free'}])}});
     expect(own.find('.lobby-game').classes()).contains('lobby-game--hosted');

@@ -10,6 +10,7 @@ import {GameStarter, Lobby} from '../lobby/Lobby';
 import {LobbyError} from '../lobby/lobbyValidation';
 import {lobbyGameProgress} from '../lobby/lobbyGameProbe';
 import {isParticipantId, LobbyAction} from '../../common/lobby/LobbyModel';
+import {AiTrainingGames, databaseKeeper} from '../aiTraining/AiTrainingGames';
 
 /**
  * Lobby (server/lobby/Lobby.ts): GET lists the open games and doubles as the heartbeat of the asking
@@ -18,14 +19,20 @@ import {isParticipantId, LobbyAction} from '../../common/lobby/LobbyModel';
 export class ApiLobby extends Handler {
   public static readonly INSTANCE = new ApiLobby();
 
-  constructor(private readonly lobby: Lobby = Lobby.INSTANCE, private readonly createGame: ApiCreateGame = ApiCreateGame.INSTANCE) {
+  constructor(
+    private readonly lobby: Lobby = Lobby.INSTANCE,
+    private readonly createGame: ApiCreateGame = ApiCreateGame.INSTANCE,
+    private readonly aiTraining: AiTrainingGames = new AiTrainingGames()) {
     super();
   }
 
   public override async get(_req: Request, res: Response, ctx: Context): Promise<void> {
     const me = ctx.urlParams.stringOrUndefined('me');
     const roomId = ctx.urlParams.stringOrUndefined('room');
-    responses.writeJson(res, ctx, await this.lobby.listWithProgress(isParticipantId(me) ? me : undefined, roomId, lobbyGameProgress(ctx.gameLoader)));
+    const list = await this.lobby.listWithProgress(isParticipantId(me) ? me : undefined, roomId, lobbyGameProgress(ctx.gameLoader));
+    // The AI test batch games of this server's computer appear among the running games (server/aiTraining)
+    const training = await this.aiTraining.rooms(databaseKeeper(ctx.gameLoader));
+    responses.writeJson(res, ctx, {...list, rooms: [...list.rooms, ...training]});
   }
 
   public override async post(req: Request, res: Response, ctx: Context): Promise<void> {

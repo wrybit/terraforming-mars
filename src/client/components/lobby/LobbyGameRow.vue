@@ -4,8 +4,11 @@
        of a running game and the settings. Like "Game created": a CTA only where you take part, otherwise a quiet button -->
   <!-- Games you opened yourself are set off by a background, the others stay neutral.
        The own waiting room opens its dialog on a click anywhere on the entry, not only on the button -->
+  <!-- AI training games of this server (aiTraining): running ones are only information (no button, no hotkey),
+       finished ones can be watched like any other game -->
   <div class="lobby-game" :data-room-id="room.id"
-    :class="{'lobby-game--running': room.state === 'started', 'lobby-game--hosted': isHost, 'lobby-game--clickable': isMine}"
+    :class="{'lobby-game--running': room.state === 'started', 'lobby-game--hosted': isHost, 'lobby-game--clickable': isMine,
+             'lobby-game--training': room.aiTraining !== undefined, 'lobby-game--info': isLiveTraining}"
     @click="isMine && emit('open-room')">
     <div class="lobby-game-info">
       <div class="lobby-game-title">{{ room.title }}</div>
@@ -15,6 +18,7 @@
         <span v-if="aiPlayers > 0" title="AI"><LobbyFactIcon kind="ai" />{{ aiPlayers }}</span>
         <span v-if="room.progress !== undefined" :title="$t('Time played')"><LobbyFactIcon kind="time" />{{ playedText }}</span>
         <span v-else class="lobby-game-waiting"><LobbyFactIcon kind="time" />{{ waitingText }}</span>
+        <span v-if="room.aiTraining?.finished" v-i18n>Finished</span>
       </div>
     </div>
     <div class="lobby-game-seats">
@@ -35,6 +39,8 @@
       <a v-else-if="continueLink !== undefined" class="btn btn-rounded btn-primary lobby-game-watch" :href="continueLink"><span v-i18n>Continue</span><HotkeyKeys :fixed="keys" /></a>
       <a v-else-if="room.state === 'started' && room.spectatorId" class="btn btn-rounded btn-tone-quiet lobby-game-watch" :href="'spectator?id=' + room.spectatorId"><span v-i18n>Watch</span><HotkeyKeys :fixed="keys" /></a>
       <AppButton v-else-if="room.state === 'open'" class="btn-tone-quiet" title="Join" :fixedHotkey="keys" @click="emit('join')" />
+      <!-- Running AI training game: no button, but the same room as "Watch", so its seats line up with the finished ones below -->
+      <span v-else-if="isLiveTraining" class="btn btn-rounded lobby-game-watch lobby-game-action-spacer" aria-hidden="true"><span v-i18n>Watch</span><HotkeyKeys :fixed="['Alt', '0']" /></span>
     </div>
   </div>
 </template>
@@ -65,6 +71,7 @@ const emit = defineEmits<{
   (event: 'open-room'): void;
 }>();
 
+const isLiveTraining = computed(() => props.room.aiTraining !== undefined && !props.room.aiTraining.finished);
 const isMine = computed(() => props.room.state === 'open' && props.room.seats.some((seat) => seat.kind === 'human' && seat.you));
 // Opened by you (host), open or already running
 const isHost = computed(() => props.room.seats.some((seat) => seat.kind === 'human' && seat.you && seat.host));
@@ -78,7 +85,12 @@ const waitingText = computed(() => {
 });
 // "6 min", "1 h 12 min"
 const playedText = computed(() => {
-  const minutes = Math.floor((props.room.progress?.playedMs ?? 0) / 60_000);
+  const milliseconds = props.room.progress?.playedMs ?? 0;
+  // AI training games take seconds to minutes: below a minute the seconds tell more than "0 min"
+  if (props.room.aiTraining !== undefined && milliseconds < 60_000) {
+    return `${Math.floor(milliseconds / 1000)} s`;
+  }
+  const minutes = Math.floor(milliseconds / 60_000);
   return minutes < 60 ? `${minutes} min` : `${Math.floor(minutes / 60)} h ${minutes % 60} min`;
 });
 

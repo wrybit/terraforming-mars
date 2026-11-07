@@ -1000,5 +1000,8 @@
   "Food & drink": "Ruoka ja juoma",
   "Objects": "Esineet",
   "Symbols": "Symbolit",
-  "Players are buying cards": "Pelaajat ostavat kortteja"
+  "Players are buying cards": "Pelaajat ostavat kortteja",
+  "Game ${0} was removed on ${1}: the lobby keeps only the last ${2} AI training games.": "Peli ${0} poistettiin ${1}: aula säilyttää vain viimeiset ${2} AI:n harjoituspeliä.",
+  "AI test runs in the lobby": "AI-testiajot aulassa",
+  "Address of the AI test run feed with the name of this computer, e.g. http://…/api/lobby-feed?instance=ak1. The lobby shows its running games and the last finished ones. Empty: none.": "AI-testisyötteen osoite tämän koneen nimellä, esim. http://…/api/lobby-feed?instance=ak1. Aula näyttää sen käynnissä olevat ja viimeksi päättyneet pelit. Tyhjä: ei mitään."
 }

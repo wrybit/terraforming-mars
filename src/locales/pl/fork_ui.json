@@ -1799,5 +1799,8 @@
   "Food & drink": "Jedzenie i picie",
   "Objects": "Przedmioty",
   "Symbols": "Symbole",
-  "Players are buying cards": "Gracze kupują karty"
+  "Players are buying cards": "Gracze kupują karty",
+  "Game ${0} was removed on ${1}: the lobby keeps only the last ${2} AI training games.": "Gra ${0} została usunięta ${1}: lobby przechowuje tylko ostatnie ${2} gry treningowe AI.",
+  "AI test runs in the lobby": "Testy AI w lobby",
+  "Address of the AI test run feed with the name of this computer, e.g. http://…/api/lobby-feed?instance=ak1. The lobby shows its running games and the last finished ones. Empty: none.": "Adres kanału testów AI z nazwą tego komputera, np. http://…/api/lobby-feed?instance=ak1. Lobby pokazuje jego trwające i ostatnio zakończone gry. Puste: brak."
 }

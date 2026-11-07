@@ -1252,5 +1252,8 @@
   "Food & drink": "음식과 음료",
   "Objects": "사물",
   "Symbols": "기호",
-  "Players are buying cards": "플레이어들이 카드를 구매하는 중"
+  "Players are buying cards": "플레이어들이 카드를 구매하는 중",
+  "Game ${0} was removed on ${1}: the lobby keeps only the last ${2} AI training games.": "게임 ${0}이(가) ${1}에 삭제되었습니다: 로비는 최근 AI 훈련 게임 ${2}개만 보관합니다.",
+  "AI test runs in the lobby": "로비의 AI 테스트",
+  "Address of the AI test run feed with the name of this computer, e.g. http://…/api/lobby-feed?instance=ak1. The lobby shows its running games and the last finished ones. Empty: none.": "이 컴퓨터 이름이 포함된 AI 테스트 피드 주소, 예: http://…/api/lobby-feed?instance=ak1. 로비에 진행 중인 게임과 최근 끝난 게임이 표시됩니다. 비우면: 없음."
 }

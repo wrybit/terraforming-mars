@@ -1872,5 +1872,8 @@
   "Food & drink": "Еда и напитки",
   "Objects": "Предметы",
   "Symbols": "Символы",
-  "Players are buying cards": "Игроки покупают карты"
+  "Players are buying cards": "Игроки покупают карты",
+  "Game ${0} was removed on ${1}: the lobby keeps only the last ${2} AI training games.": "Игра ${0} удалена ${1}: лобби хранит только последние ${2} тренировочные игры AI.",
+  "AI test runs in the lobby": "Тесты AI в лобби",
+  "Address of the AI test run feed with the name of this computer, e.g. http://…/api/lobby-feed?instance=ak1. The lobby shows its running games and the last finished ones. Empty: none.": "Адрес ленты тестов AI с именем этого компьютера, напр. http://…/api/lobby-feed?instance=ak1. Лобби показывает его текущие и последние завершённые игры. Пусто: нет."
 }

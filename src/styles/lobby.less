@@ -870,6 +870,21 @@
   font-weight: 500;
   text-overflow: ellipsis;
   white-space: nowrap;
+
+  // AI training names end with the running number, the part that tells them apart: wrap instead of cutting it off
+  .lobby-game--training & {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+}
+
+// Holds the room of the "Watch" button in running AI training rows (seats aligned); on phones the seats get their own row
+.lobby-game-action-spacer {
+  visibility: hidden;
+
+  @media only screen and (max-width: 600px) {
+    display: none;
+  }
 }
 
 // Generation, players, AI, time: icon and value close together, the facts further apart (proximity)
