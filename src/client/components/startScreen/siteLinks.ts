@@ -31,7 +31,8 @@ export const SITE_LINKS: ReadonlyArray<SiteLink> = [
   {label: 'Game rules', icon: 'rules', planet: 'saturn', href: 'https://github.com/terraforming-mars/terraforming-mars/wiki/Rulebooks', external: true, inMenu: true},
   {label: 'Board game', icon: 'boardGame', planet: 'darkBlue', href: 'https://boardgamegeek.com/boardgame/167791/terraforming-mars', external: true, inMenu: true},
   {label: 'Updates', icon: 'updates', planet: 'neptune', href: FEATURE_LOG_URL, external: true, inMenu: false},
-  {label: 'Discord', icon: 'discord', planet: 'moon', href: constants.DISCORD_INVITE, external: true, inMenu: false},
+  // Own key (English override "Chat"): fits the moon row in every language; the lobby chat keeps its "Chat" texts
+  {label: 'Community chat', icon: 'discord', planet: 'moon', href: constants.DISCORD_INVITE, external: true, inMenu: false},
 ];
 
 // Only in the game menu, above "New game": the way back to the start page from every other page.
