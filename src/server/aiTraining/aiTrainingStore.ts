@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import {LobbySetupModel} from '../../common/lobby/LobbyModel';
+import {LobbyGameCourse, LobbySetupModel} from '../../common/lobby/LobbyModel';
 import {AiLevel} from '../../common/ai/AiLevel';
 import {GameId, SpectatorId} from '../../common/Types';
 
@@ -20,6 +20,8 @@ export type StoredAiTrainingGame = {
   generation: number;
   elapsedMs: number;
   setup: LobbySetupModel;
+  /** Course for the lobby's bar (games imported before it: computed once from the stored game) */
+  course?: LobbyGameCourse;
 };
 
 export function aiTrainingFile(): string {

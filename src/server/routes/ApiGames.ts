@@ -4,6 +4,7 @@ import {Context} from './IHandler';
 import {Request} from '../Request';
 import {Response} from '../Response';
 import {RouteError} from './RouteError';
+import {withoutAiTrainingGames} from '../aiTraining/aiTrainingGameIds';
 
 export class ApiGames extends Handler {
   public static readonly INSTANCE = new ApiGames();
@@ -16,6 +17,7 @@ export class ApiGames extends Handler {
     if (list === undefined) {
       throw RouteError.notFound('could not load game list');
     }
-    responses.writeJson(res, ctx, list);
+    // AI training games are only for watching from the lobby (aiTrainingGameIds.ts)
+    responses.writeJson(res, ctx, withoutAiTrainingGames(list));
   }
 }

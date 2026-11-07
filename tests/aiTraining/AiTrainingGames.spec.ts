@@ -64,6 +64,9 @@ describe('AiTrainingGames', () => {
     expect(live.setup.expansions.prelude).is.true;
     expect(done.aiTraining).deep.eq({finished: true});
     expect(done.spectatorId).eq(kept[0].spectatorId);
+    // Finished games bring their course for the lobby bar, nothing left to estimate
+    expect(done.progress?.generations).has.length(batchGame.generation);
+    expect(done.progress?.remainingMs).eq(0);
     // Fresh ids, AI players (out of the statistics), names after the variants
     expect(kept[0].id).not.eq(batchGame.id);
     expect(kept[0].players.map((player) => player.id)).not.deep.eq(batchGame.players.map((player) => player.id));

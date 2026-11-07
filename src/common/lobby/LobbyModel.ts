@@ -107,6 +107,9 @@ export type LobbyGameProgress = {
   remainingMs?: number;
 };
 
+/** The course of a game alone (lobbyGameTimeline.ts): also comes with AI training games (AiTrainingFeed.ts) */
+export type LobbyGameCourse = Required<Pick<LobbyGameProgress, 'generations' | 'marks' | 'remainingMs'>>;
+
 /** Global parameters shown in the lobby timeline, in the order they are stacked */
 export const LOBBY_PARAMETERS = ['temperature', 'oxygen', 'oceans', 'venus'] as const;
 export type LobbyParameter = typeof LOBBY_PARAMETERS[number];

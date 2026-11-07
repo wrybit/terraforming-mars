@@ -14,6 +14,7 @@ import {ScreenshotDetailsStore} from './ScreenshotDetailsStore';
 import {withScreenshotSetup} from './screenshotSetup';
 import {CardName} from '../../common/cards/CardName';
 import {StatsGameDetails} from '../../common/stats/StatsGame';
+import {withoutAiTrainingGames} from '../aiTraining/aiTrainingGameIds';
 
 // Finished games no longer change: once evaluated, they stay in memory.
 // Saves building the complete final states on every statistics request.
@@ -105,7 +106,8 @@ export async function collectStatsGames(
   screenshots: ScreenshotDetailsStore = ScreenshotDetailsStore.getInstance(),
 ): Promise<Array<StatsGame>> {
   const games: Array<StatsGame> = [];
-  for (const {gameId} of await gameLoader.getIds()) {
+  // AI training games never count, not even while a check of their players is still pending (aiTrainingGameIds.ts)
+  for (const {gameId} of withoutAiTrainingGames(await gameLoader.getIds())) {
     if (aiOnlyGames.has(gameId)) {
       continue;
     }

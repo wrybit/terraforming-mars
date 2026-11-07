@@ -1,4 +1,5 @@
 import {AiLevel} from '../ai/AiLevel';
+import {LobbyGameCourse} from './LobbyModel';
 
 // Contract between the AI test batches (their coordinator answers AI_TRAINING_FEED_PATH) and the lobby of a game
 // server (server/aiTraining): which batch games one computer plays right now and which it finished last.
@@ -27,6 +28,8 @@ export type AiTrainingFeedGame = AiTrainingGameBase & {
   gameOptions: AiTrainingGameOptions;
   /** Share of the global parameters already raised, 0 … 1 */
   terraforming: number;
+  /** Generations, milestones and awards so far for the lobby's course bar (batches started before it: missing) */
+  course?: LobbyGameCourse;
 };
 
 /** The settings of a finished game come from the game itself */

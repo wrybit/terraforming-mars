@@ -17,6 +17,7 @@ import {gameActivity} from '../admin/dashboard/playerActivityOfGames';
 import {UptimeRecord} from '../admin/dashboard/uptimeRecord';
 import {presenceRecord} from '../admin/dashboard/presenceRecord';
 import {pendingUpdateRequest} from '../admin/dashboard/updateRequest';
+import {withoutAiTrainingGames} from '../aiTraining/aiTrainingGameIds';
 import {checkReachability, publicStatusUrl} from '../admin/dashboard/reachability';
 import raw_settings from '../../genfiles/settings.json';
 import recentCommits from '../../genfiles/recentCommits.json';
@@ -38,7 +39,8 @@ export class ApiAdminDashboard extends Handler {
   public override async get(req: Request, res: Response, ctx: Context): Promise<void> {
     const dataFolder = path.resolve('db');
     const games: Array<IGame> = [];
-    for (const {gameId} of await ctx.gameLoader.getIds()) {
+    // AI training games are only for watching from the lobby (aiTrainingGameIds.ts): not counted, no activity
+    for (const {gameId} of withoutAiTrainingGames(await ctx.gameLoader.getIds())) {
       const game = await ctx.gameLoader.getGame(gameId);
       // A broken game state must not break the dashboard
       if (game !== undefined) {
