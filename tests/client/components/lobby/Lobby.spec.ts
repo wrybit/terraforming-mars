@@ -181,8 +181,8 @@ describe('Lobby components', () => {
     expect(document.body.textContent).not.contains('Start now');
     const links = Array.from(document.body.querySelectorAll('.lobby-room-foot a')).map((link) => link.getAttribute('href'));
     expect(links).deep.eq(['player?id=p1']);
-    // The host passes on the link of the player entered by hand, or opens it here (hot seat); spectators get their own link
-    expect(document.querySelector('.lobby-seat-play')?.getAttribute('href')).contains('player?id=p2');
+    // The host passes on the link of the player entered by hand; spectators get their own link
+    expect(document.querySelector('.lobby-seat-link')?.textContent).contains('Copy link');
     expect(document.querySelector<HTMLInputElement>('.lobby-invite input')?.value).contains('spectator?id=s1');
     wrapper.unmount();
   });

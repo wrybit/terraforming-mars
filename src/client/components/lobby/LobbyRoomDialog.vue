@@ -20,15 +20,11 @@
               <LobbyAvatar kind="guest" :color="seat.color" :title="seat.name" size="large" />
               <span class="lobby-seat-name">{{ seat.name }}</span>
               <span class="lobby-seat-state" v-i18n>entered by the host</span>
-              <!-- Host: this player's own link to pass on (waiting: takes this seat in the lobby; running: the player page).
-                   Running, "Play" opens it here: several players at one device (hot seat) -->
-              <div v-if="guestLink(seat) !== undefined" class="lobby-seat-actions">
-                <button type="button" class="create-game-small-button lobby-seat-link" @click="copyGuestLink(index, seat)">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" /></svg>
-                  <span>{{ $t(copiedSeat === index ? 'Link copied' : 'Copy link') }}</span>
-                </button>
-                <a v-if="started" class="create-game-small-button lobby-seat-play" :href="guestLink(seat)" v-i18n>Play</a>
-              </div>
+              <!-- Host: this player's own link to pass on (waiting: takes this seat in the lobby; running: the player page) -->
+              <button v-if="guestLink(seat) !== undefined" type="button" class="create-game-small-button lobby-seat-link" @click="copyGuestLink(index, seat)">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" /></svg>
+                <span>{{ $t(copiedSeat === index ? 'Link copied' : 'Copy link') }}</span>
+              </button>
             </template>
             <template v-else-if="seat.kind === 'ai'">
               <LobbyAvatar kind="ai" size="large" />
