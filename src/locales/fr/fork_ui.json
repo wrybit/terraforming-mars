@@ -1085,5 +1085,8 @@
   "AI test runs in the lobby": "Tests de l'AI dans le salon",
   "Address of the AI test run feed with the name of this computer, e.g. http://…/api/lobby-feed?instance=ak1. The lobby shows its running games and the last finished ones. Empty: none.": "Adresse du flux des tests de l'AI avec le nom de cet ordinateur, p. ex. http://…/api/lobby-feed?instance=ak1. Le salon affiche ses parties en cours et les dernières terminées. Vide : aucun.",
   "Training": "Entraînement",
-  "The AI is playing this game right now. It can be watched as soon as it is finished.": "L'AI joue cette partie en ce moment. Vous pourrez la regarder dès qu'elle sera terminée."
+  "The AI is playing this game right now. It can be watched as soon as it is finished.": "L'AI joue cette partie en ce moment. Vous pourrez la regarder dès qu'elle sera terminée.",
+  "${0} % terraformed": "${0} % terraformé",
+  "about ${0} left": "encore env. ${0}",
+  "No parameter raised": "Aucun paramètre augmenté"
 }

@@ -808,5 +808,8 @@
   "Game ${0} was removed on ${1}: the lobby keeps only the last ${2} AI training games.": "Die Partie ${0} wurde am ${1} entfernt: Die Lobby behält nur die letzten ${2} AI-Trainingspartien.",
   "AI test runs in the lobby": "AI-Testläufe in der Lobby",
   "Address of the AI test run feed with the name of this computer, e.g. http://…/api/lobby-feed?instance=ak1. The lobby shows its running games and the last finished ones. Empty: none.": "Adresse des AI-Testlauf-Feeds mit dem Namen dieses Rechners, z. B. http://…/api/lobby-feed?instance=ak1. Die Lobby zeigt seine laufenden und die zuletzt fertigen Partien. Leer: keine.",
-  "The AI is playing this game right now. It can be watched as soon as it is finished.": "Die AI spielt diese Partie gerade. Zusehen kann man, sobald sie fertig ist."
+  "The AI is playing this game right now. It can be watched as soon as it is finished.": "Die AI spielt diese Partie gerade. Zusehen kann man, sobald sie fertig ist.",
+  "${0} % terraformed": "${0} % terraformt",
+  "about ${0} left": "noch ca. ${0}",
+  "No parameter raised": "Kein Parameter erhöht"
 }

@@ -2013,5 +2013,9 @@
   "AI test runs in the lobby": "大厅中的 AI 测试",
   "Address of the AI test run feed with the name of this computer, e.g. http://…/api/lobby-feed?instance=ak1. The lobby shows its running games and the last finished ones. Empty: none.": "此计算机名称对应的 AI 测试数据源地址，例如 http://…/api/lobby-feed?instance=ak1。大厅会显示其正在进行和最近完成的游戏。留空：不显示。",
   "Training": "训练中",
-  "The AI is playing this game right now. It can be watched as soon as it is finished.": "AI 正在进行这局游戏。结束后即可观看。"
+  "The AI is playing this game right now. It can be watched as soon as it is finished.": "AI 正在进行这局游戏。结束后即可观看。",
+  "${0} % terraformed": "已改造 ${0} %",
+  "about ${0} left": "约剩 ${0}",
+  "No parameter raised": "未提升任何参数",
+  "G${0}": "${0}代"
 }

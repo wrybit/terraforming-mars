@@ -1977,5 +1977,9 @@
   "AI test runs in the lobby": "Тестове на AI в лобито",
   "Address of the AI test run feed with the name of this computer, e.g. http://…/api/lobby-feed?instance=ak1. The lobby shows its running games and the last finished ones. Empty: none.": "Адрес на канала с тестове на AI с името на този компютър, напр. http://…/api/lobby-feed?instance=ak1. Лобито показва текущите и последно завършените му игри. Празно: няма.",
   "Training": "Тренировка",
-  "The AI is playing this game right now. It can be watched as soon as it is finished.": "AI играе тази игра в момента. Можете да я гледате веднага щом приключи."
+  "The AI is playing this game right now. It can be watched as soon as it is finished.": "AI играе тази игра в момента. Можете да я гледате веднага щом приключи.",
+  "${0} % terraformed": "${0} % тераформирано",
+  "about ${0} left": "остават около ${0}",
+  "No parameter raised": "Няма повишен параметър",
+  "G${0}": "П${0}"
 }

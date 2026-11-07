@@ -1281,5 +1281,9 @@
   "AI test runs in the lobby": "로비의 AI 테스트",
   "Address of the AI test run feed with the name of this computer, e.g. http://…/api/lobby-feed?instance=ak1. The lobby shows its running games and the last finished ones. Empty: none.": "이 컴퓨터 이름이 포함된 AI 테스트 피드 주소, 예: http://…/api/lobby-feed?instance=ak1. 로비에 진행 중인 게임과 최근 끝난 게임이 표시됩니다. 비우면: 없음.",
   "Training": "훈련 중",
-  "The AI is playing this game right now. It can be watched as soon as it is finished.": "AI가 지금 이 게임을 하고 있습니다. 끝나면 바로 관전할 수 있습니다."
+  "The AI is playing this game right now. It can be watched as soon as it is finished.": "AI가 지금 이 게임을 하고 있습니다. 끝나면 바로 관전할 수 있습니다.",
+  "${0} % terraformed": "${0} % 테라포밍됨",
+  "about ${0} left": "약 ${0} 남음",
+  "No parameter raised": "올린 매개변수 없음",
+  "G${0}": "${0}세대"
 }

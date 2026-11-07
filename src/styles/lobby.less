@@ -990,6 +990,167 @@
   grid-area: chips;
 }
 
+.lobby-game .lobby-timeline {
+  grid-area: progress;
+  min-width: 0;
+}
+
+// ---------- Course of a running game (LobbyGameTimeline.vue) ----------
+// Parameter colours: the colours of the global parameter tracks, used for the columns and the legend
+@lobby-temperature: #ff7a4d;
+@lobby-oxygen: #6ccf6a;
+@lobby-oceans: #3fa0ff;
+@lobby-venus: #e8b85a;
+
+.lobby-timeline-temperature { background: @lobby-temperature; }
+.lobby-timeline-oxygen { background: @lobby-oxygen; }
+.lobby-timeline-oceans { background: @lobby-oceans; }
+.lobby-timeline-venus { background: @lobby-venus; }
+
+// Information, not controls: plain text without a surface
+.lobby-timeline-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 2px 12px;
+  margin-bottom: 6px;
+  color: rgba(238, 238, 238, 0.62);
+  font-size: 12.5px;
+
+  b {
+    color: #eee;
+    font-weight: 500;
+  }
+}
+
+.lobby-timeline-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 10px;
+
+  i {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin-right: 4px;
+    border-radius: 2px;
+  }
+}
+
+// Marks sit right on top of the columns (proximity): they belong to the time axis, not to the text above
+.lobby-timeline-marks {
+  position: relative;
+  height: 22px;
+  margin-bottom: 3px;
+}
+
+.lobby-timeline-mark {
+  position: absolute;
+  bottom: 0;
+  display: grid;
+  width: 20px;
+  height: 20px;
+  place-items: center;
+  transform: translateX(-50%);
+
+  svg {
+    width: 16px;
+    height: 16px;
+    fill: #f2c94c;
+    stroke: #7a5a10;
+    stroke-width: 1;
+    filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.6));
+  }
+
+  // The player's colour as a small cube at the foot of the symbol
+  i {
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    width: 6px;
+    height: 6px;
+    margin-left: -3px;
+    border-radius: 1.5px;
+    box-shadow: 0 0 0 1.5px #1a1b21;
+  }
+}
+
+// Contract with LobbyGameTimeline.vue: 40px high, 3px padding below = COLUMN_HEIGHT 37
+.lobby-timeline-track {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 40px;
+}
+
+.lobby-timeline-column {
+  display: flex;
+  flex: none;
+  flex-direction: column-reverse;
+  height: 100%;
+  padding: 0 3px 3px;
+  border-radius: 4px 4px 0 0;
+  background: linear-gradient(to top, fade(@bg_action, 35%), fade(@bg_action, 8%));
+
+  &.lobby-timeline-column--running {
+    background: linear-gradient(to top, rgba(141, 139, 240, 0.5), rgba(141, 139, 240, 0.12));
+  }
+
+  // One block per parameter, as high as its steps
+  i {
+    display: block;
+    flex: none;
+    border-radius: 1.5px;
+  }
+
+  // Joints between the single steps while a step is high enough to count them (MIN_JOINT_STEP)
+  .lobby-timeline-joints {
+    -webkit-mask: repeating-linear-gradient(to top, #000 0 calc(var(--step) - 1px), transparent calc(var(--step) - 1px) var(--step));
+    mask: repeating-linear-gradient(to top, #000 0 calc(var(--step) - 1px), transparent calc(var(--step) - 1px) var(--step));
+  }
+}
+
+// Estimated time left, hatched like in the AI runner
+.lobby-timeline-rest {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 0 4px 0 0;
+  background: repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.07) 0 4px, transparent 4px 8px);
+}
+
+.lobby-timeline-base {
+  height: 3px;
+
+  i {
+    display: block;
+    height: 100%;
+    border-radius: 0 0 2px 2px;
+    background: @bg_action;
+  }
+}
+
+.lobby-timeline-labels {
+  position: relative;
+  height: 15px;
+  margin-top: 4px;
+  color: rgba(238, 238, 238, 0.62);
+  font-size: 11px;
+
+  span {
+    position: absolute;
+    transform: translateX(-50%);
+    white-space: nowrap;
+  }
+
+  .lobby-timeline-labels--running {
+    color: #eee;
+    font-weight: 500;
+  }
+}
+
 .lobby-game-action {
   grid-area: action;
   justify-self: end;

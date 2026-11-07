@@ -1,7 +1,7 @@
 <template>
   <!-- One open (or running) game of the lobby. Top: title with the facts (generation, players, AI, time), the seats
        (one circle each, free ones dashed, the host outlined) and the action; below over the full width the progress
-       of a running game and the settings. A CTA only where you take part, otherwise a quiet button -->
+       of a running game (LobbyGameTimeline.vue) and the settings. A CTA only where you take part, otherwise a quiet button -->
   <!-- Games you opened yourself are set off by a background, the others stay neutral.
        The own waiting room opens its dialog on a click anywhere on the entry, not only on the button -->
   <!-- AI training games of this server (aiTraining): running ones are only information (no button, no hotkey),
@@ -27,10 +27,7 @@
         :color="seat.kind === 'human' || seat.kind === 'guest' ? seat.color : undefined" :emoji="seat.kind === 'human' ? seat.emoji : undefined"
         :image="seat.kind === 'human' ? seat.image : undefined" :title="seatTitle(seat)" />
     </div>
-    <div v-if="room.progress !== undefined" class="lobby-game-progress" role="progressbar" :aria-label="$t('Terraforming')"
-      aria-valuemin="0" aria-valuemax="100" :aria-valuenow="Math.round(room.progress.terraforming * 100)">
-      <i :style="{width: (room.progress.terraforming * 100) + '%'}"></i>
-    </div>
+    <LobbyGameTimeline v-if="room.progress !== undefined" :progress="room.progress" />
     <GameSetupChips class="lobby-game-chips" :chips="chips" compact writtenOut />
     <div class="lobby-game-action">
       <!-- The click reaches the entry anyway (opens the dialog there), so the button needs no handler of its own -->
@@ -62,6 +59,8 @@ import {HotkeyKeys as HotkeyKeyList, PICK_DIGITS} from '@/client/hotkeys/hotkeyA
 import GameSetupChips from '@/client/components/common/GameSetupChips.vue';
 import LobbyAvatar from './LobbyAvatar.vue';
 import LobbyFactIcon from './LobbyFactIcon.vue';
+import LobbyGameTimeline from './LobbyGameTimeline.vue';
+import {lobbyDuration} from './lobbyDuration';
 import {lobbySetupChips} from './lobbySetupChips';
 import {continueHref} from './lobbyLinks';
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
@@ -99,8 +98,7 @@ const playedText = computed(() => {
   if (props.room.aiTraining !== undefined && milliseconds < 60_000) {
     return `${Math.floor(milliseconds / 1000)} s`;
   }
-  const minutes = Math.floor(milliseconds / 60_000);
-  return minutes < 60 ? `${minutes} min` : `${Math.floor(minutes / 60)} h ${minutes % 60} min`;
+  return lobbyDuration(milliseconds);
 });
 
 function seatTitle(seat: LobbySeatModel): string {

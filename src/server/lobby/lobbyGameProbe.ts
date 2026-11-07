@@ -3,6 +3,7 @@ import {IGameLoader} from '../database/IGameLoader';
 import {isActiveParticipant} from '../server/activeParticipants';
 import {GameProbe, GameProgressSource} from './Lobby';
 import {terraformingProgress} from '../ai/gameProgress';
+import {lobbyGameTimeline} from './lobbyGameTimeline';
 
 /** Phases of the initial choice (corporation, preludes, starting cards): until then nothing happened yet */
 const INITIAL_CHOICE_PHASES: ReadonlyArray<Phase> = [Phase.INITIALDRAFTING, Phase.RESEARCH];
@@ -22,10 +23,10 @@ export function lobbyGameProbe(gameLoader: IGameLoader): GameProbe {
   };
 }
 
-/** Generation and terraforming of a running game for the lobby list */
+/** Generation, terraforming and course (generations, milestones, awards) of a running game for the lobby list */
 export function lobbyGameProgress(gameLoader: IGameLoader): GameProgressSource {
   return async (gameId) => {
     const game = await gameLoader.getGame(gameId);
-    return game === undefined ? undefined : {generation: game.generation, terraforming: terraformingProgress(game)};
+    return game === undefined ? undefined : {generation: game.generation, terraforming: terraformingProgress(game), ...lobbyGameTimeline(game)};
   };
 }
