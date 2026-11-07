@@ -18,11 +18,14 @@ const PROGRESS: LobbyGameProgress = {
 };
 
 describe('LobbyGameTimeline', () => {
-  it('shows one column per generation, one block per raised parameter and the marks', () => {
+  it('shows one column per generation, one dot per step and the milestone on top of its generation', () => {
     const wrapper = mount(LobbyGameTimeline, {...globalConfig, props: {progress: PROGRESS}});
-    expect(wrapper.findAll('.lobby-timeline-column')).has.length(3);
-    expect(wrapper.findAll('.lobby-timeline-column')[1].findAll('i')).has.length(2);
-    expect(wrapper.findAll('.lobby-timeline-mark')).has.length(1);
+    const columns = wrapper.findAll('.lobby-timeline-column');
+    expect(columns).has.length(3);
+    expect(columns[1].findAll('.lobby-timeline-dots i')).has.length(3);
+    expect(columns[1].findAll('.lobby-timeline-marks svg')).has.length(1);
+    expect(columns[1].find('.lobby-timeline-mark--red').exists()).is.true;
+    expect(wrapper.find('.lobby-timeline-base--rest').exists()).is.true;
     expect(wrapper.find('.lobby-timeline-rest').exists()).is.true;
     expect(wrapper.find('.lobby-timeline-meta b').text()).eq('21');
   });

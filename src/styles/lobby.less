@@ -996,11 +996,12 @@
 }
 
 // ---------- Course of a running game (LobbyGameTimeline.vue) ----------
-// Parameter colours: the colours of the global parameter tracks, used for the columns and the legend
+// Parameter colours: the colours of the global parameter tracks, used for the dots and the legend
 @lobby-temperature: #ff7a4d;
 @lobby-oxygen: #6ccf6a;
 @lobby-oceans: #3fa0ff;
 @lobby-venus: #e8b85a;
+@lobby-muted: rgba(238, 238, 238, 0.6);
 
 .lobby-timeline-temperature { background: @lobby-temperature; }
 .lobby-timeline-oxygen { background: @lobby-oxygen; }
@@ -1011,10 +1012,11 @@
 .lobby-timeline-meta {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   justify-content: space-between;
   gap: 2px 12px;
   margin-bottom: 6px;
-  color: rgba(238, 238, 238, 0.62);
+  color: @lobby-muted;
   font-size: 12.5px;
 
   b {
@@ -1023,59 +1025,42 @@
   }
 }
 
+// Two groups (parameters | milestone and award): further apart than the entries within a group (proximity);
+// on a narrow screen a group wraps as a whole
 .lobby-timeline-legend {
   display: flex;
   flex-wrap: wrap;
-  gap: 2px 10px;
+  align-items: center;
+  gap: 2px 14px;
+  font-size: 11px;
 
   i {
     display: inline-block;
-    width: 8px;
-    height: 8px;
-    margin-right: 4px;
-    border-radius: 2px;
-  }
-}
-
-// Marks sit right on top of the columns (proximity): they belong to the time axis, not to the text above
-.lobby-timeline-marks {
-  position: relative;
-  height: 22px;
-  margin-bottom: 3px;
-}
-
-.lobby-timeline-mark {
-  position: absolute;
-  bottom: 0;
-  display: grid;
-  width: 20px;
-  height: 20px;
-  place-items: center;
-  transform: translateX(-50%);
-
-  svg {
-    width: 16px;
-    height: 16px;
-    fill: #f2c94c;
-    stroke: #7a5a10;
-    stroke-width: 1;
-    filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.6));
-  }
-
-  // The player's colour as a small cube at the foot of the symbol
-  i {
-    position: absolute;
-    bottom: -2px;
-    left: 50%;
     width: 6px;
     height: 6px;
-    margin-left: -3px;
-    border-radius: 1.5px;
-    box-shadow: 0 0 0 1.5px #1a1b21;
+    margin-right: 3px;
+    border-radius: 50%;
+  }
+
+  svg {
+    width: 12px;
+    height: 12px;
+    margin-right: 3px;
+    fill: #fff;
   }
 }
 
-// Contract with LobbyGameTimeline.vue: 40px high, 3px padding below = COLUMN_HEIGHT 37
+.lobby-timeline-legend-group {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 2px 8px;
+
+  > span {
+    display: inline-flex;
+    align-items: center;
+  }
+}
+
 .lobby-timeline-track {
   position: relative;
   display: flex;
@@ -1084,32 +1069,62 @@
   height: 40px;
 }
 
+// The generation as a period of time: only a breath of the accent, the dots carry the information
 .lobby-timeline-column {
   display: flex;
   flex: none;
-  flex-direction: column-reverse;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 3px;
   height: 100%;
-  padding: 0 3px 3px;
-  border-radius: 4px 4px 0 0;
-  background: linear-gradient(to top, fade(@bg_action, 35%), fade(@bg_action, 8%));
+  padding: 0 2px 3px;
+  border-radius: 3px 3px 0 0;
+  background: linear-gradient(to top, fade(@bg_action, 16%), fade(@bg_action, 0%));
+}
 
-  &.lobby-timeline-column--running {
-    background: linear-gradient(to top, rgba(141, 139, 240, 0.5), rgba(141, 139, 240, 0.12));
-  }
+// One dot per step, always the same size: the dots fill the column from below
+.lobby-timeline-dots {
+  display: flex;
+  flex-wrap: wrap-reverse;
+  justify-content: center;
+  gap: 2px;
+  width: 100%;
 
-  // One block per parameter, as high as its steps
   i {
-    display: block;
-    flex: none;
-    border-radius: 1.5px;
-  }
-
-  // Joints between the single steps while a step is high enough to count them (MIN_JOINT_STEP)
-  .lobby-timeline-joints {
-    -webkit-mask: repeating-linear-gradient(to top, #000 0 calc(var(--step) - 1px), transparent calc(var(--step) - 1px) var(--step));
-    mask: repeating-linear-gradient(to top, #000 0 calc(var(--step) - 1px), transparent calc(var(--step) - 1px) var(--step));
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
   }
 }
+
+// Milestones and awards sit on top of the dots of their generation, in the player's colour; several overlap a
+// little like stacked cubes instead of pushing the column upwards
+.lobby-timeline-marks {
+  display: flex;
+  justify-content: center;
+
+  svg {
+    width: 14px;
+    height: 14px;
+    flex: none;
+    stroke: #111216;
+    stroke-width: 1.6;
+    stroke-linejoin: round;
+    paint-order: stroke;
+  }
+
+  svg + svg {
+    margin-left: -5px;
+  }
+}
+
+each(@players, {
+  @c: ~"player_@{value}";
+  .lobby-timeline-mark--@{value} {
+    fill: @@c;
+  }
+});
 
 // Estimated time left, hatched like in the AI runner
 .lobby-timeline-rest {
@@ -1117,18 +1132,34 @@
   top: 0;
   right: 0;
   bottom: 0;
-  border-radius: 0 4px 0 0;
-  background: repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.07) 0 4px, transparent 4px 8px);
+  border-radius: 3px;
+  background: repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.06) 0 4px, transparent 4px 8px);
 }
 
 .lobby-timeline-base {
+  display: flex;
+  gap: 3px;
   height: 3px;
+  margin-top: 4px;
 
   i {
-    display: block;
+    flex: none;
     height: 100%;
-    border-radius: 0 0 2px 2px;
     background: @bg_action;
+  }
+
+  i:first-child {
+    border-radius: 2px 0 0 2px;
+  }
+
+  .lobby-timeline-base--running {
+    background: #8d8bf0;
+  }
+
+  // The estimated rest: the bar goes on dashed and grey
+  .lobby-timeline-base--rest {
+    flex: 1;
+    background: repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.28) 0 5px, transparent 5px 9px);
   }
 }
 
@@ -1136,7 +1167,7 @@
   position: relative;
   height: 15px;
   margin-top: 4px;
-  color: rgba(238, 238, 238, 0.62);
+  color: @lobby-muted;
   font-size: 11px;
 
   span {
@@ -1148,6 +1179,10 @@
   .lobby-timeline-labels--running {
     color: #eee;
     font-weight: 500;
+  }
+
+  .lobby-timeline-labels--rest {
+    font-style: italic;
   }
 }
 
