@@ -54,6 +54,7 @@
   ],
   "cn": [
     "${0} AI",
+    "AI",
     "AI ${0}",
     "Alt",
     "AltGr",
@@ -68,6 +69,7 @@
     "&nbsp;Cheung Shing",
     "1 Sardaukar",
     "2 Sardaukar",
+    "AI",
     "AI ${0}",
     "Agenda ${0} (${1})",
     "Alt",
@@ -345,6 +347,7 @@
   ],
   "jp": [
     "${0} AI",
+    "AI",
     "AI ${0}",
     "Alt",
     "AltGr",
@@ -356,6 +359,7 @@
   ],
   "ko": [
     "${0} AI",
+    "AI",
     "AI ${0}",
     "Alt",
     "AltGr",
@@ -435,6 +439,7 @@
     "2 Sardaukar",
     "2 titanium",
     "2x bonus",
+    "AI",
     "AI ${0}",
     "Agenda ${0} (${1})",
     "Alt",
