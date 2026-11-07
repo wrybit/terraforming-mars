@@ -1161,5 +1161,8 @@
   "Objects": "Предмети",
   "Symbols": "Символи",
   "Players are buying cards": "Гравці купують карти",
-  "Change picture": "Змінити зображення"
+  "Change picture": "Змінити зображення",
+  "Edit game": "Редагувати гру",
+  "Save changes": "Зберегти зміни",
+  "Players have already joined: keep a free seat for each of them.": "Гравці вже приєдналися: залиште вільне місце для кожного з них."
 }

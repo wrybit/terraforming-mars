@@ -2283,5 +2283,8 @@
   "Objects": "Objetos",
   "Symbols": "Símbolos",
   "Players are buying cards": "Los jugadores están comprando cartas",
-  "Change picture": "Cambiar imagen"
+  "Change picture": "Cambiar imagen",
+  "Edit game": "Editar partida",
+  "Save changes": "Guardar cambios",
+  "Players have already joined: keep a free seat for each of them.": "Ya se han unido jugadores: deja un asiento libre para cada uno."
 }

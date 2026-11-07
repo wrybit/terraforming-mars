@@ -1875,5 +1875,8 @@
   "Objects": "Предметы",
   "Symbols": "Символы",
   "Players are buying cards": "Игроки покупают карты",
-  "Change picture": "Сменить картинку"
+  "Change picture": "Сменить картинку",
+  "Edit game": "Изменить игру",
+  "Save changes": "Сохранить изменения",
+  "Players have already joined: keep a free seat for each of them.": "Игроки уже присоединились: оставьте для каждого из них свободное место."
 }

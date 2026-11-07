@@ -1988,5 +1988,8 @@
   "Objects": "物品",
   "Symbols": "符号",
   "Players are buying cards": "玩家正在购买卡牌",
-  "Change picture": "更换图片"
+  "Change picture": "更换图片",
+  "Edit game": "编辑游戏",
+  "Save changes": "保存更改",
+  "Players have already joined: keep a free seat for each of them.": "已有玩家加入：请为每位玩家保留一个空位。"
 }

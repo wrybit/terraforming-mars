@@ -4,7 +4,7 @@
     <header class="card-list-header card-list-header--plain create-game-head">
       <!-- Menu at the top left, as in the game -->
       <PageToolbar v-if="!lobbyMode" />
-      <PageTitle :title="lobbyMode ? 'Create game' : 'Create New Game'" />
+      <PageTitle :title="editRoom !== undefined ? 'Edit game' : lobbyMode ? 'Create game' : 'Create New Game'" />
       <div class="create-game-head-actions">
         <label class="create-game-icon-button" :title="$t('Load settings from file')">
           <!-- Import/export icons: arrow perpendicular to a hex edge, into the tile (import) or out of it (export);
@@ -492,7 +492,8 @@ import {requiredByTooltip, requirementsOf} from './expansionDependencies';
 import {Expansion} from '@/common/cards/GameModule';
 import {arrangeSeats, seatKey} from './seatOrder';
 import {collapseEnter, collapseLeave} from '@/client/utils/collapseAnimation';
-import {LOBBY_EMOJIS, LOBBY_NAME_MAX_LENGTH, LobbyProfile} from '@/common/lobby/LobbyModel';
+import {LOBBY_EMOJIS, LOBBY_NAME_MAX_LENGTH, LobbyEditRoom, LobbyProfile} from '@/common/lobby/LobbyModel';
+import {AI_ANALYSIS_DEFAULT} from '@/common/ai/aiAnalysisDefault';
 import {GAME_NAME_MAX_LENGTH, generateGameName} from '@/common/game/GameName';
 import {UnseededRandom} from '@/common/utils/Random';
 
@@ -597,6 +598,11 @@ export default defineComponent({
     // Lobby: name and color of the own seat
     lobbyProfile: {
       type: Object as () => LobbyProfile | undefined,
+      default: undefined,
+    },
+    // Lobby: the host changes a waiting game; the form starts from its settings instead of the last used ones
+    editRoom: {
+      type: Object as () => LobbyEditRoom | undefined,
       default: undefined,
     },
   },
@@ -708,7 +714,9 @@ export default defineComponent({
     // first, which then animated out while the saved seats animated in.
     // A shared link takes precedence over the most recently used settings.
     // The lobby's address carries no settings: there the last used settings are the start
-    if (this.lobbyMode || !this.restoreSettingsFromLink()) {
+    if (this.editRoom !== undefined) {
+      this.restoreEditRoom(this.editRoom);
+    } else if (this.lobbyMode || !this.restoreSettingsFromLink()) {
       this.restoreLastSettings();
     }
     // The own seat carries the lobby profile
@@ -790,6 +798,9 @@ export default defineComponent({
       return this.gameName.trim() || this.gameNamePlaceholder;
     },
     createButtonTitle(): string {
+      if (this.editRoom !== undefined) {
+        return 'Save changes';
+      }
       return this.lobbyActive ? 'Open in lobby' : 'Create game';
     },
     // Arrow paths are used twice (drawn + as mask cut), so they live here once
@@ -957,6 +968,10 @@ export default defineComponent({
         return this.players.slice(0, this.playersCount).filter((player) => player.aiLevel !== undefined).length;
       },
       set(count: number) {
+        // The first AI player makes it an analysis game (AI_ANALYSIS_DEFAULT); later changes keep the switch as it is
+        if (this.aiPlayersCount === 0 && count > 0) {
+          this.aiAnalysis = AI_ANALYSIS_DEFAULT;
+        }
         this.setSeatCounts(this.humanPlayersCount, count, 'ai');
       },
     },
@@ -1090,6 +1105,16 @@ export default defineComponent({
         // Without clipboard permission (e.g. http without TLS) the URL stays in the address bar for copying
         vueRoot(this).showAlert('Copy link', 'The browser did not allow copying to the clipboard. The link is in the address bar and can be copied from there.');
       }
+    },
+    // Settings, name and visibility of the waiting game; seats entered by hand stay manual, the others are
+    // offered in the lobby again (joined players keep them, Lobby.edit)
+    restoreEditRoom(room: LobbyEditRoom) {
+      this.applySettings(room.config as unknown as JSONObject);
+      this.gameName = room.title;
+      this.lobbyPublic = room.listed;
+      this.manualSeats = this.players.slice(0, this.playersCount)
+        .filter((player, index) => index > 0 && player.aiLevel === undefined && room.manualSeats.includes(index))
+        .map((player) => seatKey(player));
     },
     restoreLastSettings() {
       if (!this.rememberSettings) {

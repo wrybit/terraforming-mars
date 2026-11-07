@@ -1952,5 +1952,8 @@
   "Objects": "Предмети",
   "Symbols": "Символи",
   "Players are buying cards": "Играчите купуват карти",
-  "Change picture": "Смени картинката"
+  "Change picture": "Смени картинката",
+  "Edit game": "Редактирай играта",
+  "Save changes": "Запази промените",
+  "Players have already joined: keep a free seat for each of them.": "Вече има присъединили се играчи: оставете свободно място за всеки от тях."
 }

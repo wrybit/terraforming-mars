@@ -1003,5 +1003,8 @@
   "Objects": "Esineet",
   "Symbols": "Symbolit",
   "Players are buying cards": "Pelaajat ostavat kortteja",
-  "Change picture": "Vaihda kuva"
+  "Change picture": "Vaihda kuva",
+  "Edit game": "Muokkaa peliä",
+  "Save changes": "Tallenna muutokset",
+  "Players have already joined: keep a free seat for each of them.": "Pelaajia on jo liittynyt: jätä jokaiselle heistä vapaa paikka."
 }

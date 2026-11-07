@@ -1377,5 +1377,8 @@
   "Objects": "物",
   "Symbols": "記号",
   "Players are buying cards": "プレイヤーがカードを購入中",
-  "Change picture": "画像を変更"
+  "Change picture": "画像を変更",
+  "Edit game": "ゲームを編集",
+  "Save changes": "変更を保存",
+  "Players have already joined: keep a free seat for each of them.": "すでにプレイヤーが参加しています：参加者ごとに空席を残してください。"
 }

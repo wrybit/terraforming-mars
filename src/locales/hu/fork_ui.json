@@ -1186,5 +1186,8 @@
   "Objects": "Tárgyak",
   "Symbols": "Szimbólumok",
   "Players are buying cards": "A játékosok kártyákat vásárolnak",
-  "Change picture": "Kép módosítása"
+  "Change picture": "Kép módosítása",
+  "Edit game": "Játék szerkesztése",
+  "Save changes": "Módosítások mentése",
+  "Players have already joined: keep a free seat for each of them.": "Már csatlakoztak játékosok: mindegyiküknek hagyj egy szabad helyet."
 }

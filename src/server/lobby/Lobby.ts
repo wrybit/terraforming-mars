@@ -1,4 +1,5 @@
 import {AiLevel, DEFAULT_AI_LEVEL, isAiLevel} from '../../common/ai/AiLevel';
+import {AI_ANALYSIS_DEFAULT} from '../../common/ai/aiAnalysisDefault';
 import {aiUnsupportedReasons} from '../../common/ai/aiSupport';
 import {Color, PLAYER_COLORS} from '../../common/Color';
 import {setupOptionsFromConfig} from '../../common/game/GameSetupOptions';
@@ -329,9 +330,61 @@ export class Lobby {
       throw new LobbyError('This seat is not free');
     }
     this.assertAiPossible(room);
+    this.analysisWithFirstAi(room);
     room.seats[seatIndex] = {kind: 'ai', aiLevel: DEFAULT_AI_LEVEL};
     this.save();
     await this.startIfComplete(room, starter);
+    return this.model(room, me);
+  }
+
+  /**
+   * The first AI player seated in the waiting room makes it an analysis game, like switching on AI players in the
+   * create form (AI_ANALYSIS_DEFAULT). Once AI players are there, the host's own choice stays.
+   */
+  private analysisWithFirstAi(room: Room): void {
+    if (!room.seats.some((seat) => seat.kind === 'ai')) {
+      room.config = {...room.config, aiAnalysis: AI_ANALYSIS_DEFAULT};
+    }
+  }
+
+  /**
+   * Host only, while waiting: new settings from the create form. Seats are laid out as in open(); players who
+   * already joined keep their place on the free seats of the new layout, so there must be enough of them.
+   * Nothing starts here: the changed game waits until somebody confirms (ready) or the host starts it.
+   */
+  public edit(me: string, roomId: string, title: string, listed: boolean, config: NewGameConfig, freeSeats: ReadonlyArray<number>): LobbyRoomModel {
+    const room = this.hostRoom(me, roomId);
+    const players = Array.isArray(config?.players) ? config.players : [];
+    if (players.length < 1 || players.length > LOBBY_MAX_SEATS) {
+      throw new LobbyError('A game needs 1 to 6 seats');
+    }
+    if (isAiLevel(players[0].aiLevel)) {
+      throw new LobbyError('The first seat belongs to the host');
+    }
+    const host = room.seats[0];
+    const joined = room.seats.filter((seat, index): seat is HumanSeat => index > 0 && seat.kind === 'human');
+    const free = new Set(Array.isArray(freeSeats) ? freeSeats : []);
+    const seats = players.map((player, index): Seat => {
+      if (index === 0) {
+        return host;
+      }
+      if (isAiLevel(player.aiLevel)) {
+        return {kind: 'ai', aiLevel: player.aiLevel};
+      }
+      if (free.has(index)) {
+        return joined.shift() ?? {kind: 'free'};
+      }
+      const guest = sanitizeProfile({name: player.name || capitalize(player.color), color: player.color, emoji: ''});
+      return {kind: 'guest', name: guest.name, color: guest.color, handicap: Number(player.handicap) || 0};
+    });
+    if (joined.length > 0) {
+      throw new LobbyError('Players have already joined: keep a free seat for each of them.');
+    }
+    room.seats = seats;
+    room.config = {...config, clonedGamedId: undefined};
+    room.title = sanitizeTitle(title) || sanitizeTitle(config.name) || room.title;
+    room.listed = listed !== false;
+    this.save();
     return this.model(room, me);
   }
 
@@ -346,6 +399,9 @@ export class Lobby {
   public async fillWithAi(me: string, roomId: string, starter: GameStarter): Promise<LobbyRoomModel> {
     const room = this.hostRoom(me, roomId);
     this.assertAiPossible(room);
+    if (room.seats.some((seat) => seat.kind === 'free')) {
+      this.analysisWithFirstAi(room);
+    }
     room.seats = room.seats.map((seat) => seat.kind === 'free' ? {kind: 'ai', aiLevel: DEFAULT_AI_LEVEL} : seat);
     this.save();
     await this.start(room, starter);
@@ -460,6 +516,7 @@ export class Lobby {
         options: setupOptionsFromConfig(config),
       },
       gameId: me === room.host ? room.gameId : undefined,
+      config: me === room.host && room.state === 'open' ? room.config : undefined,
       spectatorId: room.spectatorId,
       yourPlayerId: me === undefined ? undefined : room.playerIds[me],
       hostNeedsLinks: room.state === 'started' && me === room.host && room.seats.some((seat) => seat.kind === 'guest') ? true : undefined,

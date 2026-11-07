@@ -109,6 +109,32 @@ describe('CreateGameForm', () => {
     expect(profiles[1].emoji).eq('🪐');
   });
 
+  it('switching on the first AI player makes it an analysis game', () => {
+    const vm = shallowMount(CreateGameForm, {...globalConfig}).vm as any;
+    vm.aiAnalysis = false;
+    vm.aiPlayersCount = 0;
+    vm.aiPlayersCount = 1;
+    expect(vm.aiAnalysis).is.true;
+    // Later changes keep the switch as the host left it
+    vm.aiAnalysis = false;
+    vm.aiPlayersCount = 2;
+    expect(vm.aiAnalysis).is.false;
+  });
+
+  it('lobby, editing: the form starts from the waiting game', () => {
+    const config = createNewGameConfig({players: [
+      {name: 'Jens', color: 'red', beginner: false, handicap: 0, first: false},
+      {name: 'Dan', color: 'green', beginner: false, handicap: 0, first: false},
+      {name: '', color: 'blue', beginner: false, handicap: 0, first: false},
+    ]});
+    const vm = shallowMount(CreateGameForm, {...globalConfig, props: {lobbyMode: true, editRoom: {title: 'Evening', listed: false, config, manualSeats: [1]}}}).vm as any;
+    expect(vm.gameName).eq('Evening');
+    expect(vm.lobbyPublic).is.false;
+    expect(vm.playersCount).eq(3);
+    expect(vm.createButtonTitle).eq('Save changes');
+    expect(vm.getPlayers().map((player: any, index: number) => vm.isOfferedSeat(player, index))).deep.eq([false, false, true]);
+  });
+
   it('lobby without a profile: the host picture is drawn at random', () => {
     const vm = shallowMount(CreateGameForm, {...globalConfig, props: {lobbyMode: true}}).vm as any;
     expect(vm.hostEmoji).is.a('string').with.length.greaterThan(0);

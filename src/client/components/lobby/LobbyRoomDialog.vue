@@ -53,6 +53,8 @@
         <div v-else class="lobby-room-foot">
           <AppButton class="btn-tone-danger" :title="isHost ? 'Close game' : 'Leave'" @click="emit('leave')" />
           <span class="lobby-room-foot-gap"></span>
+          <!-- Host: change settings, name or seats of the waiting game in the create form -->
+          <AppButton v-if="isHost" class="btn-tone-quiet" title="Edit game" @click="emit('edit')" />
           <span v-if="isHost && freeSeats > 0" v-glass-tooltip="aiBlockedText">
             <AppButton class="btn-tone-quiet" title="Fill with AI and start" :disabled="aiBlockedText !== ''" @click="emit('fill-ai')" />
           </span>
@@ -95,6 +97,7 @@ const emit = defineEmits<{
   (event: 'seat-ai', seat: number): void;
   (event: 'fill-ai'): void;
   (event: 'start'): void;
+  (event: 'edit'): void;
 }>();
 
 const copied = ref(false);

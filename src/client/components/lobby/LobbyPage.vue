@@ -108,13 +108,17 @@
     <LobbyProfileDialog :open="profileOpen" :origin="profileDialogOrigin" :profile="profile" :firstVisit="firstVisit" @close="profileOpen = false" @save="saveProfile" />
     <LobbyRoomDialog :open="roomOpen && myRoom !== undefined" :room="myRoom" :origin="roomDialogOrigin" @minimize="roomOpen = false" @leave="leave()"
       @ready="act({action: 'ready', roomId: myRoom!.id, ready: $event})" @seat-ai="act({action: 'seat-ai', roomId: myRoom!.id, seat: $event})"
-      @fill-ai="act({action: 'fill-ai', roomId: myRoom!.id})" @start="act({action: 'start', roomId: myRoom!.id})" />
+      @fill-ai="act({action: 'fill-ai', roomId: myRoom!.id})" @start="act({action: 'start', roomId: myRoom!.id})" @edit="openEdit()" />
     <LobbyMatchDialog :room="offeredRoom" :invitation="offerIsInvitation" @accept="acceptOffer()" @decline="declineOffer()" />
 
     <!-- "Create game" as a modal: the same form, with seats offered in the lobby -->
     <Teleport to="body">
       <div v-if="createOpen" class="lobby-create-overlay" @keydown.esc="createOpen = false">
         <CreateGameForm lobbyMode :lobbyProfile="profile.name.trim() === '' ? undefined : profile" @close="createOpen = false" @open-in-lobby="openInLobby" @host-profile="takeHostProfile" />
+      </div>
+      <!-- Host: the same form for the waiting game; saving changes it (Lobby.edit) and returns to the waiting room -->
+      <div v-if="editRoom !== undefined" class="lobby-create-overlay" @keydown.esc="editRoom = undefined">
+        <CreateGameForm lobbyMode :lobbyProfile="profile" :editRoom="editRoom" @close="editRoom = undefined" @open-in-lobby="saveEdit" @host-profile="takeHostProfile" />
       </div>
     </Teleport>
   </div>
@@ -125,7 +129,7 @@ import {askLobbyPushPermission, subscribeLobbyPush} from './lobbyPush';
 import ColumnResizeHandle from '@/client/components/ColumnResizeHandle.vue';
 import {LOBBY_CHAT_SPLIT} from '@/client/utils/columnResize';
 import {ComponentPublicInstance, computed, defineAsyncComponent, getCurrentInstance, onBeforeUnmount, onMounted, nextTick, ref, watch} from 'vue';
-import {LOBBY_NAME_MAX_LENGTH, LobbyProfile, LobbyRoomModel} from '@/common/lobby/LobbyModel';
+import {LOBBY_NAME_MAX_LENGTH, LobbyEditRoom, LobbyProfile, LobbyRoomModel} from '@/common/lobby/LobbyModel';
 import {NewGameConfig} from '@/common/game/NewGameConfig';
 import PageToolbar from '@/client/components/PageToolbar.vue';
 import PageTitle from '@/client/components/common/PageTitle.vue';
@@ -175,6 +179,8 @@ const filters = ref<LobbyFilters>(defaultLobbyFilters());
 const filtersOpen = ref(false);
 const roomOpen = ref(false);
 const createOpen = ref(false);
+// Host: the waiting game opened in the create form to change it
+const editRoom = ref<LobbyEditRoom | undefined>();
 const queueing = ref(false);
 const queueStartedAt = ref(0);
 const now = ref(Date.now());
@@ -382,6 +388,34 @@ watch(createOpen, (open) => {
     addressBeforeCreate = undefined;
   }
 });
+
+function openEdit(): void {
+  const room = myRoom.value;
+  if (room === undefined || room.config === undefined) {
+    return;
+  }
+  editRoom.value = {
+    title: room.title,
+    listed: room.listed,
+    config: room.config,
+    manualSeats: room.seats.flatMap((seat, index) => seat.kind === 'guest' ? [index] : []),
+  };
+  roomOpen.value = false;
+}
+
+async function saveEdit(request: {config: NewGameConfig, title: string, listed: boolean, freeSeats: Array<number>, hostPicture: {emoji: string, image?: string}}): Promise<void> {
+  const room = myRoom.value;
+  if (room === undefined) {
+    editRoom.value = undefined;
+    return;
+  }
+  const changed = await act({action: 'edit', roomId: room.id, config: request.config, title: request.title, listed: request.listed, freeSeats: request.freeSeats});
+  // Refused (e.g. too few free seats for the joined players): the form stays open, the alert says why
+  if (changed !== undefined) {
+    editRoom.value = undefined;
+    roomOpen.value = true;
+  }
+}
 
 // The own seat of "Create game" is the profile: taken over with every keystroke, kept when the form is closed
 function takeHostProfile(next: LobbyProfile): void {

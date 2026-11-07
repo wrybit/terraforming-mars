@@ -76,6 +76,8 @@ export type LobbyRoomModel = {
   yourPlayerId?: PlayerId;
   /** Started rooms: the host gets the page with every player's link when guests have to be sent theirs */
   hostNeedsLinks?: boolean;
+  /** Only for the host of a waiting room: the settings, to change them in the create form (edit) */
+  config?: NewGameConfig;
   /** Started rooms: how far the game is (lobby row: generation, progress bar, time played) */
   progress?: LobbyGameProgress;
 };
@@ -88,6 +90,15 @@ export type LobbyGameProgress = {
   playedMs: number;
 };
 
+/** What the create form needs to change a waiting game (host only): its settings, name, visibility and the seats entered by hand */
+export type LobbyEditRoom = {
+  title: string;
+  listed: boolean;
+  config: NewGameConfig;
+  /** Seat indexes the host entered by hand (guests); all other human seats are offered in the lobby */
+  manualSeats: ReadonlyArray<number>;
+};
+
 export type LobbyListModel = {
   rooms: ReadonlyArray<LobbyRoomModel>;
   /** Room the asking participant sits in (also unlisted ones) */
@@ -98,6 +109,8 @@ export type LobbyAction =
   /** config.players: seat 0 is the host; freeSeats lists the human seats offered in the lobby, other humans are guests */
   | {action: 'open', me: string, profile: LobbyProfile, title: string, listed: boolean, config: NewGameConfig, freeSeats: ReadonlyArray<number>}
   | {action: 'join', me: string, profile: LobbyProfile, roomId: string}
+  /** Host, while waiting: new settings from the create form, laid out like 'open'; joined players keep a free seat */
+  | {action: 'edit', me: string, roomId: string, title: string, listed: boolean, config: NewGameConfig, freeSeats: ReadonlyArray<number>}
   | {action: 'profile', me: string, profile: LobbyProfile, roomId: string}
   | {action: 'leave', me: string, roomId: string}
   | {action: 'ready', me: string, roomId: string, ready: boolean}
