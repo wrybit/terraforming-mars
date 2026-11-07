@@ -1,3 +1,7 @@
 *.ts text eol=lf
 *.js text eol=lf
 *.vue text eol=lf
+# Translation files: merged entry by entry instead of line by line (scripts/git/json-merge-driver.py,
+# set up per clone with scripts/git/install.sh); main and dune both append at the end of these files
+src/locales/**/*.json merge=json-union
+src/tools/i18n/sameAsEnglish.json merge=json-union
