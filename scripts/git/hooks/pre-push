@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+# Before a push of main or dune: does main still merge into dune, and does the result build?
+# AK1 builds dune with the current main merged in; a conflict or a build error used to show up only there
+# (AK1 then ran an old state, Jens, 7 Nov 2026). Here it is tested first, in a temporary worktree.
+# Install once per clone: scripts/git/install.sh. Skip in an emergency: git push --no-verify
+set -euo pipefail
+
+repository=$(git rev-parse --show-toplevel)
+mainCommit=$(git rev-parse --verify --quiet origin/main || true)
+duneCommit=$(git rev-parse --verify --quiet origin/dune || true)
+pushesBranch=false
+# stdin: <local ref> <local sha> <remote ref> <remote sha> per pushed ref
+while read -r localRef localSha remoteRef remoteSha; do
+  case "$remoteRef" in
+    refs/heads/main) mainCommit=$localSha; pushesBranch=true ;;
+    refs/heads/dune) duneCommit=$localSha; pushesBranch=true ;;
+  esac
+done
+if [ "$pushesBranch" != true ] || [ -z "$mainCommit" ] || [ -z "$duneCommit" ] || [[ "$mainCommit" =~ ^0+$ ]] || [[ "$duneCommit" =~ ^0+$ ]]; then
+  exit 0
+fi
+if git merge-base --is-ancestor "$mainCommit" "$duneCommit"; then
+  exit 0
+fi
+
+worktree=$(mktemp -d "${TMPDIR:-/tmp}/tm-merge-check.XXXXXX")
+cleanup() { git -C "$repository" worktree remove --force "$worktree" >/dev/null 2>&1 || rm -rf "$worktree"; }
+trap cleanup EXIT
+git -C "$repository" worktree add --quiet --detach "$worktree" "$duneCommit"
+cd "$worktree"
+echo "pre-push: merging main ${mainCommit:0:9} into dune ${duneCommit:0:9} (as AK1 does) …" >&2
+if ! git -c user.name=check -c user.email=check@invalid -c commit.gpgsign=false merge --quiet --no-edit "$mainCommit" >/dev/null 2>&1; then
+  echo "pre-push: main does not merge into dune without conflicts:" >&2
+  git diff --name-only --diff-filter=U | sed 's/^/  /' >&2
+  echo "Merge main into dune by hand first (or push with --no-verify)." >&2
+  exit 1
+fi
+ln -s "$repository/node_modules" node_modules
+if ! npm run --silent build > build.log 2>&1; then
+  echo "pre-push: main merged into dune does not build. Last lines:" >&2
+  grep -iE "error|ERR!" build.log | tail -20 >&2 || tail -20 build.log >&2
+  exit 1
+fi
+echo "pre-push: main + dune merge and build fine" >&2
