@@ -16,7 +16,7 @@ import {energySupplyRatio} from './energySupply';
 import {expectedEnergyRatio} from './energyOutlook';
 import {closingWindowFactor, requirementOutlook} from './requirementOutlook';
 import {drawEngineBonus} from './drawEngineBoost';
-import {pickSome} from './randomChoice';
+import {futureTableauCards} from './futureHand';
 import {engineValue} from './engineValue';
 import {nextCardDiscountValue} from './nextCardDiscount';
 import {tagDemandValue} from './tagDemand';
@@ -49,8 +49,8 @@ export function playCard(copy: IGame, copyPlayer: IPlayer, name: CardName): void
 }
 
 /** Plays a random sample of the remaining project cards: a guess at the player's future tableau. */
-function playFutureTableau(copy: IGame, copyPlayer: IPlayer, count: number): void {
-  for (const card of pickSome(Math.random, copy.projectDeck.drawPile, count)) {
+function playFutureTableau(copy: IGame, copyPlayer: IPlayer, count: number, valued: CardName): void {
+  for (const card of futureTableauCards(copy, copyPlayer, count, valued)) {
     try {
       playCard(copy, copyPlayer, card.name);
     } catch {
@@ -90,7 +90,7 @@ function gainInCopy(snapshot: GameSnapshot, player: IPlayer, card: ICard, contex
     copyPlayer.clearWaitingFor();
     try {
       if (futureCards > 0) {
-        playFutureTableau(copy, copyPlayer, futureCards);
+        playFutureTableau(copy, copyPlayer, futureCards, card.name);
       }
       if (futureGenerations > 0) {
         projectCities(copy, futureGenerations);
