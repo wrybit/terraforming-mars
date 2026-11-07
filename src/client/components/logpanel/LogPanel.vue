@@ -120,7 +120,7 @@ import {activeSectionIndex, edgeFadesOf, findScrollContainer, HEADER_SCROLL_GAP,
 import LogMessageComponent from '@/client/components/logpanel/LogMessageComponent.vue';
 import LogActionRow from '@/client/components/logpanel/LogActionRow.vue';
 import TerraformedBanner from '@/client/components/TerraformedBanner.vue';
-import {groupLogMessages, LogAction, LogRow, TERRAFORMED_MESSAGE} from '@/client/components/logpanel/logActions';
+import {groupLogMessages, LogAction, LogRow, TERRAFORMED_MESSAGE, withPendingResearch} from '@/client/components/logpanel/logActions';
 import {hasActionSummary} from '@/client/components/logpanel/LogActionEffects.vue';
 import {Color} from '@/common/Color';
 import {CardName} from '@/common/cards/CardName';
@@ -430,7 +430,7 @@ export default defineComponent({
     },
     // Rows of a generation that pass the filter
     visibleRows(section: GenerationLog): Array<LogRow> {
-      let rows = this.rowsOf(section);
+      let rows = withPendingResearch(this.rowsOf(section), section.generation, this.viewModel.game);
       // AI info switched off (filter bar): its lines are hidden like in a normal game
       if (this.analysisGame && !aiInsightsShown.value) {
         rows = rows.filter((row) => row.type !== 'message' || row.message.aiInsight === undefined);

@@ -468,6 +468,40 @@ each(@players, {
   color: #8a90a0;
 }
 
+// Purchase still running: the three dots light up one after the other
+.log-row-research-pending {
+  color: #ccc;
+}
+
+.log-row-research-dots i {
+  font-style: normal;
+  animation: log-research-dot 1.4s infinite both;
+}
+
+.log-row-research-dots i:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.log-row-research-dots i:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes log-research-dot {
+  0%, 80%, 100% {
+    opacity: 0.2;
+  }
+
+  40% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .log-row-research-dots i {
+    animation: none;
+  }
+}
+
 .log-phase-line {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   margin: 6px 0;

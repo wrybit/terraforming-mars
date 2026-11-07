@@ -46,6 +46,14 @@ describe('LogActionRow', () => {
     expect(wrapper.findAll('.log-row-research-entry')).has.length(2);
   });
 
+  it('shows only that players are buying while the purchase is still running', () => {
+    const row: LogRow = {type: 'research', indexes: [], entries: [], pending: true};
+    const wrapper = mount(LogActionRow, {...globalConfig, props: {row, viewModel: fakeViewModel()}});
+    expect(wrapper.find('[data-test="log-research-pending"]').exists()).to.be.true;
+    expect(wrapper.findAll('.log-row-research-dots i')).has.length(3);
+    expect(wrapper.findAll('.log-row-research-entry')).has.length(0);
+  });
+
   it('shows a turmoil row without player: neutral delegates as party icons, all players as one area', () => {
     const row: LogRow = {type: 'action', indexes: [0], action: {kind: 'turmoil', lead, effects: [], others: [],
       everyone: [{resource: 'tr', amount: -1}], parties: ['Mars First', 'Reds']}};

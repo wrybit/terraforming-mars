@@ -43,7 +43,8 @@ describe('AI round 152 variants', () => {
       expect(drawEngineTimingBonus(player, engine.name, playable)).eq(0);
       setPlayerTuning(player.id, 'drawEngineValue');
       const penalty = cheapFirstPenalty(player, engine.name, playable);
-      expect(penalty).to.be.greaterThan(0);
+      // cheapFirst is 0 in the baseline since round 184, so the penalty taken back may be 0.
+      expect(penalty).to.be.at.least(0);
       expect(drawEngineTimingBonus(player, engine.name, playable)).to.be.greaterThan(penalty);
       expect(drawEngineTimingBonus(player, cheap.name, playable)).eq(0);
     });

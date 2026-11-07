@@ -76,6 +76,8 @@ export type AiTuning = {
   plantProductionValue: number,
   /** Random future tableaus per card for its "later" value (cardValue.ts); 2 since the start. */
   laterSamples: number,
+  /** Share of the future tableau in a "later" value taken from the own hand instead of random deck cards (futureHand.ts); 0 = off. */
+  futureHandShare: number,
   /** Award lead uncertainty: share of the award score an opponent may still gain per remaining generation (stateValue.ts). */
   awardSwing: number,
   /** 1: hand cards keep a small value in the expected last generation until Mars is terraformed (no selling them off). */
@@ -399,6 +401,7 @@ export const BASELINE_TUNING: AiTuning = {
   corporationPriorWeight: 0,
   plantProductionValue: 2,
   laterSamples: 2,
+  futureHandShare: 0,
   // Adopted on purpose without a measurable AI-vs-AI gain (round 13: +0.6 VP per deal, z +0.7; funded
   // awards 829 → 210 per 200 games, funder wins 81 → 87 %): a human overtook three funded awards
   // (30 VP swing), the AI opponent in batches does not chase awards like that.
@@ -434,8 +437,9 @@ export const BASELINE_TUNING: AiTuning = {
   // Round 137: back to 2 M€ +1.18 VP (z +1.69), cards +0.20 – 2 and 5 play as many cards, 2 scores more.
   standardProjectRestraint: 2,
   // Round 139: cheapFirst 0.5 +2.95 VP (z +3.33) – adopted; boardCardBonus 1 cards played +1.10 (z +3.01), VP +0.79 – adopted
-  // by the card-throughput rule.
-  cheapFirst: 0.5,
+  // by the card-throughput rule. Round 184 (hand targets 14/8): noCheapFirst cards played +0.95 (z +2.87), VP +0.68
+  // (z +1.02) – back to 0 by the card rule.
+  cheapFirst: 0,
   boardCardBonus: 1,
   // Round 140: 0.5 cards played +0.72 (z +1.87), VP +0.26 – adopted by the card-throughput rule (1: −0.97, cards −0.71).
   tagDemand: 0.5,
@@ -1212,6 +1216,10 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   awardHand: {awardHandOutlook: 0.7},
   noAwardHand: {awardHandOutlook: 0},
   noLateBoardCards: {lateBoardCards: 0},
+  // Round 185: from gen 8 humans gain 31.6 M€ production from cards, the AI 11.9 – mostly cards whose production grows
+  // with own tags (Gyropolis, Medical Lab …); their later value saw only random deck cards, not the own hand.
+  futureHand05: {futureHandShare: 0.5},
+  futureHand1: {futureHandShare: 1},
 };
 
 export function isTuningVariant(name: string): boolean {

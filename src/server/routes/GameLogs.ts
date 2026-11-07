@@ -9,6 +9,7 @@ import {LogMessageDataType} from '../../common/logs/LogMessageDataType';
 import {aiPlayerOfLine, isSharedAiLine, spoilsOpenChoice} from '../aiFeedback/aiLogLines';
 import {AiFeedbackStore} from '../aiFeedback/AiFeedbackStore';
 import {AI_FEEDBACK_EMOJI} from '../../common/ai/AiFeedback';
+import {openPurchaseLines} from '../logs/openPurchaseLines';
 
 export class GameLogs {
   private getLogsForGeneration(messages: Array<LogMessage>, generation: number): Array<LogMessage> {
@@ -31,9 +32,14 @@ export class GameLogs {
   }
 
   public getLogsForGameView(playerId: ParticipantId, game: IGame, generation: number | undefined): Array<LogMessage> {
+    // Card counts of the research phase still running stay hidden until everyone has bought
+    const openPurchases = openPurchaseLines(game);
     const messagesForPlayer = (message: LogMessage) => {
       try {
         if (message === undefined || message === null) {
+          return false;
+        }
+        if (openPurchases.has(message)) {
           return false;
         }
         // Analysis game: the AI players' private lines are open to everyone – never those of humans
