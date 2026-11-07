@@ -1279,15 +1279,27 @@ each(@players, {
   background: none;
   cursor: pointer;
 
+  // Only the emoji in a thin ring: no player-color disc inside the colored name field
   .lobby-avatar {
+    box-sizing: border-box;
     width: 26px;
     height: 26px;
+    border: 1.5px solid rgba(255, 255, 255, 0.45);
+    background: transparent;
+    box-shadow: none;
     font-size: 15px;
+  }
+
+  // Emoji glyphs carry font metrics (ascent/descent): as a block of their own height they sit in the middle
+  .lobby-avatar-emoji {
+    display: block;
+    height: 1em;
+    line-height: 1em;
   }
 
   &:hover .lobby-avatar,
   &[aria-expanded="true"] .lobby-avatar {
-    box-shadow: 0 0 0 2px @bg_action;
+    border-color: @bg_action;
   }
 }
 
