@@ -349,9 +349,9 @@
                     <span class="create-game-player-position">
                       <SeatIcon :kind="newPlayer.aiLevel !== undefined ? 'ai' : 'human'" />{{ index + 1 }}
                     </span>
-                    <!-- Lobby: the own seat is the host; its picture is chosen here and becomes the lobby profile -->
-                    <LobbyEmojiPicker v-if="isHostSeat(index)" :color="newPlayer.color" :emoji="hostEmoji" :image="hostImage" @pick="pickHostEmoji" />
-                    <span class="create-game-player-name-field">
+                    <span class="create-game-player-name-field" :class="{'create-game-player-name-field--host': isHostSeat(index)}">
+                      <!-- Lobby: the own seat is the host; its picture sits in front of the name inside the field and becomes the lobby profile -->
+                      <LobbyEmojiPicker v-if="isHostSeat(index)" :color="newPlayer.color" :emoji="hostEmoji" :image="hostImage" @pick="pickHostEmoji" />
                       <input class="create-game-player-name" :placeholder="getPlayerNamePlaceholder(index)" v-model="newPlayer.name">
                       <!-- Fixed marker right behind the typed name ([AI], lobby: [Host]); not part of the input, so nobody types it twice -->
                       <span v-if="newPlayer.aiLevel !== undefined" class="create-game-player-name-marker" aria-hidden="true"><span class="create-game-player-name-ghost">{{ newPlayer.name || getPlayerNamePlaceholder(index) }}</span> {{ aiMarker(newPlayer.aiLevel) }}</span>

@@ -1246,11 +1246,29 @@ each(@players, {
   }
 }
 
-// Own seat of "Create game": picture in front of the name, the choice opens as a panel below it
+// Own seat of "Create game": picture at the start of the name field, the choice opens as a panel below it
 .lobby-emoji-picker {
-  position: relative;
   display: inline-flex;
   flex: none;
+}
+
+.create-game-player-name-field--host {
+  .lobby-emoji-picker {
+    position: absolute;
+    top: 50%;
+    left: 4px;
+    z-index: 1;
+    transform: translateY(-50%);
+  }
+
+  // Name and [Host] marker start behind the picture (the marker 1 px further: the input has a border)
+  .create-game-player-name {
+    padding-left: 36px;
+  }
+
+  .create-game-player-name-marker {
+    padding-left: 37px;
+  }
 }
 
 .lobby-emoji-picker-button {
@@ -1262,10 +1280,9 @@ each(@players, {
   cursor: pointer;
 
   .lobby-avatar {
-    width: 30px;
-    height: 30px;
-    font-size: 17px;
-    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.35);
+    width: 26px;
+    height: 26px;
+    font-size: 15px;
   }
 
   &:hover .lobby-avatar,
