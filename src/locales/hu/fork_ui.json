@@ -1188,5 +1188,16 @@
   "Change picture": "Kép módosítása",
   "Edit game": "Játék szerkesztése",
   "Save changes": "Módosítások mentése",
-  "Players have already joined: keep a free seat for each of them.": "Már csatlakoztak játékosok: mindegyiküknek hagyj egy szabad helyet."
+  "Players have already joined: keep a free seat for each of them.": "Már csatlakoztak játékosok: mindegyiküknek hagyj egy szabad helyet.",
+  "Remove from the game": "Eltávolítás a játékból",
+  "Wants to join": "Csatlakozna",
+  "Approve": "Jóváhagyás",
+  "Waiting for the host to approve": "Várakozás a házigazda jóváhagyására",
+  "The host removed you from the game ${0}.": "A házigazda eltávolított a(z) ${0} játékból.",
+  "The host removed you from this game twice: your request to join was sent, the host decides.": "A házigazda kétszer eltávolított ebből a játékból: a kérésedet elküldtük, a házigazda dönt.",
+  "The host declined your request: you cannot join this game.": "A házigazda elutasította a kérésedet: nem csatlakozhatsz ehhez a játékhoz.",
+  "There is no free seat for this player.": "Ennek a játékosnak nincs szabad helye.",
+  "This seat cannot be removed": "Ez a hely nem távolítható el",
+  "This request no longer exists": "Ez a kérés már nem létezik",
+  "This seat is not an AI player": "Ezen a helyen nem AI ül"
 }

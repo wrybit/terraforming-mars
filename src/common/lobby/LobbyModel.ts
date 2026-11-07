@@ -82,6 +82,8 @@ export type LobbyRoomModel = {
   yourPlayerId?: PlayerId;
   /** Started rooms: the host gets the page with every player's link when guests have to be sent theirs */
   hostNeedsLinks?: boolean;
+  /** Only for the host: players removed twice who ask to come back (approve or decline) */
+  requests?: ReadonlyArray<LobbyJoinRequest>;
   /** Only for the host of a waiting room: the settings, to change them in the create form (edit) */
   config?: NewGameConfig;
   /** Started rooms: how far the game is (lobby row: generation, progress bar, time played) */
@@ -105,10 +107,16 @@ export type LobbyEditRoom = {
   manualSeats: ReadonlyArray<number>;
 };
 
+export type LobbyJoinRequest = {participant: string, name: string, color: Color, emoji: string, image?: string};
+
 export type LobbyListModel = {
   rooms: ReadonlyArray<LobbyRoomModel>;
   /** Room the asking participant sits in (also unlisted ones) */
   yourRoomId?: string;
+  /** Room whose host still has to approve the asking participant (removed twice before) */
+  requestedRoomId?: string;
+  /** The host just removed the asking participant from this game (its name); told once */
+  removedFrom?: string;
 };
 
 export type LobbyAction =
@@ -123,6 +131,10 @@ export type LobbyAction =
   | {action: 'ready', me: string, roomId: string, ready: boolean}
   | {action: 'seat-ai', me: string, roomId: string, seat: number}
   | {action: 'ai-level', me: string, roomId: string, seat: number, aiLevel: AiLevel}
+  /** Host: the seat becomes free (AI, entered by hand or joined; joined players are counted, see requests) */
+  | {action: 'remove', me: string, roomId: string, seat: number}
+  | {action: 'approve', me: string, roomId: string, participant: string}
+  | {action: 'decline', me: string, roomId: string, participant: string}
   | {action: 'fill-ai', me: string, roomId: string}
   | {action: 'start', me: string, roomId: string};
 

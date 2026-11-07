@@ -1990,5 +1990,16 @@
   "Change picture": "更换图片",
   "Edit game": "编辑游戏",
   "Save changes": "保存更改",
-  "Players have already joined: keep a free seat for each of them.": "已有玩家加入：请为每位玩家保留一个空位。"
+  "Players have already joined: keep a free seat for each of them.": "已有玩家加入：请为每位玩家保留一个空位。",
+  "Remove from the game": "移出游戏",
+  "Wants to join": "想要加入",
+  "Approve": "批准",
+  "Waiting for the host to approve": "等待房主批准",
+  "The host removed you from the game ${0}.": "房主已将你移出游戏 ${0}。",
+  "The host removed you from this game twice: your request to join was sent, the host decides.": "房主已两次将你移出此游戏：加入请求已发送，由房主决定。",
+  "The host declined your request: you cannot join this game.": "房主拒绝了你的请求：你无法加入此游戏。",
+  "There is no free seat for this player.": "没有可供该玩家使用的空位。",
+  "This seat cannot be removed": "无法移除此座位",
+  "This request no longer exists": "该请求已不存在",
+  "This seat is not an AI player": "此座位不是 AI 玩家"
 }

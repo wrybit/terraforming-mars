@@ -1317,6 +1317,36 @@ each(@players, {
   font-size: 20px;
 }
 
+// Host: ✕ in the seat's top right corner frees it again (same button as in the create form)
+.lobby-seat-remove {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 24px;
+  height: 24px;
+  font-size: 12px;
+}
+
+// Request of a player removed twice: picture and name, the decision on the right
+.lobby-request {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+
+  & + .lobby-request {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .lobby-request-name {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
 // Own link of a player the host entered by hand: link icon plus text, below the seat
 .lobby-seat-link {
   display: inline-flex;
@@ -1380,6 +1410,7 @@ each(@players, {
 }
 
 .lobby-seat {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1547,6 +1578,11 @@ each(@players, {
     bottom: auto;
     transform: translate(-50%, -50%);
   }
+}
+
+// Waiting for the host's approval: information only, nothing to click
+.lobby-wait-bar--request {
+  cursor: default;
 }
 
 // ---------- "Create game" as modal ----------

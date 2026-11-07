@@ -1372,5 +1372,16 @@
   "Change picture": "Bytt bilde",
   "Edit game": "Rediger spill",
   "Save changes": "Lagre endringer",
-  "Players have already joined: keep a free seat for each of them.": "Spillere har allerede blitt med: behold en ledig plass til hver av dem."
+  "Players have already joined: keep a free seat for each of them.": "Spillere har allerede blitt med: behold en ledig plass til hver av dem.",
+  "Remove from the game": "Fjern fra spillet",
+  "Wants to join": "Vil bli med",
+  "Approve": "Godkjenn",
+  "Waiting for the host to approve": "Venter på godkjenning fra verten",
+  "The host removed you from the game ${0}.": "Verten fjernet deg fra spillet ${0}.",
+  "The host removed you from this game twice: your request to join was sent, the host decides.": "Verten har fjernet deg to ganger fra dette spillet: forespørselen er sendt, verten bestemmer.",
+  "The host declined your request: you cannot join this game.": "Verten avslo forespørselen din: du kan ikke bli med i dette spillet.",
+  "There is no free seat for this player.": "Det er ingen ledig plass til denne spilleren.",
+  "This seat cannot be removed": "Denne plassen kan ikke fjernes",
+  "This request no longer exists": "Denne forespørselen finnes ikke lenger",
+  "This seat is not an AI player": "Denne plassen er ikke en AI-spiller"
 }

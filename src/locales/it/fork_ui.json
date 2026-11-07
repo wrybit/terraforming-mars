@@ -2273,5 +2273,16 @@
   "Change picture": "Cambia immagine",
   "Edit game": "Modifica partita",
   "Save changes": "Salva modifiche",
-  "Players have already joined: keep a free seat for each of them.": "Alcuni giocatori si sono già uniti: lascia un posto libero per ciascuno di loro."
+  "Players have already joined: keep a free seat for each of them.": "Alcuni giocatori si sono già uniti: lascia un posto libero per ciascuno di loro.",
+  "Remove from the game": "Rimuovi dalla partita",
+  "Wants to join": "Vuole unirsi",
+  "Approve": "Approva",
+  "Waiting for the host to approve": "In attesa dell'approvazione dell'host",
+  "The host removed you from the game ${0}.": "L'host ti ha rimosso dalla partita ${0}.",
+  "The host removed you from this game twice: your request to join was sent, the host decides.": "L'host ti ha rimosso due volte da questa partita: la richiesta è stata inviata, decide l'host.",
+  "The host declined your request: you cannot join this game.": "L'host ha rifiutato la tua richiesta: non puoi unirti a questa partita.",
+  "There is no free seat for this player.": "Non ci sono posti liberi per questo giocatore.",
+  "This seat cannot be removed": "Questo posto non può essere rimosso",
+  "This request no longer exists": "Questa richiesta non esiste più",
+  "This seat is not an AI player": "Questo posto non è un giocatore AI"
 }

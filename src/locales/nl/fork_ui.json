@@ -1635,5 +1635,16 @@
   "Change picture": "Afbeelding wijzigen",
   "Edit game": "Spel bewerken",
   "Save changes": "Wijzigingen opslaan",
-  "Players have already joined: keep a free seat for each of them.": "Er zijn al spelers aangesloten: houd voor elk van hen een plaats vrij."
+  "Players have already joined: keep a free seat for each of them.": "Er zijn al spelers aangesloten: houd voor elk van hen een plaats vrij.",
+  "Remove from the game": "Uit het spel verwijderen",
+  "Wants to join": "Wil meedoen",
+  "Approve": "Toestaan",
+  "Waiting for the host to approve": "Wachten op toestemming van de host",
+  "The host removed you from the game ${0}.": "De host heeft je uit het spel ${0} verwijderd.",
+  "The host removed you from this game twice: your request to join was sent, the host decides.": "De host heeft je twee keer uit dit spel verwijderd: je verzoek is verstuurd, de host beslist.",
+  "The host declined your request: you cannot join this game.": "De host heeft je verzoek geweigerd: je kunt niet meedoen aan dit spel.",
+  "There is no free seat for this player.": "Er is geen vrije plaats voor deze speler.",
+  "This seat cannot be removed": "Deze plaats kan niet worden verwijderd",
+  "This request no longer exists": "Dit verzoek bestaat niet meer",
+  "This seat is not an AI player": "Deze plaats is geen AI-speler"
 }

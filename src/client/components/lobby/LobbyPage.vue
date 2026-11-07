@@ -99,6 +99,12 @@
       </aside>
     </main>
 
+    <!-- Removed twice before: the host decides; until then a quiet status at the place of the waiting bar -->
+    <div v-if="requestedRoom !== undefined && myRoom === undefined" class="lobby-wait-bar lobby-wait-bar--request" role="status">
+      <span class="lobby-queue-pulse" aria-hidden="true"></span>
+      <span>{{ $t('Waiting for the host to approve') }}: <b>{{ requestedRoom.title }}</b></span>
+    </div>
+
     <!-- Minimized waiting room. Stays in the page (hidden) while the dialog is open: the dialog grows out of it and shrinks back into it -->
     <button v-if="myRoom !== undefined && myRoom.state === 'open'" type="button" class="lobby-wait-bar" :class="{'lobby-wait-bar--hidden': roomOpen}" :aria-hidden="roomOpen" @click="roomOpen = true">
       <span class="lobby-queue-pulse" aria-hidden="true"></span>
@@ -109,6 +115,8 @@
     <LobbyRoomDialog :open="roomOpen && myRoom !== undefined" :room="myRoom" :origin="roomDialogOrigin" @minimize="roomOpen = false" @leave="leave()"
       @ready="act({action: 'ready', roomId: myRoom!.id, ready: $event})" @seat-ai="act({action: 'seat-ai', roomId: myRoom!.id, seat: $event})"
       @ai-level="(seat, aiLevel) => act({action: 'ai-level', roomId: myRoom!.id, seat, aiLevel})"
+      @remove="act({action: 'remove', roomId: myRoom!.id, seat: $event})" @approve="act({action: 'approve', roomId: myRoom!.id, participant: $event})"
+      @decline="act({action: 'decline', roomId: myRoom!.id, participant: $event})"
       @start="act({action: 'start', roomId: myRoom!.id})" @edit="openEdit()" />
     <LobbyMatchDialog :room="offeredRoom" :invitation="offerIsInvitation" @accept="acceptOffer()" @decline="declineOffer()" />
 
@@ -148,6 +156,7 @@ import {activeFilterCount, bestMatch, defaultLobbyFilters, hasFreeSeat, LobbyFil
 import {loadLobbyProfile, saveLobbyProfile} from './lobbyProfile';
 import {isLobbyCreatePath, LOBBY_CREATE_PATH, LOBBY_SEAT_PARAMETER, lobbyRoomIdFromPath} from '@/common/lobby/lobbyUrl';
 import {paths} from '@/common/app/paths';
+import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 import {PICK_CODES} from '@/client/hotkeys/hotkeyActions';
 import {codeOfEvent} from '@/client/hotkeys/hotkeyEvents';
 import {hotkeysAvailable} from '@/client/hotkeys/hotkeyAvailability';
@@ -173,6 +182,8 @@ let afterProfile: (() => void) | undefined;
 
 const rooms = ref<ReadonlyArray<LobbyRoomModel>>([]);
 const yourRoomId = ref<string | undefined>();
+// Removed twice before: the room whose host still has to approve us
+const requestedRoomId = ref<string | undefined>();
 const loaded = ref(false);
 const loadError = ref('');
 const search = ref('');
@@ -204,6 +215,7 @@ let openingOwnRoom = false;
 let clockTimer: ReturnType<typeof setInterval> | undefined;
 
 const filterCount = computed(() => activeFilterCount(filters.value));
+const requestedRoom = computed(() => rooms.value.find((room) => room.id === requestedRoomId.value));
 const myRoom = computed(() => rooms.value.find((room) => room.id === yourRoomId.value));
 const visibleRooms = computed(() => {
   const query = search.value.trim().toLowerCase();
@@ -233,7 +245,17 @@ async function refresh(): Promise<void> {
     const list = await fetchLobby(invitedRoomId);
     rooms.value = list.rooms;
     yourRoomId.value = list.yourRoomId;
+    const wasRequested = requestedRoomId.value;
+    requestedRoomId.value = list.requestedRoomId;
     loaded.value = true;
+    // Approved: the seat is ours, the waiting room opens as after joining
+    if (wasRequested !== undefined && list.yourRoomId === wasRequested) {
+      roomOpen.value = true;
+    }
+    if (list.removedFrom !== undefined && instance !== null) {
+      roomOpen.value = false;
+      showAlert(instance.proxy as ComponentPublicInstance, 'Game lobby', {text: translateTextWithParams('The host removed you from the game ${0}.', [list.removedFrom])});
+    }
     loadError.value = '';
   } catch (error) {
     loadError.value = describeFailure(failureOf(error));
@@ -329,6 +351,10 @@ function join(room: LobbyRoomModel): void {
     followNextStart = true;
     const seatToken = room.id === invitedRoomId ? invitedSeatToken : undefined;
     const joined = await act({action: 'join', roomId: room.id, profile: profile.value, seatToken});
+    if (joined !== undefined && requestedRoomId.value === room.id && instance !== null) {
+      showAlert(instance.proxy as ComponentPublicInstance, 'Game lobby', {text: translateText('The host removed you from this game twice: your request to join was sent, the host decides.')});
+      return;
+    }
     if (joined !== undefined) {
       queueing.value = false;
       roomOpen.value = joined.state === 'open';

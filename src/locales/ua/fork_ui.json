@@ -1163,5 +1163,16 @@
   "Change picture": "Змінити зображення",
   "Edit game": "Редагувати гру",
   "Save changes": "Зберегти зміни",
-  "Players have already joined: keep a free seat for each of them.": "Гравці вже приєдналися: залиште вільне місце для кожного з них."
+  "Players have already joined: keep a free seat for each of them.": "Гравці вже приєдналися: залиште вільне місце для кожного з них.",
+  "Remove from the game": "Прибрати з гри",
+  "Wants to join": "Хоче приєднатися",
+  "Approve": "Схвалити",
+  "Waiting for the host to approve": "Очікування схвалення господаря",
+  "The host removed you from the game ${0}.": "Господар прибрав тебе з гри ${0}.",
+  "The host removed you from this game twice: your request to join was sent, the host decides.": "Господар двічі прибирав тебе з цієї гри: запит надіслано, вирішує господар.",
+  "The host declined your request: you cannot join this game.": "Господар відхилив твій запит: ти не можеш приєднатися до цієї гри.",
+  "There is no free seat for this player.": "Для цього гравця немає вільного місця.",
+  "This seat cannot be removed": "Це місце не можна прибрати",
+  "This request no longer exists": "Цього запиту вже немає",
+  "This seat is not an AI player": "На цьому місці немає AI"
 }

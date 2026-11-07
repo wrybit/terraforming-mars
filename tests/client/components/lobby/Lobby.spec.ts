@@ -149,6 +149,18 @@ describe('Lobby components', () => {
     expect(document.querySelector('.lobby-seat-level')).is.null;
   });
 
+  it('LobbyRoomDialog: the host removes seats and decides on requests', async () => {
+    const waiting = room([{...host, you: true}, {kind: 'ai', aiLevel: 'hard'}, {kind: 'free'}],
+      {requests: [{participant: 'bobbobbobbobbob001', name: 'Bob', color: 'blue', emoji: '🪐'}]});
+    const wrapper = mount(LobbyRoomDialog, {...globalConfig, props: {open: true, room: waiting}, attachTo: document.body});
+    expect(document.querySelectorAll('.lobby-seat-remove')).has.length(1);
+    document.querySelector<HTMLButtonElement>('.lobby-seat-remove')?.click();
+    expect(wrapper.emitted('remove')).deep.eq([[1]]);
+    expect(document.querySelector('.lobby-request-name')?.textContent).eq('Bob');
+    Array.from(document.querySelectorAll<HTMLButtonElement>('.lobby-request button')).find((button) => button.textContent?.includes('Approve'))?.click();
+    expect(wrapper.emitted('approve')).deep.eq([['bobbobbobbobbob001']]);
+  });
+
   it('LobbyRoomDialog: the host copies the own link of a player entered by hand', () => {
     const waiting = room([{...host, you: true}, {kind: 'guest', name: 'Klaus', color: 'green', inviteToken: 'abc123abc123'}, {kind: 'free'}]);
     mount(LobbyRoomDialog, {...globalConfig, props: {open: true, room: waiting}, attachTo: document.body});

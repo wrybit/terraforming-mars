@@ -1005,5 +1005,16 @@
   "Change picture": "Vaihda kuva",
   "Edit game": "Muokkaa peliä",
   "Save changes": "Tallenna muutokset",
-  "Players have already joined: keep a free seat for each of them.": "Pelaajia on jo liittynyt: jätä jokaiselle heistä vapaa paikka."
+  "Players have already joined: keep a free seat for each of them.": "Pelaajia on jo liittynyt: jätä jokaiselle heistä vapaa paikka.",
+  "Remove from the game": "Poista pelistä",
+  "Wants to join": "Haluaa liittyä",
+  "Approve": "Hyväksy",
+  "Waiting for the host to approve": "Odotetaan isännän hyväksyntää",
+  "The host removed you from the game ${0}.": "Isäntä poisti sinut pelistä ${0}.",
+  "The host removed you from this game twice: your request to join was sent, the host decides.": "Isäntä on poistanut sinut tästä pelistä kahdesti: pyyntösi on lähetetty, isäntä päättää.",
+  "The host declined your request: you cannot join this game.": "Isäntä hylkäsi pyyntösi: et voi liittyä tähän peliin.",
+  "There is no free seat for this player.": "Tälle pelaajalle ei ole vapaata paikkaa.",
+  "This seat cannot be removed": "Tätä paikkaa ei voi poistaa",
+  "This request no longer exists": "Tätä pyyntöä ei enää ole",
+  "This seat is not an AI player": "Tällä paikalla ei ole AI:ta"
 }

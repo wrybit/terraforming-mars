@@ -205,6 +205,43 @@ describe('Lobby', () => {
     expect(filled.seats.map((seat) => seat.kind)).deep.eq(['human', 'human', 'ai']);
   });
 
+  it('lets the host free any seat; who was removed twice has to ask, declined ones stay out', async () => {
+    const room = await lobby.open(HOST, profile('Ann'), '', true, config(['human', 'human', 'ai', 'human']), starter);
+    expect(lobby.removeSeat(HOST, room.id, 2).seats[2].kind).eq('free');
+    try {
+      lobby.removeSeat(GUEST, room.id, 1);
+      expect.fail('a guest removed a seat');
+    } catch (error) {
+      expect(error).instanceOf(LobbyError);
+    }
+    for (let round = 1; round <= 2; round++) {
+      await lobby.join(GUEST, profile('Bob', 'blue'), room.id, starter);
+      lobby.removeSeat(HOST, room.id, 1);
+      expect(lobby.list(GUEST).removedFrom).eq(room.title);
+      // Told once
+      expect(lobby.list(GUEST).removedFrom).is.undefined;
+    }
+    // Third time: a request instead of a seat
+    const asked = await lobby.join(GUEST, profile('Bob', 'blue'), room.id, starter);
+    expect(asked.seats.filter((seat) => seat.kind === 'human')).has.length(1);
+    expect(lobby.list(GUEST).requestedRoomId).eq(room.id);
+    expect(lobby.list(HOST).rooms[0].requests?.map((request) => request.name)).deep.eq(['Bob']);
+    expect(lobby.list(OTHER).rooms[0].requests).is.undefined;
+    await lobby.approveRequest(HOST, room.id, GUEST, starter);
+    expect(lobby.list(GUEST).yourRoomId).eq(room.id);
+    lobby.removeSeat(HOST, room.id, 1);
+    await lobby.join(GUEST, profile('Bob', 'blue'), room.id, starter);
+    lobby.declineRequest(HOST, room.id, GUEST);
+    try {
+      await lobby.join(GUEST, profile('Bob', 'blue'), room.id, starter);
+      expect.fail('a declined player joined');
+    } catch (error) {
+      expect(error).instanceOf(LobbyError);
+    }
+    // Somebody else still joins directly
+    expect((await lobby.join(OTHER, profile('Cid', 'green'), room.id, starter)).seats.filter((seat) => seat.kind === 'human')).has.length(2);
+  });
+
   it('lets only the host change the strength of an AI player while waiting', async () => {
     const room = await lobby.open(HOST, profile('Ann'), '', true, config(['human', 'human', 'ai']), starter);
     try {

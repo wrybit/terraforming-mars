@@ -1877,5 +1877,16 @@
   "Change picture": "Сменить картинку",
   "Edit game": "Изменить игру",
   "Save changes": "Сохранить изменения",
-  "Players have already joined: keep a free seat for each of them.": "Игроки уже присоединились: оставьте для каждого из них свободное место."
+  "Players have already joined: keep a free seat for each of them.": "Игроки уже присоединились: оставьте для каждого из них свободное место.",
+  "Remove from the game": "Убрать из игры",
+  "Wants to join": "Хочет присоединиться",
+  "Approve": "Принять",
+  "Waiting for the host to approve": "Ожидание одобрения хоста",
+  "The host removed you from the game ${0}.": "Хост убрал вас из игры ${0}.",
+  "The host removed you from this game twice: your request to join was sent, the host decides.": "Хост дважды убирал вас из этой игры: запрос отправлен, решает хост.",
+  "The host declined your request: you cannot join this game.": "Хост отклонил ваш запрос: вы не можете присоединиться к этой игре.",
+  "There is no free seat for this player.": "Для этого игрока нет свободного места.",
+  "This seat cannot be removed": "Это место нельзя освободить",
+  "This request no longer exists": "Этого запроса больше нет",
+  "This seat is not an AI player": "На этом месте нет AI"
 }

@@ -26,6 +26,8 @@ export const REACHABLE_HOST_TIMEOUT_MS = 30 * 60 * 1000;
 export const ABANDONED_AFTER_MS = 3 * 60 * 1000;
 /** Rooms nobody completes are dropped at the latest after this time */
 export const OPEN_ROOM_MAX_AGE_MS = 12 * 60 * 60 * 1000;
+/** Removed this often by the host, a player may only come back when the host approves */
+export const KICKS_BEFORE_REQUEST = 2;
 
 /** The part of a created game the lobby needs (IGame satisfies it) */
 export type StartedGame = {
@@ -83,7 +85,15 @@ type Room = {
   joined?: boolean;
   /** Something happened beyond the initial choice: the game stays, whoever leaves */
   begun?: boolean;
+  /** Participant -> how often the host removed them; from KICKS_BEFORE_REQUEST on joining becomes a request */
+  removals?: Record<string, number>;
+  /** Players removed more often who ask to come back; the host approves or declines */
+  requests?: Array<JoinRequest>;
+  /** Declined by the host: they can never join this game again */
+  declined?: Array<string>;
 };
+
+type JoinRequest = {participant: string, profile: LobbyProfile, lastSeen: number};
 
 /**
  * Open games waiting for players, kept in memory: a room only lives until its game starts
@@ -94,6 +104,8 @@ export class Lobby {
   private readonly rooms = new Map<string, Room>();
   private loaded = false;
   private notifier: LobbyNotifier = NO_NOTIFIER;
+  /** Participant -> name of the game the host just removed them from; told once with the next list */
+  private readonly removedFrom = new Map<string, string>();
 
   constructor(
     private readonly clock: () => number = Date.now,
@@ -208,11 +220,16 @@ export class Lobby {
       this.touch(me);
     }
     const yourRoom = me === undefined ? undefined : this.roomOf(me);
+    const requested = me === undefined ? undefined : Array.from(this.rooms.values()).find((room) => room.state === 'open' && room.requests?.some((request) => request.participant === me));
     const rooms = Array.from(this.rooms.values())
-      .filter((room) => room.listed || room === yourRoom || room.id === roomId)
+      .filter((room) => room.listed || room === yourRoom || room === requested || room.id === roomId)
       .sort((a, b) => b.createdAt - a.createdAt)
       .map((room) => this.model(room, me));
-    return {rooms, yourRoomId: yourRoom?.id};
+    const removedFrom = me === undefined ? undefined : this.removedFrom.get(me);
+    if (me !== undefined) {
+      this.removedFrom.delete(me);
+    }
+    return {rooms, yourRoomId: yourRoom?.id, requestedRoomId: requested?.id, removedFrom};
   }
 
   /**
@@ -284,6 +301,16 @@ export class Lobby {
     this.prune();
     const room = this.openRoom(roomId);
     const cleanProfile = sanitizeProfile(profile);
+    if (room.declined?.includes(me)) {
+      throw new LobbyError('The host declined your request: you cannot join this game.');
+    }
+    if (this.seatIndexOf(room, me) < 0 && (room.removals?.[me] ?? 0) >= KICKS_BEFORE_REQUEST) {
+      // Removed twice: only the host lets them back in (approveRequest)
+      room.requests = (room.requests ?? []).filter((request) => request.participant !== me);
+      room.requests.push({participant: me, profile: cleanProfile, lastSeen: this.clock()});
+      this.save();
+      return this.model(room, me);
+    }
     const reserved = seatToken === undefined ? -1 : room.seats.findIndex((seat) => seat.kind === 'guest' && seat.token === seatToken);
     if (this.seatIndexOf(room, me) < 0 && reserved >= 0) {
       const guest = room.seats[reserved] as GuestSeat;
@@ -325,6 +352,11 @@ export class Lobby {
     if (room === undefined || room.state !== 'open') {
       return;
     }
+    if (room.requests?.some((request) => request.participant === me)) {
+      room.requests = room.requests.filter((request) => request.participant !== me);
+      this.save();
+      return;
+    }
     this.removeParticipant(room, me);
     this.save();
   }
@@ -348,6 +380,53 @@ export class Lobby {
     room.seats[seatIndex] = {kind: 'ai', aiLevel: DEFAULT_AI_LEVEL};
     this.save();
     await this.startIfComplete(room, starter);
+    return this.model(room, me);
+  }
+
+  /**
+   * Host only, while waiting: the seat becomes free again (AI player, player entered by hand or somebody who joined).
+   * Whoever joined is told (list: removedFrom) and counted; from the second time on, coming back needs the host's approval.
+   */
+  public removeSeat(me: string, roomId: string, seatIndex: number): LobbyRoomModel {
+    const room = this.hostRoom(me, roomId);
+    const seat = room.seats[seatIndex];
+    if (seatIndex === 0 || seat === undefined || seat.kind === 'free') {
+      throw new LobbyError('This seat cannot be removed');
+    }
+    if (seat.kind === 'human') {
+      room.removals = {...room.removals, [seat.participant]: (room.removals?.[seat.participant] ?? 0) + 1};
+      this.removedFrom.set(seat.participant, room.title);
+    }
+    room.seats[seatIndex] = {kind: 'free'};
+    this.save();
+    return this.model(room, me);
+  }
+
+  /** Host only: a player removed twice before takes the first free seat */
+  public async approveRequest(me: string, roomId: string, participant: string, starter: GameStarter): Promise<LobbyRoomModel> {
+    const room = this.hostRoom(me, roomId);
+    const request = room.requests?.find((candidate) => candidate.participant === participant);
+    if (request === undefined) {
+      throw new LobbyError('This request no longer exists');
+    }
+    const free = room.seats.findIndex((seat) => seat.kind === 'free');
+    if (free < 0) {
+      throw new LobbyError('There is no free seat for this player.');
+    }
+    this.leaveAll(participant);
+    room.requests = room.requests?.filter((candidate) => candidate !== request);
+    room.seats[free] = this.humanSeat(participant, {...request.profile, color: this.freeColor(room, request.profile.color)}, true);
+    this.save();
+    await this.startIfComplete(room, starter);
+    return this.model(room, me);
+  }
+
+  /** Host only: the player can never join this game again */
+  public declineRequest(me: string, roomId: string, participant: string): LobbyRoomModel {
+    const room = this.hostRoom(me, roomId);
+    room.requests = room.requests?.filter((candidate) => candidate.participant !== participant);
+    room.declined = [...(room.declined ?? []), participant];
+    this.save();
     return this.model(room, me);
   }
 
@@ -558,6 +637,9 @@ export class Lobby {
       },
       gameId: me === room.host ? room.gameId : undefined,
       config: me === room.host && room.state === 'open' ? room.config : undefined,
+      requests: me === room.host && room.state === 'open' && (room.requests?.length ?? 0) > 0 ?
+        room.requests?.map((request) => ({participant: request.participant, name: request.profile.name, color: request.profile.color, emoji: request.profile.emoji, image: request.profile.image})) :
+        undefined,
       spectatorId: room.spectatorId,
       yourPlayerId: me === undefined ? undefined : room.playerIds[me],
       hostNeedsLinks: room.state === 'started' && me === room.host && room.seats.some((seat) => seat.kind === 'guest') ? true : undefined,
@@ -570,6 +652,11 @@ export class Lobby {
       for (const seat of room.seats) {
         if (seat.kind === 'human' && seat.participant === me) {
           seat.lastSeen = now;
+        }
+      }
+      for (const request of room.requests ?? []) {
+        if (request.participant === me) {
+          request.lastSeen = now;
         }
       }
     }
@@ -609,6 +696,8 @@ export class Lobby {
           this.removeParticipant(room, seat.participant);
         }
       }
+      // A request whose player closed the lobby is withdrawn
+      room.requests = room.requests?.filter((request) => now - request.lastSeen <= PARTICIPANT_TIMEOUT_MS);
     }
   }
 

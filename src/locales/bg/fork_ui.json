@@ -1954,5 +1954,16 @@
   "Change picture": "Смени картинката",
   "Edit game": "Редактирай играта",
   "Save changes": "Запази промените",
-  "Players have already joined: keep a free seat for each of them.": "Вече има присъединили се играчи: оставете свободно място за всеки от тях."
+  "Players have already joined: keep a free seat for each of them.": "Вече има присъединили се играчи: оставете свободно място за всеки от тях.",
+  "Remove from the game": "Премахни от играта",
+  "Wants to join": "Иска да се присъедини",
+  "Approve": "Одобри",
+  "Waiting for the host to approve": "Изчакване на одобрение от домакина",
+  "The host removed you from the game ${0}.": "Домакинът те премахна от играта ${0}.",
+  "The host removed you from this game twice: your request to join was sent, the host decides.": "Домакинът те премахна два пъти от тази игра: молбата ти е изпратена, домакинът решава.",
+  "The host declined your request: you cannot join this game.": "Домакинът отказа молбата ти: не можеш да се присъединиш към тази игра.",
+  "There is no free seat for this player.": "Няма свободно място за този играч.",
+  "This seat cannot be removed": "Това място не може да бъде премахнато",
+  "This request no longer exists": "Тази молба вече не съществува",
+  "This seat is not an AI player": "Това място не е AI играч"
 }

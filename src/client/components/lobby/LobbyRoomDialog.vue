@@ -6,6 +6,9 @@
         <div class="create-game-subhead">{{ $t('Seats') }} {{ filled }}/{{ room.seats.length }}</div>
         <div class="lobby-seats" :class="'lobby-seats--count-' + room.seats.length">
           <div v-for="(seat, index) in room.seats" :key="index" class="lobby-seat" :class="'lobby-seat--' + seat.kind">
+            <!-- Host, while waiting: ✕ frees the seat again (AI player, player entered by hand or somebody who joined) -->
+            <button v-if="isHost && !started && index > 0 && seat.kind !== 'free'" type="button" class="create-game-to-lobby lobby-seat-remove"
+              :title="$t('Remove from the game')" :aria-label="$t('Remove from the game')" @click="emit('remove', index)">✕</button>
             <template v-if="seat.kind === 'human'">
               <LobbyAvatar kind="human" :color="seat.color" :emoji="seat.emoji" :image="seat.image" size="large" />
               <span class="lobby-seat-name">{{ seat.name }}<template v-if="seat.you"> ({{ $t('you') }})</template></span>
@@ -46,6 +49,16 @@
           </div>
         </div>
         <p class="lobby-dialog-note">{{ statusText }}</p>
+      </div>
+      <!-- Host: players removed twice before ask to come back; declined ones can never join this game again -->
+      <div v-if="isHost && !started && (room.requests?.length ?? 0) > 0" class="lobby-room-group">
+        <div class="create-game-subhead" v-i18n>Wants to join</div>
+        <div v-for="request in room.requests" :key="request.participant" class="lobby-request">
+          <LobbyAvatar kind="human" :color="request.color" :emoji="request.emoji" :image="request.image" size="medium" />
+          <span class="lobby-request-name">{{ request.name }}</span>
+          <AppButton class="btn-tone-danger" title="Decline" @click="emit('decline', request.participant)" />
+          <AppButton class="btn-tone-success" title="Approve" @click="emit('approve', request.participant)" />
+        </div>
       </div>
       <div v-if="freeSeats > 0 && !started" class="lobby-room-group">
         <div class="create-game-subhead" v-i18n>Invite friends</div>
@@ -105,6 +118,9 @@ const emit = defineEmits<{
   (event: 'ready', ready: boolean): void;
   (event: 'seat-ai', seat: number): void;
   (event: 'ai-level', seat: number, aiLevel: AiLevel): void;
+  (event: 'remove', seat: number): void;
+  (event: 'approve', participant: string): void;
+  (event: 'decline', participant: string): void;
   (event: 'start'): void;
   (event: 'edit'): void;
 }>();

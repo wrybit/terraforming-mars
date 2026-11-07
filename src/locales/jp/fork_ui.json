@@ -1324,7 +1324,7 @@
   "All seats are taken. The game starts as soon as everybody is ready.": "全席が埋まりました。全員が準備完了になると開始します。",
   "Game found": "ゲームが見つかりました",
   "Join this game?": "このゲームに参加しますか？",
-  "Decline": "断る",
+  "Decline": "拒否",
   "Accept": "受ける",
   "Open in lobby": "ロビーで開く",
   "Name of the game": "ゲーム名",
@@ -1379,5 +1379,16 @@
   "Change picture": "画像を変更",
   "Edit game": "ゲームを編集",
   "Save changes": "変更を保存",
-  "Players have already joined: keep a free seat for each of them.": "すでにプレイヤーが参加しています：参加者ごとに空席を残してください。"
+  "Players have already joined: keep a free seat for each of them.": "すでにプレイヤーが参加しています：参加者ごとに空席を残してください。",
+  "Remove from the game": "ゲームから外す",
+  "Wants to join": "参加希望",
+  "Approve": "承認",
+  "Waiting for the host to approve": "ホストの承認待ち",
+  "The host removed you from the game ${0}.": "ホストがあなたをゲーム ${0} から外しました。",
+  "The host removed you from this game twice: your request to join was sent, the host decides.": "ホストはあなたをこのゲームから2回外しました：参加リクエストを送信しました。ホストが決めます。",
+  "The host declined your request: you cannot join this game.": "ホストがリクエストを拒否しました：このゲームには参加できません。",
+  "There is no free seat for this player.": "このプレイヤーのための空席がありません。",
+  "This seat cannot be removed": "この席は外せません",
+  "This request no longer exists": "このリクエストはもう存在しません",
+  "This seat is not an AI player": "この席は AI プレイヤーではありません"
 }
