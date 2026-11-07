@@ -1322,7 +1322,6 @@ each(@players, {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  margin-top: 6px;
 
   svg {
     width: 13px;
@@ -1344,11 +1343,40 @@ each(@players, {
   }
 }
 
+// Seats in rows of three of the same width, short rows centered: 1 and 2 seats in the middle, 3 in one row,
+// 4 as 2 + 2, 5 as 3 + 2, 6 as 3 + 3. Six grid columns, each seat spans two; centered seats start one column later.
+// Phones: rows of two, an odd last seat in the middle.
 .lobby-seats {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 10px;
   margin-bottom: 10px;
+
+  > .lobby-seat {
+    grid-column: span 2;
+  }
+
+  @media only screen and (min-width: 601px) {
+    &.lobby-seats--count-1 > .lobby-seat {
+      grid-column: 3 / span 2;
+    }
+
+    &.lobby-seats--count-2 > .lobby-seat:nth-child(1),
+    &.lobby-seats--count-4 > .lobby-seat:nth-child(odd),
+    &.lobby-seats--count-5 > .lobby-seat:nth-child(4) {
+      grid-column: 2 / span 2;
+    }
+  }
+
+  @media only screen and (max-width: 600px) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+
+    &.lobby-seats--count-1 > .lobby-seat,
+    &.lobby-seats--count-3 > .lobby-seat:nth-child(3),
+    &.lobby-seats--count-5 > .lobby-seat:nth-child(5) {
+      grid-column: 2 / span 2;
+    }
+  }
 }
 
 .lobby-seat {
@@ -1365,6 +1393,12 @@ each(@players, {
 
   .create-game-small-button {
     margin: 0;
+  }
+
+  // The seat's button (copy link, seat an AI, AI strength) sits at the bottom: all buttons of a row on one line
+  > .create-game-small-button,
+  > span:has(> .create-game-small-button) {
+    margin-top: auto;
   }
 }
 

@@ -4,7 +4,7 @@
       <GameSetupChips :chips="chips" writtenOut />
       <div class="lobby-room-group">
         <div class="create-game-subhead">{{ $t('Seats') }} {{ filled }}/{{ room.seats.length }}</div>
-        <div class="lobby-seats">
+        <div class="lobby-seats" :class="'lobby-seats--count-' + room.seats.length">
           <div v-for="(seat, index) in room.seats" :key="index" class="lobby-seat" :class="'lobby-seat--' + seat.kind">
             <template v-if="seat.kind === 'human'">
               <LobbyAvatar kind="human" :color="seat.color" :emoji="seat.emoji" :image="seat.image" size="large" />
