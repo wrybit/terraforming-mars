@@ -57,7 +57,9 @@ export type GameStarter = (config: NewGameConfig) => Promise<StartedGame>;
 
 type HumanSeat = {kind: 'human', participant: string, profile: LobbyProfile, ready: boolean, lastSeen: number};
 // Entered by the host by hand; always counts as ready
-type GuestSeat = {kind: 'guest', name: string, color: Color, handicap?: number};
+// token: secret of the seat's own invitation link (lobby/room/<id>?seat=<token>), with which the player takes the
+// seat over in the lobby; playerId: the player's link once the game runs. Both only ever go to the host.
+type GuestSeat = {kind: 'guest', name: string, color: Color, handicap?: number, token?: string, playerId?: PlayerId};
 type Seat = {kind: 'free'} | {kind: 'ai', aiLevel: AiLevel} | HumanSeat | GuestSeat;
 
 type Room = {
@@ -242,8 +244,7 @@ export class Lobby {
       if (free.has(index)) {
         return {kind: 'free'};
       }
-      const guest = sanitizeProfile({name: player.name || capitalize(player.color), color: player.color, emoji: ''});
-      return {kind: 'guest', name: guest.name, color: guest.color, handicap: Number(player.handicap) || 0};
+      return this.guestSeat(player, []);
     });
     this.leaveAll(me);
     let id = this.newId();
@@ -274,12 +275,25 @@ export class Lobby {
     return this.model(room, me);
   }
 
-  public async join(me: string, profile: LobbyProfile, roomId: string, starter: GameStarter): Promise<LobbyRoomModel> {
+  /**
+   * seatToken: the invitation link of a seat the host entered by hand; whoever opens it takes that very seat
+   * (in the color the host chose, if still free), otherwise the first free seat.
+   */
+  public async join(me: string, profile: LobbyProfile, roomId: string, starter: GameStarter, seatToken?: string): Promise<LobbyRoomModel> {
     this.ensureLoaded();
     this.prune();
     const room = this.openRoom(roomId);
     const cleanProfile = sanitizeProfile(profile);
-    if (this.seatIndexOf(room, me) < 0) {
+    const reserved = seatToken === undefined ? -1 : room.seats.findIndex((seat) => seat.kind === 'guest' && seat.token === seatToken);
+    if (this.seatIndexOf(room, me) < 0 && reserved >= 0) {
+      const guest = room.seats[reserved] as GuestSeat;
+      this.leaveAll(me);
+      room.seats[reserved] = {kind: 'free'};
+      const color = this.freeColor(room, guest.color);
+      room.seats[reserved] = this.humanSeat(me, {...cleanProfile, color}, true);
+      this.save();
+      this.notifier.joined(room.host, {id: room.id, path: lobbyRoomPath(room.id, room.title)}, cleanProfile.name);
+    } else if (this.seatIndexOf(room, me) < 0) {
       const free = room.seats.findIndex((seat) => seat.kind === 'free');
       if (free < 0) {
         throw new LobbyError('This game is already full');
@@ -362,6 +376,7 @@ export class Lobby {
       throw new LobbyError('The first seat belongs to the host');
     }
     const host = room.seats[0];
+    const oldGuests = room.seats.filter((seat): seat is GuestSeat => seat.kind === 'guest');
     const joined = room.seats.filter((seat, index): seat is HumanSeat => index > 0 && seat.kind === 'human');
     const free = new Set(Array.isArray(freeSeats) ? freeSeats : []);
     const seats = players.map((player, index): Seat => {
@@ -374,8 +389,7 @@ export class Lobby {
       if (free.has(index)) {
         return joined.shift() ?? {kind: 'free'};
       }
-      const guest = sanitizeProfile({name: player.name || capitalize(player.color), color: player.color, emoji: ''});
-      return {kind: 'guest', name: guest.name, color: guest.color, handicap: Number(player.handicap) || 0};
+      return this.guestSeat(player, oldGuests);
     });
     if (joined.length > 0) {
       throw new LobbyError('Players have already joined: keep a free seat for each of them.');
@@ -386,6 +400,13 @@ export class Lobby {
     room.listed = listed !== false;
     this.save();
     return this.model(room, me);
+  }
+
+  /** A player entered by the host; an unchanged guest of the previous layout keeps the link already sent */
+  private guestSeat(player: NewPlayerModel, previous: ReadonlyArray<GuestSeat>): GuestSeat {
+    const guest = sanitizeProfile({name: player.name || capitalize(player.color), color: player.color, emoji: ''});
+    const same = previous.find((seat) => seat.name === guest.name);
+    return {kind: 'guest', name: guest.name, color: guest.color, handicap: Number(player.handicap) || 0, token: same?.token ?? randomSeatToken()};
   }
 
   /** No AI seat for settings the AI cannot handle (same check as the create form and ApiCreateGame, aiSupport.ts) */
@@ -408,12 +429,13 @@ export class Lobby {
     return this.model(room, me);
   }
 
-  /** Host only: start with everybody seated, even if not everyone pressed "Ready" */
+  /**
+   * Host only, at any time: start with everybody seated, even if not everyone pressed "Ready". Free seats are left
+   * out: a game set up for 4 starts with the 3 who came; the host alone plays a solo game.
+   */
   public async startNow(me: string, roomId: string, starter: GameStarter): Promise<LobbyRoomModel> {
     const room = this.hostRoom(me, roomId);
-    if (room.seats.some((seat) => seat.kind === 'free')) {
-      throw new LobbyError('There are still free seats');
-    }
+    room.seats = room.seats.filter((seat) => seat.kind !== 'free');
     await this.start(room, starter);
     return this.model(room, me);
   }
@@ -441,6 +463,9 @@ export class Lobby {
         const playerId = game.players[index].id;
         if (seat.kind === 'human') {
           room.playerIds[seat.participant] = playerId;
+        }
+        if (seat.kind === 'guest') {
+          seat.playerId = playerId;
         }
         if (seat.kind === 'human' && seat.participant === room.host) {
           room.hostPlayerId = playerId;
@@ -485,7 +510,11 @@ export class Lobby {
   private model(room: Room, me: string | undefined): LobbyRoomModel {
     const seats = room.seats.map((seat): LobbySeatModel => {
       if (seat.kind === 'guest') {
-        return {kind: 'guest', name: seat.name, color: seat.color};
+        // Only the host may pass on a guest's link: waiting, the seat's invitation; running, the player page
+        const forHost = me === room.host;
+        return {kind: 'guest', name: seat.name, color: seat.color,
+          inviteToken: forHost && room.state === 'open' ? seat.token : undefined,
+          playerId: forHost && room.state === 'started' ? seat.playerId : undefined};
       }
       if (seat.kind !== 'human') {
         return seat.kind === 'ai' ? {kind: 'ai', aiLevel: seat.aiLevel} : {kind: 'free'};
@@ -661,6 +690,12 @@ function defaultTitle(name: string): string {
 }
 
 // 4 characters (lobbyUrl.ts): short enough for a readable link; the lobby checks for collisions
+/** Secret of a guest seat's invitation link: long enough not to be guessed from the room link */
+function randomSeatToken(): string {
+  const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+  return Array.from({length: 12}, () => characters[Math.floor(Math.random() * characters.length)]).join('');
+}
+
 function randomRoomId(): string {
   const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
   return Array.from({length: 4}, () => characters[Math.floor(Math.random() * characters.length)]).join('');

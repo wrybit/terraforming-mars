@@ -60,7 +60,7 @@ export class ApiLobby extends Handler {
     case 'open':
       return this.lobby.open(action.me, action.profile, action.title, action.listed, action.config, starter, Array.isArray(action.freeSeats) ? action.freeSeats : []);
     case 'join':
-      return this.lobby.join(action.me, action.profile, action.roomId, starter);
+      return this.lobby.join(action.me, action.profile, action.roomId, starter, typeof action.seatToken === 'string' ? action.seatToken : undefined);
     case 'edit':
       return Promise.resolve(this.lobby.edit(action.me, action.roomId, action.title, action.listed, action.config, Array.isArray(action.freeSeats) ? action.freeSeats : []));
     case 'profile':

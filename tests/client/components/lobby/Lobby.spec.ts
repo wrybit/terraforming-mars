@@ -124,6 +124,21 @@ describe('Lobby components', () => {
     wrapper.unmount();
   });
 
+  it('LobbyRoomDialog: the host can always start, also alone, without "Fill with AI"', () => {
+    const alone = room([{...host, you: true}, {kind: 'free'}]);
+    mount(LobbyRoomDialog, {...globalConfig, props: {open: true, room: alone}, attachTo: document.body});
+    const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('button'));
+    const start = buttons.find((button) => button.textContent?.includes('Start now'));
+    expect(start?.disabled).is.false;
+    expect(buttons.some((button) => button.textContent?.includes('Fill with AI'))).is.false;
+  });
+
+  it('LobbyRoomDialog: the host copies the own link of a player entered by hand', () => {
+    const waiting = room([{...host, you: true}, {kind: 'guest', name: 'Klaus', color: 'green', inviteToken: 'abc123abc123'}, {kind: 'free'}]);
+    mount(LobbyRoomDialog, {...globalConfig, props: {open: true, room: waiting}, attachTo: document.body});
+    expect(document.querySelector('.lobby-seat-link')?.textContent).contains('Copy link');
+  });
+
   it('LobbyRoomDialog offers "Continue" instead of "Start now" once the game runs', () => {
     const started = room([{...host, you: true}, {kind: 'guest', name: 'Dan', color: 'green'}], {state: 'started', yourPlayerId: 'p1', gameId: 'g1', hostNeedsLinks: true});
     const wrapper = mount(LobbyRoomDialog, {...globalConfig, props: {open: true, room: started}, attachTo: document.body});
@@ -133,12 +148,12 @@ describe('Lobby components', () => {
     wrapper.unmount();
   });
 
-  it('LobbyRoomDialog disables the AI buttons for settings the AI cannot handle', () => {
+  it('LobbyRoomDialog disables "Seat an AI" for settings the AI cannot handle', () => {
     const withColonies = room([{...host, you: true}, {kind: 'free'}]);
     withColonies.setup.expansions = {...withColonies.setup.expansions, colonies: true};
     const wrapper = mount(LobbyRoomDialog, {...globalConfig, props: {open: true, room: withColonies}, attachTo: document.body});
     const disabled = Array.from(document.body.querySelectorAll('.lobby-room-dialog button[disabled]')).map((button) => button.textContent?.trim());
-    expect(disabled).to.include.members(['Seat an AI', 'Fill with AI and start']);
+    expect(disabled).to.include.members(['Seat an AI']);
     wrapper.unmount();
   });
 

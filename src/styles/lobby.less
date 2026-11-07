@@ -1317,6 +1317,24 @@ each(@players, {
   font-size: 20px;
 }
 
+// Own link of a player the host entered by hand: link icon plus text, below the seat
+.lobby-seat-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 6px;
+
+  svg {
+    width: 13px;
+    height: 13px;
+    fill: none;
+    stroke: currentcolor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+}
+
 // Waiting room
 .lobby-room-group {
   margin-top: @lobby-gap-section;

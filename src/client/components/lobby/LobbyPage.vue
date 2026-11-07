@@ -108,7 +108,7 @@
     <LobbyProfileDialog :open="profileOpen" :origin="profileDialogOrigin" :profile="profile" :firstVisit="firstVisit" @close="profileOpen = false" @save="saveProfile" />
     <LobbyRoomDialog :open="roomOpen && myRoom !== undefined" :room="myRoom" :origin="roomDialogOrigin" @minimize="roomOpen = false" @leave="leave()"
       @ready="act({action: 'ready', roomId: myRoom!.id, ready: $event})" @seat-ai="act({action: 'seat-ai', roomId: myRoom!.id, seat: $event})"
-      @fill-ai="act({action: 'fill-ai', roomId: myRoom!.id})" @start="act({action: 'start', roomId: myRoom!.id})" @edit="openEdit()" />
+      @start="act({action: 'start', roomId: myRoom!.id})" @edit="openEdit()" />
     <LobbyMatchDialog :room="offeredRoom" :invitation="offerIsInvitation" @accept="acceptOffer()" @decline="declineOffer()" />
 
     <!-- "Create game" as a modal: the same form, with seats offered in the lobby -->
@@ -145,7 +145,7 @@ import HotkeyKeys from '@/client/components/hotkeys/HotkeyKeys.vue';
 import {fetchLobby, lobbyAction, lobbyFailureText, LobbyRequest} from './lobbyApi';
 import {activeFilterCount, bestMatch, defaultLobbyFilters, hasFreeSeat, LobbyFilters, matchesFilters} from './lobbyFilters';
 import {loadLobbyProfile, saveLobbyProfile} from './lobbyProfile';
-import {isLobbyCreatePath, LOBBY_CREATE_PATH, lobbyRoomIdFromPath} from '@/common/lobby/lobbyUrl';
+import {isLobbyCreatePath, LOBBY_CREATE_PATH, LOBBY_SEAT_PARAMETER, lobbyRoomIdFromPath} from '@/common/lobby/lobbyUrl';
 import {paths} from '@/common/app/paths';
 import {PICK_CODES} from '@/client/hotkeys/hotkeyActions';
 import {codeOfEvent} from '@/client/hotkeys/hotkeyEvents';
@@ -190,6 +190,8 @@ const offerIsInvitation = ref(false);
 const declinedRooms = new Set<string>();
 // Invitation link: lobby/room/<id>-<name> (lobbyUrl.ts)
 const invitedRoomId = lobbyRoomIdFromPath(window.location.pathname);
+// Invitation link of a seat the host entered by hand (lobby/room/<id>?seat=<token>): joining takes exactly that seat
+const invitedSeatToken = new URLSearchParams(window.location.search).get(LOBBY_SEAT_PARAMETER) ?? undefined;
 let invitationHandled = false;
 let pollTimer: ReturnType<typeof setInterval> | undefined;
 // Rooms we sat in while they were still open on this page: their start leads into the game
@@ -264,7 +266,8 @@ function offerInvitation(): void {
   }
   invitationHandled = true;
   const room = rooms.value.find((r) => r.id === invitedRoomId);
-  if (room !== undefined && room.id !== yourRoomId.value && hasFreeSeat(room)) {
+  // A reserved seat is no free seat, but the link holder may take it
+  if (room !== undefined && room.id !== yourRoomId.value && room.state === 'open' && (hasFreeSeat(room) || invitedSeatToken !== undefined)) {
     offerIsInvitation.value = true;
     offeredRoom.value = room;
   }
@@ -323,7 +326,8 @@ async function act(action: LobbyRequest): Promise<LobbyRoomModel | undefined> {
 function join(room: LobbyRoomModel): void {
   withProfile(async () => {
     followNextStart = true;
-    const joined = await act({action: 'join', roomId: room.id, profile: profile.value});
+    const seatToken = room.id === invitedRoomId ? invitedSeatToken : undefined;
+    const joined = await act({action: 'join', roomId: room.id, profile: profile.value, seatToken});
     if (joined !== undefined) {
       queueing.value = false;
       roomOpen.value = joined.state === 'open';

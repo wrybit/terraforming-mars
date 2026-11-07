@@ -35,7 +35,13 @@ export type LobbySeatModel =
   | {kind: 'free'}
   | {kind: 'ai', aiLevel: AiLevel}
   /** Entered by the host for somebody who does not use the lobby; gets the link from the host after the start */
-  | {kind: 'guest', name: string, color: Color}
+  | {
+    kind: 'guest', name: string, color: Color,
+    /** Host only, waiting: secret of this seat's invitation link (lobby/room/<id>?seat=<token>) */
+    inviteToken?: string,
+    /** Host only, running: the guest's player page */
+    playerId?: PlayerId,
+  }
   | {
     kind: 'human',
     name: string,
@@ -108,7 +114,8 @@ export type LobbyListModel = {
 export type LobbyAction =
   /** config.players: seat 0 is the host; freeSeats lists the human seats offered in the lobby, other humans are guests */
   | {action: 'open', me: string, profile: LobbyProfile, title: string, listed: boolean, config: NewGameConfig, freeSeats: ReadonlyArray<number>}
-  | {action: 'join', me: string, profile: LobbyProfile, roomId: string}
+  /** seatToken: from the invitation link of a seat the host entered by hand (that seat is taken) */
+  | {action: 'join', me: string, profile: LobbyProfile, roomId: string, seatToken?: string}
   /** Host, while waiting: new settings from the create form, laid out like 'open'; joined players keep a free seat */
   | {action: 'edit', me: string, roomId: string, title: string, listed: boolean, config: NewGameConfig, freeSeats: ReadonlyArray<number>}
   | {action: 'profile', me: string, profile: LobbyProfile, roomId: string}

@@ -244,6 +244,48 @@ describe('Lobby', () => {
     expect(changed.state).eq('open');
   });
 
+  it('lets the host start at any time with the free seats left out, alone as a solo game', async () => {
+    const room = await lobby.open(HOST, profile('Ann'), '', true, config(['human', 'human', 'human', 'human']), starter);
+    await lobby.join(GUEST, profile('Bob', 'blue'), room.id, starter);
+    await lobby.join(OTHER, profile('Cid', 'green'), room.id, starter);
+    try {
+      await lobby.startNow(GUEST, room.id, starter);
+      expect.fail('a guest started the game');
+    } catch (error) {
+      expect(error).instanceOf(LobbyError);
+    }
+    const startedRoom = await lobby.startNow(HOST, room.id, starter);
+    expect(startedRoom.state).eq('started');
+    expect(startedRoom.seats.map((seat) => seat.kind)).deep.eq(['human', 'human', 'human']);
+    expect(started[0].players.map((player) => player.name)).deep.eq(['Ann', 'Bob', 'Cid']);
+
+    const alone = await lobby.open(OTHER, profile('Cid'), '', true, config(['human', 'human']), starter);
+    expect((await lobby.startNow(OTHER, alone.id, starter)).seats).has.length(1);
+    expect(started[1].players).has.length(1);
+  });
+
+  it('gives each player entered by hand an own link: before the start it takes the seat, then the player page', async () => {
+    const withGuest = config(['human', 'human', 'human']);
+    withGuest.players[1].name = 'Klaus';
+    withGuest.players[1].color = 'green';
+    const room = await lobby.open(HOST, profile('Ann'), '', true, withGuest, starter, [2]);
+    const token = (lobby.list(HOST).rooms[0].seats[1] as {inviteToken?: string}).inviteToken;
+    expect(token).is.a('string');
+    expect((lobby.list(GUEST).rooms[0].seats[1] as {inviteToken?: string}).inviteToken).is.undefined;
+    // An unchanged guest keeps the link when the host edits the game
+    lobby.edit(HOST, room.id, '', true, withGuest, [2]);
+    expect((lobby.list(HOST).rooms[0].seats[1] as {inviteToken?: string}).inviteToken).eq(token);
+    const joined = await lobby.join(GUEST, profile('Klaus K', 'red'), room.id, starter, token);
+    expect(joined.seats.map((seat) => seat.kind)).deep.eq(['human', 'human', 'free']);
+    expect(joined.seats[1]).to.include({name: 'Klaus K', color: 'green', you: true});
+
+    const second = await lobby.open(OTHER, profile('Cid'), '', true, withGuest, starter, [2]);
+    await lobby.startNow(OTHER, second.id, starter);
+    const guest = lobby.list(OTHER).rooms.find((r) => r.id === second.id)?.seats[1] as {playerId?: string, inviteToken?: string};
+    expect(guest.playerId).eq('p1');
+    expect(guest.inviteToken).is.undefined;
+  });
+
   it('frees the seat of a participant who stopped polling, and closes the room without host', async () => {
     const room = await lobby.open(HOST, profile('Ann'), '', true, config(['human', 'human', 'human']), starter);
     await lobby.join(GUEST, profile('Bob'), room.id, starter);

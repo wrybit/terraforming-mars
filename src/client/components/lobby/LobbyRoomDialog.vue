@@ -17,6 +17,11 @@
               <LobbyAvatar kind="guest" :color="seat.color" :title="seat.name" size="large" />
               <span class="lobby-seat-name">{{ seat.name }}</span>
               <span class="lobby-seat-state" v-i18n>entered by the host</span>
+              <!-- Host: this player's own link to pass on (waiting: takes this seat in the lobby; running: the player page) -->
+              <button v-if="guestLink(seat) !== undefined" type="button" class="create-game-small-button lobby-seat-link" @click="copyGuestLink(index, seat)">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" /></svg>
+                <span>{{ $t(copiedSeat === index ? 'Link copied' : 'Copy link') }}</span>
+              </button>
             </template>
             <template v-else-if="seat.kind === 'ai'">
               <LobbyAvatar kind="ai" size="large" />
@@ -55,10 +60,8 @@
           <span class="lobby-room-foot-gap"></span>
           <!-- Host: change settings, name or seats of the waiting game in the create form -->
           <AppButton v-if="isHost" class="btn-tone-quiet" title="Edit game" @click="emit('edit')" />
-          <span v-if="isHost && freeSeats > 0" v-glass-tooltip="aiBlockedText">
-            <AppButton class="btn-tone-quiet" title="Fill with AI and start" :disabled="aiBlockedText !== ''" @click="emit('fill-ai')" />
-          </span>
-          <AppButton v-if="isHost" title="Start now" :disabled="freeSeats > 0" @click="emit('start')" />
+          <!-- The host can always start: free seats are left out, alone it is a solo game -->
+          <AppButton v-if="isHost" title="Start now" @click="emit('start')" />
           <AppButton v-else :class="you?.ready ? 'btn-tone-quiet' : 'btn-tone-success'" :title="you?.ready ? 'Not ready' : 'Ready'" @click="emit('ready', !you?.ready)" />
         </div>
       </template>
@@ -69,14 +72,14 @@
 <script setup lang="ts">
 import {computed, ref} from 'vue';
 import {AiLevel} from '@/common/ai/AiLevel';
-import {LobbyRoomModel} from '@/common/lobby/LobbyModel';
+import {LobbyRoomModel, LobbySeatModel} from '@/common/lobby/LobbyModel';
 import SidebarModal from '@/client/components/SidebarModal.vue';
 import DialogFrame from '@/client/components/DialogFrame.vue';
 import AppButton from '@/client/components/common/AppButton.vue';
 import GameSetupChips from '@/client/components/common/GameSetupChips.vue';
 import LobbyAvatar from './LobbyAvatar.vue';
 import {lobbySetupChips} from './lobbySetupChips';
-import {lobbyRoomPath} from '@/common/lobby/lobbyUrl';
+import {lobbyRoomPath, lobbySeatInvitePath} from '@/common/lobby/lobbyUrl';
 import {continueHref, playerLinksHref} from './lobbyLinks';
 import {aiUnsupportedReasons} from '@/common/ai/aiSupport';
 import {glassTooltip as vGlassTooltip} from '@/client/directives/GlassTooltip';
@@ -95,7 +98,6 @@ const emit = defineEmits<{
   (event: 'leave'): void;
   (event: 'ready', ready: boolean): void;
   (event: 'seat-ai', seat: number): void;
-  (event: 'fill-ai'): void;
   (event: 'start'): void;
   (event: 'edit'): void;
 }>();
@@ -109,6 +111,7 @@ const you = computed(() => {
 const isHost = computed(() => you.value?.host === true);
 const filled = computed(() => props.room?.seats.filter((seat) => seat.kind !== 'free').length ?? 0);
 const freeSeats = computed(() => (props.room?.seats.length ?? 0) - filled.value);
+// "Start now" once every seat is taken; otherwise the button says with how many the game starts
 const inviteLink = computed(() => props.room === undefined ? '' : new URL(lobbyRoomPath(props.room.id, props.room.title), document.baseURI).href);
 // Same check as the create form and the server (aiSupport.ts); empty = AI players possible
 const aiBlockedText = computed(() => {
@@ -134,6 +137,32 @@ const statusText = computed(() => {
 
 function aiLevelLabel(level: AiLevel): string {
   return AI_LEVEL_OPTIONS.find((option) => option.value === level)?.label ?? level;
+}
+
+const copiedSeat = ref<number | undefined>();
+
+function guestLink(seat: LobbySeatModel): string | undefined {
+  if (seat.kind !== 'guest' || props.room === undefined) {
+    return undefined;
+  }
+  if (seat.inviteToken !== undefined) {
+    return new URL(lobbySeatInvitePath(props.room.id, props.room.title, seat.inviteToken), document.baseURI).href;
+  }
+  return seat.playerId === undefined ? undefined : new URL('player?id=' + seat.playerId, document.baseURI).href;
+}
+
+async function copyGuestLink(index: number, seat: LobbySeatModel): Promise<void> {
+  const link = guestLink(seat);
+  if (link === undefined) {
+    return;
+  }
+  try {
+    await navigator.clipboard.writeText(link);
+    copiedSeat.value = index;
+    setTimeout(() => copiedSeat.value = undefined, 2000);
+  } catch {
+    // Clipboard blocked: nothing else to do here
+  }
 }
 
 async function copyInvite(): Promise<void> {
