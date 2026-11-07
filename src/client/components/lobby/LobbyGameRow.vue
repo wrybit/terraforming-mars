@@ -1,7 +1,7 @@
 <template>
   <!-- One open (or running) game of the lobby. Top: title with the facts (generation, players, AI, time), the seats
        (one circle each, free ones dashed, the host outlined) and the action; below over the full width the progress
-       of a running game and the settings. Like "Game created": a CTA only where you take part, otherwise a quiet button -->
+       of a running game and the settings. A CTA only where you take part, otherwise a quiet button -->
   <!-- Games you opened yourself are set off by a background, the others stay neutral.
        The own waiting room opens its dialog on a click anywhere on the entry, not only on the button -->
   <div class="lobby-game" :data-room-id="room.id"
@@ -34,7 +34,10 @@
       <!-- Own running game: back into it instead of watching -->
       <a v-else-if="continueLink !== undefined" class="btn btn-rounded btn-primary lobby-game-watch" :href="continueLink"><span v-i18n>Continue</span><HotkeyKeys :fixed="keys" /></a>
       <a v-else-if="room.state === 'started' && room.spectatorId" class="btn btn-rounded btn-tone-quiet lobby-game-watch" :href="'spectator?id=' + room.spectatorId"><span v-i18n>Watch</span><HotkeyKeys :fixed="keys" /></a>
-      <AppButton v-else-if="room.state === 'open'" class="btn-tone-quiet" title="Join" :fixedHotkey="keys" @click="emit('join')" />
+      <!-- Declined by the host: no way in, said as plain information instead of a button that does nothing -->
+      <span v-else-if="room.state === 'open' && room.yourAccess === 'declined'" class="lobby-game-declined" v-i18n>Declined by the host</span>
+      <!-- Removed twice before: joining asks the host first -->
+      <AppButton v-else-if="room.state === 'open'" class="btn-tone-quiet" :title="room.yourAccess === 'request' ? 'Ask to join' : 'Join'" :fixedHotkey="keys" @click="emit('join')" />
     </div>
   </div>
 </template>
@@ -54,7 +57,7 @@ import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 
 const props = defineProps<{
   room: LobbyRoomModel;
-  // Position in the list: the first ten rows get Alt + 1 … 9, 0 (as on "Game created"), handled by LobbyPage.vue
+  // Position in the list: the first ten rows get Alt + 1 … 9, 0, handled by LobbyPage.vue
   position?: number;
 }>();
 

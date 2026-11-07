@@ -1,5 +1,6 @@
 import {mount} from '@vue/test-utils';
 import {expect} from 'chai';
+import {nextTick} from 'vue';
 import {globalConfig} from '../getLocalVue';
 import LobbyAvatar from '@/client/components/lobby/LobbyAvatar.vue';
 import LobbyGameRow from '@/client/components/lobby/LobbyGameRow.vue';
@@ -7,6 +8,8 @@ import LobbyFilterPanel from '@/client/components/lobby/LobbyFilterPanel.vue';
 import LobbyRoomDialog from '@/client/components/lobby/LobbyRoomDialog.vue';
 import LobbyMatchDialog from '@/client/components/lobby/LobbyMatchDialog.vue';
 import LobbyProfileDialog from '@/client/components/lobby/LobbyProfileDialog.vue';
+import LobbyEmojiPicker from '@/client/components/lobby/LobbyEmojiPicker.vue';
+import {LOBBY_EMOJIS} from '@/common/lobby/LobbyModel';
 import {isEmojiOnly} from '@/client/components/lobby/lobbyChatEmoji';
 import {activeFilterCount, availableFilterChoices, bestMatch, defaultLobbyFilters, matchesFilters} from '@/client/components/lobby/lobbyFilters';
 import {LobbyRoomModel, LobbySeatModel} from '@/common/lobby/LobbyModel';
@@ -34,6 +37,20 @@ function room(seats: Array<LobbySeatModel>, change: Partial<LobbyRoomModel> = {}
 }
 
 describe('Lobby components', () => {
+  it('LobbyEmojiPicker shows the picture and lets the host pick another emoji', async () => {
+    const wrapper = mount(LobbyEmojiPicker, {...globalConfig, props: {color: 'red', emoji: '🌕'}, attachTo: document.body});
+    expect(wrapper.find('.lobby-emoji-picker-button').text()).eq('🌕');
+    expect(document.querySelector('.lobby-emoji-picker-popover')).is.null;
+    await wrapper.find('.lobby-emoji-picker-button').trigger('click');
+    const emojis = document.querySelectorAll<HTMLButtonElement>('.lobby-emoji-picker-popover .lobby-emoji');
+    expect(emojis).has.length(LOBBY_EMOJIS.length);
+    expect(document.querySelector('.lobby-emoji-picker-popover .lobby-emoji--selected')?.textContent).eq('🌕');
+    emojis[0].click();
+    await nextTick();
+    expect(wrapper.emitted('pick')).deep.eq([[LOBBY_EMOJIS[0]]]);
+    expect(document.querySelector('.lobby-emoji-picker-popover')).is.null;
+  });
+
   it('LobbyAvatar shows the emoji, or the picture when there is one', () => {
     expect(mount(LobbyAvatar, {...globalConfig, props: {kind: 'human', color: 'red', emoji: '🪐'}}).text()).eq('🪐');
     const withImage = mount(LobbyAvatar, {...globalConfig, props: {kind: 'human', color: 'red', emoji: '🪐', image: 'data:image/png;base64,AA'}});
@@ -56,6 +73,14 @@ describe('Lobby components', () => {
     const wrapper = mount(LobbyGameRow, {...globalConfig, props: {room: running}});
     expect(wrapper.find('.lobby-game-facts').text()).contains('7').contains('1 h 12 min');
     expect(wrapper.find('.lobby-game-progress i').attributes('style')).contains('50%');
+  });
+
+  it('LobbyGameRow: removed twice asks to join, declined shows it instead of a button', () => {
+    const asking = mount(LobbyGameRow, {...globalConfig, props: {room: room([host, {kind: 'free'}], {yourAccess: 'request'})}});
+    expect(asking.find('.lobby-game-action').text()).contains('Ask to join');
+    const declined = mount(LobbyGameRow, {...globalConfig, props: {room: room([host, {kind: 'free'}], {yourAccess: 'declined'})}});
+    expect(declined.find('.lobby-game-action button').exists()).is.false;
+    expect(declined.find('.lobby-game-declined').text()).eq('Declined by the host');
   });
 
   it('LobbyGameRow: own game set off, a click on the entry opens its dialog; games of others stay neutral', async () => {
@@ -107,21 +132,73 @@ describe('Lobby components', () => {
     wrapper.unmount();
   });
 
-  it('LobbyRoomDialog offers "Continue" instead of "Start now" once the game runs', () => {
-    const started = room([{...host, you: true}, {kind: 'guest', name: 'Dan', color: 'green'}], {state: 'started', yourPlayerId: 'p1', gameId: 'g1', hostNeedsLinks: true});
+  it('LobbyRoomDialog: the host can always start, also alone, without "Fill with AI"', () => {
+    const alone = room([{...host, you: true}, {kind: 'free'}]);
+    mount(LobbyRoomDialog, {...globalConfig, props: {open: true, room: alone}, attachTo: document.body});
+    const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('button'));
+    const start = buttons.find((button) => button.textContent?.includes('Start now'));
+    expect(start?.disabled).is.false;
+    expect(buttons.some((button) => button.textContent?.includes('Fill with AI'))).is.false;
+  });
+
+  it('LobbyRoomDialog: the host sets the strength of an AI player, the others only see it', async () => {
+    const withAi = room([{...host, you: true}, {kind: 'ai', aiLevel: 'hard'}]);
+    const wrapper = mount(LobbyRoomDialog, {...globalConfig, props: {open: true, room: withAi}, attachTo: document.body});
+    const level = document.querySelector<HTMLSelectElement>('select.lobby-seat-level');
+    expect(level?.value).eq('hard');
+    expect(Array.from(level?.options ?? []).map((option) => option.textContent?.trim())).deep.eq(['[AI-] Easy', '[AI] Normal', '[AI+] Hard']);
+    if (level !== null) {
+      level.value = 'easy';
+      level.dispatchEvent(new Event('change'));
+    }
+    expect(wrapper.emitted('ai-level')).deep.eq([[1, 'easy']]);
+    wrapper.unmount();
+    mount(LobbyRoomDialog, {...globalConfig, props: {open: true, room: room([host, {...host, host: false, you: true}, {kind: 'ai', aiLevel: 'hard'}])}, attachTo: document.body});
+    expect(document.querySelector('.lobby-seat-level')).is.null;
+  });
+
+  it('LobbyRoomDialog: the host removes seats and decides on requests', async () => {
+    const waiting = room([{...host, you: true}, {kind: 'ai', aiLevel: 'hard'}, {kind: 'free'}],
+      {requests: [{participant: 'bobbobbobbobbob001', name: 'Bob', color: 'blue', emoji: '🪐'}]});
+    const wrapper = mount(LobbyRoomDialog, {...globalConfig, props: {open: true, room: waiting}, attachTo: document.body});
+    expect(document.querySelectorAll('.lobby-seat-remove')).has.length(1);
+    document.querySelector<HTMLButtonElement>('.lobby-seat-remove')?.click();
+    expect(wrapper.emitted('remove')).deep.eq([[1]]);
+    expect(document.querySelector('.lobby-request-name')?.textContent).eq('Bob');
+    Array.from(document.querySelectorAll<HTMLButtonElement>('.lobby-request button')).find((button) => button.textContent?.includes('Approve'))?.click();
+    expect(wrapper.emitted('approve')).deep.eq([['bobbobbobbobbob001']]);
+  });
+
+  it('LobbyRoomDialog: the host copies the own link of a player entered by hand', () => {
+    const waiting = room([{...host, you: true}, {kind: 'guest', name: 'Klaus', color: 'green', inviteToken: 'abc123abc123'}, {kind: 'free'}]);
+    mount(LobbyRoomDialog, {...globalConfig, props: {open: true, room: waiting}, attachTo: document.body});
+    expect(document.querySelector('.lobby-seat-link')?.textContent).contains('Copy link');
+    // Waiting, there is nothing else to do with the link: no arrow
+    expect(document.querySelector('.split-button-toggle')).is.null;
+  });
+
+  it('LobbyRoomDialog offers "Continue" instead of "Start now" once the game runs', async () => {
+    const started = room([{...host, you: true}, {kind: 'guest', name: 'Dan', color: 'green', playerId: 'p2'}], {state: 'started', yourPlayerId: 'p1', spectatorId: 's1'});
     const wrapper = mount(LobbyRoomDialog, {...globalConfig, props: {open: true, room: started}, attachTo: document.body});
     expect(document.body.textContent).not.contains('Start now');
     const links = Array.from(document.body.querySelectorAll('.lobby-room-foot a')).map((link) => link.getAttribute('href'));
-    expect(links).deep.eq(['game?id=g1', 'player?id=p1']);
+    expect(links).deep.eq(['player?id=p1']);
+    // The host passes on the link of the player entered by hand; behind the arrow it opens here (several players at one device)
+    expect(document.querySelector('.split-button-main')?.textContent).contains('Copy link');
+    document.querySelector<HTMLButtonElement>('.split-button-toggle')?.click();
+    await nextTick();
+    expect(document.querySelector('.split-button-menu a')?.getAttribute('href')).contains('player?id=p2');
+    // Spectators get their own link
+    expect(document.querySelector<HTMLInputElement>('.lobby-invite input')?.value).contains('spectator?id=s1');
     wrapper.unmount();
   });
 
-  it('LobbyRoomDialog disables the AI buttons for settings the AI cannot handle', () => {
+  it('LobbyRoomDialog disables "Seat an AI" for settings the AI cannot handle', () => {
     const withColonies = room([{...host, you: true}, {kind: 'free'}]);
     withColonies.setup.expansions = {...withColonies.setup.expansions, colonies: true};
     const wrapper = mount(LobbyRoomDialog, {...globalConfig, props: {open: true, room: withColonies}, attachTo: document.body});
     const disabled = Array.from(document.body.querySelectorAll('.lobby-room-dialog button[disabled]')).map((button) => button.textContent?.trim());
-    expect(disabled).to.include.members(['Seat an AI', 'Fill with AI and start']);
+    expect(disabled).to.include.members(['Seat an AI']);
     wrapper.unmount();
   });
 

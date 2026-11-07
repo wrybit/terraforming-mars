@@ -4,7 +4,7 @@ import {Expansion} from '../cards/GameModule';
 import {Color} from '../Color';
 import {GameSetupOptions} from '../game/GameSetupOptions';
 import {NewGameConfig} from '../game/NewGameConfig';
-import {GameId, PlayerId, SpectatorId} from '../Types';
+import {PlayerId, SpectatorId} from '../Types';
 
 // Contract between the lobby page (client/components/lobby) and the lobby routes (server/lobby).
 // Both sides test against these types and limits.
@@ -35,7 +35,13 @@ export type LobbySeatModel =
   | {kind: 'free'}
   | {kind: 'ai', aiLevel: AiLevel}
   /** Entered by the host for somebody who does not use the lobby; gets the link from the host after the start */
-  | {kind: 'guest', name: string, color: Color}
+  | {
+    kind: 'guest', name: string, color: Color,
+    /** Host only, waiting: secret of this seat's invitation link (lobby/room/<id>?seat=<token>) */
+    inviteToken?: string,
+    /** Host only, running: the guest's player page */
+    playerId?: PlayerId,
+  }
   | {
     kind: 'human',
     name: string,
@@ -70,12 +76,14 @@ export type LobbyRoomModel = {
   setup: LobbySetupModel;
   /** Started rooms: link for spectators */
   spectatorId?: SpectatorId;
-  /** Only for the host: the game page holds every player's link, so nobody else may learn it */
-  gameId?: GameId;
   /** Started rooms: the game of the asking participant */
   yourPlayerId?: PlayerId;
-  /** Started rooms: the host gets the page with every player's link when guests have to be sent theirs */
-  hostNeedsLinks?: boolean;
+  /** The asking participant was removed twice (joining becomes a request) or declined by the host (never again) */
+  yourAccess?: 'request' | 'declined';
+  /** Only for the host: players removed twice who ask to come back (approve or decline) */
+  requests?: ReadonlyArray<LobbyJoinRequest>;
+  /** Only for the host of a waiting room: the settings, to change them in the create form (edit) */
+  config?: NewGameConfig;
   /** Started rooms: how far the game is (lobby row: generation, progress bar, time played) */
   progress?: LobbyGameProgress;
 };
@@ -88,20 +96,45 @@ export type LobbyGameProgress = {
   playedMs: number;
 };
 
+/** What the create form needs to change a waiting game (host only): its settings, name, visibility and the seats entered by hand */
+export type LobbyEditRoom = {
+  title: string;
+  listed: boolean;
+  config: NewGameConfig;
+  /** Seat indexes the host entered by hand (guests); all other human seats are offered in the lobby */
+  manualSeats: ReadonlyArray<number>;
+};
+
+export type LobbyJoinRequest = {participant: string, name: string, color: Color, emoji: string, image?: string};
+
 export type LobbyListModel = {
   rooms: ReadonlyArray<LobbyRoomModel>;
   /** Room the asking participant sits in (also unlisted ones) */
   yourRoomId?: string;
+  /** Room whose host still has to approve the asking participant (removed twice before) */
+  requestedRoomId?: string;
+  /** The host just removed the asking participant from this game (its name); told once */
+  removedFrom?: string;
+  /** The host just declined the asking participant's request for this game (its name); told once */
+  declinedFrom?: string;
 };
 
 export type LobbyAction =
   /** config.players: seat 0 is the host; freeSeats lists the human seats offered in the lobby, other humans are guests */
   | {action: 'open', me: string, profile: LobbyProfile, title: string, listed: boolean, config: NewGameConfig, freeSeats: ReadonlyArray<number>}
-  | {action: 'join', me: string, profile: LobbyProfile, roomId: string}
+  /** seatToken: from the invitation link of a seat the host entered by hand (that seat is taken) */
+  | {action: 'join', me: string, profile: LobbyProfile, roomId: string, seatToken?: string}
+  /** Host, while waiting: new settings from the create form, laid out like 'open'; joined players keep a free seat */
+  | {action: 'edit', me: string, roomId: string, title: string, listed: boolean, config: NewGameConfig, freeSeats: ReadonlyArray<number>}
   | {action: 'profile', me: string, profile: LobbyProfile, roomId: string}
   | {action: 'leave', me: string, roomId: string}
   | {action: 'ready', me: string, roomId: string, ready: boolean}
   | {action: 'seat-ai', me: string, roomId: string, seat: number}
+  | {action: 'ai-level', me: string, roomId: string, seat: number, aiLevel: AiLevel}
+  /** Host: the seat becomes free (AI, entered by hand or joined; joined players are counted, see requests) */
+  | {action: 'remove', me: string, roomId: string, seat: number}
+  | {action: 'approve', me: string, roomId: string, participant: string}
+  | {action: 'decline', me: string, roomId: string, participant: string}
   | {action: 'fill-ai', me: string, roomId: string}
   | {action: 'start', me: string, roomId: string};
 

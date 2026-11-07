@@ -84,6 +84,6 @@ export function hasFreeSeat(room: LobbyRoomModel): boolean {
 export function bestMatch(rooms: ReadonlyArray<LobbyRoomModel>, filters: LobbyFilters): LobbyRoomModel | undefined {
   const fill = (room: LobbyRoomModel) => room.seats.filter((seat) => seat.kind !== 'free').length / room.seats.length;
   return rooms
-    .filter((room) => hasFreeSeat(room) && !room.seats.some((seat) => seat.kind === 'human' && seat.you) && matchesFilters(room, filters))
+    .filter((room) => hasFreeSeat(room) && room.yourAccess === undefined && !room.seats.some((seat) => seat.kind === 'human' && seat.you) && matchesFilters(room, filters))
     .sort((a, b) => fill(b) - fill(a))[0];
 }

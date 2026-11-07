@@ -65,7 +65,7 @@ describe('CreateGameForm', () => {
   beforeEach(() => {
     PreferencesManager.resetForTest();
     // The form writes its settings into the URL hash; don't carry that into the next test
-    window.history.replaceState(null, '', '/new-game');
+    window.history.replaceState(null, '', '/lobby/create');
   });
 
   afterEach(() => {
@@ -78,6 +78,66 @@ describe('CreateGameForm', () => {
       ...globalConfig,
     });
     expect(wrapper.exists()).to.be.true;
+  });
+
+  it('lobby: the own seat is the host with a picture that goes along when the game is opened', () => {
+    const wrapper = shallowMount(CreateGameForm, {
+      ...globalConfig,
+      props: {lobbyProfile: {name: 'Jens', color: 'blue', emoji: '🌕'}},
+    });
+    const vm = wrapper.vm as any;
+    expect(vm.isHostSeat(0)).is.true;
+    expect(vm.isHostSeat(1)).is.false;
+    expect(vm.hostEmoji).eq('🌕');
+    vm.pickHostEmoji('🪐');
+    vm.openInLobby();
+    const request = (wrapper.emitted('open-in-lobby') as Array<Array<any>>)[0][0];
+    expect(request.hostPicture).deep.eq({emoji: '🪐', image: undefined});
+    expect(request.config.players[0].name).eq('Jens');
+  });
+
+  it('lobby: every change of the own seat goes to the lobby profile right away', async () => {
+    const wrapper = shallowMount(CreateGameForm, {...globalConfig});
+    const vm = wrapper.vm as any;
+    vm.getPlayers()[0].name = 'Je';
+    await nextTick();
+    vm.getPlayers()[0].name = 'Jens';
+    vm.pickHostEmoji('🪐');
+    await nextTick();
+    const profiles = (wrapper.emitted('host-profile') as Array<Array<any>>).map(([profile]) => profile);
+    expect(profiles.map((profile) => profile.name)).deep.eq(['Je', 'Jens']);
+    expect(profiles[1].emoji).eq('🪐');
+  });
+
+  it('switching on the first AI player makes it an analysis game', () => {
+    const vm = shallowMount(CreateGameForm, {...globalConfig}).vm as any;
+    vm.aiAnalysis = false;
+    vm.aiPlayersCount = 0;
+    vm.aiPlayersCount = 1;
+    expect(vm.aiAnalysis).is.true;
+    // Later changes keep the switch as the host left it
+    vm.aiAnalysis = false;
+    vm.aiPlayersCount = 2;
+    expect(vm.aiAnalysis).is.false;
+  });
+
+  it('lobby, editing: the form starts from the waiting game', () => {
+    const config = createNewGameConfig({players: [
+      {name: 'Jens', color: 'red', beginner: false, handicap: 0, first: false},
+      {name: 'Dan', color: 'green', beginner: false, handicap: 0, first: false},
+      {name: '', color: 'blue', beginner: false, handicap: 0, first: false},
+    ]});
+    const vm = shallowMount(CreateGameForm, {...globalConfig, props: {editRoom: {title: 'Evening', listed: false, config, manualSeats: [1]}}}).vm as any;
+    expect(vm.gameName).eq('Evening');
+    expect(vm.lobbyPublic).is.false;
+    expect(vm.playersCount).eq(3);
+    expect(vm.createButtonTitle).eq('Save changes');
+    expect(vm.getPlayers().map((player: any, index: number) => vm.isOfferedSeat(player, index))).deep.eq([false, false, true]);
+  });
+
+  it('lobby without a profile: the host picture is drawn at random', () => {
+    const vm = shallowMount(CreateGameForm, {...globalConfig}).vm as any;
+    expect(vm.hostEmoji).is.a('string').with.length.greaterThan(0);
   });
 
   it('adds AI players after the humans and keeps at most six players', () => {
@@ -212,7 +272,7 @@ describe('CreateGameForm', () => {
     model.playersCount = 3;
     model.players[0].name = 'Jens';
     model.boards = [BoardName.ELYSIUM];
-    window.history.replaceState(null, '', '/new-game' + settingsHash(model));
+    window.history.replaceState(null, '', '/lobby/create' + settingsHash(model));
 
     const wrapper = shallowMount(CreateGameForm, {
       ...globalConfig,
@@ -351,31 +411,22 @@ describe('CreateGameForm', () => {
     expect((wrapper.vm as any).uploading).eq(false);
   });
 
-  it('saves current settings before creating a game', async () => {
-    const originalFetch = global.fetch;
-    const originalAlert = global.alert;
-    global.fetch = (() => Promise.reject(new Error('stop after saving'))) as typeof fetch;
-    global.alert = (() => {}) as typeof alert;
+  it('saves current settings when the game is opened in the lobby', async () => {
+    const wrapper = shallowMount(CreateGameForm, {
+      ...globalConfig,
+    });
+    (wrapper.vm as any).playersCount = 2;
+    (wrapper.vm as any).randomFirstPlayer = false;
+    (wrapper.vm as any).players[0].name = 'Alice';
+    (wrapper.vm as any).players[1].name = 'Bob';
+    (wrapper.vm as any).boards = [BoardName.ELYSIUM];
 
-    try {
-      const wrapper = shallowMount(CreateGameForm, {
-        ...globalConfig,
-      });
-      (wrapper.vm as any).playersCount = 2;
-      (wrapper.vm as any).randomFirstPlayer = false;
-      (wrapper.vm as any).players[0].name = 'Alice';
-      (wrapper.vm as any).players[1].name = 'Bob';
-      (wrapper.vm as any).boards = [BoardName.ELYSIUM];
+    await (wrapper.vm as any).openInLobby();
 
-      await (wrapper.vm as any).createGame();
-
-      const savedSettings = createGameSettingsStorage.load();
-      expect(savedSettings?.boards).deep.eq([BoardName.ELYSIUM]);
-      expect((savedSettings?.players as Array<{name: string}>).map((player) => player.name)).deep.eq(['Alice', 'Bob']);
-    } finally {
-      global.fetch = originalFetch;
-      global.alert = originalAlert;
-    }
+    const savedSettings = createGameSettingsStorage.load();
+    expect(savedSettings?.boards).deep.eq([BoardName.ELYSIUM]);
+    expect((savedSettings?.players as Array<{name: string}>).map((player) => player.name)).deep.eq(['Alice', 'Bob']);
+    expect(wrapper.emitted('open-in-lobby')).has.length(1);
   });
   it('offers the manual milestone segment only for manual milestones and awards', async () => {
     const wrapper = shallowMount(CreateGameForm, {
@@ -419,11 +470,11 @@ describe('CreateGameForm', () => {
     expect(errors.coloniesMissingExpansions).deep.eq([]);
   });
 
-  it('disables Create game when there is a blocking error', async () => {
+  it('disables Open in lobby when there is a blocking error', async () => {
     const wrapper = shallowMount(CreateGameForm, {
       ...globalConfig,
     });
-    const createGameButton = () => wrapper.findAllComponents({name: 'AppButton'}).find((button) => button.props('title') === 'Create game');
+    const createGameButton = () => wrapper.findAllComponents({name: 'AppButton'}).find((button) => button.props('title') === 'Open in lobby');
     expect(createGameButton()?.props('disabled')).is.false;
     expect(wrapper.findComponent({name: 'ValidationProblems'}).exists()).is.false;
 

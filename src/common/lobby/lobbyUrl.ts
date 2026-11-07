@@ -63,3 +63,10 @@ export function lobbyRoomIdFromPath(pathname: string): string | undefined {
   const match = /(?:^|\/)lobby\/room\/([a-z0-9]{4})(?:-[^/]*)?\/?$/.exec(pathname);
   return match?.[1];
 }
+
+/** Query parameter of a seat's own invitation link: the guest the host entered takes exactly that seat */
+export const LOBBY_SEAT_PARAMETER = 'seat';
+
+export function lobbySeatInvitePath(roomId: string, title: string, token: string): string {
+  return `${lobbyRoomPath(roomId, title)}?${LOBBY_SEAT_PARAMETER}=${encodeURIComponent(token)}`;
+}

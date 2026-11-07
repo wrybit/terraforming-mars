@@ -60,7 +60,9 @@ export class ApiLobby extends Handler {
     case 'open':
       return this.lobby.open(action.me, action.profile, action.title, action.listed, action.config, starter, Array.isArray(action.freeSeats) ? action.freeSeats : []);
     case 'join':
-      return this.lobby.join(action.me, action.profile, action.roomId, starter);
+      return this.lobby.join(action.me, action.profile, action.roomId, starter, typeof action.seatToken === 'string' ? action.seatToken : undefined);
+    case 'edit':
+      return Promise.resolve(this.lobby.edit(action.me, action.roomId, action.title, action.listed, action.config, Array.isArray(action.freeSeats) ? action.freeSeats : []));
     case 'profile':
       return Promise.resolve(this.lobby.updateProfile(action.me, action.profile, action.roomId));
     case 'leave':
@@ -70,6 +72,14 @@ export class ApiLobby extends Handler {
       return this.lobby.setReady(action.me, action.roomId, action.ready, starter);
     case 'seat-ai':
       return this.lobby.seatAi(action.me, action.roomId, Number(action.seat), starter);
+    case 'remove':
+      return Promise.resolve(this.lobby.removeSeat(action.me, action.roomId, Number(action.seat)));
+    case 'approve':
+      return this.lobby.approveRequest(action.me, action.roomId, String(action.participant), starter);
+    case 'decline':
+      return Promise.resolve(this.lobby.declineRequest(action.me, action.roomId, String(action.participant)));
+    case 'ai-level':
+      return Promise.resolve(this.lobby.setAiLevel(action.me, action.roomId, Number(action.seat), action.aiLevel));
     case 'fill-ai':
       return this.lobby.fillWithAi(action.me, action.roomId, starter);
     case 'start':

@@ -23,7 +23,7 @@ export const SITE_LINKS: ReadonlyArray<SiteLink> = [
   // Straight into the create form, as an overlay above the lobby (address lobby/create, lobbyUrl.ts).
   // Not in the game menu: there "Start page" already sits on top and two "Start" entries would be confused
   {label: 'Start a game', icon: 'newGame', planet: 'venus', href: LOBBY_CREATE_PATH, external: false, inMenu: false},
-  // The lobby replaces "New game": games are opened there (the create form is its modal); new-game still works directly
+  // The lobby replaces "New game": games are opened there (the create form is its modal); new-game leads to lobby/create
   // "Game lobby", not "Lobby": that key is Turmoil's lobby (political) and translates differently, e.g. in Chinese
   {label: 'Game lobby', icon: 'lobby', planet: 'earth', href: 'lobby', external: false, inMenu: true},
   {label: 'Statistics', icon: 'statistics', planet: 'mars', href: 'stats', external: true, inMenu: true},
