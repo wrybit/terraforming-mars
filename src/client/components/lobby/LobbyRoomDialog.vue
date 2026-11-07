@@ -15,6 +15,12 @@
               <span v-if="seat.host" class="lobby-seat-host" v-i18n>Host</span>
               <!-- "ready" only matters while waiting -->
               <span v-if="!started" class="lobby-seat-state" :class="{'lobby-seat-state--ready': seat.ready}">{{ $t(seat.ready ? 'ready' : 'not ready yet') }}</span>
+              <!-- Own seat of a running game: the same split button as the seats entered by hand, the other way round:
+                   playing is what you do here, copying your own link (e.g. for another device) is the rare case -->
+              <SplitButton v-else-if="seat.you && continueLink !== undefined" buttonClass="create-game-small-button lobby-seat-link" :href="continueLink" menuLabel="More options"
+                :options="[{label: 'Copy link', action: () => copyLink(index, continueLink!)}]">
+                <span>{{ $t(copiedSeat === index ? 'Link copied' : 'Play') }}</span>
+              </SplitButton>
             </template>
             <template v-else-if="seat.kind === 'guest'">
               <LobbyAvatar kind="guest" :color="seat.color" :title="seat.name" size="large" />
@@ -23,7 +29,7 @@
               <!-- Host: this player's own link to pass on (waiting: takes this seat in the lobby; running: the player page).
                    Running, the arrow also offers to open it here: the rare case of several players at one device in several tabs -->
               <SplitButton v-if="guestLink(seat) !== undefined" buttonClass="create-game-small-button lobby-seat-link" menuLabel="More options"
-                :options="started ? [{label: 'Play', href: guestLink(seat)!}] : []" @click="copyGuestLink(index, seat)">
+                :options="started ? [{label: 'Play', href: guestLink(seat)!}] : []" @click="copyLink(index, guestLink(seat)!)">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" /></svg>
                 <span>{{ $t(copiedSeat === index ? 'Link copied' : 'Copy link') }}</span>
               </SplitButton>
@@ -194,13 +200,10 @@ function guestLink(seat: LobbySeatModel): string | undefined {
   return seat.playerId === undefined ? undefined : new URL('player?id=' + seat.playerId, document.baseURI).href;
 }
 
-async function copyGuestLink(index: number, seat: LobbySeatModel): Promise<void> {
-  const link = guestLink(seat);
-  if (link === undefined) {
-    return;
-  }
+// The seat's button says "Link copied" for a moment
+async function copyLink(index: number, link: string): Promise<void> {
   try {
-    await navigator.clipboard.writeText(link);
+    await navigator.clipboard.writeText(new URL(link, document.baseURI).href);
     copiedSeat.value = index;
     setTimeout(() => copiedSeat.value = undefined, 2000);
   } catch {
