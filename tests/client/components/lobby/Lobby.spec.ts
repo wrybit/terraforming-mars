@@ -138,6 +138,7 @@ describe('Lobby components', () => {
     const wrapper = mount(LobbyRoomDialog, {...globalConfig, props: {open: true, room: withAi}, attachTo: document.body});
     const level = document.querySelector<HTMLSelectElement>('select.lobby-seat-level');
     expect(level?.value).eq('hard');
+    expect(Array.from(level?.options ?? []).map((option) => option.textContent?.trim())).deep.eq(['[AI-] Easy', '[AI] Normal', '[AI+] Hard']);
     if (level !== null) {
       level.value = 'easy';
       level.dispatchEvent(new Event('change'));

@@ -30,7 +30,7 @@
                    or in longer languages); everybody else sees it as text -->
               <select v-if="isHost && !started" class="create-game-small-button lobby-seat-level" :value="seat.aiLevel" :aria-label="$t('Strength')"
                 @change="emit('ai-level', index, ($event.target as HTMLSelectElement).value as AiLevel)">
-                <option v-for="option in AI_LEVEL_OPTIONS" :key="option.value" :value="option.value">{{ $t(option.label) }}</option>
+                <option v-for="option in AI_LEVEL_OPTIONS" :key="option.value" :value="option.value">{{ aiPlayerMarker(option.value as AiLevel) }} {{ $t(option.label) }}</option>
               </select>
               <span v-else class="lobby-seat-state lobby-seat-state--ready">{{ $t(aiLevelLabel(seat.aiLevel)) }}</span>
             </template>
@@ -77,7 +77,7 @@
 
 <script setup lang="ts">
 import {computed, ref} from 'vue';
-import {AiLevel} from '@/common/ai/AiLevel';
+import {AiLevel, aiPlayerMarker} from '@/common/ai/AiLevel';
 import {LobbyRoomModel, LobbySeatModel} from '@/common/lobby/LobbyModel';
 import SidebarModal from '@/client/components/SidebarModal.vue';
 import DialogFrame from '@/client/components/DialogFrame.vue';
