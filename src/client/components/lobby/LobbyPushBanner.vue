@@ -2,16 +2,22 @@
   <!-- Bar over the full width while this browser may not show push messages (lobbyPush.ts); pushes the page down -->
   <div v-if="state !== 'granted' && !dismissed" class="lobby-push-banner" role="status">
     <div class="lobby-push-banner-text">
-      <!-- Floats: the text runs beside and below it, also on phones (no own line for the symbol) -->
-      <svg class="lobby-push-banner-icon" viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M18 16v-5a6 6 0 0 0-9.3-5M6 9.5V16l-2 2h13M10 21h4M3 3l18 18" />
-      </svg>
-      <!-- Short and in three steps: what is missing, what it is used for, what to do -->
-      <strong class="lobby-push-banner-title" v-i18n>{{ TITLES[state] }}</strong>
-      <span class="lobby-push-banner-purpose" v-i18n>Only for your games: somebody joins, asks to join, the game starts.</span>
+      <!-- Short and in three steps: what is missing, what it is used for, what to do.
+           The symbol sits in the title line: no own column, all lines start at the same edge (also on phones) -->
+      <strong class="lobby-push-banner-title">
+        <svg class="lobby-push-banner-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M18 16v-5a6 6 0 0 0-9.3-5M6 9.5V16l-2 2h13M10 21h4M3 3l18 18" />
+        </svg>
+        <span v-i18n>{{ TITLES[state] }}</span>
+      </strong>
+      <!-- The three occasions as chips: the same kinds that can be switched off one by one in the settings -->
+      <span class="lobby-push-banner-purpose lobby-push-banner-row">
+        <span v-i18n>Only for your games:</span>
+        <span v-for="occasion in OCCASIONS" :key="occasion" class="lobby-push-banner-chip" v-i18n>{{ occasion }}</span>
+      </span>
       <!-- Blocked: pages cannot reopen the browser's question, only the settings can (notificationSettingsHelp.ts).
            Every step a chip with the browser's own words and symbols, so it can be found on screen -->
-      <span v-if="path !== undefined" class="lobby-push-banner-steps">
+      <span v-if="path !== undefined" class="lobby-push-banner-row">
         <span v-if="path.lead" class="lobby-push-banner-lead">{{ $t(path.lead) }}</span>
         <!-- Arrow and chip wrap together, so no line ends with an arrow -->
         <span v-for="(step, index) in path.steps" :key="index" class="lobby-push-banner-step">
@@ -52,6 +58,9 @@ const TITLES: Record<Exclude<PushState, 'granted'>, string> = {
   denied: 'Notifications are blocked',
   unsupported: 'This browser cannot receive push messages',
 };
+
+// What the messages are for, in the order of the switches in the settings (preferencesGroups.ts)
+const OCCASIONS = ['Somebody joins', 'Asks to join', 'The game starts'] as const;
 
 // Outlines in the style of the browsers' own symbols (lock and sliders in the address field, Share on iOS)
 const ICON_PATHS: Record<StepIcon, string> = {

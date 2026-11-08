@@ -1284,7 +1284,6 @@
   "Notifications are blocked": "Az értesítések le vannak tiltva",
   "This browser cannot receive push messages": "Ez a böngésző nem fogad push-értesítést",
   "Check again": "Újraellenőrzés",
-  "Only for your games: somebody joins, asks to join, the game starts.": "Csak a játékaidhoz: valaki csatlakozik, csatlakozást kér, a játék elkezdődik.",
   "Keep the lobby in front to see them.": "Tartsd elöl az előcsarnokot, hogy lásd őket.",
   "switched off by the player": "a játékos kikapcsolta",
   "Without a subscription, or switched off in the player settings.": "Feliratkozás nélkül, vagy a játékosbeállításokban kikapcsolva.",
@@ -1311,5 +1310,9 @@
   "Then reload the page.": "Utána töltsd újra az oldalt.",
   "Share": "Megosztás",
   "Add to Home Screen": "Főképernyőhöz adás",
-  "Then open the lobby from the new icon and allow notifications there.": "Utána nyisd meg a lobbit az új ikonról, és ott engedélyezd az értesítéseket."
+  "Then open the lobby from the new icon and allow notifications there.": "Utána nyisd meg a lobbit az új ikonról, és ott engedélyezd az értesítéseket.",
+  "Only for your games:": "Csak a játékaidhoz:",
+  "Somebody joins": "Valaki csatlakozik",
+  "Asks to join": "Csatlakozást kér",
+  "The game starts": "A játék elkezdődik"
 }

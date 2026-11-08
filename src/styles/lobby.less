@@ -1966,12 +1966,11 @@ each(@players, {
   line-height: 1.35;
 }
 
-// Floats left in the text: the lines run beside it and below it, no own column or line on phones
+// In the title line, at the height of the text: no own column, no own line on phones
 .lobby-push-banner-icon {
-  float: left;
-  width: 28px;
-  height: 28px;
-  margin: 2px 12px 4px 0;
+  flex: none;
+  width: 22px;
+  height: 22px;
   fill: none;
   stroke: currentColor;
   stroke-width: 2;
@@ -1981,20 +1980,24 @@ each(@players, {
 
 // Title and purpose belong together (2px), the way through the settings and the hint are their own lines (6px)
 .lobby-push-banner-text {
-  max-width: 760px;
+  // No own width limit: with enough room every line stays on one line, the bar's padding sets the edges
+  flex: 0 1 auto;
+  min-width: 0;
 
   > span {
     display: block;
     margin-top: 6px;
   }
 
-  > .lobby-push-banner-steps {
+  > .lobby-push-banner-row {
     display: flex;
   }
 }
 
 .lobby-push-banner-title {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-size: 16px;
   font-weight: 700;
 }
@@ -2005,7 +2008,7 @@ each(@players, {
 }
 
 // Chips in a row that wraps on phones; within a step closer than between line and line
-.lobby-push-banner-steps {
+.lobby-push-banner-row {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -2054,8 +2057,8 @@ each(@players, {
 }
 
 .lobby-push-banner-hint {
-  font-size: 12px;
-  opacity: 0.85;
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .lobby-push-banner-button {

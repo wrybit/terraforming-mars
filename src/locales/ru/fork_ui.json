@@ -1973,7 +1973,6 @@
   "Notifications are blocked": "Уведомления заблокированы",
   "This browser cannot receive push messages": "Этот браузер не получает push-уведомления",
   "Check again": "Проверить снова",
-  "Only for your games: somebody joins, asks to join, the game starts.": "Только для ваших игр: кто-то присоединяется, просит присоединиться, игра начинается.",
   "Keep the lobby in front to see them.": "Держите лобби на переднем плане, чтобы их видеть.",
   "switched off by the player": "отключено игроком",
   "Without a subscription, or switched off in the player settings.": "Без подписки или отключено в настройках игрока.",
@@ -2000,5 +1999,9 @@
   "Then reload the page.": "Затем перезагрузи страницу.",
   "Share": "Поделиться",
   "Add to Home Screen": "На экран «Домой»",
-  "Then open the lobby from the new icon and allow notifications there.": "Затем открой лобби через новый значок и разреши там уведомления."
+  "Then open the lobby from the new icon and allow notifications there.": "Затем открой лобби через новый значок и разреши там уведомления.",
+  "Only for your games:": "Только для ваших игр:",
+  "Somebody joins": "Кто-то присоединяется",
+  "Asks to join": "Просит присоединиться",
+  "The game starts": "Игра начинается"
 }
