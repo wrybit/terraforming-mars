@@ -77,6 +77,7 @@ import {nextTick, onBeforeUnmount, onMounted, ref} from 'vue';
 import {LOBBY_CHAT_MAX_LENGTH, LobbyChatMessage} from '@/common/lobby/LobbyChatModel';
 import {LobbyProfile} from '@/common/lobby/LobbyModel';
 import LobbyAvatar from './LobbyAvatar.vue';
+import {reuseUnchanged} from '@/client/utils/reuseUnchanged';
 import {chatTextParts, editLobbyChat, fetchLobbyChat, postLobbyChat, removeLobbyChat} from './lobbyChatApi';
 import AppButton from '@/client/components/common/AppButton.vue';
 import {CHAT_EMOJI_GROUPS, isEmojiOnly} from './lobbyChatEmoji';
@@ -272,7 +273,8 @@ async function show(next: Array<LobbyChatMessage>): Promise<void> {
   const element = list.value;
   const atBottom = element === null || element.scrollHeight - element.scrollTop - element.clientHeight < 40;
   const changed = next.length !== messages.value.length || next[next.length - 1]?.id !== messages.value[messages.value.length - 1]?.id;
-  messages.value = next;
+  // Polled every few seconds: unchanged messages keep their objects, so only new or edited lines render again
+  messages.value = reuseUnchanged(messages.value, next, (message) => String(message.id));
   if (changed && atBottom) {
     await nextTick();
     list.value?.scrollTo({top: list.value.scrollHeight});

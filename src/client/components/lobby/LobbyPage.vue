@@ -138,6 +138,7 @@
 <script setup lang="ts">
 import {askLobbyPushPermission, subscribeLobbyPush} from './lobbyPush';
 import LobbyPushBanner from './LobbyPushBanner.vue';
+import {reuseUnchanged} from '@/client/utils/reuseUnchanged';
 import ColumnResizeHandle from '@/client/components/ColumnResizeHandle.vue';
 import {LOBBY_CHAT_SPLIT} from '@/client/utils/columnResize';
 import {ComponentPublicInstance, computed, defineAsyncComponent, getCurrentInstance, onBeforeUnmount, onMounted, nextTick, ref, watch} from 'vue';
@@ -216,6 +217,15 @@ let followNextStart = false;
 // Set while our own "Open in lobby" runs: the new room stays in the list, its dialog opens only on a click
 let openingOwnRoom = false;
 let clockTimer: ReturnType<typeof setInterval> | undefined;
+// The clock only feeds the waiting time of the quick start: it ticks only while that runs
+watch(queueing, (running) => {
+  clearInterval(clockTimer);
+  clockTimer = undefined;
+  if (running) {
+    now.value = Date.now();
+    clockTimer = setInterval(() => now.value = Date.now(), 1000);
+  }
+});
 
 const filterCount = computed(() => activeFilterCount(filters.value));
 const requestedRoom = computed(() => rooms.value.find((room) => room.id === requestedRoomId.value));
@@ -252,7 +262,8 @@ function seatCount(room: LobbyRoomModel): string {
 async function refresh(): Promise<void> {
   try {
     const list = await fetchLobby(invitedRoomId);
-    rooms.value = list.rooms;
+    // Only changed rooms render again (polled every few seconds)
+    rooms.value = reuseUnchanged(rooms.value, list.rooms, (room) => room.id);
     yourRoomId.value = list.yourRoomId;
     const wasRequested = requestedRoomId.value;
     requestedRoomId.value = list.requestedRoomId;
@@ -556,7 +567,6 @@ onMounted(() => {
   // Renews an existing permission's subscription (language, key of the server)
   void subscribeLobbyPush();
   pollTimer = setInterval(refresh, POLL_MS);
-  clockTimer = setInterval(() => now.value = Date.now(), 1000);
 });
 
 onBeforeUnmount(() => {
