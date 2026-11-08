@@ -1318,5 +1318,6 @@
   "Notifications can be switched off one by one in the game, in the ${0}.": "Az értesítések a játékban egyenként kikapcsolhatók a ${0}.",
   "Sound on your turn": "Hang a körödben",
   "Sound for lobby messages": "Hang a lobbi üzeneteinél",
-  "With the page in front they appear inside it, with a short chime.": "Ha az oldal elöl van, benne jelennek meg, rövid hanggal."
+  "With the page in front they appear inside it, with a short chime.": "Ha az oldal elöl van, benne jelennek meg, rövid hanggal.",
+  "Sounds": "Hangok"
 }

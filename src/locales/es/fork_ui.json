@@ -2414,5 +2414,6 @@
   "Notifications can be switched off one by one in the game, in the ${0}.": "Las notificaciones se pueden desactivar una a una en el juego, en los ${0}.",
   "Sound on your turn": "Sonido en tu turno",
   "Sound for lobby messages": "Sonido para mensajes del lobby",
-  "With the page in front they appear inside it, with a short chime.": "Con la página delante aparecen dentro de ella, con un breve sonido."
+  "With the page in front they appear inside it, with a short chime.": "Con la página delante aparecen dentro de ella, con un breve sonido.",
+  "Sounds": "Sonidos"
 }

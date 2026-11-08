@@ -1502,5 +1502,6 @@
   "Notifications can be switched off one by one in the game, in the ${0}.": "Varslinger kan slås av hver for seg i spillet, i ${0}.",
   "Sound on your turn": "Lyd når det er din tur",
   "Sound for lobby messages": "Lyd for meldinger fra lobbyen",
-  "With the page in front they appear inside it, with a short chime.": "Når siden er foran, vises de i den, med en kort lyd."
+  "With the page in front they appear inside it, with a short chime.": "Når siden er foran, vises de i den, med en kort lyd.",
+  "Sounds": "Lyder"
 }

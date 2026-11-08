@@ -1294,5 +1294,6 @@
   "Notifications can be switched off one by one in the game, in the ${0}.": "Сповіщення можна вимкнути окремо в грі, у розділі ${0}.",
   "Sound on your turn": "Звук у ваш хід",
   "Sound for lobby messages": "Звук для повідомлень лобі",
-  "With the page in front they appear inside it, with a short chime.": "Якщо сторінка відкрита, вони з’являються в ній з коротким сигналом."
+  "With the page in front they appear inside it, with a short chime.": "Якщо сторінка відкрита, вони з’являються в ній з коротким сигналом.",
+  "Sounds": "Звуки"
 }

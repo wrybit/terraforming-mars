@@ -33,8 +33,6 @@ export const PREFERENCE_GROUPS: ReadonlyArray<PreferenceGroup> = [
     switches: [
       // show_alerts: the confirmations before overpaying (PaymentForm) and before buying no cards (SelectInitialCards)
       {preference: 'show_alerts', label: 'Ask before risky moves', hint: 'For example before paying more than needed or buying no cards at the start.'},
-      // enable_sounds: only the sound on one's own turn (WaitingFor.vue); the lobby messages have toast_sound
-      {preference: 'enable_sounds', label: 'Sound on your turn'},
       {preference: 'animated_title', label: 'Animated browser title', hint: 'Show spinning circle in window title on your turn.'},
       // hide_animated_sidebar: no coloured sidebar in the game on one's own turn (Sidebar.vue)
       {preference: 'hide_animated_sidebar', label: 'No highlighted sidebar', hint: 'Otherwise the sidebar in the game is coloured when it is your turn.'},
@@ -48,6 +46,15 @@ export const PREFERENCE_GROUPS: ReadonlyArray<PreferenceGroup> = [
       {preference: 'push_joined', label: 'Somebody joins your game', hint: 'Also with the lobby in the background or closed.'},
       {preference: 'push_request', label: 'Somebody asks to join'},
       {preference: 'push_started', label: 'Your game starts'},
+    ],
+  },
+  {
+    // Both sounds of the site in one place, each with its own switch
+    title: 'Sounds',
+    iconPaths: ['M4 9v6h4l5 4V5L8 9z', 'M16 9a4 4 0 0 1 0 6', 'M18.5 6.5a8 8 0 0 1 0 11'],
+    switches: [
+      // enable_sounds: only the sound on one's own turn (WaitingFor.vue); the lobby messages have toast_sound
+      {preference: 'enable_sounds', label: 'Sound on your turn'},
       {preference: 'toast_sound', label: 'Sound for lobby messages', hint: 'With the page in front they appear inside it, with a short chime.'},
     ],
   },
