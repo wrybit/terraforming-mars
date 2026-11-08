@@ -70,7 +70,7 @@ import {CorporationDeck, PreludeDeck, ProjectDeck, CeoDeck} from './cards/Deck';
 import {Logger} from './logs/Logger';
 import {addDays, stringToNumber} from './database/utils';
 import {Tag} from '../common/cards/Tag';
-import {IGame, Score} from './IGame';
+import {AddTileOptions, IGame, Score} from './IGame';
 import {GlobalParameterMaximums} from '../common/boards/GlobalParameterMaximums';
 import {MarsBoard} from './boards/MarsBoard';
 import {UnderworldData} from './underworld/UnderworldData';
@@ -1438,7 +1438,7 @@ export class Game implements IGame, Logger {
 
   // addTile applies to the Mars board, but not the Moon board, see MoonExpansion.addTile for placing
   // a tile on The Moon.
-  public addTile(player: IPlayer, space: Space, tile: Tile): void {
+  public addTile(player: IPlayer, space: Space, tile: Tile, options?: AddTileOptions): void {
     // Part 1, basic validation checks.
 
     // Land claim a player can claim land for themselves
@@ -1475,7 +1475,7 @@ export class Game implements IGame, Logger {
 
     // Part 5. Collect the bonuses
     if (this.phase !== Phase.SOLAR) {
-      this.grantPlacementBonuses(player, space, coveringExistingTile);
+      this.grantPlacementBonuses(player, space, coveringExistingTile, options);
       this.grantTilePlacementBonuses(player, space, arcadianCommunityBonus);
 
       AresHandler.ifAres(this, (aresData) => {
@@ -1512,9 +1512,9 @@ export class Game implements IGame, Logger {
     }
   }
 
-  public grantPlacementBonuses(player: IPlayer, space: Space, coveringExistingTile: boolean = false) {
+  public grantPlacementBonuses(player: IPlayer, space: Space, coveringExistingTile: boolean = false, options?: AddTileOptions) {
     if (!coveringExistingTile) {
-      this.grantSpaceBonusesAsPlacement(player, space);
+      this.grantSpaceBonusesAsPlacement(player, space, options);
     }
 
     const adjacentOceanCount = this.board.getAdjacentSpaces(space).filter(Board.isOceanSpace).length;
@@ -1559,20 +1559,20 @@ export class Game implements IGame, Logger {
     LogHelper.logTilePlacement(player, space, tile.tileType);
   }
 
-  public grantSpaceBonuses(player: IPlayer, space: Space, onStandardResource?: (resource: Resource) => void) {
+  public grantSpaceBonuses(player: IPlayer, space: Space, onStandardResource?: (resource: Resource) => void, standardResource?: Resource) {
     const bonuses = MultiSet.from(space.bonus);
     bonuses.forEachMultiplicity((count: number, bonus: SpaceBonus) => {
-      this.grantSpaceBonus(player, bonus, count, undefined, onStandardResource);
+      this.grantSpaceBonus(player, bonus, count, undefined, onStandardResource, standardResource);
     });
   }
 
-  public grantSpaceBonusesAsPlacement(player: IPlayer, space: Space) {
+  public grantSpaceBonusesAsPlacement(player: IPlayer, space: Space, options?: AddTileOptions) {
     this.grantSpaceBonuses(player, space, (resource) => {
       this.triggerForAllCards((p, c) => c.onStandardResourcePlacementBonus?.(p, player, space, resource));
-    });
+    }, options?.standardResource);
   }
 
-  public grantSpaceBonus(player: IPlayer, spaceBonus: SpaceBonus, count: number = 1, from: From = {text: 'placement bonus'}, onStandardResource?: (resource: Resource) => void) {
+  public grantSpaceBonus(player: IPlayer, spaceBonus: SpaceBonus, count: number = 1, from: From = {text: 'placement bonus'}, onStandardResource?: (resource: Resource) => void, standardResource?: Resource) {
     switch (spaceBonus) {
     case SpaceBonus.DRAW_CARD:
       player.drawCard(count);
@@ -1641,15 +1641,24 @@ export class Game implements IGame, Logger {
         {title: 'Select how to pay for building a colony'}))
         .andThen(() => this.defer(new BuildColony(player)));
       break;
-    case SpaceBonus.STANDARD_RESOURCE:
+    case SpaceBonus.STANDARD_RESOURCE: {
+      const gainStandardResource = (resource: Resource) => {
+        player.stock.add(resource, 1, {log: true});
+        onStandardResource?.(resource);
+        return undefined;
+      };
+      // The caller placing this tile already fixed the resource (e.g. Mining cards use the
+      // steel or titanium production the player chose), so there is no further choice.
+      if (standardResource !== undefined) {
+        gainStandardResource(standardResource);
+        break;
+      }
+
       // A space has this bonus at most once. If one ever has more, use SelectResources (see Philares).
       player.defer(new SelectResource('Select a standard resource to gain')
-        .andThen((resource) => {
-          player.stock.add(resource, 1, {log: true});
-          onStandardResource?.(resource);
-          return undefined;
-        }));
+        .andThen(gainStandardResource));
       break;
+    }
     default:
       throw new Error('Unhandled space bonus ' + spaceBonus + '. Report this exact error, please.');
     }
