@@ -908,5 +908,8 @@
   "Right in the address field": "Rechts im Adressfeld",
   "Notifications only for your games, namely:": "Benachrichtigungen kommen nur für deine Spiele, genauer:",
   "Turn on notifications:": "Benachrichtigungen aktivieren:",
-  "Notifications can be switched off one by one in the game, in the ${0}.": "Benachrichtigungen sind im Spiel einzeln abschaltbar in den ${0}."
+  "Notifications can be switched off one by one in the game, in the ${0}.": "Benachrichtigungen sind im Spiel einzeln abschaltbar in den ${0}.",
+  "Sound on your turn": "Ton bei deinem Zug",
+  "Sound for lobby messages": "Ton bei Mitteilungen aus der Lobby",
+  "With the page in front they appear inside it, with a short chime.": "Ist die Seite vorne, erscheinen sie in der Seite, mit kurzem Klang."
 }

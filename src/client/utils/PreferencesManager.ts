@@ -29,6 +29,8 @@ export type Preferences = {
   push_joined: boolean,
   push_request: boolean,
   push_started: boolean,
+  // Chime when a lobby message appears inside the page (PushToast.vue); the turn sound is enable_sounds
+  toast_sound: boolean,
   lang: string,
 }
 
@@ -41,6 +43,7 @@ const REMOVED_PREFERENCES: ReadonlyArray<string> = ['small_cards', 'magnify_card
 const defaults: Preferences = {
   learner_mode: true,
   enable_sounds: true,
+  toast_sound: true,
   show_alerts: true,
   lang: 'en',
 

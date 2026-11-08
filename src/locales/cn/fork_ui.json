@@ -2117,5 +2117,8 @@
   "Right in the address field": "地址栏右侧",
   "Notifications only for your games, namely:": "通知仅针对你的游戏，具体是：",
   "Turn on notifications:": "开启通知：",
-  "Notifications can be switched off one by one in the game, in the ${0}.": "通知可在游戏的${0}中逐项关闭。"
+  "Notifications can be switched off one by one in the game, in the ${0}.": "通知可在游戏的${0}中逐项关闭。",
+  "Sound on your turn": "轮到你时播放声音",
+  "Sound for lobby messages": "大厅消息提示音",
+  "With the page in front they appear inside it, with a short chime.": "页面在前台时，消息显示在页面内并伴有短提示音。"
 }
