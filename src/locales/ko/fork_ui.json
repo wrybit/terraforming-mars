@@ -1362,11 +1362,12 @@
   "iPhone or iPad settings → Notifications → TM Mars: Allow Notifications.": "iPhone 또는 iPad 설정 → 알림 → TM Mars: 알림 허용.",
   "Only for your games: somebody joins, asks to join, the game starts.": "내 게임에만 사용: 누군가 참가, 참가 요청, 게임 시작.",
   "Keep the lobby in front to see them.": "보려면 로비를 앞에 두세요.",
-  "Each one can be switched off: Setup → Player Settings → Notifications.": "각각 끌 수 있습니다: Setup → 플레이어 설정 → 알림.",
   "Push: somebody joins your game": "푸시: 누군가 게임에 참가",
   "Push: somebody asks to join": "푸시: 누군가 참가 요청",
   "Push: your game starts": "푸시: 게임 시작",
   "switched off by the player": "플레이어가 끔",
   "Without a subscription, or switched off in the player settings.": "구독이 없거나 플레이어 설정에서 꺼짐.",
-  "Without a subscription, or switched off in the player settings. Never to players entered by hand.": "구독이 없거나 플레이어 설정에서 꺼짐. 직접 입력한 플레이어에게는 보내지 않습니다."
+  "Without a subscription, or switched off in the player settings. Never to players entered by hand.": "구독이 없거나 플레이어 설정에서 꺼짐. 직접 입력한 플레이어에게는 보내지 않습니다.",
+  "Each one can be switched off in the ${0}.": "${0}에서 각각 끌 수 있습니다.",
+  "settings": "설정"
 }

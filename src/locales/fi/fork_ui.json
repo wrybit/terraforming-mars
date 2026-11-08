@@ -1110,11 +1110,12 @@
   "iPhone or iPad settings → Notifications → TM Mars: Allow Notifications.": "iPhonen tai iPadin asetukset → Ilmoitukset → TM Mars: Salli ilmoitukset.",
   "Only for your games: somebody joins, asks to join, the game starts.": "Vain peleihisi: joku liittyy, pyytää liittyä, peli alkaa.",
   "Keep the lobby in front to see them.": "Pidä aula edessä nähdäksesi ne.",
-  "Each one can be switched off: Setup → Player Settings → Notifications.": "Kunkin voi kytkeä pois: Setup → Pelaaja-asetukset → Ilmoitukset.",
   "Push: somebody joins your game": "Push: joku liittyy peliisi",
   "Push: somebody asks to join": "Push: joku pyytää liittyä",
   "Push: your game starts": "Push: pelisi alkaa",
   "switched off by the player": "pelaaja kytki pois",
   "Without a subscription, or switched off in the player settings.": "Ilman tilausta tai kytketty pois pelaaja-asetuksissa.",
-  "Without a subscription, or switched off in the player settings. Never to players entered by hand.": "Ilman tilausta tai kytketty pois pelaaja-asetuksissa. Ei koskaan käsin lisätyille pelaajille."
+  "Without a subscription, or switched off in the player settings. Never to players entered by hand.": "Ilman tilausta tai kytketty pois pelaaja-asetuksissa. Ei koskaan käsin lisätyille pelaajille.",
+  "Each one can be switched off in the ${0}.": "Kunkin voi kytkeä pois ${0}.",
+  "settings": "asetuksista"
 }

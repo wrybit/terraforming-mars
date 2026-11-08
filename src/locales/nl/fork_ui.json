@@ -1738,11 +1738,12 @@
   "iPhone or iPad settings → Notifications → TM Mars: Allow Notifications.": "Instellingen van iPhone of iPad → Berichtgeving → TM Mars: Sta berichtgeving toe.",
   "Only for your games: somebody joins, asks to join, the game starts.": "Alleen voor je spellen: iemand doet mee, vraagt mee te doen, het spel begint.",
   "Keep the lobby in front to see them.": "Houd de lobby vooraan om ze te zien.",
-  "Each one can be switched off: Setup → Player Settings → Notifications.": "Elk apart uit te zetten: Setup → Spelerinstellingen → Meldingen.",
   "Push: somebody joins your game": "Push: iemand doet mee aan je spel",
   "Push: somebody asks to join": "Push: iemand vraagt mee te doen",
   "Push: your game starts": "Push: je spel begint",
   "switched off by the player": "uitgezet door de speler",
   "Without a subscription, or switched off in the player settings.": "Zonder abonnement, of uitgezet in de spelerinstellingen.",
-  "Without a subscription, or switched off in the player settings. Never to players entered by hand.": "Zonder abonnement, of uitgezet in de spelerinstellingen. Nooit aan handmatig ingevoerde spelers."
+  "Without a subscription, or switched off in the player settings. Never to players entered by hand.": "Zonder abonnement, of uitgezet in de spelerinstellingen. Nooit aan handmatig ingevoerde spelers.",
+  "Each one can be switched off in the ${0}.": "Elk apart uit te zetten in de ${0}.",
+  "settings": "instellingen"
 }

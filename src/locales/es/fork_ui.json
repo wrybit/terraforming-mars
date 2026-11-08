@@ -2388,11 +2388,12 @@
   "iPhone or iPad settings → Notifications → TM Mars: Allow Notifications.": "Ajustes del iPhone o iPad → Notificaciones → TM Mars: Permitir notificaciones.",
   "Only for your games: somebody joins, asks to join, the game starts.": "Solo para tus partidas: alguien se une, pide unirse, la partida empieza.",
   "Keep the lobby in front to see them.": "Deja el lobby delante para verlos.",
-  "Each one can be switched off: Setup → Player Settings → Notifications.": "Cada uno se puede desactivar: Setup → Ajustes del jugador → Notificaciones.",
   "Push: somebody joins your game": "Push: alguien se une a tu partida",
   "Push: somebody asks to join": "Push: alguien pide unirse",
   "Push: your game starts": "Push: tu partida empieza",
   "switched off by the player": "desactivado por el jugador",
   "Without a subscription, or switched off in the player settings.": "Sin suscripción, o desactivado en los ajustes del jugador.",
-  "Without a subscription, or switched off in the player settings. Never to players entered by hand.": "Sin suscripción, o desactivado en los ajustes del jugador. Nunca a jugadores añadidos a mano."
+  "Without a subscription, or switched off in the player settings. Never to players entered by hand.": "Sin suscripción, o desactivado en los ajustes del jugador. Nunca a jugadores añadidos a mano.",
+  "Each one can be switched off in the ${0}.": "Cada uno se puede desactivar en los ${0}.",
+  "settings": "ajustes"
 }
