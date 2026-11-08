@@ -2058,12 +2058,18 @@
   "iPhone or iPad settings → Notifications → TM Mars: Allow Notifications.": "Настройки на iPhone или iPad → Известия → TM Mars: Разрешаване на известия.",
   "Only for your games: somebody joins, asks to join, the game starts.": "Само за твоите игри: някой се присъединява, моли да се присъедини, играта започва.",
   "Keep the lobby in front to see them.": "Дръж лобито отпред, за да ги виждаш.",
-  "Push: somebody joins your game": "Push: някой се присъедини към играта ти",
-  "Push: somebody asks to join": "Push: някой моли да се присъедини",
-  "Push: your game starts": "Push: играта ти започва",
   "switched off by the player": "изключено от играча",
   "Without a subscription, or switched off in the player settings.": "Без абонамент или изключено в настройките на играча.",
   "Without a subscription, or switched off in the player settings. Never to players entered by hand.": "Без абонамент или изключено в настройките на играча. Никога до играчи, въведени ръчно.",
   "Each one can be switched off in the ${0}.": "Всяко може да се изключи в ${0}.",
-  "settings": "настройките"
+  "settings": "настройките",
+  "Ask before risky moves": "Питай преди рискови ходове",
+  "For example before paying more than needed or buying no cards at the start.": "Например преди надплащане или ако в началото не купуваш карти.",
+  "Animated browser title": "Анимирано заглавие на браузъра",
+  "No highlighted sidebar": "Без открояваща се странична лента",
+  "Otherwise the sidebar in the game is coloured when it is your turn.": "Иначе страничната лента в играта се оцветява, когато е твой ред.",
+  "Messages from the lobby": "Съобщения от лобито",
+  "Somebody joins your game": "Някой се присъединява към играта ти",
+  "Also with the lobby in the background or closed.": "Дори когато лобито е във фонов режим или затворено.",
+  "Your game starts": "Играта ти започва"
 }

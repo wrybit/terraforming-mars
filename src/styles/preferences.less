@@ -219,33 +219,6 @@
 
 /* Visual effects of changing settings */
 
-/* Reduce all cards size */
-.preferences_small_cards .filterDiv,
-.preferences_small_cards .filterDiv:hover {
-  transform: scale(0.8);
-  margin: -22px -15px -15px -15px;
-}
-.preferences_small_cards .filterDiv.card-standard-project,
-.preferences_small_cards .filterDiv:hover.card-standard-project {
-  margin: -0px -10px -15px -10px;
-}
-
-/*Selection check box room for smaller cards */
-.preferences_small_cards input[type="checkbox"] + .filterDiv.card-container,
-.preferences_small_cards input[type="radio"] + .filterDiv.card-container {
-  margin-top: -8px;
-}
-
-.preferences_small_cards input[type="checkbox"] + .filterDiv.card-standard-project,
-.preferences_small_cards input[type="radio"] + .filterDiv.card-standard-project {
-  margin-top: 0px;
-}
-
-.preferences_small_cards input[type="checkbox"]:checked + .filterDiv,
-.preferences_small_cards input[type="radio"]:checked + .filterDiv {
-  transform: scale(0.8);
-}
-
 /* Hide blocks */
 .preferences_hide_awards_and_milestones .player_home_block--milestones-and-awards {
   display: none;
@@ -258,51 +231,6 @@
 
 .preferences_remove_background #spectator-home {
   background: @grey_900;
-}
-
-/* Card Magnification */
-/* Only on devices with a real pointer; on touch screens :hover sticks after a tap. */
-@media (hover: hover) and (pointer: fine) {
-  .preferences_magnify_cards {
-    .filterDiv {
-      transition: transform 0.15s;
-    }
-    .filterDiv:hover {
-      transform: scale(1.2);
-      z-index: 100;
-    }
-
-    .sortable-dragging .filterDiv:hover,
-    .sortable-placeholder .filterDiv:hover {
-      transform: none;
-    }
-
-    .cards-stack:hover,
-    .cards-stack-first:hover {
-      z-index: 2;
-      transform: scale(1);
-    }
-
-    .global-event:hover {
-      transform: scale(1.2);
-      z-index: 2;
-    }
-  }
-  /* Magnify the wee little cards in a special way, if requested */
-  .preferences_small_cards.preferences_magnify_cards .filterDiv:hover {
-    transform: scale(0.95);
-  }
-}
-
-// Don't magnify inactive cards – they should look inactive on hover (cards.less .card-unavailable)
-.preferences_magnify_cards .filterDiv.card-unavailable:hover,
-.preferences_magnify_cards .filterDiv.card-life-found:hover {
-  transform: none;
-}
-
-.preferences_small_cards.preferences_magnify_cards .filterDiv.card-unavailable:hover,
-.preferences_magnify_cards .filterDiv.card-life-found:hover {
-  transform: scale(0.8);
 }
 
 .bug-dialog {

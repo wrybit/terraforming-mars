@@ -23,8 +23,6 @@ export const PREFERENCE_GROUPS: ReadonlyArray<PreferenceGroup> = [
     title: 'Cards',
     iconPaths: ['M8 3h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z', 'M4 7v12a2 2 0 0 0 2 2h10'],
     switches: [
-      {preference: 'small_cards', label: 'Smaller cards'},
-      {preference: 'magnify_cards', label: 'Magnify cards on hover'},
       {preference: 'hide_discount_on_cards', label: 'Hide discount on cards'},
       {preference: 'hide_zero_tags', label: 'Hide tags with zero count'},
     ],
@@ -33,14 +31,22 @@ export const PREFERENCE_GROUPS: ReadonlyArray<PreferenceGroup> = [
     title: 'Notifications',
     iconPaths: ['M6 16V11a6 6 0 1 1 12 0v5l2 2H4z', 'M10 21h4'],
     switches: [
-      {preference: 'show_alerts', label: 'Show in-game alerts'},
+      // show_alerts: the confirmations before overpaying (PaymentForm) and before buying no cards (SelectInitialCards)
+      {preference: 'show_alerts', label: 'Ask before risky moves', hint: 'For example before paying more than needed or buying no cards at the start.'},
       {preference: 'enable_sounds', label: 'Enable sounds'},
-      {preference: 'animated_title', label: 'Animated Title', hint: 'Show spinning circle in window title on your turn.'},
-      {preference: 'hide_animated_sidebar', label: 'Hide sidebar notification'},
-      // Push messages of the lobby (lobbyPush.ts): also with the page in the background or closed
-      {preference: 'push_joined', label: 'Push: somebody joins your game'},
-      {preference: 'push_request', label: 'Push: somebody asks to join'},
-      {preference: 'push_started', label: 'Push: your game starts'},
+      {preference: 'animated_title', label: 'Animated browser title', hint: 'Show spinning circle in window title on your turn.'},
+      // hide_animated_sidebar: no coloured sidebar in the game on one's own turn (Sidebar.vue)
+      {preference: 'hide_animated_sidebar', label: 'No highlighted sidebar', hint: 'Otherwise the sidebar in the game is coloured when it is your turn.'},
+    ],
+  },
+  {
+    // Push messages of the lobby (lobbyPush.ts): one switch per kind, also with the page in the background or closed
+    title: 'Messages from the lobby',
+    iconPaths: ['M6 16V11a6 6 0 1 1 12 0v5l2 2H4z', 'M10 21h4', 'M19 3l2 2-2 2'],
+    switches: [
+      {preference: 'push_joined', label: 'Somebody joins your game', hint: 'Also with the lobby in the background or closed.'},
+      {preference: 'push_request', label: 'Somebody asks to join'},
+      {preference: 'push_started', label: 'Your game starts'},
     ],
   },
   {

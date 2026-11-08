@@ -1738,12 +1738,18 @@
   "iPhone or iPad settings → Notifications → TM Mars: Allow Notifications.": "Instellingen van iPhone of iPad → Berichtgeving → TM Mars: Sta berichtgeving toe.",
   "Only for your games: somebody joins, asks to join, the game starts.": "Alleen voor je spellen: iemand doet mee, vraagt mee te doen, het spel begint.",
   "Keep the lobby in front to see them.": "Houd de lobby vooraan om ze te zien.",
-  "Push: somebody joins your game": "Push: iemand doet mee aan je spel",
-  "Push: somebody asks to join": "Push: iemand vraagt mee te doen",
-  "Push: your game starts": "Push: je spel begint",
   "switched off by the player": "uitgezet door de speler",
   "Without a subscription, or switched off in the player settings.": "Zonder abonnement, of uitgezet in de spelerinstellingen.",
   "Without a subscription, or switched off in the player settings. Never to players entered by hand.": "Zonder abonnement, of uitgezet in de spelerinstellingen. Nooit aan handmatig ingevoerde spelers.",
   "Each one can be switched off in the ${0}.": "Elk apart uit te zetten in de ${0}.",
-  "settings": "instellingen"
+  "settings": "instellingen",
+  "Ask before risky moves": "Bevestigen bij riskante zetten",
+  "For example before paying more than needed or buying no cards at the start.": "Bijvoorbeeld voor te veel betalen of bij de start geen kaarten kopen.",
+  "Animated browser title": "Geanimeerde browsertitel",
+  "No highlighted sidebar": "Geen gemarkeerde zijbalk",
+  "Otherwise the sidebar in the game is coloured when it is your turn.": "Anders kleurt de zijbalk in het spel als jij aan de beurt bent.",
+  "Messages from the lobby": "Berichten uit de lobby",
+  "Somebody joins your game": "Iemand doet mee aan je spel",
+  "Also with the lobby in the background or closed.": "Ook met de lobby op de achtergrond of gesloten.",
+  "Your game starts": "Je spel begint"
 }

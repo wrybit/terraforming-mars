@@ -2270,12 +2270,18 @@
   "iPhone or iPad settings → Notifications → TM Mars: Allow Notifications.": "Ajustes do iPhone ou iPad → Notificações → TM Mars: Permitir Notificações.",
   "Only for your games: somebody joins, asks to join, the game starts.": "Só para seus jogos: alguém entra, pede para entrar, o jogo começa.",
   "Keep the lobby in front to see them.": "Mantenha o lobby na frente para vê-los.",
-  "Push: somebody joins your game": "Push: alguém entra no seu jogo",
-  "Push: somebody asks to join": "Push: alguém pede para entrar",
-  "Push: your game starts": "Push: seu jogo começa",
   "switched off by the player": "desligado pelo jogador",
   "Without a subscription, or switched off in the player settings.": "Sem inscrição, ou desligado nas configurações do jogador.",
   "Without a subscription, or switched off in the player settings. Never to players entered by hand.": "Sem inscrição, ou desligado nas configurações do jogador. Nunca para jogadores incluídos à mão.",
   "Each one can be switched off in the ${0}.": "Cada um pode ser desligado nas ${0}.",
-  "settings": "configurações"
+  "settings": "configurações",
+  "Ask before risky moves": "Confirmar jogadas arriscadas",
+  "For example before paying more than needed or buying no cards at the start.": "Por exemplo antes de pagar a mais ou de não comprar cartas no início.",
+  "Animated browser title": "Título do navegador animado",
+  "No highlighted sidebar": "Sem barra lateral destacada",
+  "Otherwise the sidebar in the game is coloured when it is your turn.": "Senão a barra lateral do jogo fica colorida na sua vez.",
+  "Messages from the lobby": "Mensagens do lobby",
+  "Somebody joins your game": "Alguém entra no seu jogo",
+  "Also with the lobby in the background or closed.": "Também com o lobby em segundo plano ou fechado.",
+  "Your game starts": "Seu jogo começa"
 }

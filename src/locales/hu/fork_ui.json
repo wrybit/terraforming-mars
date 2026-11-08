@@ -1292,12 +1292,18 @@
   "iPhone or iPad settings → Notifications → TM Mars: Allow Notifications.": "iPhone vagy iPad beállításai → Értesítések → TM Mars: Értesítések engedélyezése.",
   "Only for your games: somebody joins, asks to join, the game starts.": "Csak a játékaidhoz: valaki csatlakozik, csatlakozást kér, a játék elkezdődik.",
   "Keep the lobby in front to see them.": "Tartsd elöl az előcsarnokot, hogy lásd őket.",
-  "Push: somebody joins your game": "Push: valaki csatlakozik a játékodhoz",
-  "Push: somebody asks to join": "Push: valaki csatlakozást kér",
-  "Push: your game starts": "Push: a játékod elkezdődik",
   "switched off by the player": "a játékos kikapcsolta",
   "Without a subscription, or switched off in the player settings.": "Feliratkozás nélkül, vagy a játékosbeállításokban kikapcsolva.",
   "Without a subscription, or switched off in the player settings. Never to players entered by hand.": "Feliratkozás nélkül, vagy a játékosbeállításokban kikapcsolva. Kézzel felvett játékosoknak soha.",
   "Each one can be switched off in the ${0}.": "Egyenként kikapcsolhatók a ${0}.",
-  "settings": "beállításokban"
+  "settings": "beállításokban",
+  "Ask before risky moves": "Kérdezzen kockázatos lépések előtt",
+  "For example before paying more than needed or buying no cards at the start.": "Pl. túlfizetés előtt, vagy ha az elején nem veszel kártyát.",
+  "Animated browser title": "Animált böngészőcím",
+  "No highlighted sidebar": "Nincs kiemelt oldalsáv",
+  "Otherwise the sidebar in the game is coloured when it is your turn.": "Különben a játék oldalsávja színes, amikor te következel.",
+  "Messages from the lobby": "Üzenetek az előcsarnokból",
+  "Somebody joins your game": "Valaki csatlakozik a játékodhoz",
+  "Also with the lobby in the background or closed.": "Akkor is, ha az előcsarnok a háttérben van vagy zárva.",
+  "Your game starts": "A játékod elkezdődik"
 }

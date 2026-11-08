@@ -2094,12 +2094,18 @@
   "iPhone or iPad settings → Notifications → TM Mars: Allow Notifications.": "iPhone 或 iPad 设置 → 通知 → TM Mars：允许通知。",
   "Only for your games: somebody joins, asks to join, the game starts.": "仅用于你的游戏：有人加入、请求加入、游戏开始。",
   "Keep the lobby in front to see them.": "请让大厅保持在前台才能看到。",
-  "Push: somebody joins your game": "推送：有人加入你的游戏",
-  "Push: somebody asks to join": "推送：有人请求加入",
-  "Push: your game starts": "推送：你的游戏开始",
   "switched off by the player": "玩家已关闭",
   "Without a subscription, or switched off in the player settings.": "没有订阅，或在玩家设置中已关闭。",
   "Without a subscription, or switched off in the player settings. Never to players entered by hand.": "没有订阅，或在玩家设置中已关闭。从不发给手动添加的玩家。",
   "Each one can be switched off in the ${0}.": "每项都可在${0}中单独关闭。",
-  "settings": "设置"
+  "settings": "设置",
+  "Ask before risky moves": "风险操作前确认",
+  "For example before paying more than needed or buying no cards at the start.": "例如多付费用或开局不买卡牌之前。",
+  "Animated browser title": "动态浏览器标题",
+  "No highlighted sidebar": "不突出显示侧边栏",
+  "Otherwise the sidebar in the game is coloured when it is your turn.": "否则轮到你时游戏侧边栏会变色。",
+  "Messages from the lobby": "大厅消息",
+  "Somebody joins your game": "有人加入你的游戏",
+  "Also with the lobby in the background or closed.": "即使大厅在后台或已关闭。",
+  "Your game starts": "你的游戏开始"
 }
