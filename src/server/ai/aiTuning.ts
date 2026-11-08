@@ -78,6 +78,8 @@ export type AiTuning = {
   laterSamples: number,
   /** Share of the future tableau in a "later" value taken from the own hand instead of random deck cards (futureHand.ts); 0 = off. */
   futureHandShare: number,
+  /** Share of a card's later value counted when holding it instead of playing it now (cardValue.ts); 0.85 since the start. */
+  laterDiscount: number,
   /** Award lead uncertainty: share of the award score an opponent may still gain per remaining generation (stateValue.ts). */
   awardSwing: number,
   /** 1: hand cards keep a small value in the expected last generation until Mars is terraformed (no selling them off). */
@@ -402,6 +404,7 @@ export const BASELINE_TUNING: AiTuning = {
   plantProductionValue: 2,
   laterSamples: 2,
   futureHandShare: 0,
+  laterDiscount: 0.85,
   // Adopted on purpose without a measurable AI-vs-AI gain (round 13: +0.6 VP per deal, z +0.7; funded
   // awards 829 → 210 per 200 games, funder wins 81 → 87 %): a human overtook three funded awards
   // (30 VP swing), the AI opponent in batches does not chase awards like that.
@@ -1220,6 +1223,10 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // with own tags (Gyropolis, Medical Lab …); their later value saw only random deck cards, not the own hand.
   futureHand05: {futureHandShare: 0.5},
   futureHand1: {futureHandShare: 1},
+  // Round 188: the AI ends with 7.5 cards in hand (humans 4.6) and plays 23.5 cards from gen 8 (humans 40): holding a
+  // card counted 85 % of its later value – a lower share plays cards (and their production) sooner.
+  laterDiscount07: {laterDiscount: 0.7},
+  laterDiscount055: {laterDiscount: 0.55},
 };
 
 export function isTuningVariant(name: string): boolean {
