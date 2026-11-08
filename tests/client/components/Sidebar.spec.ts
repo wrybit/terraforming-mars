@@ -14,7 +14,6 @@ describe('Sidebar', () => {
       props: {
         playerNumber: 2,
         gameOptions: fakeGameOptionsModel(),
-        actingPlayer: true,
         playerColor: 'blue',
         coloniesCount: 0,
         temperature: -30,

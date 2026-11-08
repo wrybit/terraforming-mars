@@ -2,7 +2,6 @@
   <div id="spectator-home" :class="{'with-turmoil': game.turmoil, 'player-home--fixed': usesFixedLayout}">
     <!-- Built like the player view (PlayerHome.vue), just without own hand and input -->
     <Sidebar
-      :actingPlayer="false"
       :playerColor="spectator.color"
       :coloniesCount="game.colonies.length"
       :temperature="game.temperature"

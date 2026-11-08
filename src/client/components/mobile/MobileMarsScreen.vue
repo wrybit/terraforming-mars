@@ -4,7 +4,6 @@
          then milestones etc. Comment inside so the caller's v-show hits the root -->
     <!-- Language, game details, help, settings: the same buttons as on desktop, here as a bar at the top -->
     <Sidebar class="mb-toolbar"
-      :actingPlayer="acting"
       :playerColor="viewerColor ?? 'neutral'"
       :coloniesCount="game.colonies.length"
       :temperature="game.temperature"

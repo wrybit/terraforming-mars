@@ -39,8 +39,6 @@ export const PREFERENCE_GROUPS: ReadonlyArray<PreferenceGroup> = [
       // show_alerts: the confirmations before overpaying (PaymentForm) and before buying no cards (SelectInitialCards)
       {preference: 'show_alerts', label: 'Ask before risky moves', hint: 'For example before paying more than needed or buying no cards at the start.'},
       {preference: 'animated_title', label: 'Animated browser title', hint: 'Show spinning circle in window title on your turn.'},
-      // hide_animated_sidebar: no coloured sidebar in the game on one's own turn (Sidebar.vue)
-      {preference: 'hide_animated_sidebar', label: 'No highlighted sidebar', hint: 'Otherwise the sidebar in the game is coloured when it is your turn.'},
     ],
   },
   {

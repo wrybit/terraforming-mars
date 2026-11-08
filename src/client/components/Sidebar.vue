@@ -1,5 +1,5 @@
 <template>
-  <div :class="'sidebar_cont sidebar '+getSideBarClass()">
+  <div class="sidebar_cont sidebar preferences_nonacting_player">
     <div v-if="gameOptions.expansions.turmoil" :title="$t('Ruling Party')">
       <div :class="'party-name party-name-indicator party-name--'+rulingPartyToCss()"> <span v-i18n>{{ getRulingParty() }}</span></div>
     </div>
@@ -62,7 +62,7 @@ import {defineAsyncComponent, defineComponent} from 'vue';
 import SidebarModal from '@/client/components/SidebarModal.vue';
 import PlayerCube from '@/client/components/common/PlayerCube.vue';
 import {Color} from '@/common/Color';
-import {getPreferences, PreferencesManager} from '@/client/utils/PreferencesManager';
+import {PreferencesManager} from '@/client/utils/PreferencesManager';
 import {TurmoilModel} from '@/common/models/TurmoilModel';
 import {PartyName} from '@/common/turmoil/PartyName';
 import InfoPanel from '@/client/components/InfoPanel.vue';
@@ -85,9 +85,6 @@ export default defineComponent({
     gameOptions: {
       type: Object as () => GameOptionsModel,
       required: true,
-    },
-    actingPlayer: {
-      type: Boolean,
     },
     playerColor: {
       type: String as () => Color,
@@ -166,9 +163,6 @@ export default defineComponent({
     };
   },
   methods: {
-    getSideBarClass(): string {
-      return this.actingPlayer && (getPreferences().hide_animated_sidebar === false) ? 'preferences_acting_player' : 'preferences_nonacting_player';
-    },
     rulingPartyToCss(): string {
       if (this.turmoil?.ruling === undefined) {
         console.warn('no party provided');
