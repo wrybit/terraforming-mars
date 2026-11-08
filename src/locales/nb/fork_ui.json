@@ -1476,12 +1476,18 @@
   "iPhone or iPad settings → Notifications → TM Mars: Allow Notifications.": "Innstillinger på iPhone eller iPad → Varslinger → TM Mars: Tillat varslinger.",
   "Only for your games: somebody joins, asks to join, the game starts.": "Bare for spillene dine: noen blir med, ber om å bli med, spillet starter.",
   "Keep the lobby in front to see them.": "Hold lobbyen foran for å se dem.",
-  "Push: somebody joins your game": "Push: noen blir med i spillet ditt",
-  "Push: somebody asks to join": "Push: noen ber om å bli med",
-  "Push: your game starts": "Push: spillet ditt starter",
   "switched off by the player": "slått av av spilleren",
   "Without a subscription, or switched off in the player settings.": "Uten abonnement, eller slått av i spillerinnstillingene.",
   "Without a subscription, or switched off in the player settings. Never to players entered by hand.": "Uten abonnement, eller slått av i spillerinnstillingene. Aldri til spillere lagt inn for hånd.",
   "Each one can be switched off in the ${0}.": "Hver kan slås av i ${0}.",
-  "settings": "innstillingene"
+  "settings": "innstillingene",
+  "Ask before risky moves": "Spør før risikable trekk",
+  "For example before paying more than needed or buying no cards at the start.": "For eksempel før du betaler for mye eller ikke kjøper kort ved start.",
+  "Animated browser title": "Animert nettlesertittel",
+  "No highlighted sidebar": "Ingen uthevet sidelinje",
+  "Otherwise the sidebar in the game is coloured when it is your turn.": "Ellers blir sidelinjen i spillet farget når det er din tur.",
+  "Messages from the lobby": "Meldinger fra lobbyen",
+  "Somebody joins your game": "Noen blir med i spillet ditt",
+  "Also with the lobby in the background or closed.": "Også med lobbyen i bakgrunnen eller lukket.",
+  "Your game starts": "Spillet ditt starter"
 }

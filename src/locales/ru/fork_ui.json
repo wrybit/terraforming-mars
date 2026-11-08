@@ -1981,12 +1981,18 @@
   "iPhone or iPad settings → Notifications → TM Mars: Allow Notifications.": "Настройки iPhone или iPad → Уведомления → TM Mars: Допуск уведомлений.",
   "Only for your games: somebody joins, asks to join, the game starts.": "Только для ваших игр: кто-то присоединяется, просит присоединиться, игра начинается.",
   "Keep the lobby in front to see them.": "Держите лобби на переднем плане, чтобы их видеть.",
-  "Push: somebody joins your game": "Push: кто-то присоединился к вашей игре",
-  "Push: somebody asks to join": "Push: кто-то просит присоединиться",
-  "Push: your game starts": "Push: ваша игра начинается",
   "switched off by the player": "отключено игроком",
   "Without a subscription, or switched off in the player settings.": "Без подписки или отключено в настройках игрока.",
   "Without a subscription, or switched off in the player settings. Never to players entered by hand.": "Без подписки или отключено в настройках игрока. Никогда игрокам, добавленным вручную.",
   "Each one can be switched off in the ${0}.": "Каждое можно отключить в ${0}.",
-  "settings": "настройках"
+  "settings": "настройках",
+  "Ask before risky moves": "Спрашивать перед рискованными ходами",
+  "For example before paying more than needed or buying no cards at the start.": "Например, перед переплатой или если вы не покупаете карты в начале.",
+  "Animated browser title": "Анимированный заголовок браузера",
+  "No highlighted sidebar": "Без выделенной боковой панели",
+  "Otherwise the sidebar in the game is coloured when it is your turn.": "Иначе боковая панель в игре окрашивается в ваш ход.",
+  "Messages from the lobby": "Сообщения из лобби",
+  "Somebody joins your game": "Кто-то присоединился к вашей игре",
+  "Also with the lobby in the background or closed.": "Даже если лобби в фоне или закрыто.",
+  "Your game starts": "Ваша игра начинается"
 }

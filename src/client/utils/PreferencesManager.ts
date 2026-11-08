@@ -4,7 +4,6 @@ import {safeLocalStorage} from '@/client/utils/SafeLocalStorage';
 export type Preferences = {
   learner_mode: boolean,
   enable_sounds: boolean,
-  magnify_cards: boolean,
   show_alerts: boolean,
   hide_hand: boolean,
   hide_awards_and_milestones: boolean,
@@ -13,7 +12,6 @@ export type Preferences = {
   show_milestone_details: boolean,
   show_award_details: boolean,
   hide_top_bar: boolean,
-  small_cards: boolean,
   remove_background: boolean,
   hide_active_cards: boolean,
   hide_automated_cards: boolean,
@@ -36,11 +34,13 @@ export type Preferences = {
 
 export type Preference = keyof Preferences;
 
+// Former settings, no longer offered: 'small_cards' (smaller cards), 'magnify_cards' (enlarge on hover)
+const REMOVED_PREFERENCES: ReadonlyArray<string> = ['small_cards', 'magnify_cards'];
+
 // The fork's defaults: apply to everyone who has never changed a setting themselves
 const defaults: Preferences = {
   learner_mode: true,
   enable_sounds: true,
-  magnify_cards: false,
   show_alerts: true,
   lang: 'en',
 
@@ -53,7 +53,6 @@ const defaults: Preferences = {
   show_milestone_details: true,
   show_award_details: true,
   hide_top_bar: false,
-  small_cards: false,
   remove_background: false,
   hide_active_cards: false,
   hide_automated_cards: false,
@@ -89,6 +88,10 @@ export class PreferencesManager {
   private constructor() {
     // Reactive so components update when preferences change, without a page refresh.
     this._values = reactive({...defaults});
+    // Removed settings: whoever had them on gets the normal cards again (the key would otherwise linger)
+    for (const removed of REMOVED_PREFERENCES) {
+      safeLocalStorage.removeItem(removed);
+    }
     for (const key of Object.keys(defaults) as Array<Preference>) {
       const value = safeLocalStorage.getItem(key);
       if (value) {
