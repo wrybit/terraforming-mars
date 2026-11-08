@@ -55,7 +55,7 @@
 <script setup lang="ts">
 import {computed, ref} from 'vue';
 import {paths} from '@/common/app/paths';
-import {LobbyPushKind, LobbyPushText} from '@/common/lobby/LobbyPushModel';
+import {LOBBY_PUSH_OUTCOME, LOBBY_PUSH_TEST_TAG, LobbyPushKind, LobbyPushOutcome, LobbyPushText} from '@/common/lobby/LobbyPushModel';
 import {AdminPushTestRequest, AdminPushTestResponse} from '@/common/admin/AdminPushModel';
 import {translateText} from '@/client/directives/i18n';
 import {getPreferences} from '@/client/utils/PreferencesManager';
@@ -82,21 +82,64 @@ const titleParts = computed(() => previewText.value.title.split('${0}').flatMap(
 const testState = ref<'idle' | 'sending' | 'failed'>('idle');
 const testMessage = ref('');
 
-const TEST_RESULTS: Record<AdminPushTestResponse['result'], string> = {
-  sent: 'Test sent: the notification appears unless a lobby tab is in front.',
+// What the server could do with the test message
+const SERVER_RESULTS: Record<Exclude<AdminPushTestResponse['result'], 'sent'>, string> = {
   unreachable: 'This browser has no subscription: open the lobby and allow notifications.',
   gone: 'The subscription of this browser is gone: open the lobby again.',
 };
 
+// What became of it in this browser (reported by the service worker, client/sw.ts); timeout: nothing arrived
+type BrowserOutcome = LobbyPushOutcome['outcome'] | 'timeout';
+const BROWSER_RESULTS: Record<BrowserOutcome, string> = {
+  shown: 'The push reached this browser and was handed to the system. If no notification appears, the system blocks it: allow notifications for this browser in the system settings and check Focus or Do Not Disturb.',
+  suppressed: 'The push reached this browser but was held back: a lobby tab is in front.',
+  failed: 'The push reached this browser, but the browser refused to show it: check the notification permission of this site.',
+  timeout: 'The push service accepted the message, but it did not reach this browser within 15 seconds.',
+};
+const OUTCOME_WAIT_MS = 15_000;
+
+// Waits for the service worker's report about the test message; resolves 'timeout' without one
+function browserOutcome(): Promise<BrowserOutcome> {
+  return new Promise((resolve) => {
+    const container = navigator.serviceWorker;
+    if (container === undefined) {
+      resolve('timeout');
+      return;
+    }
+    const finish = (outcome: BrowserOutcome) => {
+      container.removeEventListener('message', listen);
+      clearTimeout(timer);
+      resolve(outcome);
+    };
+    const listen = (event: MessageEvent) => {
+      const report = event.data as Partial<LobbyPushOutcome> | undefined;
+      if (report?.type === LOBBY_PUSH_OUTCOME && report.tag === LOBBY_PUSH_TEST_TAG && report.outcome !== undefined) {
+        finish(report.outcome);
+      }
+    };
+    const timer = setTimeout(() => finish('timeout'), OUTCOME_WAIT_MS);
+    container.addEventListener('message', listen);
+    container.startMessages();
+  });
+}
+
 async function sendTest(): Promise<void> {
   testState.value = 'sending';
-  testMessage.value = '';
+  testMessage.value = translateText('Test sent: waiting for this browser…');
   const body: AdminPushTestRequest = {kind: props.entry.kind as LobbyPushKind, me: lobbyParticipantId()};
   try {
+    // Listen before sending: the report can come faster than the answer of the server
+    const outcome = browserOutcome();
     const response = await fetchOrFail(paths.API_ADMIN_PUSH, {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body)});
     const {result}: AdminPushTestResponse = await response.json();
-    testState.value = result === 'sent' ? 'idle' : 'failed';
-    testMessage.value = translateText(TEST_RESULTS[result]);
+    if (result !== 'sent') {
+      testState.value = 'failed';
+      testMessage.value = translateText(SERVER_RESULTS[result]);
+      return;
+    }
+    const arrived = await outcome;
+    testState.value = arrived === 'shown' ? 'idle' : 'failed';
+    testMessage.value = translateText(BROWSER_RESULTS[arrived]);
   } catch (error) {
     testState.value = 'failed';
     testMessage.value = describeFailure(failureOf(error));
