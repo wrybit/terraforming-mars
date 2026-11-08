@@ -9,4 +9,13 @@ describe('LobbyPushBanner', () => {
     expect(wrapper.find('.lobby-push-banner').exists()).is.true;
     expect(wrapper.find('.lobby-push-banner-button').exists()).is.false;
   });
+
+  it('the cross closes the bar for good', async () => {
+    localStorage.removeItem('tm-lobby-push-banner-closed');
+    const wrapper = mount(LobbyPushBanner, {...globalConfig});
+    await wrapper.find('.lobby-push-banner-close').trigger('click');
+    expect(wrapper.find('.lobby-push-banner').exists()).is.false;
+    expect(mount(LobbyPushBanner, {...globalConfig}).find('.lobby-push-banner').exists()).is.false;
+    localStorage.removeItem('tm-lobby-push-banner-closed');
+  });
 });

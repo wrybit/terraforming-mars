@@ -61,9 +61,20 @@ export const LOBBY_PUSH_TEST_TAG = 'lobby-admin-test';
 
 export const LOBBY_PUSH_OUTCOME = 'lobby-push-outcome';
 
-/** Service worker → open pages: the message arrived and was shown, held back (lobby in front) or refused */
+/**
+ * Service worker → open pages: the message arrived and was shown by the system, shown as a toast in a tab of this
+ * site that is in front, or refused by the browser
+ */
 export type LobbyPushOutcome = {
   type: typeof LOBBY_PUSH_OUTCOME;
   tag: string;
-  outcome: 'shown' | 'suppressed' | 'failed';
+  outcome: 'shown' | 'toast' | 'failed';
+};
+
+export const LOBBY_PUSH_TOAST = 'lobby-push-toast';
+
+/** Service worker → the tab in front: show the message inside the page (PushToast.vue) instead of a system notice */
+export type LobbyPushToast = {
+  type: typeof LOBBY_PUSH_TOAST;
+  message: LobbyPushMessage;
 };

@@ -94,7 +94,7 @@ const SERVER_RESULTS: Record<Exclude<AdminPushTestResponse['result'], 'sent'>, s
 type BrowserOutcome = LobbyPushOutcome['outcome'] | 'timeout';
 const BROWSER_RESULTS: Record<BrowserOutcome, string> = {
   shown: 'The push reached this browser and was handed to the system. If no notification appears, the system blocks it: allow notifications for this browser in the system settings and check Focus or Do Not Disturb.',
-  suppressed: 'The push reached this browser but was held back: a lobby tab is in front.',
+  toast: 'The push reached this browser and appears as a message on this page: a tab of this site is in front. Switch to another app to get the system notification.',
   failed: 'The push reached this browser, but the browser refused to show it: check the notification permission of this site.',
   timeout: 'The push service accepted the message, but it did not reach this browser within 15 seconds.',
 };
@@ -150,7 +150,7 @@ async function sendTest(): Promise<void> {
       return;
     }
     const arrived = await outcome;
-    testState.value = arrived === 'shown' ? 'idle' : 'failed';
+    testState.value = arrived === 'shown' || arrived === 'toast' ? 'idle' : 'failed';
     testMessage.value = translateText(BROWSER_RESULTS[arrived]);
   } catch (error) {
     testState.value = 'failed';
