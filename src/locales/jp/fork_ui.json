@@ -1510,5 +1510,6 @@
   "Notifications can be switched off one by one in the game, in the ${0}.": "通知はゲーム内の${0}で個別にオフにできます。",
   "Sound on your turn": "自分の番で音を鳴らす",
   "Sound for lobby messages": "ロビーの通知音",
-  "With the page in front they appear inside it, with a short chime.": "ページが前面にあるときは、短い音とともにページ内に表示されます。"
+  "With the page in front they appear inside it, with a short chime.": "ページが前面にあるときは、短い音とともにページ内に表示されます。",
+  "Sounds": "サウンド"
 }

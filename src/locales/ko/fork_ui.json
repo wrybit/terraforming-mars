@@ -1388,5 +1388,6 @@
   "Notifications can be switched off one by one in the game, in the ${0}.": "알림은 게임의 ${0}에서 하나씩 끌 수 있습니다.",
   "Sound on your turn": "내 차례 알림음",
   "Sound for lobby messages": "로비 메시지 알림음",
-  "With the page in front they appear inside it, with a short chime.": "페이지가 앞에 있으면 페이지 안에 짧은 소리와 함께 표시됩니다."
+  "With the page in front they appear inside it, with a short chime.": "페이지가 앞에 있으면 페이지 안에 짧은 소리와 함께 표시됩니다.",
+  "Sounds": "소리"
 }

@@ -1934,5 +1934,6 @@
   "Notifications can be switched off one by one in the game, in the ${0}.": "Powiadomienia można wyłączyć pojedynczo w grze, w ${0}.",
   "Sound on your turn": "Dźwięk w twojej turze",
   "Sound for lobby messages": "Dźwięk dla wiadomości z lobby",
-  "With the page in front they appear inside it, with a short chime.": "Gdy strona jest na wierzchu, pojawiają się w niej z krótkim sygnałem."
+  "With the page in front they appear inside it, with a short chime.": "Gdy strona jest na wierzchu, pojawiają się w niej z krótkim sygnałem.",
+  "Sounds": "Dźwięki"
 }
