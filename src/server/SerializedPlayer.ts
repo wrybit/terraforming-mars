@@ -1,3 +1,4 @@
+import {ResearchStock} from './research/researchStock';
 import {AiLevel} from '../common/ai/AiLevel';
 import {PlayerId} from '../common/Types';
 import {CardName} from '../common/cards/CardName';
@@ -41,6 +42,8 @@ export interface SerializedPlayer extends DeprecatedFields{
   draftHand: Array<CardName>,
   /** Research phase: cards offered and not yet chosen (fork, so a restart does not draw again) */
   researchOffer?: Array<CardName>,
+  /** Research phase: stock before buying, shown to the others until everyone has bought (fork) */
+  researchStock?: ResearchStock,
   draftOrder?: Array<CardName>,
   energy: number;
   energyProduction: number;

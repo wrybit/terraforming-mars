@@ -1,3 +1,4 @@
+import {ResearchStock, takeResearchStock} from './research/researchStock';
 import {rememberActionStart} from './actionStart';
 import {PlayabilityCheck, cachedPlayability, recordPlayability} from './ai/copyLoadCache';
 import * as constants from '../common/constants';
@@ -149,6 +150,7 @@ export class Player implements IPlayer {
   public cardCost: number = constants.CARD_COST;
   public needsToDraft?: boolean;
   public researchOffer: Array<IProjectCard> | undefined = undefined;
+  public researchStock: ResearchStock | undefined = undefined;
 
   public timer: Timer = Timer.newInstance();
   public autopass = false;
@@ -685,6 +687,8 @@ export class Player implements IPlayer {
     const cards = copyAndClear(this.draftedCards);
     // Dasselbe Array: auch ein Kartentausch (Underworld) landet im Speicherstand
     this.researchOffer = cards;
+    // Stock before buying: what the others see until everyone has bought
+    this.researchStock = takeResearchStock(this, cards.length);
 
     const chooseCardsToBuy = () => {
       // TODO(kberg): Using .execute to rely on directly calling setWaitingFor is not great.
@@ -1869,6 +1873,7 @@ export class Player implements IPlayer {
       playedCards: this.playedCards.serialize(),
       draftedCards: this.draftedCards.map(toName),
       researchOffer: this.researchOffer?.map(toName),
+      researchStock: this.researchStock,
       cardCost: this.cardCost,
       needsToDraft: this.needsToDraft,
       cardDiscount: this.colonies.cardDiscount,
@@ -1997,6 +2002,7 @@ export class Player implements IPlayer {
     player.playedCards.deserialize(d.playedCards);
     player.draftedCards = cardsFromJSON(d.draftedCards);
     player.researchOffer = d.researchOffer === undefined ? undefined : cardsFromJSON(d.researchOffer);
+    player.researchStock = d.researchStock;
     player.autopass = d.autoPass ?? false;
     player.preservationProgram = d.preservationProgram ?? false;
     // TODO(kberg): remove ?? 0 by 2026-11-01
