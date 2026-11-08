@@ -2,6 +2,7 @@ import * as path from 'path';
 import * as webpush from 'web-push';
 import {LOBBY_PUSH_KINDS, LOBBY_PUSH_TEXTS, LobbyPushKind, LobbyPushMessage, LobbyPushResult, LobbyPushSubscription, LobbyPushText, LobbyPushTexts} from '../../common/lobby/LobbyPushModel';
 import {AdminPushDelivery, AdminPushInfo} from '../../common/admin/AdminPushModel';
+import {faviconImage} from '../../common/admin/favicons';
 import {fileStorage, LobbyStorage} from './lobbyStorage';
 import {LobbyError} from './lobbyValidation';
 
@@ -40,6 +41,11 @@ const webPushSender: PushSender = async (subscription, message, vapid) => {
     throw error;
   }
 };
+
+/** The favicon of this server as PNG: notifications show no .ico on every system (settings FAVICON_ICON/FAVICON_COLOR) */
+export function pushIcon(): string {
+  return faviconImage(process.env.FAVICON_ICON, process.env.FAVICON_COLOR);
+}
 
 export function lobbyPushFile(): string {
   return process.env.LOBBY_PUSH_FILE ?? path.resolve('db', 'lobby-push.json');
@@ -140,6 +146,7 @@ export class LobbyPush {
     return {
       subscribers: Object.keys(data.subscribers).length,
       subscriptionMaxAgeDays: PUSH_SUBSCRIPTION_MAX_AGE_MS / (24 * 60 * 60 * 1000),
+      icon: pushIcon(),
       deliveries: data.deliveries ?? [],
     };
   }
@@ -157,6 +164,7 @@ export class LobbyPush {
       body: text.body.replace('${0}', name),
       url: room.path,
       tag: 'lobby-' + room.id,
+      icon: pushIcon(),
     };
     const result = await this.send(subscriber.subscription, message, data.vapid);
     if (result === 'gone') {

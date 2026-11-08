@@ -39,7 +39,7 @@
         </div>
       </div>
       <div class="push-notification">
-        <span class="push-notification-icon"></span>
+        <img class="push-notification-icon" :src="icon" alt="">
         <span class="push-notification-source">{{ host }}</span>
         <strong class="push-notification-title"><template v-for="(part, index) in titleParts" :key="index"><mark v-if="part.isName">{{ part.text }}</mark><template v-else>{{ part.text }}</template></template></strong>
         <span class="push-notification-body">{{ previewText.body.replace('${0}', SAMPLE_NAME) }}</span>
@@ -63,7 +63,8 @@ import {describeFailure, failureOf, fetchOrFail} from '@/client/utils/requestFai
 import {lobbyParticipantId} from '@/client/components/lobby/lobbyProfile';
 import {PushCatalogEntry} from './pushCatalog';
 
-const props = defineProps<{entry: PushCatalogEntry}>();
+// icon: the picture the messages carry (the server's favicon, AdminPushInfo)
+const props = defineProps<{entry: PushCatalogEntry, icon: string}>();
 
 // Stands for whoever caused the message, as in the server's test messages (ApiAdminPush.ts)
 const SAMPLE_NAME = 'Bob';

@@ -33,7 +33,7 @@ describe('LobbyPush', () => {
     push.subscribe(HOST, subscription, texts);
     expect(push.canReach(HOST)).is.true;
     await push.notify(HOST, 'joined', {...room, title: 'Abend'}, 'Bob');
-    expect(sent).deep.eq([{title: 'Bob ist da', body: 'Bob ist deinem Spiel beigetreten', url: room.path, tag: 'lobby-ab12'}]);
+    expect(sent).deep.eq([{title: 'Bob ist da', body: 'Bob ist deinem Spiel beigetreten', url: room.path, tag: 'lobby-ab12', icon: 'assets/favicon/mars-orange.png'}]);
     expect((storage.data as {vapid: unknown}).vapid).deep.eq({publicKey: 'public', privateKey: 'private'});
   });
 
