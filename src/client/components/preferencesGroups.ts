@@ -3,10 +3,15 @@ import {Preference} from '@/client/utils/PreferencesManager';
 // Settings as data, grouped by topic (PreferencesDialog.vue renders them with v-for).
 // hint = former tooltip (ⓘ), now shown as text below the switch.
 
+// Sounds that can be heard in the settings before switching them (SoundManager.ts)
+export type SoundPreview = 'turn' | 'lobby';
+
 export type PreferenceSwitch = {
   preference: Preference;
   label: string;
   hint?: string;
+  // Play button next to the switch
+  preview?: SoundPreview;
 };
 
 export type PreferenceGroup = {
@@ -54,8 +59,8 @@ export const PREFERENCE_GROUPS: ReadonlyArray<PreferenceGroup> = [
     iconPaths: ['M4 9v6h4l5 4V5L8 9z', 'M16 9a4 4 0 0 1 0 6', 'M18.5 6.5a8 8 0 0 1 0 11'],
     switches: [
       // enable_sounds: only the sound on one's own turn (WaitingFor.vue); the lobby messages have toast_sound
-      {preference: 'enable_sounds', label: 'Sound on your turn'},
-      {preference: 'toast_sound', label: 'Sound for lobby messages', hint: 'With the page in front they appear inside it, with a short chime.'},
+      {preference: 'enable_sounds', label: 'Sound on your turn', preview: 'turn'},
+      {preference: 'toast_sound', label: 'Sound for lobby messages', hint: 'With the page in front they appear inside it, with a short chime.', preview: 'lobby'},
     ],
   },
   {

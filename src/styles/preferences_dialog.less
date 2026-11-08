@@ -87,6 +87,33 @@
   white-space: pre-line;
 }
 
+// Play button of a sound switch: round, quiet, beside the switch
+.preferences-preview {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  color: #e4e5ea;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.14);
+  }
+
+  svg {
+    width: 14px;
+    height: 14px;
+    margin-left: 2px;
+    fill: currentColor;
+  }
+}
+
 // Switch: checkbox hidden (still operable and testable), next to it the drawn track with knob
 .preferences-switch-input {
   position: absolute;
@@ -119,7 +146,8 @@
   }
 }
 
-.preferences-switch-input:checked + .preferences-switch-track {
+// "~" instead of "+": a play button may sit between checkbox and track (sound switches)
+.preferences-switch-input:checked ~ .preferences-switch-track {
   background: @bg_action;
 
   &::after {
@@ -127,7 +155,7 @@
   }
 }
 
-.preferences-switch-input:focus-visible + .preferences-switch-track {
+.preferences-switch-input:focus-visible ~ .preferences-switch-track {
   outline: 2px solid @dialog-accent-text;
   outline-offset: 2px;
 }

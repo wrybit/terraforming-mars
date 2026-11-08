@@ -23,6 +23,10 @@
             <span v-if="item.hint" class="preferences-switch-hint">{{ $t(item.hint) }}</span>
           </span>
           <input type="checkbox" class="preferences-switch-input" @change="updatePreferences" v-model="prefs[item.preference]" :data-test="item.preference">
+          <!-- After the checkbox: the label keeps switching the checkbox, the button only plays the sound -->
+          <button v-if="item.preview" type="button" class="preferences-preview" :title="$t('Play sound')" :aria-label="$t('Play sound')" @click.stop.prevent="playPreview(item.preview)">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" /></svg>
+          </button>
           <span class="preferences-switch-track" aria-hidden="true"></span>
         </label>
       </component>
@@ -42,7 +46,8 @@ import {defineComponent} from 'vue';
 import {getPreferences, PreferencesManager, Preference} from '@/client/utils/PreferencesManager';
 import BugReportDialog from '@/client/components/BugReportDialog.vue';
 import DialogFrame from '@/client/components/DialogFrame.vue';
-import {PREFERENCE_GROUPS, PreferenceGroup} from '@/client/components/preferencesGroups';
+import {PREFERENCE_GROUPS, PreferenceGroup, SoundPreview} from '@/client/components/preferencesGroups';
+import {SoundManager} from '@/client/utils/SoundManager';
 import {PUSH_KIND_PREFERENCE, subscribeLobbyPush} from '@/client/components/lobby/lobbyPush';
 import {Preferences} from '@/client/utils/PreferencesManager';
 
@@ -74,6 +79,14 @@ export default defineComponent({
     };
   },
   methods: {
+    // Plays regardless of the switch: listening first is the point of the button
+    playPreview(preview: SoundPreview): void {
+      if (preview === 'turn') {
+        SoundManager.playActivePlayerSound();
+      } else {
+        SoundManager.pushToast();
+      }
+    },
     showBugDialog() {
       this.typedRefs.bugDialog.show();
     },
