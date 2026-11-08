@@ -1463,5 +1463,8 @@
   "The push reached this browser and was handed to the system. If no notification appears, the system blocks it: allow notifications for this browser in the system settings and check Focus or Do Not Disturb.": "Pushen nådde denne nettleseren og ble gitt videre til systemet. Vises ingen varsling, blokkerer systemet den: tillat varsler for denne nettleseren i systeminnstillingene og sjekk Fokus eller Ikke forstyrr.",
   "The push reached this browser but was held back: a lobby tab is in front.": "Pushen nådde denne nettleseren, men ble holdt tilbake: en lobbyfane er foran.",
   "The push reached this browser, but the browser refused to show it: check the notification permission of this site.": "Pushen nådde denne nettleseren, men nettleseren nektet å vise den: sjekk varseltillatelsen for dette nettstedet.",
-  "The push service accepted the message, but it did not reach this browser within 15 seconds.": "Push-tjenesten tok imot meldingen, men den nådde ikke denne nettleseren innen 15 sekunder."
+  "The push service accepted the message, but it did not reach this browser within 15 seconds.": "Push-tjenesten tok imot meldingen, men den nådde ikke denne nettleseren innen 15 sekunder.",
+  "Sending in ${0} s: switch to another app or tab now.": "Sender om ${0} s: bytt nå til en annen app eller fane.",
+  "Delay of test messages: ${0} s": "Forsinkelse for testmeldinger: ${0} s",
+  "Time to switch to another app before the message is sent.": "Tid til å bytte til en annen app før meldingen sendes."
 }

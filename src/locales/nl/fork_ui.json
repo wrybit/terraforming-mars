@@ -1725,5 +1725,8 @@
   "The push reached this browser and was handed to the system. If no notification appears, the system blocks it: allow notifications for this browser in the system settings and check Focus or Do Not Disturb.": "De push heeft deze browser bereikt en is aan het systeem doorgegeven. Verschijnt er geen melding, dan blokkeert het systeem die: sta meldingen voor deze browser toe in de systeeminstellingen en controleer Focus of Niet storen.",
   "The push reached this browser but was held back: a lobby tab is in front.": "De push heeft deze browser bereikt maar werd tegengehouden: er staat een lobbytabblad vooraan.",
   "The push reached this browser, but the browser refused to show it: check the notification permission of this site.": "De push heeft deze browser bereikt, maar de browser weigerde hem te tonen: controleer de meldingstoestemming van deze site.",
-  "The push service accepted the message, but it did not reach this browser within 15 seconds.": "De pushdienst heeft het bericht aangenomen, maar het bereikte deze browser niet binnen 15 seconden."
+  "The push service accepted the message, but it did not reach this browser within 15 seconds.": "De pushdienst heeft het bericht aangenomen, maar het bereikte deze browser niet binnen 15 seconden.",
+  "Sending in ${0} s: switch to another app or tab now.": "Versturen over ${0} s: wissel nu naar een andere app of tab.",
+  "Delay of test messages: ${0} s": "Vertraging van testberichten: ${0} s",
+  "Time to switch to another app before the message is sent.": "Tijd om vóór het versturen naar een andere app te wisselen."
 }

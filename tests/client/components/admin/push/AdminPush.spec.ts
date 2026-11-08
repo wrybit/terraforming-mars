@@ -1,5 +1,6 @@
 import {mount} from '@vue/test-utils';
 import {expect} from 'chai';
+import {vi} from 'vitest';
 import {globalConfig} from '../../getLocalVue';
 import AdminPush from '@/client/components/admin/AdminPush.vue';
 import {AdminPushInfo} from '@/common/admin/AdminPushModel';
@@ -61,7 +62,15 @@ describe('AdminPush', () => {
     for (let i = 0; i < 4; i++) {
       await new Promise((resolve) => setTimeout(resolve, 0));
     }
-    await wrapper.find('.push-test').trigger('click');
+    // The test waits for a countdown before sending (time to switch to another app)
+    vi.useFakeTimers();
+    try {
+      await wrapper.find('.push-test').trigger('click');
+      expect(wrapper.find('.push-test + p').text()).contains('Sending in 5 s');
+      await vi.advanceTimersByTimeAsync(6000);
+    } finally {
+      vi.useRealTimers();
+    }
     for (let i = 0; i < 4; i++) {
       await new Promise((resolve) => setTimeout(resolve, 0));
     }

@@ -2081,5 +2081,8 @@
   "The push reached this browser and was handed to the system. If no notification appears, the system blocks it: allow notifications for this browser in the system settings and check Focus or Do Not Disturb.": "推送已到达此浏览器并交给了系统。如果没有出现通知，是系统拦截了它：请在系统设置中允许此浏览器的通知，并检查专注模式或勿扰模式。",
   "The push reached this browser but was held back: a lobby tab is in front.": "推送已到达此浏览器，但被暂缓：有大厅标签页在前台。",
   "The push reached this browser, but the browser refused to show it: check the notification permission of this site.": "推送已到达此浏览器，但浏览器拒绝显示：请检查此网站的通知权限。",
-  "The push service accepted the message, but it did not reach this browser within 15 seconds.": "推送服务已接收消息，但它在15秒内没有到达此浏览器。"
+  "The push service accepted the message, but it did not reach this browser within 15 seconds.": "推送服务已接收消息，但它在15秒内没有到达此浏览器。",
+  "Sending in ${0} s: switch to another app or tab now.": "${0} 秒后发送：请现在切换到其他应用或标签页。",
+  "Delay of test messages: ${0} s": "测试消息延迟：${0} 秒",
+  "Time to switch to another app before the message is sent.": "发送前切换到其他应用的时间。"
 }

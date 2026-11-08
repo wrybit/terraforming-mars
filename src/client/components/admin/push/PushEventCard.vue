@@ -57,11 +57,12 @@ import {computed, ref} from 'vue';
 import {paths} from '@/common/app/paths';
 import {LOBBY_PUSH_OUTCOME, LOBBY_PUSH_TEST_TAG, LobbyPushKind, LobbyPushOutcome, LobbyPushText} from '@/common/lobby/LobbyPushModel';
 import {AdminPushTestRequest, AdminPushTestResponse} from '@/common/admin/AdminPushModel';
-import {translateText} from '@/client/directives/i18n';
+import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 import {getPreferences} from '@/client/utils/PreferencesManager';
 import {describeFailure, failureOf, fetchOrFail} from '@/client/utils/requestFailure';
 import {lobbyParticipantId} from '@/client/components/lobby/lobbyProfile';
 import {PushCatalogEntry} from './pushCatalog';
+import {pushTestDelaySeconds} from './pushTestDelay';
 
 // icon: the picture the messages carry (the server's favicon, AdminPushInfo)
 const props = defineProps<{entry: PushCatalogEntry, icon: string}>();
@@ -124,8 +125,18 @@ function browserOutcome(): Promise<BrowserOutcome> {
   });
 }
 
+// Browsers (e.g. Arc) show no banner while a tab of the same site is in front: the countdown (delay set at the
+// top of the page) leaves time to switch to another app, as in real use with the lobby in the background
+async function countdown(): Promise<void> {
+  for (let seconds = pushTestDelaySeconds.value; seconds > 0; seconds--) {
+    testMessage.value = translateTextWithParams('Sending in ${0} s: switch to another app or tab now.', [String(seconds)]);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+  }
+}
+
 async function sendTest(): Promise<void> {
   testState.value = 'sending';
+  await countdown();
   testMessage.value = translateText('Test sent: waiting for this browser…');
   const body: AdminPushTestRequest = {kind: props.entry.kind as LobbyPushKind, me: lobbyParticipantId()};
   try {

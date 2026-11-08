@@ -1349,5 +1349,8 @@
   "The push reached this browser and was handed to the system. If no notification appears, the system blocks it: allow notifications for this browser in the system settings and check Focus or Do Not Disturb.": "푸시가 이 브라우저에 도착해 시스템에 전달되었습니다. 알림이 보이지 않으면 시스템이 막고 있습니다: 시스템 설정에서 이 브라우저의 알림을 허용하고 집중 모드나 방해 금지 모드를 확인하세요.",
   "The push reached this browser but was held back: a lobby tab is in front.": "푸시가 이 브라우저에 도착했지만 보류되었습니다: 로비 탭이 앞에 있습니다.",
   "The push reached this browser, but the browser refused to show it: check the notification permission of this site.": "푸시가 이 브라우저에 도착했지만 브라우저가 표시를 거부했습니다: 이 사이트의 알림 권한을 확인하세요.",
-  "The push service accepted the message, but it did not reach this browser within 15 seconds.": "푸시 서비스가 메시지를 받았지만 15초 안에 이 브라우저에 도착하지 않았습니다."
+  "The push service accepted the message, but it did not reach this browser within 15 seconds.": "푸시 서비스가 메시지를 받았지만 15초 안에 이 브라우저에 도착하지 않았습니다.",
+  "Sending in ${0} s: switch to another app or tab now.": "${0}초 후 전송: 지금 다른 앱이나 탭으로 전환하세요.",
+  "Delay of test messages: ${0} s": "테스트 메시지 지연: ${0}초",
+  "Time to switch to another app before the message is sent.": "전송 전에 다른 앱으로 전환할 시간입니다."
 }

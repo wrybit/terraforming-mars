@@ -275,3 +275,32 @@
 .push-result--gone {
   color: #ff8a80;
 }
+
+// Title left, delay of the test messages right; below each other on narrow screens
+.push-overview-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: @push-gap-group 24px;
+}
+
+.push-delay {
+  display: flex;
+  flex-direction: column;
+  gap: @push-gap-item;
+  width: 280px;
+  max-width: 100%;
+  margin: 0;
+  font-weight: normal;
+}
+
+.push-delay-range {
+  width: 100%;
+  accent-color: #5755d9;
+}
+
+.push-delay-hint {
+  color: @push-dim;
+  font-size: 12px;
+}

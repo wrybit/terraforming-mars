@@ -1895,5 +1895,8 @@
   "The push reached this browser and was handed to the system. If no notification appears, the system blocks it: allow notifications for this browser in the system settings and check Focus or Do Not Disturb.": "Push dotarł do tej przeglądarki i został przekazany systemowi. Jeśli nie widać powiadomienia, blokuje je system: zezwól na powiadomienia dla tej przeglądarki w ustawieniach systemu i sprawdź Skupienie lub Nie przeszkadzać.",
   "The push reached this browser but was held back: a lobby tab is in front.": "Push dotarł do tej przeglądarki, ale został wstrzymany: karta lobby jest na wierzchu.",
   "The push reached this browser, but the browser refused to show it: check the notification permission of this site.": "Push dotarł do tej przeglądarki, ale przeglądarka odmówiła wyświetlenia: sprawdź zgodę na powiadomienia dla tej strony.",
-  "The push service accepted the message, but it did not reach this browser within 15 seconds.": "Usługa push przyjęła wiadomość, ale nie dotarła ona do tej przeglądarki w ciągu 15 sekund."
+  "The push service accepted the message, but it did not reach this browser within 15 seconds.": "Usługa push przyjęła wiadomość, ale nie dotarła ona do tej przeglądarki w ciągu 15 sekund.",
+  "Sending in ${0} s: switch to another app or tab now.": "Wysyłka za ${0} s: przełącz się teraz do innej aplikacji lub karty.",
+  "Delay of test messages: ${0} s": "Opóźnienie wiadomości testowych: ${0} s",
+  "Time to switch to another app before the message is sent.": "Czas na przełączenie do innej aplikacji przed wysłaniem."
 }

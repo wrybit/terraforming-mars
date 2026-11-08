@@ -1,8 +1,13 @@
 <template>
   <!-- Head of the page "Push": the key figures as five boxes; a box without content (0) steps back -->
   <section class="games-overview-card push-overview">
-    <h2 v-i18n>Push messages</h2>
-    <p class="games-overview-note" v-i18n>Every message this server can send: when, to whom and with which link.</p>
+    <div class="push-overview-head">
+      <div>
+        <h2 v-i18n>Push messages</h2>
+        <p class="games-overview-note" v-i18n>Every message this server can send: when, to whom and with which link.</p>
+      </div>
+      <PushTestDelay />
+    </div>
     <div class="push-facts">
       <div v-for="fact in facts" :key="fact.label" class="push-fact" :class="{'push-fact--empty': !fact.value}">
         <strong>{{ fact.value ?? '–' }}</strong>
@@ -16,6 +21,7 @@
 import {computed} from 'vue';
 import {AdminPushDelivery} from '@/common/admin/AdminPushModel';
 import {PUSH_CATALOG} from './pushCatalog';
+import PushTestDelay from './PushTestDelay.vue';
 
 const props = defineProps<{
   subscribers: number | undefined,
