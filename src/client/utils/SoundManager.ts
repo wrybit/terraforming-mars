@@ -69,6 +69,14 @@ export namespace SoundManager {
     });
   }
 
+  /** Lobby message inside the page (PushToast.vue): rising and brighter than the turn sound, so both stay apart */
+  export function pushToast() {
+    playInContext((audioCtx) => {
+      playSound(audioCtx, Notes.E5, 0, 0.35, 0.5);
+      playSound(audioCtx, Notes.A5, 0.12, 0.5, 0.5);
+    });
+  }
+
   export function newLog() {
     playInContext((audioCtx) => {
       playSound(audioCtx, Notes.G3, 0.02, 0.05, .1);
