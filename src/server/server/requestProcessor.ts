@@ -37,6 +37,7 @@ import {ApiAdminMusic} from '../routes/ApiAdminMusic';
 import {ApiMusic} from '../routes/ApiMusic';
 import {ServeMusic} from '../routes/ServeMusic';
 import {ApiAdminPush} from '../routes/ApiAdminPush';
+import {ApiAdminPlayerAliases} from '../routes/ApiAdminPlayerAliases';
 import {ApiAdminSession} from '../routes/ApiAdminSession';
 import {ApiDevTools} from '../routes/ApiDevTools';
 import {ApiMetrics} from '../routes/ApiMetrics';
@@ -123,6 +124,7 @@ const handlers: Map<string, IHandler> = new Map(
     [paths.ADMIN_RAW, ServeApp.INSTANCE],
     [paths.ADMIN_MUSIC, ServeApp.INSTANCE],
     [paths.ADMIN_PUSH, ServeApp.INSTANCE],
+    [paths.ADMIN_PLAYERS, ServeApp.INSTANCE],
     [paths.ADMIN_DASHBOARD, ServeApp.INSTANCE],
     [paths.ADMIN_SETTINGS, ServeApp.INSTANCE],
     [paths.API_ADMIN_DELETE_GAME, ApiAdminDeleteGame.INSTANCE],
@@ -131,6 +133,7 @@ const handlers: Map<string, IHandler> = new Map(
     [paths.API_ADMIN_IMPORT_GAME, ApiAdminImportGame.INSTANCE],
     [paths.API_ADMIN_LOGOUT, ApiAdminLogout.INSTANCE],
     [paths.API_ADMIN_MUSIC, ApiAdminMusic.INSTANCE],
+    [paths.API_ADMIN_PLAYER_ALIASES, ApiAdminPlayerAliases.INSTANCE],
     [paths.API_ADMIN_PUSH, ApiAdminPush.INSTANCE],
     [paths.API_ADMIN_RESTART, ApiAdminRestart.INSTANCE],
     [paths.API_ADMIN_SERVER_LOGO, ApiAdminServerLogo.INSTANCE],

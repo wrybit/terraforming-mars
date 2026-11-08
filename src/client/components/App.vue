@@ -62,6 +62,7 @@
       <AdminRaw v-else-if="screen === 'admin-raw'" />
       <AdminMusic v-else-if="screen === 'admin-music'" />
       <AdminPush v-else-if="screen === 'admin-push'" />
+      <AdminPlayers v-else-if="screen === 'admin-players'" />
       <AdminDashboard v-else-if="screen === 'admin-dashboard'" />
       <LoginHome v-else-if="screen === 'login-home'" />
       <HelpOverlay v-else-if="screen === 'help'" />
@@ -90,6 +91,7 @@ const AdminHome = defineAsyncComponent(() => import(/* webpackChunkName: "admin"
 const AdminRaw = defineAsyncComponent(() => import(/* webpackChunkName: "admin" */ '@/client/components/admin/AdminRaw.vue'));
 const AdminMusic = defineAsyncComponent(() => import(/* webpackChunkName: "admin" */ '@/client/components/admin/AdminMusic.vue'));
 const AdminPush = defineAsyncComponent(() => import(/* webpackChunkName: "admin" */ '@/client/components/admin/AdminPush.vue'));
+const AdminPlayers = defineAsyncComponent(() => import(/* webpackChunkName: "admin" */ '@/client/components/admin/AdminPlayers.vue'));
 const AdminDashboard = defineAsyncComponent(() => import(/* webpackChunkName: "admin" */ '@/client/components/admin/AdminDashboard.vue'));
 const CardList = defineAsyncComponent(() => import(/* webpackChunkName: "card-list" */ '@/client/components/cardlist/CardList.vue'));
 const GameEnd = defineAsyncComponent(() => import(/* webpackChunkName: "game-end" */ '@/client/components/GameEnd.vue'));
@@ -142,6 +144,7 @@ type Screen = 'admin-settings' |
             'admin-raw' |
             'admin-music' |
             'admin-push' |
+            'admin-players' |
             'admin-dashboard' |
             'cards' |
             'empty' |
@@ -235,6 +238,7 @@ export default defineComponent({
     AdminRaw,
     AdminMusic,
     AdminPush,
+    AdminPlayers,
     AdminDashboard,
     LoginHome,
   },
@@ -451,6 +455,8 @@ export default defineComponent({
       app.screen = 'admin-music';
     } else if (currentPathname === paths.ADMIN_PUSH) {
       app.screen = 'admin-push';
+    } else if (currentPathname === paths.ADMIN_PLAYERS) {
+      app.screen = 'admin-players';
     } else if (currentPathname === paths.ADMIN || currentPathname === paths.ADMIN_DASHBOARD) {
       // The admin always opens on the dashboard (/admin and the menu entry)
       app.screen = 'admin-dashboard';

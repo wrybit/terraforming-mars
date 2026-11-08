@@ -1,3 +1,4 @@
+import {ResearchStock} from './research/researchStock';
 import {AiLevel} from '../common/ai/AiLevel';
 import {PlayerId, isPlayerId} from '../common/Types';
 import {CardName} from '../common/cards/CardName';
@@ -341,6 +342,8 @@ export interface IPlayer {
 
   /** Cards offered in the research phase and not yet chosen; kept in saves for a restart mid-phase */
   researchOffer: Array<IProjectCard> | undefined;
+  /** Stock at the start of the card purchase; shown to the others until everyone has bought */
+  researchStock: ResearchStock | undefined;
   /** offer: cards already offered before a restart (resumeResearchPhase) instead of drawing new ones */
   runResearchPhase(offer?: Array<IProjectCard>): void;
   getCardCost(card: IProjectCard): number;

@@ -32,6 +32,7 @@ import {runId} from '../utils/server-ids';
 import {aiHandOf} from '../aiFeedback/aiHandView';
 import {toName} from '../../common/utils/utils';
 import {MAX_AWARDS, MAX_MILESTONES} from '../../common/constants';
+import {concealedStock, visibleDiscardPileSize} from '../research/researchStock';
 
 export class Server {
   public static getSimpleGameModel(game: IGame): SimpleGameModel {
@@ -74,7 +75,8 @@ export class Server {
       awards: this.getAwards(game),
       colonies: coloniesToModel(game, game.colonies, false, true),
       deckSize: game.projectDeck.drawPile.length,
-      discardPileSize: game.projectDeck.discardPile.length,
+      // Cards not bought in the running research phase would give away the purchases
+      discardPileSize: visibleDiscardPileSize(game),
       otherDeckSizes: this.getOtherDeckSizes(game),
       discardedColonies: game.discardedColonies.map(toName),
       expectedPurgeTimeMs: game.expectedPurgeTimeMs(),
@@ -241,6 +243,8 @@ export class Server {
   public static getPlayer(player: IPlayer, modelIsForThisPlayer: boolean, reader?: IPlayer): PublicPlayerModel {
     const game = player.game;
     const useHandicap = game.players.some((p) => p.handicap !== 0);
+    // Research phase still running: the others see the stock from before the purchase
+    const hidden = concealedStock(player, reader);
     const model: PublicPlayerModel = {
       actionsTakenThisRound: player.actionsTakenThisRound,
       actionsTakenThisGame: player.actionsTakenThisGame,
@@ -252,39 +256,39 @@ export class Server {
       cardDiscount: player.colonies.cardDiscount + player.devTools.cardDiscount,
       devToolsTagDiscounts: player.devTools.tagDiscounts,
       devToolsProtectedHabitats: player.devTools.protectedHabitats,
-      cardsInHandNbr: player.cardsInHand.length,
+      cardsInHandNbr: hidden?.cardsInHand ?? player.cardsInHand.length,
       citiesCount: game.board.getCities(player).length,
       coloniesCount: player.getColoniesCount(),
       color: player.color,
-      energy: player.energy,
+      energy: hidden?.energy ?? player.energy,
       energyProduction: player.production.energy,
       fleetSize: player.colonies.getFleetSize(),
       handicap: useHandicap ? player.handicap : undefined,
-      heat: player.heat,
+      heat: hidden?.heat ?? player.heat,
       heatProduction: player.production.heat,
       id: game.phase === Phase.END ? player.id : undefined,
       influence: game.turmoil?.getInfluence(player) ?? 0,
       isActive: player.id === game.activePlayer.id,
       lastCardPlayed: player.lastCardPlayed,
-      megacredits: player.megaCredits,
+      megacredits: hidden?.megaCredits ?? player.megaCredits,
       megacreditProduction: player.production.megacredits,
       name: player.name,
       needsToDraft: player.needsToDraft,
       needsToResearch: !game.hasResearched(player),
       noTagsCount: player.tags.numberOfCardsWithNoTags(),
-      plants: player.plants,
+      plants: hidden?.plants ?? player.plants,
       plantProduction: player.production.plants,
       protectedResources: Server.getResourceProtections(player),
       protectedProduction: Server.getProductionProtections(player),
       tableau: cardsToModel(player, player.tableau.asArray(), {showResources: true}),
       selfReplicatingRobotsCards: Server.getSelfReplicatingRobotsTargetCards(player),
-      steel: player.steel,
+      steel: hidden?.steel ?? player.steel,
       steelProduction: player.production.steel,
       steelValue: player.getSteelValue(),
       tags: player.tags.countAllTags(),
       terraformRating: player.terraformRating,
       timer: player.timer.toModel(),
-      titanium: player.titanium,
+      titanium: hidden?.titanium ?? player.titanium,
       titaniumProduction: player.production.titanium,
       titaniumValue: player.getTitaniumValue(),
       tradesThisGeneration: player.colonies.usedTradeFleets,

@@ -1227,6 +1227,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // card counted 85 % of its later value – a lower share plays cards (and their production) sooner.
   laterDiscount07: {laterDiscount: 0.7},
   laterDiscount055: {laterDiscount: 0.55},
+  // Round 188: 0.55 +0.84 VP (z +1.12), 0.7 +0.45 (z +0.63) – both candidates; round 189 repeats 0.55 and tries 0.4.
+  laterDiscount04: {laterDiscount: 0.4},
 };
 
 export function isTuningVariant(name: string): boolean {
