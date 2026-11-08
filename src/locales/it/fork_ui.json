@@ -2399,5 +2399,8 @@
   "Right in the address field": "A destra nella barra degli indirizzi",
   "Notifications only for your games, namely:": "Notifiche solo per le tue partite, ovvero:",
   "Turn on notifications:": "Attivare le notifiche:",
-  "Notifications can be switched off one by one in the game, in the ${0}.": "Le notifiche si possono disattivare una per una nel gioco, nelle ${0}."
+  "Notifications can be switched off one by one in the game, in the ${0}.": "Le notifiche si possono disattivare una per una nel gioco, nelle ${0}.",
+  "Sound on your turn": "Suono al tuo turno",
+  "Sound for lobby messages": "Suono per i messaggi della lobby",
+  "With the page in front they appear inside it, with a short chime.": "Con la pagina in primo piano appaiono al suo interno, con un breve suono."
 }

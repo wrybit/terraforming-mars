@@ -40,8 +40,8 @@ function onMessage(event: MessageEvent): void {
   }
   const key = nextKey++;
   toasts.value = [...toasts.value.filter((toast) => toast.message.tag !== data.message?.tag), {key, message: data.message}];
-  // Same switch as the turn sound; browsers may block it until the first click on the page – then it stays silent
-  if (getPreferences().enable_sounds) {
+  // Own switch, apart from the turn sound; browsers may block it until the first click on the page – then it stays silent
+  if (getPreferences().toast_sound) {
     SoundManager.pushToast();
   }
 }

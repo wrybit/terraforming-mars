@@ -1760,5 +1760,8 @@
   "Right in the address field": "Rechts in de adresbalk",
   "Notifications only for your games, namely:": "Meldingen alleen voor je spellen, namelijk:",
   "Turn on notifications:": "Meldingen aanzetten:",
-  "Notifications can be switched off one by one in the game, in the ${0}.": "Meldingen zijn in het spel apart uit te zetten in de ${0}."
+  "Notifications can be switched off one by one in the game, in the ${0}.": "Meldingen zijn in het spel apart uit te zetten in de ${0}.",
+  "Sound on your turn": "Geluid bij jouw beurt",
+  "Sound for lobby messages": "Geluid bij lobbyberichten",
+  "With the page in front they appear inside it, with a short chime.": "Staat de pagina vooraan, dan verschijnen ze erin, met een kort signaal."
 }

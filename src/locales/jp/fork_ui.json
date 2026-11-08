@@ -1507,5 +1507,8 @@
   "Right in the address field": "アドレス欄の右",
   "Notifications only for your games, namely:": "通知はあなたのゲームのみ、具体的には：",
   "Turn on notifications:": "通知をオンにする：",
-  "Notifications can be switched off one by one in the game, in the ${0}.": "通知はゲーム内の${0}で個別にオフにできます。"
+  "Notifications can be switched off one by one in the game, in the ${0}.": "通知はゲーム内の${0}で個別にオフにできます。",
+  "Sound on your turn": "自分の番で音を鳴らす",
+  "Sound for lobby messages": "ロビーの通知音",
+  "With the page in front they appear inside it, with a short chime.": "ページが前面にあるときは、短い音とともにページ内に表示されます。"
 }

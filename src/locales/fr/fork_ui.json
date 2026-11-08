@@ -1188,5 +1188,8 @@
   "Right in the address field": "À droite dans la barre d’adresse",
   "Notifications only for your games, namely:": "Notifications uniquement pour tes parties, à savoir :",
   "Turn on notifications:": "Activer les notifications :",
-  "Notifications can be switched off one by one in the game, in the ${0}.": "Les notifications se désactivent une par une dans le jeu, dans les ${0}."
+  "Notifications can be switched off one by one in the game, in the ${0}.": "Les notifications se désactivent une par une dans le jeu, dans les ${0}.",
+  "Sound on your turn": "Son à ton tour",
+  "Sound for lobby messages": "Son pour les messages du lobby",
+  "With the page in front they appear inside it, with a short chime.": "Si la page est au premier plan, ils s’affichent dedans, avec un court signal."
 }

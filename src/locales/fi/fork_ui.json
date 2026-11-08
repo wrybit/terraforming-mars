@@ -1133,5 +1133,8 @@
   "Right in the address field": "Osoitekentän oikeassa reunassa",
   "Notifications only for your games, namely:": "Ilmoitukset vain peleistäsi, eli:",
   "Turn on notifications:": "Ota ilmoitukset käyttöön:",
-  "Notifications can be switched off one by one in the game, in the ${0}.": "Ilmoitukset voi kytkeä pois yksitellen pelin ${0}."
+  "Notifications can be switched off one by one in the game, in the ${0}.": "Ilmoitukset voi kytkeä pois yksitellen pelin ${0}.",
+  "Sound on your turn": "Ääni omalla vuorollasi",
+  "Sound for lobby messages": "Ääni aulan viesteille",
+  "With the page in front they appear inside it, with a short chime.": "Kun sivu on edessä, ne näkyvät sivulla lyhyen äänen kera."
 }
