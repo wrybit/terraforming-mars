@@ -57,7 +57,7 @@ describe('logActions', () => {
   it('folds resources of an own card spent on the next card into that card row (no line of its own on the left)', () => {
     const rows = groupLogMessages([
       message('${0} removed ${1}${2} from ${3}\'s ${4}', player('red'), raw('4'), typed(LogMessageDataType.CARD_RESOURCE, 'Microbe'), player('red'), card(CardName.PSYCHROPHILES)),
-      message('${0} played ${1} [ ${2} ]', player('red'), card(CardName.GRASS), text('-7:r:megacredits: -4:cr:microbe:')),
+      message('${0} played ${1} [ ${2} ]', player('red'), card(CardName.GRASS), text('-7:r:mc: -4:cr:microbe:')),
     ]);
     expect(rows).has.length(1);
     expect(rows[0].indexes).deep.eq([0, 1]);

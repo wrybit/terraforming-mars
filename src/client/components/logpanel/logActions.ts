@@ -197,7 +197,8 @@ export const LOG_INFO_LINES: ReadonlySet<string> = new Set([
 
 // Resource words of the log (lower case, without a plural "(s)") -> icon
 const RESOURCES: Record<string, string> = {
-  'm€': 'megacredit', 'megacredits': 'megacredit', 'plant': 'plant', 'plants': 'plant', 'steel': 'steel', 'titanium': 'titanium', 'energy': 'power', 'heat': 'heat',
+  // 'mc': shortcode of payments since upstream d79dd7b49 ("-3:r:mc:")
+  'm€': 'megacredit', 'megacredits': 'megacredit', 'mc': 'megacredit', 'plant': 'plant', 'plants': 'plant', 'steel': 'steel', 'titanium': 'titanium', 'energy': 'power', 'heat': 'heat',
   'animal': 'animal', 'animals': 'animal', 'microbe': 'microbe', 'microbes': 'microbe', 'floater': 'floater', 'floaters': 'floater',
   'science': 'science', 'asteroid': 'asteroid', 'asteroids': 'asteroid', 'fighter': 'fighter', 'data': 'data', 'camp': 'camp',
   'disease': 'disease', 'ware': 'ware',
