@@ -2,8 +2,11 @@
   <div id="admin-push" class="games-overview-container admin-home">
     <AdminGate active="push" @ready="load">
       <!-- Overview, every message (also the one without push), then what was sent lately -->
-      <PushOverviewCard :subscribers="info?.subscribers" :maxAgeDays="info?.subscriptionMaxAgeDays" />
-      <PushEventCard v-for="entry in PUSH_CATALOG" :key="entry.kind" :entry="entry" />
+      <PushOverviewCard :subscribers="info?.subscribers" :maxAgeDays="info?.subscriptionMaxAgeDays" :deliveries="info?.deliveries" />
+      <!-- Up to three messages next to each other, as far as the width allows -->
+      <div class="push-events">
+        <PushEventCard v-for="entry in PUSH_CATALOG" :key="entry.kind" :entry="entry" />
+      </div>
       <p v-if="errorText !== ''" class="games-overview-note games-overview-note--error">{{ errorText }}</p>
       <PushDeliveriesCard v-else :deliveries="info?.deliveries ?? []" />
     </AdminGate>

@@ -1,4 +1,4 @@
-import {LobbyPushMessage} from '@/common/lobby/LobbyPushModel';
+import {LOBBY_PUSH_OUTCOME, LobbyPushMessage, LobbyPushOutcome} from '@/common/lobby/LobbyPushModel';
 
 // Service worker: shows the lobby's push messages (server/lobby/LobbyPush.ts) and brings the host back to the
 // game on a click. The page notifications of the game (WaitingFor.vue) use it as a fallback as well.
@@ -7,7 +7,7 @@ import {LobbyPushMessage} from '@/common/lobby/LobbyPushModel';
 type WaitableEvent = Event & {waitUntil(promise: Promise<unknown>): void};
 type PushEventLike = WaitableEvent & {data: {json(): unknown} | null};
 type NotificationEventLike = WaitableEvent & {notification: Notification & {data: unknown}};
-type WindowClientLike = {url: string, focused: boolean, visibilityState: string, focus(): Promise<unknown>, navigate(url: string): Promise<unknown>};
+type WindowClientLike = {url: string, focused: boolean, visibilityState: string, focus(): Promise<unknown>, navigate(url: string): Promise<unknown>, postMessage(message: unknown): void};
 type WorkerScope = {
   registration: ServiceWorkerRegistration;
   clients: {
@@ -36,15 +36,29 @@ function isLobbyPage(client: WindowClientLike): boolean {
 async function showPush(message: LobbyPushMessage): Promise<void> {
   // Somebody looking at the lobby right now sees the join there; a background tab or a closed one gets the message
   const clients = await worker.clients.matchAll({type: 'window', includeUncontrolled: true});
+  let outcome: LobbyPushOutcome['outcome'] = 'shown';
   if (clients.some((client) => isLobbyPage(client) && client.focused && client.visibilityState === 'visible')) {
-    return;
+    outcome = 'suppressed';
+  } else {
+    try {
+      // renotify is missing from the DOM types of TypeScript, the browsers know it
+      const options: Parameters<ServiceWorkerRegistration['showNotification']>[1] & {renotify: boolean} = {
+        body: message.body,
+        tag: message.tag,
+        // A newer message of the same room replaces the old one, but must still alert: without this the browser
+        // swaps it silently into the notification centre (no banner, no sound)
+        renotify: true,
+        icon: new URL('favicon.ico', worker.registration.scope).href,
+        data: {url: new URL(message.url, worker.registration.scope).href},
+      };
+      await worker.registration.showNotification(message.title, options);
+    } catch {
+      outcome = 'failed';
+    }
   }
-  await worker.registration.showNotification(message.title, {
-    body: message.body,
-    tag: message.tag,
-    icon: new URL('favicon.ico', worker.registration.scope).href,
-    data: {url: new URL(message.url, worker.registration.scope).href},
-  });
+  // Open pages learn what became of the message: the admin test tells where a missing notification got stuck
+  const report: LobbyPushOutcome = {type: LOBBY_PUSH_OUTCOME, tag: message.tag, outcome};
+  clients.forEach((client) => client.postMessage(report));
 }
 
 worker.addEventListener('push', (event: PushEventLike) => {

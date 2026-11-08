@@ -53,3 +53,15 @@ export type LobbyPushMessage = {
   /** One notification per room: a second join replaces the first */
   tag: string;
 };
+
+/** Tag of the admin's test messages (routes/ApiAdminPush.ts): the admin page waits for its outcome */
+export const LOBBY_PUSH_TEST_TAG = 'lobby-admin-test';
+
+export const LOBBY_PUSH_OUTCOME = 'lobby-push-outcome';
+
+/** Service worker → open pages: the message arrived and was shown, held back (lobby in front) or refused */
+export type LobbyPushOutcome = {
+  type: typeof LOBBY_PUSH_OUTCOME;
+  tag: string;
+  outcome: 'shown' | 'suppressed' | 'failed';
+};
