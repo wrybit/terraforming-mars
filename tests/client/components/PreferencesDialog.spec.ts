@@ -4,6 +4,8 @@ import PreferencesDialog from '@/client/components/PreferencesDialog.vue';
 import {Preference, PreferencesManager} from '@/client/utils/PreferencesManager';
 import {globalConfig} from './getLocalVue';
 import {PREFERENCE_GROUPS} from '@/client/components/preferencesGroups';
+import {SoundManager} from '@/client/utils/SoundManager';
+import {vi} from 'vitest';
 
 describe('PreferencesDialog', () => {
   const preferencesManager = PreferencesManager.INSTANCE;
@@ -30,6 +32,21 @@ describe('PreferencesDialog', () => {
 
     expect(getCheckbox(wrapper, 'learner_mode').checked).is.true;
     expect(preferencesManager.values().learner_mode).is.true;
+  });
+
+  it('the play buttons let both sounds be heard without switching them', async () => {
+    const turn = vi.spyOn(SoundManager, 'playActivePlayerSound').mockImplementation(() => {});
+    const lobby = vi.spyOn(SoundManager, 'pushToast').mockImplementation(() => {});
+    preferencesManager.set('enable_sounds', true);
+    const wrapper = mount(PreferencesDialog, {...globalConfig, props: {preferencesManager}});
+    const buttons = wrapper.findAll('.preferences-preview');
+    expect(buttons).has.length(2);
+    await buttons[0].trigger('click');
+    await buttons[1].trigger('click');
+    expect(turn).toHaveBeenCalledOnce();
+    expect(lobby).toHaveBeenCalledOnce();
+    expect(getCheckbox(wrapper, 'enable_sounds').checked).is.true;
+    vi.restoreAllMocks();
   });
 
   it('toggling sets the underlying preferences', async () => {

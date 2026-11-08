@@ -1389,5 +1389,6 @@
   "Sound on your turn": "내 차례 알림음",
   "Sound for lobby messages": "로비 메시지 알림음",
   "With the page in front they appear inside it, with a short chime.": "페이지가 앞에 있으면 페이지 안에 짧은 소리와 함께 표시됩니다.",
-  "Sounds": "소리"
+  "Sounds": "소리",
+  "Play sound": "소리 듣기"
 }
