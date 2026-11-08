@@ -1,0 +1,409 @@
+// Admin page "Players" (components/admin/players/) in the cards of the games overview (games-overview.less).
+// Law of proximity: within a group 4px, between rows 6px, between the groups of a card 12px, between cards 16px.
+
+@players-dim: rgba(238, 238, 238, 0.62);
+@players-line: rgba(255, 255, 255, 0.12);
+@players-inner: rgba(255, 255, 255, 0.04);
+@players-accent: #8d8bf0;
+@players-goes: #ff8a80;
+@players-warn: #f4c20d;
+@players-gap-item: 4px;
+@players-gap-row: 6px;
+@players-gap-group: 12px;
+@players-gap-card: 16px;
+@players-aside-width: 360px;
+
+.admin-players-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) @players-aside-width;
+  gap: @players-gap-card;
+  align-items: start;
+
+  @media (max-width: 860px) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.admin-players-names,
+.admin-players-aliases,
+.admin-players-list-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: @players-gap-group;
+
+  h2 {
+    margin: 0;
+  }
+
+  p {
+    margin: 0;
+  }
+}
+
+.admin-players-aliases {
+  gap: @players-gap-item;
+}
+
+.admin-players-head {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: @players-gap-item 12px;
+  // Heading and description belong together: only the item gap between them
+  margin-bottom: -(@players-gap-group - @players-gap-item);
+}
+
+// Names as quiet chips, like code on the admin cards
+.admin-players-pill {
+  padding: 1px 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  font-family: "Ubuntu Mono", monospace;
+  font-size: 13px;
+}
+
+.admin-players-arrow {
+  color: @players-dim;
+}
+
+.admin-players-pair {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: @players-gap-item 6px;
+  min-width: 0;
+}
+
+// Proposals on a surface of their own: it is a different kind of content than the list below
+.admin-players-suggestions {
+  display: flex;
+  flex-direction: column;
+  gap: @players-gap-row;
+  padding: 8px 10px;
+  border: 1px solid fade(@players-warn, 30%);
+  border-radius: 8px;
+  background: fade(@players-warn, 7%);
+}
+
+.admin-players-suggestions-title {
+  color: @players-warn;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.admin-players-suggestion {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-players-hint {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid fade(@players-accent, 40%);
+  border-radius: 8px;
+  background: fade(@players-accent, 14%);
+
+  > span {
+    flex: 1 1 180px;
+  }
+}
+
+.admin-players-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.admin-players-search {
+  flex: 1 1 200px;
+  min-height: 36px;
+  padding: 6px 10px;
+  border: 1px solid @players-line;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.25);
+  color: #eee;
+  font: inherit;
+}
+
+.admin-players-sort {
+  display: inline-flex;
+  border: 1px solid @players-line;
+  border-radius: 6px;
+  overflow: hidden;
+
+  button {
+    min-height: 36px;
+    padding: 0 10px;
+    border: 0;
+    background: none;
+    color: @players-dim;
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+
+    &[aria-pressed="true"] {
+      background: rgba(255, 255, 255, 0.12);
+      color: #eee;
+    }
+  }
+}
+
+.admin-players-list {
+  display: flex;
+  flex-direction: column;
+  gap: @players-gap-row;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.admin-players-row {
+  display: grid;
+  grid-template-columns: 16px 12px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0 10px;
+  padding: 8px 10px;
+  border: 1px solid @players-line;
+  border-radius: 8px;
+  background: @players-inner;
+  cursor: grab;
+  user-select: none;
+  transition: border-color 0.12s, background-color 0.12s, opacity 0.12s;
+
+  &:hover {
+    border-color: rgba(255, 255, 255, 0.28);
+  }
+}
+
+.admin-players-row--dragging {
+  opacity: 0.4;
+}
+
+.admin-players-row--target {
+  border-color: @players-accent;
+  background: fade(@players-accent, 16%);
+}
+
+.admin-players-row--selected {
+  border-color: @players-accent;
+  box-shadow: inset 0 0 0 2px fade(@players-accent, 40%);
+}
+
+.admin-players-row--can-drop {
+  border-style: dashed;
+}
+
+.admin-players-grip {
+  color: @players-dim;
+  letter-spacing: -2px;
+}
+
+.admin-players-swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.admin-players-who {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+
+  b {
+    overflow: hidden;
+    font-weight: 500;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.admin-players-old {
+  color: @players-dim;
+  font-size: 12px;
+}
+
+.admin-players-meta {
+  display: flex;
+  gap: 14px;
+  color: @players-dim;
+  font-size: 12px;
+  text-align: right;
+
+  > span {
+    display: flex;
+    flex-direction: column;
+  }
+
+  b {
+    color: #eee;
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  @media (max-width: 520px) {
+    .admin-players-meta-last {
+      display: none;
+    }
+  }
+}
+
+.admin-players-alias-list {
+  display: flex;
+  flex-direction: column;
+  gap: @players-gap-row;
+  margin: @players-gap-group - @players-gap-item 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.admin-players-alias {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 2px 8px;
+  padding: 8px 10px;
+  border: 1px solid @players-line;
+  border-radius: 8px;
+  background: @players-inner;
+
+  s {
+    color: @players-dim;
+  }
+
+  .btn {
+    grid-row: 1 / span 2;
+    grid-column: 2;
+  }
+}
+
+.admin-players-alias-date {
+  color: @players-dim;
+  font-size: 12px;
+}
+
+// Confirmation: what goes is struck through and red, what stays is highlighted in the accent colour
+.admin-players-dialog {
+  width: min(460px, calc(100vw - 32px));
+  padding: 0;
+  border: 1px solid @players-line;
+  border-radius: 12px;
+  background: #202129;
+  color: #eee;
+
+  &::backdrop {
+    background: rgba(0, 0, 0, 0.55);
+  }
+
+  h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 500;
+  }
+}
+
+.admin-players-dialog-body {
+  display: flex;
+  flex-direction: column;
+  gap: @players-gap-group;
+  padding: 18px;
+}
+
+.admin-players-compare {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+}
+
+.admin-players-side {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  padding: 10px 8px;
+  border: 1px solid @players-line;
+  border-radius: 8px;
+  background: @players-inner;
+}
+
+.admin-players-side-label {
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.admin-players-side-name {
+  overflow: hidden;
+  font-size: 17px;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-players-side-count {
+  color: @players-dim;
+  font-size: 12px;
+}
+
+.admin-players-side--goes {
+  border-style: dashed;
+  opacity: 0.85;
+
+  .admin-players-side-label {
+    color: @players-goes;
+  }
+
+  .admin-players-side-name {
+    color: @players-dim;
+    text-decoration: line-through;
+    text-decoration-color: @players-goes;
+    text-decoration-thickness: 2px;
+  }
+}
+
+.admin-players-side--stays {
+  border-color: @players-accent;
+  background: fade(@players-accent, 14%);
+
+  .admin-players-side-label {
+    color: @players-accent;
+  }
+}
+
+.admin-players-dialog-facts {
+  display: flex;
+  flex-direction: column;
+  gap: @players-gap-item;
+  margin: 0;
+  padding-left: 18px;
+  color: @players-dim;
+  font-size: 13px;
+}
+
+.admin-players-dialog-warning {
+  color: @players-warn;
+}
+
+.admin-players-dialog-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+
+}
+
+// "Swap" changes the question, cancel and merge answer it: the answers stay together on the right,
+// on narrow screens they wrap below as one group
+.admin-players-dialog-answers {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}

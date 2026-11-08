@@ -34,6 +34,7 @@ import {LOBBY_CREATE_PATH, LOBBY_ROOM_PATH} from '../../common/lobby/lobbyUrl';
 import {ApiLogout} from '../routes/ApiLogout';
 import {ApiAdminLogout} from '../routes/ApiAdminLogout';
 import {ApiAdminPush} from '../routes/ApiAdminPush';
+import {ApiAdminPlayerAliases} from '../routes/ApiAdminPlayerAliases';
 import {ApiAdminSession} from '../routes/ApiAdminSession';
 import {ApiMetrics} from '../routes/ApiMetrics';
 import {ApiPlayer} from '../routes/ApiPlayer';
@@ -118,6 +119,7 @@ const handlers: Map<string, IHandler> = new Map(
     [paths.ADMIN, ServeApp.INSTANCE],
     [paths.ADMIN_RAW, ServeApp.INSTANCE],
     [paths.ADMIN_PUSH, ServeApp.INSTANCE],
+    [paths.ADMIN_PLAYERS, ServeApp.INSTANCE],
     [paths.ADMIN_DASHBOARD, ServeApp.INSTANCE],
     [paths.ADMIN_SETTINGS, ServeApp.INSTANCE],
     [paths.API_ADMIN_DELETE_GAME, ApiAdminDeleteGame.INSTANCE],
@@ -125,6 +127,7 @@ const handlers: Map<string, IHandler> = new Map(
     [paths.API_ADMIN_DASHBOARD, ApiAdminDashboard.INSTANCE],
     [paths.API_ADMIN_IMPORT_GAME, ApiAdminImportGame.INSTANCE],
     [paths.API_ADMIN_LOGOUT, ApiAdminLogout.INSTANCE],
+    [paths.API_ADMIN_PLAYER_ALIASES, ApiAdminPlayerAliases.INSTANCE],
     [paths.API_ADMIN_PUSH, ApiAdminPush.INSTANCE],
     [paths.API_ADMIN_RESTART, ApiAdminRestart.INSTANCE],
     [paths.API_ADMIN_SERVER_LOGO, ApiAdminServerLogo.INSTANCE],
