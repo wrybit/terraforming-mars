@@ -33,5 +33,6 @@ const RESULT_LABELS: Record<LobbyPushResult, string> = {
   sent: 'sent',
   unreachable: 'not subscribed',
   gone: 'subscription gone',
+  muted: 'switched off by the player',
 };
 </script>

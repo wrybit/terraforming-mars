@@ -15,7 +15,7 @@ export const MAX_DELIVERIES = 50;
 const PARTICIPANT_SHOWN = 6;
 
 export type VapidKeys = {publicKey: string, privateKey: string};
-type Subscriber = {subscription: LobbyPushSubscription, texts: LobbyPushTexts, at: number};
+type Subscriber = {subscription: LobbyPushSubscription, texts: LobbyPushTexts, at: number, muted?: Array<LobbyPushKind>};
 type Stored = {vapid?: VapidKeys, subscribers?: Record<string, Subscriber>, deliveries?: Array<AdminPushDelivery>};
 /** Room as the lobby passes it: id, link of the room page, name for the admin page */
 export type LobbyPushRoom = {id: string, path: string, title: string};
@@ -56,6 +56,11 @@ function isSubscription(value: unknown): value is LobbyPushSubscription {
   return typeof candidate?.endpoint === 'string' && /^https:\/\//.test(candidate.endpoint) && candidate.endpoint.length < 1000 &&
     typeof candidate.keys?.p256dh === 'string' && typeof candidate.keys?.auth === 'string' &&
     candidate.keys.p256dh.length < 200 && candidate.keys.auth.length < 100;
+}
+
+// Only known kinds, each once
+function cleanMuted(value: unknown): Array<LobbyPushKind> {
+  return Array.isArray(value) ? LOBBY_PUSH_KINDS.filter((kind) => value.includes(kind)) : [];
 }
 
 // Missing or broken texts (also those stored before a kind existed) fall back to English
@@ -105,12 +110,12 @@ export class LobbyPush {
   }
 
   /** subscription null: the participant no longer wants (or can get) push messages */
-  public subscribe(me: string, subscription: unknown, texts: unknown): void {
+  public subscribe(me: string, subscription: unknown, texts: unknown, muted: unknown = []): void {
     const data = this.stored();
     if (subscription === null) {
       delete data.subscribers[me];
     } else if (isSubscription(subscription)) {
-      data.subscribers[me] = {subscription: {endpoint: subscription.endpoint, keys: {p256dh: subscription.keys.p256dh, auth: subscription.keys.auth}}, texts: cleanTexts(texts), at: this.clock()};
+      data.subscribers[me] = {subscription: {endpoint: subscription.endpoint, keys: {p256dh: subscription.keys.p256dh, auth: subscription.keys.auth}}, texts: cleanTexts(texts), at: this.clock(), muted: cleanMuted(muted)};
     } else {
       throw new LobbyError('Invalid subscription');
     }
@@ -126,10 +131,12 @@ export class LobbyPush {
 
   /**
    * Whether the participant is looking at the lobby right now decides the service worker.
-   * record: false for test messages from the admin page, they stay out of its list of deliveries.
+   * record: false for test messages from the admin page, they stay out of its list of deliveries and ignore
+   * kinds the participant switched off.
    */
   public async notify(participant: string, kind: LobbyPushKind, room: LobbyPushRoom, name: string, record: boolean = true): Promise<LobbyPushResult> {
-    const result = await this.deliver(participant, kind, room, name);
+    const muted = record && this.stored().subscribers[participant]?.muted?.includes(kind) === true;
+    const result = muted ? 'muted' : await this.deliver(participant, kind, room, name);
     if (record) {
       const data = this.stored();
       const delivery: AdminPushDelivery = {at: this.clock(), kind, roomId: room.id, roomTitle: room.title, participant: participant.slice(0, PARTICIPANT_SHOWN), result};

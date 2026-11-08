@@ -5,10 +5,13 @@
       <path d="M18 16v-5a6 6 0 0 0-9.3-5M6 9.5V16l-2 2h13M10 21h4M3 3l18 18" />
     </svg>
     <div class="lobby-push-banner-text">
+      <!-- Short and in three steps: what is missing, what it is used for, what to do -->
       <strong v-i18n>{{ TITLES[state] }}</strong>
-      <span v-i18n>{{ state === 'unsupported' ? 'Keep the lobby in front to notice when somebody joins your game or it starts.' : 'With the lobby in the background you will not notice when somebody joins your game or it starts.' }}</span>
+      <span v-i18n>Only for your games: somebody joins, asks to join, the game starts.</span>
       <!-- Blocked: pages cannot reopen the browser's question, only the settings can (notificationSettingsHelp.ts) -->
       <span v-if="steps !== undefined" class="lobby-push-banner-steps" v-i18n>{{ steps }}</span>
+      <span v-else-if="state === 'unsupported'" v-i18n>Keep the lobby in front to see them.</span>
+      <span v-if="state !== 'unsupported'" class="lobby-push-banner-hint" v-i18n>Each one can be switched off: Setup → Player Settings → Notifications.</span>
     </div>
     <button v-if="state === 'default'" type="button" class="btn btn-primary lobby-push-banner-button" @click="allow" v-i18n>Allow notifications</button>
     <button v-else-if="state === 'denied'" type="button" class="btn lobby-push-banner-button" @click="check" v-i18n>Check again</button>

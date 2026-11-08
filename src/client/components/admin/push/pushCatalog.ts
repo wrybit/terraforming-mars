@@ -35,7 +35,7 @@ export const PUSH_CATALOG: ReadonlyArray<PushCatalogEntry> = [
     rows: [
       {label: 'Fires when', text: 'A player takes a free seat of an open game (list, quick start or invitation link).'},
       {label: 'Recipient', text: 'The host, only in the browser the game was created in.'},
-      {label: 'Not sent', text: 'Without a subscription.'},
+      {label: 'Not sent', text: 'Without a subscription, or switched off in the player settings.'},
       SHOWN_AS,
       {label: 'Effect', text: 'A host reachable by push keeps the game 30 min with the lobby closed, otherwise 45 s.'},
     ],
@@ -52,7 +52,7 @@ export const PUSH_CATALOG: ReadonlyArray<PushCatalogEntry> = [
     rows: [
       {label: 'Fires when', text: 'A player removed twice by the host tries to join again.'},
       {label: 'Recipient', text: 'The host, only in the browser the game was created in.'},
-      {label: 'Not sent', text: 'Without a subscription.'},
+      {label: 'Not sent', text: 'Without a subscription, or switched off in the player settings.'},
       SHOWN_AS,
     ],
     code: 'Lobby.join → notify(host, \'request\')',
@@ -68,7 +68,7 @@ export const PUSH_CATALOG: ReadonlyArray<PushCatalogEntry> = [
     rows: [
       {label: 'Fires when', text: 'The host starts, the last seat gets ready, or a join fills the last seat.'},
       {label: 'Recipient', text: 'Everybody seated in the lobby, except whoever caused the start.'},
-      {label: 'Not sent', text: 'Without a subscription. Never to players entered by hand.'},
+      {label: 'Not sent', text: 'Without a subscription, or switched off in the player settings. Never to players entered by hand.'},
       SHOWN_AS,
       {label: 'Effect', text: 'Players reachable by push keep their seat 30 min with the lobby closed.'},
     ],

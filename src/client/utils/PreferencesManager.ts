@@ -27,6 +27,10 @@ export type Preferences = {
   animated_title: boolean,
   experimental_ui: boolean,
   remember_create_game_settings: boolean,
+  // Push messages of the lobby, one switch per kind (LobbyPushKind; sent along with the subscription)
+  push_joined: boolean,
+  push_request: boolean,
+  push_started: boolean,
   lang: string,
 }
 
@@ -68,6 +72,10 @@ const defaults: Preferences = {
 
   // Fork: the create game form keeps restoring the last settings unless switched off
   remember_create_game_settings: true,
+
+  push_joined: true,
+  push_request: true,
+  push_started: true,
 };
 
 export class PreferencesManager {

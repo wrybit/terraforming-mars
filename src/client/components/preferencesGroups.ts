@@ -37,6 +37,10 @@ export const PREFERENCE_GROUPS: ReadonlyArray<PreferenceGroup> = [
       {preference: 'enable_sounds', label: 'Enable sounds'},
       {preference: 'animated_title', label: 'Animated Title', hint: 'Show spinning circle in window title on your turn.'},
       {preference: 'hide_animated_sidebar', label: 'Hide sidebar notification'},
+      // Push messages of the lobby (lobbyPush.ts): also with the page in the background or closed
+      {preference: 'push_joined', label: 'Push: somebody joins your game'},
+      {preference: 'push_request', label: 'Push: somebody asks to join'},
+      {preference: 'push_started', label: 'Push: your game starts'},
     ],
   },
   {

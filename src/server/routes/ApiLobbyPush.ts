@@ -35,7 +35,7 @@ export class ApiLobbyPush extends Handler {
       throw RouteError.badRequest('Invalid participant');
     }
     try {
-      this.push.subscribe(body.me, body.subscription ?? null, body.texts);
+      this.push.subscribe(body.me, body.subscription ?? null, body.texts, body.muted);
     } catch (error) {
       if (error instanceof LobbyError) {
         throw RouteError.badRequest(error.message);

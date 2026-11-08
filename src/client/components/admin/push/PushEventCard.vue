@@ -85,7 +85,7 @@ const testState = ref<'idle' | 'sending' | 'failed'>('idle');
 const testMessage = ref('');
 
 // What the server could do with the test message
-const SERVER_RESULTS: Record<Exclude<AdminPushTestResponse['result'], 'sent'>, string> = {
+const SERVER_RESULTS: Record<Exclude<AdminPushTestResponse['result'], 'sent' | 'muted'>, string> = {
   unreachable: 'This browser has no subscription: open the lobby and allow notifications.',
   gone: 'The subscription of this browser is gone: open the lobby again.',
 };
@@ -144,7 +144,8 @@ async function sendTest(): Promise<void> {
     const outcome = browserOutcome();
     const response = await fetchOrFail(paths.API_ADMIN_PUSH, {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body)});
     const {result}: AdminPushTestResponse = await response.json();
-    if (result !== 'sent') {
+    // Tests ignore switched-off kinds on the server, so 'muted' never comes back here
+    if (result !== 'sent' && result !== 'muted') {
       testState.value = 'failed';
       testMessage.value = translateText(SERVER_RESULTS[result]);
       return;
