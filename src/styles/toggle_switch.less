@@ -15,6 +15,12 @@
   user-select: none;
 }
 
+// Label box from cap height to baseline: the centred switch then sits on the optical axis of the text, not on the
+// line box (whose descender room pushed the switch visibly below the middle). Browsers without text-box keep the line box
+.toggle-switch-label {
+  text-box: trim-both cap alphabetic;
+}
+
 // The native checkbox stays focusable for the keyboard but is invisible
 .toggle-switch-input {
   position: absolute;
@@ -39,7 +45,10 @@
   box-sizing: border-box;
   border: 1px solid #fff;
   position: absolute;
-  top: 1.5px;
+  // Vertically centred in the track by layout, not by a pixel offset (sat half a pixel high)
+  top: 0;
+  bottom: 0;
+  margin: auto 0;
   left: 1.5px;
   width: 10px;
   height: 10px;
