@@ -1904,7 +1904,6 @@
   "switched off by the player": "wyłączone przez gracza",
   "Without a subscription, or switched off in the player settings.": "Bez subskrypcji lub wyłączone w ustawieniach gracza.",
   "Without a subscription, or switched off in the player settings. Never to players entered by hand.": "Bez subskrypcji lub wyłączone w ustawieniach gracza. Nigdy do graczy wpisanych ręcznie.",
-  "Each one can be switched off in the ${0}.": "Każde można wyłączyć w ${0}.",
   "settings": "ustawieniach",
   "Ask before risky moves": "Pytaj przed ryzykownymi ruchami",
   "For example before paying more than needed or buying no cards at the start.": "Np. przed przepłaceniem lub gdy na starcie nie kupujesz kart.",
@@ -1915,8 +1914,6 @@
   "Somebody joins your game": "Ktoś dołącza do twojej gry",
   "Also with the lobby in the background or closed.": "Także gdy lobby jest w tle lub zamknięte.",
   "Your game starts": "Twoja gra się zaczyna",
-  "Left of the address:": "Po lewej od adresu:",
-  "Right in the address field:": "Po prawej w pasku adresu:",
   "Site settings": "Ustawienia witryny",
   "Permissions": "Uprawnienia",
   "Allow": "Zezwalaj",
@@ -1927,8 +1924,12 @@
   "Share": "Udostępnij",
   "Add to Home Screen": "Do ekranu początk.",
   "Then open the lobby from the new icon and allow notifications there.": "Potem otwórz lobby z nowej ikony i tam zezwól na powiadomienia.",
-  "Only for your games:": "Tylko dla twoich gier:",
   "Somebody joins": "Ktoś dołącza",
   "Asks to join": "Prosi o dołączenie",
-  "The game starts": "Gra się zaczyna"
+  "The game starts": "Gra się zaczyna",
+  "Left of the address": "Po lewej od adresu",
+  "Right in the address field": "Po prawej w pasku adresu",
+  "Notifications only for your games, namely:": "Powiadomienia tylko dla twoich gier, czyli:",
+  "Turn on notifications:": "Włącz powiadomienia:",
+  "Notifications can be switched off one by one in the game, in the ${0}.": "Powiadomienia można wyłączyć pojedynczo w grze, w ${0}."
 }

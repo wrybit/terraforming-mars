@@ -2372,7 +2372,6 @@
   "switched off by the player": "disattivato dal giocatore",
   "Without a subscription, or switched off in the player settings.": "Senza iscrizione, o disattivato nelle impostazioni del giocatore.",
   "Without a subscription, or switched off in the player settings. Never to players entered by hand.": "Senza iscrizione, o disattivato nelle impostazioni del giocatore. Mai ai giocatori inseriti a mano.",
-  "Each one can be switched off in the ${0}.": "Ognuno si può disattivare nelle ${0}.",
   "settings": "impostazioni",
   "Ask before risky moves": "Conferma le mosse rischiose",
   "For example before paying more than needed or buying no cards at the start.": "Ad esempio prima di pagare troppo o di non comprare carte all’inizio.",
@@ -2383,8 +2382,6 @@
   "Somebody joins your game": "Qualcuno entra nella tua partita",
   "Also with the lobby in the background or closed.": "Anche con la lobby in background o chiusa.",
   "Your game starts": "La tua partita inizia",
-  "Left of the address:": "A sinistra dell’indirizzo:",
-  "Right in the address field:": "A destra nella barra degli indirizzi:",
   "Site settings": "Impostazioni sito",
   "Permissions": "Autorizzazioni",
   "Allow": "Consenti",
@@ -2395,8 +2392,12 @@
   "Share": "Condividi",
   "Add to Home Screen": "Aggiungi alla schermata Home",
   "Then open the lobby from the new icon and allow notifications there.": "Poi apri la lobby dalla nuova icona e consenti lì le notifiche.",
-  "Only for your games:": "Solo per le tue partite:",
   "Somebody joins": "Qualcuno entra",
   "Asks to join": "Chiede di entrare",
-  "The game starts": "La partita inizia"
+  "The game starts": "La partita inizia",
+  "Left of the address": "A sinistra dell’indirizzo",
+  "Right in the address field": "A destra nella barra degli indirizzi",
+  "Notifications only for your games, namely:": "Notifiche solo per le tue partite, ovvero:",
+  "Turn on notifications:": "Attivare le notifiche:",
+  "Notifications can be switched off one by one in the game, in the ${0}.": "Le notifiche si possono disattivare una per una nel gioco, nelle ${0}."
 }

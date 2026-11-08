@@ -2266,7 +2266,6 @@
   "switched off by the player": "desligado pelo jogador",
   "Without a subscription, or switched off in the player settings.": "Sem inscrição, ou desligado nas configurações do jogador.",
   "Without a subscription, or switched off in the player settings. Never to players entered by hand.": "Sem inscrição, ou desligado nas configurações do jogador. Nunca para jogadores incluídos à mão.",
-  "Each one can be switched off in the ${0}.": "Cada um pode ser desligado nas ${0}.",
   "settings": "configurações",
   "Ask before risky moves": "Confirmar jogadas arriscadas",
   "For example before paying more than needed or buying no cards at the start.": "Por exemplo antes de pagar a mais ou de não comprar cartas no início.",
@@ -2277,8 +2276,6 @@
   "Somebody joins your game": "Alguém entra no seu jogo",
   "Also with the lobby in the background or closed.": "Também com o lobby em segundo plano ou fechado.",
   "Your game starts": "Seu jogo começa",
-  "Left of the address:": "À esquerda do endereço:",
-  "Right in the address field:": "À direita na barra de endereço:",
   "Site settings": "Configurações do site",
   "Permissions": "Permissões",
   "Allow": "Permitir",
@@ -2289,8 +2286,12 @@
   "Share": "Compartilhar",
   "Add to Home Screen": "Adicionar à Tela de Início",
   "Then open the lobby from the new icon and allow notifications there.": "Depois abra o lobby pelo novo ícone e permita as notificações lá.",
-  "Only for your games:": "Só para seus jogos:",
   "Somebody joins": "Alguém entra",
   "Asks to join": "Pede para entrar",
-  "The game starts": "O jogo começa"
+  "The game starts": "O jogo começa",
+  "Left of the address": "À esquerda do endereço",
+  "Right in the address field": "À direita na barra de endereço",
+  "Notifications only for your games, namely:": "Notificações só para seus jogos, ou seja:",
+  "Turn on notifications:": "Ativar notificações:",
+  "Notifications can be switched off one by one in the game, in the ${0}.": "As notificações podem ser desligadas uma a uma no jogo, nas ${0}."
 }

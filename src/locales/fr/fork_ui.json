@@ -1161,7 +1161,6 @@
   "switched off by the player": "désactivé par le joueur",
   "Without a subscription, or switched off in the player settings.": "Sans abonnement, ou désactivé dans les paramètres du joueur.",
   "Without a subscription, or switched off in the player settings. Never to players entered by hand.": "Sans abonnement, ou désactivé dans les paramètres du joueur. Jamais aux joueurs saisis à la main.",
-  "Each one can be switched off in the ${0}.": "Chacune peut être désactivée dans les ${0}.",
   "settings": "paramètres",
   "Ask before risky moves": "Confirmer les coups risqués",
   "For example before paying more than needed or buying no cards at the start.": "Par exemple avant de payer trop ou de n’acheter aucune carte au départ.",
@@ -1172,8 +1171,6 @@
   "Somebody joins your game": "Quelqu’un rejoint ta partie",
   "Also with the lobby in the background or closed.": "Même avec le lobby en arrière-plan ou fermé.",
   "Your game starts": "Ta partie commence",
-  "Left of the address:": "À gauche de l’adresse :",
-  "Right in the address field:": "À droite dans la barre d’adresse :",
   "Site settings": "Paramètres des sites",
   "Permissions": "Autorisations",
   "Allow": "Autoriser",
@@ -1184,8 +1181,12 @@
   "Share": "Partager",
   "Add to Home Screen": "Sur l’écran d’accueil",
   "Then open the lobby from the new icon and allow notifications there.": "Puis ouvre le lobby depuis la nouvelle icône et autorise les notifications.",
-  "Only for your games:": "Uniquement pour tes parties :",
   "Somebody joins": "Quelqu’un rejoint",
   "Asks to join": "Demande à rejoindre",
-  "The game starts": "La partie commence"
+  "The game starts": "La partie commence",
+  "Left of the address": "À gauche de l’adresse",
+  "Right in the address field": "À droite dans la barre d’adresse",
+  "Notifications only for your games, namely:": "Notifications uniquement pour tes parties, à savoir :",
+  "Turn on notifications:": "Activer les notifications :",
+  "Notifications can be switched off one by one in the game, in the ${0}.": "Les notifications se désactivent une par une dans le jeu, dans les ${0}."
 }

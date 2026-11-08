@@ -1734,7 +1734,6 @@
   "switched off by the player": "uitgezet door de speler",
   "Without a subscription, or switched off in the player settings.": "Zonder abonnement, of uitgezet in de spelerinstellingen.",
   "Without a subscription, or switched off in the player settings. Never to players entered by hand.": "Zonder abonnement, of uitgezet in de spelerinstellingen. Nooit aan handmatig ingevoerde spelers.",
-  "Each one can be switched off in the ${0}.": "Elk apart uit te zetten in de ${0}.",
   "settings": "instellingen",
   "Ask before risky moves": "Bevestigen bij riskante zetten",
   "For example before paying more than needed or buying no cards at the start.": "Bijvoorbeeld voor te veel betalen of bij de start geen kaarten kopen.",
@@ -1745,8 +1744,6 @@
   "Somebody joins your game": "Iemand doet mee aan je spel",
   "Also with the lobby in the background or closed.": "Ook met de lobby op de achtergrond of gesloten.",
   "Your game starts": "Je spel begint",
-  "Left of the address:": "Links van het adres:",
-  "Right in the address field:": "Rechts in de adresbalk:",
   "Site settings": "Site-instellingen",
   "Permissions": "Rechten",
   "Allow": "Toestaan",
@@ -1756,8 +1753,12 @@
   "Share": "Deel",
   "Add to Home Screen": "Zet op beginscherm",
   "Then open the lobby from the new icon and allow notifications there.": "Open daarna de lobby via het nieuwe symbool en sta daar meldingen toe.",
-  "Only for your games:": "Alleen voor je spellen:",
   "Somebody joins": "Iemand doet mee",
   "Asks to join": "Vraagt mee te doen",
-  "The game starts": "Het spel begint"
+  "The game starts": "Het spel begint",
+  "Left of the address": "Links van het adres",
+  "Right in the address field": "Rechts in de adresbalk",
+  "Notifications only for your games, namely:": "Meldingen alleen voor je spellen, namelijk:",
+  "Turn on notifications:": "Meldingen aanzetten:",
+  "Notifications can be switched off one by one in the game, in the ${0}.": "Meldingen zijn in het spel apart uit te zetten in de ${0}."
 }

@@ -12,24 +12,25 @@
       </strong>
       <!-- The three occasions as chips: the same kinds that can be switched off one by one in the settings -->
       <span class="lobby-push-banner-purpose lobby-push-banner-row">
-        <span v-i18n>Only for your games:</span>
+        <span v-i18n>Notifications only for your games, namely:</span>
         <span v-for="occasion in OCCASIONS" :key="occasion" class="lobby-push-banner-chip" v-i18n>{{ occasion }}</span>
       </span>
       <!-- Blocked: pages cannot reopen the browser's question, only the settings can (notificationSettingsHelp.ts).
-           Every step a chip with the browser's own words and symbols, so it can be found on screen -->
-      <span v-if="path !== undefined" class="lobby-push-banner-row">
-        <span v-if="path.lead" class="lobby-push-banner-lead">{{ $t(path.lead) }}</span>
-        <!-- Arrow and chip wrap together, so no line ends with an arrow -->
+           A labelled instruction, not chips: the browser's own words in bold, its symbols as drawn -->
+      <span v-if="path !== undefined" class="lobby-push-banner-row lobby-push-banner-path">
+        <span v-i18n>Turn on notifications:</span>
+        <span v-if="path.lead">{{ $t(path.lead) }}</span>
+        <!-- Arrow and step wrap together, so no line ends with an arrow -->
         <span v-for="(step, index) in path.steps" :key="index" class="lobby-push-banner-step">
-          <span v-if="index > 0" class="lobby-push-banner-arrow" aria-hidden="true">→</span>
-          <span class="lobby-push-banner-chip">
-            <svg v-for="icon in step.icons ?? []" :key="icon" class="lobby-push-banner-chip-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <span v-if="index > 0 || path.lead" class="lobby-push-banner-arrow" aria-hidden="true">→</span>
+          <strong class="lobby-push-banner-word">
+            <svg v-for="icon in step.icons ?? []" :key="icon" class="lobby-push-banner-step-icon" viewBox="0 0 24 24" aria-hidden="true">
               <path :d="ICON_PATHS[icon]" />
             </svg>
             <template v-if="step.name ?? step.label">{{ step.name ?? $t(step.label ?? "") }}</template>
-          </span>
+          </strong>
         </span>
-        <span v-if="path.tail" class="lobby-push-banner-lead">{{ $t(path.tail) }}</span>
+        <span v-if="path.tail">{{ $t(path.tail) }}</span>
       </span>
       <span v-else-if="state === 'unsupported'" v-i18n>Keep the lobby in front to see them.</span>
       <!-- "settings" as a link straight to the switches per kind (settings dialog of the setup menu) -->
@@ -89,7 +90,7 @@ function currentState(): PushState {
 const state = ref<PushState>(currentState());
 // The sentence around the link, in the word order of the language (${0} = the link)
 const hintParts = computed(() => {
-  const [before, after = ''] = translateText('Each one can be switched off in the ${0}.').split('${0}');
+  const [before, after = ''] = translateText('Notifications can be switched off one by one in the game, in the ${0}.').split('${0}');
   return [before, after];
 });
 const path = computed(() => state.value === 'denied' ? BLOCKED_PATHS[family.value] : state.value === 'unsupported' ? UNSUPPORTED_PATHS[family.value] : undefined);

@@ -882,7 +882,6 @@
   "switched off by the player": "vom Spieler abgeschaltet",
   "Without a subscription, or switched off in the player settings.": "Ohne Abo oder in den Spieler-Einstellungen abgeschaltet.",
   "Without a subscription, or switched off in the player settings. Never to players entered by hand.": "Ohne Abo oder in den Spieler-Einstellungen abgeschaltet. Nie an von Hand eingetragene Spieler.",
-  "Each one can be switched off in the ${0}.": "Einzeln abschaltbar in den ${0}.",
   "settings": "Einstellungen",
   "Ask before risky moves": "Sicherheitsabfragen",
   "For example before paying more than needed or buying no cards at the start.": "Z. B. vor dem Überzahlen oder wenn du zu Beginn keine Karten kaufst.",
@@ -893,8 +892,6 @@
   "Somebody joins your game": "Jemand tritt deinem Spiel bei",
   "Also with the lobby in the background or closed.": "Auch wenn die Lobby im Hintergrund oder geschlossen ist.",
   "Your game starts": "Dein Spiel beginnt",
-  "Left of the address:": "Links neben der Adresse:",
-  "Right in the address field:": "Rechts im Adressfeld:",
   "Site settings": "Website-Einstellungen",
   "Permissions": "Berechtigungen",
   "Allow": "Zulassen",
@@ -904,8 +901,12 @@
   "Share": "Teilen",
   "Add to Home Screen": "Zum Home-Bildschirm",
   "Then open the lobby from the new icon and allow notifications there.": "Dann die Lobby über das neue Symbol öffnen und dort Mitteilungen erlauben.",
-  "Only for your games:": "Nur für deine Spiele:",
   "Somebody joins": "Jemand tritt bei",
   "Asks to join": "Bittet um Beitritt",
-  "The game starts": "Das Spiel beginnt"
+  "The game starts": "Das Spiel beginnt",
+  "Left of the address": "Links neben der Adresse",
+  "Right in the address field": "Rechts im Adressfeld",
+  "Notifications only for your games, namely:": "Benachrichtigungen kommen nur für deine Spiele, genauer:",
+  "Turn on notifications:": "Benachrichtigungen aktivieren:",
+  "Notifications can be switched off one by one in the game, in the ${0}.": "Benachrichtigungen sind im Spiel einzeln abschaltbar in den ${0}."
 }

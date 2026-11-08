@@ -53,14 +53,14 @@ const NOTIFICATIONS: SettingsStep = {label: 'Notifications'};
 
 /** Notifications blocked: where to allow them again */
 export const BLOCKED_PATHS: Record<BrowserFamily, SettingsPath> = {
-  chromium: {lead: 'Left of the address:', steps: [{icons: ['lock', 'sliders']}, {label: 'Site settings'}, NOTIFICATIONS, ALLOW]},
+  chromium: {lead: 'Left of the address', steps: [{icons: ['lock', 'sliders']}, {label: 'Site settings'}, NOTIFICATIONS, ALLOW]},
   // Arc: the sliders sit at the right end of the address field, the menu lists the notifications directly
-  arc: {lead: 'Right in the address field:', steps: [{icons: ['sliders']}, NOTIFICATIONS, ALLOW]},
-  android: {lead: 'Left of the address:', steps: [{icons: ['lock', 'sliders']}, {label: 'Permissions'}, NOTIFICATIONS, ALLOW]},
+  arc: {lead: 'Right in the address field', steps: [{icons: ['sliders']}, NOTIFICATIONS, ALLOW]},
+  android: {lead: 'Left of the address', steps: [{icons: ['lock', 'sliders']}, {label: 'Permissions'}, NOTIFICATIONS, ALLOW]},
   safari: {steps: [{name: 'Safari'}, {label: 'Settings'}, {label: 'Websites'}, NOTIFICATIONS, ALLOW]},
   // Name of the home screen app: short_name in assets/pwa/manifest.webmanifest
   ios: {steps: [{label: 'Settings'}, NOTIFICATIONS, {name: 'TM Mars'}, {label: 'Allow Notifications'}]},
-  firefox: {lead: 'Left of the address:', steps: [{icons: ['lock']}, NOTIFICATIONS, {label: 'Remove block'}], tail: 'Then reload the page.'},
+  firefox: {lead: 'Left of the address', steps: [{icons: ['lock']}, NOTIFICATIONS, {label: 'Remove block'}], tail: 'Then reload the page.'},
 };
 
 /** No push at all: only iPhone and iPad have a way, the page added to the home screen */
