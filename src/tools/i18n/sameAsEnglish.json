@@ -122,7 +122,8 @@
     "Training",
     "Updates",
     "Version",
-    "normal ${0}"
+    "normal ${0}",
+    "Websites"
   ],
   "es": [
     "${0} AI",
@@ -496,7 +497,8 @@
     "utopia planitia",
     "vastitas borealis",
     "vastitas borealis nova",
-    "worm"
+    "worm",
+    "Websites"
   ],
   "pl": [
     "${0} AI",
