@@ -3,6 +3,7 @@
     <RotateHint />
     <AppBackground v-if="hasBackground" :always="screen === 'start-screen'" :show-credit="hasBackgroundCredit" />
     <ServerUpdateOverlay />
+    <PushToast />
     <RenderErrorBanner />
     <!-- Rating of AI decisions (analysis games): outside the game view, so updates never close it -->
     <AiDecisionDialog />
@@ -108,6 +109,7 @@ import {initMobileLayout, mobileLayout} from '@/client/utils/mobileLayout';
 import RotateHint from '@/client/components/RotateHint.vue';
 import AppBackground from '@/client/components/AppBackground.vue';
 import ServerUpdateOverlay from '@/client/components/common/ServerUpdateOverlay.vue';
+import PushToast from '@/client/components/common/PushToast.vue';
 import RenderErrorBanner from '@/client/components/common/RenderErrorBanner.vue';
 import AiDecisionDialog from '@/client/components/logpanel/aiAnalysis/AiDecisionDialog.vue';
 import AiAnalysisWelcome from '@/client/components/logpanel/aiAnalysis/AiAnalysisWelcome.vue';
@@ -193,6 +195,7 @@ export default defineComponent({
     RotateHint,
     AppBackground,
     ServerUpdateOverlay,
+    PushToast,
     RenderErrorBanner,
     AiDecisionDialog,
     AiAnalysisWelcome,

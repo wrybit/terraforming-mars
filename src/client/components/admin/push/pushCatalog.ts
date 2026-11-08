@@ -24,6 +24,7 @@ export type PushCatalogEntry = {
 };
 
 const ROOM_LINK = '/lobby/room/<id>-<name>';
+const SHOWN_AS = {label: 'Shown as', text: 'System notification; while a tab of this site is in front, a message inside the page instead.'};
 const TAG = {name: 'tag', value: 'lobby-<id>', description: 'One notification per room: a new one replaces the old one.'};
 
 export const PUSH_CATALOG: ReadonlyArray<PushCatalogEntry> = [
@@ -34,7 +35,8 @@ export const PUSH_CATALOG: ReadonlyArray<PushCatalogEntry> = [
     rows: [
       {label: 'Fires when', text: 'A player takes a free seat of an open game (list, quick start or invitation link).'},
       {label: 'Recipient', text: 'The host, only in the browser the game was created in.'},
-      {label: 'Not sent', text: 'Without a subscription, or while the host looks at the lobby.'},
+      {label: 'Not sent', text: 'Without a subscription.'},
+      SHOWN_AS,
       {label: 'Effect', text: 'A host reachable by push keeps the game 30 min with the lobby closed, otherwise 45 s.'},
     ],
     code: 'Lobby.join → notify(host, \'joined\')',
@@ -50,7 +52,8 @@ export const PUSH_CATALOG: ReadonlyArray<PushCatalogEntry> = [
     rows: [
       {label: 'Fires when', text: 'A player removed twice by the host tries to join again.'},
       {label: 'Recipient', text: 'The host, only in the browser the game was created in.'},
-      {label: 'Not sent', text: 'Without a subscription, or while the host looks at the lobby.'},
+      {label: 'Not sent', text: 'Without a subscription.'},
+      SHOWN_AS,
     ],
     code: 'Lobby.join → notify(host, \'request\')',
     parameters: [{name: '${0}', description: 'Name of whoever asks'}, TAG],
@@ -65,7 +68,8 @@ export const PUSH_CATALOG: ReadonlyArray<PushCatalogEntry> = [
     rows: [
       {label: 'Fires when', text: 'The host starts, the last seat gets ready, or a join fills the last seat.'},
       {label: 'Recipient', text: 'Everybody seated in the lobby, except whoever caused the start.'},
-      {label: 'Not sent', text: 'Without a subscription, or while the player looks at the lobby. Never to players entered by hand.'},
+      {label: 'Not sent', text: 'Without a subscription. Never to players entered by hand.'},
+      SHOWN_AS,
       {label: 'Effect', text: 'Players reachable by push keep their seat 30 min with the lobby closed.'},
     ],
     code: 'Lobby.start → notify(player, \'started\')',

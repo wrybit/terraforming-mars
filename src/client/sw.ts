@@ -1,4 +1,4 @@
-import {LOBBY_PUSH_OUTCOME, LobbyPushMessage, LobbyPushOutcome} from '@/common/lobby/LobbyPushModel';
+import {LOBBY_PUSH_OUTCOME, LOBBY_PUSH_TOAST, LobbyPushMessage, LobbyPushOutcome, LobbyPushToast} from '@/common/lobby/LobbyPushModel';
 
 // Service worker: shows the lobby's push messages (server/lobby/LobbyPush.ts) and brings the host back to the
 // game on a click. The page notifications of the game (WaitingFor.vue) use it as a fallback as well.
@@ -34,11 +34,15 @@ function isLobbyPage(client: WindowClientLike): boolean {
 }
 
 async function showPush(message: LobbyPushMessage): Promise<void> {
-  // Somebody looking at the lobby right now sees the join there; a background tab or a closed one gets the message
+  // A tab of this site in front: the message appears there as a toast (browsers like Arc show no system banner
+  // while they are in front). Otherwise, with the browser in the background or closed, the system notification.
   const clients = await worker.clients.matchAll({type: 'window', includeUncontrolled: true});
   let outcome: LobbyPushOutcome['outcome'] = 'shown';
-  if (clients.some((client) => isLobbyPage(client) && client.focused && client.visibilityState === 'visible')) {
-    outcome = 'suppressed';
+  const front = clients.find((client) => client.focused && client.visibilityState === 'visible');
+  if (front !== undefined) {
+    const toast: LobbyPushToast = {type: LOBBY_PUSH_TOAST, message: {...message, url: new URL(message.url, worker.registration.scope).href}};
+    front.postMessage(toast);
+    outcome = 'toast';
   } else {
     try {
       // renotify is missing from the DOM types of TypeScript, the browsers know it
