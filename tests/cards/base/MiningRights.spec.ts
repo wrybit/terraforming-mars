@@ -13,6 +13,7 @@ import {Units} from '../../../src/common/Units';
 import {Resource} from '../../../src/common/Resource';
 import {testGame} from '../../TestGame';
 import {cast} from '../../../src/common/utils/utils';
+import {SelectResource} from '../../../src/server/inputs/SelectResource';
 
 describe('MiningRights', () => {
   let card: MiningRights;
@@ -133,5 +134,27 @@ describe('MiningRights', () => {
     expect(space.tile?.tileType).to.eq(TileType.MINING_RIGHTS);
     expect(player.production.asUnits()).deep.eq(Units.of({titanium: 1}));
     expect(player.stock.asUnits()).deep.eq(Units.of({titanium: 1}));
+  });
+
+  it('A later tile on a ? space still offers the standard resource choice', () => {
+    const [steelSpace, standardSpace] = game.board.getAvailableSpacesOnLand(player)
+      .filter((space) => space.bonus.length === 0);
+    steelSpace.bonus = [SpaceBonus.STEEL];
+    standardSpace.bonus = [SpaceBonus.STANDARD_RESOURCE];
+
+    player.playCard(card);
+    runAllActions(game);
+    cast(player.popWaitingFor(), SelectSpace).cb(steelSpace);
+    runAllActions(game);
+    expect(card.bonusResource).deep.eq([Resource.STEEL]);
+    expect(player.lastCardPlayed).eq(card.name);
+
+    // Mining Rights is still the last card played, but this placement is not part of it.
+    game.addGreenery(player, standardSpace);
+    runAllActions(game);
+    cast(player.popWaitingFor(), SelectResource).process({type: 'resource', resource: 'plants'});
+
+    expect(player.plants).eq(1);
+    expect(player.stock.asUnits()).deep.eq(Units.of({steel: 1, plants: 1}));
   });
 });

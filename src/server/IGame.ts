@@ -43,6 +43,14 @@ export interface Score {
   playerScore: number;
 }
 
+export type AddTileOptions = {
+  /**
+   * Resource granted for a STANDARD_RESOURCE placement bonus, without asking the player.
+   * Mining cards use this for the steel or titanium production the player chose.
+   */
+  standardResource?: Resource,
+};
+
 export interface IGame extends Logger {
   readonly id: GameId;
   readonly name: string;
@@ -224,7 +232,7 @@ export interface IGame extends Logger {
    * This only applies to the Mars board. See MoonExpansion.addTile for placing
    * a tile on The Moon.
    */
-  addTile(player: IPlayer, space: Space, tile: Tile): void;
+  addTile(player: IPlayer, space: Space, tile: Tile, options?: AddTileOptions): void;
   /**
    * Add `tile` to `space` for `player` without triggering any effects.
    *
@@ -239,7 +247,7 @@ export interface IGame extends Logger {
    * @param coveringExistingTile when true, don't grant placement bonuses like when covering
    * a hazard tile, or overplacing one tile on top of another.
    */
-  grantPlacementBonuses(player: IPlayer, space: Space, coveringExistingTile?: boolean): void
+  grantPlacementBonuses(player: IPlayer, space: Space, coveringExistingTile?: boolean, options?: AddTileOptions): void
   /**
    * Calls f(cardOwner, card) for every card in every player's tableau,
    * in generation order.
@@ -251,18 +259,19 @@ export interface IGame extends Logger {
    *
    * `onStandardResource` is called with the resource chosen for a STANDARD_RESOURCE bonus.
    */
-  grantSpaceBonuses(player: IPlayer, space: Space, onStandardResource?: (resource: Resource) => void): void;
+  grantSpaceBonuses(player: IPlayer, space: Space, onStandardResource?: (resource: Resource) => void, standardResource?: Resource): void;
   /**
    * Gives all the bonuses from a space as placement bonuses, so cards can react to a
    * chosen standard resource (see ICard.onStandardResourcePlacementBonus).
    */
-  grantSpaceBonusesAsPlacement(player: IPlayer, space: Space): void;
+  grantSpaceBonusesAsPlacement(player: IPlayer, space: Space, options?: AddTileOptions): void;
   /**
    * Gives one bonus from rewards on a space.
    *
    * `onStandardResource` is called with the resource chosen for a STANDARD_RESOURCE bonus.
+   * `standardResource`, when set, is granted for a STANDARD_RESOURCE bonus without asking the player.
    */
-  grantSpaceBonus(player: IPlayer, spaceBonus: SpaceBonus, count?: number, from?: From, onStandardResource?: (resource: Resource) => void): void;
+  grantSpaceBonus(player: IPlayer, spaceBonus: SpaceBonus, count?: number, from?: From, onStandardResource?: (resource: Resource) => void, standardResource?: Resource): void;
   addGreenery(player: IPlayer, space: Space, shouldRaiseOxygen?: boolean): void;
   addCity(player: IPlayer, space: Space, cardName?: CardName | undefined): void;
   canAddOcean(): boolean;

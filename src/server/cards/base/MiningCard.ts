@@ -94,7 +94,7 @@ export abstract class MiningCard extends Card implements IProjectCard {
         this.bonusResource = [resource];
         if (this.placeTile) {
           const spaceBonus = resource === Resource.TITANIUM ? SpaceBonus.TITANIUM : SpaceBonus.STEEL;
-          player.game.addTile(player, space, {tileType: this.getTileType(spaceBonus)});
+          player.game.addTile(player, space, {tileType: this.getTileType(spaceBonus)}, {standardResource: resource});
           space.adjacency = this.getAdjacencyBonus(spaceBonus);
         }
       });
