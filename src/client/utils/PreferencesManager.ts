@@ -19,7 +19,6 @@ export type Preferences = {
   hide_tile_confirmation: boolean,
   hide_discount_on_cards: boolean,
   hide_zero_tags: boolean,
-  hide_animated_sidebar: boolean,
   debug_view: boolean,
   symbol_overlay: boolean,
   animated_title: boolean,
@@ -36,8 +35,9 @@ export type Preferences = {
 
 export type Preference = keyof Preferences;
 
-// Former settings, no longer offered: 'small_cards' (smaller cards), 'magnify_cards' (enlarge on hover)
-const REMOVED_PREFERENCES: ReadonlyArray<string> = ['small_cards', 'magnify_cards'];
+// Former settings, no longer offered: 'small_cards' (smaller cards), 'magnify_cards' (enlarge on hover),
+// 'hide_animated_sidebar' (coloured sidebar on one's turn – the sidebar became the icon group without a background)
+const REMOVED_PREFERENCES: ReadonlyArray<string> = ['small_cards', 'magnify_cards', 'hide_animated_sidebar'];
 
 // The fork's defaults: apply to everyone who has never changed a setting themselves
 const defaults: Preferences = {
@@ -64,7 +64,6 @@ const defaults: Preferences = {
   hide_discount_on_cards: false,
   // Hide tags with count 0 in the player overview (replaces the former toggle above the player bars)
   hide_zero_tags: true,
-  hide_animated_sidebar: true,
 
   symbol_overlay: false,
   animated_title: true,

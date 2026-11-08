@@ -5,7 +5,6 @@
     <TopBar :playerView="playerView" />
 
     <Sidebar
-      :actingPlayer="isPlayerActing(playerView)"
       :playerColor="thisPlayer.color"
       :coloniesCount="game.colonies.length"
       :temperature="game.temperature"
