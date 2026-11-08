@@ -34,8 +34,7 @@ import {tuningKey, tuningOf} from './aiTuning';
 
 export type CardTiming = {now: number, later: number};
 
-// Holding a card is uncertain (the game may end, money may lack): later value counts 85 %.
-const LATER_DISCOUNT = 0.85;
+// Holding a card is uncertain (the game may end, money may lack): later value counts 85 % (aiTuning.ts laterDiscount).
 
 export function playCard(copy: IGame, copyPlayer: IPlayer, name: CardName): void {
   const fresh = newCard(name);
@@ -225,7 +224,7 @@ function laterValue(snapshot: GameSnapshot, player: IPlayer, card: ICard, contex
   const raw = (total / samples + drawChoiceBonus(card, player) + drawBonus + engineDraws + nextCardDiscountValue(player, card) + tagDemandValue(player, card)) * priorFactor(card, player) - costOf(card, player);
   // A window that closes before the card would be played (at most 5 % oxygen …).
   const window = tuningOf(player).closingWindow > 0 && raw > 0 && isIProjectCard(card) ? closingWindowFactor(card, player, delay) : 1;
-  return raw * outlookOf(card, player) * LATER_DISCOUNT * window * energyFactor(card, player, context) * (isBlockedNow(card, player) ? BLOCKED_LATER_FACTOR : 1);
+  return raw * outlookOf(card, player) * tuningOf(player).laterDiscount * window * energyFactor(card, player, context) * (isBlockedNow(card, player) ? BLOCKED_LATER_FACTOR : 1);
 }
 
 // Later values take several game copies per card; they only change slowly, so they are
