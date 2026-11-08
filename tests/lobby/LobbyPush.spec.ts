@@ -70,4 +70,13 @@ describe('LobbyPush', () => {
     expect(info.deliveries.map((delivery) => `${delivery.kind} ${delivery.participant} ${delivery.result} ${delivery.roomTitle}`))
       .deep.eq(['started nobody unreachable Abend', 'joined hostho sent Abend']);
   });
+
+  it('kinds switched off by the player are not sent, test messages ignore the switch', async () => {
+    push.subscribe(HOST, subscription, texts, ['started', 'unknown']);
+    const named = {...room, title: 'Abend'};
+    expect(await push.notify(HOST, 'started', named, 'Bob')).eq('muted');
+    expect(await push.notify(HOST, 'joined', named, 'Bob')).eq('sent');
+    expect(await push.notify(HOST, 'started', named, 'Bob', false)).eq('sent');
+    expect(sent).has.length(2);
+  });
 });

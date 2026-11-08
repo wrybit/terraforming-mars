@@ -29,14 +29,16 @@ export const LOBBY_PUSH_TEXTS: LobbyPushTexts = {
   started: {title: 'Your game has started', body: 'The game is waiting for you.'},
 };
 
-/** What became of one message: delivered to the push service, browser dropped the subscription, nobody to reach */
-export type LobbyPushResult = 'sent' | 'gone' | 'unreachable';
+/** What became of one message: delivered to the push service, browser dropped the subscription, nobody to reach, switched off by the player */
+export type LobbyPushResult = 'sent' | 'gone' | 'unreachable' | 'muted';
 
 /** POST api/lobby-push: subscribe (subscription set) or unsubscribe (subscription null) */
 export type LobbyPushRequest = {
   me: string;
   subscription: LobbyPushSubscription | null;
   texts?: LobbyPushTexts;
+  /** Kinds the player switched off in the settings: the server does not send them */
+  muted?: ReadonlyArray<LobbyPushKind>;
 };
 
 /** GET api/lobby-push: the server's public key (VAPID) */

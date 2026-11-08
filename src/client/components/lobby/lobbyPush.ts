@@ -1,8 +1,20 @@
 import {paths} from '@/common/app/paths';
-import {LOBBY_PUSH_KINDS, LOBBY_PUSH_TEXTS, LobbyPushInfo, LobbyPushRequest, LobbyPushSubscription, LobbyPushTexts} from '@/common/lobby/LobbyPushModel';
+import {LOBBY_PUSH_KINDS, LOBBY_PUSH_TEXTS, LobbyPushInfo, LobbyPushKind, LobbyPushRequest, LobbyPushSubscription, LobbyPushTexts} from '@/common/lobby/LobbyPushModel';
 import {translateText} from '@/client/directives/i18n';
 import {fetchOrFail} from '@/client/utils/requestFailure';
 import {lobbyParticipantId} from './lobbyProfile';
+import {getPreferences, Preference} from '@/client/utils/PreferencesManager';
+
+/** Setting that switches a kind of message on or off (settings dialog, group Notifications) */
+export const PUSH_KIND_PREFERENCE: Record<LobbyPushKind, Preference> = {
+  joined: 'push_joined',
+  request: 'push_request',
+  started: 'push_started',
+};
+
+function mutedKinds(): Array<LobbyPushKind> {
+  return LOBBY_PUSH_KINDS.filter((kind) => getPreferences()[PUSH_KIND_PREFERENCE[kind]] === false);
+}
 
 // Push messages of the lobby (server: lobby/LobbyPush.ts, routes/ApiLobbyPush.ts; display: client/sw.ts).
 // Participants learn what happened to their game (joined, asks to join, started), also with the lobby in the
@@ -85,6 +97,7 @@ export async function subscribeLobbyPush(): Promise<void> {
     await send({
       subscription: subscription.toJSON() as LobbyPushSubscription,
       texts: translatedPushTexts(),
+      muted: mutedKinds(),
     });
   } catch (error) {
     console.warn('Lobby push messages are not available', error);

@@ -43,6 +43,12 @@ import {getPreferences, PreferencesManager, Preference} from '@/client/utils/Pre
 import BugReportDialog from '@/client/components/BugReportDialog.vue';
 import DialogFrame from '@/client/components/DialogFrame.vue';
 import {PREFERENCE_GROUPS, PreferenceGroup} from '@/client/components/preferencesGroups';
+import {PUSH_KIND_PREFERENCE, subscribeLobbyPush} from '@/client/components/lobby/lobbyPush';
+import {Preferences} from '@/client/utils/PreferencesManager';
+
+function pushSwitches(values: Readonly<Preferences>): Array<boolean> {
+  return Object.values(PUSH_KIND_PREFERENCE).map((preference) => values[preference] === true);
+}
 
 
 type Refs = {
@@ -84,9 +90,14 @@ export default defineComponent({
       }
     },
     updatePreferences(): void {
+      const pushBefore = JSON.stringify(pushSwitches(this.preferencesManager.values()));
       for (const k of Object.keys(this.preferencesManager.values()) as Array<Preference>) {
         const val = this.prefs[k];
         this.preferencesManager.set(k, val, /* setOnChange */ true);
+      }
+      // A push switch changed: the server learns it at once (the subscription carries the switched-off kinds)
+      if (JSON.stringify(pushSwitches(this.preferencesManager.values())) !== pushBefore) {
+        void subscribeLobbyPush();
       }
     },
     syncPreferences(): void {
