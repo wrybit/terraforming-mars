@@ -30,6 +30,26 @@ describe('LobbyGameTimeline', () => {
     expect(wrapper.find('.lobby-timeline-meta b').text()).eq('21');
   });
 
+  it('labels every generation and lines the bar up with the columns, even next to a very long generation', () => {
+    const progress: LobbyGameProgress = {
+      generation: 4, terraforming: 1, playedMs: 0,
+      generations: [
+        {number: 1, durationMs: 60_000, steps: {temperature: 9, oxygen: 4, oceans: 3}},
+        {number: 2, durationMs: 30_000, steps: {}},
+        {number: 3, durationMs: 45_000, steps: {oceans: 1}},
+        {number: 4, durationMs: 54_000_000, steps: {venus: 2}},
+      ],
+    };
+    const wrapper = mount(LobbyGameTimeline, {...globalConfig, props: {progress}});
+    expect(wrapper.findAll('.lobby-timeline-labels span')).has.length(4);
+    const columns = wrapper.findAll('.lobby-timeline-column');
+    const bars = wrapper.findAll('.lobby-timeline-base i');
+    columns.forEach((column, index) => {
+      expect(column.attributes('style')).eq(bars[index].attributes('style'));
+      expect(parseFloat((column.element as HTMLElement).style.width)).gt(0);
+    });
+  });
+
   it('falls back to the plain bar without a course (AI training games)', () => {
     const wrapper = mount(LobbyGameTimeline, {...globalConfig, props: {progress: {generation: 4, terraforming: 0.5, playedMs: 60_000}}});
     expect(wrapper.find('.lobby-timeline-column').exists()).is.false;
