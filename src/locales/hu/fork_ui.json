@@ -1288,7 +1288,6 @@
   "switched off by the player": "a játékos kikapcsolta",
   "Without a subscription, or switched off in the player settings.": "Feliratkozás nélkül, vagy a játékosbeállításokban kikapcsolva.",
   "Without a subscription, or switched off in the player settings. Never to players entered by hand.": "Feliratkozás nélkül, vagy a játékosbeállításokban kikapcsolva. Kézzel felvett játékosoknak soha.",
-  "Each one can be switched off in the ${0}.": "Egyenként kikapcsolhatók a ${0}.",
   "settings": "beállításokban",
   "Ask before risky moves": "Kérdezzen kockázatos lépések előtt",
   "For example before paying more than needed or buying no cards at the start.": "Pl. túlfizetés előtt, vagy ha az elején nem veszel kártyát.",
@@ -1299,8 +1298,6 @@
   "Somebody joins your game": "Valaki csatlakozik a játékodhoz",
   "Also with the lobby in the background or closed.": "Akkor is, ha az előcsarnok a háttérben van vagy zárva.",
   "Your game starts": "A játékod elkezdődik",
-  "Left of the address:": "A címtől balra:",
-  "Right in the address field:": "A címsorban jobbra:",
   "Site settings": "Webhelybeállítások",
   "Permissions": "Engedélyek",
   "Allow": "Engedélyezés",
@@ -1311,8 +1308,12 @@
   "Share": "Megosztás",
   "Add to Home Screen": "Főképernyőhöz adás",
   "Then open the lobby from the new icon and allow notifications there.": "Utána nyisd meg a lobbit az új ikonról, és ott engedélyezd az értesítéseket.",
-  "Only for your games:": "Csak a játékaidhoz:",
   "Somebody joins": "Valaki csatlakozik",
   "Asks to join": "Csatlakozást kér",
-  "The game starts": "A játék elkezdődik"
+  "The game starts": "A játék elkezdődik",
+  "Left of the address": "A címtől balra",
+  "Right in the address field": "A címsorban jobbra",
+  "Notifications only for your games, namely:": "Értesítések csak a játékaidhoz, mégpedig:",
+  "Turn on notifications:": "Értesítések bekapcsolása:",
+  "Notifications can be switched off one by one in the game, in the ${0}.": "Az értesítések a játékban egyenként kikapcsolhatók a ${0}."
 }

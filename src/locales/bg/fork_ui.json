@@ -2054,7 +2054,6 @@
   "switched off by the player": "изключено от играча",
   "Without a subscription, or switched off in the player settings.": "Без абонамент или изключено в настройките на играча.",
   "Without a subscription, or switched off in the player settings. Never to players entered by hand.": "Без абонамент или изключено в настройките на играча. Никога до играчи, въведени ръчно.",
-  "Each one can be switched off in the ${0}.": "Всяко може да се изключи в ${0}.",
   "settings": "настройките",
   "Ask before risky moves": "Питай преди рискови ходове",
   "For example before paying more than needed or buying no cards at the start.": "Например преди надплащане или ако в началото не купуваш карти.",
@@ -2065,8 +2064,6 @@
   "Somebody joins your game": "Някой се присъединява към играта ти",
   "Also with the lobby in the background or closed.": "Дори когато лобито е във фонов режим или затворено.",
   "Your game starts": "Играта ти започва",
-  "Left of the address:": "Вляво от адреса:",
-  "Right in the address field:": "Вдясно в адресното поле:",
   "Site settings": "Настройки за сайта",
   "Permissions": "Разрешения",
   "Allow": "Разрешаване",
@@ -2077,8 +2074,12 @@
   "Share": "Споделяне",
   "Add to Home Screen": "Добави към началния екран",
   "Then open the lobby from the new icon and allow notifications there.": "След това отвори лобито от новата икона и разреши известията там.",
-  "Only for your games:": "Само за твоите игри:",
   "Somebody joins": "Някой се присъединява",
   "Asks to join": "Моли да се присъедини",
-  "The game starts": "Играта започва"
+  "The game starts": "Играта започва",
+  "Left of the address": "Вляво от адреса",
+  "Right in the address field": "Вдясно в адресното поле",
+  "Notifications only for your games, namely:": "Известия само за твоите игри, а именно:",
+  "Turn on notifications:": "Включи известията:",
+  "Notifications can be switched off one by one in the game, in the ${0}.": "Известията могат да се изключат поотделно в играта, в ${0}."
 }

@@ -2090,7 +2090,6 @@
   "switched off by the player": "玩家已关闭",
   "Without a subscription, or switched off in the player settings.": "没有订阅，或在玩家设置中已关闭。",
   "Without a subscription, or switched off in the player settings. Never to players entered by hand.": "没有订阅，或在玩家设置中已关闭。从不发给手动添加的玩家。",
-  "Each one can be switched off in the ${0}.": "每项都可在${0}中单独关闭。",
   "settings": "设置",
   "Ask before risky moves": "风险操作前确认",
   "For example before paying more than needed or buying no cards at the start.": "例如多付费用或开局不买卡牌之前。",
@@ -2101,8 +2100,6 @@
   "Somebody joins your game": "有人加入你的游戏",
   "Also with the lobby in the background or closed.": "即使大厅在后台或已关闭。",
   "Your game starts": "你的游戏开始",
-  "Left of the address:": "地址左侧：",
-  "Right in the address field:": "地址栏右侧：",
   "Site settings": "网站设置",
   "Permissions": "权限",
   "Allow": "允许",
@@ -2113,8 +2110,12 @@
   "Share": "分享",
   "Add to Home Screen": "添加到主屏幕",
   "Then open the lobby from the new icon and allow notifications there.": "然后通过新图标打开大厅，并在那里允许通知。",
-  "Only for your games:": "仅用于你的游戏：",
   "Somebody joins": "有人加入",
   "Asks to join": "请求加入",
-  "The game starts": "游戏开始"
+  "The game starts": "游戏开始",
+  "Left of the address": "地址左侧",
+  "Right in the address field": "地址栏右侧",
+  "Notifications only for your games, namely:": "通知仅针对你的游戏，具体是：",
+  "Turn on notifications:": "开启通知：",
+  "Notifications can be switched off one by one in the game, in the ${0}.": "通知可在游戏的${0}中逐项关闭。"
 }

@@ -1472,7 +1472,6 @@
   "switched off by the player": "slått av av spilleren",
   "Without a subscription, or switched off in the player settings.": "Uten abonnement, eller slått av i spillerinnstillingene.",
   "Without a subscription, or switched off in the player settings. Never to players entered by hand.": "Uten abonnement, eller slått av i spillerinnstillingene. Aldri til spillere lagt inn for hånd.",
-  "Each one can be switched off in the ${0}.": "Hver kan slås av i ${0}.",
   "settings": "innstillingene",
   "Ask before risky moves": "Spør før risikable trekk",
   "For example before paying more than needed or buying no cards at the start.": "For eksempel før du betaler for mye eller ikke kjøper kort ved start.",
@@ -1483,8 +1482,6 @@
   "Somebody joins your game": "Noen blir med i spillet ditt",
   "Also with the lobby in the background or closed.": "Også med lobbyen i bakgrunnen eller lukket.",
   "Your game starts": "Spillet ditt starter",
-  "Left of the address:": "Til venstre for adressen:",
-  "Right in the address field:": "Til høyre i adressefeltet:",
   "Site settings": "Nettstedsinnstillinger",
   "Permissions": "Tillatelser",
   "Allow": "Tillat",
@@ -1495,8 +1492,12 @@
   "Share": "Del",
   "Add to Home Screen": "Legg til på Hjem-skjerm",
   "Then open the lobby from the new icon and allow notifications there.": "Åpne deretter lobbyen fra det nye symbolet og tillat varslinger der.",
-  "Only for your games:": "Bare for spillene dine:",
   "Somebody joins": "Noen blir med",
   "Asks to join": "Ber om å bli med",
-  "The game starts": "Spillet starter"
+  "The game starts": "Spillet starter",
+  "Left of the address": "Til venstre for adressen",
+  "Right in the address field": "Til høyre i adressefeltet",
+  "Notifications only for your games, namely:": "Varslinger bare for spillene dine, nemlig:",
+  "Turn on notifications:": "Slå på varslinger:",
+  "Notifications can be switched off one by one in the game, in the ${0}.": "Varslinger kan slås av hver for seg i spillet, i ${0}."
 }

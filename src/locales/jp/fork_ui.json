@@ -1480,7 +1480,6 @@
   "switched off by the player": "プレイヤーがオフ",
   "Without a subscription, or switched off in the player settings.": "購読がない、またはプレイヤー設定でオフ。",
   "Without a subscription, or switched off in the player settings. Never to players entered by hand.": "購読がない、またはプレイヤー設定でオフ。手動で入力したプレイヤーには送りません。",
-  "Each one can be switched off in the ${0}.": "${0}で個別にオフにできます。",
   "settings": "設定",
   "Ask before risky moves": "危険な操作の前に確認",
   "For example before paying more than needed or buying no cards at the start.": "例：払いすぎる前や、開始時にカードを買わないとき。",
@@ -1491,8 +1490,6 @@
   "Somebody joins your game": "誰かがゲームに参加",
   "Also with the lobby in the background or closed.": "ロビーがバックグラウンドや閉じていても。",
   "Your game starts": "ゲーム開始",
-  "Left of the address:": "アドレスの左：",
-  "Right in the address field:": "アドレス欄の右：",
   "Site settings": "サイトの設定",
   "Permissions": "権限",
   "Allow": "許可",
@@ -1503,8 +1500,12 @@
   "Share": "共有",
   "Add to Home Screen": "ホーム画面に追加",
   "Then open the lobby from the new icon and allow notifications there.": "その後、新しいアイコンからロビーを開き、そこで通知を許可してください。",
-  "Only for your games:": "あなたのゲームのみ：",
   "Somebody joins": "誰かが参加",
   "Asks to join": "参加申請",
-  "The game starts": "ゲーム開始"
+  "The game starts": "ゲーム開始",
+  "Left of the address": "アドレスの左",
+  "Right in the address field": "アドレス欄の右",
+  "Notifications only for your games, namely:": "通知はあなたのゲームのみ、具体的には：",
+  "Turn on notifications:": "通知をオンにする：",
+  "Notifications can be switched off one by one in the game, in the ${0}.": "通知はゲーム内の${0}で個別にオフにできます。"
 }

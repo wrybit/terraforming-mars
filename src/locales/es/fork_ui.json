@@ -2384,7 +2384,6 @@
   "switched off by the player": "desactivado por el jugador",
   "Without a subscription, or switched off in the player settings.": "Sin suscripción, o desactivado en los ajustes del jugador.",
   "Without a subscription, or switched off in the player settings. Never to players entered by hand.": "Sin suscripción, o desactivado en los ajustes del jugador. Nunca a jugadores añadidos a mano.",
-  "Each one can be switched off in the ${0}.": "Cada uno se puede desactivar en los ${0}.",
   "settings": "ajustes",
   "Ask before risky moves": "Confirmar jugadas arriesgadas",
   "For example before paying more than needed or buying no cards at the start.": "Por ejemplo antes de pagar de más o de no comprar cartas al inicio.",
@@ -2395,8 +2394,6 @@
   "Somebody joins your game": "Alguien se une a tu partida",
   "Also with the lobby in the background or closed.": "También con el lobby en segundo plano o cerrado.",
   "Your game starts": "Tu partida empieza",
-  "Left of the address:": "A la izquierda de la dirección:",
-  "Right in the address field:": "A la derecha en la barra de direcciones:",
   "Site settings": "Configuración del sitio",
   "Permissions": "Permisos",
   "Allow": "Permitir",
@@ -2407,8 +2404,12 @@
   "Share": "Compartir",
   "Add to Home Screen": "Añadir a pantalla de inicio",
   "Then open the lobby from the new icon and allow notifications there.": "Luego abre el lobby desde el nuevo icono y permite allí las notificaciones.",
-  "Only for your games:": "Solo para tus partidas:",
   "Somebody joins": "Alguien se une",
   "Asks to join": "Pide unirse",
-  "The game starts": "La partida empieza"
+  "The game starts": "La partida empieza",
+  "Left of the address": "A la izquierda de la dirección",
+  "Right in the address field": "A la derecha en la barra de direcciones",
+  "Notifications only for your games, namely:": "Notificaciones solo para tus partidas, en concreto:",
+  "Turn on notifications:": "Activar notificaciones:",
+  "Notifications can be switched off one by one in the game, in the ${0}.": "Las notificaciones se pueden desactivar una a una en el juego, en los ${0}."
 }

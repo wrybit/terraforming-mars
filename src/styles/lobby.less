@@ -2004,7 +2004,7 @@ each(@players, {
 
 .lobby-push-banner-text > .lobby-push-banner-purpose {
   margin-top: 2px;
-  font-weight: 600;
+  font-weight: 400;
 }
 
 // Chips in a row that wraps on phones; within a step closer than between line and line
@@ -2039,7 +2039,24 @@ each(@players, {
   white-space: nowrap;
 }
 
-.lobby-push-banner-chip-icon {
+// Instruction: plain text, only the browser's own words bold (so they stand out against it)
+.lobby-push-banner-path {
+  // The page font only ships one weight (bold is synthesised and weak): the plain words step back a little
+  color: rgba(255, 255, 255, 0.82);
+  font-weight: 400;
+}
+
+// Instruction: the browser's own words bold, its symbols beside them – plain text, no chips
+.lobby-push-banner-word {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #fff;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.lobby-push-banner-step-icon {
   width: 16px;
   height: 16px;
   fill: none;

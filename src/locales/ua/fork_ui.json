@@ -1264,7 +1264,6 @@
   "switched off by the player": "вимкнено гравцем",
   "Without a subscription, or switched off in the player settings.": "Без підписки або вимкнено в налаштуваннях гравця.",
   "Without a subscription, or switched off in the player settings. Never to players entered by hand.": "Без підписки або вимкнено в налаштуваннях гравця. Ніколи гравцям, доданим вручну.",
-  "Each one can be switched off in the ${0}.": "Кожне можна вимкнути в ${0}.",
   "settings": "налаштуваннях",
   "Ask before risky moves": "Питати перед ризикованими ходами",
   "For example before paying more than needed or buying no cards at the start.": "Наприклад, перед переплатою або якщо ви не купуєте карти на старті.",
@@ -1275,8 +1274,6 @@
   "Somebody joins your game": "Хтось приєднався до вашої гри",
   "Also with the lobby in the background or closed.": "Навіть якщо лобі у фоні або закрите.",
   "Your game starts": "Ваша гра починається",
-  "Left of the address:": "Ліворуч від адреси:",
-  "Right in the address field:": "Праворуч в адресному рядку:",
   "Site settings": "Налаштування сайту",
   "Permissions": "Дозволи",
   "Allow": "Дозволити",
@@ -1287,8 +1284,12 @@
   "Share": "Поширити",
   "Add to Home Screen": "На початковий екран",
   "Then open the lobby from the new icon and allow notifications there.": "Потім відкрий лобі через новий значок і дозволь там сповіщення.",
-  "Only for your games:": "Лише для ваших ігор:",
   "Somebody joins": "Хтось приєднується",
   "Asks to join": "Просить приєднатися",
-  "The game starts": "Гра починається"
+  "The game starts": "Гра починається",
+  "Left of the address": "Ліворуч від адреси",
+  "Right in the address field": "Праворуч в адресному рядку",
+  "Notifications only for your games, namely:": "Сповіщення лише для ваших ігор, а саме:",
+  "Turn on notifications:": "Увімкнути сповіщення:",
+  "Notifications can be switched off one by one in the game, in the ${0}.": "Сповіщення можна вимкнути окремо в грі, у розділі ${0}."
 }
