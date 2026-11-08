@@ -1966,10 +1966,12 @@ each(@players, {
   line-height: 1.35;
 }
 
+// Floats left in the text: the lines run beside it and below it, no own column or line on phones
 .lobby-push-banner-icon {
-  flex: none;
+  float: left;
   width: 28px;
   height: 28px;
+  margin: 2px 12px 4px 0;
   fill: none;
   stroke: currentColor;
   stroke-width: 2;
@@ -1977,20 +1979,71 @@ each(@players, {
   stroke-linejoin: round;
 }
 
+// Title and purpose belong together (2px), the way through the settings and the hint are their own lines (6px)
 .lobby-push-banner-text {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
   max-width: 760px;
 
-  strong {
-    font-size: 16px;
-    font-weight: 500;
+  > span {
+    display: block;
+    margin-top: 6px;
+  }
+
+  > .lobby-push-banner-steps {
+    display: flex;
   }
 }
 
+.lobby-push-banner-title {
+  display: block;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.lobby-push-banner-text > .lobby-push-banner-purpose {
+  margin-top: 2px;
+  font-weight: 600;
+}
+
+// Chips in a row that wraps on phones; within a step closer than between line and line
 .lobby-push-banner-steps {
-  font-weight: 500;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 6px;
+}
+
+// Arrow and its chip stay together when the row wraps
+.lobby-push-banner-step {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.lobby-push-banner-arrow {
+  opacity: 0.8;
+}
+
+// The browser's own words and symbols, so they can be recognised on screen
+.lobby-push-banner-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 9px;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.22);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.lobby-push-banner-chip-icon {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 // Link to the settings: fixed white, bold and underlined on the orange (no theme link colour)
