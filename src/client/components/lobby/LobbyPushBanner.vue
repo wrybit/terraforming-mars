@@ -11,7 +11,8 @@
       <!-- Blocked: pages cannot reopen the browser's question, only the settings can (notificationSettingsHelp.ts) -->
       <span v-if="steps !== undefined" class="lobby-push-banner-steps" v-i18n>{{ steps }}</span>
       <span v-else-if="state === 'unsupported'" v-i18n>Keep the lobby in front to see them.</span>
-      <span v-if="state !== 'unsupported'" class="lobby-push-banner-hint" v-i18n>Each one can be switched off: Setup → Player Settings → Notifications.</span>
+      <!-- "settings" as a link straight to the switches per kind (settings dialog of the setup menu) -->
+      <span v-if="state !== 'unsupported'" class="lobby-push-banner-hint">{{ hintParts[0] }}<a href="#" class="lobby-push-banner-link" @click.prevent="openMenuDialog('settings')">{{ $t('settings') }}</a>{{ hintParts[1] }}</span>
     </div>
     <button v-if="state === 'default'" type="button" class="btn btn-primary lobby-push-banner-button" @click="allow" v-i18n>Allow notifications</button>
     <button v-else-if="state === 'denied'" type="button" class="btn lobby-push-banner-button" @click="check" v-i18n>Check again</button>
@@ -25,6 +26,8 @@ import {computed, onBeforeUnmount, onMounted, ref} from 'vue';
 import {safeLocalStorage} from '@/client/utils/SafeLocalStorage';
 import {askLobbyPushPermission, pushSupported, subscribeLobbyPush} from './lobbyPush';
 import {BLOCKED_STEPS, browserFamily, UNSUPPORTED_STEPS} from './notificationSettingsHelp';
+import {openMenuDialog} from '@/client/components/gameMenu/gameMenuDialog';
+import {translateText} from '@/client/directives/i18n';
 
 // unsupported: no push in this browser at all (e.g. iPhone without the page on the home screen)
 type PushState = 'default' | 'denied' | 'granted' | 'unsupported';
@@ -49,6 +52,11 @@ function currentState(): PushState {
 }
 
 const state = ref<PushState>(currentState());
+// The sentence around the link, in the word order of the language (${0} = the link)
+const hintParts = computed(() => {
+  const [before, after = ''] = translateText('Each one can be switched off in the ${0}.').split('${0}');
+  return [before, after];
+});
 const steps = computed(() => state.value === 'denied' ? BLOCKED_STEPS[family] : state.value === 'unsupported' ? UNSUPPORTED_STEPS[family] : undefined);
 
 // Allowed (here or in the settings): register the subscription at once, so the server can reach this browser

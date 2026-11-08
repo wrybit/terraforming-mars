@@ -153,7 +153,8 @@ import MusicStateIcon from '@/client/components/music/MusicStateIcon.vue';
 import {musicAvailable, musicIndicator, musicProgress} from '@/client/music/gameMusic';
 import {hotkeyHelpOpen} from '@/client/hotkeys/hotkeyHelpState';
 import {hotkeysAvailable} from '@/client/hotkeys/hotkeyAvailability';
-import {computed, defineAsyncComponent, inject, onBeforeUnmount, onMounted, ref} from 'vue';
+import {computed, defineAsyncComponent, inject, onBeforeUnmount, onMounted, ref, watch} from 'vue';
+import {MenuDialog, requestedMenuDialog} from '@/client/components/gameMenu/gameMenuDialog';
 import SidebarModal from '@/client/components/SidebarModal.vue';
 import PlayerCube from '@/client/components/common/PlayerCube.vue';
 import FanProjectNotice from '@/client/components/common/FanProjectNotice.vue';
@@ -185,7 +186,6 @@ const props = withDefaults(defineProps<{
 // Help only on demand (own chunk, like in the sidebar)
 const HelpOverlay = defineAsyncComponent(() => import(/* webpackChunkName: "help" */ '@/client/components/helpOverlay/HelpOverlay.vue'));
 
-type MenuDialog = 'language' | 'info' | 'help' | 'settings';
 
 // One short word per language (locales/*/game_info.json). Own key "Setup menu", because "Setup" is already
 // translated as the start of the game; English and languages without a translation show "Setup".
@@ -314,6 +314,14 @@ function openDialog(which: MenuDialog) {
 function closeDialog() {
   dialog.value = undefined;
 }
+
+// Asked for from elsewhere on the page (gameMenuDialog.ts)
+watch(requestedMenuDialog, (which) => {
+  if (which !== undefined) {
+    openDialog(which);
+    requestedMenuDialog.value = undefined;
+  }
+});
 
 const extensionMenuItems: ReadonlyArray<ExtensionMenuItem> = CLIENT_EXTENSIONS.flatMap((extension) => extension.menuItems ?? []);
 
