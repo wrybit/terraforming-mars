@@ -2086,7 +2086,6 @@
   "Notifications are blocked": "通知已被阻止",
   "This browser cannot receive push messages": "此浏览器无法接收推送消息",
   "Check again": "重新检查",
-  "Only for your games: somebody joins, asks to join, the game starts.": "仅用于你的游戏：有人加入、请求加入、游戏开始。",
   "Keep the lobby in front to see them.": "请让大厅保持在前台才能看到。",
   "switched off by the player": "玩家已关闭",
   "Without a subscription, or switched off in the player settings.": "没有订阅，或在玩家设置中已关闭。",
@@ -2113,5 +2112,9 @@
   "Then reload the page.": "然后重新加载页面。",
   "Share": "分享",
   "Add to Home Screen": "添加到主屏幕",
-  "Then open the lobby from the new icon and allow notifications there.": "然后通过新图标打开大厅，并在那里允许通知。"
+  "Then open the lobby from the new icon and allow notifications there.": "然后通过新图标打开大厅，并在那里允许通知。",
+  "Only for your games:": "仅用于你的游戏：",
+  "Somebody joins": "有人加入",
+  "Asks to join": "请求加入",
+  "The game starts": "游戏开始"
 }

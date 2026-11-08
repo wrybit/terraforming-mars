@@ -1730,7 +1730,6 @@
   "Notifications are blocked": "Meldingen zijn geblokkeerd",
   "This browser cannot receive push messages": "Deze browser kan geen pushmeldingen ontvangen",
   "Check again": "Opnieuw controleren",
-  "Only for your games: somebody joins, asks to join, the game starts.": "Alleen voor je spellen: iemand doet mee, vraagt mee te doen, het spel begint.",
   "Keep the lobby in front to see them.": "Houd de lobby vooraan om ze te zien.",
   "switched off by the player": "uitgezet door de speler",
   "Without a subscription, or switched off in the player settings.": "Zonder abonnement, of uitgezet in de spelerinstellingen.",
@@ -1756,5 +1755,9 @@
   "Then reload the page.": "Laad daarna de pagina opnieuw.",
   "Share": "Deel",
   "Add to Home Screen": "Zet op beginscherm",
-  "Then open the lobby from the new icon and allow notifications there.": "Open daarna de lobby via het nieuwe symbool en sta daar meldingen toe."
+  "Then open the lobby from the new icon and allow notifications there.": "Open daarna de lobby via het nieuwe symbool en sta daar meldingen toe.",
+  "Only for your games:": "Alleen voor je spellen:",
+  "Somebody joins": "Iemand doet mee",
+  "Asks to join": "Vraagt mee te doen",
+  "The game starts": "Het spel begint"
 }

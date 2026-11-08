@@ -2262,7 +2262,6 @@
   "Notifications are blocked": "As notificações estão bloqueadas",
   "This browser cannot receive push messages": "Este navegador não recebe notificações push",
   "Check again": "Verificar de novo",
-  "Only for your games: somebody joins, asks to join, the game starts.": "Só para seus jogos: alguém entra, pede para entrar, o jogo começa.",
   "Keep the lobby in front to see them.": "Mantenha o lobby na frente para vê-los.",
   "switched off by the player": "desligado pelo jogador",
   "Without a subscription, or switched off in the player settings.": "Sem inscrição, ou desligado nas configurações do jogador.",
@@ -2289,5 +2288,9 @@
   "Then reload the page.": "Depois recarregue a página.",
   "Share": "Compartilhar",
   "Add to Home Screen": "Adicionar à Tela de Início",
-  "Then open the lobby from the new icon and allow notifications there.": "Depois abra o lobby pelo novo ícone e permita as notificações lá."
+  "Then open the lobby from the new icon and allow notifications there.": "Depois abra o lobby pelo novo ícone e permita as notificações lá.",
+  "Only for your games:": "Só para seus jogos:",
+  "Somebody joins": "Alguém entra",
+  "Asks to join": "Pede para entrar",
+  "The game starts": "O jogo começa"
 }

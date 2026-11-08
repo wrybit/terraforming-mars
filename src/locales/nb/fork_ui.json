@@ -1468,7 +1468,6 @@
   "Notifications are blocked": "Varsler er blokkert",
   "This browser cannot receive push messages": "Denne nettleseren kan ikke motta push-varsler",
   "Check again": "Sjekk igjen",
-  "Only for your games: somebody joins, asks to join, the game starts.": "Bare for spillene dine: noen blir med, ber om å bli med, spillet starter.",
   "Keep the lobby in front to see them.": "Hold lobbyen foran for å se dem.",
   "switched off by the player": "slått av av spilleren",
   "Without a subscription, or switched off in the player settings.": "Uten abonnement, eller slått av i spillerinnstillingene.",
@@ -1495,5 +1494,9 @@
   "Then reload the page.": "Last deretter inn siden på nytt.",
   "Share": "Del",
   "Add to Home Screen": "Legg til på Hjem-skjerm",
-  "Then open the lobby from the new icon and allow notifications there.": "Åpne deretter lobbyen fra det nye symbolet og tillat varslinger der."
+  "Then open the lobby from the new icon and allow notifications there.": "Åpne deretter lobbyen fra det nye symbolet og tillat varslinger der.",
+  "Only for your games:": "Bare for spillene dine:",
+  "Somebody joins": "Noen blir med",
+  "Asks to join": "Ber om å bli med",
+  "The game starts": "Spillet starter"
 }

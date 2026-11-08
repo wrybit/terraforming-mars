@@ -1260,7 +1260,6 @@
   "Notifications are blocked": "Сповіщення заблоковано",
   "This browser cannot receive push messages": "Цей браузер не отримує push-сповіщення",
   "Check again": "Перевірити знову",
-  "Only for your games: somebody joins, asks to join, the game starts.": "Лише для ваших ігор: хтось приєднується, просить приєднатися, гра починається.",
   "Keep the lobby in front to see them.": "Тримайте лобі на передньому плані, щоб їх бачити.",
   "switched off by the player": "вимкнено гравцем",
   "Without a subscription, or switched off in the player settings.": "Без підписки або вимкнено в налаштуваннях гравця.",
@@ -1287,5 +1286,9 @@
   "Then reload the page.": "Потім перезавантаж сторінку.",
   "Share": "Поширити",
   "Add to Home Screen": "На початковий екран",
-  "Then open the lobby from the new icon and allow notifications there.": "Потім відкрий лобі через новий значок і дозволь там сповіщення."
+  "Then open the lobby from the new icon and allow notifications there.": "Потім відкрий лобі через новий значок і дозволь там сповіщення.",
+  "Only for your games:": "Лише для ваших ігор:",
+  "Somebody joins": "Хтось приєднується",
+  "Asks to join": "Просить приєднатися",
+  "The game starts": "Гра починається"
 }

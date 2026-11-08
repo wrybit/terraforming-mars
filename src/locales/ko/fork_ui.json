@@ -1354,7 +1354,6 @@
   "Notifications are blocked": "알림이 차단되어 있습니다",
   "This browser cannot receive push messages": "이 브라우저는 푸시 메시지를 받을 수 없습니다",
   "Check again": "다시 확인",
-  "Only for your games: somebody joins, asks to join, the game starts.": "내 게임에만 사용: 누군가 참가, 참가 요청, 게임 시작.",
   "Keep the lobby in front to see them.": "보려면 로비를 앞에 두세요.",
   "switched off by the player": "플레이어가 끔",
   "Without a subscription, or switched off in the player settings.": "구독이 없거나 플레이어 설정에서 꺼짐.",
@@ -1381,5 +1380,9 @@
   "Then reload the page.": "그런 다음 페이지를 새로고침하세요.",
   "Share": "공유",
   "Add to Home Screen": "홈 화면에 추가",
-  "Then open the lobby from the new icon and allow notifications there.": "그런 다음 새 아이콘으로 로비를 열고 거기서 알림을 허용하세요."
+  "Then open the lobby from the new icon and allow notifications there.": "그런 다음 새 아이콘으로 로비를 열고 거기서 알림을 허용하세요.",
+  "Only for your games:": "내 게임에만 사용:",
+  "Somebody joins": "누군가 참가",
+  "Asks to join": "참가 요청",
+  "The game starts": "게임 시작"
 }
