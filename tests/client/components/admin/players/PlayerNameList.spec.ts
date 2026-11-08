@@ -11,7 +11,7 @@ describe('PlayerNameList', () => {
   const names = (wrapper: ReturnType<typeof mount>) => wrapper.findAll('.admin-players-who b').map((name) => name.text());
 
   it('filters and sorts', async () => {
-    const wrapper = mount(PlayerNameList, {...globalConfig, props: {players}});
+    const wrapper = mount(PlayerNameList, {...globalConfig, props: {players, defaultNames: []}});
     await wrapper.findAll('.admin-players-sort button')[1].trigger('click');
     expect(names(wrapper)).deep.eq(['Anna', 'Jens']);
     await wrapper.find('.admin-players-search').setValue('je');
@@ -19,7 +19,7 @@ describe('PlayerNameList', () => {
   });
 
   it('a second tap on the same name drops the selection', async () => {
-    const wrapper = mount(PlayerNameList, {...globalConfig, props: {players}});
+    const wrapper = mount(PlayerNameList, {...globalConfig, props: {players, defaultNames: []}});
     const row = wrapper.find('.admin-players-row');
     await row.trigger('click');
     expect(wrapper.find('.admin-players-hint').exists()).is.true;

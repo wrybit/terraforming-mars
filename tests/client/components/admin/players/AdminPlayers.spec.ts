@@ -8,8 +8,8 @@ import {statsGame} from './playerFixtures';
 describe('AdminPlayers', () => {
   let originalFetch: typeof global.fetch;
   let posted: Array<unknown>;
-  const info: AdminPlayerAliasesInfo = {aliases: [{from: 'Michael', to: 'Micha', createdTimeMs: 0}]};
-  const games = [statsGame(1, [{name: 'Jens'}, {name: 'jens'}, {name: 'Micha'}]), statsGame(2, [{name: 'Jens'}])];
+  const info: AdminPlayerAliasesInfo = {aliases: [{id: 'a1', from: 'Michael', to: 'Micha', createdTimeMs: 0}], defaultNames: ['Blue', 'Blau']};
+  const games = [statsGame(1, [{name: 'Jens'}, {name: 'jens'}, {name: 'Micha'}]), statsGame(2, [{name: 'Jens'}, {name: 'Blue'}])];
 
   async function settle(): Promise<void> {
     for (let i = 0; i < 6; i++) {
@@ -36,7 +36,7 @@ describe('AdminPlayers', () => {
   it('lists the names, the saved merges and proposes duplicates', async () => {
     const wrapper = mount(AdminPlayers, {...globalConfig});
     await settle();
-    expect(wrapper.findAll('.admin-players-row .admin-players-who b').map((name) => name.text())).deep.eq(['Jens', 'jens', 'Micha']);
+    expect(wrapper.findAll('.admin-players-row .admin-players-who b').map((name) => name.text())).deep.eq(['Jens', 'Blue', 'jens', 'Micha']);
     expect(wrapper.find('.admin-players-old').text()).contains('Michael');
     expect(wrapper.findAll('.admin-players-alias')).has.length(1);
     expect(wrapper.findAll('.admin-players-suggestion')).has.length(1);
@@ -46,7 +46,7 @@ describe('AdminPlayers', () => {
     const wrapper = mount(AdminPlayers, {...globalConfig, attachTo: document.body});
     await settle();
     const rows = wrapper.findAll('.admin-players-row');
-    await rows[1].trigger('click');
+    await rows[2].trigger('click');
     await rows[0].trigger('click');
     expect(wrapper.find('.admin-players-side--goes s').text()).eq('jens');
     expect(wrapper.find('.admin-players-side--stays strong').text()).eq('Jens');
@@ -54,7 +54,7 @@ describe('AdminPlayers', () => {
     expect(wrapper.find('.admin-players-dialog-warning').exists()).is.true;
     await wrapper.find('.admin-players-dialog-actions .btn-primary').trigger('click');
     await settle();
-    expect(posted).deep.eq([{action: 'merge', from: 'jens', to: 'Jens'}]);
+    expect(posted).deep.eq([{action: 'merge', from: 'jens', to: 'Jens', permanent: true}]);
     wrapper.unmount();
   });
 
@@ -65,6 +65,20 @@ describe('AdminPlayers', () => {
     await wrapper.findAll('.admin-players-dialog-actions .btn')[0].trigger('click');
     await settle();
     expect(wrapper.find('.admin-players-side--stays strong').text()).eq('jens');
+    wrapper.unmount();
+  });
+
+  it('a default name merges one-time unless switched on', async () => {
+    const wrapper = mount(AdminPlayers, {...globalConfig, attachTo: document.body});
+    await settle();
+    const rows = wrapper.findAll('.admin-players-row');
+    expect(rows[1].find('.admin-players-default-tag').exists()).is.true;
+    await rows[1].trigger('click');
+    await rows[0].trigger('click');
+    expect((wrapper.find('.admin-players-dialog .toggle-switch-input').element as HTMLInputElement).checked).is.false;
+    await wrapper.find('.admin-players-dialog-actions .btn-primary').trigger('click');
+    await settle();
+    expect(posted).deep.eq([{action: 'merge', from: 'Blue', to: 'Jens', permanent: false}]);
     wrapper.unmount();
   });
 });

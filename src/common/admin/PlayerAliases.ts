@@ -2,15 +2,24 @@
 
 /** A name in the statistics that counts as another one: "from" is shown and counted as "to". */
 export type PlayerAlias = {
+  id: string;
   from: string;
   to: string;
   createdTimeMs: number;
+  /**
+   * Only these games (StatsGame summary ids): a one-time merge of the games played so far. Default names
+   * ("Blue", a Dune name …) belong to whoever left the name empty, so a later player with the same name stays
+   * apart. Missing: permanent, also for future games.
+   */
+  gameIds?: Array<string>;
 };
 
 export type AdminPlayerAliasesInfo = {
   aliases: Array<PlayerAlias>;
+  /** Names the game gives to seats left empty, in every language: merged only one-time by default. */
+  defaultNames: Array<string>;
 };
 
 export type AdminPlayerAliasRequest =
-  {action: 'merge', from: string, to: string} |
-  {action: 'unmerge', from: string};
+  {action: 'merge', from: string, to: string, permanent: boolean} |
+  {action: 'unmerge', id: string};

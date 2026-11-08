@@ -2027,7 +2027,13 @@
   "⇄ Swap": "⇄ Поменять",
   "Merge": "Объединить",
   "Merged": "Объединены",
-  "Applies permanently, also to new games under the old name.": "Действует постоянно, и для новых партий под старым именем.",
   "Unmerge": "Разъединить",
-  "Nothing merged yet.": "Пока ничего не объединено."
+  "Nothing merged yet.": "Пока ничего не объединено.",
+  "Permanent merges also apply to new games under the old name; one-time merges only to the games so far.": "Постоянные объединения действуют и для новых партий под старым именем, разовые – только для прошлых.",
+  "default name": "стандартное имя",
+  "Also for future games": "И для будущих партий",
+  "Only the games played so far are merged: a future player with this name stays separate.": "Объединяются только сыгранные партии: будущий игрок с этим именем останется отдельным.",
+  "This is a default name: future players with it are usually other people.": "Это стандартное имя: будущие игроки с ним обычно другие люди.",
+  "permanent": "постоянно",
+  "${0} games, one-time": "${0} партий, разово"
 }

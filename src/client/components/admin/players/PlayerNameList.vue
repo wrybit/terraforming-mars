@@ -26,7 +26,10 @@
         <span class="admin-players-grip" aria-hidden="true">⋮⋮</span>
         <span class="admin-players-swatch" :class="`player_bg_color_${player.color}`" aria-hidden="true"></span>
         <span class="admin-players-who">
-          <b>{{ player.name }}</b>
+          <span class="admin-players-name-line">
+            <b>{{ player.name }}</b>
+            <span v-if="defaultNames.includes(player.name)" class="admin-players-default-tag" v-i18n>default name</span>
+          </span>
           <span v-if="player.oldNames.length > 0" class="admin-players-old"><span v-i18n>also counts:</span> {{ player.oldNames.join(', ') }}</span>
         </span>
         <span class="admin-players-meta">
@@ -53,6 +56,7 @@ const SORT_OPTIONS: ReadonlyArray<{key: SortKey, label: string}> = [
 
 const props = defineProps<{
   players: ReadonlyArray<PlayerNameStats>,
+  defaultNames: ReadonlyArray<string>,
 }>();
 
 const emit = defineEmits<{

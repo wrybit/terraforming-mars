@@ -1338,7 +1338,13 @@
   "⇄ Swap": "⇄ Megfordítás",
   "Merge": "Összevonás",
   "Merged": "Összevonva",
-  "Applies permanently, also to new games under the old name.": "Véglegesen érvényes, a régi néven játszott új játékokra is.",
   "Unmerge": "Szétválasztás",
-  "Nothing merged yet.": "Még nincs összevonás."
+  "Nothing merged yet.": "Még nincs összevonás.",
+  "Permanent merges also apply to new games under the old name; one-time merges only to the games so far.": "A végleges összevonás a régi néven játszott új játékokra is érvényes, az egyszeri csak az eddigiekre.",
+  "default name": "alapértelmezett név",
+  "Also for future games": "A jövőbeli játékokra is",
+  "Only the games played so far are merged: a future player with this name stays separate.": "Csak az eddigi játékok vonódnak össze: egy jövőbeli játékos ezzel a névvel külön marad.",
+  "This is a default name: future players with it are usually other people.": "Ez alapértelmezett név: a jövőbeli játékosok ezzel általában más emberek.",
+  "permanent": "végleges",
+  "${0} games, one-time": "${0} játék, egyszeri"
 }

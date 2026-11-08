@@ -11,11 +11,12 @@
           <p class="games-overview-note" v-i18n>Drag a name onto another one to merge them. On a phone: tap the name that goes, then the name that stays.</p>
           <p v-if="errorText !== ''" class="games-overview-note games-overview-note--error">{{ errorText }}</p>
           <PlayerMergeSuggestions :suggestions="suggestions" @merge="ask" />
-          <PlayerNameList :players="players" @merge="ask" />
+          <PlayerNameList :players="players" :defaultNames="defaultNames" @merge="ask" />
         </section>
         <PlayerAliasesCard :aliases="aliases" :busy="busy" @unmerge="unmerge" />
       </div>
       <PlayerMergeDialog v-if="pending !== undefined" :key="pending.from.name + '→' + pending.to.name"
+        v-model:permanent="pending.permanent" :isDefaultName="defaultNames.includes(pending.from.name)"
         :from="pending.from" :to="pending.to" :sharedGames="pending.sharedGames" :busy="busy"
         @swap="ask({from: pending.to.name, to: pending.from.name})" @cancel="pending = undefined" @confirm="merge" />
     </AdminGate>
@@ -36,23 +37,26 @@ import PlayerAliasesCard from '@/client/components/admin/players/PlayerAliasesCa
 import {PlayerNameStats, playerNameStats, sharedGameCount} from '@/client/components/admin/players/playerNameStats';
 import {similarPlayerNames} from '@/client/components/admin/players/similarPlayerNames';
 
-type PendingMerge = {from: PlayerNameStats, to: PlayerNameStats, sharedGames: number};
+type PendingMerge = {from: PlayerNameStats, to: PlayerNameStats, sharedGames: number, permanent: boolean};
 
 const games = ref<ReadonlyArray<StatsGame>>([]);
 const aliases = ref<ReadonlyArray<PlayerAlias>>([]);
+const defaultNames = ref<ReadonlyArray<string>>([]);
 const pending = ref<PendingMerge | undefined>(undefined);
 const busy = ref(false);
 const errorText = ref('');
 
 const players = computed(() => playerNameStats(games.value, aliases.value));
-const suggestions = computed(() => similarPlayerNames(players.value));
+const suggestions = computed(() => similarPlayerNames(players.value, defaultNames.value));
 
 // The statistics deliver the names already merged: what the list shows is what the statistics page shows
 async function load(): Promise<void> {
   try {
     const [statsResponse, aliasesResponse] = await Promise.all([fetchOrFail(paths.API_STATS_GAMES), fetchOrFail(paths.API_ADMIN_PLAYER_ALIASES)]);
     games.value = await statsResponse.json();
-    aliases.value = ((await aliasesResponse.json()) as AdminPlayerAliasesInfo).aliases;
+    const info: AdminPlayerAliasesInfo = await aliasesResponse.json();
+    aliases.value = info.aliases;
+    defaultNames.value = info.defaultNames;
     errorText.value = '';
   } catch (error) {
     errorText.value = describeFailure(failureOf(error));
@@ -63,7 +67,8 @@ function ask(pair: {from: string, to: string}): void {
   const from = players.value.find((player) => player.name === pair.from);
   const to = players.value.find((player) => player.name === pair.to);
   if (from !== undefined && to !== undefined) {
-    pending.value = {from, to, sharedGames: sharedGameCount(games.value, from.name, to.name)};
+    // Default names merge one-time unless the admin says otherwise; real names permanently
+    pending.value = {from, to, sharedGames: sharedGameCount(games.value, from.name, to.name), permanent: !defaultNames.value.includes(from.name)};
   }
 }
 
@@ -83,12 +88,12 @@ async function merge(): Promise<void> {
   if (pending.value === undefined) {
     return;
   }
-  const request: AdminPlayerAliasRequest = {action: 'merge', from: pending.value.from.name, to: pending.value.to.name};
+  const request: AdminPlayerAliasRequest = {action: 'merge', from: pending.value.from.name, to: pending.value.to.name, permanent: pending.value.permanent};
   pending.value = undefined;
   await send(request);
 }
 
-function unmerge(from: string): Promise<void> {
-  return send({action: 'unmerge', from});
+function unmerge(id: string): Promise<void> {
+  return send({action: 'unmerge', id});
 }
 </script>

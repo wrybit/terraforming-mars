@@ -9,7 +9,7 @@ describe('playerNameStats', () => {
   ];
 
   it('counts games and wins per name, most games first, colour of the latest game', () => {
-    const stats = playerNameStats(games, [{from: 'Jens H.', to: 'Jens', createdTimeMs: 0}]);
+    const stats = playerNameStats(games, [{id: 'a1', from: 'Jens H.', to: 'Jens', createdTimeMs: 0}]);
     expect(stats.map((player) => player.name)).deep.eq(['Jens', 'jens', 'Tobi']);
     expect(stats[0]).deep.include({games: 2, wins: 1, lastTimeMs: 2, color: 'green', oldNames: ['Jens H.']});
   });

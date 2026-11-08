@@ -18,10 +18,13 @@ function isSimilar(first: string, second: string): boolean {
   return a === b || (Math.min(a.length, b.length) >= 4 && (a.startsWith(b) || b.startsWith(a)));
 }
 
-/** Likely duplicates among the names (sorted by games, most first); every name is proposed at most once as "from". */
-export function similarPlayerNames(players: ReadonlyArray<PlayerNameStats>, limit: number = 5): Array<MergeSuggestion> {
+/**
+ * Likely duplicates among the names (sorted by games, most first); every name is proposed at most once as "from".
+ * Default names ("Blue", "Du" …) are never proposed: "Blue" and "Blau" are different people, not one.
+ */
+export function similarPlayerNames(players: ReadonlyArray<PlayerNameStats>, defaultNames: ReadonlyArray<string> = [], limit: number = 5): Array<MergeSuggestion> {
   const suggestions: Array<MergeSuggestion> = [];
-  const sorted = [...players].sort((first, second) => second.games - first.games);
+  const sorted = [...players].filter((player) => !defaultNames.includes(player.name)).sort((first, second) => second.games - first.games);
   sorted.forEach((source, index) => {
     const target = sorted.slice(0, index).find((candidate) => isSimilar(candidate.name, source.name));
     if (target !== undefined) {
