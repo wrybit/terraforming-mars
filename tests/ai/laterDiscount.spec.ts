@@ -6,8 +6,16 @@ import {Greenhouses} from '../../src/server/cards/base/Greenhouses';
 
 // Holding a card counts only a share of its later value: a lower share plays cards sooner.
 describe('AI later discount', () => {
-  beforeEach(() => clearLaterValueCacheForTest());
-  afterEach(() => clearPlayerTunings());
+  const random = Math.random;
+  // The later value plays random cards as a future tableau: the same sample for both values, or the spread hides the share
+  beforeEach(() => {
+    clearLaterValueCacheForTest();
+    Math.random = () => 0.5;
+  });
+  afterEach(() => {
+    Math.random = random;
+    clearPlayerTunings();
+  });
 
   function laterValue(variant: string | undefined): number {
     const [game, player, opponent] = testGame(2);
