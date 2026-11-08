@@ -1255,5 +1255,8 @@
   "The push reached this browser and was handed to the system. If no notification appears, the system blocks it: allow notifications for this browser in the system settings and check Focus or Do Not Disturb.": "Push дійшов до цього браузера й переданий системі. Якщо сповіщення не з’явилося, його блокує система: дозвольте сповіщення для цього браузера в налаштуваннях системи та перевірте режим фокусування чи «Не турбувати».",
   "The push reached this browser but was held back: a lobby tab is in front.": "Push дійшов до цього браузера, але був затриманий: вкладка лобі на передньому плані.",
   "The push reached this browser, but the browser refused to show it: check the notification permission of this site.": "Push дійшов до цього браузера, але браузер відмовився його показати: перевірте дозвіл сповіщень для цього сайту.",
-  "The push service accepted the message, but it did not reach this browser within 15 seconds.": "Push-сервіс прийняв повідомлення, але воно не дійшло до цього браузера за 15 секунд."
+  "The push service accepted the message, but it did not reach this browser within 15 seconds.": "Push-сервіс прийняв повідомлення, але воно не дійшло до цього браузера за 15 секунд.",
+  "Sending in ${0} s: switch to another app or tab now.": "Надсилання через ${0} с: перейдіть зараз в інший застосунок або вкладку.",
+  "Delay of test messages: ${0} s": "Затримка тестових повідомлень: ${0} с",
+  "Time to switch to another app before the message is sent.": "Час, щоб перейти в інший застосунок до надсилання."
 }

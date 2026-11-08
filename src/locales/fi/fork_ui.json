@@ -1097,5 +1097,8 @@
   "The push reached this browser and was handed to the system. If no notification appears, the system blocks it: allow notifications for this browser in the system settings and check Focus or Do Not Disturb.": "Push saapui tähän selaimeen ja annettiin järjestelmälle. Jos ilmoitusta ei näy, järjestelmä estää sen: salli ilmoitukset tälle selaimelle järjestelmäasetuksissa ja tarkista keskittyminen tai Älä häiritse.",
   "The push reached this browser but was held back: a lobby tab is in front.": "Push saapui tähän selaimeen, mutta se pidätettiin: aulan välilehti on edessä.",
   "The push reached this browser, but the browser refused to show it: check the notification permission of this site.": "Push saapui tähän selaimeen, mutta selain kieltäytyi näyttämästä sitä: tarkista tämän sivuston ilmoituslupa.",
-  "The push service accepted the message, but it did not reach this browser within 15 seconds.": "Push-palvelu hyväksyi viestin, mutta se ei saapunut tähän selaimeen 15 sekunnissa."
+  "The push service accepted the message, but it did not reach this browser within 15 seconds.": "Push-palvelu hyväksyi viestin, mutta se ei saapunut tähän selaimeen 15 sekunnissa.",
+  "Sending in ${0} s: switch to another app or tab now.": "Lähetys ${0} s kuluttua: vaihda nyt toiseen sovellukseen tai välilehteen.",
+  "Delay of test messages: ${0} s": "Testiviestien viive: ${0} s",
+  "Time to switch to another app before the message is sent.": "Aikaa vaihtaa toiseen sovellukseen ennen lähetystä."
 }

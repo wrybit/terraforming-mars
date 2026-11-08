@@ -2045,5 +2045,8 @@
   "The push reached this browser and was handed to the system. If no notification appears, the system blocks it: allow notifications for this browser in the system settings and check Focus or Do Not Disturb.": "Push съобщението стигна до този браузър и беше предадено на системата. Ако не се появи известие, системата го блокира: разреши известията за този браузър в системните настройки и провери режим Фокус или Не безпокойте.",
   "The push reached this browser but was held back: a lobby tab is in front.": "Push съобщението стигна до този браузър, но беше задържано: раздел на лобито е отпред.",
   "The push reached this browser, but the browser refused to show it: check the notification permission of this site.": "Push съобщението стигна до този браузър, но браузърът отказа да го покаже: провери разрешението за известия на този сайт.",
-  "The push service accepted the message, but it did not reach this browser within 15 seconds.": "Push услугата прие съобщението, но то не стигна до този браузър за 15 секунди."
+  "The push service accepted the message, but it did not reach this browser within 15 seconds.": "Push услугата прие съобщението, но то не стигна до този браузър за 15 секунди.",
+  "Sending in ${0} s: switch to another app or tab now.": "Изпращане след ${0} с: превключи сега към друго приложение или раздел.",
+  "Delay of test messages: ${0} s": "Забавяне на тестовите съобщения: ${0} с",
+  "Time to switch to another app before the message is sent.": "Време да превключиш към друго приложение преди изпращането."
 }

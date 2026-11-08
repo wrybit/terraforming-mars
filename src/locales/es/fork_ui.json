@@ -2375,5 +2375,8 @@
   "The push reached this browser and was handed to the system. If no notification appears, the system blocks it: allow notifications for this browser in the system settings and check Focus or Do Not Disturb.": "El push llegó a este navegador y se pasó al sistema. Si no aparece ninguna notificación, el sistema la bloquea: permite las notificaciones de este navegador en los ajustes del sistema y revisa Concentración o No molestar.",
   "The push reached this browser but was held back: a lobby tab is in front.": "El push llegó a este navegador pero se retuvo: hay una pestaña del lobby delante.",
   "The push reached this browser, but the browser refused to show it: check the notification permission of this site.": "El push llegó a este navegador, pero el navegador se negó a mostrarlo: revisa el permiso de notificaciones de este sitio.",
-  "The push service accepted the message, but it did not reach this browser within 15 seconds.": "El servicio push aceptó el mensaje, pero no llegó a este navegador en 15 segundos."
+  "The push service accepted the message, but it did not reach this browser within 15 seconds.": "El servicio push aceptó el mensaje, pero no llegó a este navegador en 15 segundos.",
+  "Sending in ${0} s: switch to another app or tab now.": "Envío en ${0} s: cambia ahora a otra app o pestaña.",
+  "Delay of test messages: ${0} s": "Retraso de los mensajes de prueba: ${0} s",
+  "Time to switch to another app before the message is sent.": "Tiempo para cambiar a otra app antes del envío."
 }

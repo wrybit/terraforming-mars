@@ -1279,5 +1279,8 @@
   "The push reached this browser and was handed to the system. If no notification appears, the system blocks it: allow notifications for this browser in the system settings and check Focus or Do Not Disturb.": "A push megérkezett ebbe a böngészőbe, és átadtuk a rendszernek. Ha nem jelenik meg értesítés, a rendszer blokkolja: engedélyezd az értesítéseket ennek a böngészőnek a rendszerbeállításokban, és ellenőrizd a Fókusz vagy a Ne zavarjanak módot.",
   "The push reached this browser but was held back: a lobby tab is in front.": "A push megérkezett ebbe a böngészőbe, de visszatartottuk: elöl van egy előcsarnok-lap.",
   "The push reached this browser, but the browser refused to show it: check the notification permission of this site.": "A push megérkezett ebbe a böngészőbe, de a böngésző nem volt hajlandó megjeleníteni: ellenőrizd az oldal értesítési engedélyét.",
-  "The push service accepted the message, but it did not reach this browser within 15 seconds.": "A push-szolgáltatás elfogadta az üzenetet, de 15 másodpercen belül nem érkezett meg ebbe a böngészőbe."
+  "The push service accepted the message, but it did not reach this browser within 15 seconds.": "A push-szolgáltatás elfogadta az üzenetet, de 15 másodpercen belül nem érkezett meg ebbe a böngészőbe.",
+  "Sending in ${0} s: switch to another app or tab now.": "Küldés ${0} mp múlva: válts most másik alkalmazásra vagy lapra.",
+  "Delay of test messages: ${0} s": "Tesztüzenetek késleltetése: ${0} mp",
+  "Time to switch to another app before the message is sent.": "Idő arra, hogy küldés előtt másik alkalmazásra válts."
 }
