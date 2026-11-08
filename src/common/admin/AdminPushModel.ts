@@ -17,6 +17,8 @@ export type AdminPushDelivery = {
 export type AdminPushInfo = {
   subscribers: number;
   subscriptionMaxAgeDays: number;
+  /** Picture the messages carry (the server's favicon), relative to the app */
+  icon: string;
   /** Newest first */
   deliveries: ReadonlyArray<AdminPushDelivery>;
 };

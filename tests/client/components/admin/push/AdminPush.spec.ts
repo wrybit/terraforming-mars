@@ -9,6 +9,7 @@ describe('AdminPush', () => {
   let originalFetch: typeof global.fetch;
   const info: AdminPushInfo = {
     subscribers: 4,
+    icon: 'assets/favicon/mars-orange.png',
     subscriptionMaxAgeDays: 30,
     deliveries: [{at: 0, kind: 'joined', roomId: 'ab12', roomTitle: 'Abend', participant: 'hostho', result: 'sent'}],
   };
@@ -46,6 +47,8 @@ describe('AdminPush', () => {
       await new Promise((resolve) => setTimeout(resolve, 0));
     }
     expect(wrapper.find('.push-event[data-kind=joined] .push-notification-title mark').text()).eq('Bob');
+    // The picture of the messages is the server's favicon
+    expect(wrapper.find('.push-event[data-kind=joined] .push-notification-icon').attributes('src')).eq('assets/favicon/mars-orange.png');
   });
 
   it('test message: without a service worker report it says the message did not arrive', async () => {

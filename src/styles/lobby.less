@@ -1119,10 +1119,12 @@
   }
 }
 
+// Player colours lightened by 20 % white, only here: on the dark track the plain colours look muddy (Jens,
+// 8 Nov 2026); the player colours themselves stay unchanged everywhere else
 each(@players, {
   @c: ~"player_@{value}";
   .lobby-timeline-mark--@{value} {
-    fill: @@c;
+    fill: mix(#fff, @@c, 20%);
   }
 });
 

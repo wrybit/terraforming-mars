@@ -52,6 +52,8 @@ export type LobbyPushMessage = {
   url: string;
   /** One notification per room: a second join replaces the first */
   tag: string;
+  /** Picture of the notification relative to the app: the favicon chosen in the admin settings (PNG, not .ico) */
+  icon?: string;
 };
 
 /** Tag of the admin's test messages (routes/ApiAdminPush.ts): the admin page waits for its outcome */

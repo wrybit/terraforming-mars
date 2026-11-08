@@ -48,7 +48,7 @@ async function showPush(message: LobbyPushMessage): Promise<void> {
         // A newer message of the same room replaces the old one, but must still alert: without this the browser
         // swaps it silently into the notification centre (no banner, no sound)
         renotify: true,
-        icon: new URL('favicon.ico', worker.registration.scope).href,
+        icon: new URL(message.icon ?? 'favicon.ico', worker.registration.scope).href,
         data: {url: new URL(message.url, worker.registration.scope).href},
       };
       await worker.registration.showNotification(message.title, options);
