@@ -1,5 +1,5 @@
 import {paths} from '@/common/app/paths';
-import {LobbyPushInfo, LobbyPushRequest, LobbyPushSubscription} from '@/common/lobby/LobbyPushModel';
+import {LOBBY_PUSH_KINDS, LOBBY_PUSH_TEXTS, LobbyPushInfo, LobbyPushRequest, LobbyPushSubscription, LobbyPushTexts} from '@/common/lobby/LobbyPushModel';
 import {translateText} from '@/client/directives/i18n';
 import {fetchOrFail} from '@/client/utils/requestFailure';
 import {lobbyParticipantId} from './lobbyProfile';
@@ -8,7 +8,7 @@ import {lobbyParticipantId} from './lobbyProfile';
 // Participants learn what happened to their game (joined, asks to join, started), also with the lobby in the
 // background or closed.
 
-function pushSupported(): boolean {
+export function pushSupported(): boolean {
   return window.isSecureContext && 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
 }
 
@@ -43,6 +43,15 @@ function sameKey(subscription: PushSubscription, key: Uint8Array): boolean {
   return bytes.length === key.length && bytes.every((byte, index) => byte === key[index]);
 }
 
+/** The texts in the chosen language: the server knows no translations (also used by the admin preview) */
+export function translatedPushTexts(): LobbyPushTexts {
+  const texts = {} as LobbyPushTexts;
+  for (const kind of LOBBY_PUSH_KINDS) {
+    texts[kind] = {title: translateText(LOBBY_PUSH_TEXTS[kind].title), body: translateText(LOBBY_PUSH_TEXTS[kind].body)};
+  }
+  return texts;
+}
+
 async function send(request: Omit<LobbyPushRequest, 'me'>): Promise<void> {
   await fetchOrFail(paths.API_LOBBY_PUSH, {
     method: 'POST',
@@ -75,11 +84,7 @@ export async function subscribeLobbyPush(): Promise<void> {
     subscription = subscription ?? await registration.pushManager.subscribe({userVisibleOnly: true, applicationServerKey: key});
     await send({
       subscription: subscription.toJSON() as LobbyPushSubscription,
-      texts: {
-        joined: {title: translateText('${0} joined your game'), body: translateText('Your game in the lobby is waiting for you.')},
-        request: {title: translateText('${0} wants to join your game'), body: translateText('Open the lobby to let them in or decline.')},
-        started: {title: translateText('Your game has started'), body: translateText('The game is waiting for you.')},
-      },
+      texts: translatedPushTexts(),
     });
   } catch (error) {
     console.warn('Lobby push messages are not available', error);

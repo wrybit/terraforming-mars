@@ -52,7 +52,7 @@ export type GameProgressSource = (gameId: GameId) => Promise<Omit<LobbyGameProgr
 export type LobbyNotifier = {
   canReach(participant: string): boolean;
   /** name: whoever caused the event (joined, asks to join, started) */
-  notify(participant: string, kind: LobbyPushKind, room: {id: string, path: string}, name: string): void;
+  notify(participant: string, kind: LobbyPushKind, room: {id: string, path: string, title: string}, name: string): void;
 };
 const NO_NOTIFIER: LobbyNotifier = {canReach: () => false, notify: () => {}};
 
@@ -749,7 +749,7 @@ export class Lobby {
   }
 
   private notify(participant: string, kind: LobbyPushKind, room: Room, name: string): void {
-    this.notifier.notify(participant, kind, {id: room.id, path: lobbyRoomPath(room.id, room.title)}, name);
+    this.notifier.notify(participant, kind, {id: room.id, path: lobbyRoomPath(room.id, room.title), title: room.title}, name);
   }
 
   /** The host leaving dissolves the room; anybody else frees the seat */

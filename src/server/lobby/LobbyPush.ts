@@ -1,21 +1,23 @@
 import * as path from 'path';
 import * as webpush from 'web-push';
-import {LOBBY_PUSH_KINDS, LobbyPushKind, LobbyPushMessage, LobbyPushSubscription, LobbyPushText, LobbyPushTexts} from '../../common/lobby/LobbyPushModel';
+import {LOBBY_PUSH_KINDS, LOBBY_PUSH_TEXTS, LobbyPushKind, LobbyPushMessage, LobbyPushResult, LobbyPushSubscription, LobbyPushText, LobbyPushTexts} from '../../common/lobby/LobbyPushModel';
+import {AdminPushDelivery, AdminPushInfo} from '../../common/admin/AdminPushModel';
 import {fileStorage, LobbyStorage} from './lobbyStorage';
 import {LobbyError} from './lobbyValidation';
 
 /** A subscription nobody renewed (the page renews it on every visit) is forgotten after this time */
 export const PUSH_SUBSCRIPTION_MAX_AGE_MS = 30 * 24 * 60 * 60 * 1000;
 const MAX_TEXT_LENGTH = 200;
-const DEFAULT_TEXTS: LobbyPushTexts = {
-  joined: {title: '${0} joined your game', body: 'Your game in the lobby is waiting for you.'},
-  request: {title: '${0} wants to join your game', body: 'Open the lobby to let them in or decline.'},
-  started: {title: 'Your game has started', body: 'The game is waiting for you.'},
-};
+const DEFAULT_TEXTS = LOBBY_PUSH_TEXTS;
+/** The admin page shows this many of the latest messages */
+export const MAX_DELIVERIES = 50;
+const PARTICIPANT_SHOWN = 6;
 
 export type VapidKeys = {publicKey: string, privateKey: string};
 type Subscriber = {subscription: LobbyPushSubscription, texts: LobbyPushTexts, at: number};
-type Stored = {vapid?: VapidKeys, subscribers?: Record<string, Subscriber>};
+type Stored = {vapid?: VapidKeys, subscribers?: Record<string, Subscriber>, deliveries?: Array<AdminPushDelivery>};
+/** Room as the lobby passes it: id, link of the room page, name for the admin page */
+export type LobbyPushRoom = {id: string, path: string, title: string};
 
 /** Delivers one message; 'gone': the browser dropped the subscription (unsubscribed, data cleared) */
 export type PushSender = (subscription: LobbyPushSubscription, message: LobbyPushMessage, vapid: VapidKeys) => Promise<'sent' | 'gone'>;
@@ -116,8 +118,33 @@ export class LobbyPush {
     return subscriber !== undefined && this.clock() - subscriber.at < PUSH_SUBSCRIPTION_MAX_AGE_MS;
   }
 
-  /** Whether the participant is looking at the lobby right now decides the service worker */
-  public async notify(participant: string, kind: LobbyPushKind, room: {id: string, path: string}, name: string): Promise<'sent' | 'gone' | 'unreachable'> {
+  /**
+   * Whether the participant is looking at the lobby right now decides the service worker.
+   * record: false for test messages from the admin page, they stay out of its list of deliveries.
+   */
+  public async notify(participant: string, kind: LobbyPushKind, room: LobbyPushRoom, name: string, record: boolean = true): Promise<LobbyPushResult> {
+    const result = await this.deliver(participant, kind, room, name);
+    if (record) {
+      const data = this.stored();
+      const delivery: AdminPushDelivery = {at: this.clock(), kind, roomId: room.id, roomTitle: room.title, participant: participant.slice(0, PARTICIPANT_SHOWN), result};
+      data.deliveries = [delivery, ...(data.deliveries ?? [])].slice(0, MAX_DELIVERIES);
+      this.storage.save(data);
+    }
+    return result;
+  }
+
+  /** For the admin page: how many browsers can be reached and what was sent lately */
+  public info(): AdminPushInfo {
+    this.forgetOld();
+    const data = this.stored();
+    return {
+      subscribers: Object.keys(data.subscribers).length,
+      subscriptionMaxAgeDays: PUSH_SUBSCRIPTION_MAX_AGE_MS / (24 * 60 * 60 * 1000),
+      deliveries: data.deliveries ?? [],
+    };
+  }
+
+  private async deliver(participant: string, kind: LobbyPushKind, room: LobbyPushRoom, name: string): Promise<LobbyPushResult> {
     const data = this.stored();
     const subscriber = data.subscribers[participant];
     if (subscriber === undefined || !this.canReach(participant)) {

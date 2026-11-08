@@ -1,5 +1,7 @@
 <template>
   <div id="lobby" class="lobby" :class="{'lobby--waiting': myRoom !== undefined && myRoom.state === 'open' && !roomOpen}">
+    <!-- Without push messages a join or the start goes unnoticed in the background: said over the full width -->
+    <LobbyPushBanner />
     <!-- Header like "Create game": menu, title, then the own profile and the one way to open a game -->
     <header class="card-list-header card-list-header--plain lobby-head">
       <PageToolbar />
@@ -135,6 +137,7 @@
 
 <script setup lang="ts">
 import {askLobbyPushPermission, subscribeLobbyPush} from './lobbyPush';
+import LobbyPushBanner from './LobbyPushBanner.vue';
 import ColumnResizeHandle from '@/client/components/ColumnResizeHandle.vue';
 import {LOBBY_CHAT_SPLIT} from '@/client/utils/columnResize';
 import {ComponentPublicInstance, computed, defineAsyncComponent, getCurrentInstance, onBeforeUnmount, onMounted, nextTick, ref, watch} from 'vue';
