@@ -61,14 +61,15 @@
   opacity: 0.5;
 }
 
-// Up to three cards per row: a column is at least @push-event-min-width wide and never narrower than a third
-@push-event-min-width: 460px;
+// Up to four cards per row (all events side by side): a column is at least @push-event-min-width wide and never
+// narrower than a quarter, so with less room the cards wrap to three, two or one per row
+@push-event-min-width: 400px;
 @push-events-gap: 16px;
 
 .push-events {
   display: grid;
   // Escaped: Less would evaluate min()/max() itself
-  grid-template-columns: ~"repeat(auto-fill, minmax(max(min(100%, @{push-event-min-width}), calc((100% - 2 * @{push-events-gap}) / 3)), 1fr))";
+  grid-template-columns: ~"repeat(auto-fill, minmax(max(min(100%, @{push-event-min-width}), calc((100% - 3 * @{push-events-gap}) / 4)), 1fr))";
   gap: @push-events-gap;
 }
 
