@@ -54,10 +54,7 @@ import LanguageFlag from '@/client/components/LanguageFlag.vue';
 import {relativeTimeText} from '@/client/utils/relativeTime';
 import {gameLocaleToIntlLocale} from '@/client/utils/LocaleUtils';
 import {getPreferences} from '@/client/utils/PreferencesManager';
-
-function shortDateTime(timeMs: number): string {
-  return new Date(timeMs).toLocaleString(undefined, {dateStyle: 'short', timeStyle: 'short'});
-}
+import {shortDateTime} from '@/client/utils/shortDateTime';
 
 export default defineComponent({
   name: 'GameOverview',

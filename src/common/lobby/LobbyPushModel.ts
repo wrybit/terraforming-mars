@@ -19,6 +19,19 @@ export const LOBBY_PUSH_KINDS: ReadonlyArray<LobbyPushKind> = ['joined', 'reques
 export type LobbyPushText = {title: string, body: string};
 export type LobbyPushTexts = Record<LobbyPushKind, LobbyPushText>;
 
+/**
+ * The texts in English: the keys of the translations (page), the fallback of the server and the admin preview.
+ * One source, so the three never drift apart.
+ */
+export const LOBBY_PUSH_TEXTS: LobbyPushTexts = {
+  joined: {title: '${0} joined your game', body: 'Your game in the lobby is waiting for you.'},
+  request: {title: '${0} wants to join your game', body: 'Open the lobby to let them in or decline.'},
+  started: {title: 'Your game has started', body: 'The game is waiting for you.'},
+};
+
+/** What became of one message: delivered to the push service, browser dropped the subscription, nobody to reach */
+export type LobbyPushResult = 'sent' | 'gone' | 'unreachable';
+
 /** POST api/lobby-push: subscribe (subscription set) or unsubscribe (subscription null) */
 export type LobbyPushRequest = {
   me: string;

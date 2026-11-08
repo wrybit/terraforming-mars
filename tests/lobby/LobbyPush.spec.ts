@@ -32,7 +32,7 @@ describe('LobbyPush', () => {
     expect(push.publicKey()).eq('public');
     push.subscribe(HOST, subscription, texts);
     expect(push.canReach(HOST)).is.true;
-    await push.notify(HOST, 'joined', room, 'Bob');
+    await push.notify(HOST, 'joined', {...room, title: 'Abend'}, 'Bob');
     expect(sent).deep.eq([{title: 'Bob ist da', body: 'Bob ist deinem Spiel beigetreten', url: room.path, tag: 'lobby-ab12'}]);
     expect((storage.data as {vapid: unknown}).vapid).deep.eq({publicKey: 'public', privateKey: 'private'});
   });
@@ -41,7 +41,7 @@ describe('LobbyPush', () => {
     expect(() => push.subscribe(HOST, {endpoint: 'http://insecure'}, texts)).to.throw(LobbyError);
     push.subscribe(HOST, subscription, texts);
     answer = 'gone';
-    await push.notify(HOST, 'joined', room, 'Bob');
+    await push.notify(HOST, 'joined', {...room, title: 'Abend'}, 'Bob');
     expect(push.canReach(HOST)).is.false;
     push.subscribe(HOST, subscription, texts);
     push.subscribe(HOST, null, undefined);
@@ -53,8 +53,21 @@ describe('LobbyPush', () => {
 
   it('missing texts of a kind fall back to English, an unknown participant is unreachable', async () => {
     push.subscribe(HOST, subscription, texts);
-    expect(await push.notify(HOST, 'started', room, 'Bob')).eq('sent');
+    expect(await push.notify(HOST, 'started', {...room, title: 'Abend'}, 'Bob')).eq('sent');
     expect(sent[0].title).eq('Your game has started');
-    expect(await push.notify('nobodynobody000001', 'joined', room, 'Bob')).eq('unreachable');
+    expect(await push.notify('nobodynobody000001', 'joined', {...room, title: 'Abend'}, 'Bob')).eq('unreachable');
+  });
+
+  it('keeps the latest deliveries for the admin page, newest first, without test messages', async () => {
+    push.subscribe(HOST, subscription, texts);
+    const named = {...room, title: 'Abend'};
+    await push.notify(HOST, 'joined', named, 'Bob');
+    now += 1000;
+    await push.notify('nobodynobody000001', 'started', named, 'Bob');
+    await push.notify(HOST, 'request', named, 'Bob', false);
+    const info = push.info();
+    expect(info.subscribers).eq(1);
+    expect(info.deliveries.map((delivery) => `${delivery.kind} ${delivery.participant} ${delivery.result} ${delivery.roomTitle}`))
+      .deep.eq(['started nobody unreachable Abend', 'joined hostho sent Abend']);
   });
 });
