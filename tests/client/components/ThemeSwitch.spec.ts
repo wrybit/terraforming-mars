@@ -9,6 +9,8 @@ import {chosenTheme} from '@/client/theme/themeChoice';
 describe('ThemeSwitch', () => {
   beforeEach(() => {
     localStorage.clear();
+    // The theme lives in the address (/dune/…, themeChoice.ts): every test starts without one
+    window.history.replaceState(null, '', '/');
     // The Dune texts come from the server; the switch only needs the answer
     vi.stubGlobal('fetch', vi.fn(async () => ({json: async () => ({})})));
   });
@@ -40,6 +42,7 @@ describe('ThemeSwitch', () => {
     expect(wrapper.emitted('switch')).deep.eq([['dune']]);
     expect(activeTheme()).eq('dune');
     expect(chosenTheme()).eq('dune');
+    expect(window.location.pathname).eq('/dune/');
     expect(wrapper.find('.theme-switch__planet').classes()).contains('theme-switch__planet--dune');
   });
 

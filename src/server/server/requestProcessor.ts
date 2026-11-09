@@ -31,6 +31,7 @@ import {ApiLobbyPush} from '../routes/ApiLobbyPush';
 import {ApiAdminChatWords} from '../routes/ApiAdminChatWords';
 import {LobbySubPage} from '../routes/LobbySubPage';
 import {LOBBY_CREATE_PATH, LOBBY_ROOM_PATH} from '../../common/lobby/lobbyUrl';
+import {themeOfPath, withoutTheme} from '../../common/theme/themeUrl';
 import {ApiLogout} from '../routes/ApiLogout';
 import {ApiAdminLogout} from '../routes/ApiAdminLogout';
 import {ApiAdminMusic} from '../routes/ApiAdminMusic';
@@ -267,6 +268,20 @@ export async function processRequest(req: Request, res: Response): Promise<void>
       return;
     }
 
+    // A world in front of the address (/dune/lobby, /mars/stats, common/theme/themeUrl.ts) is a transparent folder:
+    // everything below it is served like the address without it, the page reads the world from its own address
+    const requested = new URL(req.url, `http://${req.headers.host}`);
+    const theme = themeOfPath(requested.pathname.substring(1));
+    const themePrefix = theme === undefined ? '' : '/' + theme;
+    if (theme !== undefined) {
+      // "/dune" without the slash: the page's relative addresses would point next to the world instead of into it
+      if (requested.pathname === themePrefix) {
+        responses.redirect(res, themePrefix + '/' + requested.search);
+        return;
+      }
+      req.url = '/' + withoutTheme(requested.pathname.substring(1)) + requested.search;
+    }
+
     const url = new URL(req.url, `http://${req.headers.host}`);
 
     const pathname = url.pathname.substring(1); // Remove leading '/'
@@ -274,7 +289,7 @@ export async function processRequest(req: Request, res: Response): Promise<void>
     // load its styles and scripts relative to the wrong folder.
     const withoutSlash = pathname.replace(/\/+$/, '');
     if (withoutSlash !== pathname && withoutSlash !== '' && getHandler(pathname) === undefined && getHandler(withoutSlash) !== undefined) {
-      responses.redirect(res, '/' + withoutSlash + url.search);
+      responses.redirect(res, themePrefix + '/' + withoutSlash + url.search);
       return;
     }
     const handler = getHandler(pathname);

@@ -2101,3 +2101,35 @@ each(@players, {
     opacity: 1;
   }
 }
+
+// Mars/Dune switch in the header (only the lobby has it there): centered on the header, which spans the page.
+// Below this width title and actions would reach under it: it gets its own row in the header card instead.
+@lobby-head-theme-inline: 1360px;
+
+.lobby-head-theme {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@media only screen and (max-width: @lobby-head-theme-inline) {
+  // Same inner distance above, between and below the rows as the single-row header has around its buttons
+  .card-list-header.lobby-head {
+    flex-wrap: wrap;
+    row-gap: 12px;
+    height: auto;
+    min-height: var(--card-list-header);
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+  .lobby-head-theme {
+    position: static;
+    order: 2;
+    display: flex;
+    justify-content: center;
+    flex-basis: 100%;
+    transform: none;
+  }
+}

@@ -6,6 +6,8 @@
     <header class="card-list-header card-list-header--plain lobby-head">
       <PageToolbar />
       <PageTitle title="Game lobby" />
+      <!-- Mars/Dune switch: here, unlike on the other pages, in the header (Jens' request), centered on the page -->
+      <div class="lobby-head-theme"><ThemeSwitch /></div>
       <div class="create-game-head-actions">
         <button type="button" class="create-game-icon-button lobby-profile-button" :title="$t('Your profile')" @click="profileOpen = true">
           <LobbyAvatar kind="human" :color="profile.color" :emoji="profile.emoji" :image="profile.image" size="small" />
@@ -146,6 +148,7 @@ import {LOBBY_NAME_MAX_LENGTH, LobbyEditRoom, LobbyProfile, LobbyRoomModel} from
 import {NewGameConfig} from '@/common/game/NewGameConfig';
 import PageToolbar from '@/client/components/PageToolbar.vue';
 import PageTitle from '@/client/components/common/PageTitle.vue';
+import ThemeSwitch from '@/client/components/common/ThemeSwitch.vue';
 import AppButton from '@/client/components/common/AppButton.vue';
 import LobbyAvatar from './LobbyAvatar.vue';
 import LobbyFilterPanel from './LobbyFilterPanel.vue';

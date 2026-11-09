@@ -438,9 +438,10 @@ export default defineComponent({
       // A real redirect: lobby/create lies one level deeper, its page resolves the script chunks from there
       window.location.replace(currentPathname === paths.NEW_GAME ? LOBBY_CREATE_PATH + window.location.hash : paths.LOBBY);
     } else if (currentPathname === paths.LOBBY || lobbyRoomIdFromPath(window.location.pathname) !== undefined || isLobbyCreatePath(window.location.pathname)) {
-      app.screen = 'lobby';
+      // The lobby carries the Mars/Dune switch in its header: it opens in the theme of the address (themeChoice.ts)
+      applyChosenTheme().finally(() => app.screen = 'lobby');
     } else if (currentPathname === paths.CARDS || currentPathname === paths.STATS) {
-      // Both pages carry the Mars/Dune switch: they open in the theme picked last (themeChoice.ts), texts loaded first
+      // Both pages carry the Mars/Dune switch: they open in the theme of the address (themeChoice.ts), texts loaded first
       const screen = currentPathname === paths.CARDS ? 'cards' : 'stats';
       applyChosenTheme().finally(() => app.screen = screen);
     } else if (currentPathname === paths.HELP) {

@@ -1,3 +1,4 @@
+import {appRootUrl} from '@/client/theme/themeChoice';
 import {paths} from '@/common/app/paths';
 import {LOBBY_PUSH_KINDS, LOBBY_PUSH_TEXTS, LobbyPushInfo, LobbyPushKind, LobbyPushRequest, LobbyPushSubscription, LobbyPushTexts} from '@/common/lobby/LobbyPushModel';
 import {translateText} from '@/client/directives/i18n';
@@ -83,7 +84,8 @@ export async function subscribeLobbyPush(): Promise<void> {
   }
   try {
     // Subscribing needs an active worker: on the very first visit it is still installing
-    await navigator.serviceWorker.register('sw.js');
+    // The app's one worker, also from /dune/lobby (common/theme/themeUrl.ts)
+    await navigator.serviceWorker.register(new URL('sw.js', appRootUrl()).href);
     const registration = await navigator.serviceWorker.ready;
     const info: LobbyPushInfo = await (await fetchOrFail(paths.API_LOBBY_PUSH)).json();
     const key = keyBytes(info.publicKey);

@@ -1,3 +1,4 @@
+import {appRootUrl} from '@/client/theme/themeChoice';
 import {createApp, defineAsyncComponent} from 'vue';
 import {handleRenderError} from '@/client/utils/renderErrors';
 
@@ -38,7 +39,8 @@ async function bootstrap() {
 
   if (window.isSecureContext && 'serviceWorker' in navigator) {
     window.addEventListener('load', function() {
-      navigator.serviceWorker.register('sw.js').then(function(registration) {
+      // One worker for the whole app: below /dune/ or /mars/ it would be a second one (common/theme/themeUrl.ts)
+      navigator.serviceWorker.register(new URL('sw.js', appRootUrl()).href).then(function(registration) {
         console.log('registered the service worker', registration);
       });
     });
