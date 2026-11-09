@@ -82,6 +82,7 @@ export function chooseMilestonesAndAwards(gameOptions: GameOptions): DrawnMilest
     case BoardName.VASTITAS_BOREALIS_NOVA:
     case BoardName.AMAZONIS_PLANITIA:
       push(milestoneManifest.boards[boardName], awardManifest.boards[gameOptions.boardName]);
+      drawnMilestonesAndAwards = replaceIncompatibleBoardMAs(drawnMilestonesAndAwards, gameOptions);
       break;
     default:
       return getRandomMilestonesAndAwards(gameOptions, requiredQty, LIMITED_SYNERGY);
@@ -123,6 +124,44 @@ export function chooseMilestonesAndAwards(gameOptions: GameOptions): DrawnMilest
   }
 
   return drawnMilestonesAndAwards;
+}
+
+/**
+ * Some fixed board sets contain milestones or awards that only work with an expansion
+ * (e.g. Pioneer needs Colonies on Utopia Planitia). Without that expansion they can never
+ * be scored, so each one is swapped for a random compatible candidate. The board keeps its
+ * full count, and the replacement must not exceed the limited synergy maximum with the rest.
+ *
+ * Exported for tests.
+ */
+export function replaceIncompatibleBoardMAs(drawn: DrawnMilestonesAndAwards, gameOptions: GameOptions): DrawnMilestonesAndAwards {
+  const [candidateMilestones, candidateAwards] = getCandidates(gameOptions);
+  const taken: Array<MilestoneName | AwardName> = [...drawn.milestones, ...drawn.awards];
+
+  function replace<T extends MilestoneName | AwardName>(names: ReadonlyArray<T>, manifest: MAManifest<T, any>, candidates: Array<T>): Array<T> {
+    // Random order, so the same board does not always get the same substitute.
+    inplaceShuffle(candidates, UnseededRandom.INSTANCE);
+    return names.map((name) => {
+      if (isCompatible(name, manifest, gameOptions)) {
+        return name;
+      }
+      const others = taken.filter((other) => other !== name);
+      const available = candidates.filter((candidate) => !taken.includes(candidate));
+      const fitting = available.find((candidate) =>
+        others.every((other) => synergies.get(other, candidate) <= LIMITED_SYNERGY.maxSynergyAllowed));
+      const substitute = fitting ?? available[0];
+      if (substitute === undefined) {
+        throw new Error(`No compatible replacement for ${name} on ${gameOptions.boardName}.`);
+      }
+      taken[taken.indexOf(name)] = substitute;
+      return substitute;
+    });
+  }
+
+  return {
+    milestones: replace(drawn.milestones, milestoneManifest, candidateMilestones),
+    awards: replace(drawn.awards, awardManifest, candidateAwards),
+  };
 }
 
 /** Boards with no volcanic spaces. Exported for tests. */
