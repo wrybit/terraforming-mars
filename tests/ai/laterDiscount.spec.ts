@@ -28,9 +28,10 @@ describe('AI later discount', () => {
     return estimateCardTimings(player, [new Greenhouses()]).get(new Greenhouses().name)!.later;
   }
 
-  it('counts less of the later value with a lower share', () => {
+  it('counts more of the later value with a higher share', () => {
     const plain = laterValue(undefined);
     expect(plain).to.be.greaterThan(0);
-    expect(laterValue('laterDiscount055')).to.be.lessThan(plain);
+    // Baseline 0.55 since round 190: the old share 0.85 counts more of the later value
+    expect(laterValue('laterDiscount085')).to.be.greaterThan(plain);
   });
 });
