@@ -116,9 +116,10 @@ function check(): void {
 
 // The permission can also change in the browser settings while the lobby is open
 let status: PermissionStatus | undefined;
+let detectTimer: number | undefined;
 onMounted(async () => {
   window.addEventListener('focus', update);
-  window.setTimeout(detectBrowser, 1000);
+  detectTimer = window.setTimeout(detectBrowser, 1000);
   try {
     status = await navigator.permissions?.query({name: 'notifications'});
     status?.addEventListener('change', update);
@@ -127,6 +128,8 @@ onMounted(async () => {
   }
 });
 onBeforeUnmount(() => {
+  // A pending check must not run after the bar is gone (tests: after the document was torn down)
+  window.clearTimeout(detectTimer);
   window.removeEventListener('focus', update);
   status?.removeEventListener('change', update);
 });
