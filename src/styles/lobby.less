@@ -2103,14 +2103,22 @@ each(@players, {
 }
 
 // Mars/Dune switch in the header (only the lobby has it there): in the row, centered in the space between title and
-// actions, shrinking with it. Below this width that space gets too small: the switch takes its own row in the header card.
-@lobby-head-theme-inline: 1080px;
+// actions, shrinking with it. Narrower, the title drops the app name ("Lobby", as on phones), so the header keeps
+// one row; only below the second width the switch takes its own row in the header card.
+@lobby-head-short-title: 1080px;
+@lobby-head-theme-inline: 800px;
 
 .lobby-head-theme {
   display: flex;
   flex: 1 1 0;
   justify-content: center;
   min-width: 0;
+}
+
+@media only screen and (max-width: @lobby-head-short-title) {
+  .lobby-head .page-title-app {
+    display: none;
+  }
 }
 
 @media only screen and (max-width: @lobby-head-theme-inline) {
