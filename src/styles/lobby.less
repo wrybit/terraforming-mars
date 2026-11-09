@@ -2107,58 +2107,11 @@ each(@players, {
   }
 }
 
-// Mars/Dune switch in the header (only the lobby has it there): in the row, centered in the space between title and
-// actions, shrinking with it. Narrower, the title drops the app name ("Lobby", as on phones), so the header keeps
-// one row; only below the second width the switch takes its own row in the header card.
-@lobby-head-short-title: 1080px;
-@lobby-head-theme-inline: 800px;
-
-.lobby-head-theme {
-  display: flex;
-  flex: 1 1 0;
-  justify-content: center;
-  min-width: 0;
-}
-
-@media only screen and (max-width: @lobby-head-short-title) {
-  .lobby-head .page-title-app {
-    display: none;
-  }
-}
-
-@media only screen and (max-width: @lobby-head-theme-inline) {
-  // Same inner distance above, between and below the rows as the single-row header has around its buttons
-  .card-list-header.lobby-head {
-    flex-wrap: wrap;
-    row-gap: 12px;
-    height: auto;
-    min-height: var(--card-list-header);
-    padding-top: 12px;
-    padding-bottom: 12px;
-  }
-
-  .lobby-head-theme {
-    order: 2;
-    flex-basis: 100%;
-  }
-}
-
-// Phone: profile and "Create game" stay in the first row next to the title (only symbols there); the switch below
-// slimmer, so the header stays compact (same width as the phone rules above)
+// Phone: profile and "Create game" stay in the first row next to the title (only symbols there)
 @media only screen and (max-width: 600px) {
   .lobby-head .create-game-head-actions {
     order: 0;
     flex-basis: auto;
     margin-left: auto;
-  }
-
-  .lobby-head-theme .theme-switch {
-    width: 240px;
-    height: 36px;
-    border-radius: 18px;
-  }
-
-  .lobby-head-theme .theme-switch__option {
-    font-size: 14px;
   }
 }

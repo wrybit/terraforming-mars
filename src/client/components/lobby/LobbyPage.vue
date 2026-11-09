@@ -6,8 +6,6 @@
     <header class="card-list-header card-list-header--plain lobby-head">
       <PageToolbar />
       <PageTitle title="Game lobby" />
-      <!-- Mars/Dune switch: here, unlike on the other pages, in the header (Jens' request), centered on the page -->
-      <div class="lobby-head-theme"><ThemeSwitch /></div>
       <div class="create-game-head-actions">
         <button type="button" class="create-game-icon-button lobby-profile-button" :title="$t('Your profile')" @click="profileOpen = true">
           <LobbyAvatar kind="human" :color="profile.color" :emoji="profile.emoji" :image="profile.image" size="small" />
@@ -28,6 +26,8 @@
         </button>
       </div>
     </header>
+    <!-- Mars/Dune switch below the header, as on create game, statistics and card list -->
+    <div class="theme-switch-row"><ThemeSwitch /></div>
 
     <main class="lobby-layout">
       <div class="lobby-main">
