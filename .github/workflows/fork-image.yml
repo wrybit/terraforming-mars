@@ -1,0 +1,121 @@
+# Builds the Docker image of the fork on GitHub, the same way the servers build it themselves
+# (docker build of the branch; a side branch such as dune is built with the current main merged in).
+# For now it runs alongside the servers' own builds: nothing pulls this image yet.
+# Native runners per architecture (x86 and ARM) instead of emulation: emulated arm64 npm ci takes far longer.
+name: Fork image
+
+on:
+  push:
+    branches: [main, dune]
+  workflow_dispatch:
+
+# A newer push of the same branch makes the running build obsolete
+concurrency:
+  group: fork-image-${{ github.ref_name }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  IMAGE: ghcr.io/wrybit/terraforming-mars
+
+jobs:
+  build:
+    # Only in the fork itself, not in forks of the fork
+    if: github.repository == 'wrybit/terraforming-mars'
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: linux/amd64
+            runner: ubuntu-24.04
+          - platform: linux/arm64
+            runner: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      # Same as AK1 (scripts/ak1/deploy-update.sh): main is merged in only for the build, never pushed.
+      # On a conflict the plain side branch is built, with a warning, as AK1 does.
+      - name: Merge main into the side branch
+        if: github.ref_name != 'main'
+        run: |
+          git config user.name "CI build"
+          git config user.email "ci-build@invalid"
+          git config merge.json-union.driver "python3 $GITHUB_WORKSPACE/scripts/git/json-merge-driver.py %O %A %B"
+          git fetch --quiet origin main
+          if git merge-base --is-ancestor origin/main HEAD; then
+            echo "main is already contained in $GITHUB_REF_NAME"
+          elif git merge --quiet --no-edit -m "CI build: merge main into $GITHUB_REF_NAME" origin/main; then
+            echo "Merged main $(git rev-parse --short origin/main) into $GITHUB_REF_NAME for this build"
+          else
+            git merge --abort
+            echo "::warning::main does not merge into $GITHUB_REF_NAME without conflicts – building plain $GITHUB_REF_NAME (merge main into $GITHUB_REF_NAME by hand)"
+          fi
+
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Pushed by digest only; the publish job joins both architectures under one tag
+      - id: build
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: ${{ matrix.platform }}
+          labels: |
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.revision=${{ github.sha }}
+          outputs: type=image,name=${{ env.IMAGE }},push-by-digest=true,name-canonical=true,push=true
+          cache-from: type=gha,scope=${{ github.ref_name }}-${{ matrix.runner }}
+          cache-to: type=gha,mode=max,scope=${{ github.ref_name }}-${{ matrix.runner }}
+
+      - name: Keep the digest for the publish job
+        run: |
+          mkdir -p "$RUNNER_TEMP/digests"
+          digest="${{ steps.build.outputs.digest }}"
+          touch "$RUNNER_TEMP/digests/${digest#sha256:}"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: digest-${{ matrix.runner }}
+          path: ${{ runner.temp }}/digests/*
+          if-no-files-found: error
+          retention-days: 1
+
+  publish:
+    needs: build
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: ${{ runner.temp }}/digests
+          pattern: digest-*
+          merge-multiple: true
+
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Tags: <branch> (latest state of the branch) and <branch>-<commit> (fixed, for a later pull by commit)
+      - name: Publish the multi-architecture image
+        working-directory: ${{ runner.temp }}/digests
+        run: |
+          shortCommit="${GITHUB_SHA:0:9}"
+          docker buildx imagetools create \
+            -t "$IMAGE:$GITHUB_REF_NAME" \
+            -t "$IMAGE:$GITHUB_REF_NAME-$shortCommit" \
+            $(printf "$IMAGE@sha256:%s " *)
+          docker buildx imagetools inspect "$IMAGE:$GITHUB_REF_NAME-$shortCommit"
