@@ -27,6 +27,11 @@ export function lobbyGameProbe(gameLoader: IGameLoader): GameProbe {
 export function lobbyGameProgress(gameLoader: IGameLoader): GameProgressSource {
   return async (gameId) => {
     const game = await gameLoader.getGame(gameId);
-    return game === undefined ? undefined : {generation: game.generation, terraforming: terraformingProgress(game), ...lobbyGameTimeline(game)};
+    return game === undefined ? undefined : {
+      generation: game.generation,
+      terraforming: terraformingProgress(game),
+      lastActivityTimeMs: game.lastActivityTime.getTime(),
+      ...lobbyGameTimeline(game),
+    };
   };
 }
