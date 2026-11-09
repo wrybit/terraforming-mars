@@ -4,6 +4,7 @@ import {globalConfig} from '../getLocalVue';
 import GameOverview from '@/client/components/admin/GameOverview.vue';
 import {AdminGameSummary} from '@/common/admin/AdminGameSummary';
 import {PLAYER_COLUMNS} from '@/client/components/admin/playerColumns';
+import {PreferencesManager} from '@/client/utils/PreferencesManager';
 
 describe('GameOverview', () => {
   const summary: AdminGameSummary = {
@@ -84,6 +85,8 @@ describe('GameOverview', () => {
   });
 
   it('last activity relative to now, exact time in the tooltip; none for imports', () => {
+    // The text follows the game language; other specs in the same worker (isolate: false) may have changed it
+    PreferencesManager.INSTANCE.set('lang', 'en');
     const nowMs = Date.UTC(2026, 10, 7, 18);
     const local = mount(GameOverview, {...globalConfig, attachTo: document.createElement('tbody'),
       props: {summary: {...summary, lastActivityTimeMs: nowMs - 3 * 60 * 60 * 1000}, columns: PLAYER_COLUMNS, nowMs}});
