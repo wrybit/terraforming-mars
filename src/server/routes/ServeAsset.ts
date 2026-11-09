@@ -15,6 +15,16 @@ import {faviconFile} from '../../common/admin/favicons';
 
 type Encoding = 'gzip' | 'br';
 
+// Served as they are, under exactly this path
+const FIXED_FILES: ReadonlyArray<string> = [
+  'assets/index.html',
+  'assets/Prototype.ttf',
+  'assets/Prototype-ru.ttf',
+  'assets/Prototype-pl.ttf',
+  'assets/futureforces.ttf',
+  'assets/pwa/manifest.webmanifest', // PWA manifest: fixed path, since the extension is otherwise not allowed
+];
+
 export class FileAPI {
   public static readonly INSTANCE: FileAPI = new FileAPI();
 
@@ -145,22 +155,14 @@ export class ServeAsset extends Handler {
     return {file, encoding: undefined};
   }
 
-  private toServiceWorkerFile(urlPath: string): { file?: string, encoding?: Encoding } {
-    return {
-      file: `build/${urlPath}`,
-    };
-  }
 
   private toFile(urlPath: string, encodings: Set<Encoding>): { file?: string, encoding?: Encoding } {
+    // Fixed files: the path read from disk is the constant from the list, never the request path itself
+    const fixedFile = FIXED_FILES.find((file) => file === urlPath);
+    if (fixedFile !== undefined) {
+      return {file: fixedFile};
+    }
     switch (urlPath) {
-    case 'assets/index.html':
-    case 'assets/Prototype.ttf':
-    case 'assets/Prototype-ru.ttf':
-    case 'assets/Prototype-pl.ttf':
-    case 'assets/futureforces.ttf':
-    case 'assets/pwa/manifest.webmanifest': // PWA manifest: fixed path, since the extension is otherwise not allowed
-      return {file: urlPath};
-
     case 'styles.css':
       if (encodings.has('br')) {
         return {file: 'build/styles.css.br', encoding: 'br'};
@@ -173,13 +175,14 @@ export class ServeAsset extends Handler {
     // Source maps are not served: they would publish the full source with comments, including optional
     // extensions that are not part of the public repository
     case 'main.js':
+      return this.toMainFile('build/main.js', encodings);
     case 'vendors.js':
-      return this.toMainFile(`build/${urlPath}`, encodings);
+      return this.toMainFile('build/vendors.js', encodings);
 
     // Service worker (client/sw.ts): lobby push messages, and the notification fallback of the game
     case 'sw.js':
     case '/sw.js':
-      return this.toServiceWorkerFile(urlPath);
+      return {file: 'build/sw.js'};
 
     // Icon and color chosen on the admin page (FAVICON_ICON, FAVICON_COLOR), the original otherwise
     case 'favicon.ico':
