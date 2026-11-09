@@ -11,7 +11,7 @@
           <p class="games-overview-note" v-i18n>Drag a name onto another one to merge them. On a phone: tap the name that goes, then the name that stays.</p>
           <p v-if="errorText !== ''" class="games-overview-note games-overview-note--error">{{ errorText }}</p>
           <PlayerMergeSuggestions :suggestions="suggestions" @merge="ask" />
-          <PlayerNameList :players="players" :defaultNames="defaultNames" @merge="ask" />
+          <PlayerNameList :players="players" :defaultNames="defaultNames" @merge="ask" @appearance="setAppearance" />
         </section>
         <PlayerAliasesCard :aliases="aliases" :busy="busy" @unmerge="unmerge" />
       </div>
@@ -28,6 +28,7 @@ import {computed, ref} from 'vue';
 import {paths} from '@/common/app/paths';
 import {StatsGame} from '@/common/stats/StatsGame';
 import {AdminPlayerAliasesInfo, AdminPlayerAliasRequest, PlayerAlias} from '@/common/admin/PlayerAliases';
+import {PlayerAppearance} from '@/common/admin/PlayerAppearance';
 import {describeFailure, failureOf, fetchOrFail} from '@/client/utils/requestFailure';
 import AdminGate from '@/client/components/admin/AdminGate.vue';
 import PlayerNameList from '@/client/components/admin/players/PlayerNameList.vue';
@@ -42,11 +43,12 @@ type PendingMerge = {from: PlayerNameStats, to: PlayerNameStats, sharedGames: nu
 const games = ref<ReadonlyArray<StatsGame>>([]);
 const aliases = ref<ReadonlyArray<PlayerAlias>>([]);
 const defaultNames = ref<ReadonlyArray<string>>([]);
+const appearances = ref<ReadonlyArray<PlayerAppearance>>([]);
 const pending = ref<PendingMerge | undefined>(undefined);
 const busy = ref(false);
 const errorText = ref('');
 
-const players = computed(() => playerNameStats(games.value, aliases.value));
+const players = computed(() => playerNameStats(games.value, aliases.value, appearances.value));
 const suggestions = computed(() => similarPlayerNames(players.value, defaultNames.value));
 
 // The statistics deliver the names already merged: what the list shows is what the statistics page shows
@@ -57,6 +59,7 @@ async function load(): Promise<void> {
     const info: AdminPlayerAliasesInfo = await aliasesResponse.json();
     aliases.value = info.aliases;
     defaultNames.value = info.defaultNames;
+    appearances.value = info.appearances ?? [];
     errorText.value = '';
   } catch (error) {
     errorText.value = describeFailure(failureOf(error));
@@ -91,6 +94,12 @@ async function merge(): Promise<void> {
   const request: AdminPlayerAliasRequest = {action: 'merge', from: pending.value.from.name, to: pending.value.to.name, permanent: pending.value.permanent};
   pending.value = undefined;
   await send(request);
+}
+
+// Shown at once; the server answer (load) confirms it or the error text says why not
+function setAppearance(look: PlayerAppearance): Promise<void> {
+  appearances.value = [...appearances.value.filter((entry) => entry.name !== look.name), look];
+  return send({action: 'appearance', ...look});
 }
 
 function unmerge(id: string): Promise<void> {

@@ -4,6 +4,7 @@ import * as path from 'path';
 import {mkdtempSync, rmSync} from 'fs';
 import {ApiAdminPlayerAliases} from '../../src/server/routes/ApiAdminPlayerAliases';
 import {PlayerAliasesStore} from '../../src/server/stats/PlayerAliasesStore';
+import {PlayerAppearanceStore} from '../../src/server/stats/PlayerAppearanceStore';
 import {MockResponse} from './HttpMocks';
 import {RouteTestScaffolding} from './RouteTestScaffolding';
 import {statusCode} from '@/common/http/statusCode';
@@ -20,7 +21,7 @@ describe('ApiAdminPlayerAliases', () => {
     res = new MockResponse();
     folder = mkdtempSync(path.join(os.tmpdir(), 'api-player-aliases-'));
     store = new PlayerAliasesStore(path.join(folder, 'player-aliases.json'));
-    handler = new ApiAdminPlayerAliases(store);
+    handler = new ApiAdminPlayerAliases(store, new PlayerAppearanceStore(path.join(folder, 'player-appearances.json')));
     scaffolding.url = '/api/admin/player-aliases';
   });
 
@@ -57,6 +58,22 @@ describe('ApiAdminPlayerAliases', () => {
 
   it('refuses invalid requests', async () => {
     await post({action: 'merge', from: 'Jens', to: 'Jens', permanent: true});
+    expect(res.statusCode).eq(statusCode.badRequest);
+  });
+
+  it('sets and resets the look of a name', async () => {
+    await post({action: 'appearance', name: 'Jens', color: 'blue', emoji: '🚀'});
+    expect(JSON.parse(res.content).appearances).deep.eq([{name: 'Jens', color: 'blue', emoji: '🚀'}]);
+    res = new MockResponse();
+    await post({action: 'appearance', name: 'Jens'});
+    expect(JSON.parse(res.content).appearances).deep.eq([]);
+  });
+
+  it('refuses colours and emojis the lobby does not offer', async () => {
+    await post({action: 'appearance', name: 'Jens', color: 'neutral'});
+    expect(res.statusCode).eq(statusCode.badRequest);
+    res = new MockResponse();
+    await post({action: 'appearance', name: 'Jens', emoji: '💩'});
     expect(res.statusCode).eq(statusCode.badRequest);
   });
 });

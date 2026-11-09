@@ -2,6 +2,7 @@ import * as path from 'path';
 import {randomBytes} from 'crypto';
 import {existsSync, mkdirSync, readFileSync, writeFileSync} from 'fs';
 import {PlayerAlias} from '../../common/admin/PlayerAliases';
+import {aiMarkerOf} from '../../common/ai/AiLevel';
 
 // Merged player names of the statistics. A small JSON file of its own next to the database, like the imported
 // games: the games themselves stay untouched, the statistics only read names over. So a merge can be undone.
@@ -34,13 +35,14 @@ export class PlayerAliasesStore {
   /**
    * "from" counts as "to" from now on – everywhere (gameIds missing) or only in the given games. Returns false for
    * an invalid merge (empty, same name, no games, or "to" already counts as "from"). Chains are flattened:
-   * whoever counted as "from" counts as the final name directly.
+   * whoever counted as "from" counts as the final name directly. AI names never: they count per strength
+   * as "Bot [AI…]" automatically (botAccounts.ts).
    */
   public merge(from: string, to: string, gameIds: ReadonlyArray<string> | undefined, nowMs: number = Date.now()): boolean {
     const aliases = this.list();
     // Only a permanent merge renames a name everywhere; a one-time one does not make "to" someone else
     const target = aliases.find((alias) => isPermanent(alias) && alias.from === to)?.to ?? to;
-    if (from === '' || target === '' || from === target || gameIds?.length === 0) {
+    if (from === '' || target === '' || from === target || gameIds?.length === 0 || aiMarkerOf(from) !== undefined || aiMarkerOf(target) !== undefined) {
       return false;
     }
     const remaining = aliases

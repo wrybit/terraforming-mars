@@ -1535,6 +1535,7 @@
   "Nothing merged yet.": "まだ統合はありません。",
   "Permanent merges also apply to new games under the old name; one-time merges only to the games so far.": "恒久的な統合は古い名前での新しいゲームにも適用され、1回限りの統合はこれまでのゲームだけに適用されます。",
   "default name": "既定の名前",
+  "merged automatically": "自動で統合",
   "Also for future games": "今後のゲームにも適用",
   "Only the games played so far are merged: a future player with this name stays separate.": "これまでのゲームだけを統合します：今後この名前を使うプレイヤーは別のままです。",
   "This is a default name: future players with it are usually other people.": "これは既定の名前です：今後この名前を使うプレイヤーは通常別の人です。",

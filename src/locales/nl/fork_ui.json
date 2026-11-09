@@ -1788,6 +1788,7 @@
   "Nothing merged yet.": "Nog niets samengevoegd.",
   "Permanent merges also apply to new games under the old name; one-time merges only to the games so far.": "Blijvende samenvoegingen gelden ook voor nieuwe spellen onder de oude naam, eenmalige alleen voor de spellen tot nu toe.",
   "default name": "standaardnaam",
+  "merged automatically": "automatisch samengevoegd",
   "Also for future games": "Ook voor toekomstige spellen",
   "Only the games played so far are merged: a future player with this name stays separate.": "Alleen de spellen tot nu toe worden samengevoegd: een toekomstige speler met deze naam blijft apart.",
   "This is a default name: future players with it are usually other people.": "Dit is een standaardnaam: toekomstige spelers ermee zijn meestal andere mensen.",

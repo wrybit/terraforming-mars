@@ -1216,6 +1216,7 @@
   "Nothing merged yet.": "Rien de fusionné pour l'instant.",
   "Permanent merges also apply to new games under the old name; one-time merges only to the games so far.": "Les fusions permanentes s'appliquent aussi aux nouvelles parties sous l'ancien nom ; les fusions uniques seulement aux parties passées.",
   "default name": "nom par défaut",
+  "merged automatically": "fusionné automatiquement",
   "Also for future games": "Aussi pour les parties futures",
   "Only the games played so far are merged: a future player with this name stays separate.": "Seules les parties jouées jusqu'ici sont fusionnées : un futur joueur portant ce nom reste séparé.",
   "This is a default name: future players with it are usually other people.": "C'est un nom par défaut : les futurs joueurs qui le portent sont généralement d'autres personnes.",

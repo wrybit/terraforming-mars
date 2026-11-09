@@ -1161,6 +1161,7 @@
   "Nothing merged yet.": "Ei vielä yhdistettyjä.",
   "Permanent merges also apply to new games under the old name; one-time merges only to the games so far.": "Pysyvät yhdistämiset koskevat myös uusia pelejä vanhalla nimellä, kertaluonteiset vain tähänastisia.",
   "default name": "oletusnimi",
+  "merged automatically": "yhdistetty automaattisesti",
   "Also for future games": "Myös tuleville peleille",
   "Only the games played so far are merged: a future player with this name stays separate.": "Vain tähänastiset pelit yhdistetään: tuleva pelaaja tällä nimellä pysyy erillään.",
   "This is a default name: future players with it are usually other people.": "Tämä on oletusnimi: tulevat pelaajat sillä ovat yleensä eri ihmisiä.",

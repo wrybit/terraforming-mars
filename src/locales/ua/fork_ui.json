@@ -1319,6 +1319,7 @@
   "Nothing merged yet.": "Поки нічого не об'єднано.",
   "Permanent merges also apply to new games under the old name; one-time merges only to the games so far.": "Постійні об'єднання діють і для нових ігор під старим ім'ям, одноразові – лише для попередніх.",
   "default name": "стандартне ім'я",
+  "merged automatically": "об'єднано автоматично",
   "Also for future games": "І для майбутніх ігор",
   "Only the games played so far are merged: a future player with this name stays separate.": "Об'єднуються лише зіграні ігри: майбутній гравець з цим ім'ям залишиться окремо.",
   "This is a default name: future players with it are usually other people.": "Це стандартне ім'я: майбутні гравці з ним зазвичай інші люди.",

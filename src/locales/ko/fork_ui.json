@@ -1413,6 +1413,7 @@
   "Nothing merged yet.": "아직 합친 이름이 없습니다.",
   "Permanent merges also apply to new games under the old name; one-time merges only to the games so far.": "영구 합치기는 옛 이름의 새 게임에도 적용되고, 1회 합치기는 지금까지의 게임에만 적용됩니다.",
   "default name": "기본 이름",
+  "merged automatically": "자동 병합됨",
   "Also for future games": "앞으로의 게임에도 적용",
   "Only the games played so far are merged: a future player with this name stays separate.": "지금까지의 게임만 합칩니다: 앞으로 이 이름을 쓰는 플레이어는 따로 남습니다.",
   "This is a default name: future players with it are usually other people.": "기본 이름입니다: 앞으로 이 이름을 쓰는 플레이어는 대개 다른 사람입니다.",

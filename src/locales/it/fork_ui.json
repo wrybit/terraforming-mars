@@ -2427,6 +2427,7 @@
   "Nothing merged yet.": "Ancora nulla di unito.",
   "Permanent merges also apply to new games under the old name; one-time merges only to the games so far.": "Le unioni permanenti valgono anche per le nuove partite con il vecchio nome, quelle una tantum solo per le partite passate.",
   "default name": "nome predefinito",
+  "merged automatically": "unito automaticamente",
   "Also for future games": "Anche per le partite future",
   "Only the games played so far are merged: a future player with this name stays separate.": "Si uniscono solo le partite giocate finora: un futuro giocatore con questo nome resta separato.",
   "This is a default name: future players with it are usually other people.": "È un nome predefinito: i futuri giocatori con questo nome sono di solito altre persone.",

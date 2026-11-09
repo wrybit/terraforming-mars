@@ -1959,6 +1959,7 @@
   "Nothing merged yet.": "Jeszcze nic nie połączono.",
   "Permanent merges also apply to new games under the old name; one-time merges only to the games so far.": "Stałe połączenia obejmują też nowe gry pod starą nazwą, jednorazowe tylko dotychczasowe.",
   "default name": "nazwa domyślna",
+  "merged automatically": "scalono automatycznie",
   "Also for future games": "Także dla przyszłych gier",
   "Only the games played so far are merged: a future player with this name stays separate.": "Łączone są tylko dotychczasowe gry: przyszły gracz o tej nazwie pozostaje osobno.",
   "This is a default name: future players with it are usually other people.": "To nazwa domyślna: przyszli gracze z nią to zwykle inne osoby.",

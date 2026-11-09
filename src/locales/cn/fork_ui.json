@@ -2145,6 +2145,7 @@
   "Nothing merged yet.": "尚未合并任何名字。",
   "Permanent merges also apply to new games under the old name; one-time merges only to the games so far.": "永久合并也适用于使用旧名字的新对局；一次性合并只适用于已有对局。",
   "default name": "默认名字",
+  "merged automatically": "自动合并",
   "Also for future games": "也适用于以后的对局",
   "Only the games played so far are merged: a future player with this name stays separate.": "只合并目前已有的对局：以后使用这个名字的玩家保持独立。",
   "This is a default name: future players with it are usually other people.": "这是默认名字：以后使用它的玩家通常是其他人。",

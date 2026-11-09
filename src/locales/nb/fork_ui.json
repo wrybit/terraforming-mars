@@ -1527,6 +1527,7 @@
   "Nothing merged yet.": "Ingenting slått sammen ennå.",
   "Permanent merges also apply to new games under the old name; one-time merges only to the games so far.": "Varige sammenslåinger gjelder også nye spill under det gamle navnet, engangs bare spillene så langt.",
   "default name": "standardnavn",
+  "merged automatically": "slått sammen automatisk",
   "Also for future games": "Også for fremtidige spill",
   "Only the games played so far are merged: a future player with this name stays separate.": "Bare spillene så langt slås sammen: en fremtidig spiller med dette navnet holdes adskilt.",
   "This is a default name: future players with it are usually other people.": "Dette er et standardnavn: fremtidige spillere med det er som regel andre personer.",
