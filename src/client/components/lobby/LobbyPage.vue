@@ -124,11 +124,11 @@
 
     <!-- "Create game" as a modal: the same form, with seats offered in the lobby -->
     <Teleport to="body">
-      <div v-if="createOpen" class="lobby-create-overlay" @keydown.esc="createOpen = false">
+      <div v-if="createOpen" class="lobby-create-overlay" @pointerdown="notePressOnBackdrop" @click="closeFormOnBackdrop">
         <CreateGameForm :lobbyProfile="profile.name.trim() === '' ? undefined : profile" @close="createOpen = false" @open-in-lobby="openInLobby" @host-profile="takeHostProfile" />
       </div>
       <!-- Host: the same form for the waiting game; saving changes it (Lobby.edit) and returns to the waiting room -->
-      <div v-if="editRoom !== undefined" class="lobby-create-overlay" @keydown.esc="editRoom = undefined">
+      <div v-if="editRoom !== undefined" class="lobby-create-overlay" @pointerdown="notePressOnBackdrop" @click="closeFormOnBackdrop">
         <CreateGameForm :lobbyProfile="profile" :editRoom="editRoom" @close="editRoom = undefined" @open-in-lobby="saveEdit" @host-profile="takeHostProfile" />
       </div>
     </Teleport>
@@ -557,8 +557,50 @@ function onRowKey(event: KeyboardEvent): void {
   }
 }
 
+// "Create game"/"Edit game" close like any dialog: Escape or a click on the backdrop the lobby shows through
+function closeForm(): void {
+  createOpen.value = false;
+  editRoom.value = undefined;
+}
+
+// Backdrop = the overlay and every frame of the form without a surface of their own (edges, gaps, the empty
+// space below a short column): wherever the lobby shows through, a click closes, as with any modal
+const FORM_BACKDROP_SELECTOR = '.lobby-create-overlay, #create-game, .create-game-layout, .create-game-settings, .create-game-cards, .create-game-cards-column, .create-game-side';
+
+function isFormBackdrop(target: EventTarget | null): boolean {
+  return target instanceof HTMLElement && target.matches(FORM_BACKDROP_SELECTOR);
+}
+
+// Only when both press and release were on the backdrop: otherwise selecting text in the name field
+// and releasing outside it would close the form
+let pressedOnFormBackdrop = false;
+function notePressOnBackdrop(event: PointerEvent): void {
+  pressedOnFormBackdrop = isFormBackdrop(event.target);
+}
+
+function closeFormOnBackdrop(event: MouseEvent): void {
+  if (pressedOnFormBackdrop && isFormBackdrop(event.target)) {
+    closeForm();
+  }
+  pressedOnFormBackdrop = false;
+}
+
+// On window, not @keydown on the overlay: that only gets Escape while the focus is inside the form.
+// A dialog above it (wiki info, any SidebarModal) closes itself on Escape and goes first
+function onFormEscape(event: KeyboardEvent): void {
+  if (event.key !== 'Escape' || event.defaultPrevented || (!createOpen.value && editRoom.value === undefined)) {
+    return;
+  }
+  if (document.querySelector('.sidebar-modal-backdrop') !== null) {
+    return;
+  }
+  event.preventDefault();
+  closeForm();
+}
+
 onMounted(() => {
   window.addEventListener('keydown', onRowKey);
+  window.addEventListener('keydown', onFormEscape);
   setDocumentTitle('Game lobby');
   if (isLobbyCreatePath(window.location.pathname)) {
     openCreate();
@@ -571,6 +613,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   window.removeEventListener('keydown', onRowKey);
+  window.removeEventListener('keydown', onFormEscape);
   clearInterval(pollTimer);
   clearInterval(clockTimer);
 });
