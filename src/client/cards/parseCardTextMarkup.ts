@@ -14,6 +14,17 @@ const STYLED = /<(b|opp)>([\s\S]*?)<\/\1>/g;
 const ANY_TAG = /<\/?[a-z]+>/g;
 const STYLE_OF_TAG: Record<string, TextStyle> = {b: 'rule', opp: 'opponent'};
 
+// Repeated until nothing changes: removing one tag must not join the rest into a new one ("<b<b>>")
+function withoutTags(text: string): string {
+  let previous: string;
+  let current = text;
+  do {
+    previous = current;
+    current = current.replace(ANY_TAG, '');
+  } while (current !== previous);
+  return current;
+}
+
 function segments(text: string): Array<TextSegment> {
   const result: Array<TextSegment> = [];
   let position = 0;
@@ -30,7 +41,7 @@ function segments(text: string): Array<TextSegment> {
   }
   // Stray tags would show up as literal text; the i18n lint keeps them out, this is the safety net
   return result
-    .map((segment) => ({...segment, text: segment.text.replace(ANY_TAG, '')}))
+    .map((segment) => ({...segment, text: withoutTags(segment.text)}))
     .filter((segment) => segment.text !== '');
 }
 

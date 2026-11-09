@@ -24,6 +24,10 @@ describe('reachability', () => {
   it('builds the status address from the host the admin used', () => {
     expect(publicStatusUrl('tm.example.org', true)).eq('https://tm.example.org/api/status');
     expect(publicStatusUrl('localhost:8080', false)).eq('http://localhost:8080/api/status');
+    // The host comes from the request header: user info, paths or other ports syntax fall back to localhost
+    expect(publicStatusUrl('evil@10.0.0.1', false)).eq('http://localhost/api/status');
+    expect(publicStatusUrl('10.0.0.1/admin#', false)).eq('http://localhost/api/status');
+    expect(publicStatusUrl('[::1]:8080', false)).eq('http://[::1]:8080/api/status');
   });
 
   it('reports status and errors', async () => {
