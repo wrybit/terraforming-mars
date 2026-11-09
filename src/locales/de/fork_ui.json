@@ -714,7 +714,7 @@
   "1 vs 1": "1 gegen 1",
   "just opened": "gerade eröffnet",
   "waiting for ${0} min": "wartet seit ${0} Min.",
-  "inactive for ${0}": "inaktiv seit ${0}",
+  "active ${0} ago": "aktiv vor ${0}",
   "Free seat": "Freier Platz",
   "Join": "Beitreten",
   "Seats": "Plätze",

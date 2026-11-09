@@ -2212,7 +2212,7 @@
   "1 vs 1": "1 contra 1",
   "just opened": "recién abierta",
   "waiting for ${0} min": "espera hace ${0} min",
-  "inactive for ${0}": "inactiva hace ${0}",
+  "active ${0} ago": "activa hace ${0}",
   "Free seat": "Plaza libre",
   "Join": "Unirse",
   "Seats": "Plazas",

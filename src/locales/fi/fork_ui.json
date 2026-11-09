@@ -933,7 +933,7 @@
   "1 vs 1": "1 vastaan 1",
   "just opened": "juuri avattu",
   "waiting for ${0} min": "odottanut ${0} min",
-  "inactive for ${0}": "toimeton ${0}",
+  "active ${0} ago": "aktiivinen ${0} sitten",
   "Free seat": "Vapaa paikka",
   "Join": "Liity",
   "Seats": "Paikat",
