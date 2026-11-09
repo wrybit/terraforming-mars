@@ -8,6 +8,7 @@ import {SelectStandardProjectToPlay} from '../../src/server/inputs/SelectStandar
 import {Phase} from '../../src/common/Phase';
 import {CardName} from '../../src/common/cards/CardName';
 import {InputResponse} from '../../src/common/inputs/InputResponse';
+import {Payment} from '../../src/common/inputs/Payment';
 import {IPlayer} from '../../src/server/IPlayer';
 
 // While own cities do not lead own greeneries, the city comes first and plants wait for it: greeneries placed with
@@ -31,7 +32,7 @@ describe('AI cityFirstAction', () => {
 
   function cityProject(menu: OrOptions): InputResponse {
     const index = menu.options.findIndex((option) => option instanceof SelectStandardProjectToPlay);
-    return {type: 'or', index, response: {type: 'projectCard', card: CardName.CITY_STANDARD_PROJECT}};
+    return {type: 'or', index, response: {type: 'projectCard', card: CardName.CITY_STANDARD_PROJECT, payment: Payment.EMPTY}};
   }
 
   it('lowers a greenery without an own city and raises the city while cities do not lead', () => {

@@ -3,6 +3,7 @@ import {testGame} from '../TestGame';
 import {clearPlayerTunings, setPlayerTuning} from '../../src/server/ai/aiTuning';
 import {chooseFreeCardsToKeep} from '../../src/server/ai/cardSelection';
 import {SelectCard} from '../../src/server/inputs/SelectCard';
+import {ICard} from '../../src/server/cards/ICard';
 import {Phase} from '../../src/common/Phase';
 import {TransNeptuneProbe} from '../../src/server/cards/base/TransNeptuneProbe';
 import {InventionContest} from '../../src/server/cards/base/InventionContest';
@@ -18,7 +19,7 @@ describe('AI keeps drawn cards by the full valuation', () => {
     game.phase = Phase.ACTION;
     setPlayerTuning(player.id, 'keepValued');
     const offered = [new TransNeptuneProbe(), new InventionContest(), new EarthCatapult(), new AquiferPumping()];
-    const input = new SelectCard('Select ${0} card(s) to keep', 'Keep', offered, {min: 2, max: 2});
+    const input = new SelectCard<ICard>('Select ${0} card(s) to keep', 'Keep', offered, {min: 2, max: 2});
     const response = chooseFreeCardsToKeep(input, player);
     expect(response.type).to.eq('card');
     const kept = (response as {cards: Array<string>}).cards;

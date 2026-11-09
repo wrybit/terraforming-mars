@@ -2,7 +2,7 @@ import {mount} from '@vue/test-utils';
 import {expect} from 'chai';
 import {globalConfig} from '../getLocalVue';
 import AdminRaw from '@/client/components/admin/AdminRaw.vue';
-import {formatRawData} from '@/client/components/admin/RawDataCard.vue';
+import {formatRawData} from '@/client/components/admin/rawData';
 
 describe('AdminRaw', () => {
   let originalFetch: typeof global.fetch;

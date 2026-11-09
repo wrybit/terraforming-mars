@@ -39,7 +39,7 @@ describe('PushToast', () => {
     const wrapper = mount(PushToast, {...globalConfig});
     sendToast('room-1');
     await wrapper.vm.$nextTick();
-    expect(sound).toHaveBeenCalledOnce();
+    expect(sound.mock.calls).has.length(1);
     const countdown = wrapper.find('.push-toast-countdown');
     expect(countdown.exists()).is.true;
     await countdown.trigger('animationend');

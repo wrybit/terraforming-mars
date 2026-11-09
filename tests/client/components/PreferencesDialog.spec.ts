@@ -43,8 +43,8 @@ describe('PreferencesDialog', () => {
     expect(buttons).has.length(2);
     await buttons[0].trigger('click');
     await buttons[1].trigger('click');
-    expect(turn).toHaveBeenCalledOnce();
-    expect(lobby).toHaveBeenCalledOnce();
+    expect(turn.mock.calls).has.length(1);
+    expect(lobby.mock.calls).has.length(1);
     expect(getCheckbox(wrapper, 'enable_sounds').checked).is.true;
     vi.restoreAllMocks();
   });

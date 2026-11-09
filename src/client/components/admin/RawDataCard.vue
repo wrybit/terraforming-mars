@@ -19,21 +19,7 @@
 <script lang="ts">
 import {defineComponent, PropType} from 'vue';
 import {describeFailure, failureOf, fetchOrFail} from '@/client/utils/requestFailure';
-
-// json: pretty-printed; text: as delivered (e.g. Prometheus metrics); download: only a link
-export type RawDataKind = 'json' | 'text' | 'download';
-
-/** JSON indented for reading; anything else unchanged */
-export function formatRawData(text: string, kind: RawDataKind): string {
-  if (kind !== 'json') {
-    return text;
-  }
-  try {
-    return JSON.stringify(JSON.parse(text), undefined, 2);
-  } catch {
-    return text;
-  }
-}
+import {formatRawData, RawDataKind} from '@/client/components/admin/rawData';
 
 type DataModel = {
   status: 'loading' | 'error' | 'done',

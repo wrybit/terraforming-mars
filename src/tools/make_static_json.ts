@@ -61,6 +61,12 @@ function getAllTranslations(): {[phrase: string]: Translation} {
             if (translations[phrase] === undefined) {
               translations[phrase] = {};
             }
+            // An empty entry is no translation: it must not count as a duplicate of a real one in another file.
+            // Otherwise the result depends on the file order, which differs between Windows and Linux
+            // (Windows lists UI.json after fork_ui.json, Linux before).
+            if (json[phrase].trim().length === 0) {
+              continue;
+            }
             if (translations[phrase][lang] !== undefined) {
               duplicates.push({lang, phrase});
               continue;
