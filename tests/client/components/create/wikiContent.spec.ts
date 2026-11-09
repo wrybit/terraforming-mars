@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {parseWikiUrl, renderWikiPage, wikiExcerpt, wikiSection} from '@/client/components/create/wikiContent';
+import {parseWikiUrl, renderWikiPage, splitExcerpt, wikiExcerpt, wikiSection} from '@/client/components/create/wikiContent';
 
 const PAGE = `# Variants
 
@@ -24,6 +24,12 @@ describe('wikiContent', () => {
   it('takes the first prose paragraph of the section, skipping link lines', () => {
     expect(wikiExcerpt(wikiSection(PAGE, 'initial-draft'))).eq('Adds a draft mechanic for starting cards before the game begins.');
     expect(wikiExcerpt(wikiSection(PAGE, 'draft'))).eq('Players draft their cards each generation instead of drawing them directly.');
+  });
+
+  it('moves bare addresses out of the excerpt into links showing the host', () => {
+    const url = 'https://www.boardgamegeek.com/thread/2742644/article/38658180#38658180';
+    expect(splitExcerpt(`Nice cards. More at ${url}`)).deep.eq({text: 'Nice cards. More at', links: [{label: 'boardgamegeek.com', href: url}]});
+    expect(splitExcerpt('No address here')).deep.eq({text: 'No address here', links: []});
   });
 
   it('renders the page without scripts and moves the title out', () => {

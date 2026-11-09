@@ -517,6 +517,8 @@
 .create-game-info-box-text {
   flex: 1;
   min-width: 0;
+  // Safety net: a long word or address from the wiki breaks instead of running out of the box
+  overflow-wrap: anywhere;
 
   // Invisible float on the right that pushes the button down to the last line
   &::before {
@@ -531,6 +533,12 @@
 .create-game-info-box-anchor {
   float: right;
   clear: right;
+  // Address buttons and "Full info" always in one row (the spacer float above expects one button height);
+  // on a narrow box the address label shortens instead
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+  max-width: calc(100% - 12px);
   margin: 0 0 0 12px;
   line-height: 0;
 }
@@ -542,12 +550,31 @@
 // The small button's auto margin pushes it right in subheads; here the float places it
 .create-game-info-box-more {
   margin-left: 0;
+  text-decoration: none;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
+}
+
+// Address button: may shrink, its host ends with "…"; "Full info" keeps its size
+button.create-game-info-box-more {
+  flex-shrink: 0;
+}
+
+a.create-game-info-box-more {
+  min-width: 0;
+
+  > span {
+    // The anchor's line-height 0 would clip the text to nothing
+    line-height: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }
 
 .create-game-info-box-icon {
+  flex-shrink: 0;
   width: 14px;
   height: 14px;
   fill: none;
