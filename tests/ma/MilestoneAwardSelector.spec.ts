@@ -10,6 +10,7 @@ import {AwardName} from '../../src/common/ma/AwardName';
 import {MilestoneName} from '../../src/common/ma/MilestoneName';
 import {GameSetup} from '../../src/server/GameSetup';
 import {SeededRandom} from '../../src/common/utils/Random';
+import {isCompatible} from '../../src/server/ma/MAManifest';
 
 describe('MilestoneAwardSelector', () => {
   it('Arrakis boards use their own set (Dune names), not a random draw', () => {
@@ -252,10 +253,53 @@ describe('MilestoneAwardSelector', () => {
   });
 
   it('Amazonis Planitia uses its own milestones and awards when not randomized', () => {
-    const mas = choose({boardName: BoardName.AMAZONIS_PLANITIA, randomMA: RandomMAOptionType.NONE});
+    const mas = choose({
+      boardName: BoardName.AMAZONIS_PLANITIA,
+      randomMA: RandomMAOptionType.NONE,
+      expansions: {...DEFAULT_GAME_OPTIONS.expansions, colonies: true, turmoil: true},
+    });
     expect(mas.milestones).deep.eq(milestoneManifest.boards[BoardName.AMAZONIS_PLANITIA]);
     expect(mas.awards).deep.eq(awardManifest.boards[BoardName.AMAZONIS_PLANITIA]);
   });
+
+  it('Utopia Planitia keeps Pioneer when Colonies is selected', () => {
+    const mas = choose({
+      boardName: BoardName.UTOPIA_PLANITIA,
+      randomMA: RandomMAOptionType.NONE,
+      expansions: {...DEFAULT_GAME_OPTIONS.expansions, colonies: true},
+    });
+    expect(mas.milestones).deep.eq(milestoneManifest.boards[BoardName.UTOPIA_PLANITIA]);
+  });
+
+  it('Utopia Planitia replaces Pioneer when Colonies is not selected', () => {
+    for (let idx = 0; idx < 200; idx++) {
+      const mas = choose({boardName: BoardName.UTOPIA_PLANITIA, randomMA: RandomMAOptionType.NONE});
+      expect(mas.milestones).does.not.contain('Pioneer');
+      expect(mas.milestones).to.have.length(5);
+      expect(new Set(mas.milestones).size).eq(5);
+      // The other board milestones stay in place.
+      expect(mas.milestones).to.include.members(['Land Specialist', 'Tradesman', 'Smith', 'Researcher']);
+      expect(mas.awards).deep.eq(awardManifest.boards[BoardName.UTOPIA_PLANITIA]);
+    }
+  });
+
+  // Every fixed board set, played without any expansion, only offers milestones and awards that can be scored.
+  for (const boardName of Object.values(BoardName)) {
+    it('Fixed milestones and awards need no missing expansion on ' + boardName, () => {
+      for (let idx = 0; idx < 20; idx++) {
+        const options = {...DEFAULT_GAME_OPTIONS, boardName, randomMA: RandomMAOptionType.NONE};
+        const mas = chooseMilestonesAndAwards(options);
+        for (const milestone of mas.milestones) {
+          expect(isCompatible(milestone, milestoneManifest, options), milestone).is.true;
+        }
+        for (const award of mas.awards) {
+          expect(isCompatible(award, awardManifest, options), award).is.true;
+        }
+        expect(new Set(mas.milestones).size).eq(mas.milestones.length);
+        expect(new Set(mas.awards).size).eq(mas.awards.length);
+      }
+    });
+  }
 
   function choose(options: Partial<GameOptions>) {
     return chooseMilestonesAndAwards({...DEFAULT_GAME_OPTIONS, ...options});
