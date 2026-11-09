@@ -2,7 +2,8 @@ import {mount} from '@vue/test-utils';
 import {expect} from 'chai';
 import {vi} from 'vitest';
 import {globalConfig} from '../getLocalVue';
-import RevealablePasswordInput, {partlyRevealed, REVEAL_DURATION_MS} from '@/client/components/common/RevealablePasswordInput.vue';
+import RevealablePasswordInput from '@/client/components/common/RevealablePasswordInput.vue';
+import {partlyRevealed, REVEAL_DURATION_MS} from '@/client/components/common/passwordReveal';
 
 describe('RevealablePasswordInput', () => {
   afterEach(() => {

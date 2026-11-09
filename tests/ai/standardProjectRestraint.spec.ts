@@ -29,7 +29,7 @@ describe('AI standard project restraint', () => {
     const [game, player] = testGame(2);
     setPlayerTuning(player.id, 'standardRestraint5');
     game.generation = 99;
-    game.lastSoloGeneration = 99;
+    (game as any).lastSoloGeneration = () => 99;
     (game as any).marsIsTerraformed = () => true;
     expect(standardProjectPenalty(player, true)).to.eq(0);
   });

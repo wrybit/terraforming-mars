@@ -11,7 +11,8 @@
 import {defineComponent} from 'vue';
 import {paths} from '@/common/app/paths';
 import AdminGate from '@/client/components/admin/AdminGate.vue';
-import RawDataCard, {RawDataKind} from '@/client/components/admin/RawDataCard.vue';
+import RawDataCard from '@/client/components/admin/RawDataCard.vue';
+import {RawDataKind} from '@/client/components/admin/rawData';
 
 type RawDataSource = {label: string, path: string, kind: RawDataKind};
 

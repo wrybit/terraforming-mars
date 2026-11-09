@@ -112,7 +112,9 @@ function responsesFor(input: PlayerInput, player: IPlayer): Array<InputResponse>
   // almost never acted. The valued party goes into the move search instead (not inside simulations: copies per party).
   if (input instanceof SelectParty && tuningOf(player).partyChoice > 0 && !isSimulating()) {
     const valued = chooseParty(input, player);
-    if (valued !== undefined) return [valued];
+    if (valued !== undefined) {
+      return [valued];
+    }
   }
   if (input instanceof SelectCardToPlay) {
     return input.cards
