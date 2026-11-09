@@ -122,6 +122,8 @@ describe('LogMessageComponent', () => {
         '<span class="log-card background-color-corporation">Celestic</span>',
       );
     } finally {
+      // set() also wrote the language to localStorage, and resetForTest() reads it back: restore English first
+      PreferencesManager.INSTANCE.set('lang', 'en');
       PreferencesManager.resetForTest();
     }
   });
@@ -147,6 +149,8 @@ describe('LogMessageComponent', () => {
         '<span class="log-card background-color-corporation">Celestic</span>',
       );
     } finally {
+      // set() also wrote the language to localStorage, and resetForTest() reads it back: restore English first
+      PreferencesManager.INSTANCE.set('lang', 'en');
       PreferencesManager.resetForTest();
     }
   });
