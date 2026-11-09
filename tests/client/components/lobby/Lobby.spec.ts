@@ -75,6 +75,14 @@ describe('Lobby components', () => {
     expect(wrapper.find('.lobby-game-progress i').attributes('style')).contains('50%');
   });
 
+  it('LobbyGameRow shows the time since the last human move only when the server sends it', () => {
+    const progress = {generation: 3, terraforming: 0.1, playedMs: 30 * 60_000};
+    const idle = mount(LobbyGameRow, {...globalConfig, props: {room: room([host], {state: 'started', progress: {...progress, idleMs: 12 * 60_000}})}});
+    expect(idle.find('.lobby-game-activity').text()).contains('12');
+    const none = mount(LobbyGameRow, {...globalConfig, props: {room: room([host], {state: 'started', progress})}});
+    expect(none.find('.lobby-game-activity').exists()).is.false;
+  });
+
   it('LobbyGameRow: removed twice asks to join, declined shows it instead of a button', () => {
     const asking = mount(LobbyGameRow, {...globalConfig, props: {room: room([host, {kind: 'free'}], {yourAccess: 'request'})}});
     expect(asking.find('.lobby-game-action').text()).contains('Ask to join');

@@ -158,6 +158,14 @@ describe('Lobby', () => {
     expect(list.rooms[0].progress).deep.eq({generation: 4, terraforming: 0.25, playedMs: 90_000});
   });
 
+  it('turns the last human move of a running game into the time since then', async () => {
+    await lobby.open(HOST, profile('Ann'), '', true, config(['human', 'ai']), starter);
+    const lastMove = now + 30_000;
+    now += 90_000;
+    const list = await lobby.listWithProgress(OTHER, undefined, () => Promise.resolve({generation: 4, terraforming: 0.25, lastActivityTimeMs: lastMove}));
+    expect(list.rooms[0].progress).deep.eq({generation: 4, terraforming: 0.25, playedMs: 90_000, idleMs: 60_000});
+  });
+
   it('drops a room whose game cannot be created', async () => {
     const failing: GameStarter = () => Promise.reject(new LobbyError('no'));
     try {

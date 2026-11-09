@@ -45,8 +45,11 @@ export type GameProbe = {
   close(gameId: GameId): Promise<void>;
 };
 
-/** Generation, terraforming and course of a running game (lobbyGameProbe.ts); undefined: the game is gone */
-export type GameProgressSource = (gameId: GameId) => Promise<Omit<LobbyGameProgress, 'playedMs'> | undefined>;
+/**
+ * Generation, terraforming and course of a running game (lobbyGameProbe.ts); undefined: the game is gone.
+ * lastActivityTimeMs: time of the last human move, turned into idleMs with the lobby's clock
+ */
+export type GameProgressSource = (gameId: GameId) => Promise<(Omit<LobbyGameProgress, 'playedMs' | 'idleMs'> & {lastActivityTimeMs?: number}) | undefined>;
 
 /** Push messages to participants (LobbyPush.ts); the lobby itself only knows when to send one */
 export type LobbyNotifier = {
@@ -218,7 +221,12 @@ export class Lobby {
         return model;
       }
       const status = await progressOf(room.gameId).catch(() => undefined);
-      return status === undefined ? model : {...model, progress: {...status, playedMs: now - (room.startedAt ?? now)}};
+      if (status === undefined) {
+        return model;
+      }
+      const {lastActivityTimeMs, ...progress} = status;
+      const idle = lastActivityTimeMs === undefined ? {} : {idleMs: Math.max(0, now - lastActivityTimeMs)};
+      return {...model, progress: {...progress, playedMs: now - (room.startedAt ?? now), ...idle}};
     }));
     return {...list, rooms};
   }

@@ -99,6 +99,8 @@ export type LobbyGameProgress = {
   terraforming: number;
   /** Milliseconds since the game started */
   playedMs: number;
+  /** Lobby games: milliseconds since the last human move (same source as "Last activity" in the admin overview) */
+  idleMs?: number;
   /** Lobby games: one entry per generation so far, the last one still running (LobbyGameTimeline.vue) */
   generations?: ReadonlyArray<LobbyGeneration>;
   /** Lobby games: claimed milestones and funded awards, in the order they happened */

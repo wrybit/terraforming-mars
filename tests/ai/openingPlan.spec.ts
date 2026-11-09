@@ -1,7 +1,7 @@
 import {expect} from 'chai';
 import {testGame} from '../TestGame';
 import {clearPlayerTunings, setPlayerTuning} from '../../src/server/ai/aiTuning';
-import {openingPlan} from '../../src/server/ai/openingPlan';
+import {clearOpeningPlanCache, openingPlan} from '../../src/server/ai/openingPlan';
 import {spaceValue} from '../../src/server/ai/spaceValue';
 import {IPlayer} from '../../src/server/IPlayer';
 
@@ -12,6 +12,8 @@ function best(player: IPlayer, kind: 'greenery' | 'city') {
 }
 
 describe('AI opening plan', () => {
+  // Other spec files in the same mocha worker leave plans of their test games behind
+  beforeEach(() => clearOpeningPlanCache());
   afterEach(() => clearPlayerTunings());
 
   it('can be switched off', () => {
