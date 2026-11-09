@@ -14,8 +14,9 @@ jobs:
         node-version: 22
     - run: npm ci
     - run: npm run make:static
-    - run: npm run lint
+    # Fork: build before lint – the translation check (lint:i18n) needs the generated card data of the build
     - run: npm run build
+    - run: npm run lint
     - run: npm run build:tests
     - run: npm test
 
@@ -29,8 +30,9 @@ jobs:
         node-version: 22
     - run: npm ci
     - run: npm run make:static
-    - run: npm run lint
+    # Fork: build before lint – the translation check (lint:i18n) needs the generated card data of the build
     - run: npm run build
+    - run: npm run lint
     - run: npm run build:tests
     - run: npm test
 
