@@ -1238,6 +1238,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Round 191: against humans the AI expected 2.3 more production phases than followed (95 Oracle games, from
   // generation 4 to 10; remainingEstimateError.ts) – 2P games last 12.2 generations against humans, 13 in AI batches.
   twoPlayerLength13: {twoPlayerGenerations: 13},
+  twoPlayerLength16: {twoPlayerGenerations: 16},
+  twoPlayerLength17: {twoPlayerGenerations: 17},
 };
 
 export function isTuningVariant(name: string): boolean {
