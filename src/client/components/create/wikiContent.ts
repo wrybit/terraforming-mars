@@ -68,6 +68,8 @@ export function wikiSection(markdown: string, anchor: string | undefined): Secti
 /** Plain text without markdown syntax (links keep their text). */
 function plainText(markdown: string): string {
   return markdown
+    // Autolinks <https://…> keep only their address
+    .replace(/<(https?:\/\/[^>\s]+)>/g, '$1')
     .replace(/!\[[^\]]*\]\([^)]*\)/g, '')
     .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
     .replace(/[*_`>]/g, '')
@@ -110,6 +112,29 @@ export function wikiExcerpt(section: Section): string {
   }
   const cut = text.slice(0, EXCERPT_MAX_LENGTH);
   return cut.slice(0, cut.lastIndexOf(' ')) + ' …';
+}
+
+export type ExcerptLink = {label: string, href: string};
+
+// Bare addresses in the excerpt; a closing punctuation mark directly behind it belongs to the sentence
+const BARE_URL = /https?:\/\/[^\s<>"]+[^\s<>".,;:!?)]/g;
+
+/**
+ * Bare addresses leave the excerpt text and become buttons showing only their host, so a long address can never
+ * overflow the box; a lead-in like "More at" stays in the text and the buttons follow it on the last line.
+ */
+export function splitExcerpt(excerpt: string): {text: string, links: Array<ExcerptLink>} {
+  const links: Array<ExcerptLink> = [];
+  for (const match of excerpt.matchAll(BARE_URL)) {
+    let label = match[0];
+    try {
+      label = new URL(match[0]).host.replace(/^www\./, '');
+    } catch {
+      // Invalid address: shown as written, overflow-wrap in the box still breaks it
+    }
+    links.push({label, href: match[0]});
+  }
+  return {text: excerpt.replace(BARE_URL, '').replace(/\s+/g, ' ').trim(), links};
 }
 
 // The wiki contains raw HTML (tables with images). It is written by third parties, so only a short list of harmless
