@@ -24,7 +24,8 @@ describe('AdminPlayers', () => {
       if (init?.method === 'POST') {
         posted.push(JSON.parse(String(init.body)));
       }
-      const body = String(url) === 'api/stats/games' ? games : String(url) === 'api/admin/player-aliases' ? info : {admin: true};
+      const path = new URL(String(url), window.location.origin).pathname;
+      const body = path === '/api/stats/games' ? games : path === '/api/admin/player-aliases' ? info : {admin: true};
       return Promise.resolve({ok: true, status: 200, json: () => Promise.resolve(body)} as Response);
     };
   });
