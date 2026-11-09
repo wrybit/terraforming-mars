@@ -1564,6 +1564,7 @@
   "1 vs 1": "1 tegen 1",
   "just opened": "net geopend",
   "waiting for ${0} min": "wacht al ${0} min",
+  "inactive for ${0}": "inactief sinds ${0}",
   "Free seat": "Vrije plaats",
   "Join": "Meedoen",
   "Seats": "Plaatsen",

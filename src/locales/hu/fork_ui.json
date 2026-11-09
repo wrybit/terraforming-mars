@@ -1115,6 +1115,7 @@
   "1 vs 1": "1 az 1 ellen",
   "just opened": "épp most nyílt",
   "waiting for ${0} min": "${0} perce vár",
+  "inactive for ${0}": "${0} óta inaktív",
   "Free seat": "Szabad hely",
   "Join": "Csatlakozás",
   "Seats": "Helyek",

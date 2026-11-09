@@ -1183,6 +1183,7 @@
   "1 vs 1": "1 대 1",
   "just opened": "방금 열림",
   "waiting for ${0} min": "${0}분째 대기 중",
+  "inactive for ${0}": "${0}째 활동 없음",
   "Free seat": "빈자리",
   "Join": "참가",
   "Seats": "자리",

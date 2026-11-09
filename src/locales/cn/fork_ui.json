@@ -1915,6 +1915,7 @@
   "1 vs 1": "1 对 1",
   "just opened": "刚刚开设",
   "waiting for ${0} min": "已等待 ${0} 分钟",
+  "inactive for ${0}": "已闲置 ${0}",
   "Free seat": "空位",
   "Join": "加入",
   "Seats": "座位",

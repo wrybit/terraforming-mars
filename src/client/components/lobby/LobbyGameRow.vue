@@ -17,8 +17,8 @@
         <span :title="$t('Players')"><LobbyFactIcon kind="players" />{{ humans }}</span>
         <span v-if="aiPlayers > 0" :title="$t('AI')"><LobbyFactIcon kind="ai" />{{ aiPlayers }}</span>
         <span v-if="room.progress !== undefined" :title="$t('Time played')"><LobbyFactIcon kind="time" />{{ playedText }}</span>
-        <span v-if="activityText !== undefined" class="lobby-game-activity" :title="$t('Last activity')"><LobbyFactIcon kind="activity" />{{ activityText }}</span>
-        <span v-else class="lobby-game-waiting"><LobbyFactIcon kind="time" />{{ waitingText }}</span>
+        <span v-if="activityText !== undefined" :class="['lobby-game-activity', `lobby-game-activity--${idleLevel}`]" :title="$t('Last activity')"><LobbyFactIcon kind="activity" />{{ activityText }}</span>
+        <span v-else-if="room.progress === undefined" class="lobby-game-waiting"><LobbyFactIcon kind="time" />{{ waitingText }}</span>
         <span v-if="room.aiTraining?.finished" v-i18n>Finished</span>
       </div>
     </div>
@@ -63,11 +63,9 @@ import LobbyAvatar from './LobbyAvatar.vue';
 import LobbyFactIcon from './LobbyFactIcon.vue';
 import LobbyGameTimeline from './LobbyGameTimeline.vue';
 import {lobbyDuration} from './lobbyDuration';
+import {lobbyIdleLevel} from './lobbyIdleLevel';
 import {lobbySetupChips} from './lobbySetupChips';
 import {continueHref} from './lobbyLinks';
-import {relativeTimeText} from '@/client/utils/relativeTime';
-import {gameLocaleToIntlLocale} from '@/client/utils/LocaleUtils';
-import {getPreferences} from '@/client/utils/PreferencesManager';
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 import {glassTooltip as vGlassTooltip} from '@/client/directives/GlassTooltip';
 
@@ -106,15 +104,18 @@ const playedText = computed(() => {
   return lobbyDuration(milliseconds);
 });
 
-// "vor 12 Min.": time since the last human move, words of the viewer's language from Intl (like the admin overview)
+// "inactive for 25 min": how long no human has moved, shows whether a room is dead.
+// AI training rooms send no idleMs: the AI moves all the time, they are never dead
 const activityText = computed(() => {
   const idleMs = props.room.progress?.idleMs;
   if (idleMs === undefined) {
     return undefined;
   }
-  const nowMs = Date.now();
-  return relativeTimeText(nowMs - idleMs, nowMs, gameLocaleToIntlLocale(getPreferences().lang));
+  return translateTextWithParams('inactive for ${0}', [lobbyDuration(idleMs)]);
 });
+
+// Colour level from grey to red, the longer nobody has moved
+const idleLevel = computed(() => lobbyIdleLevel(props.room.progress?.idleMs ?? 0));
 
 function seatTitle(seat: LobbySeatModel): string {
   if (seat.kind === 'human' || seat.kind === 'guest') {

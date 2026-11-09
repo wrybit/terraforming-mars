@@ -1730,6 +1730,7 @@
   "1 vs 1": "1 na 1",
   "just opened": "właśnie otwarta",
   "waiting for ${0} min": "czeka ${0} min",
+  "inactive for ${0}": "nieaktywna od ${0}",
   "Free seat": "Wolne miejsce",
   "Join": "Dołącz",
   "Seats": "Miejsca",

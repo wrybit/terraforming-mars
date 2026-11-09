@@ -1305,6 +1305,7 @@
   "1 vs 1": "1対1",
   "just opened": "開いたばかり",
   "waiting for ${0} min": "${0}分待機中",
+  "inactive for ${0}": "${0}操作なし",
   "Free seat": "空席",
   "Join": "参加",
   "Seats": "席",

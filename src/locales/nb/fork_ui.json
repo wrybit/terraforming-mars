@@ -1301,6 +1301,7 @@
   "1 vs 1": "1 mot 1",
   "just opened": "nettopp åpnet",
   "waiting for ${0} min": "venter i ${0} min",
+  "inactive for ${0}": "inaktiv i ${0}",
   "Free seat": "Ledig plass",
   "Join": "Bli med",
   "Seats": "Plasser",
