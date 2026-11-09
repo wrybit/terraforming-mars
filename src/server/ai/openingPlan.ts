@@ -40,6 +40,11 @@ export type OpeningPlan = {cities: ReadonlyArray<SpaceId>, greeneries: ReadonlyA
 // The plan only changes when a tile is placed; remembered per game, player and occupied spaces.
 const planCache = new Map<string, OpeningPlan | undefined>();
 
+/** Tests: all test games share the id "game-id", so a plan of another test would be reused. */
+export function clearOpeningPlanCache(): void {
+  planCache.clear();
+}
+
 function placementGain(space: Space, board: IPlayer['game']['board']): number {
   const bonus = space.bonus.reduce((sum, item) => sum + (BONUS_VALUE[item] ?? 1), 0);
   return bonus + board.getAdjacentSpaces(space).filter((neighbour) => Board.isOceanSpace(neighbour)).length * OCEAN_ADJACENCY_VALUE;

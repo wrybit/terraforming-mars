@@ -44,7 +44,8 @@ function hasAttribute(element: ElementNode, name: string): boolean {
 export function checkTemplates(input: TemplateCheckInput): Array<string> {
   const problems: Array<string> = [];
   for (const file of input.clientDirs.flatMap((dir) => vueFiles(dir))) {
-    const relativePath = path.relative(input.rootDir, file);
+    // Always with "/": allowlist.json is written that way, Windows would give backslashes
+    const relativePath = path.relative(input.rootDir, file).split(path.sep).join('/');
     const ast = parse(fs.readFileSync(file, 'utf8'), {filename: file}).descriptor.template?.ast;
     if (ast === undefined) {
       continue;
