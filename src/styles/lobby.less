@@ -2102,15 +2102,15 @@ each(@players, {
   }
 }
 
-// Mars/Dune switch in the header (only the lobby has it there): centered on the header, which spans the page.
-// Below this width title and actions would reach under it: it gets its own row in the header card instead.
-@lobby-head-theme-inline: 1360px;
+// Mars/Dune switch in the header (only the lobby has it there): in the row, centered in the space between title and
+// actions, shrinking with it. Below this width that space gets too small: the switch takes its own row in the header card.
+@lobby-head-theme-inline: 1080px;
 
 .lobby-head-theme {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  display: flex;
+  flex: 1 1 0;
+  justify-content: center;
+  min-width: 0;
 }
 
 @media only screen and (max-width: @lobby-head-theme-inline) {
@@ -2125,11 +2125,27 @@ each(@players, {
   }
 
   .lobby-head-theme {
-    position: static;
     order: 2;
-    display: flex;
-    justify-content: center;
     flex-basis: 100%;
-    transform: none;
+  }
+}
+
+// Phone: profile and "Create game" stay in the first row next to the title (only symbols there); the switch below
+// slimmer, so the header stays compact (same width as the phone rules above)
+@media only screen and (max-width: 600px) {
+  .lobby-head .create-game-head-actions {
+    order: 0;
+    flex-basis: auto;
+    margin-left: auto;
+  }
+
+  .lobby-head-theme .theme-switch {
+    width: 240px;
+    height: 36px;
+    border-radius: 18px;
+  }
+
+  .lobby-head-theme .theme-switch__option {
+    font-size: 14px;
   }
 }
