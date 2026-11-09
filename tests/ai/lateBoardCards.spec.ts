@@ -3,12 +3,10 @@ import {testGame} from '../TestGame';
 import {clearPlayerTunings, setPlayerTuning} from '../../src/server/ai/aiTuning';
 import {clearLaterValueCacheForTest, estimateCardTimings} from '../../src/server/ai/cardValue';
 import {Greenhouses} from '../../src/server/cards/base/Greenhouses';
-import {useSeededRandom} from './useSeededRandom';
 
 // Rated human game (2026-10-16): Greenhouses not bought in generation 5 (value −1.5 with 1 city on the board).
 // Strong players always take it and play it as late as possible, when many cities are in play.
 describe('AI values city-counting cards at the end of the game', () => {
-  useSeededRandom();
   beforeEach(() => clearLaterValueCacheForTest());
   afterEach(() => clearPlayerTunings());
 

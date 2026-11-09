@@ -6,12 +6,10 @@ import {AICentral} from '../../src/server/cards/base/AICentral';
 import {Research} from '../../src/server/cards/base/Research';
 import {DevelopmentCenter} from '../../src/server/cards/base/DevelopmentCenter';
 import {ICard} from '../../src/server/cards/ICard';
-import {useSeededRandom} from './useSeededRandom';
 
 // Jens' rule (2026-10-17): card-drawing cards are a priority, those drawing by action every generation most.
 // Humans played 7.6 of them per game, the AI 1.7.
 describe('AI draw priority', () => {
-  useSeededRandom();
   afterEach(() => clearPlayerTunings());
 
   function value(card: ICard, tuning: string): number {

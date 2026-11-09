@@ -7,6 +7,7 @@ import {globalInitialize} from '../../src/server/globalInitialize';
 import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
+import {seededRandomHooks} from './seededRandom';
 
 const FAKE_DATABASE: IDatabase = {
   markFinished: () => Promise.resolve(),
@@ -54,3 +55,6 @@ GameLoader.getInstance = () => gameLoaderUnderTest;
 // Tests loeschen Partien: das Loeschprotokoll soll nicht im db-Ordner des Repos landen
 process.env.DELETED_GAMES_FILE = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'deleted-games-')), 'deleted-games.jsonl');
 globalInitialize();
+
+// Mocha root hooks (this file is loaded with --require, also in parallel mode)
+export const mochaHooks = seededRandomHooks;
