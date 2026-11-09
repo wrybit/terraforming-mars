@@ -6,6 +6,10 @@ on:
     # Fork: branches only – the approval tags (approved/*) point at commits that were already checked
     branches: ['**']
 
+# Read-only token: the checks only read the code (fork: CodeQL flagged the default write permissions)
+permissions:
+  contents: read
+
 jobs:
   build-linux:
 

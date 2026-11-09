@@ -26,7 +26,7 @@
       <div class="players-table-cell"><span class="players-table-counter" data-test="tr" v-flash-count="flashKeys.playerCounter(player.color, 'terraformRating')"><ScoreIcon class="players-table-cell-icon" kind="tr" />{{ player.terraformRating }}</span></div>
       <div :class="['players-table-cell', {'players-table-cell--discounted': handDiscount !== ''}]">
         <span class="players-table-counter" data-test="hand" v-flash-count="flashKeys.playerCounter(player.color, 'cardsInHand')"><ScoreIcon class="players-table-cell-icon" kind="hand" />{{ player.cardsInHandNbr ?? 0 }}</span>
-        <span v-if="handDiscount !== ''" class="players-table-discount" data-test="discount-all" :title="handDiscountTitle">{{ handDiscount.replace('*', '') }}<b v-if="handDiscount.endsWith('*')" class="players-table-discount-mark">*</b></span>
+        <span v-if="handDiscount !== ''" class="players-table-discount" data-test="discount-all" :title="handDiscountTitle">{{ handDiscount.replaceAll('*', '') }}<b v-if="handDiscount.endsWith('*')" class="players-table-discount-mark">*</b></span>
       </div>
       <div class="players-table-cell">
         <span :class="['players-table-counter', {'players-table-counter--zero': player.availableBlueCardActionCount === 0}]" data-test="actions"><ScoreIcon class="players-table-cell-icon" kind="actions" />{{ player.availableBlueCardActionCount }}</span>

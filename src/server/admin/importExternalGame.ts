@@ -6,6 +6,7 @@ import {Phase} from '../../common/Phase';
 import {paths} from '../../common/app/paths';
 import {isImportableParticipantId} from './isImportableParticipantId';
 import {ImportedSnapshot} from './ImportedSnapshotsStore';
+import {assertPublicUrl} from './publicAddress';
 
 // External servers only hand out one participant's view, not a complete game state.
 // So this view is imported along with the log – enough to show the results page permanently on our own server,
@@ -50,7 +51,9 @@ export function parseExternalLink(link: string): {baseUrl: string, participantId
 }
 
 export async function fetchJson(url: string): Promise<unknown> {
-  const response = await fetch(url, {signal: AbortSignal.timeout(requestTimeoutMs)});
+  // The link comes from the admin form: only public servers, and no redirects that could lead back inside
+  await assertPublicUrl(url);
+  const response = await fetch(url, {signal: AbortSignal.timeout(requestTimeoutMs), redirect: 'error'});
   if (!response.ok) {
     throw new Error(`The other server answered with status ${response.status}`);
   }
