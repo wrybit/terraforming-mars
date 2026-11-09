@@ -1416,5 +1416,6 @@
   "Only the games played so far are merged: a future player with this name stays separate.": "지금까지의 게임만 합칩니다: 앞으로 이 이름을 쓰는 플레이어는 따로 남습니다.",
   "This is a default name: future players with it are usually other people.": "기본 이름입니다: 앞으로 이 이름을 쓰는 플레이어는 대개 다른 사람입니다.",
   "permanent": "영구",
-  "${0} games, one-time": "${0}게임, 1회"
+  "${0} games, one-time": "${0}게임, 1회",
+  "inactive for ${0}": "${0}째 활동 없음"
 }

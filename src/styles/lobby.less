@@ -950,6 +950,15 @@
   color: #7fd99a;
 }
 
+// Running game: how long no human has moved. The colour rises with the idle level (lobbyIdleLevel.ts),
+// text and icon together (the icon strokes in currentcolor)
+.lobby-game-activity {
+  &--active { color: rgba(238, 238, 238, 0.55); }
+  &--slow { color: #e8d36a; }
+  &--stalled { color: #f0a050; }
+  &--dead { color: #ff6b6b; }
+}
+
 // One circle per seat: the number of circles is the size of the game, free seats are dashed. Slightly overlapping
 // like a group, the left one on top (z-index from the template); the dark ring separates neighbours
 .lobby-game-seats {

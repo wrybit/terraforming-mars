@@ -64,6 +64,8 @@ describe('CreateGameForm', () => {
 
   beforeEach(() => {
     PreferencesManager.resetForTest();
+    // Every unmounted form keeps its draft for the tab (createGameDraftStorage.ts); start each test without one
+    sessionStorage.clear();
     // The form writes its settings into the URL hash; don't carry that into the next test
     window.history.replaceState(null, '', '/lobby/create');
   });
@@ -356,6 +358,37 @@ describe('CreateGameForm', () => {
     expect((wrapper.vm as any).draftVariant).eq(false);
     expect((wrapper.vm as any).expansions.venus).eq(true);
     expect((wrapper.vm as any).solarPhaseOption).eq(true);
+  });
+
+  it('reopens a form closed without creating as it was left', async () => {
+    const first = shallowMount(CreateGameForm, {...globalConfig});
+    const vm = first.vm as any;
+    vm.gameName = 'Red Planet';
+    vm.lobbyPublic = false;
+    vm.expansions.venus = true;
+    vm.getPlayers()[0].name = 'Jens';
+    await nextTick();
+    first.unmount();
+    // Closing returns to the lobby address (LobbyPage.vue); a settings link left in the URL would take precedence
+    window.history.replaceState(null, '', '/lobby/create');
+
+    const second = shallowMount(CreateGameForm, {...globalConfig});
+    await nextTick();
+    const reopened = second.vm as any;
+    expect(reopened.gameName).eq('Red Planet');
+    expect(reopened.lobbyPublic).is.false;
+    expect(reopened.expansions.venus).is.true;
+    expect(reopened.getPlayers()[0].name).eq('Jens');
+  });
+
+  it('keeps no draft after the game was opened', async () => {
+    const first = shallowMount(CreateGameForm, {...globalConfig});
+    (first.vm as any).gameName = 'Red Planet';
+    (first.vm as any).openInLobby();
+    first.unmount();
+
+    const second = shallowMount(CreateGameForm, {...globalConfig});
+    expect((second.vm as any).gameName).eq('');
   });
 
   it('finds the import field after restoring saved settings', async () => {

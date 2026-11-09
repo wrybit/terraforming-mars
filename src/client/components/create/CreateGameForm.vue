@@ -517,6 +517,7 @@ import {paths} from '@/common/app/paths';
 import {JSONProcessor} from './JSONProcessor';
 import {defaultCreateGameModel} from './defaultCreateGameModel';
 import {createGameSettingsStorage} from './createGameSettingsStorage';
+import {CreateGameDraft, createGameDraftStorage} from './createGameDraftStorage';
 import {getPreferences, PreferencesManager} from '@/client/utils/PreferencesManager';
 import {readSettingsFromHash, replaceSettingsHash, settingsHash} from './settingsLink/settingsLinkHash';
 import {getColony} from '@/client/colonies/ClientColonyManifest';
@@ -590,6 +591,8 @@ type FormModel = {
   /** Lobby: picture of the own seat (host) */
   hostEmoji: string;
   hostImage: string | undefined;
+  /** The form was sent: closing it afterwards keeps no draft (createGameDraftStorage.ts) */
+  submitted: boolean;
 };
 
 // Distance of the sticky Create card to the bottom edge; same value as bottom in create_game_form.less
@@ -636,6 +639,7 @@ export default defineComponent({
       // Lobby: picture of the own seat (host), from the profile or drawn at random when there is none yet
       hostEmoji: LOBBY_EMOJIS[Math.floor(Math.random() * LOBBY_EMOJIS.length)],
       hostImage: undefined,
+      submitted: false,
     };
   },
   props: {
@@ -762,9 +766,11 @@ export default defineComponent({
     // first, which then animated out while the saved seats animated in.
     // A shared link (lobby/create#s=…) takes precedence over the most recently used settings
     const fromLink = this.editRoom === undefined && this.restoreSettingsFromLink();
+    // A form closed without creating comes back as it was left (before the remembered settings)
+    const fromDraft = this.editRoom === undefined && !fromLink && this.restoreDraft();
     if (this.editRoom !== undefined) {
       this.restoreEditRoom(this.editRoom);
-    } else if (!fromLink) {
+    } else if (!fromLink && !fromDraft) {
       this.restoreLastSettings();
       // Without a link the theme last picked with the switch (here, on statistics or card list) wins over the last settings
       const chosen = chosenTheme();
@@ -780,8 +786,8 @@ export default defineComponent({
       this.hostImage = this.lobbyProfile.image;
     }
     // Opened from the lobby, a game is meant for several people: at least one free seat (solo stays one click away).
-    // A shared link keeps its seats
-    if (!fromLink && this.humanPlayersCount < 2) {
+    // A shared link and a draft keep their seats
+    if (!fromLink && !fromDraft && this.humanPlayersCount < 2) {
       this.humanPlayersCount = 2;
     }
   },
@@ -824,6 +830,14 @@ export default defineComponent({
     }
   },
   beforeUnmount() {
+    // Closed without creating (also by mistake): keep everything for reopening; editing a waiting game keeps nothing
+    if (this.editRoom === undefined) {
+      if (this.submitted) {
+        createGameDraftStorage.clear();
+      } else {
+        createGameDraftStorage.save(this.currentDraft());
+      }
+    }
     this.stopStickyObserver();
     this.stopBelowObserver();
     this.stopColumnWatch();
@@ -1258,6 +1272,44 @@ export default defineComponent({
         .filter((player, index) => index > 0 && player.aiLevel === undefined && room.manualSeats.includes(index))
         .map((player) => seatKey(player));
     },
+    currentDraft(): CreateGameDraft {
+      const players = this.players.slice(0, this.playersCount).map((player) => ({...player}));
+      return {
+        settings: JSON.parse(JSON.stringify({...this.newGameConfig, players})) as JSONObject,
+        gameName: this.gameName,
+        gameNamePlaceholder: this.gameNamePlaceholder,
+        lobbyPublic: this.lobbyPublic,
+        manualSeats: this.manualSeats,
+        seededGame: this.seededGame,
+        clonedGameId: this.clonedGameId === undefined ? undefined : String(this.clonedGameId),
+        hostEmoji: this.hostEmoji,
+        hostImage: this.hostImage,
+      };
+    },
+    // false: no draft or it no longer fits this version; then the remembered settings apply as usual
+    restoreDraft(): boolean {
+      const draft = createGameDraftStorage.load();
+      if (draft === undefined) {
+        return false;
+      }
+      try {
+        this.applySettings(draft.settings);
+      } catch (e) {
+        console.warn('Unable to restore the create game draft:', e);
+        createGameDraftStorage.clear();
+        return false;
+      }
+      this.gameName = draft.gameName;
+      this.gameNamePlaceholder = draft.gameNamePlaceholder;
+      this.lobbyPublic = draft.lobbyPublic;
+      const seatKeys = new Set(this.players.slice(0, this.playersCount).map((player) => seatKey(player)));
+      this.manualSeats = draft.manualSeats.filter((key) => seatKeys.has(key));
+      this.seededGame = draft.seededGame;
+      this.clonedGameId = draft.clonedGameId as GameId | undefined;
+      this.hostEmoji = draft.hostEmoji ?? this.hostEmoji;
+      this.hostImage = draft.hostImage;
+      return true;
+    },
     restoreLastSettings() {
       if (!this.rememberSettings) {
         return;
@@ -1360,6 +1412,7 @@ export default defineComponent({
     },
     resetSettings() {
       createGameSettingsStorage.clear();
+      createGameDraftStorage.clear();
       Object.assign(this, defaultCreateGameModel(), {
         preludeToggled: false,
         uploading: false,
@@ -1658,6 +1711,7 @@ export default defineComponent({
       if (this.rememberSettings) {
         createGameSettingsStorage.save({...config, players: this.theme === 'dune' ? withoutDrawnDuneNames(players, this.players.map((player) => player.name)) : players});
       }
+      this.submitted = true;
       // Not declared as emits on purpose: typed emits would break showAlert(this) in this component
       // eslint-disable-next-line vue/require-explicit-emits
       this.$emit('open-in-lobby', {

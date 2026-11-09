@@ -2442,5 +2442,6 @@
   "Only the games played so far are merged: a future player with this name stays separate.": "Solo se fusionan las partidas jugadas hasta ahora: un futuro jugador con este nombre queda aparte.",
   "This is a default name: future players with it are usually other people.": "Es un nombre por defecto: los futuros jugadores con él suelen ser otras personas.",
   "permanent": "permanente",
-  "${0} games, one-time": "${0} partidas, única vez"
+  "${0} games, one-time": "${0} partidas, única vez",
+  "inactive for ${0}": "inactiva hace ${0}"
 }

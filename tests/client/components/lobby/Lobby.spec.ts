@@ -85,9 +85,27 @@ describe('Lobby components', () => {
   it('LobbyGameRow shows the time since the last human move only when the server sends it', () => {
     const progress = {generation: 3, terraforming: 0.1, playedMs: 30 * 60_000};
     const idle = mount(LobbyGameRow, {...globalConfig, props: {room: room([host], {state: 'started', progress: {...progress, idleMs: 12 * 60_000}})}});
-    expect(idle.find('.lobby-game-activity').text()).contains('12');
+    expect(idle.find('.lobby-game-activity').text()).contains('inactive for 12 min');
     const none = mount(LobbyGameRow, {...globalConfig, props: {room: room([host], {state: 'started', progress})}});
     expect(none.find('.lobby-game-activity').exists()).is.false;
+  });
+
+  it('LobbyGameRow colours the idle time by how dead the room is', () => {
+    const progress = {generation: 3, terraforming: 0.1, playedMs: 90 * 60_000};
+    const levelAt = (minutes: number) => mount(LobbyGameRow, {...globalConfig, props: {room: room([host], {state: 'started', progress: {...progress, idleMs: minutes * 60_000}})}})
+      .find('.lobby-game-activity').classes();
+    expect(levelAt(9)).contains('lobby-game-activity--active');
+    expect(levelAt(10)).contains('lobby-game-activity--slow');
+    expect(levelAt(20)).contains('lobby-game-activity--stalled');
+    expect(levelAt(60)).contains('lobby-game-activity--dead');
+  });
+
+  it('LobbyGameRow shows the waiting time only for rooms that have not started', () => {
+    const progress = {generation: 3, terraforming: 0.1, playedMs: 30 * 60_000};
+    const started = mount(LobbyGameRow, {...globalConfig, props: {room: room([host], {state: 'started', progress, ageMs: 5 * 60_000})}});
+    expect(started.find('.lobby-game-waiting').exists()).is.false;
+    const open = mount(LobbyGameRow, {...globalConfig, props: {room: room([host], {ageMs: 5 * 60_000})}});
+    expect(open.find('.lobby-game-waiting').text()).contains('waiting for 5 min');
   });
 
   it('LobbyGameRow: removed twice asks to join, declined shows it instead of a button', () => {
