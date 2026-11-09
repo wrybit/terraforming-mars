@@ -50,6 +50,8 @@ export type AiTuning = {
   terraformBrake: number,
   /** 1: expected game length by player count (2 players 15, 3 players 12) instead of 12 (gameProgress.ts). */
   lengthByPlayers: number,
+  /** Expected length of a two-player game in generations (gameProgress.ts, with lengthByPlayers); 15 since round 8. */
+  twoPlayerGenerations: number,
   /** Factor on the M€ value of a victory point in the deciding player's valuation (stateValue.ts). */
   victoryPointScale: number,
   /** Passing with money left costs this share of it (up to 40 M€) in the move choice (actionLookahead.ts). */
@@ -381,6 +383,7 @@ export const BASELINE_TUNING: AiTuning = {
   // Neutral in AI-vs-AI (z +0.36) but measured right (2P 14.5, 3P 11.8 generations); adopted on
   // purpose against the z rule: with 12 the AI gave up its engine from generation 8 against a human.
   lengthByPlayers: 1,
+  twoPlayerGenerations: 15,
   awardTiming: 0,
   // Night runs A+B (3200 games): 0.55 → 0.9 won clearly (A: 0.75 z +4.8; B: 0.9 z +2.7, 1.05 z +3.5,
   // control −0.8); best VP per generation. Income was undervalued once the game length was right.
@@ -404,7 +407,8 @@ export const BASELINE_TUNING: AiTuning = {
   plantProductionValue: 2,
   laterSamples: 2,
   futureHandShare: 0,
-  laterDiscount: 0.85,
+  // Rounds 188–190: 0.55 +0.84, −0.12, +1.34 VP (round 190 z +1.64; pooled z ≈ 1.57) – adopted (0.85 before).
+  laterDiscount: 0.55,
   // Adopted on purpose without a measurable AI-vs-AI gain (round 13: +0.6 VP per deal, z +0.7; funded
   // awards 829 → 210 per 200 games, funder wins 81 → 87 %): a human overtook three funded awards
   // (30 VP swing), the AI opponent in batches does not chase awards like that.
@@ -1229,6 +1233,11 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   laterDiscount055: {laterDiscount: 0.55},
   // Round 188: 0.55 +0.84 VP (z +1.12), 0.7 +0.45 (z +0.63) – both candidates; round 189 repeats 0.55 and tries 0.4.
   laterDiscount04: {laterDiscount: 0.4},
+  // Round 191: check of the adoption.
+  laterDiscount085: {laterDiscount: 0.85},
+  // Round 191: against humans the AI expected 2.3 more production phases than followed (95 Oracle games, from
+  // generation 4 to 10; remainingEstimateError.ts) – 2P games last 12.2 generations against humans, 13 in AI batches.
+  twoPlayerLength13: {twoPlayerGenerations: 13},
 };
 
 export function isTuningVariant(name: string): boolean {

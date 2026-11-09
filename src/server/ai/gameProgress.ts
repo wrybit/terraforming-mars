@@ -20,12 +20,16 @@ const EXPECTED_GENERATIONS = 12;
  * ~4 were left, valued production and engine cards too low and lost 108 : 209 (aiTuning.ts lengthByPlayers).
  */
 // 5 players: 8.9 generations in 100 AI games (7–11); 4 players interpolated.
-const GENERATIONS_BY_PLAYER_COUNT: Record<number, number> = {2: 15, 3: 12, 4: 10, 5: 9};
+// 2 players: aiTuning.ts twoPlayerGenerations (15).
+const GENERATIONS_BY_PLAYER_COUNT: Record<number, number> = {3: 12, 4: 10, 5: 9};
 
 /** Typical game length for this player's AI variant. */
 export function expectedGenerations(game: IGame, player?: IPlayer): number {
   if (player === undefined || tuningOf(player).lengthByPlayers <= 0) {
     return EXPECTED_GENERATIONS;
+  }
+  if (game.players.length === 2) {
+    return tuningOf(player).twoPlayerGenerations;
   }
   return GENERATIONS_BY_PLAYER_COUNT[game.players.length] ?? (game.players.length > 3 ? 11 : EXPECTED_GENERATIONS);
 }
