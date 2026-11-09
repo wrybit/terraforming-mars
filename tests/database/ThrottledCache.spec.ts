@@ -2,8 +2,12 @@ import {expect} from 'chai';
 import {ThrottledCache} from '../../src/server/database/ThrottledCache';
 import {FakeClock} from '../common/FakeClock';
 
-function flushPromises(): Promise<void> {
-  return new Promise((resolve) => setImmediate(resolve));
+// Microtasks instead of setImmediate: in a busy mocha worker (parallel run, CI) the macrotask queue could wait
+// past the 2 s timeout, while the cache's then/catch/finally chain only needs a few microtask turns
+async function flushPromises(): Promise<void> {
+  for (let turn = 0; turn < 10; turn++) {
+    await Promise.resolve();
+  }
 }
 
 describe('ThrottledCache', () => {
