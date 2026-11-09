@@ -1347,5 +1347,5 @@
   "This is a default name: future players with it are usually other people.": "Ez alapértelmezett név: a jövőbeli játékosok ezzel általában más emberek.",
   "permanent": "végleges",
   "${0} games, one-time": "${0} játék, egyszeri",
-  "inactive for ${0}": "${0} óta inaktív"
+  "active ${0} ago": "${0} ezelőtt aktív"
 }

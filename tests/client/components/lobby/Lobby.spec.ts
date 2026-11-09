@@ -85,7 +85,7 @@ describe('Lobby components', () => {
   it('LobbyGameRow shows the time since the last human move only when the server sends it', () => {
     const progress = {generation: 3, terraforming: 0.1, playedMs: 30 * 60_000};
     const idle = mount(LobbyGameRow, {...globalConfig, props: {room: room([host], {state: 'started', progress: {...progress, idleMs: 12 * 60_000}})}});
-    expect(idle.find('.lobby-game-activity').text()).contains('inactive for 12 min');
+    expect(idle.find('.lobby-game-activity').text()).contains('active 12 min ago');
     const none = mount(LobbyGameRow, {...globalConfig, props: {room: room([host], {state: 'started', progress})}});
     expect(none.find('.lobby-game-activity').exists()).is.false;
   });

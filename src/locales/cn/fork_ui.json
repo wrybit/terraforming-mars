@@ -2149,5 +2149,5 @@
   "This is a default name: future players with it are usually other people.": "这是默认名字：以后使用它的玩家通常是其他人。",
   "permanent": "永久",
   "${0} games, one-time": "${0} 局，一次性",
-  "inactive for ${0}": "已闲置 ${0}"
+  "active ${0} ago": "${0}前活跃"
 }

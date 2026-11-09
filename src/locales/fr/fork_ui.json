@@ -1220,5 +1220,5 @@
   "This is a default name: future players with it are usually other people.": "C'est un nom par défaut : les futurs joueurs qui le portent sont généralement d'autres personnes.",
   "permanent": "permanente",
   "${0} games, one-time": "${0} parties, unique",
-  "inactive for ${0}": "inactif depuis ${0}"
+  "active ${0} ago": "actif il y a ${0}"
 }

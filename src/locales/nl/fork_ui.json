@@ -1792,5 +1792,5 @@
   "This is a default name: future players with it are usually other people.": "Dit is een standaardnaam: toekomstige spelers ermee zijn meestal andere mensen.",
   "permanent": "blijvend",
   "${0} games, one-time": "${0} spellen, eenmalig",
-  "inactive for ${0}": "inactief sinds ${0}"
+  "active ${0} ago": "actief ${0} geleden"
 }

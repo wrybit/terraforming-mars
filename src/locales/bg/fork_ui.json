@@ -2113,5 +2113,5 @@
   "This is a default name: future players with it are usually other people.": "Това е име по подразбиране: бъдещите играчи с него обикновено са други хора.",
   "permanent": "трайно",
   "${0} games, one-time": "${0} игри, еднократно",
-  "inactive for ${0}": "неактивна от ${0}"
+  "active ${0} ago": "активна преди ${0}"
 }

@@ -107,14 +107,14 @@ const playedText = computed(() => {
   return lobbyDuration(milliseconds);
 });
 
-// "inactive for 25 min": how long no human has moved, shows whether a room is dead.
+// "active 25 min ago": how long no human has moved, the colour shows whether a room is dead.
 // AI training rooms send no idleMs: the AI moves all the time, they are never dead
 const activityText = computed(() => {
   const idleMs = props.room.progress?.idleMs;
   if (idleMs === undefined) {
     return undefined;
   }
-  return translateTextWithParams('inactive for ${0}', [lobbyDuration(idleMs)]);
+  return translateTextWithParams('active ${0} ago', [lobbyDuration(idleMs)]);
 });
 
 // Colour level from grey to red, the longer nobody has moved
