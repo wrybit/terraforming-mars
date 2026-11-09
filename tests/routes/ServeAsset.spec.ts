@@ -1,3 +1,4 @@
+import path from 'path';
 import {expect} from 'chai';
 import fs from 'fs';
 import {FileAPI, ServeAsset} from '../../src/server/routes/ServeAsset';
@@ -166,7 +167,7 @@ describe('ServeAsset', () => {
     scaffolding.url = '/chunks/player-home.js';
     scaffolding.req.headers['accept-encoding'] = '';
     await scaffolding.get(instance, res);
-    expect(res.content).eq('data: build/chunks/player-home.js');
+    expect(res.content).eq('data: ' + path.resolve('build/chunks/player-home.js'));
   });
 
   it('does not serve source maps', async () => {
@@ -215,6 +216,14 @@ describe('ServeAsset', () => {
       restore('FAVICON_ICON', stored.icon);
       restore('FAVICON_COLOR', stored.color);
     }
+  });
+
+  it('rejects a folder next to assets whose name starts the same', async () => {
+    instance = new ServeAsset(undefined, false, fileApi);
+    scaffolding.url = '/assets-other/secret.json';
+    scaffolding.req.headers['accept-encoding'] = '';
+    await scaffolding.get(instance, res);
+    expect(res.statusCode).eq(statusCode.notFound);
   });
 
   it('rejects path traversal in chunks', async () => {
