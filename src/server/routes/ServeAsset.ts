@@ -128,9 +128,8 @@ export class ServeAsset extends Handler {
     }
   }
 
-  private toMainFile(urlPath: string, encodings: Set<Encoding>): { file?: string, encoding?: Encoding } {
-    const file = `build/${urlPath}`;
-
+  // file: a fixed build file, or a chunk path already resolved and checked to lie inside build/chunks
+  private toMainFile(file: string, encodings: Set<Encoding>): { file?: string, encoding?: Encoding } {
     // Only serve compressed versions in production. Development mode serves
     // uncompressed versions because they can be hot-swapped.
     if (isProduction()) {
@@ -175,7 +174,7 @@ export class ServeAsset extends Handler {
     // extensions that are not part of the public repository
     case 'main.js':
     case 'vendors.js':
-      return this.toMainFile(urlPath, encodings);
+      return this.toMainFile(`build/${urlPath}`, encodings);
 
     // Service worker (client/sw.ts): lobby push messages, and the notification fallback of the game
     case 'sw.js':
@@ -193,7 +192,8 @@ export class ServeAsset extends Handler {
         const resolvedFile = path.resolve(path.normalize('build/' + urlPath));
         if (resolvedFile.startsWith(chunksRoot + path.sep)) {
           if (urlPath.endsWith('.js')) {
-            return this.toMainFile(urlPath, encodings);
+            // The checked, resolved path – not the request path – reaches the file system
+            return this.toMainFile(resolvedFile, encodings);
           }
         }
       }
