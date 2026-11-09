@@ -6,6 +6,7 @@ import {Server} from '../models/ServerModel';
 /** Setup chips of an AI training game, from the same options the batch game was created with */
 export function aiTrainingSetup(gameOptions: GameOptions): LobbySetupModel {
   return {
+    theme: gameOptions.theme,
     expansions: gameOptions.expansions,
     boards: [gameOptions.boardName],
     randomBoard: false,

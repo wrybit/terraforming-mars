@@ -1,3 +1,4 @@
+import {Theme} from '../theme/Theme';
 import {AiLevel} from '../ai/AiLevel';
 import {BoardName} from '../boards/BoardName';
 import {Expansion} from '../cards/GameModule';
@@ -56,6 +57,8 @@ export type LobbySeatModel =
 
 /** Only what the lobby list and the waiting room show of the game settings (setup chips) */
 export type LobbySetupModel = {
+  /** Mars or Dune (lobby row: planet badge); stored AI training games from before have none and are Mars */
+  theme?: Theme;
   expansions: Record<Expansion, boolean>;
   boards: ReadonlyArray<BoardName>;
   randomBoard: boolean;

@@ -406,6 +406,15 @@ describe('Lobby', () => {
     expect(lobby.list(undefined).rooms).has.length(0);
   });
 
+  it('sends a Dune game\'s messages into the Dune world and lists its theme', async () => {
+    const joins: Array<string> = [];
+    lobby.setNotifier({canReach: () => true, notify: (_host, _kind, room) => joins.push(room.path)});
+    const room = await lobby.open(HOST, profile('Ann'), 'Sietch', true, {...config(['human', 'human']), theme: 'dune'}, starter);
+    expect(lobby.list(undefined).rooms[0].setup.theme).eq('dune');
+    await lobby.join(GUEST, profile('Bob'), room.id, starter);
+    expect(joins[0]).eq('dune/' + lobbyRoomPath(room.id, 'Sietch'));
+  });
+
   it('tells everybody seated except whoever started it that the game started', async () => {
     const messages: Array<string> = [];
     lobby.setNotifier({canReach: () => true, notify: (participant, kind, _room, name) => messages.push(`${kind} ${participant} ${name}`)});

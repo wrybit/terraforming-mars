@@ -824,8 +824,9 @@
 // settings. Room on the right under the button stays empty on purpose: nothing is squeezed.
 .lobby-game {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
-  grid-template-areas: "info seats action" "progress progress progress" "chips chips chips";
+  // Planet of the game's theme first (ThemePlanetBadge.vue), progress and chips below over the full width
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  grid-template-areas: "planet info seats action" "progress progress progress progress" "chips chips chips chips";
   align-items: center;
   gap: 10px 16px;
   padding: 14px @lobby-pad;
@@ -854,9 +855,13 @@
 
   // Phone: the seats get their own row below the title, so the title keeps its width
   @media only screen and (max-width: 600px) {
-    grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-areas: "info action" "seats seats" "progress progress" "chips chips";
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-areas: "planet info action" "seats seats seats" "progress progress progress" "chips chips chips";
   }
+}
+
+.lobby-game-planet {
+  grid-area: planet;
 }
 
 .lobby-game-info {

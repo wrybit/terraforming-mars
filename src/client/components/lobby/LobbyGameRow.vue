@@ -10,6 +10,8 @@
     :class="{'lobby-game--running': room.state === 'started', 'lobby-game--hosted': isHost, 'lobby-game--clickable': isMine,
              'lobby-game--training': room.aiTraining !== undefined, 'lobby-game--info': isLiveTraining}"
     @click="isMine && emit('open-room')">
+    <!-- Mars or Dune at a glance, as in the admin games overview -->
+    <ThemePlanetBadge class="lobby-game-planet" :theme="room.setup.theme" />
     <div class="lobby-game-info">
       <div class="lobby-game-title">{{ room.title }}</div>
       <div class="lobby-game-facts">
@@ -56,6 +58,7 @@
 import {computed} from 'vue';
 import {LobbyRoomModel, LobbySeatModel} from '@/common/lobby/LobbyModel';
 import AppButton from '@/client/components/common/AppButton.vue';
+import ThemePlanetBadge from '@/client/components/common/ThemePlanetBadge.vue';
 import HotkeyKeys from '@/client/components/hotkeys/HotkeyKeys.vue';
 import {HotkeyKeys as HotkeyKeyList, PICK_DIGITS} from '@/client/hotkeys/hotkeyActions';
 import GameSetupChips from '@/client/components/common/GameSetupChips.vue';

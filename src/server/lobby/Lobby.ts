@@ -679,6 +679,7 @@ export class Lobby {
       listed: room.listed,
       seats,
       setup: {
+        theme: config.theme,
         expansions: config.expansions,
         boards: config.boards ?? [],
         randomBoard: (config.boards ?? []).length > 1,
@@ -757,7 +758,9 @@ export class Lobby {
   }
 
   private notify(participant: string, kind: LobbyPushKind, room: Room, name: string): void {
-    this.notifier.notify(participant, kind, {id: room.id, path: lobbyRoomPath(room.id, room.title), title: room.title}, name);
+    // A Dune game opens the lobby of the Dune world (common/theme/themeUrl.ts), a Mars game the plain address
+    const world = room.config.theme === 'dune' ? 'dune/' : '';
+    this.notifier.notify(participant, kind, {id: room.id, path: world + lobbyRoomPath(room.id, room.title), title: room.title}, name);
   }
 
   /** The host leaving dissolves the room; anybody else frees the seat */

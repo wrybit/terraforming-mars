@@ -68,6 +68,13 @@ describe('Lobby components', () => {
     expect(wrapper.emitted('join')).has.length(1);
   });
 
+  it('LobbyGameRow shows the planet of the game\'s theme, Mars without one', () => {
+    const mars = mount(LobbyGameRow, {...globalConfig, props: {room: room([host])}});
+    expect(mars.get('[data-test=game-theme]').text()).eq('Mars');
+    const dune = mount(LobbyGameRow, {...globalConfig, props: {room: room([host], {setup: {...room([host]).setup, theme: 'dune'}})}});
+    expect(dune.get('[data-test=game-theme]').attributes('style')).contains('arrakis-planet.png');
+  });
+
   it('LobbyGameRow shows generation, time played and the progress of a running game', () => {
     const running = room([host, {...host, host: false}], {state: 'started', spectatorId: 's1', progress: {generation: 7, terraforming: 0.5, playedMs: 72 * 60_000}});
     const wrapper = mount(LobbyGameRow, {...globalConfig, props: {room: running}});

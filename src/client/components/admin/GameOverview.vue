@@ -2,11 +2,8 @@
   <!-- One game of the admin overview: theme, then eleven fixed columns (players 1–6, AI 1–5), chips with name and points,
        winner with a trophy -->
   <tr class="games-overview-row" :class="{'games-overview-row--imported': summary.source === 'imported'}">
-    <!-- Mars or Dune at a glance: the planet with its name on it, like the Mars/Dune switch -->
-    <td class="games-overview-theme">
-      <span class="games-overview-planet" :class="'games-overview-planet--' + planet.theme" :style="{backgroundImage: `url(${planet.planet})`}"
-        data-test="game-theme">{{ planet.label }}</span>
-    </td>
+    <!-- Mars or Dune at a glance (same badge as in the lobby list) -->
+    <td class="games-overview-theme"><ThemePlanetBadge :theme="summary.theme" /></td>
     <td class="games-overview-status">
       <span :class="summary.isFinished ? 'status-finished' : 'status-running'" :title="$t(summary.isFinished ? 'Finished' : 'Running')"></span>
     </td>
@@ -56,8 +53,7 @@ import {LANGUAGES} from '@/common/constants';
 import {translateText} from '@/client/directives/i18n';
 import DeleteGameButton from '@/client/components/admin/DeleteGameButton.vue';
 import LanguageFlag from '@/client/components/LanguageFlag.vue';
-import {THEME_PLANETS, ThemePlanet} from '@/client/theme/themePlanets';
-import {DEFAULT_THEME} from '@/common/theme/Theme';
+import ThemePlanetBadge from '@/client/components/common/ThemePlanetBadge.vue';
 import {relativeTimeText} from '@/client/utils/relativeTime';
 import {gameLocaleToIntlLocale} from '@/client/utils/LocaleUtils';
 import {getPreferences} from '@/client/utils/PreferencesManager';
@@ -68,6 +64,7 @@ export default defineComponent({
   components: {
     DeleteGameButton,
     LanguageFlag,
+    ThemePlanetBadge,
   },
   emits: ['delete'],
   props: {
@@ -90,9 +87,6 @@ export default defineComponent({
     },
   },
   computed: {
-    planet(): ThemePlanet {
-      return THEME_PLANETS[this.summary.theme ?? DEFAULT_THEME];
-    },
     importedResultUrl(): string {
       return `${paths.THE_END}?id=${this.summary.importedParticipantId}`;
     },
