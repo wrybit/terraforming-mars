@@ -1314,7 +1314,13 @@
   "⇄ Swap": "⇄ Поміняти",
   "Merge": "Об'єднати",
   "Merged": "Об'єднані",
-  "Applies permanently, also to new games under the old name.": "Діє постійно, і для нових ігор під старим ім'ям.",
   "Unmerge": "Роз'єднати",
-  "Nothing merged yet.": "Поки нічого не об'єднано."
+  "Nothing merged yet.": "Поки нічого не об'єднано.",
+  "Permanent merges also apply to new games under the old name; one-time merges only to the games so far.": "Постійні об'єднання діють і для нових ігор під старим ім'ям, одноразові – лише для попередніх.",
+  "default name": "стандартне ім'я",
+  "Also for future games": "І для майбутніх ігор",
+  "Only the games played so far are merged: a future player with this name stays separate.": "Об'єднуються лише зіграні ігри: майбутній гравець з цим ім'ям залишиться окремо.",
+  "This is a default name: future players with it are usually other people.": "Це стандартне ім'я: майбутні гравці з ним зазвичай інші люди.",
+  "permanent": "постійно",
+  "${0} games, one-time": "${0} ігор, одноразово"
 }

@@ -73,6 +73,9 @@ export type LogRow =
 export const TERRAFORMED_MESSAGE = 'Mars is terraformed';
 
 const PLAYED_WITH_PAYMENT = '${0} played ${1} [ ${2} ]';
+// Resources taken from a card (Player.removeResourceFrom). Paying a card with resources of an own card
+// (Psychrophiles, Dirigibles …) logs this line right before "played": it belongs to that card's row
+const OWN_CARD_REMOVAL = '${0} removed ${1}${2} from ${3}\'s ${4}';
 
 // Since upstream 186dbf78f..92b5335b1 many lines name the resource as an icon shortcode (":r:mc:", ":i:tr:"). Same
 // data positions as before: the new key is read as the old one, which saved games still use. Without this the
@@ -237,7 +240,8 @@ export const LOG_INFO_LINES: ReadonlySet<string> = new Set([
 
 // Resource words of the log (lower case, without a plural "(s)") -> icon
 const RESOURCES: Record<string, string> = {
-  'm€': 'megacredit', 'megacredits': 'megacredit', 'plant': 'plant', 'plants': 'plant', 'steel': 'steel', 'titanium': 'titanium', 'energy': 'power', 'heat': 'heat',
+  // 'mc': shortcode of payments since upstream d79dd7b49 ("-3:r:mc:")
+  'm€': 'megacredit', 'megacredits': 'megacredit', 'mc': 'megacredit', 'plant': 'plant', 'plants': 'plant', 'steel': 'steel', 'titanium': 'titanium', 'energy': 'power', 'heat': 'heat',
   'animal': 'animal', 'animals': 'animal', 'microbe': 'microbe', 'microbes': 'microbe', 'floater': 'floater', 'floaters': 'floater',
   'science': 'science', 'asteroid': 'asteroid', 'asteroids': 'asteroid', 'fighter': 'fighter', 'data': 'data', 'camp': 'camp',
   'disease': 'disease', 'ware': 'ware',
@@ -498,6 +502,23 @@ export function effectsOf(message: LogMessage): Array<PlayerEffect> {
   case '${0} added ${1}${2} to ${3}':
   case '${0} added ${1} ${2} to ${3}':
     return one(withResource(resource(value(message, 2)), {amount: n, card: cardAt(message, 3)}));
+  case '${0} added ${1}${2} to ${3} from ${4}':
+    return one(withResource(resource(value(message, 2)), {amount: n, card: cardAt(message, 3), cause: causeAt(message, 4)}));
+  case OWN_CARD_REMOVAL:
+    // ${0} removes, ${3} owns the card: an attack takes from the owner, not from the one removing
+    return one(withResource(resource(value(message, 2)), {amount: -n, card: cardAt(message, 4)}), playerAt(message, 3));
+  case '${0} removed ${1}${2} from ${3} to ${4}':
+    return one(withResource(resource(value(message, 2)), {amount: -n, card: cardAt(message, 3)}));
+  case '${0} stole ${1}${2} from the neutral player':
+    return one(withResource(resourceDatum(message, 2).name, {amount: n}));
+  case '${0} moved 1 ${1} from ${2} to ${3}.': {
+    const moved = resource(value(message, 1));
+    return [...one(withResource(moved, {amount: -1, card: cardAt(message, 2)})), ...one(withResource(moved, {amount: 1, card: cardAt(message, 3)}))];
+  }
+  case '${0} gained a bonus ${1} because of ${2}':
+    return one(withResource(resource(value(message, 1)), {amount: 1, cause: causeAt(message, 2)}));
+  case '${0} gained ${1} ${2} from ${3}':
+    return one(withResource(resource(value(message, 2)), {amount: n, cause: causeAt(message, 3)}));
   case '${0} ${1} ${2} card(s)':
     return one(effect({resource: 'card', amount: amount(message, 2)}));
   case '${0} is using their ${1} effect to draw a card by discarding a card.':
@@ -701,13 +722,33 @@ export function groupLogMessages(messages: ReadonlyArray<LogMessage>, context: L
   let research: (LogRow & {type: 'research'}) | undefined;
   let actionsStarted = false;
 
+  // Removals that pay the card played next: they wait for its row
+  let payments: Array<{index: number, effects: Array<PlayerEffect>}> = [];
+
   const start = (action: LogAction, index: number) => {
-    current = {type: 'action', action, indexes: [index]};
+    current = {type: 'action', action, indexes: [...payments.map((payment) => payment.index), index]};
+    for (const payment of payments) {
+      // Usually the payment of the "played" line already names it as cost; extra costs (Think Tank …) do not
+      for (const entry of payment.effects) {
+        if (!action.effects.some((known) => known.cost === true && known.resource === entry.effect.resource)) {
+          addEffect(action, {player: entry.player, effect: {...entry.effect, cost: true}});
+        }
+      }
+    }
+    payments = [];
     rows.push(current);
   };
 
   messages.forEach((message, index) => {
     const template = templateOf(message);
+    // Own card resources spent on the card played right after: no line of its own, the card row shows the cost
+    if (template === OWN_CARD_REMOVAL && firstPlayer(message) === playerAt(message, 3)) {
+      const next = messages[index + 1];
+      if (next !== undefined && STARTERS[templateOf(next)] === 'card' && firstPlayer(next) === firstPlayer(message)) {
+        payments.push({index, effects: effectsOf(message)});
+        return;
+      }
+    }
     // Terraformed: the banner gets a row of its own; the open action keeps collecting its effects above it
     if (template === TERRAFORMED_MESSAGE) {
       rows.push({type: 'terraformed', indexes: [index]});

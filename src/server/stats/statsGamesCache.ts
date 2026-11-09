@@ -15,7 +15,7 @@ let entry: Entry | undefined;
 export function cachedStatsGames(gameLoader: IGameLoader, nowMs: number = Date.now()): Promise<Array<StatsGame>> {
   if (entry === undefined || nowMs - entry.createdAtMs >= MAX_AGE_MS) {
     // Merged names are applied on every collection: new games under an old name count for the merged player too
-    const games = collectStatsGames(gameLoader).then((collected) => applyPlayerAliases(collected, PlayerAliasesStore.getInstance().targets()));
+    const games = collectStatsGames(gameLoader).then((collected) => applyPlayerAliases(collected, PlayerAliasesStore.getInstance().list()));
     entry = {createdAtMs: nowMs, games};
     // A failed run must not be served for a whole minute
     games.catch(() => {

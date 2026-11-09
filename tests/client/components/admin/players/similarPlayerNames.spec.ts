@@ -13,4 +13,8 @@ describe('similarPlayerNames', () => {
   it('does not match short prefixes', () => {
     expect(similarPlayerNames([player('Tom', 3), player('Tomas', 1), player('Tobias', 2)])).deep.eq([]);
   });
+
+  it('never proposes default names', () => {
+    expect(similarPlayerNames([player('Blue', 9), player('blue', 2)], ['Blue', 'blue'])).deep.eq([]);
+  });
 });

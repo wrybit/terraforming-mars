@@ -2104,7 +2104,13 @@
   "⇄ Swap": "⇄ Размяна",
   "Merge": "Обединяване",
   "Merged": "Обединени",
-  "Applies permanently, also to new games under the old name.": "Важи трайно, и за нови игри под старото име.",
   "Unmerge": "Разделяне",
-  "Nothing merged yet.": "Още няма обединени."
+  "Nothing merged yet.": "Още няма обединени.",
+  "Permanent merges also apply to new games under the old name; one-time merges only to the games so far.": "Трайните обединения важат и за нови игри под старото име, еднократните – само за досегашните.",
+  "default name": "име по подразбиране",
+  "Also for future games": "И за бъдещи игри",
+  "Only the games played so far are merged: a future player with this name stays separate.": "Обединяват се само досегашните игри: бъдещ играч с това име остава отделен.",
+  "This is a default name: future players with it are usually other people.": "Това е име по подразбиране: бъдещите играчи с него обикновено са други хора.",
+  "permanent": "трайно",
+  "${0} games, one-time": "${0} игри, еднократно"
 }

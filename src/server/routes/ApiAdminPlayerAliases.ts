@@ -6,8 +6,9 @@ import {Response} from '../Response';
 import {readBody} from './readBody';
 import {RouteError} from './RouteError';
 import {PlayerAliasesStore} from '../stats/PlayerAliasesStore';
-import {forgetCachedStatsGames} from '../stats/statsGamesCache';
-import {AdminPlayerAliasesInfo, AdminPlayerAliasRequest} from '../../common/admin/PlayerAliases';
+import {cachedStatsGames, forgetCachedStatsGames} from '../stats/statsGamesCache';
+import {defaultPlayerNames} from '../stats/defaultPlayerNames';
+import {AdminPlayerAliasesInfo} from '../../common/admin/PlayerAliases';
 
 const isName = (value: unknown): value is string => typeof value === 'string' && value.trim() !== '';
 
@@ -25,16 +26,18 @@ export class ApiAdminPlayerAliases extends Handler {
   }
 
   public override async post(req: Request, res: Response, ctx: Context): Promise<void> {
-    let body: Partial<AdminPlayerAliasRequest> & {to?: unknown};
+    let body: Partial<{action: string, from: unknown, to: unknown, permanent: unknown, id: unknown}>;
     try {
       body = JSON.parse(await readBody(req));
     } catch {
       throw RouteError.badRequest('Invalid request');
     }
-    const done =
-      body?.action === 'merge' && isName(body.from) && isName(body.to) ? this.store.merge(body.from, body.to) :
-        body?.action === 'unmerge' && isName(body.from) ? this.store.unmerge(body.from) :
-          false;
+    let done = false;
+    if (body?.action === 'merge' && isName(body.from) && isName(body.to) && typeof body.permanent === 'boolean') {
+      done = this.store.merge(body.from, body.to, body.permanent ? undefined : await this.gamesOf(body.from, ctx));
+    } else if (body?.action === 'unmerge' && isName(body.id)) {
+      done = this.store.unmerge(body.id);
+    }
     if (!done) {
       throw RouteError.badRequest('Invalid request');
     }
@@ -43,8 +46,15 @@ export class ApiAdminPlayerAliases extends Handler {
     this.writeInfo(res, ctx);
   }
 
+  /** One-time merge: the games the name has right now, as the list shows it (finished just now included). */
+  private async gamesOf(name: string, ctx: Context): Promise<Array<string>> {
+    forgetCachedStatsGames();
+    const games = await cachedStatsGames(ctx.gameLoader);
+    return games.filter((game) => game.summary.players.some((player) => player.name === name)).map((game) => game.summary.id);
+  }
+
   private writeInfo(res: Response, ctx: Context): void {
-    const info: AdminPlayerAliasesInfo = {aliases: this.store.list()};
+    const info: AdminPlayerAliasesInfo = {aliases: this.store.list(), defaultNames: defaultPlayerNames()};
     responses.writeJson(res, ctx, info);
   }
 }

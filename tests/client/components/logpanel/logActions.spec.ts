@@ -54,6 +54,25 @@ describe('logActions', () => {
     expect(actionAt(rows, 1).effects).deep.eq([]);
   });
 
+  it('folds resources of an own card spent on the next card into that card row (no line of its own on the left)', () => {
+    const rows = groupLogMessages([
+      message('${0} removed ${1}${2} from ${3}\'s ${4}', player('red'), raw('4'), typed(LogMessageDataType.CARD_RESOURCE, 'Microbe'), player('red'), card(CardName.PSYCHROPHILES)),
+      message('${0} played ${1} [ ${2} ]', player('red'), card(CardName.GRASS), text('-7:r:mc: -4:cr:microbe:')),
+    ]);
+    expect(rows).has.length(1);
+    expect(rows[0].indexes).deep.eq([0, 1]);
+    expect(actionAt(rows, 0).effects).deep.eq([{resource: 'megacredit', amount: -7, cost: true}, {resource: 'microbe', amount: -4, cost: true}]);
+  });
+
+  it('shows resources removed from another player\'s card as their loss on the right', () => {
+    const rows = groupLogMessages([
+      message('${0} used ${1} action', player('red'), card(CardName.PREDATORS)),
+      message('${0} removed ${1}${2} from ${3}\'s ${4}', player('red'), raw('1'), typed(LogMessageDataType.CARD_RESOURCE, 'Animal'), player('blue'), card(CardName.BIRDS)),
+    ]);
+    expect(rows).has.length(1);
+    expect(actionAt(rows, 0).others).deep.eq([{player: 'blue', effects: [{resource: 'animal', amount: -1, card: CardName.BIRDS}]}]);
+  });
+
   it('reads the icon shortcode lines of upstream as effects, so later effects still join the action row', () => {
     const rows = groupLogMessages([
       message('${0} played ${1}', player('red'), card(CardName.ALGAE)),

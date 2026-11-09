@@ -2422,7 +2422,13 @@
   "⇄ Swap": "⇄ Inverti",
   "Merge": "Unisci",
   "Merged": "Uniti",
-  "Applies permanently, also to new games under the old name.": "Vale in modo permanente, anche per le nuove partite con il vecchio nome.",
   "Unmerge": "Separa",
-  "Nothing merged yet.": "Ancora nulla di unito."
+  "Nothing merged yet.": "Ancora nulla di unito.",
+  "Permanent merges also apply to new games under the old name; one-time merges only to the games so far.": "Le unioni permanenti valgono anche per le nuove partite con il vecchio nome, quelle una tantum solo per le partite passate.",
+  "default name": "nome predefinito",
+  "Also for future games": "Anche per le partite future",
+  "Only the games played so far are merged: a future player with this name stays separate.": "Si uniscono solo le partite giocate finora: un futuro giocatore con questo nome resta separato.",
+  "This is a default name: future players with it are usually other people.": "È un nome predefinito: i futuri giocatori con questo nome sono di solito altre persone.",
+  "permanent": "permanente",
+  "${0} games, one-time": "${0} partite, una tantum"
 }

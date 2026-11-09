@@ -5,7 +5,8 @@ import {join} from 'path';
 // Every server log line that names an amount (icon shortcode, M€, TR) must be known to the log grouping, otherwise
 // it stands as text with its values on the left and cuts the following effects off their action row.
 // A new upstream line shows up here: read it in logActions.ts or list it in LOG_INFO_LINES.
-const VALUE = /:(r|p|cr|i|mc):|M€|\bTR\b|\d+\s*(M€|TR)/;
+// "${1}${2}": an amount followed by its resource as a placeholder (removeResourceFrom, LogHelper)
+const VALUE = /:(r|p|cr|i|mc):|M€|\bTR\b|\d+\s*(M€|TR)|\$\{\d\}\$\{\d\}/;
 
 function sourceFiles(directory: string): Array<string> {
   return readdirSync(directory).flatMap((name) => {

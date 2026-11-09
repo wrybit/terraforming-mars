@@ -17,10 +17,14 @@
           <span class="admin-players-side-count">{{ to.games }} → {{ to.games + from.games }} <span v-i18n>games</span></span>
         </div>
       </div>
+      <!-- Off for default names: whoever gets "Blue" next time is usually someone else -->
+      <ToggleSwitch :modelValue="permanent" :label="$t('Also for future games')" @update:modelValue="emit('update:permanent', $event)" />
       <ul class="admin-players-dialog-facts">
         <!-- Names stay out of the translated sentence: v-i18n would translate a player called "Green" -->
-        <li v-i18n>From now on the statistics count the dropped name as the one that stays – also in future games.</li>
+        <li v-if="permanent" v-i18n>From now on the statistics count the dropped name as the one that stays – also in future games.</li>
+        <li v-else v-i18n>Only the games played so far are merged: a future player with this name stays separate.</li>
         <li v-i18n>The games themselves stay unchanged; the merge can be undone under "Merged".</li>
+        <li v-if="permanent && isDefaultName" class="admin-players-dialog-warning" v-i18n>This is a default name: future players with it are usually other people.</li>
         <li v-if="sharedGames > 0" class="admin-players-dialog-warning" v-i18n="[String(sharedGames)]">Both names played together in ${0} games: there the player counts twice.</li>
       </ul>
       <menu class="admin-players-dialog-actions">
@@ -38,6 +42,7 @@
 import {onMounted, ref} from 'vue';
 import dialogPolyfill from 'dialog-polyfill';
 import {showModal, windowHasHTMLDialogElement} from '@/client/components/HTMLDialogElementCompatibility';
+import ToggleSwitch from '@/client/components/common/ToggleSwitch.vue';
 import {PlayerNameStats} from './playerNameStats';
 
 defineProps<{
@@ -45,12 +50,15 @@ defineProps<{
   to: PlayerNameStats,
   sharedGames: number,
   busy: boolean,
+  permanent: boolean,
+  isDefaultName: boolean,
 }>();
 
 const emit = defineEmits<{
   (event: 'confirm'): void;
   (event: 'cancel'): void;
   (event: 'swap'): void;
+  (event: 'update:permanent', permanent: boolean): void;
 }>();
 
 const dialog = ref<HTMLDialogElement | null>(null);

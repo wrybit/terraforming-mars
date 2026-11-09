@@ -45,16 +45,18 @@ describe('ApiAdminPlayerAliases', () => {
   });
 
   it('merges and unmerges', async () => {
-    await post({action: 'merge', from: 'jens', to: 'Jens'});
-    expect(JSON.parse(res.content).aliases).to.have.length(1);
-    expect(store.targets().get('jens')).eq('Jens');
+    await post({action: 'merge', from: 'jens', to: 'Jens', permanent: true});
+    const [alias] = JSON.parse(res.content).aliases;
+    expect(alias).deep.include({from: 'jens', to: 'Jens'});
+    expect(alias.gameIds).is.undefined;
+    expect(JSON.parse(res.content).defaultNames).to.include('Blue');
     res = new MockResponse();
-    await post({action: 'unmerge', from: 'jens'});
+    await post({action: 'unmerge', id: alias.id});
     expect(JSON.parse(res.content).aliases).deep.eq([]);
   });
 
   it('refuses invalid requests', async () => {
-    await post({action: 'merge', from: 'Jens', to: 'Jens'});
+    await post({action: 'merge', from: 'Jens', to: 'Jens', permanent: true});
     expect(res.statusCode).eq(statusCode.badRequest);
   });
 });
