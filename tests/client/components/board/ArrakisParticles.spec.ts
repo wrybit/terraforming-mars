@@ -2,7 +2,8 @@ import {mount} from '@vue/test-utils';
 import {expect} from 'chai';
 import {vi} from 'vitest';
 import {globalConfig} from '../getLocalVue';
-import ArrakisParticles, {ParticleFlow} from '@/client/components/board/ArrakisParticles.vue';
+import ArrakisParticles from '@/client/components/board/ArrakisParticles.vue';
+import {ParticleFlow} from '@/client/components/board/particleFlow';
 
 const particle = (radius: number): ParticleFlow => ({
   path: 'M 0 0 L 10 0', radius, colour: '#ffd08a', travel: 4, travelBegin: 1, blink: 2, blinkBegin: 0.5, opacity: [0.1, 1, 0.1],

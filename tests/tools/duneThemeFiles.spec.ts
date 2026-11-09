@@ -54,7 +54,11 @@ describe('Dune theme files', () => {
     const modules = ['base', ...DUNE_EXPANSIONS];
     const dealt = ALL_MODULE_MANIFESTS
       .filter((manifest) => modules.includes(manifest.module))
-      .flatMap((manifest) => [manifest.projectCards, manifest.corporationCards, manifest.preludeCards].flatMap((cards) => CardManifest.entries(cards)))
+      .flatMap((manifest) => [
+        ...CardManifest.entries(manifest.projectCards),
+        ...CardManifest.entries(manifest.corporationCards),
+        ...CardManifest.entries(manifest.preludeCards),
+      ])
       .filter(([, spec]) => asArray(spec.compatibility ?? []).every((expansion) => themeAllowsExpansion('dune', expansion)))
       .map(([name]) => name);
     expect(dealt.length).to.be.greaterThan(250);

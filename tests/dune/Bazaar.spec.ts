@@ -13,7 +13,6 @@ import {Payment} from '../../src/common/inputs/Payment';
 import {DuneExpansion} from '../../src/server/dune/DuneExpansion';
 import {BAZAAR_WARES, bazaarBasePrice, bazaarPrice, bazaarStartWareCount, bazaarWare} from '../../src/common/dune/bazaarWares';
 import {cast} from '../../src/common/utils/utils';
-import {doWait} from '../TestingUtils';
 
 function bazaarOf(game: IGame): BazaarData {
   const bazaar = game.duneData?.bazaar;

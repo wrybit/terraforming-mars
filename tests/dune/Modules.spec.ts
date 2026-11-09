@@ -13,7 +13,7 @@ import {Resource} from '../../src/common/Resource';
 import {TileType} from '../../src/common/TileType';
 import {Phase} from '../../src/common/Phase';
 import {DuneExpansion} from '../../src/server/dune/DuneExpansion';
-import {battleTargets, garrisonOf, resolveBattle, OPEN_KANLY_COST} from '../../src/server/dune/Kanly';
+import {battleTargets, resolveBattle, OPEN_KANLY_COST} from '../../src/server/dune/Kanly';
 import {NORMAL_BUY, NORMAL_SELL} from '../../src/common/dune/smugglingExchange';
 import {chargeSuspicion, exchangeOf, moveExchange, nextPrivilegeOf, openExchange, privilegeOf, prophecyOf, suspicionOf, suspicionPenalty} from '../../src/server/dune/Smuggling';
 import {PRIVILEGE_TITLE, PROPHECY_BUY_TITLE, PROPHECY_SELL_TITLE, SMUGGLE_TITLE} from '../../src/common/dune/duneActionTitles';
@@ -61,9 +61,6 @@ function smuggleTrade(player: TestPlayer): SelectTrade {
   return cast(option(choamTab(player), SMUGGLE_TITLE), SelectTrade);
 }
 
-function pick(input: PlayerInput): void {
-  cast(input, SelectOption).cb(undefined);
-}
 
 describe('Dune modules B, D, E, F', () => {
   let game: IGame;

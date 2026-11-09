@@ -77,7 +77,8 @@ import {FILL_WIDTH, FULL_WIDTH, FlowPath, GHOST_WIDTH, SCALE_GLOW, ScaleArt, Sca
 import {BOARD_BOX, MotionBox, MotionStyle, boxAround, desync, whiteTo} from './arrakisMotion';
 import {themedAsset} from '@/client/theme/themeDisplay';
 import {prefersReducedMotion} from '@/client/utils/motion';
-import ArrakisParticles, {ParticleFlow} from './ArrakisParticles.vue';
+import ArrakisParticles from './ArrakisParticles.vue';
+import {ParticleFlow} from './particleFlow';
 import ArrakisMotionPart from './ArrakisMotionPart.vue';
 
 type Track = {

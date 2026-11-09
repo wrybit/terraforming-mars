@@ -61,7 +61,8 @@ import {BAR_HEIGHT, CELL_WIDTH, CHECK_HEX, ICON_SIZE, SpiceLayout, SpiceRow, hex
 import {BOARD_BOX, MotionBox, MotionStyle, boxAround, desync, seededRandom, whiteTo} from './arrakisMotion';
 import {translateTextWithParams} from '@/client/directives/i18n';
 import {prefersReducedMotion} from '@/client/utils/motion';
-import ArrakisParticles, {ParticleFlow} from './ArrakisParticles.vue';
+import ArrakisParticles from './ArrakisParticles.vue';
+import {ParticleFlow} from './particleFlow';
 import ArrakisMotionPart from './ArrakisMotionPart.vue';
 
 type Cell = {distance: number, filled: boolean, next: boolean, index: number};

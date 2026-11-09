@@ -10,22 +10,9 @@
 <script lang="ts">
 import {defineComponent, markRaw, PropType} from 'vue';
 import {trackPoints} from './particleTrack';
+import {ParticleFlow} from './particleFlow';
 import {supportsWebAnimations} from '@/client/utils/motion';
 import {tuneAmbientAnimations} from '@/client/utils/ambientMotion';
-
-/** One particle: its path in board px (with the SVG transform of its group), size, colour and two own clocks (seconds) */
-export type ParticleFlow = {
-  path: string,
-  transform?: string,
-  radius: number,
-  colour: string,
-  travel: number,
-  travelBegin: number,
-  blink: number,
-  blinkBegin: number,
-  /** Opacity at the start, middle and end of each blink */
-  opacity: [number, number, number],
-};
 
 export default defineComponent({
   name: 'ArrakisParticles',
