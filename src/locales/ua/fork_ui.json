@@ -1324,5 +1324,6 @@
   "Only the games played so far are merged: a future player with this name stays separate.": "Об'єднуються лише зіграні ігри: майбутній гравець з цим ім'ям залишиться окремо.",
   "This is a default name: future players with it are usually other people.": "Це стандартне ім'я: майбутні гравці з ним зазвичай інші люди.",
   "permanent": "постійно",
-  "${0} games, one-time": "${0} ігор, одноразово"
+  "${0} games, one-time": "${0} ігор, одноразово",
+  "${0} added a delegate in ${1}": "${0} додав делегата до ${1}"
 }

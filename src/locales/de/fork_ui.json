@@ -941,5 +941,6 @@
   "Only the games played so far are merged: a future player with this name stays separate.": "Nur die bisherigen Partien werden zusammengeführt: ein künftiger Spieler mit diesem Namen bleibt getrennt.",
   "This is a default name: future players with it are usually other people.": "Das ist ein Standardname: künftige Spieler damit sind meist andere Personen.",
   "permanent": "dauerhaft",
-  "${0} games, one-time": "${0} Partien, einmalig"
+  "${0} games, one-time": "${0} Partien, einmalig",
+  "${0} added a delegate in ${1}": "${0} schickt einen Delegierten in die Partei ${1}"
 }

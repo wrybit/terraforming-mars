@@ -2037,5 +2037,6 @@
   "Only the games played so far are merged: a future player with this name stays separate.": "Объединяются только сыгранные партии: будущий игрок с этим именем останется отдельным.",
   "This is a default name: future players with it are usually other people.": "Это стандартное имя: будущие игроки с ним обычно другие люди.",
   "permanent": "постоянно",
-  "${0} games, one-time": "${0} партий, разово"
+  "${0} games, one-time": "${0} партий, разово",
+  "${0} added a delegate in ${1}": "${0} добавил делегата в ${1}"
 }

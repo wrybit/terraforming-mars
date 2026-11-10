@@ -1348,5 +1348,6 @@
   "Only the games played so far are merged: a future player with this name stays separate.": "Csak az eddigi játékok vonódnak össze: egy jövőbeli játékos ezzel a névvel külön marad.",
   "This is a default name: future players with it are usually other people.": "Ez alapértelmezett név: a jövőbeli játékosok ezzel általában más emberek.",
   "permanent": "végleges",
-  "${0} games, one-time": "${0} játék, egyszeri"
+  "${0} games, one-time": "${0} játék, egyszeri",
+  "${0} added a delegate in ${1}": "${0} delegáltat helyezett el: ${1}"
 }

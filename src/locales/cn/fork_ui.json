@@ -2150,5 +2150,6 @@
   "Only the games played so far are merged: a future player with this name stays separate.": "只合并目前已有的对局：以后使用这个名字的玩家保持独立。",
   "This is a default name: future players with it are usually other people.": "这是默认名字：以后使用它的玩家通常是其他人。",
   "permanent": "永久",
-  "${0} games, one-time": "${0} 局，一次性"
+  "${0} games, one-time": "${0} 局，一次性",
+  "${0} added a delegate in ${1}": "${0} 在 ${1} 增加了一名代表"
 }

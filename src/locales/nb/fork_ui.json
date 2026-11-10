@@ -1532,5 +1532,6 @@
   "Only the games played so far are merged: a future player with this name stays separate.": "Bare spillene så langt slås sammen: en fremtidig spiller med dette navnet holdes adskilt.",
   "This is a default name: future players with it are usually other people.": "Dette er et standardnavn: fremtidige spillere med det er som regel andre personer.",
   "permanent": "varig",
-  "${0} games, one-time": "${0} spill, engangs"
+  "${0} games, one-time": "${0} spill, engangs",
+  "${0} added a delegate in ${1}": "${0} la til en delegat i ${1}"
 }
