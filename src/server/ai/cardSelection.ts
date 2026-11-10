@@ -26,6 +26,7 @@ import {openingSynergy} from './openingSynergy';
 import {preludeIncomePenalty} from './preludeIncomeFloor';
 import {withOpeningFit} from './cardFit';
 import {withPolicyPreference} from './bgaPolicy';
+import {withPlayShare} from './measuredPlayShare';
 
 // Opening choice (corporation + preludes + cards) and card buying / drafting.
 
@@ -302,7 +303,8 @@ export function chooseCardsToKeep(input: SelectCard<ICard>, player: IPlayer): In
   // Also when the game will probably end in this generation: buying for "later" is mostly lost then.
   const bought = remaining === 0 || lastGenerationLikelihood(player.game) >= 0.5 ?
     lastGenerationCardsToBuy(sorted, valueOf, player, input.config.max) :
-    cardsToBuy(sorted, valueOf, budget, Math.min(input.config.max, room), player.cardCost, tuning.buyMargin);
+    // buyPlayShare: cards the AI rarely gets to play are worth less to buy (measuredPlayShare.ts).
+    cardsToBuy(sorted, withPlayShare(valueOf, tuning.buyPlayShare), budget, Math.min(input.config.max, room), player.cardCost, tuning.buyMargin);
   const count = Math.max(input.config.min, bought.length);
   const kept = count > bought.length ? sorted.slice(0, count) : bought;
   // One or two cards more when they make a milestone claimable (milestoneBuying.ts).

@@ -50,7 +50,7 @@ export type AiTuning = {
   terraformBrake: number,
   /** 1: expected game length by player count (2 players 15, 3 players 12) instead of 12 (gameProgress.ts). */
   lengthByPlayers: number,
-  /** Expected length of a two-player game in generations (gameProgress.ts, with lengthByPlayers); 16 since round 192 (15 before). */
+  /** Expected length of a two-player game in generations (gameProgress.ts, with lengthByPlayers); 15 (16 in round 192 only). */
   twoPlayerGenerations: number,
   /** Factor on the M€ value of a victory point in the deciding player's valuation (stateValue.ts). */
   victoryPointScale: number,
@@ -328,6 +328,8 @@ export type AiTuning = {
   awardHandOutlook: number,
   /** 1: cards counting city tiles (Greenhouses) are valued at the end of the game with the cities built by then (cardValue.ts). */
   lateBoardCards: number,
+  /** 0..1: card buying scales a card's value toward the share of it the AI really played in test batches (measuredPlayShare.ts); 0 = off. */
+  buyPlayShare: number,
 };
 
 // Card buying, found with A/B batches (same 100 deals, variants rotating through the seats):
@@ -383,9 +385,9 @@ export const BASELINE_TUNING: AiTuning = {
   // Neutral in AI-vs-AI (z +0.36) but measured right (2P 14.5, 3P 11.8 generations); adopted on
   // purpose against the z rule: with 12 the AI gave up its engine from generation 8 against a human.
   lengthByPlayers: 1,
-  // Round 192: 16 −0.25 VP (z −0.33) but cards played +1.02 (z +2.89), bought +1.21 – adopted by the card rule;
-  // 13 lost in round 191 (−2.04, fewer cards bought), 17 −1.01 (z −1.23).
-  twoPlayerGenerations: 16,
+  // Rounds 191–193: 13 −2.04 VP (fewer cards bought); 16 −0.25 VP with +1.02 cards played – adopted by the card rule,
+  // but the check 15 won +1.17 (z +1.57), pooled 16 vs 15 −0.71 VP (z −1.3) – back to 15; 17 −1.01 / −1.21.
+  twoPlayerGenerations: 15,
   awardTiming: 0,
   // Night runs A+B (3200 games): 0.55 → 0.9 won clearly (A: 0.75 z +4.8; B: 0.9 z +2.7, 1.05 z +3.5,
   // control −0.8); best VP per generation. Income was undervalued once the game length was right.
@@ -614,6 +616,7 @@ export const BASELINE_TUNING: AiTuning = {
   awardFundingLead: 0.1,
   // Round 141: +0.14 VP (z +0.16) – adopted: fixes the human-game error (paid funding at 0 : 0 in generation 1).
   awardPaidEarlyLead: 1,
+  buyPlayShare: 0,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
@@ -1244,6 +1247,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   twoPlayerLength17: {twoPlayerGenerations: 17},
   // Round 193: check of the adoption of 16.
   twoPlayerLength15: {twoPlayerGenerations: 15},
+  // Round 194: the AI holds 6.5 cards at the end (humans ~1); some cards are bought but hardly ever played.
+  buyPlayShare05: {buyPlayShare: 0.5},
+  buyPlayShare1: {buyPlayShare: 1},
 };
 
 export function isTuningVariant(name: string): boolean {
