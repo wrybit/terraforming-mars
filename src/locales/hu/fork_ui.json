@@ -1348,5 +1348,6 @@
   "permanent": "végleges",
   "${0} games, one-time": "${0} játék, egyszeri",
   "active ${0} ago": "${0} ezelőtt aktív",
-  "merged automatically": "automatikusan összevonva"
+  "merged automatically": "automatikusan összevonva",
+  "${0} added a delegate in ${1}": "${0} delegáltat helyezett el: ${1}"
 }

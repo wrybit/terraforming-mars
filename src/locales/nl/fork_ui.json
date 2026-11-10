@@ -1793,5 +1793,6 @@
   "permanent": "blijvend",
   "${0} games, one-time": "${0} spellen, eenmalig",
   "active ${0} ago": "actief ${0} geleden",
-  "merged automatically": "automatisch samengevoegd"
+  "merged automatically": "automatisch samengevoegd",
+  "${0} added a delegate in ${1}": "${0} voegde een afgevaardigde toe aan ${1}"
 }

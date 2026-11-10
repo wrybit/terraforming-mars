@@ -1964,5 +1964,6 @@
   "permanent": "na stałe",
   "${0} games, one-time": "${0} gier, jednorazowo",
   "active ${0} ago": "aktywna ${0} temu",
-  "merged automatically": "scalono automatycznie"
+  "merged automatically": "scalono automatycznie",
+  "${0} added a delegate in ${1}": "${0} dodał delegata do ${1}"
 }

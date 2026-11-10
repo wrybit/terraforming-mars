@@ -2150,5 +2150,6 @@
   "permanent": "永久",
   "${0} games, one-time": "${0} 局，一次性",
   "active ${0} ago": "${0}前活跃",
-  "merged automatically": "自动合并"
+  "merged automatically": "自动合并",
+  "${0} added a delegate in ${1}": "${0} 在 ${1} 增加了一名代表"
 }

@@ -2037,5 +2037,6 @@
   "permanent": "постоянно",
   "${0} games, one-time": "${0} партий, разово",
   "active ${0} ago": "активность ${0} назад",
-  "merged automatically": "объединено автоматически"
+  "merged automatically": "объединено автоматически",
+  "${0} added a delegate in ${1}": "${0} добавил делегата в ${1}"
 }

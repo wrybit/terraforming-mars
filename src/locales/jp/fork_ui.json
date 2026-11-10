@@ -1540,5 +1540,6 @@
   "permanent": "恒久",
   "${0} games, one-time": "${0} ゲーム、1回限り",
   "active ${0} ago": "${0}前に操作",
-  "merged automatically": "自動で統合"
+  "merged automatically": "自動で統合",
+  "${0} added a delegate in ${1}": "${0} が ${1} に代表を追加しました"
 }

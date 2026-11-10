@@ -1166,5 +1166,6 @@
   "permanent": "pysyvä",
   "${0} games, one-time": "${0} peliä, kertaluonteinen",
   "active ${0} ago": "aktiivinen ${0} sitten",
-  "merged automatically": "yhdistetty automaattisesti"
+  "merged automatically": "yhdistetty automaattisesti",
+  "${0} added a delegate in ${1}": "${0} lisäsi edustajan puolueeseen ${1}"
 }

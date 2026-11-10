@@ -2432,5 +2432,6 @@
   "permanent": "permanente",
   "${0} games, one-time": "${0} partite, una tantum",
   "active ${0} ago": "attiva ${0} fa",
-  "merged automatically": "unito automaticamente"
+  "merged automatically": "unito automaticamente",
+  "${0} added a delegate in ${1}": "${0} ha aggiunto un delegato in ${1}"
 }
