@@ -2431,5 +2431,6 @@
   "This is a default name: future players with it are usually other people.": "È un nome predefinito: i futuri giocatori con questo nome sono di solito altre persone.",
   "permanent": "permanente",
   "${0} games, one-time": "${0} partite, una tantum",
-  "active ${0} ago": "attiva ${0} fa"
+  "active ${0} ago": "attiva ${0} fa",
+  "merged automatically": "unito automaticamente"
 }

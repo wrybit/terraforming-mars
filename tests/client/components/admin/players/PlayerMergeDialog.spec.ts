@@ -4,7 +4,7 @@ import {globalConfig} from '../../getLocalVue';
 import PlayerMergeDialog from '@/client/components/admin/players/PlayerMergeDialog.vue';
 import {PlayerNameStats} from '@/client/components/admin/players/playerNameStats';
 
-const player = (name: string, games: number): PlayerNameStats => ({name, games, color: 'red', wins: 0, lastTimeMs: 0, oldNames: []});
+const player = (name: string, games: number): PlayerNameStats => ({name, games, color: 'red', wins: 0, lastTimeMs: 0, oldNames: [], isBot: false});
 
 describe('PlayerMergeDialog', () => {
   it('shows the new game count of the name that stays, warns only for shared games', () => {

@@ -2,7 +2,7 @@ import {expect} from 'chai';
 import {similarPlayerNames} from '@/client/components/admin/players/similarPlayerNames';
 import {PlayerNameStats} from '@/client/components/admin/players/playerNameStats';
 
-const player = (name: string, games: number): PlayerNameStats => ({name, games, color: 'red', wins: 0, lastTimeMs: 0, oldNames: []});
+const player = (name: string, games: number): PlayerNameStats => ({name, games, color: 'red', wins: 0, lastTimeMs: 0, oldNames: [], isBot: false});
 
 describe('similarPlayerNames', () => {
   it('proposes the name with fewer games into the one with more', () => {
@@ -16,5 +16,10 @@ describe('similarPlayerNames', () => {
 
   it('never proposes default names', () => {
     expect(similarPlayerNames([player('Blue', 9), player('blue', 2)], ['Blue', 'blue'])).deep.eq([]);
+  });
+
+  it('never proposes the AI accounts', () => {
+    const bot = (name: string, games: number) => ({...player(name, games), isBot: true});
+    expect(similarPlayerNames([bot('Bot [AI+]', 9), bot('Bot [AI]', 2)])).deep.eq([]);
   });
 });

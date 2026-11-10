@@ -1165,5 +1165,6 @@
   "This is a default name: future players with it are usually other people.": "Tämä on oletusnimi: tulevat pelaajat sillä ovat yleensä eri ihmisiä.",
   "permanent": "pysyvä",
   "${0} games, one-time": "${0} peliä, kertaluonteinen",
-  "active ${0} ago": "aktiivinen ${0} sitten"
+  "active ${0} ago": "aktiivinen ${0} sitten",
+  "merged automatically": "yhdistetty automaattisesti"
 }

@@ -2036,5 +2036,6 @@
   "This is a default name: future players with it are usually other people.": "Это стандартное имя: будущие игроки с ним обычно другие люди.",
   "permanent": "постоянно",
   "${0} games, one-time": "${0} партий, разово",
-  "active ${0} ago": "активность ${0} назад"
+  "active ${0} ago": "активность ${0} назад",
+  "merged automatically": "объединено автоматически"
 }

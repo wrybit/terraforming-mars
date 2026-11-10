@@ -64,4 +64,10 @@ describe('PlayerAliasesStore', () => {
     expect(store.unmerge(anna.id)).is.false;
     expect(pairs()).deep.eq(['Blue→Jens [g1]']);
   });
+
+  it('never merges AI names: they count per strength automatically', () => {
+    expect(store.merge('Paul [AI+]', 'Jens', undefined)).is.false;
+    expect(store.merge('Jens', 'Bot [AI]', undefined)).is.false;
+    expect(store.list()).deep.eq([]);
+  });
 });

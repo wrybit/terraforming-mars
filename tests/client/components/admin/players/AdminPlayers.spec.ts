@@ -8,7 +8,7 @@ import {statsGame} from './playerFixtures';
 describe('AdminPlayers', () => {
   let originalFetch: typeof global.fetch;
   let posted: Array<unknown>;
-  const info: AdminPlayerAliasesInfo = {aliases: [{id: 'a1', from: 'Michael', to: 'Micha', createdTimeMs: 0}], defaultNames: ['Blue', 'Blau']};
+  const info: AdminPlayerAliasesInfo = {aliases: [{id: 'a1', from: 'Michael', to: 'Micha', createdTimeMs: 0}], defaultNames: ['Blue', 'Blau'], appearances: [{name: 'Micha', emoji: '🚀'}]};
   const games = [statsGame(1, [{name: 'Jens'}, {name: 'jens'}, {name: 'Micha'}]), statsGame(2, [{name: 'Jens'}, {name: 'Blue'}])];
 
   async function settle(): Promise<void> {

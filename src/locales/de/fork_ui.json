@@ -936,6 +936,7 @@
   "Nothing merged yet.": "Noch nichts zusammengeführt.",
   "Permanent merges also apply to new games under the old name; one-time merges only to the games so far.": "Dauerhafte Zusammenführungen gelten auch für neue Partien unter dem alten Namen, einmalige nur für die bisherigen.",
   "default name": "Standardname",
+  "merged automatically": "automatisch zusammengeführt",
   "Also for future games": "Auch für künftige Partien",
   "Only the games played so far are merged: a future player with this name stays separate.": "Nur die bisherigen Partien werden zusammengeführt: ein künftiger Spieler mit diesem Namen bleibt getrennt.",
   "This is a default name: future players with it are usually other people.": "Das ist ein Standardname: künftige Spieler damit sind meist andere Personen.",

@@ -1539,5 +1539,6 @@
   "This is a default name: future players with it are usually other people.": "これは既定の名前です：今後この名前を使うプレイヤーは通常別の人です。",
   "permanent": "恒久",
   "${0} games, one-time": "${0} ゲーム、1回限り",
-  "active ${0} ago": "${0}前に操作"
+  "active ${0} ago": "${0}前に操作",
+  "merged automatically": "自動で統合"
 }

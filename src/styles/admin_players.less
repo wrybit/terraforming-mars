@@ -154,6 +154,30 @@
   }
 }
 
+.admin-players-group {
+  display: flex;
+  flex-direction: column;
+  gap: @players-gap-row;
+
+  // Groups further apart than the toolbar from the list: AI and humans read as two blocks
+  & + & {
+    margin-top: @players-gap-card - @players-gap-group;
+  }
+}
+
+.admin-players-group-title {
+  margin: 0;
+  color: @players-dim;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.admin-players-group-count {
+  font-weight: 400;
+}
+
 .admin-players-list {
   display: flex;
   flex-direction: column;
@@ -165,7 +189,7 @@
 
 .admin-players-row {
   display: grid;
-  grid-template-columns: 16px 12px minmax(0, 1fr) auto;
+  grid-template-columns: 16px 30px minmax(0, 1fr) auto;
   align-items: center;
   gap: 0 10px;
   padding: 8px 10px;
@@ -199,15 +223,68 @@
   border-style: dashed;
 }
 
+// AI accounts are merged automatically: no grab cursor, no hover, no grip
+.admin-players-row--bot {
+  cursor: default;
+
+  &:hover {
+    border-color: @players-line;
+  }
+}
+
+.admin-players-look {
+  display: inline-flex;
+}
+
+.admin-players-look-button {
+  display: inline-flex;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    box-shadow: 0 0 0 2px @players-accent;
+  }
+}
+
+// Colour cubes, emojis and reset: title close to its choice, the blocks further apart
+.admin-players-look-panel {
+  display: flex;
+  flex-direction: column;
+  gap: @players-gap-item;
+  padding-bottom: 12px;
+
+  // The panel sets the spacing itself: the subhead's own top margin left an empty strip above "Color"
+  .create-game-subhead {
+    margin: 0;
+  }
+
+  .create-game-swatches + .create-game-subhead {
+    margin-top: @players-gap-group;
+  }
+
+  // The grid's own bottom margin plus the action row would double the gap
+  .lobby-emoji-grid {
+    margin-bottom: 0;
+  }
+}
+
+.admin-players-look-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: @players-gap-group;
+}
+
+.admin-players-grip--off {
+  visibility: hidden;
+}
+
 .admin-players-grip {
   color: @players-dim;
   letter-spacing: -2px;
-}
-
-.admin-players-swatch {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
 }
 
 .admin-players-who {

@@ -50,7 +50,7 @@ export type AiTuning = {
   terraformBrake: number,
   /** 1: expected game length by player count (2 players 15, 3 players 12) instead of 12 (gameProgress.ts). */
   lengthByPlayers: number,
-  /** Expected length of a two-player game in generations (gameProgress.ts, with lengthByPlayers); 15 since round 8. */
+  /** Expected length of a two-player game in generations (gameProgress.ts, with lengthByPlayers); 16 since round 192 (15 before). */
   twoPlayerGenerations: number,
   /** Factor on the M€ value of a victory point in the deciding player's valuation (stateValue.ts). */
   victoryPointScale: number,
@@ -383,7 +383,9 @@ export const BASELINE_TUNING: AiTuning = {
   // Neutral in AI-vs-AI (z +0.36) but measured right (2P 14.5, 3P 11.8 generations); adopted on
   // purpose against the z rule: with 12 the AI gave up its engine from generation 8 against a human.
   lengthByPlayers: 1,
-  twoPlayerGenerations: 15,
+  // Round 192: 16 −0.25 VP (z −0.33) but cards played +1.02 (z +2.89), bought +1.21 – adopted by the card rule;
+  // 13 lost in round 191 (−2.04, fewer cards bought), 17 −1.01 (z −1.23).
+  twoPlayerGenerations: 16,
   awardTiming: 0,
   // Night runs A+B (3200 games): 0.55 → 0.9 won clearly (A: 0.75 z +4.8; B: 0.9 z +2.7, 1.05 z +3.5,
   // control −0.8); best VP per generation. Income was undervalued once the game length was right.
@@ -1240,6 +1242,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   twoPlayerLength13: {twoPlayerGenerations: 13},
   twoPlayerLength16: {twoPlayerGenerations: 16},
   twoPlayerLength17: {twoPlayerGenerations: 17},
+  // Round 193: check of the adoption of 16.
+  twoPlayerLength15: {twoPlayerGenerations: 15},
 };
 
 export function isTuningVariant(name: string): boolean {

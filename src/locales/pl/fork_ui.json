@@ -1963,5 +1963,6 @@
   "This is a default name: future players with it are usually other people.": "To nazwa domyślna: przyszli gracze z nią to zwykle inne osoby.",
   "permanent": "na stałe",
   "${0} games, one-time": "${0} gier, jednorazowo",
-  "active ${0} ago": "aktywna ${0} temu"
+  "active ${0} ago": "aktywna ${0} temu",
+  "merged automatically": "scalono automatycznie"
 }
