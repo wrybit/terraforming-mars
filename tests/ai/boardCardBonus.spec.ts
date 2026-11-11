@@ -15,6 +15,13 @@ describe('AI board card bonus', () => {
     setPlayerTuning(player.id, 'noBoardCards');
     const flat = spaceValue(space!, 'ocean', player);
     setPlayerTuning(player.id, 'boardCards1');
-    expect(spaceValue(space!, 'ocean', player)).to.be.greaterThan(flat + 2);
+    const single = spaceValue(space!, 'ocean', player);
+    expect(single).to.be.greaterThan(flat + 2);
+    // Round 197: stronger weights for the card spaces
+    setPlayerTuning(player.id, 'boardCards15');
+    const oneAndHalf = spaceValue(space!, 'ocean', player);
+    expect(oneAndHalf).to.be.greaterThan(single);
+    setPlayerTuning(player.id, 'boardCards2');
+    expect(spaceValue(space!, 'ocean', player)).to.be.greaterThan(oneAndHalf);
   });
 });
