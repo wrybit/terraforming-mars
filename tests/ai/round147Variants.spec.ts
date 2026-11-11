@@ -35,6 +35,9 @@ describe('AI round 147 variants', () => {
       expect(milestoneDenialPoints(player)).eq(0);
       setPlayerTuning(player.id, 'milestoneDenial');
       expect(milestoneDenialPoints(player)).eq(-5);
+      // Round 196: half strength
+      setPlayerTuning(player.id, 'milestoneDenial05');
+      expect(milestoneDenialPoints(player)).eq(-2.5);
     });
 
     it('sees no risk when the opponent is far away or the milestone is claimed', () => {
