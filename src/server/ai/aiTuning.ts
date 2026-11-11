@@ -1035,6 +1035,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   passFairness: {passFairness: 1},
   // Human games 24.–26.10.: a claimable milestone put off for another move, the opponent claimed it (3x).
   milestoneDenial: {milestoneDenial: 1},
+  // Round 196: retest at half strength against the current baseline (at strength 1: −0.89, dropped).
+  milestoneDenial05: {milestoneDenial: 0.5},
   // Human games: M€ production at most 1 until generation 5 (8x), e.g. preludes with −1 M€ production.
   preludeIncomeFloor: {preludeIncomeFloor: 1},
   // Round 147: preludeIncomeFloor adopted (neutral −0.04, fixes a human-game error); check.
@@ -1248,8 +1250,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Round 193: check of the adoption of 16.
   twoPlayerLength15: {twoPlayerGenerations: 15},
   // Round 194: the AI holds 6.5 cards at the end (humans ~1); some cards are bought but hardly ever played.
-  // Round 194: 0.5 +0.44 VP (z +0.56, bought −0.37, hand at the end 6.2 vs 6.4) → candidate, repeated in round 195;
-  // 1 +0.19 (z +0.27), played −0.47 → dropped.
+  // Round 194: 0.5 +0.44 VP (z +0.56, bought −0.37, hand at the end 6.2 vs 6.4), 1 +0.19 (played −0.47);
+  // round 195: 0.5 −1.05 (z −1.57), 0.25 −0.68 (z −0.97) → all dropped, buyPlayShare stays 0.
   buyPlayShare05: {buyPlayShare: 0.5},
   buyPlayShare1: {buyPlayShare: 1},
   buyPlayShare025: {buyPlayShare: 0.25},
