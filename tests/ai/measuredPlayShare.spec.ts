@@ -14,5 +14,6 @@ describe('AI measured play share', () => {
     expect(withPlayShare(valueOf, 0)(CardName.EXTRACTOR_BALLOONS)).eq(20);
     expect(withPlayShare(valueOf, 1)(CardName.EXTRACTOR_BALLOONS)).closeTo(20 * share, 1e-9);
     expect(withPlayShare(valueOf, 0.5)(CardName.EXTRACTOR_BALLOONS)).closeTo(20 * (1 + share) / 2, 1e-9);
+    expect(withPlayShare(valueOf, 0.25)(CardName.EXTRACTOR_BALLOONS)).closeTo(20 * (1 - 0.25 * (1 - share)), 1e-9);
   });
 });

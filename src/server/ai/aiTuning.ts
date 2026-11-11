@@ -1248,8 +1248,11 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Round 193: check of the adoption of 16.
   twoPlayerLength15: {twoPlayerGenerations: 15},
   // Round 194: the AI holds 6.5 cards at the end (humans ~1); some cards are bought but hardly ever played.
+  // Round 194: 0.5 +0.44 VP (z +0.56, bought −0.37, hand at the end 6.2 vs 6.4) → candidate, repeated in round 195;
+  // 1 +0.19 (z +0.27), played −0.47 → dropped.
   buyPlayShare05: {buyPlayShare: 0.5},
   buyPlayShare1: {buyPlayShare: 1},
+  buyPlayShare025: {buyPlayShare: 0.25},
 };
 
 export function isTuningVariant(name: string): boolean {
