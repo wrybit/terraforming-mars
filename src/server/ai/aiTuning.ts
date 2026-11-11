@@ -922,6 +922,7 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   collectorRate08: {accumulatorValue: 0.8, collectorRates: 1},
   noCollectors: {accumulatorValue: 0, collectorRates: 0},
   // Human rush ended a game in generation 8: shorten the estimate by the last generation's pace.
+  // Round 196 retest: +0.04 (z +0.06), cards played −1.22 – dropped again.
   recentPace1: {recentPace: 1},
   recentPace2: {recentPace: 2},
   // Venus games: World Government chose temperature every time (first option).
@@ -1016,6 +1017,9 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Card spaces on the board valued like a drawn card instead of 3 M€.
   boardCards05: {boardCardBonus: 0.5},
   boardCards1: {boardCardBonus: 1},
+  // Round 197: Oracle humans draw 3.2 cards per game from board spaces, the AI 1.5 (96 games, drawSources.py).
+  boardCards15: {boardCardBonus: 1.5},
+  boardCards2: {boardCardBonus: 2},
   // Round 140: building tags while Builder is open, then science/power for later requirements (Jens' rule).
   tagDemand05: {tagDemand: 0.5},
   tagDemand1: {tagDemand: 1},
@@ -1035,7 +1039,7 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   passFairness: {passFairness: 1},
   // Human games 24.–26.10.: a claimable milestone put off for another move, the opponent claimed it (3x).
   milestoneDenial: {milestoneDenial: 1},
-  // Round 196: retest at half strength against the current baseline (at strength 1: −0.89, dropped).
+  // Round 196: retest at half strength against the current baseline (at strength 1: −0.89, dropped) – −2.12 (z −3.01), dropped again.
   milestoneDenial05: {milestoneDenial: 0.5},
   // Human games: M€ production at most 1 until generation 5 (8x), e.g. preludes with −1 M€ production.
   preludeIncomeFloor: {preludeIncomeFloor: 1},
