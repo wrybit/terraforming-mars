@@ -467,6 +467,7 @@ import {CreateGameDraft, createGameDraftStorage} from './createGameDraftStorage'
 import {getPreferences, PreferencesManager} from '@/client/utils/PreferencesManager';
 import {readSettingsFromHash, replaceSettingsHash, settingsHash} from './settingsLink/settingsLinkHash';
 import {getColony} from '@/client/colonies/ClientColonyManifest';
+import {getAward, getMilestone} from '@/client/MilestoneAwardManifest';
 import {RULEBOOK_URLS, WIKI_URLS} from '@/client/utils/WikiLinks';
 import {sanitizeEscapeVelocityOptions} from '@/common/game/escapeVelocity';
 import {validateNewGameConfig, ValidationErrors} from '@/common/game/validateNewGameConfig';
@@ -902,6 +903,8 @@ export default defineComponent({
         getColonyExpansion: (name) => {
           return getColony(name)?.expansion;
         },
+        getMilestoneExpansion: (name) => getMilestone(name)?.requirements,
+        getAwardExpansion: (name) => getAward(name)?.requirements,
       });
     },
     hasValidationProblems(): boolean {
