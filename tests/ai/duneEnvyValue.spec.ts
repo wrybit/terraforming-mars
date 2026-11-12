@@ -18,7 +18,7 @@ describe('AI Dune envy value', () => {
     setPlayerTuning(player.id, 'envyAversion1');
     // envy 4 → 2 TR
     expect(envyCost(player, 10)).eq(20);
-    expect(extensionValue(player, 10)).eq(-20);
+    expect(extensionValue(player, {terraformRating: 10, victoryPoint: 7})).eq(-20);
     data.suspicion[player.id] = 2;
     expect(envyCost(player, 10)).eq(0);
     setPlayerTuning(player.id, 'envyAversion05');

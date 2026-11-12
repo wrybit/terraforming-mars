@@ -18,4 +18,4 @@ export function envyCost(player: IPlayer, terraformRatingValue: number): number 
   return weight * suspicionPenalty(suspicionOf(data, player)) * terraformRatingValue;
 }
 
-registerValueExtension((player, terraformRatingValue) => -envyCost(player, terraformRatingValue));
+registerValueExtension((player, prices) => -envyCost(player, prices.terraformRating));
