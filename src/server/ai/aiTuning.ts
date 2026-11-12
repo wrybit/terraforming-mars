@@ -1021,7 +1021,7 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Round 197: Oracle humans draw 3.2 cards per game from board spaces, the AI 1.5 (96 games, drawSources.py).
   boardCards15: {boardCardBonus: 1.5},
   boardCards2: {boardCardBonus: 2},
-  // Round 198: boardCards1 is the check of the adoption of 1.5.
+  // Round 198: boardCards1 (check of 1.5) +0.29 (z +0.38), played −0.38 – 1.5 stays (pooled 1 vs 1.5 ≈ +0.15, z ≈ 0.3).
   // Round 140: building tags while Builder is open, then science/power for later requirements (Jens' rule).
   tagDemand05: {tagDemand: 0.5},
   tagDemand1: {tagDemand: 1},
@@ -1072,6 +1072,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Round 198 retest (once −0.24, drawn +0.56): Oracle humans use draw actions about once per generation owned, the AI
   // much less (Development Center 0.94 vs 0.55, Hi-Tech Lab 0.93 vs 0.43, Inventors' Guild 0.99 vs 0.52).
   spareMoneyDraw: {spareMoneyDraw: 1},
+  // Round 198: +0.42 VP (z +0.61), drawn +0.99, played +0.37 → candidate, repeated in round 199 with double strength.
+  spareMoneyDraw2: {spareMoneyDraw: 2},
   // Human game: the AI held 61 plants with no city and no money for one – waiting plants need a city plan.
   plantHoardDecay: {plantHoardDecay: 1},
   // Round 156: plantHoardDecay adopted (+0.73, z +1.35; cards played +0.64, z +2.35 – card rule); check.
