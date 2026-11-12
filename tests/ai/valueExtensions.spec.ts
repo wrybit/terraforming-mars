@@ -7,12 +7,13 @@ import {extensionValue, registerValueExtension} from '../../src/server/ai/valueE
 describe('AI value extensions', () => {
   afterEach(() => clearPlayerTunings());
 
-  it('adds registered terms, priced with the value of a TR step', () => {
+  it('adds registered terms, priced with the value of a TR step and a VP', () => {
     const [, player] = testGame(2);
-    const before = extensionValue(player, 10);
+    const prices = {terraformRating: 10, victoryPoint: 7};
+    const before = extensionValue(player, prices);
     const marker = player.id;
-    registerValueExtension((candidate, terraformRatingValue) => candidate.id === marker ? -2 * terraformRatingValue : 0);
-    expect(extensionValue(player, 10)).eq(before - 20);
+    registerValueExtension((candidate, {terraformRating, victoryPoint}) => candidate.id === marker ? -2 * terraformRating + victoryPoint : 0);
+    expect(extensionValue(player, prices)).eq(before - 13);
   });
 
   it('knows variant names of a module and the variant of a player', () => {

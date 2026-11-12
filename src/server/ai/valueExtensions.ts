@@ -1,10 +1,11 @@
 import {IPlayer} from '../IPlayer';
 
 // Extra terms of a player's position value (stateValue.ts playerValue) contributed by optional game modules that
-// the core valuation does not know, e.g. penalties that only fall due at the end of a generation. Each term is in
-// M€ and gets the M€ value of one terraform rating step, the usual currency of such penalties.
+// the core valuation does not know, e.g. penalties or tile changes that only fall due at the end of a generation. Each
+// term is in M€ and gets the M€ value of one terraform rating step and of one victory point at this moment.
 
-export type ValueExtension = (player: IPlayer, terraformRatingValue: number) => number;
+export type ValuePrices = {terraformRating: number, victoryPoint: number};
+export type ValueExtension = (player: IPlayer, prices: ValuePrices) => number;
 
 const extensions: Array<ValueExtension> = [];
 
@@ -16,10 +17,10 @@ export function registerValueExtension(extension: ValueExtension): void {
 }
 
 /** Sum of all registered terms for `player`; 0 without any. */
-export function extensionValue(player: IPlayer, terraformRatingValue: number): number {
+export function extensionValue(player: IPlayer, prices: ValuePrices): number {
   let value = 0;
   for (const extension of extensions) {
-    value += extension(player, terraformRatingValue);
+    value += extension(player, prices);
   }
   return value;
 }

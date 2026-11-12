@@ -512,8 +512,11 @@ export function playerValue(player: IPlayer, frozen: ValuationContext): number {
     tableauValue(player, context) -
     // Plants and animals an opponent's attack can still take (attackExposure.ts).
     (tuningOf(player).exposure > 0 ? tuningOf(player).exposure * expectedAttackLoss(player, context.remaining, context.victoryPoint) : 0) +
-    // Terms of optional modules (valueExtensions.ts), priced with what one TR step is worth here.
-    extensionValue(player, context.victoryPoint + context.remaining * (context.productionDiscount ?? PRODUCTION_DISCOUNT));
+    // Terms of optional modules (valueExtensions.ts), priced with what one TR step and one VP are worth here.
+    extensionValue(player, {
+      terraformRating: context.victoryPoint + context.remaining * (context.productionDiscount ?? PRODUCTION_DISCOUNT),
+      victoryPoint: context.victoryPoint,
+    });
 }
 
 /** Own value minus a share of the opponents' average: the number the AI maximises. */
