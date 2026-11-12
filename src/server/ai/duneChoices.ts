@@ -7,6 +7,8 @@ import {relativeValue, valuationContext} from './stateValue';
 import {handCardValues} from './cardValue';
 import {buyInput} from '../dune/Bazaar';
 import {distanceInput} from '../dune/Worm';
+// Registers the CHOAM envy term of the position value (side effect).
+import './duneEnvyValue';
 
 // Dune expansion (dune/DuneExpansion.ts): choices of its modules. Each option – "buy nothing" included – is tried
 // on a copy of the game and valued like a move (relativeValue: own position against the others), so a ware is
