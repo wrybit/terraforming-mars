@@ -451,7 +451,8 @@ export const BASELINE_TUNING: AiTuning = {
   // by the card-throughput rule. Round 184 (hand targets 14/8): noCheapFirst cards played +0.95 (z +2.87), VP +0.68
   // (z +1.02) – back to 0 by the card rule.
   cheapFirst: 0,
-  boardCardBonus: 1,
+  // Round 197: 1.5 cards played +0.86 (z +2.72), drawn +1.21, VP −0.02 – adopted by the card rule (2: −1.36 VP).
+  boardCardBonus: 1.5,
   // Round 140: 0.5 cards played +0.72 (z +1.87), VP +0.26 – adopted by the card-throughput rule (1: −0.97, cards −0.71).
   tagDemand: 0.5,
   energyOutlook: 0,
@@ -1020,6 +1021,7 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Round 197: Oracle humans draw 3.2 cards per game from board spaces, the AI 1.5 (96 games, drawSources.py).
   boardCards15: {boardCardBonus: 1.5},
   boardCards2: {boardCardBonus: 2},
+  // Round 198: boardCards1 is the check of the adoption of 1.5.
   // Round 140: building tags while Builder is open, then science/power for later requirements (Jens' rule).
   tagDemand05: {tagDemand: 0.5},
   tagDemand1: {tagDemand: 1},
@@ -1067,6 +1069,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Round 155 (60-card gap: humans draw 28.9 cards outside research, the AI 8.1; late cards 5–8 vs 3.6–4.1 per generation).
   lateDrawFloor: {lateDrawFloor: 1},
   lateProductionFloor: {lateProductionFloor: 1},
+  // Round 198 retest (once −0.24, drawn +0.56): Oracle humans use draw actions about once per generation owned, the AI
+  // much less (Development Center 0.94 vs 0.55, Hi-Tech Lab 0.93 vs 0.43, Inventors' Guild 0.99 vs 0.52).
   spareMoneyDraw: {spareMoneyDraw: 1},
   // Human game: the AI held 61 plants with no city and no money for one – waiting plants need a city plan.
   plantHoardDecay: {plantHoardDecay: 1},
