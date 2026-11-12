@@ -166,6 +166,8 @@ export type AiTuning = {
   cityRaceAdapt: number,
   /** Weight of the drawn cards' value taken off a draw move while the hand holds many unplayable cards (drawStop.ts); 0 = off. */
   drawStop: number,
+  /** Weight of the drawn cards' value taken off passing while a move that draws cards is still open (drawBeforePass.ts); 0 = off. */
+  drawBeforePass: number,
   /** > 0: next generation's income counts as a city plan for city first (cityFirstWithIncome.ts); 0 = off. */
   cityFirstWithIncome: number,
   /** VP per own city beyond the first next to a greenery space (greeneryBetweenCities.ts); 0 = off. */
@@ -476,6 +478,7 @@ export const BASELINE_TUNING: AiTuning = {
   lateStandardRestraint: 0,
   cityRaceAdapt: 0,
   drawStop: 0,
+  drawBeforePass: 0,
   cityFirstWithIncome: 1,
   greeneryBetweenCities: 0,
   deadCardSale: 0,
@@ -1072,8 +1075,11 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Round 198 retest (once −0.24, drawn +0.56): Oracle humans use draw actions about once per generation owned, the AI
   // much less (Development Center 0.94 vs 0.55, Hi-Tech Lab 0.93 vs 0.43, Inventors' Guild 0.99 vs 0.52).
   spareMoneyDraw: {spareMoneyDraw: 1},
-  // Round 198: +0.42 VP (z +0.61), drawn +0.99, played +0.37 → candidate, repeated in round 199 with double strength.
+  // Round 198: +0.42 VP (z +0.61), drawn +0.99, played +0.37; round 199: +0.01, double strength −0.57 → dropped.
   spareMoneyDraw2: {spareMoneyDraw: 2},
+  // Round 200: passing costs the value of the cards an open draw action would still draw (drawBeforePass.ts).
+  drawBeforePass1: {drawBeforePass: 1},
+  drawBeforePass05: {drawBeforePass: 0.5},
   // Human game: the AI held 61 plants with no city and no money for one – waiting plants need a city plan.
   plantHoardDecay: {plantHoardDecay: 1},
   // Round 156: plantHoardDecay adopted (+0.73, z +1.35; cards played +0.64, z +2.35 – card rule); check.
