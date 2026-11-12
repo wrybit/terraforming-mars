@@ -1276,8 +1276,18 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   buyPlayShare025: {buyPlayShare: 0.25},
 };
 
+// Variant names of optional modules with their own tuning (they read it with playerVariant), so batches accept them.
+const extraVariantNames = new Set<string>();
+
+/** Makes variant names of a module's own tuning known (called once when its AI code is loaded). */
+export function registerTuningVariantNames(names: Iterable<string>): void {
+  for (const name of names) {
+    extraVariantNames.add(name);
+  }
+}
+
 export function isTuningVariant(name: string): boolean {
-  return Object.prototype.hasOwnProperty.call(TUNING_VARIANTS, name);
+  return Object.prototype.hasOwnProperty.call(TUNING_VARIANTS, name) || extraVariantNames.has(name);
 }
 
 // Two-player games (the main use case) can differ from the baseline of 3–5 players; found with the
@@ -1302,6 +1312,11 @@ export function setPlayerTuning(playerId: string, variant: string): void {
 export function clearPlayerTunings(): void {
   variantByPlayer.clear();
   tuningCache.clear();
+}
+
+/** Name of the variant a player plays with (batches), undefined for the baseline – for modules with their own tuning. */
+export function playerVariant(player: IPlayer): string | undefined {
+  return variantByPlayer.get(player.id);
 }
 
 /** Short key of the tuning a player uses, for caches that must not mix values of different tunings. */
