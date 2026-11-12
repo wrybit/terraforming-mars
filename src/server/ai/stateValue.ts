@@ -6,6 +6,7 @@ import {PlayerId} from '../../common/Types';
 import {CardType} from '../../common/cards/CardType';
 import {ICard, isIActionCard} from '../cards/ICard';
 import {productionPhasesWithFloor} from './lateProductionFloor';
+import {extensionValue} from './valueExtensions';
 import {isTemperatureMaxed, remainingProductionPhases, stepsLeft, terraformingProgress, victoryPointValue} from './gameProgress';
 import {tuningOf} from './aiTuning';
 import {boardPotential} from './boardPotential';
@@ -510,7 +511,9 @@ export function playerValue(player: IPlayer, frozen: ValuationContext): number {
     handValue(player, context) +
     tableauValue(player, context) -
     // Plants and animals an opponent's attack can still take (attackExposure.ts).
-    (tuningOf(player).exposure > 0 ? tuningOf(player).exposure * expectedAttackLoss(player, context.remaining, context.victoryPoint) : 0);
+    (tuningOf(player).exposure > 0 ? tuningOf(player).exposure * expectedAttackLoss(player, context.remaining, context.victoryPoint) : 0) +
+    // Terms of optional modules (valueExtensions.ts), priced with what one TR step is worth here.
+    extensionValue(player, context.victoryPoint + context.remaining * (context.productionDiscount ?? PRODUCTION_DISCOUNT));
 }
 
 /** Own value minus a share of the opponents' average: the number the AI maximises. */
