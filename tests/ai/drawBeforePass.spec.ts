@@ -26,6 +26,10 @@ describe('AI draw before pass', () => {
     });
     const action: InputResponse = {type: 'or', index, response: {type: 'card', cards: [CardName.DEVELOPMENT_CENTER]}};
     const other: InputResponse = {type: 'or', index: index === 0 ? 1 : 0, response: {type: 'option'}};
+    // Round 200: adopted at half strength; the check variant switches it off.
+    const adopted = drawBeforePassPenalty(player, menu, [action, other]);
+    expect(adopted).to.be.greaterThan(0);
+    setPlayerTuning(player.id, 'noDrawBeforePass');
     expect(drawBeforePassPenalty(player, menu, [action, other])).eq(0);
     setPlayerTuning(player.id, 'drawBeforePass1');
     const full = drawBeforePassPenalty(player, menu, [action, other]);

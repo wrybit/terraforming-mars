@@ -478,7 +478,8 @@ export const BASELINE_TUNING: AiTuning = {
   lateStandardRestraint: 0,
   cityRaceAdapt: 0,
   drawStop: 0,
-  drawBeforePass: 0,
+  // Round 200: 0.5 cards played +0.60 (z +1.84), drawn +0.80, VP +0.07 – adopted by the card rule (1: −0.40).
+  drawBeforePass: 0.5,
   cityFirstWithIncome: 1,
   greeneryBetweenCities: 0,
   deadCardSale: 0,
@@ -1080,6 +1081,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Round 200: passing costs the value of the cards an open draw action would still draw (drawBeforePass.ts).
   drawBeforePass1: {drawBeforePass: 1},
   drawBeforePass05: {drawBeforePass: 0.5},
+  // Round 201 (first Dune round): check of the adoption.
+  noDrawBeforePass: {drawBeforePass: 0},
   // Human game: the AI held 61 plants with no city and no money for one – waiting plants need a city plan.
   plantHoardDecay: {plantHoardDecay: 1},
   // Round 156: plantHoardDecay adopted (+0.73, z +1.35; cards played +0.64, z +2.35 – card rule); check.
