@@ -12,12 +12,25 @@ import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 import {BoardName} from '@/common/boards/BoardName';
 import {RandomBoardOption} from '@/common/boards/RandomBoardOption';
 import {boardOptions} from '@/common/boards/randomBoardOptions';
+import {CustomMA} from '@/common/ma/CustomMA';
 
 function safeBoolean(val: JSONValue): boolean {
   if (typeof val === 'boolean') {
     return val;
   }
   throw new Error(`${val} is not boolean`);
+}
+
+/** The customMA, which comes from untrusted JSON, or undefined when it's absent. */
+function safeCustomMA(val: JSONValue | undefined): CustomMA | undefined {
+  if (val === undefined || val === null) {
+    return undefined;
+  }
+  const isNames = (names: JSONValue | undefined) => Array.isArray(names) && names.every((name) => typeof name === 'string');
+  if (typeof val !== 'object' || Array.isArray(val) || !isNames(val.milestones) || !isNames(val.awards)) {
+    throw new Error('customMA must have milestones and awards arrays of names');
+  }
+  return val as unknown as CustomMA;
 }
 
 export class JSONProcessor {
@@ -133,7 +146,9 @@ export class JSONProcessor {
       'escapeVelocity',
       'players',
       'solarPhaseOption',
-      'constants'];
+      'constants',
+      // Checked, below.
+      'customMA'];
     for (const k in json) {
       if (ignoredFields.includes(k)) {
         continue;
@@ -149,6 +164,8 @@ export class JSONProcessor {
     for (let i = 0; i < players.length; i++) {
       this.model.players[i] = players[i];
     }
+
+    this.model.customMA = safeCustomMA(json.customMA) ?? this.model.customMA;
 
     this.validateCardNames('customCorporations', this.model.customCorporations);
     this.validateCardNames('customPreludes', this.model.customPreludes);
