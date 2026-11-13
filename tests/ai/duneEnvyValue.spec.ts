@@ -14,7 +14,12 @@ describe('AI Dune envy value', () => {
     const data = game.duneData!.smuggling!;
     expect(isTuningVariant('envyAversion1')).eq(true);
     data.suspicion[player.id] = 4;
+    // Round 202: adopted in the baseline; the check variant switches it off
+    expect(envyCost(player, 10)).eq(20);
+    setPlayerTuning(player.id, 'noEnvyAversion');
     expect(envyCost(player, 10)).eq(0);
+    setPlayerTuning(player.id, 'envyAversion2');
+    expect(envyCost(player, 10)).eq(40);
     setPlayerTuning(player.id, 'envyAversion1');
     // envy 4 → 2 TR
     expect(envyCost(player, 10)).eq(20);
@@ -28,7 +33,6 @@ describe('AI Dune envy value', () => {
 
   it('costs nothing without CHOAM', () => {
     const [, player] = testGame(2, {theme: 'dune', boardName: BoardName.ARRAKIS_61});
-    setPlayerTuning(player.id, 'envyAversion1');
     expect(envyCost(player, 10)).eq(0);
   });
 });

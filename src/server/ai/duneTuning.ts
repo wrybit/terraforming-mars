@@ -14,7 +14,9 @@ export interface DuneTuning {
 }
 
 export const BASELINE_DUNE_TUNING: DuneTuning = {
-  envyAversion: 0,
+  // Round 202 (all games with modules): 1 +4.89 VP (z +4.80), 0.5 +3.33 (z +3.14); TR lost to Landsraad votes per
+  // player 9.9 → 4.6, guild trades 11.9 → 8.0 – adopted.
+  envyAversion: 1,
   kanlyBattle: 0,
   kanlyGarrison: 0,
 };
@@ -24,6 +26,9 @@ export const DUNE_TUNING_VARIANTS: Record<string, Partial<DuneTuning>> = {
   // game), after 30 guild trades and 11 exchange offers – the AI did not see the penalty coming at the end of the generation.
   envyAversion1: {envyAversion: 1},
   envyAversion05: {envyAversion: 0.5},
+  // Round 203: one step further (still 3 votes per player and game with 1); noEnvyAversion is the check.
+  envyAversion2: {envyAversion: 2},
+  noEnvyAversion: {envyAversion: 0},
   // Round 203: Kanly was never opened (round 201); the battle's outcome and the garrison's chances count.
   kanly: {kanlyBattle: 1, kanlyGarrison: 0.5},
   kanlyBattleOnly: {kanlyBattle: 1},
