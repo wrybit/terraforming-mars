@@ -29,14 +29,22 @@
       </template>
       <template v-else-if="row.action.kind === 'turmoil'">
         <span class="log-row-muted">{{ $t('Turmoil') }}</span>
-        <!-- Neutral delegates added to these parties -->
-        <span v-if="(row.action.parties ?? []).length > 0" class="log-row-parties" :title="$t('Neutral delegates')">
-          <i class="log-row-neutral-delegate"></i>
-          <i v-for="(party, index) in row.action.parties" :key="index" :class="partyIcon(party)" :title="$t(party)"></i>
-        </span>
       </template>
       <!-- Where the action placed tiles, right after the text as in the classic log -->
       <LogSpaceChip v-for="space in placedSpaces" :key="space" :space="space" :game="viewModel.game" @spaceClicked="$emit('spaceClicked', $event)" />
+    </span>
+    <!-- Turmoil values right-aligned like the effects: neutral delegates, new party leaders (who + party) -->
+    <span v-if="hasTurmoilChips" class="log-row-turmoil-chips">
+      <span v-if="row.action.kind === 'turmoil' && (row.action.parties ?? []).length > 0" class="log-row-parties" :title="$t('Neutral delegates')">
+        <i class="log-row-neutral-delegate"></i>
+        <i v-for="(party, index) in row.action.parties" :key="index" :class="partyIcon(party)" :title="$t(party)"></i>
+      </span>
+      <span v-for="(leader, index) in shownLeaders" :key="'leader-' + index" class="log-row-parties log-row-leader" :title="$t('Party leader')">
+        <span v-if="leader.player !== undefined && leader.player !== row.action.player" :class="['log-row-name', 'log-row-name--' + leader.player]">{{ playerName(leader.player) }}</span>
+        <i v-else-if="leader.player === undefined" class="log-row-neutral-delegate"></i>
+        <i class="log-row-leader-icon"></i>
+        <i :class="partyIcon(leader.party)" :title="$t(leader.party)"></i>
+      </span>
     </span>
     <LogRowEffects :action="row.action" :viewModel="viewModel" @spaceClicked="$emit('spaceClicked', $event)" />
   </div>
@@ -106,6 +114,20 @@ export default defineComponent({
     cardStripe(): Array<string> {
       const css = this.card === undefined ? undefined : cardTypeToCss[this.card.type];
       return ['log-row-card-type', css ?? 'background-color-standard-project'];
+    },
+    // A neutral leader of a party that got its neutral delegate in the same row needs no chip of its own
+    shownLeaders(): Array<{party: string, player?: Color}> {
+      if (this.row.type !== 'action') {
+        return [];
+      }
+      const parties = this.row.action.parties ?? [];
+      return (this.row.action.leaders ?? []).filter((leader) => leader.player !== undefined || !parties.includes(leader.party));
+    },
+    hasTurmoilChips(): boolean {
+      if (this.row.type !== 'action') {
+        return false;
+      }
+      return (this.row.action.kind === 'turmoil' && (this.row.action.parties ?? []).length > 0) || this.shownLeaders.length > 0;
     },
     delegateText(): string {
       return this.row.type === 'action' ? translateTextWithParams('${0} delegate(s)', [String(this.row.action.count ?? 1)]) : '';
