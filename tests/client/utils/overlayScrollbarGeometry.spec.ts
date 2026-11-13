@@ -1,7 +1,7 @@
 import {expect} from 'chai';
 import {
   OVERLAY_SCROLLBAR_GAP, OVERLAY_SCROLLBAR_MIN_THUMB, OVERLAY_SCROLLBAR_THICKNESS,
-  railBox, scrollDeltaForDrag, snapToFrame, thumbGeometry,
+  boxContains, railBox, scrollDeltaForDrag, snapToFrame, thumbGeometry,
 } from '@/client/utils/overlayScrollbarGeometry';
 
 describe('overlayScrollbarGeometry', () => {
@@ -37,5 +37,15 @@ describe('overlayScrollbarGeometry', () => {
     const metrics = {viewport: 100, content: 400, position: 0};
     // 150 px free track for 300 px of scrolling
     expect(scrollDeltaForDrag(15, metrics, 200)).to.eq(30);
+  });
+
+  it('hit tests a bar box, with a slack for the hover zone', () => {
+    const box = {left: 10, top: 20, right: 30, bottom: 60};
+    expect(boxContains(box, 20, 40)).is.true;
+    expect(boxContains(box, 10, 20)).is.true;
+    expect(boxContains(box, 9, 40)).is.false;
+    expect(boxContains(box, 9, 40, 1)).is.true;
+    expect(boxContains(box, 20, 66, 6)).is.true;
+    expect(boxContains(box, 20, 67, 6)).is.false;
   });
 });
