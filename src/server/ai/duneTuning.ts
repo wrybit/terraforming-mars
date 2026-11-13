@@ -32,6 +32,10 @@ export const DUNE_TUNING_VARIANTS: Record<string, Partial<DuneTuning>> = {
   // Round 203: Kanly was never opened (round 201); the battle's outcome and the garrison's chances count.
   kanly: {kanlyBattle: 1, kanlyGarrison: 0.5},
   kanlyBattleOnly: {kanlyBattle: 1},
+  // Round 204: kanly +1.17 VP (z +1.15; all modules +2.95, z +1.78) – but the gain came from defence (holds 0.16 vs
+  // 0.01 per player and game, Sardaukar 0.71 vs 0.17); tiles taken stayed at 0.03. A full share for the garrison
+  // checks whether a stronger army leads to attacks.
+  kanlyGarrison1: {kanlyBattle: 1, kanlyGarrison: 1},
 };
 
 registerTuningVariantNames(Object.keys(DUNE_TUNING_VARIANTS));

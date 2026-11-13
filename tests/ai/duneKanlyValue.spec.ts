@@ -39,6 +39,8 @@ describe('AI Dune Kanly value', () => {
     expect(kanlyValue(player, prices)).eq(0);
     setPlayerTuning(player.id, 'kanly');
     expect(kanlyValue(player, prices)).eq(5);
+    setPlayerTuning(player.id, 'kanlyGarrison1');
+    expect(kanlyValue(player, prices)).eq(10);
     setPlayerTuning(player.id, 'kanlyBattleOnly');
     expect(kanlyValue(player, prices)).eq(0);
   });
