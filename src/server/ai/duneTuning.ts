@@ -11,6 +11,8 @@ export interface DuneTuning {
   kanlyBattle: number;
   /** Share of the best tile the own garrison could take now that the Sardaukar are worth (duneKanlyValue.ts); 0 = off. */
   kanlyGarrison: number;
+  /** Share of the VP at stake in a Kanly that passing costs while a battle can still be opened or joined (duneKanlyStayIn.ts); 0 = off. */
+  kanlyStayIn: number;
 }
 
 export const BASELINE_DUNE_TUNING: DuneTuning = {
@@ -19,6 +21,7 @@ export const BASELINE_DUNE_TUNING: DuneTuning = {
   envyAversion: 1,
   kanlyBattle: 0,
   kanlyGarrison: 0,
+  kanlyStayIn: 0,
 };
 
 export const DUNE_TUNING_VARIANTS: Record<string, Partial<DuneTuning>> = {
@@ -36,6 +39,9 @@ export const DUNE_TUNING_VARIANTS: Record<string, Partial<DuneTuning>> = {
   // 0.01 per player and game, Sardaukar 0.71 vs 0.17); tiles taken stayed at 0.03. A full share for the garrison
   // checks whether a stronger army leads to attacks.
   kanlyGarrison1: {kanlyBattle: 1, kanlyGarrison: 1},
+  // Round 205: a passed owner cannot defend, and battles come at the end – stay in the generation with small moves
+  // while a battle can still be opened or joined (Jens, 13 Nov 2026). On top of the kanly terms, which value joining.
+  kanlyStayIn: {kanlyBattle: 1, kanlyGarrison: 0.5, kanlyStayIn: 1},
 };
 
 registerTuningVariantNames(Object.keys(DUNE_TUNING_VARIANTS));

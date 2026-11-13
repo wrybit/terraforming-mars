@@ -11,6 +11,8 @@ import {distanceInput} from '../dune/Worm';
 import './duneEnvyValue';
 // Registers the Kanly terms of the position value (side effect).
 import './duneKanlyValue';
+// Registers the Kanly cost of passing early (side effect).
+import './duneKanlyStayIn';
 
 // Dune expansion (dune/DuneExpansion.ts): choices of its modules. Each option – "buy nothing" included – is tried
 // on a copy of the game and valued like a move (relativeValue: own position against the others), so a ware is
