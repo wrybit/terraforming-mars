@@ -229,7 +229,8 @@ describe('ApiCreateGame', () => {
 
   it('rejects custom milestones and awards of the wrong size', async () => {
     await postConfig({...twoPlayerConfig(), randomMA: RandomMAOptionType.MANUAL, customMA: {...customMA, awards: ['Banker']}});
-    expect(res.statusCode).eq(statusCode.internalServerError);
+    // Fork: the route checks customMA up front, so the create form gets a 400 with the reason
+    expect(res.statusCode).eq(statusCode.badRequest);
     expect(res.content).contains('customMA must have 5 awards');
   });
 
@@ -241,7 +242,8 @@ describe('ApiCreateGame', () => {
       randomMA: RandomMAOptionType.MANUAL,
       customMA: {...customMA, awards: ['Banker', 'Scientist', 'Thermalist', 'Miner', 'Politician']},
     });
-    expect(res.statusCode).eq(statusCode.internalServerError);
+    // Fork: the route checks customMA up front, so the create form gets a 400 with the reason
+    expect(res.statusCode).eq(statusCode.badRequest);
     expect(res.content).contains('Politician needs the Turmoil expansion');
   });
 

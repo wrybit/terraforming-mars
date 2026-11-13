@@ -19,6 +19,8 @@ const NO_ERRORS: ValidationErrors = {
   deltaProjectWithoutPrelude: false,
   notEnoughCorporations: 0,
   invalidCustomMA: '',
+  milestonesMissingExpansions: false,
+  awardsMissingExpansions: false,
 };
 
 describe('validationProblemKeys', () => {

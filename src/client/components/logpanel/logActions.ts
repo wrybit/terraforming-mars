@@ -143,6 +143,15 @@ const TURMOIL = new Set([
   'The ruling bonus is: ${0}',
   'The ruling policy is: ${0}',
   'A neutral delegate was added to the ${0} party',
+  'The ruling party is: ${0}',
+]);
+
+// Party leader changes (upstream 210025093): they belong to the row that moved the delegate (delegate, card, party
+// action) as a note in its hover summary; without such a row (game setup, new government) they join the turmoil row
+const PARTY_LEADER_LINES = new Set([
+  '${0} is the new leader of the ${1} party',
+  'A neutral delegate is the new leader of the ${0} party',
+  'The ${0} party has no leader',
 ]);
 
 // Lines that set off effects of their own but tell more than an action row could (what was copied, bought, smuggled):
@@ -730,8 +739,13 @@ export function groupLogMessages(messages: ReadonlyArray<LogMessage>, context: L
       start(started, index);
       return;
     }
+    if (PARTY_LEADER_LINES.has(template) && current !== undefined && current.action.kind !== 'turmoil') {
+      (current.action.notes ??= []).push(message);
+      current.indexes.push(index);
+      return;
+    }
     // New government: chairman, ruling bonus and policy, neutral delegates – one row with notes
-    if (TURMOIL.has(template)) {
+    if (TURMOIL.has(template) || PARTY_LEADER_LINES.has(template)) {
       let government = current;
       if (government?.action.kind === 'turmoil') {
         government.indexes.push(index);
