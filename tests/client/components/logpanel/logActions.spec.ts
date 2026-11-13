@@ -356,6 +356,9 @@ describe('logActions', () => {
     const delegate = actionAt(rows, 1);
     expect(delegate).include({kind: 'delegate', name: 'Mars First'});
     expect(delegate.notes?.map((note) => note.message)).deep.eq(['${0} is the new leader of the ${1} party']);
+    // Leader chips on the right: who and which party
+    expect(setup.leaders).deep.eq([{party: 'Reds'}]);
+    expect(delegate.leaders).deep.eq([{party: 'Mars First', player: 'blue'}]);
   });
 
   it('groups a trade with its fuel, income and colony bonuses of other players', () => {

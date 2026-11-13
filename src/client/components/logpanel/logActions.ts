@@ -55,6 +55,8 @@ export type LogAction = {
   everyone?: Array<LogEffect>,
   // Parties that got a neutral delegate (new government)
   parties?: Array<string>,
+  // New party leaders, shown right-aligned as who + party (player undefined = neutral delegate)
+  leaders?: Array<{party: string, player?: Color}>,
   // Text lines summarised by this row (ruling bonus and policy, new chairman), shown in the hover summary
   notes?: Array<LogMessage>,
 };
@@ -155,6 +157,24 @@ const PARTY_LEADER_LINES = new Set([
   'A neutral delegate is the new leader of the ${0} party',
   'The ${0} party has no leader',
 ]);
+
+// Leader chip of a party leader line, undefined for "has no leader"
+function leaderOf(template: string, message: LogMessage): {party: string, player?: Color} | undefined {
+  if (template === '${0} is the new leader of the ${1} party') {
+    return {party: value(message, 1) ?? '', player: firstPlayer(message)};
+  }
+  if (template === 'A neutral delegate is the new leader of the ${0} party') {
+    return {party: value(message, 0) ?? ''};
+  }
+  return undefined;
+}
+
+function addLeader(action: LogAction, template: string, message: LogMessage): void {
+  const leader = leaderOf(template, message);
+  if (leader !== undefined) {
+    (action.leaders ??= []).push(leader);
+  }
+}
 
 // Lines that set off effects of their own but tell more than an action row could (what was copied, bought, smuggled):
 // they stay text lines, and the effects that follow join them on the right ('line' action of the message row)
@@ -795,6 +815,7 @@ export function groupLogMessages(messages: ReadonlyArray<LogMessage>, context: L
     }
     if (PARTY_LEADER_LINES.has(template) && current !== undefined && current.action.kind !== 'turmoil') {
       (current.action.notes ??= []).push(message);
+      addLeader(current.action, template, message);
       current.indexes.push(index);
       return;
     }
@@ -813,6 +834,7 @@ export function groupLogMessages(messages: ReadonlyArray<LogMessage>, context: L
         (action.parties ??= []).push(value(message, 0) ?? '');
       } else {
         (action.notes ??= []).push(message);
+        addLeader(action, template, message);
       }
       effectsOf(message).forEach((entry) => addEffect(action, entry));
       return;

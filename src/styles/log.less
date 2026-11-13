@@ -662,6 +662,32 @@ each(@log-effect-tiles, {
   gap: 3px;
 }
 
+// Turmoil values on the right like the effect chips (neutral delegates, new party leader)
+.log-row-turmoil-chips {
+  margin-left: auto;
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 6px;
+
+  + .log-row-effects {
+    margin-left: 6px;
+  }
+}
+
+.log-row-leader .log-row-name {
+  margin-right: 1px;
+}
+
+// Leader token between who and party
+.log-row-leader-icon {
+  display: inline-block;
+  width: 12px;
+  height: 15px;
+  background: url("./assets/misc/chairman.png") center / contain no-repeat;
+}
+
 .log-row-party-icon,
 .log-row-neutral-delegate {
   display: inline-block;
