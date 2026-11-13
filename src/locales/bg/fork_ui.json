@@ -2115,5 +2115,11 @@
   "${0} games, one-time": "${0} игри, еднократно",
   "active ${0} ago": "активна преди ${0}",
   "merged automatically": "обединено автоматично",
-  "${0} added a delegate in ${1}": "${0} добави делегат в ${1}"
+  "${0} added a delegate in ${1}": "${0} добави делегат в ${1}",
+  "The ruling party is: ${0}": "Управляващата партия е: ${0}",
+  "A neutral delegate is the new leader of the ${0} party": "Неутрален делегат е новият лидер на партия ${0}",
+  "${0} is the new leader of the ${1} party": "${0} е новият лидер на партия ${1}",
+  "The ${0} party has no leader": "Партия ${0} няма лидер",
+  "Some of the milestones you selected need expansions you have not enabled.": "Някои избрани постижения изискват неактивирани разширения.",
+  "Some of the awards you selected need expansions you have not enabled.": "Някои избрани награди изискват неактивирани разширения."
 }

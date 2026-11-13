@@ -2151,5 +2151,11 @@
   "${0} games, one-time": "${0} 局，一次性",
   "active ${0} ago": "${0}前活跃",
   "merged automatically": "自动合并",
-  "${0} added a delegate in ${1}": "${0} 在 ${1} 增加了一名代表"
+  "${0} added a delegate in ${1}": "${0} 在 ${1} 增加了一名代表",
+  "The ruling party is: ${0}": "执政党为 ${0}",
+  "A neutral delegate is the new leader of the ${0} party": "一名中立代表成为 ${0} 政党的新领袖",
+  "${0} is the new leader of the ${1} party": "${0} 成为 ${1} 政党的新领袖",
+  "The ${0} party has no leader": "${0} 政党没有领袖",
+  "Some of the milestones you selected need expansions you have not enabled.": "部分所选里程碑需要未启用的扩展。",
+  "Some of the awards you selected need expansions you have not enabled.": "部分所选奖项需要未启用的扩展。"
 }

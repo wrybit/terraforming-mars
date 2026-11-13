@@ -1167,5 +1167,11 @@
   "${0} games, one-time": "${0} peliä, kertaluonteinen",
   "active ${0} ago": "aktiivinen ${0} sitten",
   "merged automatically": "yhdistetty automaattisesti",
-  "${0} added a delegate in ${1}": "${0} lisäsi edustajan puolueeseen ${1}"
+  "${0} added a delegate in ${1}": "${0} lisäsi edustajan puolueeseen ${1}",
+  "The ruling party is: ${0}": "Hallitseva puolue on: ${0}",
+  "A neutral delegate is the new leader of the ${0} party": "Neutraali edustaja on puolueen ${0} uusi puoluejohtaja",
+  "${0} is the new leader of the ${1} party": "${0} on puolueen ${1} uusi puoluejohtaja",
+  "The ${0} party has no leader": "Puolueella ${0} ei ole puoluejohtajaa",
+  "Some of the milestones you selected need expansions you have not enabled.": "Osa valituista saavutuksista vaatii laajennuksia, joita ei ole otettu käyttöön.",
+  "Some of the awards you selected need expansions you have not enabled.": "Osa valituista palkinnoista vaatii laajennuksia, joita ei ole otettu käyttöön."
 }

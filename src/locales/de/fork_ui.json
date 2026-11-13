@@ -942,5 +942,11 @@
   "This is a default name: future players with it are usually other people.": "Das ist ein Standardname: künftige Spieler damit sind meist andere Personen.",
   "permanent": "dauerhaft",
   "${0} games, one-time": "${0} Partien, einmalig",
-  "${0} added a delegate in ${1}": "${0} schickt einen Delegierten in die Partei ${1}"
+  "${0} added a delegate in ${1}": "${0} schickt einen Delegierten in die Partei ${1}",
+  "The ruling party is: ${0}": "Die regierende Partei ist: ${0}",
+  "A neutral delegate is the new leader of the ${0} party": "Ein neutraler Delegierter ist neuer Parteiführer der Partei ${0}",
+  "${0} is the new leader of the ${1} party": "${0} ist neuer Parteiführer der Partei ${1}",
+  "The ${0} party has no leader": "Die Partei ${0} hat keinen Parteiführer",
+  "Some of the milestones you selected need expansions you have not enabled.": "Einige der gewählten Meilensteine brauchen Erweiterungen, die nicht aktiviert sind.",
+  "Some of the awards you selected need expansions you have not enabled.": "Einige der gewählten Auszeichnungen brauchen Erweiterungen, die nicht aktiviert sind."
 }

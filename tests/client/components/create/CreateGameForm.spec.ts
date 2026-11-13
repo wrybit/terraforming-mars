@@ -528,6 +528,20 @@ describe('CreateGameForm', () => {
     expect((wrapper.vm as any).milestoneOptions.map((option: {value: string}) => option.value)).not.to.include(RandomMAOptionType.MANUAL);
   });
 
+  it('solo games ignore the milestone and award settings', async () => {
+    const wrapper = shallowMount(CreateGameForm, {
+      ...globalConfig,
+    });
+    const model = wrapper.vm as unknown as CreateGameModel;
+    model.playersCount = 1;
+    model.randomMA = RandomMAOptionType.MANUAL;
+    model.customMA = {milestones: ['Terraformer'], awards: []};
+    expect(wrapper.vm.hasBlockingValidationErrors).is.false;
+    const config: NewGameConfig | undefined = await wrapper.vm.serializeSettings();
+    expect(config?.randomMA).eq(RandomMAOptionType.NONE);
+    expect(config?.customMA).is.undefined;
+  });
+
   it('validates the form settings', () => {
     // Default: 4 starting corporations per player, so two players need 8
     expect(validateTwoPlayerGame((model) => model.customCorporations = cardNames(7)).notEnoughCorporations).eq(8);
@@ -537,6 +551,16 @@ describe('CreateGameForm', () => {
   it('ignores unknown colony names when validating', () => {
     const errors = validateTwoPlayerGame((model) => model.customColonies = ['Unknown Colony' as ColonyName]);
     expect(errors.coloniesMissingExpansions).deep.eq([]);
+  });
+
+  it('validates hand-picked milestones and awards against the expansions', () => {
+    const errors = validateTwoPlayerGame((model) => {
+      model.randomMA = RandomMAOptionType.MANUAL;
+      model.expansions.turmoil = false;
+      model.customMA = {milestones: ['Terraformer'], awards: ['Banker', 'Politician']};
+    });
+    expect(errors.milestonesMissingExpansions).is.false;
+    expect(errors.awardsMissingExpansions).is.true;
   });
 
   it('disables Open in lobby when there is a blocking error', async () => {
