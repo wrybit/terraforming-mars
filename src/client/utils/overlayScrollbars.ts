@@ -2,8 +2,8 @@
 // the native bars are hidden (overlay_scrollbar.less), instead a thin bar lies on top of the content,
 // appears while scrolling and fades out after a pause. Touch devices keep their own, already subtle bars.
 import {isScrollable, scrollAreaOf, wantsOverlayScrollbar} from '@/client/utils/overlayScrollbarArea';
-import {OVERLAY_SCROLLBAR_GAP, OVERLAY_SCROLLBAR_HIDE_DELAY_MS, OVERLAY_SCROLLBAR_SNAP_DISTANCE, ScrollAxis} from '@/client/utils/overlayScrollbarGeometry';
-import {OverlayScrollbarRail, railBoxOf} from '@/client/utils/overlayScrollbarRail';
+import {OVERLAY_SCROLLBAR_HIDE_DELAY_MS, ScrollAxis, boxContains} from '@/client/utils/overlayScrollbarGeometry';
+import {OverlayScrollbarRail} from '@/client/utils/overlayScrollbarRail';
 
 const AXES: ReadonlyArray<ScrollAxis> = ['vertical', 'horizontal'];
 // Extra hover zone in front of the bar, so the thin bar is easy to hit
@@ -65,39 +65,30 @@ function scheduleHide(area: Element): void {
   }, OVERLAY_SCROLLBAR_HIDE_DELAY_MS);
 }
 
-function hitAxis(area: Element, x: number, y: number): ScrollAxis | undefined {
-  if (!wantsOverlayScrollbar(area)) {
-    return undefined;
-  }
-  return AXES.find((axis) => {
-    if (!isScrollable(area, axis)) {
-      return false;
-    }
-    const box = railBoxOf(area, axis);
-    return axis === 'vertical' ?
-      x >= box.left - HOVER_SLACK && x <= box.right + OVERLAY_SCROLLBAR_GAP && y >= box.top && y <= box.bottom :
-      y >= box.top - HOVER_SLACK && y <= box.bottom + OVERLAY_SCROLLBAR_GAP && x >= box.left && x <= box.right;
-  });
-}
-
-// Areas the pointer may be on the bar of: under the pointer, and a little further inside – the bar can lie
-// in the padding of the tab box, outside of its scroll area
-function candidates(x: number, y: number): Array<Element> {
-  const result: Array<Element> = [];
-  const starts = [
-    document.elementFromPoint(x, y),
-    document.elementFromPoint(x - OVERLAY_SCROLLBAR_SNAP_DISTANCE, y),
-    document.elementFromPoint(x, y - OVERLAY_SCROLLBAR_SNAP_DISTANCE),
-  ];
-  for (const start of starts) {
-    for (let element = start; element !== null; element = element.parentElement) {
-      if (!result.includes(element) && !element.classList.contains('overlay-scrollbar')) {
-        result.push(element);
+// Bar under the pointer, judged from the boxes cached when the bars were placed: no element
+// hit testing and no style reads per pointer move (that was the bulk of the work before).
+function hitRail(x: number, y: number): {area: Element, axis: ScrollAxis} | undefined {
+  let found: {area: Element, axis: ScrollAxis} | undefined;
+  for (const [area, state] of areas) {
+    for (const axis of AXES) {
+      const box = state.rails[axis]?.cachedBox();
+      if (box !== undefined && boxContains(box, x, y, HOVER_SLACK)) {
+        found = {area, axis};
       }
     }
   }
-  result.push(document.scrollingElement ?? document.documentElement);
-  return result;
+  return found;
+}
+
+function anyDragging(): boolean {
+  for (const state of areas.values()) {
+    for (const rail of Object.values(state.rails)) {
+      if (rail?.isDragging === true) {
+        return true;
+      }
+    }
+  }
+  return false;
 }
 
 function setHovered(next: {area: Element, axis: ScrollAxis} | undefined): void {
@@ -106,30 +97,20 @@ function setHovered(next: {area: Element, axis: ScrollAxis} | undefined): void {
     stateOf(previous.area).rails[previous.axis]?.setHovered(false);
     scheduleHide(previous.area);
   }
+  const changed = next !== undefined && (hovered === undefined || next.area !== hovered.area || next.axis !== hovered.axis);
   hovered = next;
-  if (next !== undefined) {
+  if (next !== undefined && changed) {
+    // Placing the bar reads the layout: only when the hovered bar changes, not on every move over it
     show(next.area);
     stateOf(next.area).rails[next.axis]?.setHovered(true);
   }
 }
 
 function onPointerMove(event: PointerEvent): void {
-  if (event.pointerType === 'touch' || railsOf(hovered?.area ?? document.body).some((rail) => rail.isDragging)) {
+  if (event.pointerType === 'touch' || anyDragging()) {
     return;
   }
-  // Pointer on the bar itself: stays with its area
-  if (hovered !== undefined && event.target instanceof Element && event.target.closest('.overlay-scrollbar') !== null) {
-    return;
-  }
-  let found: {area: Element, axis: ScrollAxis} | undefined;
-  for (const area of candidates(event.clientX, event.clientY)) {
-    const axis = hitAxis(area, event.clientX, event.clientY);
-    if (axis !== undefined) {
-      found = {area, axis};
-      break;
-    }
-  }
-  setHovered(found);
+  setHovered(hitRail(event.clientX, event.clientY));
 }
 
 function throttled<T>(handler: (value: T) => void): (value: T) => void {

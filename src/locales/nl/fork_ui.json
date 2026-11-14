@@ -1795,6 +1795,12 @@
   "permanent": "blijvend",
   "${0} games, one-time": "${0} spellen, eenmalig",
   "${0} added a delegate in ${1}": "${0} voegde een afgevaardigde toe aan ${1}",
+  "The ruling party is: ${0}": "De regerende partij is: ${0}",
+  "A neutral delegate is the new leader of the ${0} party": "Een neutrale afgevaardigde is de nieuwe partijleider van ${0}",
+  "${0} is the new leader of the ${1} party": "${0} is de nieuwe partijleider van ${1}",
+  "The ${0} party has no leader": "Partij ${0} heeft geen partijleider",
+  "Some of the milestones you selected need expansions you have not enabled.": "Sommige gekozen mijlpalen hebben uitbreidingen nodig die niet aan staan.",
+  "Some of the awards you selected need expansions you have not enabled.": "Sommige gekozen onderscheidingen hebben uitbreidingen nodig die niet aan staan.",
   "Keyboard layout": "Toetsenbordindeling",
   "Automatic (${0})": "Automatisch (${0})"
 }

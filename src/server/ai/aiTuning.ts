@@ -50,7 +50,7 @@ export type AiTuning = {
   terraformBrake: number,
   /** 1: expected game length by player count (2 players 15, 3 players 12) instead of 12 (gameProgress.ts). */
   lengthByPlayers: number,
-  /** Expected length of a two-player game in generations (gameProgress.ts, with lengthByPlayers); 16 since round 192 (15 before). */
+  /** Expected length of a two-player game in generations (gameProgress.ts, with lengthByPlayers); 15 (16 in round 192 only). */
   twoPlayerGenerations: number,
   /** Factor on the M€ value of a victory point in the deciding player's valuation (stateValue.ts). */
   victoryPointScale: number,
@@ -166,6 +166,8 @@ export type AiTuning = {
   cityRaceAdapt: number,
   /** Weight of the drawn cards' value taken off a draw move while the hand holds many unplayable cards (drawStop.ts); 0 = off. */
   drawStop: number,
+  /** Weight of the drawn cards' value taken off passing while a move that draws cards is still open (drawBeforePass.ts); 0 = off. */
+  drawBeforePass: number,
   /** > 0: next generation's income counts as a city plan for city first (cityFirstWithIncome.ts); 0 = off. */
   cityFirstWithIncome: number,
   /** VP per own city beyond the first next to a greenery space (greeneryBetweenCities.ts); 0 = off. */
@@ -328,6 +330,8 @@ export type AiTuning = {
   awardHandOutlook: number,
   /** 1: cards counting city tiles (Greenhouses) are valued at the end of the game with the cities built by then (cardValue.ts). */
   lateBoardCards: number,
+  /** 0..1: card buying scales a card's value toward the share of it the AI really played in test batches (measuredPlayShare.ts); 0 = off. */
+  buyPlayShare: number,
 };
 
 // Card buying, found with A/B batches (same 100 deals, variants rotating through the seats):
@@ -383,9 +387,9 @@ export const BASELINE_TUNING: AiTuning = {
   // Neutral in AI-vs-AI (z +0.36) but measured right (2P 14.5, 3P 11.8 generations); adopted on
   // purpose against the z rule: with 12 the AI gave up its engine from generation 8 against a human.
   lengthByPlayers: 1,
-  // Round 192: 16 −0.25 VP (z −0.33) but cards played +1.02 (z +2.89), bought +1.21 – adopted by the card rule;
-  // 13 lost in round 191 (−2.04, fewer cards bought), 17 −1.01 (z −1.23).
-  twoPlayerGenerations: 16,
+  // Rounds 191–193: 13 −2.04 VP (fewer cards bought); 16 −0.25 VP with +1.02 cards played – adopted by the card rule,
+  // but the check 15 won +1.17 (z +1.57), pooled 16 vs 15 −0.71 VP (z −1.3) – back to 15; 17 −1.01 / −1.21.
+  twoPlayerGenerations: 15,
   awardTiming: 0,
   // Night runs A+B (3200 games): 0.55 → 0.9 won clearly (A: 0.75 z +4.8; B: 0.9 z +2.7, 1.05 z +3.5,
   // control −0.8); best VP per generation. Income was undervalued once the game length was right.
@@ -449,7 +453,8 @@ export const BASELINE_TUNING: AiTuning = {
   // by the card-throughput rule. Round 184 (hand targets 14/8): noCheapFirst cards played +0.95 (z +2.87), VP +0.68
   // (z +1.02) – back to 0 by the card rule.
   cheapFirst: 0,
-  boardCardBonus: 1,
+  // Round 197: 1.5 cards played +0.86 (z +2.72), drawn +1.21, VP −0.02 – adopted by the card rule (2: −1.36 VP).
+  boardCardBonus: 1.5,
   // Round 140: 0.5 cards played +0.72 (z +1.87), VP +0.26 – adopted by the card-throughput rule (1: −0.97, cards −0.71).
   tagDemand: 0.5,
   energyOutlook: 0,
@@ -473,6 +478,8 @@ export const BASELINE_TUNING: AiTuning = {
   lateStandardRestraint: 0,
   cityRaceAdapt: 0,
   drawStop: 0,
+  // Round 200: 0.5 cards played +0.60 (z +1.84), drawn +0.80, VP +0.07 – adopted by the card rule (1: −0.40).
+  drawBeforePass: 0.5,
   cityFirstWithIncome: 1,
   greeneryBetweenCities: 0,
   deadCardSale: 0,
@@ -614,6 +621,7 @@ export const BASELINE_TUNING: AiTuning = {
   awardFundingLead: 0.1,
   // Round 141: +0.14 VP (z +0.16) – adopted: fixes the human-game error (paid funding at 0 : 0 in generation 1).
   awardPaidEarlyLead: 1,
+  buyPlayShare: 0,
 };
 
 // Champion/challenger: a change only becomes the baseline when it wins clearly more seats than
@@ -919,6 +927,7 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   collectorRate08: {accumulatorValue: 0.8, collectorRates: 1},
   noCollectors: {accumulatorValue: 0, collectorRates: 0},
   // Human rush ended a game in generation 8: shorten the estimate by the last generation's pace.
+  // Round 196 retest: +0.04 (z +0.06), cards played −1.22 – dropped again.
   recentPace1: {recentPace: 1},
   recentPace2: {recentPace: 2},
   // Venus games: World Government chose temperature every time (first option).
@@ -1013,6 +1022,10 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Card spaces on the board valued like a drawn card instead of 3 M€.
   boardCards05: {boardCardBonus: 0.5},
   boardCards1: {boardCardBonus: 1},
+  // Round 197: Oracle humans draw 3.2 cards per game from board spaces, the AI 1.5 (96 games, drawSources.py).
+  boardCards15: {boardCardBonus: 1.5},
+  boardCards2: {boardCardBonus: 2},
+  // Round 198: boardCards1 (check of 1.5) +0.29 (z +0.38), played −0.38 – 1.5 stays (pooled 1 vs 1.5 ≈ +0.15, z ≈ 0.3).
   // Round 140: building tags while Builder is open, then science/power for later requirements (Jens' rule).
   tagDemand05: {tagDemand: 0.5},
   tagDemand1: {tagDemand: 1},
@@ -1032,6 +1045,8 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   passFairness: {passFairness: 1},
   // Human games 24.–26.10.: a claimable milestone put off for another move, the opponent claimed it (3x).
   milestoneDenial: {milestoneDenial: 1},
+  // Round 196: retest at half strength against the current baseline (at strength 1: −0.89, dropped) – −2.12 (z −3.01), dropped again.
+  milestoneDenial05: {milestoneDenial: 0.5},
   // Human games: M€ production at most 1 until generation 5 (8x), e.g. preludes with −1 M€ production.
   preludeIncomeFloor: {preludeIncomeFloor: 1},
   // Round 147: preludeIncomeFloor adopted (neutral −0.04, fixes a human-game error); check.
@@ -1058,7 +1073,16 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   // Round 155 (60-card gap: humans draw 28.9 cards outside research, the AI 8.1; late cards 5–8 vs 3.6–4.1 per generation).
   lateDrawFloor: {lateDrawFloor: 1},
   lateProductionFloor: {lateProductionFloor: 1},
+  // Round 198 retest (once −0.24, drawn +0.56): Oracle humans use draw actions about once per generation owned, the AI
+  // much less (Development Center 0.94 vs 0.55, Hi-Tech Lab 0.93 vs 0.43, Inventors' Guild 0.99 vs 0.52).
   spareMoneyDraw: {spareMoneyDraw: 1},
+  // Round 198: +0.42 VP (z +0.61), drawn +0.99, played +0.37; round 199: +0.01, double strength −0.57 → dropped.
+  spareMoneyDraw2: {spareMoneyDraw: 2},
+  // Round 200: passing costs the value of the cards an open draw action would still draw (drawBeforePass.ts).
+  drawBeforePass1: {drawBeforePass: 1},
+  drawBeforePass05: {drawBeforePass: 0.5},
+  // Round 201 (first Dune round): check of the adoption.
+  noDrawBeforePass: {drawBeforePass: 0},
   // Human game: the AI held 61 plants with no city and no money for one – waiting plants need a city plan.
   plantHoardDecay: {plantHoardDecay: 1},
   // Round 156: plantHoardDecay adopted (+0.73, z +1.35; cards played +0.64, z +2.35 – card rule); check.
@@ -1244,10 +1268,26 @@ export const TUNING_VARIANTS: Record<string, Partial<AiTuning>> = {
   twoPlayerLength17: {twoPlayerGenerations: 17},
   // Round 193: check of the adoption of 16.
   twoPlayerLength15: {twoPlayerGenerations: 15},
+  // Round 194: the AI holds 6.5 cards at the end (humans ~1); some cards are bought but hardly ever played.
+  // Round 194: 0.5 +0.44 VP (z +0.56, bought −0.37, hand at the end 6.2 vs 6.4), 1 +0.19 (played −0.47);
+  // round 195: 0.5 −1.05 (z −1.57), 0.25 −0.68 (z −0.97) → all dropped, buyPlayShare stays 0.
+  buyPlayShare05: {buyPlayShare: 0.5},
+  buyPlayShare1: {buyPlayShare: 1},
+  buyPlayShare025: {buyPlayShare: 0.25},
 };
 
+// Variant names of optional modules with their own tuning (they read it with playerVariant), so batches accept them.
+const extraVariantNames = new Set<string>();
+
+/** Makes variant names of a module's own tuning known (called once when its AI code is loaded). */
+export function registerTuningVariantNames(names: Iterable<string>): void {
+  for (const name of names) {
+    extraVariantNames.add(name);
+  }
+}
+
 export function isTuningVariant(name: string): boolean {
-  return Object.prototype.hasOwnProperty.call(TUNING_VARIANTS, name);
+  return Object.prototype.hasOwnProperty.call(TUNING_VARIANTS, name) || extraVariantNames.has(name);
 }
 
 // Two-player games (the main use case) can differ from the baseline of 3–5 players; found with the
@@ -1272,6 +1312,11 @@ export function setPlayerTuning(playerId: string, variant: string): void {
 export function clearPlayerTunings(): void {
   variantByPlayer.clear();
   tuningCache.clear();
+}
+
+/** Name of the variant a player plays with (batches), undefined for the baseline – for modules with their own tuning. */
+export function playerVariant(player: IPlayer): string | undefined {
+  return variantByPlayer.get(player.id);
 }
 
 /** Short key of the tuning a player uses, for caches that must not mix values of different tunings. */

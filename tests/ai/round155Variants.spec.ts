@@ -53,5 +53,9 @@ describe('AI round 155 variants', () => {
     setPlayerTuning(player.id, 'spareMoneyDraw');
     expect(spareMoneyDrawBonus(player, menu, action, false)).to.be.greaterThan(0);
     expect(spareMoneyDrawBonus(player, menu, action, true)).eq(0);
+    // Round 199: double strength
+    const single = spareMoneyDrawBonus(player, menu, action, false);
+    setPlayerTuning(player.id, 'spareMoneyDraw2');
+    expect(spareMoneyDrawBonus(player, menu, action, false)).closeTo(2 * single, 1e-9);
   });
 });

@@ -295,6 +295,30 @@ describe('logActions', () => {
     expect(government.others).deep.eq([{player: 'blue', effects: [{resource: 'megacredit', amount: 1, cause: 'Greens'}]}]);
   });
 
+  it('puts party leader lines into the row that moved the delegate, else into the turmoil row', () => {
+    const rows = groupLogMessages([
+      message('A neutral delegate was added to the ${0} party', typed(LogMessageDataType.PARTY, 'Reds')),
+      message('A neutral delegate is the new leader of the ${0} party', typed(LogMessageDataType.PARTY, 'Reds')),
+      message('The ruling party is: ${0}', typed(LogMessageDataType.PARTY, 'Greens')),
+      message('${0} sent ${1} delegate(s) in ${2} area', player('blue'), raw('1'), typed(LogMessageDataType.PARTY, 'Mars First')),
+      message('${0} is the new leader of the ${1} party', player('blue'), typed(LogMessageDataType.PARTY, 'Mars First')),
+    ]);
+    expect(rows.map((row) => row.type)).deep.eq(['action', 'action']);
+    const setup = actionAt(rows, 0);
+    expect(setup.kind).eq('turmoil');
+    expect(setup.parties).deep.eq(['Reds']);
+    expect(setup.notes?.map((note) => note.message)).deep.eq([
+      'A neutral delegate is the new leader of the ${0} party',
+      'The ruling party is: ${0}',
+    ]);
+    const delegate = actionAt(rows, 1);
+    expect(delegate).include({kind: 'delegate', name: 'Mars First'});
+    expect(delegate.notes?.map((note) => note.message)).deep.eq(['${0} is the new leader of the ${1} party']);
+    // Leader chips on the right: who and which party
+    expect(setup.leaders).deep.eq([{party: 'Reds'}]);
+    expect(delegate.leaders).deep.eq([{party: 'Mars First', player: 'blue'}]);
+  });
+
   it('groups a trade with its fuel, income and colony bonuses of other players', () => {
     const rows = groupLogMessages([
       message('${0} spent ${1} M€ to trade with ${2}', player('red'), raw('9'), typed(LogMessageDataType.COLONY, 'Io')),

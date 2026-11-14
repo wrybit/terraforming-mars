@@ -467,6 +467,7 @@ import {CreateGameDraft, createGameDraftStorage} from './createGameDraftStorage'
 import {getPreferences, PreferencesManager} from '@/client/utils/PreferencesManager';
 import {readSettingsFromHash, replaceSettingsHash, settingsHash} from './settingsLink/settingsLinkHash';
 import {getColony} from '@/client/colonies/ClientColonyManifest';
+import {getAward, getMilestone} from '@/client/MilestoneAwardManifest';
 import {RULEBOOK_URLS, WIKI_URLS} from '@/client/utils/WikiLinks';
 import {sanitizeEscapeVelocityOptions} from '@/common/game/escapeVelocity';
 import {validateNewGameConfig, ValidationErrors} from '@/common/game/validateNewGameConfig';
@@ -902,6 +903,8 @@ export default defineComponent({
         getColonyExpansion: (name) => {
           return getColony(name)?.expansion;
         },
+        getMilestoneExpansion: (name) => getMilestone(name)?.requirements,
+        getAwardExpansion: (name) => getAward(name)?.requirements,
       });
     },
     hasValidationProblems(): boolean {
@@ -1466,8 +1469,12 @@ export default defineComponent({
       }
 
       const config = this.newGameConfig;
+      const isSolo = players.length === 1;
       return {
         ...config,
+        // Solo games have no milestones and awards, and the form hides their settings.
+        randomMA: isSolo ? RandomMAOptionType.NONE : config.randomMA,
+        customMA: isSolo ? undefined : config.customMA,
         players,
         clonedGamedId,
         escapeVelocity: config.escapeVelocity === undefined ? undefined : sanitizeEscapeVelocityOptions(config.escapeVelocity),

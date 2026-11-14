@@ -2446,6 +2446,12 @@
   "permanent": "permanente",
   "${0} games, one-time": "${0} partidas, única vez",
   "${0} added a delegate in ${1}": "${0} añadió un delegado en ${1}",
+  "The ruling party is: ${0}": "El partido gobernante es: ${0}",
+  "A neutral delegate is the new leader of the ${0} party": "Un delegado neutral es el nuevo líder del partido ${0}",
+  "${0} is the new leader of the ${1} party": "${0} es el nuevo líder del partido ${1}",
+  "The ${0} party has no leader": "El partido ${0} no tiene líder",
+  "Some of the milestones you selected need expansions you have not enabled.": "Algunos hitos elegidos necesitan expansiones que no has activado.",
+  "Some of the awards you selected need expansions you have not enabled.": "Algunas recompensas elegidas necesitan expansiones que no has activado.",
   "Keyboard layout": "Distribución del teclado",
   "Automatic (${0})": "Automático (${0})"
 }

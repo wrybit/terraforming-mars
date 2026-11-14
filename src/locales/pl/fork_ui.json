@@ -1966,6 +1966,12 @@
   "permanent": "na stałe",
   "${0} games, one-time": "${0} gier, jednorazowo",
   "${0} added a delegate in ${1}": "${0} dodał delegata do ${1}",
+  "The ruling party is: ${0}": "Partia rządząca to: ${0}",
+  "A neutral delegate is the new leader of the ${0} party": "Neutralny delegat zostaje nowym liderem partii ${0}",
+  "${0} is the new leader of the ${1} party": "${0} zostaje nowym liderem partii ${1}",
+  "The ${0} party has no leader": "Partia ${0} nie ma lidera",
+  "Some of the milestones you selected need expansions you have not enabled.": "Niektóre wybrane tytuły wymagają niewłączonych dodatków.",
+  "Some of the awards you selected need expansions you have not enabled.": "Niektóre wybrane nagrody wymagają niewłączonych dodatków.",
   "Keyboard layout": "Układ klawiatury",
   "Automatic (${0})": "Automatycznie (${0})"
 }

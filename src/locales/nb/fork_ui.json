@@ -1534,6 +1534,12 @@
   "permanent": "varig",
   "${0} games, one-time": "${0} spill, engangs",
   "${0} added a delegate in ${1}": "${0} la til en delegat i ${1}",
+  "The ruling party is: ${0}": "Det regjerende partiet er: ${0}",
+  "A neutral delegate is the new leader of the ${0} party": "En nøytral delegat er ny partileder for ${0}",
+  "${0} is the new leader of the ${1} party": "${0} er ny partileder for ${1}",
+  "The ${0} party has no leader": "Partiet ${0} har ingen partileder",
+  "Some of the milestones you selected need expansions you have not enabled.": "Noen valgte milepæler krever utvidelser som ikke er slått på.",
+  "Some of the awards you selected need expansions you have not enabled.": "Noen valgte utmerkelser krever utvidelser som ikke er slått på.",
   "Keyboard layout": "Tastaturoppsett",
   "Automatic (${0})": "Automatisk (${0})"
 }

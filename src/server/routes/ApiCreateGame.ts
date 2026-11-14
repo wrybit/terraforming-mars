@@ -20,11 +20,13 @@ import {durationToMilliseconds} from '../utils/durations';
 import {readBody} from './readBody';
 import {RouteError} from './RouteError';
 import {CEO_CARDS_DEALT_PER_PLAYER} from '../../common/constants';
-import {validateCustomMA} from '../../common/ma/CustomMA';
 import {hasNegativeEscapeVelocityOption, sanitizeEscapeVelocityOptions} from '../../common/game/escapeVelocity';
 import {boardRandom, pickBoard} from '../boards/newGameBoard';
 import {BoardName} from '../../common/boards/BoardName';
 import {GAME_NAME_MAX_LENGTH} from '../../common/game/GameName';
+import {validateCustomMA} from '../../common/ma/CustomMA';
+import {RandomMAOptionType} from '../../common/ma/RandomMAOptionType';
+import {validateCustomMAExpansions} from '../ma/MilestoneAwardSelector';
 
 function parseQuotaConfig(struct: any): QuotaConfig {
   let {limit} = struct;
@@ -239,6 +241,11 @@ export class ApiCreateGame extends Handler {
 
     try {
       validateCustomMA(gameOptions.customMA, gameOptions.randomMA, gameOptions.venusNextExtension);
+      // Upstream (01398fd91) only checks this while building the game, which ends in a 500 here.
+      // Checking it up front keeps the precise message as a 400 the create form can show.
+      if (gameOptions.randomMA === RandomMAOptionType.MANUAL) {
+        validateCustomMAExpansions(gameOptions.customMA, gameOptions.expansions);
+      }
     } catch (e) {
       throw RouteError.badRequest(e instanceof Error ? e.message : String(e));
     }

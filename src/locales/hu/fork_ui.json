@@ -1350,6 +1350,12 @@
   "permanent": "végleges",
   "${0} games, one-time": "${0} játék, egyszeri",
   "${0} added a delegate in ${1}": "${0} delegáltat helyezett el: ${1}",
+  "The ruling party is: ${0}": "A kormányzó párt: ${0}",
+  "A neutral delegate is the new leader of the ${0} party": "Egy semleges küldött a(z) ${0} párt új pártvezetője",
+  "${0} is the new leader of the ${1} party": "${0} a(z) ${1} párt új pártvezetője",
+  "The ${0} party has no leader": "A(z) ${0} pártnak nincs pártvezetője",
+  "Some of the milestones you selected need expansions you have not enabled.": "Néhány kiválasztott mérföldkőhöz nem engedélyezett kiegészítő kell.",
+  "Some of the awards you selected need expansions you have not enabled.": "Néhány kiválasztott díjhoz nem engedélyezett kiegészítő kell.",
   "Keyboard layout": "Billentyűzetkiosztás",
   "Automatic (${0})": "Automatikus (${0})"
 }

@@ -53,6 +53,8 @@ export type LogAction = {
   everyone?: Array<LogEffect>,
   // Parties that got a neutral delegate (new government)
   parties?: Array<string>,
+  // New party leaders, shown right-aligned as who + party (player undefined = neutral delegate)
+  leaders?: Array<{party: string, player?: Color}>,
   // Text lines summarised by this row (ruling bonus and policy, new chairman), shown in the hover summary
   notes?: Array<LogMessage>,
 };
@@ -143,7 +145,34 @@ const TURMOIL = new Set([
   'The ruling bonus is: ${0}',
   'The ruling policy is: ${0}',
   'A neutral delegate was added to the ${0} party',
+  'The ruling party is: ${0}',
 ]);
+
+// Party leader changes (upstream 210025093): they belong to the row that moved the delegate (delegate, card, party
+// action) as a note in its hover summary; without such a row (game setup, new government) they join the turmoil row
+const PARTY_LEADER_LINES = new Set([
+  '${0} is the new leader of the ${1} party',
+  'A neutral delegate is the new leader of the ${0} party',
+  'The ${0} party has no leader',
+]);
+
+// Leader chip of a party leader line, undefined for "has no leader"
+function leaderOf(template: string, message: LogMessage): {party: string, player?: Color} | undefined {
+  if (template === '${0} is the new leader of the ${1} party') {
+    return {party: value(message, 1) ?? '', player: firstPlayer(message)};
+  }
+  if (template === 'A neutral delegate is the new leader of the ${0} party') {
+    return {party: value(message, 0) ?? ''};
+  }
+  return undefined;
+}
+
+function addLeader(action: LogAction, template: string, message: LogMessage): void {
+  const leader = leaderOf(template, message);
+  if (leader !== undefined) {
+    (action.leaders ??= []).push(leader);
+  }
+}
 
 // Lines that set off effects of their own but tell more than an action row could (what was copied, bought, smuggled):
 // they stay text lines, and the effects that follow join them on the right ('line' action of the message row)
@@ -730,8 +759,14 @@ export function groupLogMessages(messages: ReadonlyArray<LogMessage>, context: L
       start(started, index);
       return;
     }
+    if (PARTY_LEADER_LINES.has(template) && current !== undefined && current.action.kind !== 'turmoil') {
+      (current.action.notes ??= []).push(message);
+      addLeader(current.action, template, message);
+      current.indexes.push(index);
+      return;
+    }
     // New government: chairman, ruling bonus and policy, neutral delegates – one row with notes
-    if (TURMOIL.has(template)) {
+    if (TURMOIL.has(template) || PARTY_LEADER_LINES.has(template)) {
       let government = current;
       if (government?.action.kind === 'turmoil') {
         government.indexes.push(index);
@@ -745,6 +780,7 @@ export function groupLogMessages(messages: ReadonlyArray<LogMessage>, context: L
         (action.parties ??= []).push(value(message, 0) ?? '');
       } else {
         (action.notes ??= []).push(message);
+        addLeader(action, template, message);
       }
       effectsOf(message).forEach((entry) => addEffect(action, entry));
       return;

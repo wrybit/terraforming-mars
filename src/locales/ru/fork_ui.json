@@ -2039,6 +2039,12 @@
   "permanent": "постоянно",
   "${0} games, one-time": "${0} партий, разово",
   "${0} added a delegate in ${1}": "${0} добавил делегата в ${1}",
+  "The ruling party is: ${0}": "Правящая партия: ${0}",
+  "A neutral delegate is the new leader of the ${0} party": "Нейтральный делегат стал новым лидером партии ${0}",
+  "${0} is the new leader of the ${1} party": "${0} стал новым лидером партии ${1}",
+  "The ${0} party has no leader": "У партии ${0} нет лидера",
+  "Some of the milestones you selected need expansions you have not enabled.": "Некоторые выбранные достижения требуют невключённых дополнений.",
+  "Some of the awards you selected need expansions you have not enabled.": "Некоторые выбранные награды требуют невключённых дополнений.",
   "Keyboard layout": "Раскладка клавиатуры",
   "Automatic (${0})": "Автоматически (${0})"
 }

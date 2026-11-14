@@ -41,6 +41,8 @@ import {SelectParty} from '../inputs/SelectParty';
 import {chooseParty} from './partyChoice';
 import {CardName} from '../../common/cards/CardName';
 import {clearFollowUpPlan, followUpChoices, setFollowUpPlan} from './followUpPlan';
+import {drawBeforePassPenalty} from './drawBeforePass';
+import {passExtensionPenalty} from './passExtensions';
 
 // Decides an action-phase move by playing every candidate move on a copy of the game and
 // valuing the resulting position (one-step lookahead). This captures the effect of any card
@@ -545,6 +547,27 @@ export function chooseAction(menu: OrOptions, player: IPlayer, options: Lookahea
     for (const {candidate, outcome} of tried) {
       if (isPass(menu, candidate.response)) {
         outcome.value -= penalty;
+      }
+    }
+  }
+
+  // drawBeforePass: an open draw action is used before passing, as humans do (drawBeforePass.ts).
+  if (!rolledOut && tuning.drawBeforePass > 0) {
+    const drawPenalty = drawBeforePassPenalty(player, menu, tried.map(({candidate}) => candidate.response));
+    for (const {candidate, outcome} of tried) {
+      if (drawPenalty > 0 && isPass(menu, candidate.response)) {
+        outcome.value -= drawPenalty;
+      }
+    }
+  }
+
+  // Optional modules may make passing dearer, e.g. when a passed player can no longer answer (passExtensions.ts).
+  // Also after rollouts: they do not play the opponents' replies that passing gives up.
+  const modulePassPenalty = passExtensionPenalty(player, context.victoryPoint);
+  if (modulePassPenalty > 0) {
+    for (const {candidate, outcome} of tried) {
+      if (isPass(menu, candidate.response)) {
+        outcome.value -= modulePassPenalty;
       }
     }
   }
