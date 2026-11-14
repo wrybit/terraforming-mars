@@ -220,9 +220,9 @@ html.tm-mobile {
     }
 
     // Tablet portrait: tiles as a portrait block (2 → 1×2, 5–6 → 2×3), column count from choiceBlock.ts.
-    // From 560px like cardColumns() in mobileFit.ts; on a phone the tiles wrap by themselves.
+    // From the tablet breakpoint (cardColumns() in mobileFit.ts switches to three columns at a similar list width); on a phone the tiles wrap by themselves.
     // Without player groups (a group contains several tiles) and without cards (own grid, mobile.less)
-    @media (min-width: 560px) and (orientation: portrait) {
+    @media @from-tablet and @layout-portrait {
       &:not(.wf-component--select-card, .choice-block--natural):not(:has(.player-option-group)) {
         display: grid;
         grid-template-columns: repeat(var(--choice-columns-portrait, 1), max-content);
@@ -230,7 +230,7 @@ html.tm-mobile {
     }
 
     // Colony choice (SelectColony): the panels (418px wide, .colony-card in cards.less) are wider than a phone
-    @media (max-width: 440px) {
+    @media @below-tablet {
       .colony-card {
         zoom: 0.8;
         // only a bottom margin so the panel sits exactly centered

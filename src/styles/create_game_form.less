@@ -21,9 +21,6 @@
 @create-game-chip-background: rgba(255, 255, 255, 0.05);
 @create-game-chip-hover: rgba(255, 255, 255, 0.1);
 @create-game-control-height: 36px;
-// Below this width one column: players on top, Create card sticks to the bottom edge
-@create-game-narrow: 820px;
-// Below this width the settings cards in a single column
 
 // The page has no sidebar: the space reserved for it on the left (common.less) is dropped
 .main-container:has(#create-game) {
@@ -166,7 +163,7 @@
 
 // Inner width of the header up to which it is two rows on the phone (media query below):
 // page margin, padding (12px, card_list.less narrow) and border subtracted
-@create-game-head-two-rows-width: @card-list-phone - 2 * @page-content-edge-narrow - 2 * 12px - 2px;
+@create-game-head-two-rows-width: @bp-tablet - 2 * @page-content-edge-narrow - 2 * 12px - 2px;
 
 .create-game-icon-only() {
   .create-game-head-label {
@@ -661,7 +658,7 @@ a.create-game-info-box-more {
 }
 
 // Phone: only the icon, the title needs the room
-@media only screen and (max-width: @card-list-phone) {
+@media @below-tablet {
   .wiki-overlay-github span {
     display: none;
   }
@@ -1546,7 +1543,7 @@ a.create-game-summary-chip:hover {
 
 // ---------- narrower ----------
 // One column: the column wrappers dissolve, the cards follow their order (style="order: …")
-@media only screen and (max-width: @create-game-narrow) {
+@media @below-wide {
   .create-game-layout {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -1614,7 +1611,7 @@ a.create-game-summary-chip:hover {
 }
 
 // Phone: title with language/settings on top, file buttons below – the header card grows in height for that
-@media only screen and (max-width: @card-list-phone) {
+@media @below-tablet {
   .card-list-header.create-game-head {
     flex-wrap: wrap;
     row-gap: 8px;
@@ -1696,7 +1693,7 @@ a.create-game-summary-chip:hover {
 }
 
 // Phone: two cards side by side
-@media only screen and (max-width: @card-list-phone) {
+@media @below-tablet {
   .create-game-card-grid {
     justify-content: center;
 

@@ -18,6 +18,7 @@ import {onBeforeUnmount, onMounted, ref} from 'vue';
 import SeatIcon from '@/client/components/create/SeatIcon.vue';
 import {GameSetupChip} from './gameSetupChips';
 import {glassTooltip as vGlassTooltip} from '@/client/directives/GlassTooltip';
+import {BREAKPOINTS, belowWidth} from '@/client/utils/breakpoints';
 
 // Setup of a game as plain chips (gameSetupChips.ts); compact: smaller for table rows.
 // Expansions are icon-only chips with the frosted-glass tooltip (the native title takes too long to show).
@@ -30,8 +31,8 @@ const props = defineProps<{
   writtenOut?: boolean;
 }>();
 
-// Same width as the lobby rows' phone layout (lobby.less)
-const NARROW_QUERY = '(max-width: 700px)';
+// Phones (breakpoints.ts), like the lobby rows' phone layout (lobby.less)
+const NARROW_QUERY = belowWidth(BREAKPOINTS.tablet);
 const narrow = ref(false);
 let query: MediaQueryList | undefined;
 const onQueryChange = () => narrow.value = query?.matches === true;

@@ -32,7 +32,7 @@
         </a>
       </div>
     </div>
-    <!-- From @player-home-columns-min-width two columns as in the game view: result on the left, board, charts, log on the right -->
+    <!-- From @bp-desktop (breakpoints.less) two columns as in the game view: result on the left, board, charts, log on the right -->
     <div class="game_end game-end-columns">
       <div class="game-end-columns__main">
 

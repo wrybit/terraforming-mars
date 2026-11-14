@@ -16,7 +16,7 @@
   max-width: none;
   padding: 0 @page-content-edge @page-content-edge;
 
-  @media only screen and (max-width: @page-content-narrow) {
+  @media @below-wide {
     padding: 0 @page-content-edge-narrow @page-content-edge-narrow;
   }
 }
@@ -34,7 +34,7 @@
   padding-top: 8px;
   padding-bottom: 8px;
 
-  @media only screen and (max-width: @page-content-narrow) {
+  @media @below-wide {
     margin-top: @page-content-edge-narrow;
   }
 }
@@ -327,7 +327,7 @@
   }
 }
 
-@media only screen and (max-width: 700px) {
+@media @below-tablet {
   .server-settings-row {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -505,7 +505,7 @@
 }
 
 // Phone: navigation smaller, so it takes less of the screen while it stays at the top
-@media only screen and (max-width: 700px) {
+@media @below-tablet {
   .games-overview-container .admin-nav-link {
     padding: 5px 9px;
     font-size: 14px;

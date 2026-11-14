@@ -1,15 +1,21 @@
 import {expect} from 'chai';
-import {resolveMobileLayout} from '@/client/utils/mobileLayout';
+import {resolveLayoutState} from '@/client/utils/mobileLayout';
 import {boardMaxHeight, cardColumns, cardGridColumns, choiceGridColumns, fitScale} from '@/client/utils/mobileFit';
 import {transposedCopy} from '@/client/utils/transposeTable';
 
 describe('mobileLayout', () => {
-  it('uses touch devices and narrow windows in auto mode and honours overrides', () => {
-    expect(resolveMobileLayout('auto', true, false)).to.be.true;
-    expect(resolveMobileLayout('auto', false, true)).to.be.true;
-    expect(resolveMobileLayout('auto', false, false)).to.be.false;
-    expect(resolveMobileLayout('on', false, false)).to.be.true;
-    expect(resolveMobileLayout('off', true, true)).to.be.false;
+  it('decides the layout state by window size alone', () => {
+    expect(resolveLayoutState(320, 568)).to.eq('phone-portrait');
+    expect(resolveLayoutState(390, 844)).to.eq('phone-portrait');
+    expect(resolveLayoutState(844, 390)).to.eq('phone-landscape');
+    expect(resolveLayoutState(744, 1133)).to.eq('tablet-portrait');
+    expect(resolveLayoutState(1133, 744)).to.eq('tablet-landscape');
+    expect(resolveLayoutState(1024, 1366)).to.eq('tablet-portrait');
+    expect(resolveLayoutState(1100, 800)).to.eq('tablet-landscape');
+    expect(resolveLayoutState(1279, 800)).to.eq('tablet-landscape');
+    expect(resolveLayoutState(1280, 800)).to.eq('desktop');
+    expect(resolveLayoutState(1366, 1024)).to.eq('desktop');
+    expect(resolveLayoutState(3840, 2160)).to.eq('desktop');
   });
 });
 

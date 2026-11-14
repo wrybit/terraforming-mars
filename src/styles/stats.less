@@ -1,7 +1,6 @@
 // Statistics page (/stats). Scaffold (header, filter column, bottom sheet, filter tiles) comes from card_list.less,
 // surfaces and spacing from create_game_form.less – only statistics-specific styles here.
 
-@stats-narrow: 900px; // like @card-list-narrow
 @stats-winner: #f4c20d; // like the winner numbers of the admin overview
 @stats-bar-width: 90px;
 
@@ -629,7 +628,7 @@ each(@players, {
 }
 
 // ---------- Narrow: everything single-column, first table column stays put when scrolling sideways ----------
-@media only screen and (max-width: @stats-narrow) {
+@media @below-wide {
   .card-list-header .stats-header-info {
     display: none;
   }
@@ -726,7 +725,7 @@ each(@players, {
   position: relative;
 }
 
-@media only screen and (max-width: @stats-narrow) {
+@media @below-wide {
   .stats-list-tools {
     flex: 1 1 100%;
     flex-wrap: wrap;
@@ -821,7 +820,7 @@ each(@stats-source-colors, {
   cursor: zoom-in;
 }
 
-@media only screen and (max-width: @stats-narrow) {
+@media @below-wide {
   .stats-detail-head--asset {
     grid-template-columns: minmax(0, 1fr);
 
@@ -1041,7 +1040,7 @@ each(range(10), {
   }
 }
 
-@media only screen and (max-width: @stats-narrow) {
+@media @below-wide {
   .stats-skeleton-kpi {
     height: 57px;
   }

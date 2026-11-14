@@ -46,6 +46,15 @@
         </template>
         <template v-else>
           <ToggleSwitch :modelValue="hotkeyState.showHints" :label="$t('Show keys in the game')" @update:modelValue="setShowHints" />
+          <!-- Only where the browser does not tell the layout (Firefox, Safari): correct a wrong guess by hand -->
+          <label v-if="detectedLayout === undefined" class="hotkey-dialog__layout">
+            <span v-i18n>Keyboard layout</span>
+            <select class="hotkey-dialog__layout-select" data-test="hotkey-layout" :value="letterLayoutChoice"
+              @change="setLetterLayoutChoice(($event.target as HTMLSelectElement).value as LetterLayoutChoice)">
+              <option value="auto">{{ automaticLabel }}</option>
+              <option v-for="layout in LETTER_LAYOUTS" :key="layout" :value="layout">{{ layout.toUpperCase() }}</option>
+            </select>
+          </label>
           <span class="hotkey-dialog__message hotkey-dialog__message--end">{{ message }}</span>
         </template>
       </div>
@@ -63,6 +72,8 @@ import HotkeyKeyboard from '@/client/components/hotkeys/HotkeyKeyboard.vue';
 import {HotkeyKeys as KeyList} from '@/client/hotkeys/hotkeyActions';
 import {KeyboardKey, isStack, keyboardLayout} from '@/client/hotkeys/hotkeyKeyboardLayouts';
 import {drawnCharacter, keyUses} from '@/client/hotkeys/hotkeyKeyUses';
+import {detectedLayout} from '@/client/hotkeys/hotkeyKeyLabels';
+import {LETTER_LAYOUTS, LetterLayoutChoice, letterLayout, letterLayoutChoice, setLetterLayoutChoice} from '@/client/hotkeys/hotkeyLetterLayouts';
 import {getPreferences} from '@/client/utils/PreferencesManager';
 import {PICK_CODES, findHotkeyAction} from '@/client/hotkeys/hotkeyActions';
 import {duplicateBindings, exportHotkeys, hotkeyState, importHotkeys, resetBindings, setBinding, setShowHints} from '@/client/hotkeys/hotkeyStore';
@@ -93,6 +104,9 @@ const note = ref<{text: string, warning: boolean} | undefined>(undefined);
 let noteTimer: number | undefined;
 
 const duplicates = computed(() => duplicateBindings());
+
+// "Automatic (AZERTY)": shows which layout the guess or the first key press found
+const automaticLabel = computed(() => translateTextWithParams('Automatic (${0})', [letterLayout.value.toUpperCase()]));
 
 // Keyboard drawing: the layout of the chosen language, hover links keys and rows, pressed keys sink in
 const language = computed(() => getPreferences().lang);

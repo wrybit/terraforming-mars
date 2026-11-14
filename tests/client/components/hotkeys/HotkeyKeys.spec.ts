@@ -2,8 +2,17 @@ import {mount} from '@vue/test-utils';
 import {expect} from 'chai';
 import {globalConfig} from '../getLocalVue';
 import HotkeyKeys from '@/client/components/hotkeys/HotkeyKeys.vue';
+import {detectedLayout} from '@/client/hotkeys/hotkeyKeyLabels';
 
 describe('HotkeyKeys', () => {
+  beforeEach(() => {
+    detectedLayout.value = new Map([['KeyE', 'e']]);
+  });
+
+  afterEach(() => {
+    detectedLayout.value = undefined;
+  });
+
   it('shows the keys of an action as caps', () => {
     const wrapper = mount(HotkeyKeys, {...globalConfig, props: {action: 'confirm'}});
     expect(wrapper.findAll('kbd')).has.length(1);

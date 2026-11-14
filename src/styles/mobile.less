@@ -19,12 +19,9 @@
 @mb-danger: #8e2a22;
 @mb-top-height: 52px;
 @mb-nav-height: 68px;
-@mb-screen-width-max: 1400px;
-// Tablet landscape (also wide windows in landscape): Mars next to the bars, player tables horizontal like on desktop.
-// Breakpoint like LANDSCAPE_MIN_WIDTH in mobileLayout.ts
-@mb-landscape: ~"(min-width: 900px) and (orientation: landscape)";
-// Everything else (phone, tablet portrait, narrow windows): player tables rotated, players as columns
-@mb-portrait: ~"not all and (min-width: 900px) and (orientation: landscape)";
+// Orientation states come from breakpoints.less: in landscape the player tables are horizontal like on desktop
+// (@layout-landscape), in portrait rotated with players as columns (@layout-portrait); only tablet landscape
+// puts Mars next to the bars (@layout-tablet-landscape)
 // Columns of the wrapping player table: exactly six resources fit in one row
 // Icon column of the rotated player table
 @mb-players-icon-column: 44px;
@@ -337,7 +334,7 @@ html.tm-mobile {
 
   // ---------- Screens ----------
   .mb-main {
-    max-width: @mb-screen-width-max;
+    max-width: @bp-desktop;
     margin: 0 auto;
   }
 
@@ -373,7 +370,7 @@ html.tm-mobile {
     box-shadow: none !important;
   }
 
-  // Tab boxes like on desktop (from 1400 px), just with less padding; without their own stacking context,
+  // Tab boxes like on desktop (from @bp-desktop), just with less padding; without their own stacking context,
   // otherwise the footer (confirm/pay, fixed at the bottom) would sit behind the task bar
   .mb-screen .or-tab-panel {
     padding: 10px 8px;
@@ -638,14 +635,14 @@ html.tm-mobile {
     color: @mb-text;
   }
 
-  // Milestones & awards in the player screen always as a table (milestone_award_table.less hides them below 1400 px)
+  // Milestones & awards in the player screen always as a table (milestone_award_table.less hides them below @bp-desktop)
   .mb-ma .ma-table {
     display: grid !important;
   }
 
   // Tablet landscape: milestones & awards horizontal, player header (PlayerIdentity.vue) as wide and tall
   // as in the player list – both sections show the same header
-  @media @mb-landscape {
+  @media @layout-landscape {
     .mb-ma .ma-table {
       --ma-table-name-width: @mb-players-name-width;
     }
@@ -669,7 +666,7 @@ html.tm-mobile {
   }
 
   // Phone and tablet portrait: tables rotated (players as columns); tablet landscape keeps the desktop's horizontal rows
-  @media @mb-portrait {
+  @media @layout-portrait {
     // Milestones & awards rotated like the player table: icons on the left, then cost or owner,
     // then one column per player (cells per row: --ma-table-cell-count from MilestoneAwardTable)
     .mb-ma .ma-table {
@@ -828,7 +825,7 @@ html.tm-mobile {
 
   // Tablet landscape: bars vertical side by side, filling the height next to Mars (row 3 in the grid of .mb-screen--mars);
   // subgrid keeps label, value and bar of all columns at the same height, even when a name wraps
-  @media @mb-landscape {
+  @media @layout-tablet-landscape {
     .mb-params {
       --bar-direction: 0deg;
       display: grid;
@@ -894,7 +891,7 @@ html.tm-mobile {
     }
   }
 
-  // ---------- Milestones & awards and players: tables like in the two-column layout (from 1400 px) ----------
+  // ---------- Milestones & awards and players: tables like in the two-column layout (from @bp-desktop) ----------
   .player_home_block--milestones-and-awards {
     width: auto !important;
     margin: 0 !important;
@@ -904,7 +901,7 @@ html.tm-mobile {
       display: none;
     }
 
-    // milestone_award_table.less hides the table below 1400 px
+    // milestone_award_table.less hides the table below @bp-desktop
     .ma-table {
       display: grid !important;
     }
@@ -928,7 +925,7 @@ html.tm-mobile {
   }
 
   // Phone and tablet portrait: player table rotated
-  @media @mb-portrait {
+  @media @layout-portrait {
     // Player header (PlayerIdentity.vue) of the rotated milestone table: name, status, corporation stacked and centered
     .mb-screen--players .mb-ma .players-table-identity {
       justify-content: flex-start; // Columns side by side: names at one height instead of centered per column
@@ -956,11 +953,11 @@ html.tm-mobile {
     .mb-screen--players-scroll {
       --mb-players-visible: 2;
 
-      @media (min-width: 560px) {
+      @media @from-tablet {
         --mb-players-visible: 3;
       }
 
-      @media (min-width: 900px) {
+      @media @from-wide {
         --mb-players-visible: 4;
       }
 
@@ -1402,7 +1399,7 @@ html.tm-mobile {
     }
   }
 
-  @media (orientation: portrait) {
+  @media @layout-portrait {
     .mb-screen--turn .wf-component--select-card.choice-block:not(.setup-column-body *) {
       display: grid !important;
       grid-template-columns: repeat(var(--mb-grid-columns, 2), max-content);
@@ -1993,7 +1990,7 @@ html.tm-mobile {
     }
 
     // Narrowest phones (320 px): with two currencies the "Left over" column ran off the screen
-    @media (max-width: 359px) {
+    @media @below-compact-phone {
       .payments_balance {
         column-gap: 3px;
       }
@@ -2283,7 +2280,7 @@ html.tm-mobile {
   .board-zoom-banner {
     top: calc(12px + env(safe-area-inset-top));
 
-    @media (max-width: 699px) { // same limit in placement_banner.less
+    @media @below-tablet {
       left: 12px;
       right: 64px; // ✕ (44 px) + gap
       transform: none;
@@ -2350,7 +2347,7 @@ html.tm-mobile {
   // Tablet landscape: turn status and toolbar in the top row, below them the board box over the full width (Mars tab:
   // planet left, the bars vertical next to it filling its height; the other boards get the whole box),
   // milestone buttons at the bottom
-  @media @mb-landscape {
+  @media @layout-tablet-landscape {
     .mb-screen--mars {
       display: grid; // without !important, otherwise hiding via v-show (inline style) would no longer work
       grid-template-columns: minmax(0, 1fr) auto;
@@ -2406,7 +2403,7 @@ html.tm-mobile {
   }
 
   // Tablet: don't stretch bars across the full width
-  @media (min-width: 700px) {
+  @media @from-tablet {
     .mb-screen {
       padding-left: 16px;
       padding-right: 16px;
@@ -2500,13 +2497,13 @@ html.tm-mobile #game-end {
 
   // Show the wide table on phone and tablet portrait only rotated (mobileDocument.ts);
   // tablet landscape shows the original with players as rows like on desktop
-  @media @mb-portrait {
+  @media @layout-portrait {
     .mb-transposed-source {
       display: none;
     }
   }
 
-  @media @mb-landscape {
+  @media @layout-landscape {
     .game_end_table.mb-transposed {
       display: none;
     }
@@ -2579,7 +2576,7 @@ html.tm-mobile #game-end {
 
   // Solo on tablet landscape: end picture (60 %) and Mars (40 %) side by side in the first row,
   // so the picture does not take the whole width; all other boxes keep the full width below
-  @media @mb-landscape {
+  @media @layout-tablet-landscape {
     &:has(.game-end-solo) {
       .game-end-columns {
         display: grid;

@@ -19,7 +19,7 @@
   gap: @players-gap-card;
   align-items: start;
 
-  @media (max-width: 860px) {
+  @media @below-wide {
     grid-template-columns: minmax(0, 1fr);
   }
 }
@@ -323,7 +323,7 @@
     font-weight: 500;
   }
 
-  @media (max-width: 520px) {
+  @media @below-tablet {
     .admin-players-meta-last {
       display: none;
     }

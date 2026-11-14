@@ -1,0 +1,35 @@
+// The only place for layout breakpoints. Contract with src/client/utils/breakpoints.ts:
+// tests/client/utils/breakpoints.spec.ts checks that both sides carry the same values.
+//
+// Five layout states (mobileLayout.ts sets them as data-layout on <html>):
+//   phone-portrait    width below @bp-tablet
+//   phone-landscape   landscape, height below @bp-short-height
+//   tablet-portrait   portrait, width @bp-tablet and up (below @bp-desktop)
+//   tablet-landscape  landscape, height @bp-short-height and up (below @bp-desktop)
+//   desktop           width @bp-desktop and up (HD laptops with 1280 and 1366 px included)
+// Page layouts outside the game view only use the width steps below.
+
+// Very narrow phones (320 px): a few controls need a second row there
+@bp-compact-phone: 360px;
+// Phone → tablet
+@bp-tablet: 600px;
+// Narrow → wide page layouts (tablet portrait → tablet landscape, small windows)
+@bp-wide: 1024px;
+// Two-column desktop layout
+@bp-desktop: 1280px;
+// Landscape below this height is a phone
+@bp-short-height: 600px;
+
+@below-compact-phone: ~"(max-width: 359px)";
+@below-tablet: ~"(max-width: 599px)";
+@from-tablet: ~"(min-width: 600px)";
+@below-wide: ~"(max-width: 1023px)";
+@from-wide: ~"(min-width: 1024px)";
+@below-desktop: ~"(max-width: 1279px)";
+@from-desktop: ~"(min-width: 1280px)";
+
+// Orientation states of the mobile view (inside .tm-mobile)
+@layout-portrait: ~"(orientation: portrait)";
+@layout-landscape: ~"(orientation: landscape)";
+@layout-phone-landscape: ~"(orientation: landscape) and (max-height: 599px)";
+@layout-tablet-landscape: ~"(orientation: landscape) and (min-height: 600px)";

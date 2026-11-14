@@ -30,7 +30,7 @@
   list-style: none;
   .dune-frame-focus();
 
-  @media only screen and (max-width: 600px) {
+  @media @below-tablet {
     gap: 6px;
     padding: 8px;
   }
@@ -64,7 +64,7 @@
   color: @bazaar-ink;
   text-align: center;
 
-  @media only screen and (max-width: 600px) {
+  @media @below-tablet {
     padding: 4px 3px 6px;
   }
 }
@@ -130,7 +130,7 @@ html:not(.tm-mobile) .dune-bazaar {
   }
 
   // Narrow slot: a smaller coin keeps the name readable
-  @media only screen and (max-width: 600px) {
+  @media @below-tablet {
     top: -8px;
     left: -6px;
     width: 26px;
@@ -151,7 +151,7 @@ html:not(.tm-mobile) .dune-bazaar {
   hyphens: auto;
   overflow-wrap: break-word;
 
-  @media only screen and (max-width: 600px) {
+  @media @below-tablet {
     // Name below the coin instead of beside it
     padding: 14px 0 0;
     font-size: 10px;
@@ -371,7 +371,7 @@ html:not(.tm-mobile) .or-tab-panel .dune-bazaar-purchase-intro__row > .choice-bl
   padding: 22px 4px 0;
 }
 
-@media only screen and (max-width: 600px) {
+@media @below-tablet {
   .dune-bazaar__price.dune-bazaar__price--printed {
     top: -5px;
     left: -8px;

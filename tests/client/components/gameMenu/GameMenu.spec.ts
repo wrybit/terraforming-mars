@@ -7,6 +7,7 @@ import {GAME_MENU_CONTEXT, GameMenuContext} from '@/client/components/gameMenu/g
 import {fakeGameOptionsModel} from '../testHelpers';
 import {CLIENT_EXTENSIONS} from '@/genfiles/extensionsClient';
 import {useFakeLocalStorage} from '../FakeLocalStorage';
+import {isAdmin} from '@/client/components/admin/adminSession';
 
 function context(): GameMenuContext {
   return {
@@ -26,6 +27,8 @@ describe('GameMenu', () => {
   useFakeLocalStorage();
 
   beforeEach(() => {
+    // Admin tests of the same worker may leave the login behind (vitest runs with isolate: false)
+    isAdmin.value = false;
     // The menu hides the link to the current page, so start from a neutral URL
     window.history.replaceState(null, '', '/');
     // Specs share one document (isolate: false): a menu another spec left open (teleported to body) would be found too

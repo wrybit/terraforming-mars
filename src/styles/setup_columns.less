@@ -184,7 +184,7 @@ html:not(.tm-mobile) .setup-columns {
 }
 
 // Below the two-column layout (narrow windows) columns stack vertically, the page scrolls
-@media only screen and (max-width: (@player-home-columns-min-width - 1px)) {
+@media @below-desktop {
   .setup-columns {
     flex-direction: column;
   }
@@ -195,7 +195,7 @@ html:not(.tm-mobile) .setup-columns {
 }
 
 // Fixed app layout (player_home_fixed.less): columns fill the height below the turn order
-@media only screen and (min-width: @player-home-columns-min-width) {
+@media @from-desktop {
   .player-home--fixed .select-initial-cards .setup-columns {
     flex: 1 1 auto;
     min-height: 0;

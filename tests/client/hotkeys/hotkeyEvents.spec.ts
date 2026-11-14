@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {keysOfEvent} from '@/client/hotkeys/hotkeyEvents';
+import {keyCapLabel, keysOfEvent} from '@/client/hotkeys/hotkeyEvents';
 
 function press(code: string, key: string): KeyboardEvent {
   return new KeyboardEvent('keydown', {code, key});
@@ -15,8 +15,16 @@ describe('hotkeyEvents', () => {
   });
 
   it('reads single keys by position', () => {
+    // QWERTZ: Pass and End stay on the bottom row (KeyZ / KeyX), whatever their caps say.
+    expect(keysOfEvent(press('KeyZ', 'w'))).to.deep.equal(['KeyZ']);
+    expect(keysOfEvent(press('KeyX', 'x'))).to.deep.equal(['KeyX']);
     expect(keysOfEvent(press('KeyY', 'z'))).to.deep.equal(['KeyY']);
     expect(keysOfEvent(press('Numpad1', '1'))).to.deep.equal(['Digit1']);
+  });
+
+  it('guesses the letter from the language before the layout is known', () => {
+    expect(keyCapLabel('KeyP')).to.equal('P');
+    expect(keyCapLabel('Digit1')).to.equal('1');
   });
 
   it('swaps the key left of 1 and the <> key back on Mac ISO keyboards', () => {

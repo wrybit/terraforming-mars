@@ -354,7 +354,7 @@
 // 3 fixed party columns are too narrow to hold a 2-column bonus/policy grid on an actual phone
 // screen, even with the minmax(0, 1fr) fix above -- drop to 1 column so each party card gets
 // the full width instead.
-@media only screen and (max-width: 767px) {
+@media @below-tablet {
   .help-parties-grid {
     grid-template-columns: minmax(0, 1fr);
   }

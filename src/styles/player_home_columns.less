@@ -1,8 +1,6 @@
 // Two-column layout of the player view: game action on the left, Mars board on the right.
 // Below the breakpoint the previous single-column order stays (board on top).
 
-// From this width, board (~670px) and a usable left column fit side by side
-@player-home-columns-min-width: 1400px;
 // Distance of the sticky board from the top of the window
 @player-home-sticky-top: 10px;
 // Gap between columns larger than between blocks within a column (20px) – law of proximity;
@@ -19,7 +17,7 @@
 @player-home-card-height: @log-card-preview-height; // project card incl. border (log.less)
 @player-home-log-height: floor(@player-home-card-height * @log-card-preview-zoom);
 
-@media only screen and (min-width: @player-home-columns-min-width) {
+@media @from-desktop {
   .player-home-columns {
     display: grid;
     grid-template-columns:

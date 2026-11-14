@@ -117,9 +117,10 @@ import {activeTheme} from '@/client/theme/applyTheme';
 import {Theme} from '@/common/theme/Theme';
 import {statsGameTheme} from '@/common/stats/statsBoardKey';
 import {CARD_ZOOM_KEY, StatsCardZoomRequest} from './statsCardZoom';
+import {BREAKPOINTS} from '@/client/utils/breakpoints';
 
-// Below this width narrower charts (same breakpoint as the card list's filter sheet)
-const NARROW_WIDTH = 900;
+// Below this width narrower charts (same breakpoint as the narrow stats layout, stats.less)
+const NARROW_WIDTH = BREAKPOINTS.wide;
 
 type DataModel = {
   theme: Theme;

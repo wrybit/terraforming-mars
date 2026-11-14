@@ -19,7 +19,7 @@
 .lobby {
   --lobby-inset: @page-content-edge;
 
-  @media only screen and (max-width: @card-list-narrow) {
+  @media @below-wide {
     --lobby-inset: 12px;
   }
 
@@ -40,7 +40,7 @@
 
   // Wide screens: the chat as a sidebar on the right; its width is dragged with the handle between them
   // (ColumnResizeHandle.vue, LOBBY_CHAT_SPLIT in columnResize.ts sets the two shares)
-  @media only screen and (min-width: 1400px) {
+  @media @from-desktop {
     display: grid;
     grid-template-columns: minmax(0, var(--lobby-main-share, 75fr)) @lobby-resizer-width minmax(0, var(--lobby-chat-share, 25fr));
     // Rows as usual; across, the handle sits in the middle of the usual gap (half the rest on each side)
@@ -52,7 +52,7 @@
 @lobby-resizer-width: 12px;
 
 .lobby-chat-resizer {
-  @media only screen and (min-width: 1400px) {
+  @media @from-desktop {
     .column-resize-handle-shown(0);
     // As high as the two neighbours instead of the window
     position: relative;
@@ -64,7 +64,7 @@
 .lobby-chat-aside {
   margin-top: @lobby-gap-section;
 
-  @media only screen and (min-width: 1400px) {
+  @media @from-desktop {
     position: sticky;
     top: @page-content-edge;
     margin-top: 0;
@@ -387,7 +387,7 @@
   // chat card is lower and cuts off what sticks out above it
   max-height: min(420px, 60vh);
 
-  @media only screen and (max-width: 1399px) {
+  @media @below-desktop {
     max-height: 340px;
   }
   overflow-y: auto;
@@ -511,7 +511,7 @@
 }
 
 // Phone: profile and "Create game" only as symbols, the header must not overflow
-@media only screen and (max-width: 600px) {
+@media @below-tablet {
   .lobby-head .lobby-open-label,
   .lobby-head .lobby-open-keys,
   .lobby-profile-button .create-game-head-label,
@@ -547,7 +547,7 @@
   }
   // Phone: only the round profile picture, as big as the button, with a pencil badge (like profile pictures in apps).
   // Here, after the pill rules, so their padding and gap do not push the picture off centre
-  @media only screen and (max-width: 600px) {
+  @media @below-tablet {
     position: relative;
     justify-content: center;
     width: @toolbar-button-size;
@@ -588,7 +588,7 @@
 .lobby-profile-badge {
   display: none;
 
-  @media only screen and (max-width: 600px) {
+  @media @below-tablet {
     position: absolute;
     right: -3px;
     bottom: -3px;
@@ -653,7 +653,7 @@
   flex: 1 1 260px;
 
   // Phone: the search gets its own row, the buttons go below it
-  @media only screen and (max-width: 600px) {
+  @media @below-tablet {
     flex-basis: 100%;
     max-width: none;
   }
@@ -664,7 +664,7 @@
   margin-bottom: 72px;
 
   // Wide screens: the bar sits in the header, nothing to keep free at the bottom
-  @media only screen and (min-width: 1200px) {
+  @media @from-wide {
     margin-bottom: 0;
   }
 }
@@ -737,7 +737,7 @@
 .lobby-filter-group--wide {
   grid-column: span 2;
 
-  @media only screen and (max-width: 600px) {
+  @media @below-tablet {
     grid-column: auto;
   }
 }
@@ -854,7 +854,7 @@
   }
 
   // Phone: the seats get their own row below the title, so the title keeps its width
-  @media only screen and (max-width: 600px) {
+  @media @below-tablet {
     grid-template-columns: auto minmax(0, 1fr) auto;
     grid-template-areas: "planet info action" "seats seats seats" "progress progress progress" "chips chips chips";
   }
@@ -1211,7 +1211,7 @@ each(@players, {
 
 // With the chat sidebar the page itself does not scroll: header, cards and footer fit the window, and each of
 // the three cards (running, open, chat) scrolls on its own. The chain of flex boxes passes the height down.
-@media only screen and (min-width: 1400px) {
+@media @from-desktop {
   .topmost-lobby {
     height: 100dvh;
     overflow: hidden;
@@ -1274,7 +1274,7 @@ each(@players, {
 }
 
 .lobby-main {
-  @media only screen and (min-width: 1400px) {
+  @media @from-desktop {
     display: flex;
     flex-direction: column;
     min-height: 0;
@@ -1303,7 +1303,7 @@ each(@players, {
   }
 
   // Stacked (phones): the open games first, they are what one comes for; the running ones follow
-  @media only screen and (max-width: 1000px) {
+  @media @below-wide {
     grid-template-columns: minmax(0, 1fr);
 
     > .create-game-card:last-child {
@@ -1438,7 +1438,7 @@ each(@players, {
   align-items: center;
   margin: 12px 0 4px;
 
-  @media only screen and (max-width: 520px) {
+  @media @below-tablet {
     grid-template-columns: 1fr;
     justify-items: center;
   }
@@ -1654,7 +1654,7 @@ each(@players, {
     grid-column: span 2;
   }
 
-  @media only screen and (min-width: 601px) {
+  @media @from-tablet {
     &.lobby-seats--count-1 > .lobby-seat {
       grid-column: 3 / span 2;
     }
@@ -1666,7 +1666,7 @@ each(@players, {
     }
   }
 
-  @media only screen and (max-width: 600px) {
+  @media @below-tablet {
     grid-template-columns: repeat(4, minmax(0, 1fr));
 
     &.lobby-seats--count-1 > .lobby-seat,
@@ -1841,7 +1841,7 @@ each(@players, {
 
   // Wide screens: top centre, its middle on the header's middle axis (header 20px down, 64px high); narrower
   // screens have no free room between title and buttons there, so it stays at the bottom
-  @media only screen and (min-width: 1200px) {
+  @media @from-wide {
     top: 52px;
     bottom: auto;
     transform: translate(-50%, -50%);
@@ -2117,7 +2117,7 @@ each(@players, {
 }
 
 // Phone: profile and "Create game" stay in the first row next to the title (only symbols there)
-@media only screen and (max-width: 600px) {
+@media @below-tablet {
   .lobby-head .create-game-head-actions {
     order: 0;
     flex-basis: auto;

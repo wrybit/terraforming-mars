@@ -3,6 +3,8 @@ import {expect} from 'chai';
 import {globalConfig} from '../getLocalVue';
 import HotkeyHelpDialog from '@/client/components/hotkeys/HotkeyHelpDialog.vue';
 import {resetBindings, setBinding} from '@/client/hotkeys/hotkeyStore';
+import {detectedLayout} from '@/client/hotkeys/hotkeyKeyLabels';
+import {letterLayoutChoice, resetLetterLayout} from '@/client/hotkeys/hotkeyLetterLayouts';
 
 function mountDialog() {
   return mount(HotkeyHelpDialog, {
@@ -18,6 +20,8 @@ function mountDialog() {
 describe('HotkeyHelpDialog', () => {
   afterEach(() => {
     resetBindings();
+    detectedLayout.value = undefined;
+    resetLetterLayout();
   });
 
   it('is an information page until "Edit" is pressed', async () => {
@@ -28,7 +32,23 @@ describe('HotkeyHelpDialog', () => {
     expect(wrapper.find('[data-test="hotkey-done"]').classes()).to.include('hotkey-dialog__button--cta');
   });
 
+  it('lets the player pick the layout where the browser does not tell it', async () => {
+    const wrapper = mountDialog();
+    const select = wrapper.find('[data-test="hotkey-layout"]');
+    expect(select.exists()).to.be.true;
+    expect(wrapper.find('.hotkey-keyboard [data-key="Q"]').exists()).to.be.true;
+
+    await select.setValue('azerty');
+    expect(letterLayoutChoice.value).to.equal('azerty');
+    expect(wrapper.find('.hotkey-keyboard').text()).to.include('A');
+
+    detectedLayout.value = new Map([['KeyQ', 'a']]);
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find('[data-test="hotkey-layout"]').exists()).to.be.false;
+  });
+
   it('takes a new key for the clicked entry', async () => {
+    detectedLayout.value = new Map([['KeyX', 'x']]);
     const wrapper = mountDialog();
     await wrapper.find('[data-test="hotkey-edit"]').trigger('click');
     await wrapper.findAll('button.hotkey-row')[0].trigger('click');
@@ -38,6 +58,7 @@ describe('HotkeyHelpDialog', () => {
   });
 
   it('takes a key clicked on the drawn keyboard', async () => {
+    detectedLayout.value = new Map([['KeyM', 'm']]);
     const wrapper = mountDialog();
     await wrapper.find('[data-test="hotkey-edit"]').trigger('click');
     await wrapper.findAll('button.hotkey-row')[0].trigger('click');

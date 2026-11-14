@@ -1971,5 +1971,7 @@
   "${0} is the new leader of the ${1} party": "${0} zostaje nowym liderem partii ${1}",
   "The ${0} party has no leader": "Partia ${0} nie ma lidera",
   "Some of the milestones you selected need expansions you have not enabled.": "Niektóre wybrane tytuły wymagają niewłączonych dodatków.",
-  "Some of the awards you selected need expansions you have not enabled.": "Niektóre wybrane nagrody wymagają niewłączonych dodatków."
+  "Some of the awards you selected need expansions you have not enabled.": "Niektóre wybrane nagrody wymagają niewłączonych dodatków.",
+  "Keyboard layout": "Układ klawiatury",
+  "Automatic (${0})": "Automatycznie (${0})"
 }

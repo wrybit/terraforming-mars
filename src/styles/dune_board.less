@@ -618,7 +618,7 @@ html:not(.tm-mobile) .dune-schemes__cards {
 }
 
 // Phone: two tiles per row, so a choice of six stays short
-@media (max-width: 600px) {
+@media @below-tablet {
   .dune-move__tiles {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));

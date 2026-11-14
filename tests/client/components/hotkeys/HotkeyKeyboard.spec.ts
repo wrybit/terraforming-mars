@@ -3,7 +3,8 @@ import {expect} from 'chai';
 import {globalConfig} from '../getLocalVue';
 import HotkeyKeyboard from '@/client/components/hotkeys/HotkeyKeyboard.vue';
 import {resetBindings, setBinding} from '@/client/hotkeys/hotkeyStore';
-import {detectedLayout} from '@/client/hotkeys/hotkeyKeyLabels';
+import {detectedLayout, observeKeyLayout, resetObservedKeys} from '@/client/hotkeys/hotkeyKeyLabels';
+import {resetLetterLayout, setLetterLayoutChoice} from '@/client/hotkeys/hotkeyLetterLayouts';
 
 function mountKeyboard(language: string) {
   return mount(HotkeyKeyboard, {...globalConfig, props: {language, editing: false, highlighted: new Set<string>(), pressed: new Set<string>(), modArmed: false}});
@@ -13,6 +14,8 @@ describe('HotkeyKeyboard', () => {
   afterEach(() => {
     resetBindings();
     detectedLayout.value = undefined;
+    resetObservedKeys();
+    resetLetterLayout();
   });
 
   it('draws QWERTZ for German and colors the keys with a shortcut', () => {
@@ -23,6 +26,28 @@ describe('HotkeyKeyboard', () => {
     expect(projects.classes()).to.include('hotkey-keyboard__key--tabs-default');
     expect(projects.find('.hotkey-keyboard__use').text()).to.equal('Projects');
     expect(wrapper.find('[data-key="X"]').classes()).to.include('hotkey-keyboard__key--danger');
+  });
+
+  it('guesses the letters before the layout is known', () => {
+    const wrapper = mountKeyboard('en');
+    expect(wrapper.find('[data-key="Q"]').text()).to.include('Q');
+    expect(wrapper.find('[data-key="1"]').text()).to.include('1');
+  });
+
+  it('labels every letter after one press reveals AZERTY (browsers without layout API)', async () => {
+    const wrapper = mountKeyboard('en');
+    observeKeyLayout(new KeyboardEvent('keydown', {code: 'KeyQ', key: 'a'}));
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find('[data-key="Q"]').text()).to.include('A');
+    expect(wrapper.find('[data-key="W"]').text()).to.include('Z');
+    expect(wrapper.find('[data-key="Q"] .hotkey-keyboard__use').text()).to.equal('Cards');
+  });
+
+  it('uses the layout picked by hand', async () => {
+    const wrapper = mountKeyboard('en');
+    setLetterLayoutChoice('qwertz');
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find('[data-key="Z"]').text()).to.include('Y');
   });
 
   it('follows changed bindings at once', async () => {
@@ -45,6 +70,27 @@ describe('HotkeyKeyboard', () => {
     const allCards = wrapper.find('[data-key="Q"]');
     expect(allCards.text()).to.include('A');
     expect(allCards.find('.hotkey-keyboard__use').text()).to.equal('Cards');
+    expect(wrapper.find('[data-key="A"] .hotkey-keyboard__use').text()).to.equal('Corporation');
+  });
+
+  it('updates the drawn caps when the detected layout arrives while the dialog is open', async () => {
+    const wrapper = mountKeyboard('en');
+    expect(wrapper.find('[data-key="Q"]').text()).to.include('Q');
+
+    detectedLayout.value = new Map([['KeyQ', 'a'], ['KeyA', 'q']]);
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.find('[data-key="Q"]').text()).to.include('A');
+    expect(wrapper.find('[data-key="Q"] .hotkey-keyboard__use').text()).to.equal('Cards');
+  });
+
+  it('shows the number keys without repeating the choose label', () => {
+    const wrapper = mountKeyboard('en');
+    for (const digit of '1234567890') {
+      const key = wrapper.find(`[data-key="${digit}"]`);
+      expect(key.text()).to.include(digit);
+      expect(key.find('.hotkey-keyboard__use').exists()).to.be.false;
+    }
   });
 
   it('has arrow up and down as two half keys', () => {

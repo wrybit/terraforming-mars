@@ -18,7 +18,6 @@
 @help-gap-section: 16px;
 @help-card-radius: 10px;
 @help-icon-slot: 34px;
-@help-mobile-max: 760px;
 
 .help-overlay {
   display: flex;
@@ -683,7 +682,7 @@
 }
 
 // ---- Phone: the tree becomes a chip bar above the content ----
-@media only screen and (max-width: @help-mobile-max) {
+@media @below-tablet {
   .help-overlay--page {
     height: 100dvh;
     margin: 0;

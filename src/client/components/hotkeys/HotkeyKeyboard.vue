@@ -83,7 +83,9 @@ function useLabel(key: KeyboardKey): string {
   if (key.half === true || key.mod === true || key.id === 'EnterLower') {
     return '';
   }
-  return Array.from(new Set(mainUses(key).map((use) => translateText(use.short)))).join(' / ');
+  // "Choose 1 … 0" spans ten keys: repeat the label in the list, not on every digit key.
+  const uses = mainUses(key).filter((use) => use.id !== 'pick');
+  return Array.from(new Set(uses.map((use) => translateText(use.short)))).join(' / ');
 }
 
 function keyClass(key: KeyboardKey): Array<string | Record<string, boolean>> {

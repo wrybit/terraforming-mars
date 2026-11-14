@@ -2157,5 +2157,7 @@
   "${0} is the new leader of the ${1} party": "${0} 成为 ${1} 政党的新领袖",
   "The ${0} party has no leader": "${0} 政党没有领袖",
   "Some of the milestones you selected need expansions you have not enabled.": "部分所选里程碑需要未启用的扩展。",
-  "Some of the awards you selected need expansions you have not enabled.": "部分所选奖项需要未启用的扩展。"
+  "Some of the awards you selected need expansions you have not enabled.": "部分所选奖项需要未启用的扩展。",
+  "Keyboard layout": "键盘布局",
+  "Automatic (${0})": "自动（${0}）"
 }

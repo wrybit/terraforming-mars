@@ -20,6 +20,11 @@
   flex-direction: column;
 }
 
+// Footer width below which a payment area with a choice of currencies, step chips and button no longer fit in one
+// row. Content threshold of the footer itself, not a layout breakpoint: the left column of the desktop layout is
+// this narrow from @bp-desktop up to about 1700 px window width
+@tab-panel-footer-one-row-min: 960px;
+
 .or-tab-footer {
   position: sticky;
   bottom: -@tab-panel-padding; // otherwise it sticks to the padding instead of the border
@@ -55,6 +60,14 @@
   > .or-tab-save {
     order: 1;
   }
+
+  // Desktop: too narrow for one row – the payment area gets its own row, step chips and button follow below it on the
+  // right (the mobile view arranges its footer itself, mobile.less)
+  html:not(.tm-mobile) & {
+    container: tab-footer / inline-size;
+    flex-wrap: wrap;
+  }
+
 
   // Short explanation left of the button (e.g. draft: choice can still be changed) – small, it is no question
   > .or-tab-footer-hint {
@@ -141,7 +154,7 @@ html.tm-mobile .or-tab-footer > .or-tab-footer-hint {
 }
 
 // Narrow layout: the box is only as tall as its content – button directly below the intro, with spacing
-@media only screen and (max-width: (@player-home-columns-min-width - 1px)) {
+@media @below-desktop {
   .or-tab-panel--centered-button .or-tab-footer:not(.or-tab-footer--bar) {
     min-height: 0;
     margin-top: 16px;
@@ -227,4 +240,11 @@ html.tm-mobile .or-tab-footer > .or-tab-footer-hint {
 // Phone: the rocket in the navigation already shows "1/2" – no chips in the narrow footer
 html.tm-mobile .action-step-chips {
   display: none;
+}
+
+// Only the wide payment area with a choice of currencies (steppers per resource) needs its own row
+@container tab-footer (max-width: @tab-panel-footer-one-row-min - 1px) {
+  .or-tab-footer > .payments_form:has(.payments_balance:not(.payments_balance--single)) {
+    flex-basis: 100%;
+  }
 }
