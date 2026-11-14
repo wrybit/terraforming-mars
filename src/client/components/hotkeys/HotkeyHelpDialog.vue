@@ -19,6 +19,7 @@
         </button>
       </div>
       <div class="dialog-frame-body hotkey-dialog__body">
+        <p v-if="!layoutDetected" class="hotkey-dialog__layout-hint" v-i18n>Press a key …</p>
         <HotkeyKeyboard :language="language" :expansions="expansions" :editing="editing" :highlighted="highlighted" :pressed="pressed" :modArmed="modArmed"
           @hover="hoveredKey = $event" @press="pressVirtualKey" />
         <HotkeyList :expansions="expansions" :editing="editing" :capturing="capturing" :duplicates="duplicates" :highlighted="highlighted"
@@ -63,6 +64,7 @@ import HotkeyKeyboard from '@/client/components/hotkeys/HotkeyKeyboard.vue';
 import {HotkeyKeys as KeyList} from '@/client/hotkeys/hotkeyActions';
 import {KeyboardKey, isStack, keyboardLayout} from '@/client/hotkeys/hotkeyKeyboardLayouts';
 import {drawnCharacter, keyUses} from '@/client/hotkeys/hotkeyKeyUses';
+import {layoutDetected} from '@/client/hotkeys/hotkeyKeyLabels';
 import {getPreferences} from '@/client/utils/PreferencesManager';
 import {PICK_CODES, findHotkeyAction} from '@/client/hotkeys/hotkeyActions';
 import {duplicateBindings, exportHotkeys, hotkeyState, importHotkeys, resetBindings, setBinding, setShowHints} from '@/client/hotkeys/hotkeyStore';

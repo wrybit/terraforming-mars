@@ -25,6 +25,12 @@ describe('HotkeyKeyboard', () => {
     expect(wrapper.find('[data-key="X"]').classes()).to.include('hotkey-keyboard__key--danger');
   });
 
+  it('does not show invented letters before the layout is known', () => {
+    const wrapper = mountKeyboard('en');
+    expect(wrapper.find('[data-key="Q"]').text()).to.include('·');
+    expect(wrapper.find('[data-key="1"]').text()).to.include('1');
+  });
+
   it('follows changed bindings at once', async () => {
     const wrapper = mountKeyboard('en');
     setBinding('tab-projects', ['KeyM']);
@@ -50,7 +56,7 @@ describe('HotkeyKeyboard', () => {
 
   it('updates the drawn caps when the detected layout arrives while the dialog is open', async () => {
     const wrapper = mountKeyboard('en');
-    expect(wrapper.find('[data-key="Q"]').text()).to.include('Q');
+    expect(wrapper.find('[data-key="Q"]').text()).to.include('·');
 
     detectedLayout.value = new Map([['KeyQ', 'a'], ['KeyA', 'q']]);
     await wrapper.vm.$nextTick();

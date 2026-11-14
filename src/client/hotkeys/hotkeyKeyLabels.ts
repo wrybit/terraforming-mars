@@ -2,7 +2,7 @@
 // layout (navigator.keyboard.getLayoutMap, also AZERTY, Nordic …); other browsers learn it from the keys the
 // player actually presses, then fall back to the layout of the game language (hotkeyKeyboardLayouts.ts). Letters are
 // bound by physical position, so only the labels on the caps and the drawn keyboard come from here.
-import {shallowRef} from 'vue';
+import {computed, shallowRef} from 'vue';
 import {characterAt} from '@/client/hotkeys/hotkeyKeyboardLayouts';
 import {getPreferences} from '@/client/utils/PreferencesManager';
 
@@ -18,6 +18,9 @@ export const detectedLayout = shallowRef<LayoutMap | undefined>(undefined);
 // Fallback for browsers without navigator.keyboard (Firefox, Safari …): labels learned from actual key presses.
 const observedLayout = shallowRef<ReadonlyMap<string, string>>(new Map());
 
+/** True once the real layout or at least one key cap is known. */
+export const layoutDetected = computed(() => detectedLayout.value !== undefined || observedLayout.value.size > 0);
+
 function rememberKey(code: string, character: string): void {
   if (observedLayout.value.get(code) === character) {
     return;
@@ -30,6 +33,10 @@ function rememberKey(code: string, character: string): void {
 /** Learns the character on a physical key from an actual press; useful where the browser has no layout API. */
 export function observeKeyLayout(event: KeyboardEvent): void {
   if (event.code === '' || event.code === undefined || event.ctrlKey || event.metaKey || event.altKey) {
+    return;
+  }
+  // Digit labels are the digits themselves, also on AZERTY where the unshifted key shows &, é, " …
+  if (/^Digit[0-9]$/.test(event.code)) {
     return;
   }
   if (event.key.length !== 1 || event.key === ' ') {
@@ -109,6 +116,9 @@ export function startKeyLabelDetection(): void {
 
 /** Character on the key at this position, uppercase; undefined for keys without one */
 export function codeLabel(code: string): string | undefined {
+  if (/^Digit[0-9]$/.test(code)) {
+    return code.slice('Digit'.length);
+  }
   // The reported layout uses the browser's (swapped) codes on Mac ISO keyboards
   const swapped = code === 'Backquote' ? 'IntlBackslash' : 'Backquote';
   const reported = isoMac() && (code === 'Backquote' || code === 'IntlBackslash') ? swapped : code;
@@ -119,6 +129,10 @@ export function codeLabel(code: string): string | undefined {
   const observed = observedLayout.value.get(reported) ?? observedLayout.value.get(code);
   if (observed !== undefined) {
     return observed;
+  }
+  // Never invent a letter from the game language: that may be the wrong keyboard layout. Digits are stable.
+  if (/^Key[A-Z]$/.test(code)) {
+    return undefined;
   }
   return characterAt(code, getPreferences().lang);
 }
