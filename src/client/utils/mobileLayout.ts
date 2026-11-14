@@ -66,23 +66,6 @@ export const mobileLayout = ref(false);
 /* True in landscape from LANDSCAPE_MIN_WIDTH (tablet landscape): player tables then stay horizontal as on desktop. */
 export const mobileLandscape = ref(false);
 
-const DEVICE_VIEWPORT = 'width=device-width, initial-scale=1, viewport-fit=cover';
-// Viewport setting from index.html (desktop layout with fixed width), restored when leaving the mobile view
-let desktopViewport: string | undefined;
-
-// Mobile view uses the real device width instead of the fixed desktop width
-function applyViewport(mobile: boolean): void {
-  const meta = document.querySelector('meta[name="viewport"]');
-  if (meta === null) {
-    return;
-  }
-  desktopViewport ??= meta.getAttribute('content') ?? '';
-  const wanted = mobile ? DEVICE_VIEWPORT : desktopViewport;
-  if (meta.getAttribute('content') !== wanted) {
-    meta.setAttribute('content', wanted);
-  }
-}
-
 // Ends the running mobile adjustments to the document (mobileDocument.ts) while the mobile view applies
 let stopMobileDocument: (() => void) | undefined;
 
@@ -102,7 +85,6 @@ function update(): void {
     stopMobileDocument = undefined;
   }
   document.documentElement.classList.toggle(MOBILE_ROOT_CLASS, mobile);
-  applyViewport(mobile);
 }
 
 // Takes `?mobile=…` from the address, removes the parameter again and returns the effective setting
