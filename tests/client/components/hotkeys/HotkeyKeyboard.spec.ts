@@ -59,6 +59,15 @@ describe('HotkeyKeyboard', () => {
     expect(wrapper.find('[data-key="Q"] .hotkey-keyboard__use').text()).to.equal('Cards');
   });
 
+  it('shows the number keys without repeating the choose label', () => {
+    const wrapper = mountKeyboard('en');
+    for (const digit of '1234567890') {
+      const key = wrapper.find(`[data-key="${digit}"]`);
+      expect(key.text()).to.include(digit);
+      expect(key.find('.hotkey-keyboard__use').exists()).to.be.false;
+    }
+  });
+
   it('has arrow up and down as two half keys', () => {
     const wrapper = mountKeyboard('en');
     expect(wrapper.findAll('.hotkey-keyboard__stack .hotkey-keyboard__key--half')).has.length(2);
