@@ -21,6 +21,7 @@ export class OverlayScrollbarRail {
   public readonly element: HTMLDivElement;
   private readonly thumb: HTMLDivElement;
   private dragging = false;
+  private lastBox: Box | undefined;
 
   constructor(private readonly scrollArea: Element, private readonly axis: ScrollAxis, private readonly onDragEnd: () => void) {
     this.element = document.createElement('div');
@@ -69,12 +70,18 @@ export class OverlayScrollbarRail {
     return this.element.classList.contains('overlay-scrollbar--hovered');
   }
 
+  /** Box of the bar as last placed, for hit testing without a layout read (overlayScrollbars.ts). */
+  public cachedBox(): Box | undefined {
+    return this.lastBox;
+  }
+
   public remove(): void {
     this.element.remove();
   }
 
   private place(): void {
     const box = this.box();
+    this.lastBox = box;
     Object.assign(this.element.style, {
       left: `${box.left}px`, top: `${box.top}px`,
       width: `${box.right - box.left}px`, height: `${box.bottom - box.top}px`,
