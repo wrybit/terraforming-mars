@@ -19,8 +19,10 @@ export const BASELINE_DUNE_TUNING: DuneTuning = {
   // Round 202 (all games with modules): 1 +4.89 VP (z +4.80), 0.5 +3.33 (z +3.14); TR lost to Landsraad votes per
   // player 9.9 → 4.6, guild trades 11.9 → 8.0 – adopted.
   envyAversion: 1,
-  kanlyBattle: 0,
-  kanlyGarrison: 0,
+  // Rounds 203–205 (variant kanly): +1.17, −0.16, +1.73 VP – pooled +0.76 ± 0.56 (z +1.36); the gain comes mostly from
+  // defence (battles held 0.17 vs 0.02 per player and game) – adopted.
+  kanlyBattle: 1,
+  kanlyGarrison: 0.5,
   kanlyStayIn: 0,
 };
 
@@ -34,7 +36,7 @@ export const DUNE_TUNING_VARIANTS: Record<string, Partial<DuneTuning>> = {
   noEnvyAversion: {envyAversion: 0},
   // Round 203: Kanly was never opened (round 201); the battle's outcome and the garrison's chances count.
   kanly: {kanlyBattle: 1, kanlyGarrison: 0.5},
-  kanlyBattleOnly: {kanlyBattle: 1},
+  kanlyBattleOnly: {kanlyBattle: 1, kanlyGarrison: 0},
   // Round 204: kanly +1.17 VP (z +1.15; all modules +2.95, z +1.78) – but the gain came from defence (holds 0.16 vs
   // 0.01 per player and game, Sardaukar 0.71 vs 0.17); tiles taken stayed at 0.03. A full share for the garrison
   // checks whether a stronger army leads to attacks.
@@ -42,6 +44,10 @@ export const DUNE_TUNING_VARIANTS: Record<string, Partial<DuneTuning>> = {
   // Round 205: a passed owner cannot defend, and battles come at the end – stay in the generation with small moves
   // while a battle can still be opened or joined (Jens, 13 Nov 2026). On top of the kanly terms, which value joining.
   kanlyStayIn: {kanlyBattle: 1, kanlyGarrison: 0.5, kanlyStayIn: 1},
+  // Round 206: kanly is in the baseline now; noKanly is the check. kanlyStayIn lost −2.31 VP (z −2.44) in round 205:
+  // it took more tiles (0.10 vs 0.04) but lost more TR and traded more at the exchange while staying in – half weight.
+  noKanly: {kanlyBattle: 0, kanlyGarrison: 0},
+  kanlyStayIn05: {kanlyStayIn: 0.5},
 };
 
 registerTuningVariantNames(Object.keys(DUNE_TUNING_VARIANTS));

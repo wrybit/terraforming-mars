@@ -36,6 +36,9 @@ describe('AI Dune Kanly value', () => {
     game.addGreenery(opponent, space);
     game.duneData!.kanly!.garrison[player.id] = 1;
     const prices = {terraformRating: 12, victoryPoint: 10};
+    // Baseline since round 206 = variant kanly.
+    expect(kanlyValue(player, prices)).eq(5);
+    setPlayerTuning(player.id, 'noKanly');
     expect(kanlyValue(player, prices)).eq(0);
     setPlayerTuning(player.id, 'kanly');
     expect(kanlyValue(player, prices)).eq(5);

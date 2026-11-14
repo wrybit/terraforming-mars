@@ -51,6 +51,9 @@ describe('AI Dune Kanly stay-in', () => {
     const before = passExtensionPenalty(player, 10);
     setPlayerTuning(player.id, 'kanlyStayIn');
     expect(kanlyStayInPenalty(player, 10)).eq(10);
+    setPlayerTuning(player.id, 'kanlyStayIn05');
+    expect(kanlyStayInPenalty(player, 10)).eq(5);
+    setPlayerTuning(player.id, 'kanlyStayIn');
     expect(passExtensionPenalty(player, 10)).eq(before + 10);
   });
 });
