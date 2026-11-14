@@ -1539,5 +1539,7 @@
   "${0} is the new leader of the ${1} party": "${0} er ny partileder for ${1}",
   "The ${0} party has no leader": "Partiet ${0} har ingen partileder",
   "Some of the milestones you selected need expansions you have not enabled.": "Noen valgte milepæler krever utvidelser som ikke er slått på.",
-  "Some of the awards you selected need expansions you have not enabled.": "Noen valgte utmerkelser krever utvidelser som ikke er slått på."
+  "Some of the awards you selected need expansions you have not enabled.": "Noen valgte utmerkelser krever utvidelser som ikke er slått på.",
+  "Keyboard layout": "Tastaturoppsett",
+  "Automatic (${0})": "Automatisk (${0})"
 }

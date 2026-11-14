@@ -2044,5 +2044,7 @@
   "${0} is the new leader of the ${1} party": "${0} стал новым лидером партии ${1}",
   "The ${0} party has no leader": "У партии ${0} нет лидера",
   "Some of the milestones you selected need expansions you have not enabled.": "Некоторые выбранные достижения требуют невключённых дополнений.",
-  "Some of the awards you selected need expansions you have not enabled.": "Некоторые выбранные награды требуют невключённых дополнений."
+  "Some of the awards you selected need expansions you have not enabled.": "Некоторые выбранные награды требуют невключённых дополнений.",
+  "Keyboard layout": "Раскладка клавиатуры",
+  "Automatic (${0})": "Автоматически (${0})"
 }

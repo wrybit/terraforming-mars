@@ -1425,5 +1425,7 @@
   "${0} is the new leader of the ${1} party": "${0}이(가) ${1} 당의 새 당 대표가 되었습니다",
   "The ${0} party has no leader": "${0} 당에 당 대표가 없습니다",
   "Some of the milestones you selected need expansions you have not enabled.": "선택한 업적 중 일부는 활성화하지 않은 확장이 필요합니다.",
-  "Some of the awards you selected need expansions you have not enabled.": "선택한 기업상 중 일부는 활성화하지 않은 확장이 필요합니다."
+  "Some of the awards you selected need expansions you have not enabled.": "선택한 기업상 중 일부는 활성화하지 않은 확장이 필요합니다.",
+  "Keyboard layout": "키보드 배열",
+  "Automatic (${0})": "자동 (${0})"
 }

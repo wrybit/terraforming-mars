@@ -1800,5 +1800,7 @@
   "${0} is the new leader of the ${1} party": "${0} is de nieuwe partijleider van ${1}",
   "The ${0} party has no leader": "Partij ${0} heeft geen partijleider",
   "Some of the milestones you selected need expansions you have not enabled.": "Sommige gekozen mijlpalen hebben uitbreidingen nodig die niet aan staan.",
-  "Some of the awards you selected need expansions you have not enabled.": "Sommige gekozen onderscheidingen hebben uitbreidingen nodig die niet aan staan."
+  "Some of the awards you selected need expansions you have not enabled.": "Sommige gekozen onderscheidingen hebben uitbreidingen nodig die niet aan staan.",
+  "Keyboard layout": "Toetsenbordindeling",
+  "Automatic (${0})": "Automatisch (${0})"
 }

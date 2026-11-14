@@ -1547,5 +1547,7 @@
   "${0} is the new leader of the ${1} party": "${0}が${1}の新しい党首になりました",
   "The ${0} party has no leader": "${0}に党首がいません",
   "Some of the milestones you selected need expansions you have not enabled.": "選んだ称号の一部には有効でない拡張が必要です。",
-  "Some of the awards you selected need expansions you have not enabled.": "選んだ褒賞の一部には有効でない拡張が必要です。"
+  "Some of the awards you selected need expansions you have not enabled.": "選んだ褒賞の一部には有効でない拡張が必要です。",
+  "Keyboard layout": "キーボード配列",
+  "Automatic (${0})": "自動（${0}）"
 }

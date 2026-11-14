@@ -948,5 +948,7 @@
   "${0} is the new leader of the ${1} party": "${0} ist neuer Parteiführer der Partei ${1}",
   "The ${0} party has no leader": "Die Partei ${0} hat keinen Parteiführer",
   "Some of the milestones you selected need expansions you have not enabled.": "Einige der gewählten Meilensteine brauchen Erweiterungen, die nicht aktiviert sind.",
-  "Some of the awards you selected need expansions you have not enabled.": "Einige der gewählten Auszeichnungen brauchen Erweiterungen, die nicht aktiviert sind."
+  "Some of the awards you selected need expansions you have not enabled.": "Einige der gewählten Auszeichnungen brauchen Erweiterungen, die nicht aktiviert sind.",
+  "Keyboard layout": "Tastaturlayout",
+  "Automatic (${0})": "Automatisch (${0})"
 }

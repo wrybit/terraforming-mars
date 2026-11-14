@@ -1331,5 +1331,7 @@
   "${0} is the new leader of the ${1} party": "${0} став новим лідером партії ${1}",
   "The ${0} party has no leader": "Партія ${0} не має лідера",
   "Some of the milestones you selected need expansions you have not enabled.": "Деякі вибрані віхи потребують неувімкнених доповнень.",
-  "Some of the awards you selected need expansions you have not enabled.": "Деякі вибрані нагороди потребують неувімкнених доповнень."
+  "Some of the awards you selected need expansions you have not enabled.": "Деякі вибрані нагороди потребують неувімкнених доповнень.",
+  "Keyboard layout": "Розкладка клавіатури",
+  "Automatic (${0})": "Автоматично (${0})"
 }

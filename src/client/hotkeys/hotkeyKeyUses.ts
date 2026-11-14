@@ -41,7 +41,7 @@ export function allKeyUses(expansions?: ReadonlyArray<string>): Array<KeyUse & {
   return uses;
 }
 
-/** Character a drawn key shows on this device (real layout where the browser tells it) */
+/** Character a drawn key shows on this device (real, recognized or guessed layout, hotkeyKeyLabels.ts) */
 export function drawnCharacter(key: KeyboardKey): string | undefined {
   return (key.code !== undefined ? codeLabel(key.code) : undefined) ?? key.value;
 }

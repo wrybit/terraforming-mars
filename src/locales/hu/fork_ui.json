@@ -1355,5 +1355,7 @@
   "${0} is the new leader of the ${1} party": "${0} a(z) ${1} párt új pártvezetője",
   "The ${0} party has no leader": "A(z) ${0} pártnak nincs pártvezetője",
   "Some of the milestones you selected need expansions you have not enabled.": "Néhány kiválasztott mérföldkőhöz nem engedélyezett kiegészítő kell.",
-  "Some of the awards you selected need expansions you have not enabled.": "Néhány kiválasztott díjhoz nem engedélyezett kiegészítő kell."
+  "Some of the awards you selected need expansions you have not enabled.": "Néhány kiválasztott díjhoz nem engedélyezett kiegészítő kell.",
+  "Keyboard layout": "Billentyűzetkiosztás",
+  "Automatic (${0})": "Automatikus (${0})"
 }
