@@ -1541,5 +1541,7 @@
   "This is a default name: future players with it are usually other people.": "これは既定の名前です：今後この名前を使うプレイヤーは通常別の人です。",
   "permanent": "恒久",
   "${0} games, one-time": "${0} ゲーム、1回限り",
-  "${0} added a delegate in ${1}": "${0} が ${1} に代表を追加しました"
+  "${0} added a delegate in ${1}": "${0} が ${1} に代表を追加しました",
+  "Keyboard layout": "キーボード配列",
+  "Automatic (${0})": "自動（${0}）"
 }

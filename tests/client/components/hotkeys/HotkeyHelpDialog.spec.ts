@@ -4,6 +4,7 @@ import {globalConfig} from '../getLocalVue';
 import HotkeyHelpDialog from '@/client/components/hotkeys/HotkeyHelpDialog.vue';
 import {resetBindings, setBinding} from '@/client/hotkeys/hotkeyStore';
 import {detectedLayout} from '@/client/hotkeys/hotkeyKeyLabels';
+import {letterLayoutChoice, resetLetterLayout} from '@/client/hotkeys/hotkeyLetterLayouts';
 
 function mountDialog() {
   return mount(HotkeyHelpDialog, {
@@ -20,6 +21,7 @@ describe('HotkeyHelpDialog', () => {
   afterEach(() => {
     resetBindings();
     detectedLayout.value = undefined;
+    resetLetterLayout();
   });
 
   it('is an information page until "Edit" is pressed', async () => {
@@ -30,13 +32,19 @@ describe('HotkeyHelpDialog', () => {
     expect(wrapper.find('[data-test="hotkey-done"]').classes()).to.include('hotkey-dialog__button--cta');
   });
 
-  it('asks for a key until the keyboard layout is detected', async () => {
+  it('lets the player pick the layout where the browser does not tell it', async () => {
     const wrapper = mountDialog();
-    expect(wrapper.find('.hotkey-dialog__layout-hint').exists()).to.be.true;
+    const select = wrapper.find('[data-test="hotkey-layout"]');
+    expect(select.exists()).to.be.true;
+    expect(wrapper.find('.hotkey-keyboard [data-key="Q"]').exists()).to.be.true;
+
+    await select.setValue('azerty');
+    expect(letterLayoutChoice.value).to.equal('azerty');
+    expect(wrapper.find('.hotkey-keyboard').text()).to.include('A');
 
     detectedLayout.value = new Map([['KeyQ', 'a']]);
     await wrapper.vm.$nextTick();
-    expect(wrapper.find('.hotkey-dialog__layout-hint').exists()).to.be.false;
+    expect(wrapper.find('[data-test="hotkey-layout"]').exists()).to.be.false;
   });
 
   it('takes a new key for the clicked entry', async () => {

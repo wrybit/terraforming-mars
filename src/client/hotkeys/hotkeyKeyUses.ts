@@ -41,17 +41,9 @@ export function allKeyUses(expansions?: ReadonlyArray<string>): Array<KeyUse & {
   return uses;
 }
 
-/** Character a drawn key shows on this device; undefined for a letter until the layout is known */
+/** Character a drawn key shows on this device (real, recognized or guessed layout, hotkeyKeyLabels.ts) */
 export function drawnCharacter(key: KeyboardKey): string | undefined {
-  const detected = key.code !== undefined ? codeLabel(key.code) : undefined;
-  if (detected !== undefined) {
-    return detected;
-  }
-  // Letters must not fall back to the QWERTY/QWERTZ drawing: that may be the wrong keyboard layout.
-  if (key.code !== undefined && /^Key[A-Z]$/.test(key.code)) {
-    return undefined;
-  }
-  return key.value;
+  return (key.code !== undefined ? codeLabel(key.code) : undefined) ?? key.value;
 }
 
 // Single keys match the position, combinations the character, the help its "?" (Shift character of the key)

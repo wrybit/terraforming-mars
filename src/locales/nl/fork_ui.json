@@ -1794,5 +1794,7 @@
   "This is a default name: future players with it are usually other people.": "Dit is een standaardnaam: toekomstige spelers ermee zijn meestal andere mensen.",
   "permanent": "blijvend",
   "${0} games, one-time": "${0} spellen, eenmalig",
-  "${0} added a delegate in ${1}": "${0} voegde een afgevaardigde toe aan ${1}"
+  "${0} added a delegate in ${1}": "${0} voegde een afgevaardigde toe aan ${1}",
+  "Keyboard layout": "Toetsenbordindeling",
+  "Automatic (${0})": "Automatisch (${0})"
 }

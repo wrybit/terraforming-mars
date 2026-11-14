@@ -2,6 +2,7 @@
 // digits at selectable items. Caps in the game only show while <html> has tm-hotkeys (hotkeyAvailability.ts):
 // keyboard available, no mobile view, the player has not switched them off.
 @import (reference) "./variables.less";
+@import (reference) "./dialog_frame.less";
 
 @hotkey-cap-size: 20px;
 @hotkey-cap-font: "Ubuntu Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -366,12 +367,25 @@ html.tm-hotkeys .hotkey-item-number {
   gap: 18px;
 }
 
-// Letters stay hidden until the real keyboard layout is known; this invites the first press.
-.hotkey-dialog__layout-hint {
-  margin: 0;
+// Label and select belong together: a small gap inside, a clearly larger one to the switch before it
+.hotkey-dialog__layout {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 16px;
   color: #9aa0b4;
   font-size: 13px;
-  text-align: center;
+}
+
+.hotkey-dialog__layout-select {
+  // Same field as the select in the AI rating dialog (ai_decision_dialog.less)
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid @dialog-surface-border;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.25);
+  color: #eee;
+  font: inherit;
 }
 
 .hotkey-keyboard {

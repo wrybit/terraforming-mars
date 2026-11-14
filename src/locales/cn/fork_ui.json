@@ -2151,5 +2151,7 @@
   "This is a default name: future players with it are usually other people.": "这是默认名字：以后使用它的玩家通常是其他人。",
   "permanent": "永久",
   "${0} games, one-time": "${0} 局，一次性",
-  "${0} added a delegate in ${1}": "${0} 在 ${1} 增加了一名代表"
+  "${0} added a delegate in ${1}": "${0} 在 ${1} 增加了一名代表",
+  "Keyboard layout": "键盘布局",
+  "Automatic (${0})": "自动（${0}）"
 }

@@ -1965,5 +1965,7 @@
   "This is a default name: future players with it are usually other people.": "To nazwa domyślna: przyszli gracze z nią to zwykle inne osoby.",
   "permanent": "na stałe",
   "${0} games, one-time": "${0} gier, jednorazowo",
-  "${0} added a delegate in ${1}": "${0} dodał delegata do ${1}"
+  "${0} added a delegate in ${1}": "${0} dodał delegata do ${1}",
+  "Keyboard layout": "Układ klawiatury",
+  "Automatic (${0})": "Automatycznie (${0})"
 }

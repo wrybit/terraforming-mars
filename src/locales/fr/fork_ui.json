@@ -1222,5 +1222,7 @@
   "This is a default name: future players with it are usually other people.": "C'est un nom par défaut : les futurs joueurs qui le portent sont généralement d'autres personnes.",
   "permanent": "permanente",
   "${0} games, one-time": "${0} parties, unique",
-  "${0} added a delegate in ${1}": "${0} a ajouté un délégué dans ${1}"
+  "${0} added a delegate in ${1}": "${0} a ajouté un délégué dans ${1}",
+  "Keyboard layout": "Disposition du clavier",
+  "Automatic (${0})": "Automatique (${0})"
 }

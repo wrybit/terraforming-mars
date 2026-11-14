@@ -60,9 +60,6 @@ function keyLabel(key: KeyboardKey): string {
   if (key.label === 'Ctrl') {
     return translateText('Ctrl');
   }
-  if (key.code !== undefined && /^Key[A-Z]$/.test(key.code)) {
-    return drawnCharacter(key) ?? '·';
-  }
   return key.value !== undefined && key.value.trim().length === 1 ? drawnCharacter(key) ?? key.label : key.label;
 }
 

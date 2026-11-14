@@ -1,9 +1,11 @@
 // Which character a physical key (KeyboardEvent.code) shows on this device. Chrome and Edge tell the real keyboard
-// layout (navigator.keyboard.getLayoutMap, also AZERTY, Nordic …); other browsers learn it from the keys the
-// player actually presses, then fall back to the layout of the game language (hotkeyKeyboardLayouts.ts). Letters are
-// bound by physical position, so only the labels on the caps and the drawn keyboard come from here.
-import {computed, shallowRef} from 'vue';
+// layout (navigator.keyboard.getLayoutMap, also AZERTY, Nordic …). Firefox and Safari have no such API: letters come
+// from the layout picked by hand, the keys actually pressed or the letter layout recognized from one press (guessed
+// from the browser language before, hotkeyLetterLayouts.ts); other keys from the layout of the game language
+// (hotkeyKeyboardLayouts.ts). Letters are bound by physical position, so only the labels come from here.
+import {shallowRef} from 'vue';
 import {characterAt} from '@/client/hotkeys/hotkeyKeyboardLayouts';
+import {letterAt, letterLayout, letterLayoutChoice, recognizeLetterLayout} from '@/client/hotkeys/hotkeyLetterLayouts';
 import {getPreferences} from '@/client/utils/PreferencesManager';
 
 type LayoutMap = {get(code: string): string | undefined};
@@ -18,8 +20,10 @@ export const detectedLayout = shallowRef<LayoutMap | undefined>(undefined);
 // Fallback for browsers without navigator.keyboard (Firefox, Safari …): labels learned from actual key presses.
 const observedLayout = shallowRef<ReadonlyMap<string, string>>(new Map());
 
-/** True once the real layout or at least one key cap is known. */
-export const layoutDetected = computed(() => detectedLayout.value !== undefined || observedLayout.value.size > 0);
+/** Only for tests: forget the keys seen so far */
+export function resetObservedKeys(): void {
+  observedLayout.value = new Map();
+}
 
 function rememberKey(code: string, character: string): void {
   if (observedLayout.value.get(code) === character) {
@@ -42,6 +46,8 @@ export function observeKeyLayout(event: KeyboardEvent): void {
   if (event.key.length !== 1 || event.key === ' ') {
     return;
   }
+  // One letter tells the whole letter block (A/Q, Z/W/Y, M differ between QWERTY, QWERTZ and AZERTY)
+  recognizeLetterLayout(event.code, event.key);
   // Shift gives the upper symbol, not the character printed on the key cap. Letters are the same in both cases.
   if (event.shiftKey && !/^[a-zA-Z]$/.test(event.key)) {
     return;
@@ -126,13 +132,15 @@ export function codeLabel(code: string): string | undefined {
   if (detected !== undefined && detected !== '') {
     return detected.toUpperCase();
   }
+  // A layout picked by hand wins over what was seen: the player knows the keyboard better than the guess
+  const letter = letterAt(code, letterLayout.value);
+  if (letterLayoutChoice.value !== 'auto' && letter !== undefined) {
+    return letter;
+  }
   const observed = observedLayout.value.get(reported) ?? observedLayout.value.get(code);
   if (observed !== undefined) {
     return observed;
   }
-  // Never invent a letter from the game language: that may be the wrong keyboard layout. Digits are stable.
-  if (/^Key[A-Z]$/.test(code)) {
-    return undefined;
-  }
-  return characterAt(code, getPreferences().lang);
+  // Letters follow the keyboard layout, never the game language: a French game may be played on QWERTY
+  return letter ?? characterAt(code, getPreferences().lang);
 }

@@ -22,8 +22,8 @@ describe('hotkeyEvents', () => {
     expect(keysOfEvent(press('Numpad1', '1'))).to.deep.equal(['Digit1']);
   });
 
-  it('shows a placeholder instead of a guessed letter before the layout is known', () => {
-    expect(keyCapLabel('KeyP')).to.equal('?');
+  it('guesses the letter from the language before the layout is known', () => {
+    expect(keyCapLabel('KeyP')).to.equal('P');
     expect(keyCapLabel('Digit1')).to.equal('1');
   });
 

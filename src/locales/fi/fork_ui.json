@@ -1167,5 +1167,7 @@
   "This is a default name: future players with it are usually other people.": "Tämä on oletusnimi: tulevat pelaajat sillä ovat yleensä eri ihmisiä.",
   "permanent": "pysyvä",
   "${0} games, one-time": "${0} peliä, kertaluonteinen",
-  "${0} added a delegate in ${1}": "${0} lisäsi edustajan puolueeseen ${1}"
+  "${0} added a delegate in ${1}": "${0} lisäsi edustajan puolueeseen ${1}",
+  "Keyboard layout": "Näppäimistöasettelu",
+  "Automatic (${0})": "Automaattinen (${0})"
 }

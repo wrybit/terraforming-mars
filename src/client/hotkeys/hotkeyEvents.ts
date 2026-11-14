@@ -88,8 +88,5 @@ export function keyCapLabel(key: string): string {
   if (key === 'Control') {
     return isMac() ? '^' : 'Ctrl';
   }
-  if (/^Key[A-Z]$/.test(key)) {
-    return codeLabel(key) ?? '?';
-  }
   return KEY_LABELS[key] ?? (key.length > 1 ? codeLabel(key) ?? key : key);
 }

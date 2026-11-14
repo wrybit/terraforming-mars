@@ -2038,5 +2038,7 @@
   "This is a default name: future players with it are usually other people.": "Это стандартное имя: будущие игроки с ним обычно другие люди.",
   "permanent": "постоянно",
   "${0} games, one-time": "${0} партий, разово",
-  "${0} added a delegate in ${1}": "${0} добавил делегата в ${1}"
+  "${0} added a delegate in ${1}": "${0} добавил делегата в ${1}",
+  "Keyboard layout": "Раскладка клавиатуры",
+  "Automatic (${0})": "Автоматически (${0})"
 }
