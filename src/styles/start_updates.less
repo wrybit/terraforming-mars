@@ -1,8 +1,6 @@
 // Start page update column (startScreen/StartScreenUpdates.vue): latest days of the feature log.
 // No colours of its own: white text in steps of transparency on the starry sky; only Sundays are red.
 
-// Below this width the column has no room next to the menu and moves below it
-@start-updates-side-min: 1100px;
 @start-updates-row: 26px;
 @start-updates-date-width: 38px;
 
@@ -277,7 +275,7 @@
   }
 }
 
-@media only screen and (min-width: @start-updates-side-min) {
+@media @from-wide {
   // Right edge, vertically centred (top from StartScreenUpdates.vue); the menu lies above it if they ever meet
   .start-updates {
     position: fixed;
@@ -292,7 +290,7 @@
 // Mit Maus: in Ruhe halb aus dem Bild geschoben, blass und unscharf; je näher die Maus (--near 0…1 aus
 // StartScreenUpdates.vue), desto weiter fährt die Spalte herein, wird deutlich, scharf und bis 20 % größer.
 // Ohne Maus (Tablet quer) bliebe sie sonst für immer halb verdeckt – dort steht sie voll da.
-@media only screen and (min-width: @start-updates-side-min) and (hover: hover) {
+@media @from-wide and (hover: hover) {
   .start-updates {
     --updates-scale: calc(1 + 0.2 * var(--near, 0));
     --updates-fade: calc(0.25 + 0.75 * var(--near, 0));
@@ -304,7 +302,7 @@
 }
 
 // Narrow windows: below the menu, fully visible (no mouse nearness on touch); longer points may wrap
-@media only screen and (max-width: (@start-updates-side-min - 1px)) {
+@media @below-wide {
   .start-updates {
     margin-top: 32px;
   }

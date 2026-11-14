@@ -42,7 +42,7 @@
   background-position: center;
 }
 
-@media only screen and (min-width: @player-home-columns-min-width) {
+@media @from-desktop {
   // The space reserved on the left for the sidebar is dropped
   .main-container:has(#player-home),
   .main-container:has(#spectator-home) {
@@ -165,13 +165,12 @@
 // Content below the header bar as wide as the game view (player_home.less, 20px margin)
 @page-content-edge: 20px;
 @page-content-edge-narrow: 16px;
-@page-content-narrow: 820px;
 
 .page-content() {
   box-sizing: border-box;
   padding: @page-content-edge;
 
-  @media only screen and (max-width: @page-content-narrow) {
+  @media @below-wide {
     padding: @page-content-edge-narrow;
   }
 }

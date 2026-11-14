@@ -1,5 +1,5 @@
 // Results page in the look of the game view: galaxy background (app_background.less), frosted-glass boxes and
-// from @player-home-columns-min-width two columns – results on the left, board, charts and log on the right.
+// from @bp-desktop (breakpoints.less) two columns – results on the left, board, charts and log on the right.
 // The sections are distributed so that both columns end up roughly the same length.
 
 @game-end-page-padding: @game-end-card-gap; // page edge = gap between the cards: even all around
@@ -157,7 +157,7 @@ html.tm-mobile #game-end .game-end-box.game-end-solo {
   }
 }
 
-@media (max-width: 600px) {
+@media @below-tablet {
   .game-end-solo__body {
     margin-top: -18px;
     padding: 0 16px 18px;
@@ -439,7 +439,7 @@ html.tm-mobile #game-end .game-end-box.game-end-solo {
   margin: 0;
 }
 
-@media only screen and (min-width: @player-home-columns-min-width) {
+@media @from-desktop {
   .game-end-columns {
     display: grid;
     // Middle track: drag handle between the columns, centered in the column gap (ColumnResizeHandle.vue)

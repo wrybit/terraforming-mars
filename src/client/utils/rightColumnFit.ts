@@ -146,7 +146,7 @@ function fit(column: HTMLElement): void {
   const block = column.querySelector<HTMLElement>(MARS_BLOCK_SELECTOR);
   block?.style.removeProperty('height');
 
-  // Without a height limit (single-column layout below 1400px) there is nothing to weigh
+  // Without a height limit (single-column layout below BREAKPOINTS.desktop) there is nothing to weigh
   const available = parseFloat(getComputedStyle(column).maxHeight);
   if (Number.isNaN(available)) {
     return;

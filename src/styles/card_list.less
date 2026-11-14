@@ -7,13 +7,10 @@
 @card-list-header-height: 64px;
 // Narrow, two rows: title and buttons on top, the search across the full width below
 @card-list-header-height-narrow: 104px;
-// Below this width cards are scaled down so two fit side by side
-@card-list-phone: 600px;
+// Phones (@below-tablet): cards scaled down so two fit side by side
 @card-list-phone-card-zoom: 0.68;
 @card-list-filters-width: 320px;
 @card-list-icon-size: 26px;
-// Below this width filters as a bottom sheet
-@card-list-narrow: 900px;
 
 // The page has no sidebar: the space reserved for it on the left (common.less) is dropped
 .main-container:has(#card-list) {
@@ -107,7 +104,7 @@
   border-radius: @create-game-radius;
   box-shadow: none;
 
-  @media only screen and (max-width: @page-content-narrow) {
+  @media @below-wide {
     margin: @page-content-edge-narrow @page-content-edge-narrow (@create-game-gap-card - @page-content-edge-narrow);
   }
 }
@@ -801,7 +798,7 @@
   display: none;
 }
 
-@media only screen and (max-width: @card-list-narrow) {
+@media @below-wide {
   .card-list {
     --card-list-header: @card-list-header-height-narrow;
   }
@@ -1000,7 +997,7 @@
 }
 
 // Phone: cards scaled down, two side by side
-@media only screen and (max-width: @card-list-phone) {
+@media @below-tablet {
   .card-list-cards {
     justify-content: center;
 

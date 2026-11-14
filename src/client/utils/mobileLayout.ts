@@ -1,82 +1,63 @@
 import {ref} from 'vue';
 import {startMobileDocument} from '@/client/utils/mobileDocument';
-import {LANDSCAPE_MIN_WIDTH} from '@/client/utils/mobileFit';
+import {BREAKPOINTS, fromWidth} from '@/client/utils/breakpoints';
 
 /*
- * Switch between desktop and mobile view of the player view.
+ * Layout state of the app, decided by the window size alone (breakpoints.less / breakpoints.ts):
  *
- * The mobile view is used on devices whose primary pointer is a finger (phone, tablet portrait and landscape), and on
- * windows narrower than the desktop two-column layout (1400 px). The URL parameter `?mobile=on|off|auto`
- * overrides this for this tab (sessionStorage); a new tab decides automatically again.
+ *   phone-portrait    narrower than BREAKPOINTS.tablet
+ *   phone-landscape   landscape and lower than BREAKPOINTS.shortHeight
+ *   tablet-portrait   portrait from BREAKPOINTS.tablet
+ *   tablet-landscape  landscape from BREAKPOINTS.shortHeight
+ *   desktop           from BREAKPOINTS.desktop (HD laptops with 1280 and 1366 px included)
+ *
+ * The four phone and tablet states use the mobile view (class tm-mobile, mobile.less), the desktop state the
+ * two-column layout. Input devices don't matter: a tablet wide enough gets the desktop layout, a narrow window
+ * with a mouse the tablet layout. The viewport is always the device width (index.html), so CSS media queries and
+ * this script measure the same width.
  */
 
-export const MOBILE_LAYOUT_SETTINGS = ['auto', 'on', 'off'] as const;
-export type MobileLayoutSetting = typeof MOBILE_LAYOUT_SETTINGS[number];
+export type LayoutState = 'phone-portrait' | 'phone-landscape' | 'tablet-portrait' | 'tablet-landscape' | 'desktop';
 
 // Class on the <html> element while the mobile view is active; all mobile styles hang off it (mobile.less)
 export const MOBILE_ROOT_CLASS = 'tm-mobile';
 
-const STORAGE_KEY = 'mobile_layout';
-const URL_PARAMETER = 'mobile';
-const TOUCH_QUERY = '(pointer: coarse)';
-// Below this width there is no two-column layout (@player-home-columns-min-width, player_home_columns.less)
-export const DESKTOP_MIN_WIDTH = 1400;
-const NARROW_QUERY = `(max-width: ${DESKTOP_MIN_WIDTH - 1}px)`;
-// Same condition as @mb-landscape in mobile.less
-const LANDSCAPE_QUERY = `(min-width: ${LANDSCAPE_MIN_WIDTH}px) and (orientation: landscape)`;
+// Queries whose change can change the state; each is watched
+const WATCHED_QUERIES = [
+  '(orientation: landscape)',
+  fromWidth(BREAKPOINTS.tablet),
+  fromWidth(BREAKPOINTS.desktop),
+  `(min-height: ${BREAKPOINTS.shortHeight}px)`,
+];
 
-function isSetting(value: unknown): value is MobileLayoutSetting {
-  return MOBILE_LAYOUT_SETTINGS.includes(value as MobileLayoutSetting);
-}
-
-// Stored setting of this tab; missing or blocked storage counts as 'auto'
-function readSetting(): MobileLayoutSetting {
-  try {
-    // Earlier versions stored the setting permanently; that kept the mobile view even on wide windows
-    localStorage.removeItem(STORAGE_KEY);
-    const stored = sessionStorage.getItem(STORAGE_KEY);
-    return isSetting(stored) ? stored : 'auto';
-  } catch {
-    return 'auto';
+/* Layout state for a window of `width` × `height` px. */
+export function resolveLayoutState(width: number, height: number): LayoutState {
+  if (width >= BREAKPOINTS.desktop) {
+    return 'desktop';
   }
-}
-
-function writeSetting(setting: MobileLayoutSetting): void {
-  try {
-    sessionStorage.setItem(STORAGE_KEY, setting);
-  } catch {
-    // Private window or similar: then applies only to this page
+  if (width > height) {
+    return height < BREAKPOINTS.shortHeight ? 'phone-landscape' : 'tablet-landscape';
   }
+  return width < BREAKPOINTS.tablet ? 'phone-portrait' : 'tablet-portrait';
 }
 
-function mediaQuery(query: string): MediaQueryList | undefined {
-  return typeof window !== 'undefined' && typeof window.matchMedia === 'function' ? window.matchMedia(query) : undefined;
-}
+/* Current state; reacts to resizing and rotating. */
+export const layoutState = ref<LayoutState>('desktop');
 
-// True if the setting, or device or window width, calls for the mobile view
-export function resolveMobileLayout(setting: MobileLayoutSetting, touch: boolean, narrow: boolean): boolean {
-  return setting === 'on' || (setting === 'auto' && (touch || narrow));
-}
-
-let setting: MobileLayoutSetting = 'auto';
-
-/* Current state: true while the mobile view applies. Reacts to changes of input mode (e.g. mouse on a tablet). */
+/* True while the mobile view applies (every state except desktop). */
 export const mobileLayout = ref(false);
-
-/* True in landscape from LANDSCAPE_MIN_WIDTH (tablet landscape): player tables then stay horizontal as on desktop. */
-export const mobileLandscape = ref(false);
 
 // Ends the running mobile adjustments to the document (mobileDocument.ts) while the mobile view applies
 let stopMobileDocument: (() => void) | undefined;
 
 function update(): void {
-  const mobile = resolveMobileLayout(setting, mediaQuery(TOUCH_QUERY)?.matches ?? false, mediaQuery(NARROW_QUERY)?.matches ?? false);
+  const state = resolveLayoutState(window.innerWidth, window.innerHeight);
+  const mobile = state !== 'desktop';
+  if (state !== layoutState.value) {
+    layoutState.value = state;
+  }
   if (mobile !== mobileLayout.value) {
     mobileLayout.value = mobile;
-  }
-  const landscape = mediaQuery(LANDSCAPE_QUERY)?.matches ?? false;
-  if (landscape !== mobileLandscape.value) {
-    mobileLandscape.value = landscape;
   }
   if (mobile && stopMobileDocument === undefined) {
     stopMobileDocument = startMobileDocument(document.body);
@@ -85,44 +66,24 @@ function update(): void {
     stopMobileDocument = undefined;
   }
   document.documentElement.classList.toggle(MOBILE_ROOT_CLASS, mobile);
-}
-
-// Takes `?mobile=…` from the address, removes the parameter again and returns the effective setting
-function settingFromUrl(): MobileLayoutSetting | undefined {
-  const url = new URL(window.location.href);
-  const value = url.searchParams.get(URL_PARAMETER);
-  if (!isSetting(value)) {
-    return undefined;
-  }
-  url.searchParams.delete(URL_PARAMETER);
-  window.history.replaceState(window.history.state, '', url.toString());
-  return value;
+  document.documentElement.dataset.layout = state;
 }
 
 let initialized = false;
 
-/* Reads setting and device once and keeps `mobileLayout` up to date afterwards. */
+/* Decides the state once and keeps `layoutState` and `mobileLayout` up to date afterwards. */
 export function initMobileLayout(): void {
   if (initialized || typeof window === 'undefined') {
     return;
   }
   initialized = true;
-  const fromUrl = settingFromUrl();
-  if (fromUrl !== undefined) {
-    writeSetting(fromUrl);
+  if (typeof window.matchMedia === 'function') {
+    for (const query of WATCHED_QUERIES) {
+      window.matchMedia(query).addEventListener('change', update);
+    }
   }
-  setting = fromUrl ?? readSetting();
-  mediaQuery(TOUCH_QUERY)?.addEventListener('change', update);
-  mediaQuery(NARROW_QUERY)?.addEventListener('change', update);
-  mediaQuery(LANDSCAPE_QUERY)?.addEventListener('change', update);
-  // Some browsers report the input mode only after loading or without a change event (rotating, docking the keyboard)
+  // Some browsers report a rotation only as a resize
   window.addEventListener('resize', update);
   update();
 }
 
-/* Sets the setting for this tab and applies it immediately. */
-export function setMobileLayoutSetting(value: MobileLayoutSetting): void {
-  setting = value;
-  writeSetting(value);
-  update();
-}

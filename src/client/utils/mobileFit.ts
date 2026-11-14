@@ -8,6 +8,7 @@
 
 import {MARS_CROP, MARS_CROP_LARGE, RING_FRAME, RING_FRAME_LARGE} from '@/client/components/mobile/mobileBoardZoom';
 import {choiceBlockColumns, choiceBlockColumnsPortrait, choiceBlockFillsWidth} from '@/client/components/choiceBlock';
+import {BREAKPOINTS} from '@/client/utils/breakpoints';
 
 /* Visible area of an element in its own px (before scaling). */
 export type FitCrop = {left: number, top: number, width: number, height: number};
@@ -41,12 +42,17 @@ const FITTED_CLASS = 'mb-fit';
 // Mars without the scale ring (mobile.less: planet image, colony spaces in the corners)
 const CROPPED_CLASS = 'mb-mars-cropped';
 
+// List widths from which 3 or 4 cards fit side by side. Content thresholds of the list itself, not layout
+// breakpoints (breakpoints.ts): the list is narrower than the window by the box padding
+const THREE_CARDS_MIN_LIST_WIDTH = 560;
+const FOUR_CARDS_MIN_LIST_WIDTH = 900;
+
 /* Column count for a card list of width `width` px: phone 2, tablet portrait 3, tablet landscape 4. */
 export function cardColumns(width: number): number {
-  if (width >= 900) {
+  if (width >= FOUR_CARDS_MIN_LIST_WIDTH) {
     return 4;
   }
-  return width >= 560 ? 3 : 2;
+  return width >= THREE_CARDS_MIN_LIST_WIDTH ? 3 : 2;
 }
 
 /*
@@ -102,15 +108,14 @@ export function fitScale(listWidth: number, itemWidth: number, columns: number, 
 // Mars without the scale ring: planet including colony spaces in the top corners (mobile.less)
 // Portrait: at most this share of the window height for the board, so the bars below stay visible
 const BOARD_HEIGHT_SHARE = 0.62;
-// Tablet landscape (mobile.less, @mb-landscape: Mars left, rest right; player tables horizontal): from this width in landscape
-export const LANDSCAPE_MIN_WIDTH = 900;
 // Landscape: everything above and below the board box (header, turn status row, tab bar and box padding,
 // milestone buttons, navigation); the bars sit next to Mars inside the box
 const LANDSCAPE_CHROME_HEIGHT = 330;
 
 /* Maximum board height in px for the current window. */
 export function boardMaxHeight(width: number, height: number): number {
-  const landscape = width >= LANDSCAPE_MIN_WIDTH && width > height;
+  // Tablet landscape (mobile.less, @layout-tablet-landscape: Mars left, bars right)
+  const landscape = width > height && height >= BREAKPOINTS.shortHeight;
   return landscape ? height - LANDSCAPE_CHROME_HEIGHT : height * BOARD_HEIGHT_SHARE;
 }
 

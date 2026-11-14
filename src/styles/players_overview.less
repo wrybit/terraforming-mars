@@ -263,7 +263,11 @@
   }
 }
 
-@media only screen and (max-width: 1740px)  {
+// Content threshold, not a layout breakpoint: below this window width the right column of the two-column layout is too
+// narrow for the player rows in one line (depends on the row's content, see breakpoints.less for the layout scale)
+@players-overview-stacked-below: 1741px;
+
+@media (max-width: (@players-overview-stacked-below - 1px)) {
   .players-overview {
     .players-overview-stacked();
   }

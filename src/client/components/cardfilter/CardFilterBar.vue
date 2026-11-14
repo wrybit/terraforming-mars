@@ -73,6 +73,7 @@ import CardFilterOptions from '@/client/components/cardfilter/CardFilterOptions.
 import AppButton from '@/client/components/common/AppButton.vue';
 import CardZoomSlider from '@/client/components/cardfilter/CardZoomSlider.vue';
 import {mobileLayout} from '@/client/utils/mobileLayout';
+import {BREAKPOINTS} from '@/client/utils/breakpoints';
 import {useShrinkToWrappedContent} from '@/client/utils/shrinkToWrappedContent';
 import {resourceIconClass, tagIconClass, typeColorClass, typeOptionLabel} from '@/client/components/cardfilter/cardFilterLabels';
 
@@ -86,7 +87,7 @@ const props = defineProps<{
 
 // Mobile view only: below this row width the row switches to icon buttons and a bottom sheet.
 // Outside the mobile view the labels always stay.
-const COMPACT_BELOW_PX = 560;
+const COMPACT_BELOW_PX = BREAKPOINTS.tablet;
 
 const root = ref<HTMLElement>();
 const sheet = ref<HTMLElement>();

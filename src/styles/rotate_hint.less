@@ -1,5 +1,5 @@
-// Phone in landscape (see RotateHint.vue): only on touch devices with very little height. Tablets in landscape have
-// well over 500 px height and are unaffected.
+// Phone in landscape (see RotateHint.vue, layout state phone-landscape in breakpoints.less): too little height for the
+// mobile view, so touch devices are asked to turn. Tablets in landscape have more height and are unaffected.
 
 // Purple of the mobile view (@mb-accent in mobile.less), phone white
 @rotate-hint-accent: #5b5ef0;
@@ -7,7 +7,7 @@
   display: none;
 }
 
-@media (orientation: landscape) and (max-height: 500px) and (pointer: coarse) {
+@media @layout-phone-landscape and (pointer: coarse) {
   .rotate-hint {
     position: fixed;
     inset: 0;

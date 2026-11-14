@@ -139,7 +139,7 @@
 
 // Narrow screens: rules below the title block over the full width, everything a little smaller.
 // Wider mobile layouts (tablet, small laptop) keep the row like the desktop
-@media (max-width: 699px) { // same limit in mobile.less (.board-zoom-banner)
+@media @below-tablet {
   .placement-banner {
     flex-wrap: wrap;
     gap: 6px 10px;

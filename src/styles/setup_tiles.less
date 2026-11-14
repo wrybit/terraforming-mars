@@ -98,7 +98,7 @@ a.setup-chip:hover {
 .setup-chip--board-hollandia { .board-chip(@board-hollandia; #1b1b1b); }
 
 // Portrait/phone: two columns, card piles stay at three (short values)
-@media only screen and (max-width: 520px) {
+@media @below-tablet {
   .setup-tiles {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
