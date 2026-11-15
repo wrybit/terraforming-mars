@@ -450,7 +450,7 @@
   }
 }
 
-@media @below-wide {
+@media (max-width: @max-below-wide) {
   .topmost-start-screen {
     min-height: 100dvh;
 
@@ -481,7 +481,7 @@
 
 }
 
-@media @below-tablet {
+@media (max-width: @max-below-tablet) {
   .notice--split > .fan-project-notice {
     margin-left: 0; // centred like the other groups
   }
@@ -538,7 +538,7 @@
   }
 }
 
-@media @from-tablet and @below-wide {
+@media (min-width: @bp-tablet) and (max-width: @max-below-wide) {
   .start-screen-link {
     height: 104px;
     font-size: 28px;

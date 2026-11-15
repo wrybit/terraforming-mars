@@ -628,7 +628,7 @@ each(@players, {
 }
 
 // ---------- Narrow: everything single-column, first table column stays put when scrolling sideways ----------
-@media @below-wide {
+@media (max-width: @max-below-wide) {
   .card-list-header .stats-header-info {
     display: none;
   }
@@ -725,7 +725,7 @@ each(@players, {
   position: relative;
 }
 
-@media @below-wide {
+@media (max-width: @max-below-wide) {
   .stats-list-tools {
     flex: 1 1 100%;
     flex-wrap: wrap;
@@ -820,7 +820,7 @@ each(@stats-source-colors, {
   cursor: zoom-in;
 }
 
-@media @below-wide {
+@media (max-width: @max-below-wide) {
   .stats-detail-head--asset {
     grid-template-columns: minmax(0, 1fr);
 
@@ -1040,7 +1040,7 @@ each(range(10), {
   }
 }
 
-@media @below-wide {
+@media (max-width: @max-below-wide) {
   .stats-skeleton-kpi {
     height: 57px;
   }

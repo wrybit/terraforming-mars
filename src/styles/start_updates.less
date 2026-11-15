@@ -275,7 +275,7 @@
   }
 }
 
-@media @from-wide {
+@media (min-width: @bp-wide) {
   // Right edge, vertically centred (top from StartScreenUpdates.vue); the menu lies above it if they ever meet
   .start-updates {
     position: fixed;
@@ -290,7 +290,7 @@
 // Mit Maus: in Ruhe halb aus dem Bild geschoben, blass und unscharf; je näher die Maus (--near 0…1 aus
 // StartScreenUpdates.vue), desto weiter fährt die Spalte herein, wird deutlich, scharf und bis 20 % größer.
 // Ohne Maus (Tablet quer) bliebe sie sonst für immer halb verdeckt – dort steht sie voll da.
-@media @from-wide and (hover: hover) {
+@media (min-width: @bp-wide) and (hover: hover) {
   .start-updates {
     --updates-scale: calc(1 + 0.2 * var(--near, 0));
     --updates-fade: calc(0.25 + 0.75 * var(--near, 0));
@@ -302,7 +302,7 @@
 }
 
 // Narrow windows: below the menu, fully visible (no mouse nearness on touch); longer points may wrap
-@media @below-wide {
+@media (max-width: @max-below-wide) {
   .start-updates {
     margin-top: 32px;
   }

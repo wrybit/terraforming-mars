@@ -84,7 +84,7 @@
 }
 
 // Phone: one tile per row, so the content line stays readable
-@media @below-tablet {
+@media (max-width: @max-below-tablet) {
   .create-game-chip-grid.create-game-expansion-grid {
     grid-template-columns: minmax(0, 1fr);
   }
