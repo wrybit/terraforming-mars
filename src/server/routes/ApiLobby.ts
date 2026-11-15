@@ -62,7 +62,7 @@ export class ApiLobby extends Handler {
     }
   }
 
-  private perform(action: LobbyAction, starter: GameStarter): Promise<unknown> {
+  private perform(action: LobbyAction, starter: GameStarter): Promise<object> {
     switch (action.action) {
     case 'open':
       return this.lobby.open(action.me, action.profile, action.title, action.listed, action.config, starter, Array.isArray(action.freeSeats) ? action.freeSeats : []);

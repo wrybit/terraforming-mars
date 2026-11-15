@@ -57,12 +57,12 @@ export async function fetchLogStream(id: ParticipantId, currentGeneration: numbe
       }
       return {generation, messages};
     }));
-  } catch (err: any) {
-    if (err.name === 'AbortError') {
+  } catch (err: unknown) {
+    if (err instanceof Error && err.name === 'AbortError') {
       // ignore aborted requests
       return undefined;
     }
-    console.error(err.message ?? 'error updating messages, unable to reach server');
+    console.error((err instanceof Error ? err.message : undefined) ?? 'error updating messages, unable to reach server');
     return undefined;
   }
 }

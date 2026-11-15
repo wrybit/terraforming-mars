@@ -16,7 +16,7 @@ export class Deck<T extends Named<N>, N extends string = CardName> {
   private readonly random: Random;
 
   // Exposing shuffle so it can be replaced in tests.
-  public static shuffle(array: Array<any>, random: Random) {
+  public static shuffle(array: Array<unknown>, random: Random) {
     inplaceShuffle(array, random);
   }
 

@@ -1177,7 +1177,7 @@ function unshiftCards(deck: Array<IProjectCard>, cards: Array<CardName>) {
 }
 
 function initialCardSelection(player: IPlayer) {
-  function map(input: any) {
+  function map(input: unknown) {
     if (input === undefined) {
       return [];
     }

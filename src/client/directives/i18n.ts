@@ -6,6 +6,13 @@ import {Log} from '@/common/logs/Log';
 import {PlayerViewModel} from '@/common/models/PlayerModel';
 import {tileTypeToString} from '@/common/TileType';
 import {Color} from '@/common/Color';
+import {DirectiveBinding} from 'vue';
+
+declare global {
+  interface Window {
+    _translations: { [key: string]: string } | undefined;
+  }
+}
 
 type Context = {
   playerView: PlayerViewModel | undefined;
@@ -52,13 +59,13 @@ let translated: Set<string> | undefined;
 const reportedMissing = new Set<string>();
 
 export function setTranslationsForTest(translations: {[key: string]: string} | undefined) {
-  (window as any)._translations = translations;
+  window._translations = translations;
   translated = undefined;
 }
 
 export function translateText(englishText: string): string {
   const lang = getPreferences().lang;
-  const translations: {[key: string]: string} | undefined = (window as any)._translations;
+  const translations: {[key: string]: string} | undefined = window._translations;
   if (translations === undefined) {
     return englishText;
   }
@@ -173,7 +180,7 @@ function translateChildren(node: Node, params: string[] | undefined) {
   }
 }
 
-export function translateTextNode(el: HTMLElement, binding: any) {
+export function translateTextNode(el: HTMLElement, binding: DirectiveBinding) {
   let params: string[] | undefined = undefined;
   if (binding?.value) {
     params = binding.value instanceof Array ? binding.value : [binding.value];

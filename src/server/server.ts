@@ -35,7 +35,7 @@ import {startUptimeRecording} from '@/server/admin/dashboard/uptimeRecord';
 import {startPresenceRecording} from '@/server/admin/dashboard/presenceRecord';
 import {rustAiSupportFile} from './ai/rust/rustAiSupportFile';
 
-process.on('uncaughtException', (err: any) => {
+process.on('uncaughtException', (err: unknown) => {
   console.error('UNCAUGHT EXCEPTION', err);
 });
 
