@@ -17,7 +17,7 @@
 @player-home-card-height: @log-card-preview-height; // project card incl. border (log.less)
 @player-home-log-height: floor(@player-home-card-height * @log-card-preview-zoom);
 
-@media @from-desktop {
+@media (min-width: @bp-desktop) {
   .player-home-columns {
     display: grid;
     grid-template-columns:

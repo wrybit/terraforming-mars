@@ -39,11 +39,11 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: @dashboard-card-gap;
 
-  @media @below-wide {
+  @media (max-width: @max-below-wide) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  @media @below-tablet {
+  @media (max-width: @max-below-tablet) {
     grid-template-columns: minmax(0, 1fr);
   }
 
@@ -403,7 +403,7 @@
 }
 
 // Phone: the hash is the least useful column, time and title stay
-@media @below-tablet {
+@media (max-width: @max-below-tablet) {
   .server-dashboard-commit-hash {
     display: none;
   }

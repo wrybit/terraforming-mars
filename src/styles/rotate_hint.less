@@ -7,7 +7,7 @@
   display: none;
 }
 
-@media @layout-phone-landscape and (pointer: coarse) {
+@media (orientation: landscape) and (max-height: @max-phone-landscape-height) and (pointer: coarse) {
   .rotate-hint {
     position: fixed;
     inset: 0;

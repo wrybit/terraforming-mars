@@ -157,7 +157,7 @@ html.tm-mobile #game-end .game-end-box.game-end-solo {
   }
 }
 
-@media @below-tablet {
+@media (max-width: @max-below-tablet) {
   .game-end-solo__body {
     margin-top: -18px;
     padding: 0 16px 18px;
@@ -440,7 +440,7 @@ html.tm-mobile #game-end .game-end-box.game-end-solo {
   margin: 0;
 }
 
-@media @from-desktop {
+@media (min-width: @bp-desktop) {
   .game-end-columns {
     display: grid;
     // Middle track: drag handle between the columns, centered in the column gap (ColumnResizeHandle.vue)

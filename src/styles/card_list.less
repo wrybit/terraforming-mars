@@ -104,7 +104,7 @@
   border-radius: @create-game-radius;
   box-shadow: none;
 
-  @media @below-wide {
+  @media (max-width: @max-below-wide) {
     margin: @page-content-edge-narrow @page-content-edge-narrow (@create-game-gap-card - @page-content-edge-narrow);
   }
 }
@@ -815,7 +815,7 @@
   display: none;
 }
 
-@media @below-wide {
+@media (max-width: @max-below-wide) {
   .card-list {
     --card-list-header: @card-list-header-height-narrow;
   }
@@ -1019,7 +1019,7 @@
 }
 
 // Phone: cards scaled down, two side by side
-@media @below-tablet {
+@media (max-width: @max-below-tablet) {
   .card-list-cards {
     justify-content: center;
 

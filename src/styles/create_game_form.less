@@ -658,7 +658,7 @@ a.create-game-info-box-more {
 }
 
 // Phone: only the icon, the title needs the room
-@media @below-tablet {
+@media (max-width: @max-below-tablet) {
   .wiki-overlay-github span {
     display: none;
   }
@@ -1543,7 +1543,7 @@ a.create-game-summary-chip:hover {
 
 // ---------- narrower ----------
 // One column: the column wrappers dissolve, the cards follow their order (style="order: …")
-@media @below-wide {
+@media (max-width: @max-below-wide) {
   .create-game-layout {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -1611,7 +1611,7 @@ a.create-game-summary-chip:hover {
 }
 
 // Phone: title with language/settings on top, file buttons below – the header card grows in height for that
-@media @below-tablet {
+@media (max-width: @max-below-tablet) {
   .card-list-header.create-game-head {
     flex-wrap: wrap;
     row-gap: 8px;
@@ -1693,7 +1693,7 @@ a.create-game-summary-chip:hover {
 }
 
 // Phone: two cards side by side
-@media @below-tablet {
+@media (max-width: @max-below-tablet) {
   .create-game-card-grid {
     justify-content: center;
 

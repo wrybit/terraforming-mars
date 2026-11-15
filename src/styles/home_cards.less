@@ -14,7 +14,7 @@
   padding: @home-card-padding;
 }
 
-@media @from-desktop {
+@media (min-width: @bp-desktop) {
   .player-home-columns__main .players-overview {
     .home-card(@or-tabs-border; @or-tabs-panel-background);
     // Size from the drag handle (playersCardFit.ts): below 1 the table zooms down, above 1 numbers and boxes grow

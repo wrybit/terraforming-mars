@@ -42,7 +42,7 @@
   background-position: center;
 }
 
-@media @from-desktop {
+@media (min-width: @bp-desktop) {
   // The space reserved on the left for the sidebar is dropped
   .main-container:has(#player-home),
   .main-container:has(#spectator-home) {
@@ -170,7 +170,7 @@
   box-sizing: border-box;
   padding: @page-content-edge;
 
-  @media @below-wide {
+  @media (max-width: @max-below-wide) {
     padding: @page-content-edge-narrow;
   }
 }

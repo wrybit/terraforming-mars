@@ -28,6 +28,16 @@
 @below-desktop: ~"(max-width: 1279px)";
 @from-desktop: ~"(min-width: 1280px)";
 
+// Use the numeric bounds inside media feature expressions:
+//   @media (max-width: @max-below-tablet) { … }
+// A bare @below-tablet in the at-rule prelude is deprecated by Less, and stylelint cannot parse the
+// suggested @{below-tablet} interpolation.
+@max-below-compact-phone: (@bp-compact-phone - 1px);
+@max-below-tablet: (@bp-tablet - 1px);
+@max-below-wide: (@bp-wide - 1px);
+@max-below-desktop: (@bp-desktop - 1px);
+@max-phone-landscape-height: (@bp-short-height - 1px);
+
 // Orientation states of the mobile view (inside .tm-mobile)
 @layout-portrait: ~"(orientation: portrait)";
 @layout-landscape: ~"(orientation: landscape)";
