@@ -24,9 +24,9 @@ const EVENT_DIRECTORY = process.env.RUST_BOT_EVENTS ?? path.resolve('db', 'rust-
 // rollouts took 9 s for one decision): the search stops there with fewer rollouts. A started rollout still ends and
 // the first round over all candidates always runs, so a decision takes up to about twice the limit on AK1.
 const SETTINGS: Record<AiLevel, RustBotSettings> = {
-  easy: {rollouts: 4, threads: 1, horizon: 0, candidates: 4, timeLimit: 250},
-  normal: {rollouts: 16, threads: 2, horizon: 0, candidates: 6, timeLimit: 700},
-  hard: {rollouts: 64, threads: 2, horizon: 0, candidates: 8, timeLimit: 1200},
+  easy: {rollouts: 4, threads: 1, horizon: 0, candidates: 4, timeLimit: 750},
+  normal: {rollouts: 16, threads: 2, horizon: 0, candidates: 6, timeLimit: 1700},
+  hard: {rollouts: 64, threads: 2, horizon: 0, candidates: 8, timeLimit: 2600},
 };
 
 type StoredEvent = {saveId: number, event: Record<string, unknown>};
