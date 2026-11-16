@@ -1,3 +1,4 @@
+import {hasTsAiMenus} from '../../common/ai/AiEngine';
 import {IGame} from '../IGame';
 import {BRIBE_TITLE, SMUGGLE_TITLE} from '../../common/dune/duneActionTitles';
 import {IPlayer} from '../IPlayer';
@@ -271,7 +272,7 @@ function bribed(player: IPlayer, data: SmugglingData, steps: number): void {
 
 /** Moves of the Dune group of the action menu: only the AI pays tribute there (from 3 on, where it costs) */
 export function smugglingActions(player: IPlayer, data: SmugglingData): Array<PlayerInput> {
-  if (player.aiLevel === undefined || suspicionOf(data, player) < 3) {
+  if (!hasTsAiMenus(player) || suspicionOf(data, player) < 3) {
     return [];
   }
   const bribe = bribeOption(player, data);

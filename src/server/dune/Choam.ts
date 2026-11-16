@@ -1,3 +1,4 @@
+import {hasTsAiMenus} from '../../common/ai/AiEngine';
 import {IGame} from '../IGame';
 import {CHOAM_ACCEPT_OFFER_TITLE, CHOAM_ACCEPT_TITLE, CHOAM_OFFER_TITLE, CHOAM_WITHDRAW_TITLE} from '../../common/dune/duneActionTitles';
 import {IPlayer} from '../IPlayer';
@@ -129,7 +130,7 @@ function acceptInputs(player: IPlayer, data: ChoamData, then: () => void): Array
  * `then` follows an accepted offer (the envy, ChoamExchange.ts).
  */
 export function choamActions(player: IPlayer, data: ChoamData, then: () => void = () => {}): Array<PlayerInput> {
-  if (player.aiLevel === undefined) {
+  if (!hasTsAiMenus(player)) {
     return [];
   }
   const accepts = acceptInputs(player, data, then);

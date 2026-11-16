@@ -1,3 +1,4 @@
+import {hasTsAiMenus} from '../../common/ai/AiEngine';
 import {IPlayer} from '../IPlayer';
 import {SelectTrade} from '../inputs/SelectTrade';
 import {PlayerInput} from '../PlayerInput';
@@ -34,7 +35,7 @@ export function choamExchangeTabActions(player: IPlayer, data: DuneData): Array<
     return [];
   }
   const {smuggling, choam} = parts;
-  if (player.aiLevel !== undefined) {
+  if (hasTsAiMenus(player)) {
     // Spice and, at maximum temperature, surplus water (aiWaterSale.ts)
     return [aiGuildInput(player, smuggling), aiWaterInput(player, smuggling)].filter((input): input is SelectTrade => input !== undefined);
   }
@@ -57,7 +58,7 @@ export function choamExchangeTabActions(player: IPlayer, data: DuneData): Array<
 /** CHOAM moves of the Dune group of the action menu: only the AI pays tribute and accepts offers there */
 export function choamExchangeActions(player: IPlayer, data: DuneData): Array<PlayerInput> {
   const parts = choamParts(data);
-  if (parts === undefined || player.aiLevel === undefined) {
+  if (parts === undefined || !hasTsAiMenus(player)) {
     return [];
   }
   const {smuggling, choam} = parts;

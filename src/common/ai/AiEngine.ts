@@ -8,3 +8,11 @@ export const DEFAULT_AI_ENGINE: AiEngine = 'ts';
 export function isAiEngine(value: unknown): value is AiEngine {
   return typeof value === 'string' && (AI_ENGINES as ReadonlyArray<string>).includes(value);
 }
+
+/**
+ * The TS AI gets a few simplified Dune menus (CHOAM moves directly in the action menu). The new AI sees the menus
+ * humans see: it learned from games recorded with them and follows every answer in its own copy of the game.
+ */
+export function hasTsAiMenus(player: {aiLevel?: unknown, aiEngine?: unknown}): boolean {
+  return player.aiLevel !== undefined && player.aiEngine !== 'rust';
+}
