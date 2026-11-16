@@ -2340,5 +2340,10 @@
   "New β": "Nova β",
   "New AI, learns from its own games. Still being tested.": "Nova IA, aprende com suas próprias partidas. Ainda em testes.",
   "The new AI is not installed on this server": "A nova IA não está instalada neste servidor",
-  "The new AI cannot play these expansions yet": "A nova IA ainda não sabe jogar estas expansões"
+  "The new AI cannot play these expansions yet": "A nova IA ainda não sabe jogar estas expansões",
+  "${0} is thinking…": "${0} está pensando…",
+  "${0} is pondering…": "${0} está matutando…",
+  "${0} is choosing a card…": "${0} está escolhendo uma carta…",
+  "${0} is building something…": "${0} está construindo algo…",
+  "${0} is playing…": "${0} está jogando…"
 }

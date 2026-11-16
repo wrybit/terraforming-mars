@@ -9,6 +9,7 @@ import {isSpectatorId} from '../../common/Types';
 import {Request} from '../Request';
 import {Response} from '../Response';
 import {RouteError} from './RouteError';
+import {thinkingIn} from '../ai/aiThinking';
 
 export class ApiWaitingFor extends Handler {
   public static readonly INSTANCE = new ApiWaitingFor();
@@ -67,7 +68,7 @@ export class ApiWaitingFor extends Handler {
     }
 
     if (isSpectatorId(id)) {
-      responses.writeJson(res, ctx, this.getSpectatorWaitingForModel(game, gameAge, undoCount));
+      responses.writeJson(res, ctx, this.withAiThinking(game, this.getSpectatorWaitingForModel(game, gameAge, undoCount)));
       return;
     }
 
@@ -84,6 +85,12 @@ export class ApiWaitingFor extends Handler {
       throw RouteError.forbidden();
     }
     ctx.ipTracker.addParticipant(id, ctx.ip);
-    responses.writeJson(res, ctx, this.getPlayerWaitingForModel(player, game, gameAge, undoCount));
+    responses.writeJson(res, ctx, this.withAiThinking(game, this.getPlayerWaitingForModel(player, game, gameAge, undoCount)));
+  }
+
+  /** AI players deciding right now: the log shows "… is thinking" until their move arrives */
+  private withAiThinking(game: IGame, model: WaitingForModel): WaitingForModel {
+    const thinking = thinkingIn(game.id);
+    return thinking.length === 0 ? model : {...model, aiThinking: thinking};
   }
 }

@@ -1546,5 +1546,10 @@
   "New β": "Ny β",
   "New AI, learns from its own games. Still being tested.": "Ny AI, lærer av egne spill. Fortsatt under testing.",
   "The new AI is not installed on this server": "Den nye AI-en er ikke installert på denne serveren",
-  "The new AI cannot play these expansions yet": "Den nye AI-en kan ikke spille disse utvidelsene ennå"
+  "The new AI cannot play these expansions yet": "Den nye AI-en kan ikke spille disse utvidelsene ennå",
+  "${0} is thinking…": "${0} tenker…",
+  "${0} is pondering…": "${0} grubler…",
+  "${0} is choosing a card…": "${0} velger et kort…",
+  "${0} is building something…": "${0} bygger noe…",
+  "${0} is playing…": "${0} spiller…"
 }

@@ -1362,5 +1362,10 @@
   "New β": "Új β",
   "New AI, learns from its own games. Still being tested.": "Új MI, a saját játszmáiból tanul. Még tesztelés alatt.",
   "The new AI is not installed on this server": "Az új MI nincs telepítve ezen a szerveren",
-  "The new AI cannot play these expansions yet": "Az új MI még nem tudja játszani ezeket a kiegészítőket"
+  "The new AI cannot play these expansions yet": "Az új MI még nem tudja játszani ezeket a kiegészítőket",
+  "${0} is thinking…": "${0} gondolkodik…",
+  "${0} is pondering…": "${0} töpreng…",
+  "${0} is choosing a card…": "${0} kártyát választ…",
+  "${0} is building something…": "${0} épít valamit…",
+  "${0} is playing…": "${0} lép…"
 }

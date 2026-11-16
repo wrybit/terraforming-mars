@@ -1180,5 +1180,10 @@
   "New β": "Uusi β",
   "New AI, learns from its own games. Still being tested.": "Uusi tekoäly, oppii omista peleistään. Vielä testissä.",
   "The new AI is not installed on this server": "Uutta tekoälyä ei ole asennettu tälle palvelimelle",
-  "The new AI cannot play these expansions yet": "Uusi tekoäly ei vielä osaa pelata näitä laajennuksia"
+  "The new AI cannot play these expansions yet": "Uusi tekoäly ei vielä osaa pelata näitä laajennuksia",
+  "${0} is thinking…": "${0} miettii…",
+  "${0} is pondering…": "${0} pohtii…",
+  "${0} is choosing a card…": "${0} valitsee korttia…",
+  "${0} is building something…": "${0} rakentaa jotain…",
+  "${0} is playing…": "${0} pelaa…"
 }

@@ -1332,3 +1332,34 @@ each(@players, {
   margin-right: 4px;
   color: #8b90a3;
 }
+
+// AI deciding right now: a passing row with a small spinner, replaced by the move's own row
+.log-panel li.log-ai-thinking {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  opacity: 0.8;
+  font-style: italic;
+}
+
+.log-ai-thinking-spinner {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  border-top-color: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  animation: log-ai-thinking-spin 0.8s linear infinite;
+}
+
+@keyframes log-ai-thinking-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .log-ai-thinking-spinner {
+    animation-duration: 2.4s;
+  }
+}

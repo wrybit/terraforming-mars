@@ -1554,5 +1554,10 @@
   "New β": "新版 β",
   "New AI, learns from its own games. Still being tested.": "新しいAI。自分の対局から学習します。まだテスト中です。",
   "The new AI is not installed on this server": "このサーバーには新しいAIがインストールされていません",
-  "The new AI cannot play these expansions yet": "新しいAIはまだこれらの拡張をプレイできません"
+  "The new AI cannot play these expansions yet": "新しいAIはまだこれらの拡張をプレイできません",
+  "${0} is thinking…": "${0} が考え中…",
+  "${0} is pondering…": "${0} が悩み中…",
+  "${0} is choosing a card…": "${0} がカードを選び中…",
+  "${0} is building something…": "${0} が建設中…",
+  "${0} is playing…": "${0} がプレイ中…"
 }

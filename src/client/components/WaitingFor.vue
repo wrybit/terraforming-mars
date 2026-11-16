@@ -63,6 +63,7 @@ import {ingestView} from '@/client/utils/changeTracker';
 import {describeFailure, failureFromResponse, RequestFailedError, RequestFailure} from '@/client/utils/requestFailure';
 import {describeGameLoadFailure} from '@/client/utils/gameLoadFailure';
 import {registerMoveSender} from '@/client/components/dune/duneMoves';
+import {aiThinking} from '@/client/utils/aiThinking';
 
 let ui_update_timeout_id: number | undefined;
 let otherPlayersTimer: number | undefined;
@@ -282,6 +283,7 @@ export default defineComponent({
           if (xhr.status === statusCode.ok) {
             const result = xhr.response as WaitingForModel;
             this.playersWaitingFor = result.waitingFor;
+            aiThinking.value = result.aiThinking ?? [];
             if (result.result === 'GO') {
               // Will only apply to player, not spectator.
               const updated = root.updatePlayer();

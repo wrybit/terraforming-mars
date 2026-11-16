@@ -2164,5 +2164,10 @@
   "New β": "新版 β",
   "New AI, learns from its own games. Still being tested.": "新AI，从自己的对局中学习。仍在测试中。",
   "The new AI is not installed on this server": "此服务器未安装新AI",
-  "The new AI cannot play these expansions yet": "新AI还不能玩这些扩展"
+  "The new AI cannot play these expansions yet": "新AI还不能玩这些扩展",
+  "${0} is thinking…": "${0} 正在思考…",
+  "${0} is pondering…": "${0} 正在琢磨…",
+  "${0} is choosing a card…": "${0} 正在选卡…",
+  "${0} is building something…": "${0} 正在建造…",
+  "${0} is playing…": "${0} 正在行动…"
 }

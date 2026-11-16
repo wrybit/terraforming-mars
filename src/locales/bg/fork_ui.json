@@ -2128,5 +2128,10 @@
   "New β": "Нова β",
   "New AI, learns from its own games. Still being tested.": "Нов ИИ, учи се от собствените си игри. Още се тества.",
   "The new AI is not installed on this server": "Новият ИИ не е инсталиран на този сървър",
-  "The new AI cannot play these expansions yet": "Новият ИИ още не може да играе тези разширения"
+  "The new AI cannot play these expansions yet": "Новият ИИ още не може да играе тези разширения",
+  "${0} is thinking…": "${0} мисли…",
+  "${0} is pondering…": "${0} умува…",
+  "${0} is choosing a card…": "${0} избира карта…",
+  "${0} is building something…": "${0} строи нещо…",
+  "${0} is playing…": "${0} играе…"
 }
