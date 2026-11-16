@@ -1,4 +1,5 @@
 import {AiLevel, DEFAULT_AI_LEVEL, isAiLevel} from '../../common/ai/AiLevel';
+import {AiEngine} from '../../common/ai/AiEngine';
 import {AI_ANALYSIS_DEFAULT} from '../../common/ai/aiAnalysisDefault';
 import {aiUnsupportedReasons} from '../../common/ai/aiSupport';
 import {Color, PLAYER_COLORS} from '../../common/Color';
@@ -68,7 +69,8 @@ type HumanSeat = {kind: 'human', participant: string, profile: LobbyProfile, rea
 // seat over in the lobby; playerId: the player's link once the game runs. Both only ever go to the host.
 type GuestSeat = {kind: 'guest', name: string, color: Color, handicap?: number, token?: string, playerId?: PlayerId};
 // Color and name as chosen in the create form; seats turned into AI in the lobby have none
-type AiSeat = {kind: 'ai', aiLevel: AiLevel, color?: Color, name?: string};
+// aiEngine: the new AI chosen in the create form (missing = classic TS AI)
+type AiSeat = {kind: 'ai', aiLevel: AiLevel, aiEngine?: AiEngine, color?: Color, name?: string};
 type Seat = {kind: 'free'} | AiSeat | HumanSeat | GuestSeat;
 
 type Room = {
@@ -520,7 +522,7 @@ export class Lobby {
   private aiSeat(player: NewPlayerModel, aiLevel: AiLevel): AiSeat {
     // Same cleanup as a guest's name and color; an empty name stays empty so the AI is named after its color
     const chosen = sanitizeProfile({name: player.name || capitalize(player.color), color: player.color, emoji: ''});
-    return {kind: 'ai', aiLevel, color: chosen.color, name: player.name ? chosen.name : undefined};
+    return {kind: 'ai', aiLevel, aiEngine: player.aiEngine === 'rust' ? 'rust' : undefined, color: chosen.color, name: player.name ? chosen.name : undefined};
   }
 
   /** A player entered by the host; an unchanged guest of the previous layout keeps the link already sent */
@@ -637,7 +639,8 @@ export class Lobby {
       const aiLevel = seat.kind === 'ai' ? seat.aiLevel : DEFAULT_AI_LEVEL;
       // A name of its own stays; otherwise the AI is named after its color, as in the create form
       const name = seat.kind === 'ai' && seat.name !== undefined && ownColor !== undefined ? seat.name : capitalize(color);
-      return {name, color, beginner: false, handicap: 0, first: false, aiLevel};
+      const aiEngine = seat.kind === 'ai' ? seat.aiEngine : undefined;
+      return {name, color, beginner: false, handicap: 0, first: false, aiLevel, aiEngine};
     });
     // Seat order is the form's order, so its "goes first" star still points at the right seat
     const chosenFirst = room.config.players.findIndex((player) => player.first === true);

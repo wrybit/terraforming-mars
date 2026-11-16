@@ -16,6 +16,9 @@ export const serverUpdateCommits = ref<ReadonlyArray<ServerUpdateCommit>>([]);
 // Players of running games with a page open right now (start page: "3 players online", OnlinePlayers.vue)
 export const activeParticipants = ref<number | undefined>(undefined);
 
+// The new AI is installed on this server (create form: version choice per AI seat)
+export const newAiAvailable = ref(false);
+
 const POLL_MILLISECONDS = 5000;
 let knownStartedAt: number | undefined;
 let timer: ReturnType<typeof setInterval> | undefined;
@@ -29,6 +32,7 @@ export function markServerUpdating(): void {
 
 export function applyServerStatus(status: ServerStatusModel): void {
   activeParticipants.value = status.activeParticipants;
+  newAiAvailable.value = status.newAi === true;
   if (status.updating) {
     markServerUpdating();
   } else if (knownStartedAt !== undefined && status.startedAt !== knownStartedAt) {

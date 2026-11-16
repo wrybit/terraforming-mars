@@ -6,10 +6,12 @@
       type="button"
       role="radio"
       :aria-checked="option.value === modelValue"
-      :class="{'create-game-segmented--selected': option.value === modelValue}"
-      :disabled="option.disabled"
+      :class="{'create-game-segmented--selected': option.value === modelValue, 'create-game-segmented--disabled': option.disabled === true}"
+      :disabled="option.disabled && option.title === undefined"
+      :aria-disabled="option.disabled === true"
+      :title="option.title !== undefined ? $t(option.title) : undefined"
       :aria-label="option.icon !== undefined ? $t(option.label) : undefined"
-      @click="$emit('update:modelValue', option.value)">
+      @click="!option.disabled && $emit('update:modelValue', option.value)">
       <!-- With a symbol the label only names the button for screen readers -->
       <SeatIcon v-if="option.icon !== undefined" :kind="option.icon" :size="20" />
       <span v-else v-i18n>{{ option.label }}</span>

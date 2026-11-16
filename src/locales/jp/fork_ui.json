@@ -1549,5 +1549,10 @@
   "Some of the milestones you selected need expansions you have not enabled.": "選んだ称号の一部には有効でない拡張が必要です。",
   "Some of the awards you selected need expansions you have not enabled.": "選んだ褒賞の一部には有効でない拡張が必要です。",
   "Keyboard layout": "キーボード配列",
-  "Automatic (${0})": "自動（${0}）"
+  "Automatic (${0})": "自動（${0}）",
+  "Classic": "クラシック",
+  "New β": "新版 β",
+  "New AI, learns from its own games. Still being tested.": "新しいAI。自分の対局から学習します。まだテスト中です。",
+  "The new AI is not installed on this server": "このサーバーには新しいAIがインストールされていません",
+  "The new AI cannot play these expansions yet": "新しいAIはまだこれらの拡張をプレイできません"
 }

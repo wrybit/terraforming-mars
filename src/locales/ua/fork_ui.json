@@ -1333,5 +1333,10 @@
   "Some of the milestones you selected need expansions you have not enabled.": "Деякі вибрані віхи потребують неувімкнених доповнень.",
   "Some of the awards you selected need expansions you have not enabled.": "Деякі вибрані нагороди потребують неувімкнених доповнень.",
   "Keyboard layout": "Розкладка клавіатури",
-  "Automatic (${0})": "Автоматично (${0})"
+  "Automatic (${0})": "Автоматично (${0})",
+  "Classic": "Класична",
+  "New β": "Нова β",
+  "New AI, learns from its own games. Still being tested.": "Новий ШІ, вчиться на власних партіях. Ще тестується.",
+  "The new AI is not installed on this server": "Новий ШІ не встановлено на цьому сервері",
+  "The new AI cannot play these expansions yet": "Новий ШІ ще не вміє грати з цими доповненнями"
 }

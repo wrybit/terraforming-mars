@@ -1175,5 +1175,10 @@
   "Some of the milestones you selected need expansions you have not enabled.": "Osa valituista saavutuksista vaatii laajennuksia, joita ei ole otettu käyttöön.",
   "Some of the awards you selected need expansions you have not enabled.": "Osa valituista palkinnoista vaatii laajennuksia, joita ei ole otettu käyttöön.",
   "Keyboard layout": "Näppäimistöasettelu",
-  "Automatic (${0})": "Automaattinen (${0})"
+  "Automatic (${0})": "Automaattinen (${0})",
+  "Classic": "Klassinen",
+  "New β": "Uusi β",
+  "New AI, learns from its own games. Still being tested.": "Uusi tekoäly, oppii omista peleistään. Vielä testissä.",
+  "The new AI is not installed on this server": "Uutta tekoälyä ei ole asennettu tälle palvelimelle",
+  "The new AI cannot play these expansions yet": "Uusi tekoäly ei vielä osaa pelata näitä laajennuksia"
 }

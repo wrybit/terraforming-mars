@@ -2453,5 +2453,10 @@
   "Some of the milestones you selected need expansions you have not enabled.": "Algunos hitos elegidos necesitan expansiones que no has activado.",
   "Some of the awards you selected need expansions you have not enabled.": "Algunas recompensas elegidas necesitan expansiones que no has activado.",
   "Keyboard layout": "Distribución del teclado",
-  "Automatic (${0})": "Automático (${0})"
+  "Automatic (${0})": "Automático (${0})",
+  "Classic": "Clásica",
+  "New β": "Nueva β",
+  "New AI, learns from its own games. Still being tested.": "Nueva IA, aprende de sus propias partidas. Aún en pruebas.",
+  "The new AI is not installed on this server": "La nueva IA no está instalada en este servidor",
+  "The new AI cannot play these expansions yet": "La nueva IA aún no puede jugar estas expansiones"
 }

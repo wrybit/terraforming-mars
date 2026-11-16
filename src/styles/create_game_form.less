@@ -996,11 +996,22 @@ a.create-game-info-box-more {
   flex: 1 1 0;
 }
 
-.create-game-ai-strength {
+// Not selectable, but still hoverable so its title can say why (a disabled button shows no title)
+.create-game-segmented button.create-game-segmented--disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+
+  &:hover {
+    color: @create-game-dim;
+  }
+}
+
+// Strength and version of an AI seat: one grid, so both labels share a column and the controls line up
+.create-game-ai-settings {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
-  gap: 10px;
+  gap: 6px 10px;
   margin-bottom: 4px;
   font-size: 14px;
 }

@@ -12,6 +12,16 @@ export type AiSupportSettings = {
   twoCorpsVariant?: boolean,
 };
 
+/** Expansions the new AI (Rust program, see AiEngine.ts) plays; Merger too. */
+export const NEW_AI_SUPPORTED_EXPANSIONS: ReadonlyArray<Expansion> = ['corpera', 'promo', 'venus', 'colonies', 'prelude', 'prelude2', 'turmoil'];
+
+/** Names of the settings the new AI cannot play (English, translated in the client); empty = new AI possible. */
+export function newAiUnsupportedReasons(settings: AiSupportSettings): Array<string> {
+  return (Object.entries(settings.expansions) as Array<[Expansion, boolean | undefined]>)
+    .filter(([expansion, enabled]) => enabled === true && !NEW_AI_SUPPORTED_EXPANSIONS.includes(expansion))
+    .map(([expansion]) => MODULE_NAMES[expansion]);
+}
+
 /** Names of the settings that rule out AI players (English, translated in the client); empty = AI possible. */
 export function aiUnsupportedReasons(settings: AiSupportSettings): Array<string> {
   const reasons: Array<string> = [];
