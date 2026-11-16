@@ -7,7 +7,7 @@ import {SelectSpace} from '../inputs/SelectSpace';
 import {AI_THINKING_TEXTS, AiActivity, AiThinkingModel} from '../../common/ai/AiThinking';
 import {Color} from '../../common/Color';
 
-type Thinking = {color: Color, text: string, deadline: number};
+type Thinking = {color: Color, text: string, deadline: number, input: PlayerInput};
 
 // AI players that are deciding right now, per game (aiDriver.ts sets and clears them, GET /api/waitingfor reports
 // them, the log shows a passing line with a countdown). Not saved: after a restart the next move sets it again.
@@ -32,12 +32,19 @@ export function startThinking(player: IPlayer, input: PlayerInput, durationMs: n
   }
   const texts = AI_THINKING_TEXTS[activityOf(input)];
   const text = texts[Math.floor(Math.random() * texts.length)];
-  players.set(player.id, {color: player.color, text, deadline: Date.now() + durationMs});
+  players.set(player.id, {color: player.color, text, deadline: Date.now() + durationMs, input});
 }
 
-export function stopThinking(player: IPlayer): void {
+/**
+ * The decision on `input` is over. Only its own line goes: while the move was processed the AI may already
+ * think about its next decision (several moves in a row), whose line must stay.
+ */
+export function stopThinking(player: IPlayer, input: PlayerInput): void {
   const players = thinking.get(player.game.id);
-  players?.delete(player.id);
+  if (players?.get(player.id)?.input !== input) {
+    return;
+  }
+  players.delete(player.id);
   if (players?.size === 0) {
     thinking.delete(player.game.id);
   }
