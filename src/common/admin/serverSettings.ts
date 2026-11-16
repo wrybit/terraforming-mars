@@ -80,9 +80,9 @@ const BASE_SETTINGS: ReadonlyArray<ServerSettingDefinition> = [
     description: 'IP addresses separated by spaces that get no answer.'},
 
   {key: 'AI_MOVE_DELAY_MS', group: 'AI opponents', kind: 'number', label: 'Pause before follow-up questions (ms)',
-    description: 'Where to place a tile, how to pay … Empty: 600.'},
+    description: 'Where to place a tile, how to pay … Empty: 1000.'},
   {key: 'AI_ACTION_DELAY_MS', group: 'AI opponents', kind: 'number', label: 'Pause before a new action (ms)',
-    description: 'So players can follow what the AI just did. Empty: 2000.'},
+    description: 'Thinking time of a hard AI (normal: two thirds, easy: one third). Empty: 3000.'},
   {key: 'AI_DECISION_LOG_DIR', group: 'AI opponents', kind: 'text', label: 'Folder for decision logs',
     description: 'The AI writes every decision there (for training). Empty: no logs.'},
   {key: 'AI_TRAINING_FEED', group: 'AI opponents', kind: 'text', label: 'AI test runs in the lobby',
