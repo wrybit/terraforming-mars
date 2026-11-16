@@ -6,7 +6,8 @@ import * as readline from 'readline';
 // A request the bot does not answer in this time counts as failed (the TS AI then moves instead)
 const REQUEST_TIMEOUT_MILLISECONDS = 60_000;
 
-export type RustBotSettings = {rollouts: number, threads: number, horizon: number, candidates: number};
+/** Search effort; timeLimit: thinking time per decision in milliseconds (the bot stops its search there) */
+export type RustBotSettings = {rollouts: number, threads: number, horizon: number, candidates: number, timeLimit: number};
 
 type Waiting = {resolve: (value: any) => void, reject: (error: Error) => void, timer: ReturnType<typeof setTimeout>};
 
@@ -16,7 +17,8 @@ export class RustBotProcess {
   private failure: Error | undefined = undefined;
 
   constructor(binary: string, data: string, settings: RustBotSettings) {
-    this.child = spawn(binary, [data, String(settings.rollouts), String(settings.threads), String(settings.horizon), String(settings.candidates)]);
+    this.child = spawn(binary, [data, String(settings.rollouts), String(settings.threads), String(settings.horizon), String(settings.candidates),
+      'search', String(settings.timeLimit)]);
     readline.createInterface({input: this.child.stdout}).on('line', (line) => {
       const next = this.waiting.shift();
       if (next === undefined) {

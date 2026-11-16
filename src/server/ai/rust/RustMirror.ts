@@ -20,11 +20,13 @@ const BINARY = process.env.RUST_BOT_BINARY ?? path.resolve('db', 'rust-ai', 'bot
 const DATA = process.env.RUST_BOT_DATA ?? path.resolve('db', 'rust-ai', 'data');
 const EVENT_DIRECTORY = process.env.RUST_BOT_EVENTS ?? path.resolve('db', 'rust-bot');
 
-// Search effort per strength (tuned in the lab repo; easy also plays with more randomness there)
+// Search effort per strength. The time limit keeps the bot about as quick as the TS AI on slow servers (AK1: 64
+// rollouts took 9 s for one decision): the search stops there with fewer rollouts. A started rollout still ends and
+// the first round over all candidates always runs, so a decision takes up to about twice the limit on AK1.
 const SETTINGS: Record<AiLevel, RustBotSettings> = {
-  easy: {rollouts: 4, threads: 1, horizon: 0, candidates: 4},
-  normal: {rollouts: 16, threads: 2, horizon: 0, candidates: 8},
-  hard: {rollouts: 64, threads: 2, horizon: 0, candidates: 10},
+  easy: {rollouts: 4, threads: 1, horizon: 0, candidates: 4, timeLimit: 300},
+  normal: {rollouts: 16, threads: 2, horizon: 0, candidates: 6, timeLimit: 900},
+  hard: {rollouts: 64, threads: 2, horizon: 0, candidates: 8, timeLimit: 1500},
 };
 
 type StoredEvent = {saveId: number, event: Record<string, unknown>};
