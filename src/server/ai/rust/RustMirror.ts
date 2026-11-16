@@ -14,9 +14,10 @@ import {RandomRecord, recordRandom, takeRandom} from './rustRandom';
 import {steps} from './rustSteps';
 import {responseFor} from './rustContract';
 
-// Where the program and its data are (only on servers that installed the Rust AI)
-const BINARY = process.env.RUST_BOT_BINARY;
-const DATA = process.env.RUST_BOT_DATA;
+// Where the program and its data are (only on servers that installed the Rust AI): by default in the database
+// folder, which survives updates of the server image, so installing is copying two things there
+const BINARY = process.env.RUST_BOT_BINARY ?? path.resolve('db', 'rust-ai', 'bot');
+const DATA = process.env.RUST_BOT_DATA ?? path.resolve('db', 'rust-ai', 'data');
 const EVENT_DIRECTORY = process.env.RUST_BOT_EVENTS ?? path.resolve('db', 'rust-bot');
 
 // Search effort per strength (tuned in the lab repo; easy also plays with more randomness there)
