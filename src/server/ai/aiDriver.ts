@@ -85,7 +85,7 @@ async function makeMove(player: IPlayer, input: PlayerInput, minimumMilliseconds
   } finally {
     // the log's "… is thinking" line goes; the move's own line follows
     if (player.getWaitingFor() !== input) {
-      stopThinking(player);
+      stopThinking(player, input);
     }
   }
 }
