@@ -2051,5 +2051,10 @@
   "New β": "Новая β",
   "New AI, learns from its own games. Still being tested.": "Новый ИИ, учится на своих партиях. Ещё тестируется.",
   "The new AI is not installed on this server": "Новый ИИ не установлен на этом сервере",
-  "The new AI cannot play these expansions yet": "Новый ИИ пока не умеет играть с этими дополнениями"
+  "The new AI cannot play these expansions yet": "Новый ИИ пока не умеет играть с этими дополнениями",
+  "${0} is thinking…": "${0} думает…",
+  "${0} is pondering…": "${0} размышляет…",
+  "${0} is choosing a card…": "${0} выбирает карту…",
+  "${0} is building something…": "${0} что-то строит…",
+  "${0} is playing…": "${0} ходит…"
 }

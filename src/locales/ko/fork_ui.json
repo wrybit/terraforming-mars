@@ -1432,5 +1432,10 @@
   "New β": "신규 β",
   "New AI, learns from its own games. Still being tested.": "새 AI, 자신의 게임에서 배웁니다. 아직 테스트 중입니다.",
   "The new AI is not installed on this server": "이 서버에는 새 AI가 설치되어 있지 않습니다",
-  "The new AI cannot play these expansions yet": "새 AI는 아직 이 확장을 플레이할 수 없습니다"
+  "The new AI cannot play these expansions yet": "새 AI는 아직 이 확장을 플레이할 수 없습니다",
+  "${0} is thinking…": "${0} 생각 중…",
+  "${0} is pondering…": "${0} 고민 중…",
+  "${0} is choosing a card…": "${0} 카드 고르는 중…",
+  "${0} is building something…": "${0} 무언가 짓는 중…",
+  "${0} is playing…": "${0} 플레이 중…"
 }

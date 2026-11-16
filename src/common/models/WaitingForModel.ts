@@ -1,4 +1,5 @@
 import {Color} from '../Color';
+import {AiThinkingModel} from '../ai/AiThinking';
 
 export type WaitingForModel = {
   result:
@@ -11,4 +12,7 @@ export type WaitingForModel = {
 
   /** List of players waiting for. */
   waitingFor: Array<Color>,
+
+  /** AI players deciding right now (the log shows a passing line); missing: none */
+  aiThinking?: Array<AiThinkingModel>,
 }

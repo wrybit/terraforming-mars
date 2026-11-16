@@ -64,6 +64,8 @@
               <LogActionRow v-else :data-log-row="rowKey(section, row)" :row="row" :viewModel="viewModel" />
               <LogAiRatings v-if="analysisGame && row.type !== 'phase'" :entries="rowRatings(section, row)" />
             </template>
+            <!-- AI players deciding right now: a passing line below the newest row, until their move arrives -->
+            <LogAiThinking v-if="section === sections[sections.length - 1] && !filterActive" :entries="aiThinkingEntries" :players="viewModel.players" />
             <!-- Games saved before the server logged the moment: the banner below the newest row -->
             <TerraformedBanner v-if="showsLateTerraformedBanner && section === sections[sections.length - 1]" :playerId="viewModel.id" />
           </section>
@@ -149,6 +151,9 @@ import {withViewerNamed} from '@/client/components/logpanel/logViewerName';
 import {AiFeedbackEntry} from '@/common/ai/AiFeedback';
 import {isTypingTarget} from '@/client/utils/typingTarget';
 import RowResizeHandle from '@/client/components/RowResizeHandle.vue';
+import LogAiThinking from '@/client/components/logpanel/LogAiThinking.vue';
+import {aiThinking} from '@/client/utils/aiThinking';
+import {AiThinkingModel} from '@/common/ai/AiThinking';
 
 // Touch: a second tap on the same AI row within this time opens the rating instead of the cards
 const DOUBLE_TAP_MS = 350;
@@ -303,6 +308,7 @@ export default defineComponent({
     flashTab: vFlashTab,
   },
   components: {
+    LogAiThinking,
     LogFilterBar,
     TerraformedBanner,
     LogMessageComponent,
@@ -864,6 +870,10 @@ export default defineComponent({
     },
   },
   computed: {
+    // Other players' AI deciding right now (the own seat is never an AI on this page)
+    aiThinkingEntries(): ReadonlyArray<AiThinkingModel> {
+      return aiThinking.value.filter((entry) => entry.color !== this.viewModel.thisPlayer?.color);
+    },
     // Terraformed, but the log has no line for the moment (games saved before the server wrote it)
     showsLateTerraformedBanner(): boolean {
       return this.viewModel.game.isTerraformed &&

@@ -12,6 +12,7 @@ import {Phase} from '../../common/Phase';
 import {takeAiDecisionSummary} from './decisionTrace';
 import {runWithAiDecision} from '../logs/aiDecisionContext';
 import {RustMirror} from './rust/RustMirror';
+import {startThinking, stopThinking} from './aiThinking';
 
 // Plays the moves of AI players on the server. Player.setWaitingFor reports every new input of
 // an AI player; the move is made a little later so humans can follow the game.
@@ -74,6 +75,17 @@ function isCurrent(player: IPlayer, input: PlayerInput): boolean {
 }
 
 async function makeMove(player: IPlayer, input: PlayerInput, minimumMilliseconds: number): Promise<void> {
+  try {
+    await decideAndMove(player, input, minimumMilliseconds);
+  } finally {
+    // the log's "… is thinking" line goes; the move's own line follows
+    if (player.getWaitingFor() !== input) {
+      stopThinking(player);
+    }
+  }
+}
+
+async function decideAndMove(player: IPlayer, input: PlayerInput, minimumMilliseconds: number): Promise<void> {
   if (!isCurrent(player, input)) {
     return;
   }
@@ -123,6 +135,10 @@ function scheduleAiMove(player: IPlayer): void {
   const pause = !hasHuman ? 0 : isActionMenu(input) ? ACTION_DELAY_MILLISECONDS : MOVE_DELAY_MILLISECONDS;
   // A short start delay, the rest of the pause is filled by the thinking time (makeMove).
   const startDelay = Math.min(pause, MOVE_DELAY_MILLISECONDS);
+  // Humans see that the AI is busy (game log), not only after its move
+  if (hasHuman) {
+    startThinking(player, input);
+  }
   setTimeout(() => {
     makeMove(player, input, pause - startDelay).catch((error) => console.error('AI move failed', error));
   }, startDelay);
