@@ -1,5 +1,6 @@
 import {ResearchStock} from './research/researchStock';
 import {AiLevel} from '../common/ai/AiLevel';
+import {AiEngine} from '../common/ai/AiEngine';
 import {PlayerId, isPlayerId} from '../common/Types';
 import {CardName} from '../common/cards/CardName';
 import {ICorporationCard} from './cards/corporation/ICorporationCard';
@@ -71,6 +72,8 @@ export interface IPlayer {
   handicap: number;
   /** Set for computer-controlled players: their strength. */
   aiLevel: AiLevel | undefined;
+  /** Program behind an AI player (undefined = TS AI) */
+  aiEngine: AiEngine | undefined;
 
   readonly game: IGame;
   tags: Tags;

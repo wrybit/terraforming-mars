@@ -4,7 +4,8 @@ import {PlayabilityCheck, cachedPlayability, recordPlayability} from './ai/copyL
 import * as constants from '../common/constants';
 import {PlayerId} from '../common/Types';
 import {AiLevel, isAiLevel} from '../common/ai/AiLevel';
-import {notifyAiPlayerWaiting} from './ai/aiHook';
+import {AiEngine, isAiEngine} from '../common/ai/AiEngine';
+import {notifyAiPlayerWaiting, notifyInputProcessed} from './ai/aiHook';
 import {MILESTONE_COST, PRODUCTION_MINIMUMS, REDS_RULING_POLICY_COST} from '../common/constants';
 import {cardsFromJSON, ceosFromJSON, corporationCardsFromJSON, newCorporationCard, preludesFromJSON} from './createCard';
 import {CardName} from '../common/cards/CardName';
@@ -101,6 +102,7 @@ export class Player implements IPlayer {
   public readonly id: PlayerId;
   /** Set for computer-controlled players: their strength. */
   public aiLevel: AiLevel | undefined = undefined;
+  public aiEngine: AiEngine | undefined = undefined;
   protected waitingFor?: PlayerInput;
   protected waitingForCb?: () => void;
   public game: IGame;
@@ -1751,6 +1753,8 @@ export class Player implements IPlayer {
     const waitingFor = this.waitingFor;
     const waitingForCb = this.waitingForCb;
     const requestId = this.requestId;
+    // the save this answer belongs to (games with Rust AI players replay their answers up to a loaded save)
+    const saveId = this.game.lastSaveId;
     this.waitingFor = undefined;
     this.waitingForCb = undefined;
     this.requestId = undefined;
@@ -1768,6 +1772,7 @@ export class Player implements IPlayer {
       this.requestId = requestId;
       throw err;
     }
+    notifyInputProcessed(this, waitingFor, input, saveId);
   }
 
   public getWaitingFor(): PlayerInput | undefined {
@@ -1915,6 +1920,7 @@ export class Player implements IPlayer {
       beginner: this.beginner,
       handicap: this.handicap,
       aiLevel: this.aiLevel,
+      aiEngine: this.aiEngine,
       timer: this.timer.serialize(),
       // Stats
       actionsTakenThisGame: this.actionsTakenThisGame,
@@ -1938,6 +1944,7 @@ export class Player implements IPlayer {
   public static deserialize(d: SerializedPlayer): Player {
     const player = new Player(d.name, d.color, d.beginner, Number(d.handicap), d.id);
     player.aiLevel = isAiLevel(d.aiLevel) ? d.aiLevel : undefined;
+    player.aiEngine = isAiEngine(d.aiEngine) ? d.aiEngine : undefined;
 
     player.actionsTakenThisGame = d.actionsTakenThisGame;
     player.actionsThisGeneration = new Set(d.actionsThisGeneration);

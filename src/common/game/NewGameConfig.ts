@@ -1,4 +1,5 @@
 import {AiLevel} from '../ai/AiLevel';
+import {AiEngine} from '../ai/AiEngine';
 import {BoardName} from '../boards/BoardName';
 import {CardName} from '../cards/CardName';
 import {ColonyName} from '../colonies/ColonyName';
@@ -17,6 +18,8 @@ export interface NewPlayerModel {
   first: boolean;
   /** Present for computer-controlled players. */
   aiLevel?: AiLevel;
+  /** Program behind an AI seat (default TS AI) */
+  aiEngine?: AiEngine;
 }
 
 export type EscapeVelocityOptions = {

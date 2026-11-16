@@ -1,3 +1,4 @@
+import {startGame} from '../ai/rust/startRustGame';
 import {aiUnsupportedReasons} from '../../common/ai/aiSupport';
 import {aiPlayerName, isAiLevel} from '../../common/ai/AiLevel';
 import * as responses from '../server/responses';
@@ -225,6 +226,7 @@ export class ApiCreateGame extends Handler {
         safeCast(generateRandomId('p'), isPlayerId),
       );
       player.aiLevel = aiLevel;
+      player.aiEngine = aiLevel !== undefined && p.aiEngine === 'rust' ? 'rust' : undefined;
       return player;
     });
     let firstPlayerIdx = 0;
@@ -257,7 +259,11 @@ export class ApiCreateGame extends Handler {
     } else {
       const seed = Math.random();
       const name = typeof gameReq.name === 'string' ? gameReq.name.trim().slice(0, GAME_NAME_MAX_LENGTH) : undefined;
-      game = Game.newInstance(gameId, players, players[firstPlayerIdx], spectatorId, gameOptions, seed, boardRng, name);
+      game = startGame(players, () => Game.newInstance(gameId, players, players[firstPlayerIdx], spectatorId, gameOptions, seed, boardRng, name));
+    }
+    // a cloned game cannot be mirrored by the Rust AI (its setup lies in the past): TS AI
+    if (gameOptions.clonedGamedId !== undefined && !gameOptions.clonedGamedId.startsWith('#')) {
+      players.forEach((player) => player.aiEngine = undefined);
     }
     ctx.gameLoader.add(game);
     // Only games that are actually created count against the quota.
