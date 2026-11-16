@@ -11,6 +11,7 @@ import {isActionMenu} from './gameCopy';
 import {Phase} from '../../common/Phase';
 import {takeAiDecisionSummary} from './decisionTrace';
 import {runWithAiDecision} from '../logs/aiDecisionContext';
+import {RustMirror} from './rust/RustMirror';
 
 // Plays the moves of AI players on the server. Player.setWaitingFor reports every new input of
 // an AI player; the move is made a little later so humans can follow the game.
@@ -47,12 +48,25 @@ function processWithFallback(player: IPlayer, input: PlayerInput, chosen: InputR
   console.warn(`AI player ${player.name} could not answer input ${input.type} in game ${player.game.id}`);
 }
 
-function choose(player: IPlayer, input: PlayerInput): InputResponse | undefined {
-  try {
-    return chooseResponse(input, player, player.aiLevel ?? 'normal');
-  } catch {
-    return undefined;
+type Choice = {chosen: InputResponse | undefined, summary: ReturnType<typeof takeAiDecisionSummary>};
+
+async function choose(player: IPlayer, input: PlayerInput): Promise<Choice> {
+  // Rust AI players: the Rust bot's answer; without one (not installed, lost the game) the TS AI moves
+  if (player.aiEngine === 'rust') {
+    const answer = await RustMirror.of(player.game)?.decide(player, input, player.aiLevel ?? 'normal');
+    if (answer !== undefined) {
+      return {chosen: answer, summary: undefined};
+    }
   }
+  let chosen: InputResponse | undefined;
+  try {
+    chosen = chooseResponse(input, player, player.aiLevel ?? 'normal');
+  } catch {
+    chosen = undefined;
+  }
+  // Analysis game: the lines this move logs point to the decision (options and values). Taken right after the
+  // decision: while a Rust bot thinks, other games' AI players decide too.
+  return {chosen, summary: takeAiDecisionSummary()};
 }
 
 function isCurrent(player: IPlayer, input: PlayerInput): boolean {
@@ -74,9 +88,12 @@ async function makeMove(player: IPlayer, input: PlayerInput, minimumMilliseconds
   // The thinking time counts towards the pause humans need to follow the game: before, the
   // rollouts (up to 4 s) came on top of the 2 s pause.
   const start = Date.now();
-  const chosen = choose(player, input);
-  // Analysis game: the lines this move logs point to the decision (options and values)
-  const summary = takeAiDecisionSummary();
+  const {chosen, summary} = await choose(player, input);
+  // the game may have moved on while the Rust bot was thinking (undo, reload)
+  const after = await GameLoader.getInstance().getGame(player.game.id);
+  if (!isCurrent(player, input) || (after !== undefined && after !== player.game)) {
+    return;
+  }
   const rest = minimumMilliseconds - (Date.now() - start);
   if (rest > 0) {
     await new Promise((resolve) => setTimeout(resolve, rest));

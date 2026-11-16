@@ -1357,5 +1357,10 @@
   "Some of the milestones you selected need expansions you have not enabled.": "Néhány kiválasztott mérföldkőhöz nem engedélyezett kiegészítő kell.",
   "Some of the awards you selected need expansions you have not enabled.": "Néhány kiválasztott díjhoz nem engedélyezett kiegészítő kell.",
   "Keyboard layout": "Billentyűzetkiosztás",
-  "Automatic (${0})": "Automatikus (${0})"
+  "Automatic (${0})": "Automatikus (${0})",
+  "Classic": "Klasszikus",
+  "New β": "Új β",
+  "New AI, learns from its own games. Still being tested.": "Új MI, a saját játszmáiból tanul. Még tesztelés alatt.",
+  "The new AI is not installed on this server": "Az új MI nincs telepítve ezen a szerveren",
+  "The new AI cannot play these expansions yet": "Az új MI még nem tudja játszani ezeket a kiegészítőket"
 }

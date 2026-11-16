@@ -419,9 +419,13 @@
                       <PlayerCube :color="color" :view="newPlayer.color === color ? 'slight' : 'top'" :size="newPlayer.color === color ? 17 : 16" animated />
                     </button>
                   </div>
-                  <div v-if="newPlayer.aiLevel !== undefined" class="create-game-ai-strength">
+                  <!-- Strength and which AI plays the seat (the classic TS AI or the new one, where the server has it) -->
+                  <div v-if="newPlayer.aiLevel !== undefined" class="create-game-ai-settings">
                     <span v-i18n>Strength</span>
                     <SegmentedControl v-model="newPlayer.aiLevel" :options="AI_LEVEL_OPTIONS" class="create-game-segmented--equal" />
+                    <span v-i18n>Version</span>
+                    <SegmentedControl :model-value="newPlayer.aiEngine ?? DEFAULT_AI_ENGINE" :options="aiEngineOptions"
+                      class="create-game-segmented--equal" @update:model-value="newPlayer.aiEngine = $event" />
                   </div>
                   <div class="create-game-player-extra">
                     <!-- The beginner corporation is a help for humans; AI players do not need it -->
@@ -484,7 +488,9 @@ import {ColumnCount, currentColumnCount, placementOf, SettingsCard, watchColumnC
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 import {drawDuneNames, withoutDrawnDuneNames} from '@/client/components/create/duneNames';
 import {describeFailure, failureFromResponse, failureOf, RequestFailedError} from '@/client/utils/requestFailure';
-import {AI_SUPPORTED_EXPANSIONS, aiUnsupportedReasons} from '@/common/ai/aiSupport';
+import {AI_SUPPORTED_EXPANSIONS, aiUnsupportedReasons, newAiUnsupportedReasons} from '@/common/ai/aiSupport';
+import {DEFAULT_AI_ENGINE} from '@/common/ai/AiEngine';
+import {newAiAvailable} from '@/client/utils/serverStatus';
 import {DUNE_BOARD, DUNE_BOARDS, Theme, isDuneBoard, themeAllowsExpansion} from '@/common/theme/Theme';
 import {activeTheme, applyTheme} from '@/client/theme/applyTheme';
 import {chosenTheme, rememberTheme} from '@/client/theme/themeChoice';
@@ -535,7 +541,7 @@ import NumberStepper from './NumberStepper.vue';
 import OptionRow from './OptionRow.vue';
 import SegmentedControl from './SegmentedControl.vue';
 import SwitchInput from './SwitchInput.vue';
-import {AGENDA_OPTIONS, AI_LEVEL_OPTIONS, DUNE_MILESTONE_OPTIONS, ExpansionChoice, FAN_EXPANSIONS, MILESTONE_OPTIONS, MANUAL_MILESTONE_OPTION, OFFICIAL_BOARDS, ALPHA_BOARDS, OFFICIAL_EXPANSIONS, PLAYER_COUNT_OPTIONS, RANDOM_BOARD_OPTIONS, SegmentOption, FAN_BOARDS} from './createGameChoices';
+import {AGENDA_OPTIONS, AI_ENGINE_OPTIONS, AI_LEVEL_OPTIONS, DUNE_MILESTONE_OPTIONS, ExpansionChoice, FAN_EXPANSIONS, MILESTONE_OPTIONS, MANUAL_MILESTONE_OPTION, OFFICIAL_BOARDS, ALPHA_BOARDS, OFFICIAL_EXPANSIONS, PLAYER_COUNT_OPTIONS, RANDOM_BOARD_OPTIONS, SegmentOption, FAN_BOARDS} from './createGameChoices';
 import {ExpansionGroup, ExpansionGrouping, ExpansionTile, groupExpansions, loadExpansionGrouping, saveExpansionGrouping} from './expansionGrouping';
 import {ContentLinePart, contentLine} from './expansionContentLine';
 import {ContentKey, TraitKey} from '@/common/game/expansionFacts';
@@ -976,6 +982,9 @@ export default defineComponent({
     PLAYER_COUNT_OPTIONS(): typeof PLAYER_COUNT_OPTIONS {
       return PLAYER_COUNT_OPTIONS;
     },
+    DEFAULT_AI_ENGINE(): typeof DEFAULT_AI_ENGINE {
+      return DEFAULT_AI_ENGINE;
+    },
     AI_LEVEL_OPTIONS(): typeof AI_LEVEL_OPTIONS {
       return AI_LEVEL_OPTIONS;
     },
@@ -1000,6 +1009,12 @@ export default defineComponent({
         }
         return {value: count, label: String(count)};
       });
+    },
+    // Version of an AI seat: the new AI only where the server has it and knows the settings; the hover says why not
+    aiEngineOptions(): ReadonlyArray<SegmentOption> {
+      const reason = !newAiAvailable.value ? 'The new AI is not installed on this server' :
+        newAiUnsupportedReasons({expansions: this.expansions}).length > 0 ? 'The new AI cannot play these expansions yet' : undefined;
+      return AI_ENGINE_OPTIONS.map((option) => option.value === 'rust' && reason !== undefined ? {...option, disabled: true, title: reason} : option);
     },
     // Settings the AI cannot handle (common/ai/aiSupport.ts), e.g. ['Colonies', 'Merger']
     aiBlockers(): Array<string> {

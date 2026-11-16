@@ -2046,5 +2046,10 @@
   "Some of the milestones you selected need expansions you have not enabled.": "Некоторые выбранные достижения требуют невключённых дополнений.",
   "Some of the awards you selected need expansions you have not enabled.": "Некоторые выбранные награды требуют невключённых дополнений.",
   "Keyboard layout": "Раскладка клавиатуры",
-  "Automatic (${0})": "Автоматически (${0})"
+  "Automatic (${0})": "Автоматически (${0})",
+  "Classic": "Классическая",
+  "New β": "Новая β",
+  "New AI, learns from its own games. Still being tested.": "Новый ИИ, учится на своих партиях. Ещё тестируется.",
+  "The new AI is not installed on this server": "Новый ИИ не установлен на этом сервере",
+  "The new AI cannot play these expansions yet": "Новый ИИ пока не умеет играть с этими дополнениями"
 }

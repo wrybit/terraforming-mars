@@ -1427,5 +1427,10 @@
   "Some of the milestones you selected need expansions you have not enabled.": "선택한 업적 중 일부는 활성화하지 않은 확장이 필요합니다.",
   "Some of the awards you selected need expansions you have not enabled.": "선택한 기업상 중 일부는 활성화하지 않은 확장이 필요합니다.",
   "Keyboard layout": "키보드 배열",
-  "Automatic (${0})": "자동 (${0})"
+  "Automatic (${0})": "자동 (${0})",
+  "Classic": "클래식",
+  "New β": "신규 β",
+  "New AI, learns from its own games. Still being tested.": "새 AI, 자신의 게임에서 배웁니다. 아직 테스트 중입니다.",
+  "The new AI is not installed on this server": "이 서버에는 새 AI가 설치되어 있지 않습니다",
+  "The new AI cannot play these expansions yet": "새 AI는 아직 이 확장을 플레이할 수 없습니다"
 }

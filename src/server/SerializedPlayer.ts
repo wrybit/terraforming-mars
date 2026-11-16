@@ -1,5 +1,6 @@
 import {ResearchStock} from './research/researchStock';
 import {AiLevel} from '../common/ai/AiLevel';
+import {AiEngine} from '../common/ai/AiEngine';
 import {PlayerId} from '../common/Types';
 import {CardName} from '../common/cards/CardName';
 import {Color} from '../common/Color';
@@ -54,6 +55,7 @@ export interface SerializedPlayer extends DeprecatedFields{
   globalParameterSteps: Record<GlobalParameter, number>;
   handicap: number;
   aiLevel?: AiLevel;
+  aiEngine?: AiEngine;
   hasIncreasedTerraformRatingThisGeneration: boolean;
   hasTurmoilScienceTagBonus: boolean;
   heat: number;

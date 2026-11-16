@@ -2159,5 +2159,10 @@
   "Some of the milestones you selected need expansions you have not enabled.": "部分所选里程碑需要未启用的扩展。",
   "Some of the awards you selected need expansions you have not enabled.": "部分所选奖项需要未启用的扩展。",
   "Keyboard layout": "键盘布局",
-  "Automatic (${0})": "自动（${0}）"
+  "Automatic (${0})": "自动（${0}）",
+  "Classic": "经典",
+  "New β": "新版 β",
+  "New AI, learns from its own games. Still being tested.": "新AI，从自己的对局中学习。仍在测试中。",
+  "The new AI is not installed on this server": "此服务器未安装新AI",
+  "The new AI cannot play these expansions yet": "新AI还不能玩这些扩展"
 }

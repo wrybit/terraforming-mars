@@ -97,6 +97,7 @@ import {byKey} from '@/common/utils/Ordering';
 import {sanitizeEscapeVelocityOptions} from '@/common/game/escapeVelocity';
 import {ColoniesHandler} from './colonies/ColoniesHandler';
 import {annotateLogMessage} from './logs/aiDecisionContext';
+import {notifyGameLoaded} from './ai/aiHook';
 
 // Can be overridden by tests
 let createGameLog: () => Array<LogMessage> = () => [];
@@ -1987,6 +1988,8 @@ export class Game implements IGame, Logger {
     if (game.phase === Phase.END) {
       GameLoader.getInstance().mark(game.id);
     }
+    // games with Rust AI players: their mirror follows the new object (ai/rust/RustMirror.ts)
+    notifyGameLoaded(game);
     return game;
   }
 

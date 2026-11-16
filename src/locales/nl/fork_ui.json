@@ -1802,5 +1802,10 @@
   "Some of the milestones you selected need expansions you have not enabled.": "Sommige gekozen mijlpalen hebben uitbreidingen nodig die niet aan staan.",
   "Some of the awards you selected need expansions you have not enabled.": "Sommige gekozen onderscheidingen hebben uitbreidingen nodig die niet aan staan.",
   "Keyboard layout": "Toetsenbordindeling",
-  "Automatic (${0})": "Automatisch (${0})"
+  "Automatic (${0})": "Automatisch (${0})",
+  "Classic": "Klassiek",
+  "New β": "Nieuw β",
+  "New AI, learns from its own games. Still being tested.": "Nieuwe AI, leert van eigen potjes. Nog in de testfase.",
+  "The new AI is not installed on this server": "De nieuwe AI is niet geïnstalleerd op deze server",
+  "The new AI cannot play these expansions yet": "De nieuwe AI kan deze uitbreidingen nog niet spelen"
 }
