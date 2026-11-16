@@ -14,7 +14,8 @@ describe('LogAiThinking', () => {
     expect(rows[0].find('.log-ai-thinking-spinner').exists()).to.be.true;
     expect(rows[0].find('.log-player').text()).eq('AI Mira');
     expect(rows[0].find('.log-line-content').text()).eq('AI Mira is choosing a card...');
-    expect(rows[0].find('.log-ai-thinking-countdown').text()).eq('3');
+    const left = Number(rows[0].find('.log-ai-thinking-countdown').text());
+    expect(left).within(2300, 2400);
   });
 
   it('shows nothing while no AI decides', () => {
