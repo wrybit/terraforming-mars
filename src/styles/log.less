@@ -1355,16 +1355,18 @@ each(@players, {
   animation-delay: 0.4s;
 }
 
-// Seconds left: at the row's end like the effect icons of the other rows
+// Milliseconds left: at the row's end like the effect icons of the other rows; fixed width, so the digits don't jump
 .log-ai-thinking-countdown {
   margin-left: auto;
+  min-width: 4ch;
+  text-align: right;
   font-style: normal;
   font-variant-numeric: tabular-nums;
   opacity: 0.7;
 }
 
 .log-ai-thinking-countdown::after {
-  content: " s";
+  content: " ms";
 }
 
 @keyframes log-ai-thinking-spin {

@@ -3,7 +3,7 @@
   <li v-for="entry in entries" :key="entry.color" :class="['log-ai-thinking', 'log-line--' + entry.color]" role="status">
     <span class="log-ai-thinking-spinner" aria-hidden="true"></span>
     <span class="log-line-content">{{ parts(entry).before }}<span class="log-player" :class="'player_bg_color_' + entry.color">{{ playerName(entry.color) }}</span>{{ parts(entry).after }}<span class="log-ai-thinking-dots" aria-hidden="true"><span>.</span><span>.</span><span>.</span></span></span>
-    <span v-if="secondsLeft(entry) > 0" class="log-ai-thinking-countdown">{{ secondsLeft(entry) }}</span>
+    <span v-if="millisecondsLeft(entry) > 0" class="log-ai-thinking-countdown">{{ millisecondsLeft(entry) }}</span>
   </li>
 </template>
 
@@ -18,7 +18,7 @@ type DataModel = {
   now: number,
   // Local end of the thinking time per seat: counted from the moment the server's answer arrived (no clock sync needed)
   deadlines: Map<string, {text: string, at: number}>,
-  timer: number | undefined,
+  frame: number | undefined,
 };
 
 export default defineComponent({
@@ -34,7 +34,7 @@ export default defineComponent({
     },
   },
   data(): DataModel {
-    return {now: Date.now(), deadlines: new Map(), timer: undefined};
+    return {now: Date.now(), deadlines: new Map(), frame: undefined};
   },
   watch: {
     entries: {
@@ -53,10 +53,17 @@ export default defineComponent({
     },
   },
   mounted() {
-    this.timer = window.setInterval(() => this.now = Date.now(), 200);
+    // Milliseconds count down smoothly: one update per frame
+    const tick = () => {
+      this.now = Date.now();
+      this.frame = window.requestAnimationFrame(tick);
+    };
+    tick();
   },
   unmounted() {
-    window.clearInterval(this.timer);
+    if (this.frame !== undefined) {
+      window.cancelAnimationFrame(this.frame);
+    }
   },
   methods: {
     playerName(color: Color): string {
@@ -67,9 +74,9 @@ export default defineComponent({
       const [before, after = ''] = translateText(entry.text).split('${0}');
       return {before, after};
     },
-    secondsLeft(entry: AiThinkingModel): number {
+    millisecondsLeft(entry: AiThinkingModel): number {
       const at = this.deadlines.get(entry.color)?.at ?? 0;
-      return Math.ceil((at - this.now) / 1000);
+      return Math.max(0, Math.round(at - this.now));
     },
   },
 });
