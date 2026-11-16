@@ -13,14 +13,19 @@ import {takeAiDecisionSummary} from './decisionTrace';
 import {runWithAiDecision} from '../logs/aiDecisionContext';
 import {RustMirror} from './rust/RustMirror';
 import {startThinking, stopThinking} from './aiThinking';
+import {AiLevel} from '../../common/ai/AiLevel';
 
 // Plays the moves of AI players on the server. Player.setWaitingFor reports every new input of
 // an AI player; the move is made a little later so humans can follow the game.
 
 // Follow-up questions (where to place a tile, how to pay) go fast; a new action waits longer so
 // a human can see what the AI just did (1 s was too fast to follow in test games).
-const MOVE_DELAY_MILLISECONDS = Number(process.env.AI_MOVE_DELAY_MS ?? 600);
-const ACTION_DELAY_MILLISECONDS = Number(process.env.AI_ACTION_DELAY_MS ?? 2000);
+// Thinking time per decision when humans play along (Jens: hard 3 s, normal 2 s, easy 1 s). The AI decides
+// within it and the move comes when it is up, so the log's countdown is right. Follow-up questions (where to
+// place a tile, how to pay) are part of the same move and get at most AI_MOVE_DELAY_MS.
+const ACTION_THINKING_MILLISECONDS = Number(process.env.AI_ACTION_DELAY_MS ?? 3000);
+const MOVE_DELAY_MILLISECONDS = Number(process.env.AI_MOVE_DELAY_MS ?? 1000);
+const LEVEL_SHARE: Record<AiLevel, number> = {easy: 1 / 3, normal: 2 / 3, hard: 1};
 const RANDOM_ATTEMPTS = 50;
 
 function processWithFallback(player: IPlayer, input: PlayerInput, chosen: InputResponse | undefined): void {
@@ -132,16 +137,16 @@ function scheduleAiMove(player: IPlayer): void {
   }
   // The pause only lets humans follow the game; without humans the AI plays at full speed.
   const hasHuman = player.game.players.some((candidate) => candidate.aiLevel === undefined);
-  const pause = !hasHuman ? 0 : isActionMenu(input) ? ACTION_DELAY_MILLISECONDS : MOVE_DELAY_MILLISECONDS;
-  // A short start delay, the rest of the pause is filled by the thinking time (makeMove).
-  const startDelay = Math.min(pause, MOVE_DELAY_MILLISECONDS);
-  // Humans see that the AI is busy (game log), not only after its move
+  const think = Math.round(ACTION_THINKING_MILLISECONDS * LEVEL_SHARE[player.aiLevel ?? 'normal']);
+  const pause = !hasHuman ? 0 : isActionMenu(input) ? think : Math.min(think, MOVE_DELAY_MILLISECONDS);
+  // Humans see that the AI is busy (game log, with countdown), not only after its move
   if (hasHuman) {
-    startThinking(player, input);
+    startThinking(player, input, pause);
   }
+  // Started on the next tick: the request that led here finishes first. The thinking fills the pause (makeMove).
   setTimeout(() => {
-    makeMove(player, input, pause - startDelay).catch((error) => console.error('AI move failed', error));
-  }, startDelay);
+    makeMove(player, input, pause).catch((error) => console.error('AI move failed', error));
+  }, 0);
 }
 
 export function installAiDriver(): void {

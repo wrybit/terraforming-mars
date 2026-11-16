@@ -927,6 +927,12 @@ export default defineComponent({
     },
   },
   watch: {
+    // The AI's passing line appears and goes without a new log entry: keep the end in view while the reader follows it
+    aiThinkingEntries(): void {
+      if (this.following) {
+        this.$nextTick(() => this.restorePosition());
+      }
+    },
     // Keep the filter for the next remount; changing it starts at the newest matching entries
     logFilter(filter: LogFilter) {
       savedFilter = {id: this.viewModel.id, filter};

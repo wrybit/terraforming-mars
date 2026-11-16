@@ -1333,12 +1333,12 @@ each(@players, {
   color: #8b90a3;
 }
 
-// AI deciding right now: a passing row with a small spinner, replaced by the move's own row
+// AI deciding right now: a passing row with a spinner, animated dots and a countdown, replaced by the move's own row
 .log-panel li.log-ai-thinking {
   display: flex;
   align-items: center;
   gap: 6px;
-  opacity: 0.8;
+  opacity: 0.85;
   font-style: italic;
 }
 
@@ -1352,14 +1352,53 @@ each(@players, {
   animation: log-ai-thinking-spin 0.8s linear infinite;
 }
 
+.log-ai-thinking-dots span {
+  animation: log-ai-thinking-dot 1.2s infinite;
+  opacity: 0.2;
+}
+
+.log-ai-thinking-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.log-ai-thinking-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+// Seconds left: at the row's end like the effect icons of the other rows
+.log-ai-thinking-countdown {
+  margin-left: auto;
+  font-style: normal;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.7;
+}
+
+.log-ai-thinking-countdown::after {
+  content: " s";
+}
+
 @keyframes log-ai-thinking-spin {
   to {
     transform: rotate(360deg);
   }
 }
 
+@keyframes log-ai-thinking-dot {
+  0%, 20% {
+    opacity: 0.2;
+  }
+  40%, 100% {
+    opacity: 1;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .log-ai-thinking-spinner {
     animation-duration: 2.4s;
+  }
+
+  .log-ai-thinking-dots span {
+    animation: none;
+    opacity: 1;
   }
 }
