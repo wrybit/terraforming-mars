@@ -22,6 +22,10 @@ function menuIndex(options: Array<any>, option: string, choice: ContractChoice =
   if (option === 'Bazaar: buy' && choice.ware !== undefined) {
     return titles.findIndex((title) => title === `Bazaar: buy ${choice.ware}` || title.startsWith(`Bazaar: buy ${choice.ware} for `));
   }
+  // CHOAM: a single move may stand in the menu itself ("CHOAM: trade with the guild") instead of a CHOAM sub-menu
+  if (option === 'CHOAM' && typeof choice.name === 'string' && titles.includes(choice.name)) {
+    return titles.indexOf(choice.name);
+  }
   const matches = (title: string) => {
     switch (option) {
     case 'Pass': return title === 'Pass for this generation' || title.startsWith('Don\'t');
@@ -164,6 +168,9 @@ function innerResponse(option: any, choice: ContractChoice, chain: Array<Contrac
     return {type: 'option'};
   }
   if (choice.kind === 'menu') {
+    if (choice.option === 'CHOAM' && titleOf(option) === choice.name) {
+      return menuLeaf(option, choice);
+    }
     if (choice.option === 'Trade with a colony tile' && option.type === 'and') {
       return tradeResponse(option, choice);
     }
