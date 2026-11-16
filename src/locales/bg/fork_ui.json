@@ -2143,5 +2143,7 @@
   "${0} is reading the fine print": "${0} чете дребния шрифт",
   "${0} is building something": "${0} строи нещо",
   "${0} is looking for a good spot": "${0} търси добро място",
-  "${0} is surveying Mars": "${0} проучва Марс"
+  "${0} is surveying Mars": "${0} проучва Марс",
+  "Track +${0} before trading": "Писта +${0} преди търговия",
+  "optional": "по избор"
 }

@@ -251,6 +251,7 @@ export class Server {
       cardsInHandNbr: hidden?.cardsInHand ?? player.cardsInHand.length,
       citiesCount: game.board.getCities(player).length,
       coloniesCount: player.getColoniesCount(),
+      colonyTradeOffset: player.colonies.tradeOffset,
       color: player.color,
       energy: hidden?.energy ?? player.energy,
       energyProduction: player.production.energy,

@@ -2461,5 +2461,7 @@
   "${0} is reading the fine print": "${0} legge le clausole",
   "${0} is building something": "${0} sta costruendo qualcosa",
   "${0} is looking for a good spot": "${0} cerca un buon posto",
-  "${0} is surveying Mars": "${0} esplora Marte"
+  "${0} is surveying Mars": "${0} esplora Marte",
+  "Track +${0} before trading": "Tracciato +${0} prima di commerciare",
+  "optional": "facoltativo"
 }

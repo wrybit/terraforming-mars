@@ -1822,5 +1822,7 @@
   "${0} is reading the fine print": "${0} leest de kleine lettertjes",
   "${0} is building something": "${0} bouwt iets",
   "${0} is looking for a good spot": "${0} zoekt een goede plek",
-  "${0} is surveying Mars": "${0} verkent Mars"
+  "${0} is surveying Mars": "${0} verkent Mars",
+  "Track +${0} before trading": "Spoor +${0} voor de handel",
+  "optional": "optioneel"
 }

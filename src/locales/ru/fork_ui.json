@@ -2066,5 +2066,7 @@
   "${0} is reading the fine print": "${0} читает мелкий шрифт",
   "${0} is building something": "${0} что-то строит",
   "${0} is looking for a good spot": "${0} ищет хорошее место",
-  "${0} is surveying Mars": "${0} обследует Марс"
+  "${0} is surveying Mars": "${0} обследует Марс",
+  "Track +${0} before trading": "Трек +${0} перед торговлей",
+  "optional": "необязательно"
 }

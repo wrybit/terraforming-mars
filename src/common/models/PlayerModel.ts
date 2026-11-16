@@ -51,6 +51,8 @@ export type PublicPlayerModel = {
   cardsInHandNbr: number;
   citiesCount: number;
   coloniesCount: number;
+  // Steps the colony track rises before this player's trade (Trade Envoys, Trading Colony, L1 Trade Terminal)
+  colonyTradeOffset?: number;
   color: Color;
   deltaProject?: DeltaProjectPlayerModel;
   energy: number;

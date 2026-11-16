@@ -1447,5 +1447,7 @@
   "${0} is reading the fine print": "${0} 작은 글씨를 읽는 중",
   "${0} is building something": "${0} 무언가 짓는 중",
   "${0} is looking for a good spot": "${0} 좋은 자리를 찾는 중",
-  "${0} is surveying Mars": "${0} 화성을 측량하는 중"
+  "${0} is surveying Mars": "${0} 화성을 측량하는 중",
+  "Track +${0} before trading": "교역 전 트랙 +${0}",
+  "optional": "선택 사항"
 }

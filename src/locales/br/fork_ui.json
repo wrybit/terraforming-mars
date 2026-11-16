@@ -2355,5 +2355,7 @@
   "${0} is reading the fine print": "${0} lê as letras miúdas",
   "${0} is building something": "${0} está construindo algo",
   "${0} is looking for a good spot": "${0} procura um bom lugar",
-  "${0} is surveying Mars": "${0} explora Marte"
+  "${0} is surveying Mars": "${0} explora Marte",
+  "Track +${0} before trading": "Trilha +${0} antes de negociar",
+  "optional": "opcional"
 }

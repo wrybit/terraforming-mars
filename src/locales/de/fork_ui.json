@@ -970,5 +970,6 @@
   "${0} is reading the fine print": "${0} liest das Kleingedruckte",
   "${0} is building something": "${0} baut gerade was",
   "${0} is looking for a good spot": "${0} sucht einen guten Platz",
-  "${0} is surveying Mars": "${0} vermisst den Mars"
+  "${0} is surveying Mars": "${0} vermisst den Mars",
+  "Track +${0} before trading": "Leiste +${0} vor dem Handel"
 }

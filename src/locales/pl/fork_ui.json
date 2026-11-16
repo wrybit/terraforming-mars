@@ -1993,5 +1993,7 @@
   "${0} is reading the fine print": "${0} czyta drobny druk",
   "${0} is building something": "${0} coś buduje",
   "${0} is looking for a good spot": "${0} szuka dobrego miejsca",
-  "${0} is surveying Mars": "${0} bada Marsa"
+  "${0} is surveying Mars": "${0} bada Marsa",
+  "Track +${0} before trading": "Tor +${0} przed handlem",
+  "optional": "opcjonalnie"
 }
