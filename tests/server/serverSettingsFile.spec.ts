@@ -47,6 +47,27 @@ describe('serverSettingsFile', () => {
     expect(value('SERVER_NAME')).is.undefined;
   });
 
+  it('applies live settings at once, others only after a restart', () => {
+    const previousOff = process.env.NEW_AI_OFF;
+    const previousName = process.env.SERVER_NAME;
+    try {
+      delete process.env.NEW_AI_OFF;
+      writeServerSettings({NEW_AI_OFF: 'true', SERVER_NAME: 'Live probe'});
+      expect(process.env.NEW_AI_OFF).eq('true');
+      expect(process.env.SERVER_NAME).eq(previousName);
+      const state = readServerSettings().settings.find((setting) => setting.key === 'NEW_AI_OFF');
+      expect(state?.running).eq('true');
+      writeServerSettings({NEW_AI_OFF: ''});
+      expect(process.env.NEW_AI_OFF).is.undefined;
+    } finally {
+      if (previousOff === undefined) {
+        delete process.env.NEW_AI_OFF;
+      } else {
+        process.env.NEW_AI_OFF = previousOff;
+      }
+    }
+  });
+
   it('refuses unknown keys', () => {
     expect(() => writeServerSettings({PATH: '/tmp'})).to.throw('unknown setting PATH');
   });
