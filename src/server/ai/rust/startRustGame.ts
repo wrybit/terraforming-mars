@@ -2,7 +2,7 @@
 // Rust AI or the Rust AI does not know the setup, those players are TS AI players.
 import {IGame} from '../../IGame';
 import {IPlayer} from '../../IPlayer';
-import {RustMirror, rustAiInstalled} from './RustMirror';
+import {RustMirror, rustAiOffered} from './RustMirror';
 import {recordSetup} from './rustRandom';
 import {rustOptionsText, setupOf} from './rustSetup';
 
@@ -13,8 +13,8 @@ export function startGame(players: ReadonlyArray<IPlayer>, create: () => IGame):
   }
   const {result: game, duneDraws} = recordSetup(create);
   const options = rustOptionsText(game.gameOptions, game.players.length);
-  if (!rustAiInstalled() || 'unsupported' in options) {
-    const reason = 'unsupported' in options ? options.unsupported : 'not installed';
+  if (!rustAiOffered() || 'unsupported' in options) {
+    const reason = 'unsupported' in options ? options.unsupported : 'not installed or switched off';
     console.warn(`Rust AI in game ${game.id}: ${reason}; its players are TS AI players`);
     rustPlayers.forEach((player) => player.aiEngine = undefined);
     return game;

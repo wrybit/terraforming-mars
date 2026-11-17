@@ -1,0 +1,292 @@
+// Decision log of a self-play game of the new AI (components/decisionLog/). Proximity: options and state lines of a
+// block sit close together, blocks of one generation a little apart, generations clearly apart behind their own bar.
+
+@decision-card: #1d2029;
+@decision-card-raised: #252935;
+@decision-line: #343a49;
+@decision-muted: #9aa1b2;
+@decision-good: #3fb871;
+@decision-close: #e3b341;
+@decision-drop: #e5534b;
+@decision-single: #6d7486;
+@decision-best: #f2c230;
+@decision-rule: #4f9cff;
+@decision-block-gap: 6px;
+@decision-generation-gap: 32px;
+
+.decision-seat-0 { background: #2f6fe0; }
+.decision-seat-1 { background: #c0392b; }
+.decision-seat-2 { background: #b8920b; }
+.decision-seat-3 { background: #27ae60; }
+.decision-seat-4 { background: #6c7a7d; }
+
+// Full width like the admin pages: the app's main column keeps a margin for its side menu otherwise
+.main-container:has(.decision-log) {
+  margin-left: 0;
+  max-width: none;
+  padding: 0;
+}
+
+.decision-log {
+  min-height: 100vh;
+  background: #14161c;
+  color: #e8eaf0;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.decision-log__head {
+  position: sticky;
+  top: 0;
+  z-index: 6;
+  padding: 12px 16px 0;
+  background: rgba(16, 18, 23, 0.94);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid @decision-line;
+}
+
+.decision-log__title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 16px;
+
+  h1 { margin: 0; font-size: 18px; }
+}
+
+.decision-log__meta { flex: 1 1 320px; color: @decision-muted; font-size: 13px; }
+// Navigation on the right like the other pages
+.decision-log__back { margin-left: auto; }
+
+.decision-log__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.decision-log__search {
+  flex: 1 1 200px;
+  min-width: 140px;
+  padding: 6px 10px;
+  border: 1px solid @decision-line;
+  border-radius: 8px;
+  background: @decision-card;
+  color: inherit;
+}
+
+.decision-log__chip {
+  padding: 4px 10px;
+  border: 1px solid @decision-line;
+  border-radius: 999px;
+  background: @decision-card;
+  color: inherit;
+  font-size: 12px;
+  cursor: pointer;
+
+  &[aria-pressed="false"] { opacity: 0.45; }
+}
+
+.decision-log__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  margin-top: 8px;
+  color: @decision-muted;
+  font-size: 12px;
+
+  > span { display: inline-flex; align-items: center; gap: 4px; }
+}
+
+.decision-legend-swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  &--good { background: @decision-good; }
+  &--close { background: @decision-close; }
+  &--drop { background: @decision-drop; }
+  &--single { background: @decision-single; }
+}
+
+.decision-log__lanes {
+  display: grid;
+  grid-template-columns: repeat(var(--decision-seats), minmax(0, 1fr));
+  gap: @decision-block-gap 12px;
+}
+
+.decision-log__lane-heads { margin-top: 10px; }
+
+.decision-lane-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 10px 10px 0 0;
+  color: #fff;
+  font-weight: 600;
+
+  small { font-weight: 400; opacity: 0.85; }
+}
+
+.decision-log__note { padding: 24px 16px; color: @decision-muted; }
+.decision-log__body { padding: 0 16px 60px; }
+
+.decision-generation { margin-top: @decision-generation-gap; }
+
+// Generation bar: own surface, sticks below the head until the next generation pushes it away
+.decision-generation__head {
+  position: sticky;
+  top: var(--decision-head, 0);
+  z-index: 4;
+  margin: 0 0 12px;
+  padding: 8px 14px;
+  border: 1px solid #4a5270;
+  border-radius: 8px;
+  background: #2b3147;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.45);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.decision-block {
+  min-width: 0;
+  padding: 10px 12px;
+  border: 1px solid @decision-line;
+  border-left: 4px solid @decision-single;
+  border-radius: 10px;
+  background: @decision-card;
+
+  &--good { border-left-color: @decision-good; }
+  &--close { border-left-color: @decision-close; }
+  &--drop { border-left-color: @decision-drop; }
+  &--single { padding: 6px 12px; }
+  &--single .decision-block__state { display: none; }
+}
+
+.decision-block__top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.decision-block__kind { color: @decision-muted; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; }
+.decision-block__owner { display: none; }
+.decision-block__badges { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 4px; }
+.decision-block__move { display: flex; align-items: center; gap: 6px; margin: 2px 0 6px; font-weight: 600; overflow-wrap: anywhere; }
+
+// Effect chips of the game log (LogEffectIcon) on the right of a move, a little smaller in the option bars
+.decision-effects { display: inline-flex; flex: none; align-items: center; gap: 4px; margin-left: auto; font-weight: 400; }
+.decision-option .decision-effects { position: relative; z-index: 1; font-size: 11px; }
+// Card type stripe as in the game log rows
+.decision-stripe { flex: none; width: 4px; height: 1em; border-radius: 2px; }
+.decision-block__note { margin-top: 4px; color: @decision-muted; font-size: 12px; b { color: #e8eaf0; } }
+.decision-block__left { opacity: 0.6; }
+.decision-block__taken { color: #e8eaf0; font-weight: 600; }
+// Card names show the card on hover
+.decision-move-text__card,
+.decision-block__note .ai-card-hover--card { text-decoration: underline dotted rgba(232, 234, 240, 0.45); text-underline-offset: 2px; cursor: help; }
+
+// Kind of move: own background each (colour stays on the left edge for the rating), legend chips the same
+.decision-move--start { background: #262a45; }
+.decision-move--draft { background: #1c2d45; }
+.decision-move--buy { background: #173a38; }
+.decision-move--play { background: #33244a; }
+.decision-move--standard { background: #3d2e17; }
+.decision-move--sell { background: #44212a; }
+.decision-move--cardAction { background: #1d3a24; }
+.decision-move--claim { background: #403a14; }
+.decision-move--convert { background: #163543; }
+.decision-move--space { background: #2e3036; }
+.decision-move--pass { background: #18191d; }
+.decision-move--choice { background: @decision-card; }
+
+.decision-legend-move {
+  padding: 2px 8px;
+  border: 1px solid @decision-line;
+  border-radius: 6px;
+  color: #e8eaf0;
+}
+
+.decision-block__raw,
+.decision-block__more {
+  padding: 1px 4px;
+  border: 0;
+  border-radius: 4px;
+  background: none;
+  cursor: pointer;
+}
+.decision-block__raw { color: @decision-muted; font: 11px ui-monospace, monospace; &:hover, &[aria-pressed="true"] { background: @decision-card-raised; color: #e8eaf0; } }
+.decision-block__more { padding-left: 0; color: #7c83ff; font-size: 12px; }
+
+.decision-block__state {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid @decision-line;
+  color: @decision-muted;
+  font-size: 12px;
+  b { color: #e8eaf0; }
+}
+
+.decision-block__json {
+  max-height: 240px;
+  margin: 6px 0 0;
+  padding: 8px;
+  overflow: auto;
+  border-radius: 6px;
+  background: #0e1015;
+  font-size: 11px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.decision-badge {
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: @decision-card-raised;
+  color: @decision-muted;
+  font-size: 11px;
+  white-space: nowrap;
+  &--good { background: #1f3a2a; color: @decision-good; }
+  &--close { background: #3d3418; color: @decision-close; }
+  &--drop { background: #45201e; color: @decision-drop; }
+}
+
+.decision-options { display: grid; gap: 3px; margin-top: 4px; }
+
+.decision-option {
+  display: grid;
+  grid-template-columns: 1fr 96px;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.decision-option__bar { position: relative; display: flex; align-items: center; gap: 8px; min-width: 0; padding: 3px 8px; overflow: hidden; border-radius: 6px; background: @decision-card-raised; }
+.decision-option__fill { position: absolute; inset: 0 auto 0 0; background: #3a4052; }
+.decision-option--played .decision-option__fill { background: #2b5b3d; }
+.decision-option__text { position: relative; z-index: 1; flex: 1 1 auto; min-width: 0; display: flex; align-items: center; gap: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.decision-option__value { color: @decision-muted; text-align: right; font-variant-numeric: tabular-nums; }
+.decision-option--played .decision-option__value { color: @decision-good; font-weight: 600; }
+
+.decision-mark {
+  flex: none;
+  &--best { fill: @decision-best; }
+  &--rule { fill: @decision-rule; }
+  &--played { fill: @decision-good; }
+  .decision-mark__cut { fill: none; stroke: #14161c; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+}
+
+@media (max-width: @max-below-tablet) {
+  // Phone: one column, the player is a coloured tag in each block; the head scrolls away, the generation stays
+  .decision-log__head { position: static; padding: 10px 8px 8px; }
+  .decision-log { --decision-head: 0px !important; }
+  .decision-log__lane-heads { display: none; }
+  .decision-log__body { padding: 0 8px 60px; }
+  .decision-log__lanes { grid-template-columns: 1fr; }
+  .decision-log__lanes .decision-block { grid-column: 1 !important; }
+  .decision-block { padding: 8px; }
+  .decision-block__owner { display: inline-block; margin-right: 6px; padding: 1px 7px; border-radius: 999px; color: #fff; font-weight: 600; }
+  .decision-option { grid-template-columns: 1fr 64px; }
+}

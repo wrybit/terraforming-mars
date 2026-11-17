@@ -115,5 +115,16 @@ export function writeServerSettings(update: ServerSettingsUpdate): ServerSetting
     }
   }
   writeValues(update);
+  // Sofort wirksame Schalter (z. B. neue AI aus) gelten ohne Neustart, damit der Admin schnell reagieren kann
+  for (const [key, value] of Object.entries(update)) {
+    if (serverSettingDefinition(key)?.live === true) {
+      if (value === null || value === '') {
+        delete process.env[key];
+      } else {
+        process.env[key] = value;
+      }
+      runningValues.set(key, process.env[key]);
+    }
+  }
   return readServerSettings();
 }

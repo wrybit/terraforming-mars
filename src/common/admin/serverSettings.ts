@@ -34,6 +34,8 @@ export type ServerSettingDefinition = {
    * together with another one (the icon in the chosen color and the other way round)
    */
   choiceImage?: (value: string, values: Readonly<Record<string, string>>) => string,
+  /** Takes effect when saved, without a restart (the server reads it at every use) */
+  live?: boolean,
 };
 
 // Favicon choices: the default is stored as '' (no line in the .env)
@@ -83,6 +85,8 @@ const BASE_SETTINGS: ReadonlyArray<ServerSettingDefinition> = [
     description: 'Where to place a tile, how to pay … Empty: 1000.'},
   {key: 'AI_ACTION_DELAY_MS', group: 'AI opponents', kind: 'number', label: 'Pause before a new action (ms)',
     description: 'Thinking time of a hard AI (normal: two thirds, easy: one third). Empty: 3000.'},
+  {key: 'NEW_AI_OFF', group: 'AI opponents', kind: 'toggle', live: true, label: 'Switch off the new AI',
+    description: 'New games cannot choose the new AI. Games already running keep it. Takes effect at once.'},
   {key: 'AI_DECISION_LOG_DIR', group: 'AI opponents', kind: 'text', label: 'Folder for decision logs',
     description: 'The AI writes every decision there (for training). Empty: no logs.'},
   {key: 'AI_TRAINING_FEED', group: 'AI opponents', kind: 'text', label: 'AI test runs in the lobby',

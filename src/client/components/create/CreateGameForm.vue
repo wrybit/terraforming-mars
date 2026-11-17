@@ -1012,7 +1012,7 @@ export default defineComponent({
     },
     // Version of an AI seat: the new AI only where the server has it and knows the settings; the hover says why not
     aiEngineOptions(): ReadonlyArray<SegmentOption> {
-      const reason = !newAiAvailable.value ? 'The new AI is not installed on this server' :
+      const reason = !newAiAvailable.value ? 'The new AI is not available on this server' :
         newAiUnsupportedReasons({expansions: this.expansions}).length > 0 ? 'The new AI cannot play these expansions yet' : undefined;
       return AI_ENGINE_OPTIONS.map((option) => option.value === 'rust' && reason !== undefined ? {...option, disabled: true, title: reason} : option);
     },

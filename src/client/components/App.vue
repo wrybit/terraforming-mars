@@ -59,6 +59,7 @@
       <CardList v-else-if="screen === 'cards'" :key="'cards-' + themeKey" />
       <StatsPage v-else-if="screen === 'stats'" :key="'stats-' + themeKey" />
       <AdminHome v-else-if="screen === 'admin-settings'" />
+      <DecisionLogPage v-else-if="screen === 'decision-log'" />
       <AdminRaw v-else-if="screen === 'admin-raw'" />
       <AdminMusic v-else-if="screen === 'admin-music'" />
       <AdminPush v-else-if="screen === 'admin-push'" />
@@ -87,6 +88,8 @@ import {installHotkeys} from '@/client/hotkeys/hotkeyDispatcher';
 import {defineAsyncComponent, defineComponent} from 'vue';
 import * as constants from '@/common/constants';
 
+// Decision log of the new AI's self-play games: admins only, so in its own chunk
+const DecisionLogPage = defineAsyncComponent(() => import(/* webpackChunkName: "decision-log" */ '@/client/components/decisionLog/DecisionLogPage.vue'));
 const AdminHome = defineAsyncComponent(() => import(/* webpackChunkName: "admin" */ '@/client/components/admin/AdminHome.vue'));
 const AdminRaw = defineAsyncComponent(() => import(/* webpackChunkName: "admin" */ '@/client/components/admin/AdminRaw.vue'));
 const AdminMusic = defineAsyncComponent(() => import(/* webpackChunkName: "admin" */ '@/client/components/admin/AdminMusic.vue'));
@@ -147,6 +150,7 @@ type Screen = 'admin-settings' |
             'admin-players' |
             'admin-dashboard' |
             'cards' |
+            'decision-log' |
             'empty' |
             'games-overview' |
             'help' |
@@ -235,6 +239,7 @@ export default defineComponent({
     StatsPage,
     HelpOverlay,
     AdminHome,
+    DecisionLogPage,
     AdminRaw,
     AdminMusic,
     AdminPush,
@@ -448,6 +453,8 @@ export default defineComponent({
       app.screen = 'help';
     } else if (currentPathname === paths.SPECTATOR) {
       app.updateSpectator();
+    } else if (currentPathname === paths.DECISION_LOG) {
+      app.screen = 'decision-log';
     } else if (currentPathname === paths.ADMIN_SETTINGS) {
       app.screen = 'admin-settings';
     } else if (currentPathname === paths.ADMIN_RAW) {

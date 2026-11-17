@@ -24,12 +24,12 @@ describe('SegmentedControl', () => {
   });
 
   it('keeps a blocked option with a reason hoverable but never emits it', async () => {
-    const options = [{value: 'ts', label: 'Classic'}, {value: 'rust', label: 'New β', disabled: true, title: 'The new AI is not installed on this server'}];
+    const options = [{value: 'ts', label: 'Classic'}, {value: 'rust', label: 'New β', disabled: true, title: 'The new AI is not available on this server'}];
     const wrapper = mount(SegmentedControl, {...globalConfig, props: {options, modelValue: 'ts'}});
     const blocked = wrapper.findAll('button')[1];
     expect(blocked.attributes('disabled')).is.undefined;
     expect(blocked.attributes('aria-disabled')).eq('true');
-    expect(blocked.attributes('title')).eq('The new AI is not installed on this server');
+    expect(blocked.attributes('title')).eq('The new AI is not available on this server');
     await blocked.trigger('click');
     expect(wrapper.emitted('update:modelValue')).is.undefined;
   });

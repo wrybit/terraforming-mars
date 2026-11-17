@@ -66,4 +66,9 @@ export const paths = {
   SPECTATOR: 'spectator',
   STATS: 'stats',
   THE_END: 'the-end',
+  // Archived self-play game of the new AI: imported on first use, then its result page (aiTraining/selfplayArchive.ts)
+  AI_TRAINING_GAME: 'ai-training-game',
+  // Decision log of an archived self-play game, admins only
+  DECISION_LOG: 'decision-log',
+  API_DECISION_LOG: 'api/decision-log',
 } as const;
