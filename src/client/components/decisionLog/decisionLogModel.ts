@@ -63,7 +63,7 @@ export type DecisionRecord = {
 /** Kinds of decisions in the order of the filter chips */
 export const DECISION_KINDS = ['initial', 'draft', 'research', 'action', 'space', 'cards', 'other'] as const;
 const KIND_LABELS: Record<string, string> = {
-  initial: 'Game start', draft: 'Draft round', research: 'Buying cards', action: 'Action', space: 'Board space', cards: 'Cards', other: 'Choice',
+  initial: 'Game start', draft: 'Draft pick', research: 'Buying cards', action: 'Action', space: 'Board space', cards: 'Cards', other: 'Choice',
 };
 /** Name of a seat: all players of a self-play game are the new AI */
 export const seatName = (seat: number): string => translateTextWithParams('AI ${0}', [String(seat + 1)]);
@@ -192,7 +192,7 @@ export const moveText = (move: DecisionMove, kind: string): string => moveParts(
 export type MoveCategory = 'start' | 'draft' | 'buy' | 'play' | 'standard' | 'sell' | 'cardAction' | 'claim' | 'convert' | 'space' | 'pass' | 'choice';
 export const MOVE_CATEGORIES: ReadonlyArray<MoveCategory> = ['start', 'draft', 'buy', 'play', 'standard', 'sell', 'cardAction', 'claim', 'convert', 'space', 'pass', 'choice'];
 export const MOVE_CATEGORY_LABELS: Record<MoveCategory, string> = {
-  start: 'Game start', draft: 'Draft round', buy: 'Buying cards', play: 'Playing a card', standard: 'Standard project', sell: 'Selling cards',
+  start: 'Game start', draft: 'Draft pick', buy: 'Buying cards', play: 'Playing a card', standard: 'Standard project', sell: 'Selling cards',
   cardAction: 'Card action', claim: 'Milestone or award', convert: 'Converting plants or heat', space: 'Board space', pass: 'Passing', choice: 'Choice',
 };
 const MENU_CATEGORIES: Record<string, MoveCategory> = {
