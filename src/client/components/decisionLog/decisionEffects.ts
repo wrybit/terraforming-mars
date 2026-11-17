@@ -8,7 +8,7 @@ import {DecisionMove, DecisionPlayer} from '@/client/components/decisionLog/deci
 // chips of the game log. Card data comes from this game server's card manifest, so it matches the cards on hover.
 
 // Payment fields of the record -> icon names of the game log (log.less)
-const PAYMENT_ICONS: Record<string, string> = {megacredits: 'megacredit', steel: 'steel', titanium: 'titanium', heat: 'heat'};
+const PAYMENT_ICONS: Record<string, string> = {megacredits: 'megacredit', steel: 'steel', titanium: 'titanium', heat: 'heat', plants: 'plant', microbes: 'microbe', floaters: 'floater'};
 
 // Standard projects of the base game: what they bring besides their price (paid as payment)
 const STANDARD_PROJECT_GAINS: Record<string, ReadonlyArray<LogEffect>> = {
@@ -41,6 +41,12 @@ export function moveEffects(move: DecisionMove, kind: string): Array<LogEffect> 
   if (kind === 'research') {
     const count = move.cards?.length ?? 0;
     return count === 0 ? [] : [{resource: 'card', amount: count}, {resource: 'megacredit', amount: -3 * count, cost: true}];
+  }
+  if (move.kind === 'payment') {
+    return payment(move);
+  }
+  if (move.kind === 'projectCard') {
+    return [...cardEffects(move.card), ...payment(move)];
   }
   if (move.kind !== 'menu') {
     return [];

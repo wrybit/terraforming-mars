@@ -1621,5 +1621,7 @@
   "Selling cards": "Selge kort",
   "Milestone or award": "Milepæl eller pris",
   "Converting plants or heat": "Omgjøre planter eller varme",
-  "Passing": "Passe"
+  "Passing": "Passe",
+  "pays ${0}": "betaler ${0}",
+  "Amount ${0}": "Mengde ${0}"
 }

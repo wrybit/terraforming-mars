@@ -1507,5 +1507,7 @@
   "Selling cards": "카드 판매",
   "Milestone or award": "마일스톤 또는 어워드",
   "Converting plants or heat": "식물 또는 열 전환",
-  "Passing": "패스"
+  "Passing": "패스",
+  "pays ${0}": "${0} 지불",
+  "Amount ${0}": "수량 ${0}"
 }

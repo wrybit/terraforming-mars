@@ -2521,5 +2521,7 @@
   "Selling cards": "Vendere carte",
   "Milestone or award": "Traguardo o riconoscimento",
   "Converting plants or heat": "Convertire piante o calore",
-  "Passing": "Passare"
+  "Passing": "Passare",
+  "pays ${0}": "paga ${0}",
+  "Amount ${0}": "Quantità ${0}"
 }

@@ -2203,5 +2203,7 @@
   "Selling cards": "Продажба на карти",
   "Milestone or award": "Етап или награда",
   "Converting plants or heat": "Обмяна на растения или топлина",
-  "Passing": "Пасуване"
+  "Passing": "Пасуване",
+  "pays ${0}": "плаща ${0}",
+  "Amount ${0}": "Количество: ${0}"
 }

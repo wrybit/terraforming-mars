@@ -1882,5 +1882,7 @@
   "Selling cards": "Kaarten verkopen",
   "Milestone or award": "Mijlpaal of prijs",
   "Converting plants or heat": "Planten of warmte omzetten",
-  "Passing": "Beurt overslaan"
+  "Passing": "Beurt overslaan",
+  "pays ${0}": "betaalt ${0}",
+  "Amount ${0}": "Aantal ${0}"
 }
