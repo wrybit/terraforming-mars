@@ -53,6 +53,7 @@
       <StatsPage v-else-if="screen === 'stats'" />
       <AdminHome v-else-if="screen === 'admin-settings'" />
       <DecisionLogPage v-else-if="screen === 'decision-log'" />
+      <CardView v-else-if="screen === 'card-view'" />
       <AdminRaw v-else-if="screen === 'admin-raw'" />
       <AdminPush v-else-if="screen === 'admin-push'" />
       <AdminPlayers v-else-if="screen === 'admin-players'" />
@@ -62,7 +63,7 @@
     </div>
     <!-- In game views the notice sits in the sidebar's info window; on the results page it is dropped (Jens' request) -->
     <!-- Start page and lobby (with its "Create game") share the same footer (Jens' request): build facts left, notice right -->
-    <footer v-if="screen !== 'player-home' && screen !== 'spectator-home' && screen !== 'the-end'" class="notice" :class="{'notice--split': hasStartScreenFooter, 'notice--online': screen === 'start-screen'}">
+    <footer v-if="screen !== 'player-home' && screen !== 'spectator-home' && screen !== 'the-end' && screen !== 'card-view'" class="notice" :class="{'notice--split': hasStartScreenFooter, 'notice--online': screen === 'start-screen'}">
       <StartScreenFooter v-if="hasStartScreenFooter" />
       <!-- Start page: how many are playing right now, in the middle of the footer -->
       <OnlinePlayers v-if="screen === 'start-screen'" />
@@ -81,6 +82,7 @@ import * as constants from '@/common/constants';
 
 // Decision log of the new AI's self-play games: admins only, so in its own chunk
 const DecisionLogPage = defineAsyncComponent(() => import(/* webpackChunkName: "decision-log" */ '@/client/components/decisionLog/DecisionLogPage.vue'));
+const CardView = defineAsyncComponent(() => import(/* webpackChunkName: "card-view" */ '@/client/components/CardView.vue'));
 const AdminHome = defineAsyncComponent(() => import(/* webpackChunkName: "admin" */ '@/client/components/admin/AdminHome.vue'));
 const AdminRaw = defineAsyncComponent(() => import(/* webpackChunkName: "admin" */ '@/client/components/admin/AdminRaw.vue'));
 const AdminPush = defineAsyncComponent(() => import(/* webpackChunkName: "admin" */ '@/client/components/admin/AdminPush.vue'));
@@ -133,6 +135,7 @@ type Screen = 'admin-settings' |
             'admin-push' |
             'admin-players' |
             'admin-dashboard' |
+            'card-view' |
             'cards' |
             'decision-log' |
             'empty' |
@@ -221,6 +224,7 @@ export default defineComponent({
     HelpOverlay,
     AdminHome,
     DecisionLogPage,
+    CardView,
     AdminRaw,
     AdminPush,
     AdminPlayers,
@@ -406,6 +410,8 @@ export default defineComponent({
       app.updateSpectator();
     } else if (currentPathname === paths.DECISION_LOG) {
       app.screen = 'decision-log';
+    } else if (currentPathname === paths.CARD_VIEW) {
+      app.screen = 'card-view';
     } else if (currentPathname === paths.ADMIN_SETTINGS) {
       app.screen = 'admin-settings';
     } else if (currentPathname === paths.ADMIN_RAW) {
