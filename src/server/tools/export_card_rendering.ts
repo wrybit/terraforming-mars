@@ -15,6 +15,8 @@ import {isICorporationCard} from '../cards/corporation/ICorporationCard';
 import {isPreludeCard} from '../cards/prelude/IPreludeCard';
 import {ColonyMetadata} from '../../common/colonies/ColonyMetadata';
 import {Units} from '../../common/Units';
+import {CardPlayEffect, UNIT_ICONS} from '../../common/cards/CardPlayEffect';
+import {Behavior} from '../behavior/Behavior';
 import {ALL_COLONIES_TILES, getColonyModule} from '../colonies/ColonyManifest';
 import {milestoneManifest} from '../milestones/Milestones';
 import {awardManifest} from '../awards/Awards';
@@ -111,6 +113,10 @@ class CardProcessor {
     if (Units.isUnits(production)) {
       clientCard.productionBox = production;
     }
+    const playEffects = cardPlayEffects(card.behavior);
+    if (playEffects.length > 0) {
+      clientCard.playEffects = playEffects;
+    }
 
     if (Array.isArray(compatibility)) {
       clientCard.compatibility.push(...compatibility);
@@ -119,6 +125,42 @@ class CardProcessor {
     }
     CardProcessor.json.push(clientCard);
   }
+}
+
+/** Fixed numbers of a card's behavior (counted or chosen effects are left out): production, stock, TR, tiles, cards */
+function cardPlayEffects(behavior: Behavior | undefined): Array<CardPlayEffect> {
+  if (behavior === undefined) {
+    return [];
+  }
+  const effects: Array<CardPlayEffect> = [];
+  const units = (values: object | undefined, production: boolean) => {
+    for (const [key, amount] of Object.entries(values ?? {})) {
+      if (UNIT_ICONS[key] !== undefined && typeof amount === 'number' && amount !== 0) {
+        effects.push({resource: UNIT_ICONS[key], amount, ...production ? {production} : {}});
+      }
+    }
+  };
+  units(behavior.production, true);
+  units(behavior.stock, false);
+  if (behavior.city !== undefined) {
+    effects.push({tile: 'city', amount: 1});
+  }
+  if (behavior.greenery !== undefined) {
+    effects.push({tile: 'greenery', amount: 1});
+  }
+  if (behavior.ocean !== undefined) {
+    effects.push({tile: 'ocean', amount: behavior.ocean.count ?? 1});
+  }
+  // Raising a global parameter gives TR, one per step; a greenery raises the oxygen, an ocean is a step of its own
+  const steps = (behavior.global?.temperature ?? 0) + (behavior.global?.oxygen ?? 0) + (behavior.global?.venus ?? 0) +
+    (typeof behavior.tr === 'number' ? behavior.tr : 0) + (behavior.greenery !== undefined ? 1 : 0) + (behavior.ocean?.count ?? (behavior.ocean !== undefined ? 1 : 0));
+  if (steps !== 0) {
+    effects.push({resource: 'tr', amount: steps});
+  }
+  if (typeof behavior.drawCard === 'number' && behavior.drawCard > 0) {
+    effects.push({resource: 'card', amount: behavior.drawCard});
+  }
+  return effects;
 }
 
 class GlobalEventProcessor {

@@ -9,6 +9,7 @@ import {AiTrainingFeedSource, configuredFeedSource} from './aiTrainingFeedSource
 import {AiTrainingStorage, StoredAiTrainingGame, fileTrainingStorage} from './aiTrainingStore';
 import {aiTrainingSetup} from './aiTrainingSetup';
 import {importAiTrainingGame} from './importAiTrainingGame';
+import {SelfplayArchive} from './selfplayArchive';
 import {lastLogTime, lobbyGameTimeline} from '../lobby/lobbyGameTimeline';
 
 // The lobby polls every 2.5 s; the coordinator is asked at most this often
@@ -53,6 +54,7 @@ export class AiTrainingGames {
     private readonly source: AiTrainingFeedSource | undefined = configuredFeedSource(),
     private readonly storage: AiTrainingStorage = fileTrainingStorage(),
     private readonly clock: () => number = Date.now,
+    private readonly archive: () => SelfplayArchive = () => SelfplayArchive.getInstance(),
   ) {}
 
   /** Rows for the lobby list: running games first, then the finished ones, newest first */
@@ -116,6 +118,10 @@ export class AiTrainingGames {
     const title = aiTrainingTitle(feed.batch.commit, finished.variants, finished.number);
     const game = importAiTrainingGame(await source.game(finished.gamePath), title, finished.level, finished.variants);
     await keeper.keep(game);
+    if (finished.archive !== undefined) {
+      // Self-play games of the new AI: their decision log stays reachable from the result page
+      this.archive().remember(finished.archive, game.id, game.spectatorId as StoredAiTrainingGame['spectatorId']);
+    }
     const games = this.games();
     games.push({
       key: feedKey(feed, finished),

@@ -1,5 +1,6 @@
 import {AiLevel} from '../ai/AiLevel';
 import {LobbyGameCourse} from './LobbyModel';
+import {SelfplayArchiveRef} from '../aiTraining/selfplayArchive';
 
 // Contract between the AI test batches (their coordinator answers AI_TRAINING_FEED_PATH) and the lobby of a game
 // server (server/aiTraining): which batch games one computer plays right now and which it finished last.
@@ -39,6 +40,8 @@ export type AiTrainingFinishedGame = AiTrainingGameBase & {
   finishedAt: number;
   /** Serialized final game, relative to the feed address */
   gamePath: string;
+  /** Self-play games of the new AI: where the hub archives it, for its decision log */
+  archive?: SelfplayArchiveRef;
 };
 
 export type AiTrainingFeed = {

@@ -30,6 +30,11 @@
           <svg class="game-end-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" /></svg>
           <span v-i18n>All statistics</span>
         </a>
+        <!-- Admins: the detailed log of a self-play game of the new AI, which the training reads -->
+        <a v-if="decisionLogLink !== undefined" :href="decisionLogLink" class="btn btn-lg btn-rounded game-end-nav-button">
+          <svg class="game-end-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16M4 12h10M4 19h13" /><circle cx="19" cy="12" r="2" /></svg>
+          <span v-i18n>Decision log</span>
+        </a>
       </div>
     </div>
     <!-- From @bp-desktop (breakpoints.less) two columns as in the game view: result on the left, board, charts, log on the right -->
@@ -278,6 +283,8 @@ import {Message} from '@/common/logs/Message';
 import {LogMessageDataType} from '@/common/logs/LogMessageDataType';
 import {MADetail} from '@/common/game/VictoryPointsBreakdown';
 import {AwardName} from '@/common/ma/AwardName';
+import {paths} from '@/common/app/paths';
+import {checkAdminLoginOnce} from '@/client/components/admin/adminSession';
 
 type PlayerContributions = {player: string, color: Color, temp: number, oxygen: number, oceans: number, venus?: number, moonHabitat?: number, moonMining?: number, moonLogistic?: number, total: number};
 
@@ -426,8 +433,10 @@ export default defineComponent({
       return new Map(this.playerContributionsData.map((data) => [data.color, data]));
     },
   },
-  data(): {tileView: TileView, boardZoomOpen: boolean, zoomBoard: ZoomBoard, columnBoardElement: HTMLElement | undefined} {
+  data(): {tileView: TileView, boardZoomOpen: boolean, zoomBoard: ZoomBoard, columnBoardElement: HTMLElement | undefined, decisionLogLink: string | undefined} {
     return {
+      // Set once the server confirms an admin and a decision log for this game
+      decisionLogLink: undefined,
       tileView: 'show',
       boardZoomOpen: false,
       // Board shown in the enlargement (Mars or Moon)
@@ -452,12 +461,23 @@ export default defineComponent({
     RowResizeHandle,
   },
   mounted() {
+    void this.findDecisionLog();
     document.title = gameDocumentTitle({game: this.game, thisPlayer: this.participant.thisPlayer}, '🏁');
     if (getPreferences().experimental_ui) {
       setFaviconStatus('ended');
     }
   },
   methods: {
+    async findDecisionLog(): Promise<void> {
+      const id = new URLSearchParams(window.location.search).get('id') ?? '';
+      if (id === '' || await checkAdminLoginOnce() !== 'admin') {
+        return;
+      }
+      const answer = await fetch(`${paths.API_DECISION_LOG}?id=${encodeURIComponent(id)}&check`).then((response) => response.ok ? response.json() : undefined).catch(() => undefined);
+      if (answer?.available === true) {
+        this.decisionLogLink = `${paths.DECISION_LOG}?id=${encodeURIComponent(id)}`;
+      }
+    },
     isWinner(player: PublicPlayerModel): boolean {
       return this.winners.some((winner) => winner.color === player.color);
     },

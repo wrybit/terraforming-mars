@@ -56,6 +56,8 @@ import {CancelAction} from '../routes/CancelAction';
 import {PlayerInput} from '../routes/PlayerInput';
 import {Reset} from '../routes/Reset';
 import {ServeApp} from '../routes/ServeApp';
+import {ApiAiTrainingGame} from '../routes/ApiAiTrainingGame';
+import {ApiDecisionLog} from '../routes/ApiDecisionLog';
 import {ServeAsset} from '../routes/ServeAsset';
 import {serverId} from '../utils/server-ids';
 import {adminCookieName} from './auth/adminCookie';
@@ -141,6 +143,9 @@ const handlers: Map<string, IHandler> = new Map(
     [paths.API_GAME_HISTORY, ApiGameHistory.INSTANCE],
     [paths.API_GAME_LOGS, ApiGameLogs.INSTANCE],
     [paths.API_AI_FEEDBACK, ApiAiFeedback.INSTANCE],
+    [paths.AI_TRAINING_GAME, ApiAiTrainingGame.INSTANCE],
+    [paths.API_DECISION_LOG, ApiDecisionLog.INSTANCE],
+    [paths.DECISION_LOG, ServeApp.INSTANCE],
     [paths.API_GAMES, ApiGames.INSTANCE],
     [paths.API_HEAP_SNAPSHOT, ApiHeapSnapshot.INSTANCE],
     [paths.API_IPS, ApiIPs.INSTANCE],

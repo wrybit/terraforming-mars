@@ -9,6 +9,7 @@ import {CountableVictoryPoints} from './CountableVictoryPoints';
 import {Tag} from './Tag';
 import {CardDiscount} from './Types';
 import {OneOrArray} from '../utils/types';
+import {CardPlayEffect} from './CardPlayEffect';
 
 export type ClientCard = Readonly<{
   name: CardName;
@@ -26,4 +27,6 @@ export type ClientCard = Readonly<{
   cardCost?: number; // Corporation
   compatibility: Array<Expansion>;
   hasAction: boolean; // For Prelude 2 preludes with actions. Can be used for more, of course.
+  /** Fixed effects of playing the card (decision log of the new AI) */
+  playEffects?: ReadonlyArray<CardPlayEffect>;
 }>
