@@ -77,6 +77,8 @@ export interface IPlayer {
   aiEngine: AiEngine | undefined;
 
   readonly game: IGame;
+  /** True for the player MarsBot plays as. */
+  readonly isMarsBot: boolean;
   tags: Tags;
   colonies: Colonies;
   readonly production: Production;
