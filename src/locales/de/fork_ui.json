@@ -1030,5 +1030,7 @@
   "Selling cards": "Karten verkaufen",
   "Milestone or award": "Meilenstein oder Auszeichnung",
   "Converting plants or heat": "Pflanzen oder Wärme umwandeln",
-  "Passing": "Passen"
+  "Passing": "Passen",
+  "pays ${0}": "zahlt ${0}",
+  "Amount ${0}": "Menge ${0}"
 }

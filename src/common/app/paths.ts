@@ -70,5 +70,6 @@ export const paths = {
   AI_TRAINING_GAME: 'ai-training-game',
   // Decision log of an archived self-play game, admins only
   DECISION_LOG: 'decision-log',
+  CARD_VIEW: 'card-view',
   API_DECISION_LOG: 'api/decision-log',
 } as const;

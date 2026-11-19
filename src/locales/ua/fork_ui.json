@@ -1413,5 +1413,7 @@
   "Selling cards": "Продаж карт",
   "Milestone or award": "Віха або нагорода",
   "Converting plants or heat": "Обмін рослин або тепла",
-  "Passing": "Пас"
+  "Passing": "Пас",
+  "pays ${0}": "платить ${0}",
+  "Amount ${0}": "Кількість ${0}"
 }

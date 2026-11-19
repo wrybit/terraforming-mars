@@ -1437,5 +1437,7 @@
   "Selling cards": "Kártyák eladása",
   "Milestone or award": "Mérföldkő vagy díj",
   "Converting plants or heat": "Növény vagy hő átváltása",
-  "Passing": "Passzolás"
+  "Passing": "Passzolás",
+  "pays ${0}": "fizet: ${0}",
+  "Amount ${0}": "Mennyiség: ${0}"
 }

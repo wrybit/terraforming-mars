@@ -773,10 +773,11 @@ export default defineComponent({
     const fromLink = this.editRoom === undefined && this.restoreSettingsFromLink();
     // A form closed without creating comes back as it was left (before the remembered settings)
     const fromDraft = this.editRoom === undefined && !fromLink && this.restoreDraft();
+    let fromSettings = false;
     if (this.editRoom !== undefined) {
       this.restoreEditRoom(this.editRoom);
     } else if (!fromLink && !fromDraft) {
-      this.restoreLastSettings();
+      fromSettings = this.restoreLastSettings();
       // Without a link the theme last picked with the switch (here, on statistics or card list) wins over the last settings
       const chosen = chosenTheme();
       if (this.theme !== chosen) {
@@ -791,8 +792,8 @@ export default defineComponent({
       this.hostImage = this.lobbyProfile.image;
     }
     // Opened from the lobby, a game is meant for several people: at least one free seat (solo stays one click away).
-    // A shared link and a draft keep their seats
-    if (!fromLink && !fromDraft && this.humanPlayersCount < 2) {
+    // A shared link, a draft and remembered settings keep their seats.
+    if (!fromLink && !fromDraft && !fromSettings && this.humanPlayersCount < 2) {
       this.humanPlayersCount = 2;
     }
   },
@@ -1310,21 +1311,23 @@ export default defineComponent({
       this.hostImage = draft.hostImage;
       return true;
     },
-    restoreLastSettings() {
+    restoreLastSettings(): boolean {
       if (!this.rememberSettings) {
-        return;
+        return false;
       }
       const settings = createGameSettingsStorage.load();
       if (settings === undefined) {
-        return;
+        return false;
       }
       try {
         const processor = this.applySettings(settings);
         if (processor.warnings.length > 0) {
           this.showSettingsLoadResult('Restore settings', processor);
         }
+        return true;
       } catch (e) {
         vueRoot(this).showAlert('Restore settings', {text: translateText('The last used settings could not be restored; they may come from an older version. The form keeps its default settings.') + '\n' + translateText('Details:') + ' ' + String(e)});
+        return false;
       }
     },
     applySettings(json: JSONObject): JSONProcessor {

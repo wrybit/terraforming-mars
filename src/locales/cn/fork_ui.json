@@ -2239,5 +2239,7 @@
   "Selling cards": "出售卡牌",
   "Milestone or award": "里程碑或奖项",
   "Converting plants or heat": "转换植物或热量",
-  "Passing": "跳过"
+  "Passing": "跳过",
+  "pays ${0}": "支付 ${0}",
+  "Amount ${0}": "数量 ${0}"
 }

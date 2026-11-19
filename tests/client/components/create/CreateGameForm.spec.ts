@@ -329,6 +329,14 @@ describe('CreateGameForm', () => {
     expect((wrapper.vm as any).rememberSettings).is.true;
   });
 
+  it('starts with two human seats when there are no remembered settings', () => {
+    const wrapper = shallowMount(CreateGameForm, {
+      ...globalConfig,
+    });
+    expect(wrapper.vm.humanPlayersCount).eq(2);
+    expect(wrapper.vm.aiPlayersCount).eq(0);
+  });
+
   it('does not restore saved settings when remember is off', async () => {
     PreferencesManager.INSTANCE.set('remember_create_game_settings', false);
     createGameSettingsStorage.save(createNewGameConfig());
@@ -372,6 +380,25 @@ describe('CreateGameForm', () => {
     expect((wrapper.vm as any).draftVariant).eq(false);
     expect((wrapper.vm as any).expansions.venus).eq(true);
     expect((wrapper.vm as any).solarPhaseOption).eq(true);
+  });
+
+  it('keeps one human and the AI players when restoring remembered settings', async () => {
+    createGameSettingsStorage.save(createNewGameConfig({
+      players: [
+        {name: 'Alice', color: 'red', beginner: false, handicap: 0, first: false},
+        {name: 'Bot 1', color: 'green', beginner: false, handicap: 0, first: false, aiLevel: 'hard'},
+        {name: 'Bot 2', color: 'blue', beginner: false, handicap: 0, first: false, aiLevel: 'hard'},
+      ],
+    }));
+
+    const wrapper = shallowMount(CreateGameForm, {
+      ...globalConfig,
+    });
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.vm.humanPlayersCount).eq(1);
+    expect(wrapper.vm.aiPlayersCount).eq(2);
+    expect(wrapper.vm.playersCount).eq(3);
   });
 
   it('reopens a form closed without creating as it was left', async () => {

@@ -1255,5 +1255,7 @@
   "Selling cards": "Korttien myynti",
   "Milestone or award": "Virstanpylväs tai palkinto",
   "Converting plants or heat": "Kasvien tai lämmön muunto",
-  "Passing": "Passaaminen"
+  "Passing": "Passaaminen",
+  "pays ${0}": "maksaa ${0}",
+  "Amount ${0}": "Määrä ${0}"
 }

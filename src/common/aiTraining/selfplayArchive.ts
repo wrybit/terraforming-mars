@@ -18,3 +18,6 @@ export function selfplayArchivePath(kind: SelfplayArchiveKind, ref: SelfplayArch
 /** Query parameters of the game server's address that opens an archived game (paths.AI_TRAINING_GAME) */
 export const SELFPLAY_MACHINE_PARAM = 'machine';
 export const SELFPLAY_GAME_PARAM = 'id';
+/** With this parameter set to SELFPLAY_VIEW_LOG the address opens the decision log instead of the result page */
+export const SELFPLAY_VIEW_PARAM = 'view';
+export const SELFPLAY_VIEW_LOG = 'log';

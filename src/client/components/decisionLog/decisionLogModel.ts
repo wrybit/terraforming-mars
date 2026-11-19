@@ -16,6 +16,8 @@ export type DecisionMove = {
   project?: string;
   name?: string;
   payment?: Record<string, number>;
+  amount?: number;
+  text?: string;
 };
 
 export type DecisionCandidate = {
@@ -142,10 +144,17 @@ function cardParts(cards: ReadonlyArray<string>): Array<MovePart> {
   return cards.flatMap((card, index) => [...index > 0 ? [{text: ', '}] : [], {text: $t(card), card}]);
 }
 
+// Payment fields of the record and their names; the others (floaters, microbes …) by their own name
+const PAYMENT_UNITS: Record<string, string> = {megacredits: 'M€', steel: 'steel', titanium: 'titanium', heat: 'heat', plants: 'plants'};
+
+function paymentList(payment: Record<string, number> | undefined): string {
+  return Object.entries(payment ?? {}).filter(([, amount]) => amount > 0)
+    .map(([key, amount]) => `${amount} ${$t(PAYMENT_UNITS[key] ?? key)}`).join(' + ');
+}
+
 function paymentText(payment: Record<string, number> | undefined): string {
-  const parts = [['megacredits', 'M€'], ['steel', 'steel'], ['titanium', 'titanium'], ['heat', 'heat']]
-    .filter(([key]) => (payment?.[key] ?? 0) > 0).map(([key, unit]) => `${payment?.[key]} ${$t(unit)}`);
-  return parts.length > 0 ? ` (${parts.join(' + ')})` : '';
+  const list = paymentList(payment);
+  return list === '' ? '' : ` (${list})`;
 }
 
 const one = (name: string | undefined): ReadonlyArray<string> => name === undefined || name === '' ? [] : [name];
@@ -181,6 +190,11 @@ export function moveParts(move: DecisionMove, kind: string): Array<MovePart> {
   case 'player': return withParams('Player ${0}', [$t(move.color ?? '')]);
   case 'index': return withParams('Option ${0}', [String((move.index ?? 0) + 1)]);
   case 'menu': return MENU_TEXTS[move.option ?? '']?.(move) ?? [{text: $t(move.option ?? '')}];
+  // How to pay (Helion's heat, steel, titanium …): the question above names what for
+  case 'payment': return withParams('pays ${0}', [paymentList(move.payment) || '0 M€']);
+  case 'projectCard': return [...withParams('plays ${0}', [one(move.card)]), {text: paymentText(move.payment)}];
+  case 'amount': return withParams('Amount ${0}', [String(move.amount ?? 0)]);
+  case 'title': return [{text: $t(move.text ?? '')}];
   default: return [{text: JSON.stringify(move)}];
   }
 }
