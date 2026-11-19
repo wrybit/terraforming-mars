@@ -1,5 +1,6 @@
 import {Resource} from '../Resource';
 import {TradePairRate, TradeRate} from '../models/PlayerInputModel';
+import {NORMAL_BUY, NORMAL_SELL} from '../dune/smugglingExchange';
 
 // Exchange rate of a trade (SelectTrade), shared by server (checks the answer) and client (shows and builds it), so
 // both always compute the same amounts.
@@ -30,6 +31,9 @@ export function pairGiveLimit(pricing: TradePricing, give: Resource, get: Resour
   return pairOf(pricing, give, get)?.maxGive;
 }
 
+/** Guild trades of goods for goods are at most this many times as good as at the normal rates */
+export const GOODS_FOR_GOODS_CAP = 2;
+
 function greatestCommonDivisor(a: number, b: number): number {
   return b === 0 ? a : greatestCommonDivisor(b, a % b);
 }
@@ -52,8 +56,15 @@ export function tradeRate(pricing: TradePricing, give: Resource, get: Resource):
   if (giveWorth === undefined || getWorth === undefined) {
     return undefined;
   }
-  const giveUnits = (pricing.buyValues !== undefined ? 1 : (pricing.factor ?? 1)) * getWorth;
-  const getUnits = giveWorth;
+  let giveUnits = (pricing.buyValues !== undefined ? 1 : (pricing.factor ?? 1)) * getWorth;
+  let getUnits = giveWorth;
+  // Guild (buyValues), goods for goods: at most GOODS_FOR_GOODS_CAP times as good as at the normal rates (Jens 19 Nov
+  // 2026, guild variant D). A high sell rate times a low buy rate made 1 steel worth 6 energy (12 times normal)
+  if (pricing.buyValues !== undefined && give !== Resource.MEGACREDITS && get !== Resource.MEGACREDITS &&
+    giveWorth * NORMAL_BUY[get] > GOODS_FOR_GOODS_CAP * NORMAL_SELL[give] * getWorth) {
+    giveUnits = NORMAL_BUY[get];
+    getUnits = GOODS_FOR_GOODS_CAP * NORMAL_SELL[give];
+  }
   const divisor = greatestCommonDivisor(giveUnits, getUnits);
   return {give: giveUnits / divisor, get: getUnits / divisor};
 }

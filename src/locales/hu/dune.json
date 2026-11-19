@@ -418,5 +418,6 @@
   "Recruit: standard project, 12 M€ per Sardaukar": "Toborzás: alapprojekt, sardaukaronként 12 M€",
   "Market mood": "Piaci hangulat",
   "Market mood from −2 (slump) to +2 (boom) pulls all rates along; no rate stays the same longer than 2 generations": "A piaci hangulat −2-től (pangás) +2-ig (fellendülés) magával húzza az összes árfolyamot; egy árfolyam sem marad 2 generációnál tovább változatlan",
-  "What you bought from the guild you cannot sell back to it in the same generation, and the other way round": "Amit a céhtől vettél, azt ugyanabban a generációban nem adhatod vissza neki – és fordítva"
+  "What you bought from the guild you cannot sell back to it in the same or the next generation, and the other way round; energy and heat count as one good": "Amit a céhtől vettél, azt ugyanabban és a következő generációban nem adhatod vissza neki – és fordítva; a nedvesség és a víz egy árunak számít",
+  "At most 7 goods per guild trade (Solari do not count); goods for goods at most twice as good as at the normal rates": "Egy céhkereskedésben legfeljebb 7 áru (a solari nem számít); áru árura legfeljebb kétszer olyan jó, mint a normál árfolyamon"
 }

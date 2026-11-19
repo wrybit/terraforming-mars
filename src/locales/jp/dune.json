@@ -420,5 +420,6 @@
   "Recruit: standard project, 12 M€ per Sardaukar": "募集：スタンダードプロジェクト、サーダカー1人につき 12 M€",
   "Market mood": "市況",
   "Market mood from −2 (slump) to +2 (boom) pulls all rates along; no rate stays the same longer than 2 generations": "市況（−2 不況〜+2 好況）がすべての相場を引っぱる。どの相場も2世代を超えて同じままにはならない",
-  "What you bought from the guild you cannot sell back to it in the same generation, and the other way round": "ギルドから買ったものは同じ世代にギルドへ売り戻せない（逆も同様）"
+  "What you bought from the guild you cannot sell back to it in the same or the next generation, and the other way round; energy and heat count as one good": "ギルドから買ったものは同じ世代と次の世代にギルドへ売り戻せない（逆も同様）。湿気と水は同じ品物として扱う",
+  "At most 7 goods per guild trade (Solari do not count); goods for goods at most twice as good as at the normal rates": "ギルド取引1回につき品物は最大7個（ソラリは数えない）。品物同士の交換は通常レートの最大2倍まで"
 }

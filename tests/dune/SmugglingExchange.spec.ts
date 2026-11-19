@@ -56,7 +56,7 @@ describe('CHOAM exchange', () => {
     expect(crossed).gt(0);
   });
 
-  it('follows the target distribution where 1 Solari does not cut it: spice sells for 3 to 9', () => {
+  it('follows the target distribution where 1 Solari does not cut it: spice sells for 4 to 8', () => {
     const counts: Record<number, number> = {};
     let cells = 0;
     for (let seed = 1; seed <= 300; seed++) {
@@ -68,10 +68,11 @@ describe('CHOAM exchange', () => {
       });
     }
     const share = (favour: number) => 100 * (counts[favour] ?? 0) / cells;
-    // Target 12 / 22 / 26 / 18 / 10 / 7 / 5 %
-    expect(share(0)).within(18, 32);
-    expect(share(-2)).within(6, 18);
-    expect(share(4)).within(2, 9);
+    // Target (guild variant D, −1 … +3) 27 / 31 / 22 / 12 / 8 %
+    expect(share(0)).within(24, 38);
+    expect(share(-1)).within(19, 34);
+    expect(share(3)).within(4, 13);
+    expect(share(-2) + share(4)).eq(0);
   });
 
   it('turns the forecast into the rates of the next generation', () => {
@@ -119,18 +120,18 @@ describe('CHOAM exchange', () => {
 
   it('draws the steps below 1 Solari as well: water sells for 1 more often, not more often higher (Jens 27 Oct 2026)', () => {
     let atOne = 0;
-    let atFive = 0;
+    let atFour = 0;
     let cells = 0;
     for (let seed = 1; seed <= 300; seed++) {
       run(seed / 301, 14).sell.slice(1).forEach((sell) => {
         atOne += sell.heat === 1 ? 1 : 0;
-        atFive += sell.heat === 5 ? 1 : 0;
+        atFour += sell.heat === 4 ? 1 : 0;
         cells++;
       });
     }
-    // Target: −2, −1 and 0 together 60 %, +4 5 %
-    expect(100 * atOne / cells).within(52, 68);
-    expect(100 * atFive / cells).within(2, 9);
+    // Target (guild variant D): −1 and 0 together 58 %, +3 8 %
+    expect(100 * atOne / cells).within(50, 66);
+    expect(100 * atFour / cells).within(4, 13);
   });
 
   it('never keeps a rate the same longer than 2 generations, except on 1 Solari (Jens 27 Oct 2026)', () => {
@@ -182,21 +183,22 @@ describe('CHOAM exchange', () => {
     recordTrade(data, 'megacredits', 6, 'titanium', 1);
     recordTrade(data, 'megacredits', 6, 'heat', 3);
     const forecast = forecastOf(data);
-    expect(forecast?.sell.titanium).eq(NORMAL_SELL.titanium - 2);
+    // at most 1 against the player since guild variant D
+    expect(forecast?.sell.titanium).eq(NORMAL_SELL.titanium - 1);
     expect(forecast?.buy.heat).eq(NORMAL_BUY.heat + 1);
     expect(forecast?.sell.steel).eq(NORMAL_SELL.steel);
-    // Never beyond 2 against the player, never below 1
+    // Never beyond 1 against the player, never below 1
     recordTrade(data, 'plants', 30, 'megacredits', 30);
     expect(forecastOf(data)?.sell.plants).eq(1);
     // The next generation takes the moved rates and starts counting anew
     advanceExchange(data, rng);
-    expect(data.sell[1].titanium).eq(NORMAL_SELL.titanium - 2);
+    expect(data.sell[1].titanium).eq(NORMAL_SELL.titanium - 1);
     expect(data.flow).is.undefined;
   });
 
   it('prices prophecies: limits, bet premium for selling only, half back on withdrawing', () => {
     expect(orderLimits('sell', 'titanium')).deep.eq({min: 6, max: bestRate('sell', 'titanium')});
-    expect(bestRate('sell', 'titanium')).eq(9);
+    expect(bestRate('sell', 'titanium')).eq(8);
     expect(orderLimits('buy', 'steel')).deep.eq({min: 1, max: 3});
     expect(orderPremium('sell', 'titanium', 3, 7)).eq(6);
     expect(orderPremium('buy', 'steel', 3, 2)).eq(0);

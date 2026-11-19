@@ -417,5 +417,6 @@
   "Recruit: standard project, 12 M€ per Sardaukar": "Recrutar: projeto padrão, 12 M€ por Sardaukar",
   "Market mood": "Clima do mercado",
   "Market mood from −2 (slump) to +2 (boom) pulls all rates along; no rate stays the same longer than 2 generations": "O clima do mercado, de −2 (crise) a +2 (alta), arrasta todas as cotações; nenhuma cotação fica igual por mais de 2 gerações",
-  "What you bought from the guild you cannot sell back to it in the same generation, and the other way round": "O que você comprou da guilda não pode revender a ela na mesma geração, e vice-versa"
+  "What you bought from the guild you cannot sell back to it in the same or the next generation, and the other way round; energy and heat count as one good": "O que você comprou da guilda não pode revender a ela na mesma geração nem na seguinte, e vice-versa; umidade e água contam como um só bem",
+  "At most 7 goods per guild trade (Solari do not count); goods for goods at most twice as good as at the normal rates": "No máximo 7 bens por troca com a guilda (solari não contam); bem por bem no máximo duas vezes melhor que na cotação normal"
 }

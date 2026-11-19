@@ -153,8 +153,23 @@ describe('Dune modules B, D, E, F', () => {
       const market = smuggleTrade(player1);
       expect(() => market.process({type: 'trade', give: Resource.HEAT, giveAmount: 10, get: Resource.PLANTS, getAmount: 5})).to.throw();
       expect(() => market.process({type: 'trade', give: Resource.HEAT, giveAmount: 8, get: Resource.HEAT, getAmount: 4})).to.throw();
-      market.process({type: 'trade', give: Resource.HEAT, giveAmount: 8, get: Resource.PLANTS, getAmount: 4});
-      expect([player1.heat, player1.plants]).deep.eq([1, 4]);
+      // at most 7 goods per deal (MAX_GOODS_PER_DEAL): 8 heat is too much, 6 heat for 3 plants is fine
+      expect(() => market.process({type: 'trade', give: Resource.HEAT, giveAmount: 8, get: Resource.PLANTS, getAmount: 4})).to.throw();
+      market.process({type: 'trade', give: Resource.HEAT, giveAmount: 6, get: Resource.PLANTS, getAmount: 3});
+      expect([player1.heat, player1.plants]).deep.eq([3, 3]);
+    });
+
+    it('limits a guild trade to 7 goods given or received, M€ do not count', () => {
+      player1.heat = 40;
+      player1.megaCredits = 100;
+      const selling = smuggleTrade(player1);
+      expect(() => selling.process({type: 'trade', give: Resource.HEAT, giveAmount: 8, get: Resource.MEGACREDITS, getAmount: 8})).to.throw();
+      selling.process({type: 'trade', give: Resource.HEAT, giveAmount: 7, get: Resource.MEGACREDITS, getAmount: 7});
+      const buying = smuggleTrade(player1);
+      // plants cost 2 M€ each at normal rates: 16 M€ would bring 8 plants, too many
+      expect(() => buying.process({type: 'trade', give: Resource.MEGACREDITS, giveAmount: 16, get: Resource.PLANTS, getAmount: 8})).to.throw();
+      buying.process({type: 'trade', give: Resource.MEGACREDITS, giveAmount: 14, get: Resource.PLANTS, getAmount: 7});
+      expect([player1.heat, player1.plants, player1.megaCredits]).deep.eq([33, 7, 93]);
     });
 
     it('prices the black market by worth: 6 M€ for 1 spice, never 2', () => {
@@ -174,7 +189,11 @@ describe('Dune modules B, D, E, F', () => {
       expect(second.give.map((option) => option.resource)).includes(Resource.HEAT);
       second.process({type: 'trade', give: Resource.MEGACREDITS, giveAmount: 2, get: Resource.PLANTS, getAmount: 1});
       expect(smuggleTrade(player1).give.map((option) => option.resource)).not.includes(Resource.PLANTS);
-      // A new generation starts afresh
+      // Since guild variant D the next generation is blocked too, energy with heat; the one after starts afresh
+      player1.energy = 5;
+      (game as any).generation = game.generation + 1;
+      expect(smuggleTrade(player1).get).not.includes(Resource.HEAT);
+      expect(smuggleTrade(player1).get).not.includes(Resource.ENERGY);
       (game as any).generation = game.generation + 1;
       expect(smuggleTrade(player1).get).includes(Resource.HEAT);
     });

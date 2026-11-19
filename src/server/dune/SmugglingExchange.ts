@@ -25,7 +25,7 @@ import {
 //   net raise its next buying rate by 1, within the same guard rails.
 
 /** Version of the exchange data: 2 since variant G (27 Oct 2026); missing in games from before (exchangeOf migrates them) */
-export const EXCHANGE_VERSION = 2;
+export const EXCHANGE_VERSION = 3;
 
 /** Per good how many steps beyond 1 Solari a rate lies */
 export type Depth = Partial<Record<ExchangeGood, number>>;
@@ -88,8 +88,8 @@ export function forecastOf(data: ExchangeData): {sell: ExchangePrices, buy: Exch
   return {sell, buy, market: data.next.market};
 }
 
-/** Target weights of the favours −2 … +4 before the market mood tilts them */
-const FAVOUR_WEIGHTS: Readonly<Record<number, number>> = {[-2]: 12, [-1]: 22, 0: 26, 1: 18, 2: 10, 3: 7, 4: 5};
+/** Target weights of the favours FAVOUR_MIN … FAVOUR_MAX (−1 … +3) before the market mood tilts them; others have none */
+const FAVOUR_WEIGHTS: Readonly<Record<number, number>> = {[-1]: 22, 0: 26, 1: 18, 2: 10, 3: 7};
 /** How strongly the market mood tilts the weights (per step of mood and favour, as an exponent) */
 const MARKET_TILT = 0.15;
 /** Tries per board and generation */
@@ -267,7 +267,7 @@ function shownRates(side: ExchangeSide, favours: Favours): {rates: ExchangePrice
 /** Starting rates drawn from the target distribution (at mood 0) */
 function startingRates(side: ExchangeSide, rng: Random): {rates: ExchangePrices, depth: Depth} {
   const favours = {} as Favours;
-  const all = [-2, -1, 0, 1, 2, 3, 4];
+  const all = Array.from({length: FAVOUR_MAX - FAVOUR_MIN + 1}, (_, index) => FAVOUR_MIN + index);
   for (const good of EXCHANGE_GOODS) {
     favours[good] = pickWeighted(all, (favour) => weightOf(favour, 0), rng) ?? 0;
   }
@@ -340,11 +340,17 @@ export function undoubledRate(side: ExchangeSide, good: ExchangeGood, rate: numb
  * Brings an exchange onto version 2: games from before the market mood get one (rates unchanged), games from variant
  * D move back onto the normal rates. Returns 'doubled' when it undid variant D (open prophecies have to follow).
  */
-export function migrateExchange(data: ExchangeData): 'doubled' | 'added' | undefined {
+export function migrateExchange(data: ExchangeData): 'doubled' | 'added' | 'narrowed' | undefined {
   if (data.version === EXCHANGE_VERSION) {
     return undefined;
   }
+  const from = data.version;
   data.version = EXCHANGE_VERSION;
+  // Version 3 (guild variant D, 19 Nov 2026): the favours narrow to −1 … +3. Rates beyond move back by themselves
+  // (tryMove takes every move out of a weightless favour); open prophecies get their limits capped (exchangeOf)
+  if (from === 2) {
+    return 'narrowed';
+  }
   if (data.market === undefined) {
     data.market = data.sell.map(() => 0);
     data.marketTrend = 0;

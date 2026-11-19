@@ -10,7 +10,7 @@ import {SelectOption} from '../inputs/SelectOption';
 import {SelectTrade} from '../inputs/SelectTrade';
 import {SelectPayment} from '../inputs/SelectPayment';
 import {tradeRate} from '../../common/inputs/tradeRate';
-import {NORMAL_BUY, NORMAL_SELL} from '../../common/dune/smugglingExchange';
+import {NORMAL_BUY, NORMAL_SELL, bestRate} from '../../common/dune/smugglingExchange';
 import {ExchangeData, advanceExchange, currentRates, forecastOf, initializeExchange, migrateExchange, recordTrade, undoubledRate} from './SmugglingExchange';
 import {GuildRoundTrips, mayBuyFromGuild, maySellToGuild, recordRoundTrip} from './guildRoundTrip';
 import {PlayerInput} from '../PlayerInput';
@@ -53,8 +53,14 @@ export {MAX_SUSPICION};
 export const MAX_SPICE_PER_DEAL = 5;
 export const BRIBE_COST = TRIBUTE_PRINTED_COST;
 export const BRIBE_COST_WITH_MARKET = 7;
-/** No upper limit on what a guild trade pays out (the stock limits it) */
+/** No upper limit on what a guild trade pays out (the stock and the goods limit below limit it) */
 const NO_LIMIT = 9999;
+/**
+ * At most this many goods (everything but M€) change hands in one guild trade, given or received. Without it the AI
+ * stocked up heat and steel and sold everything at once at a peak rate (182 heat for 910 M€, 440 steel for 1,760 M€;
+ * Jens 19 Nov 2026, guild variant D: 7 per deal; spice keeps its own 5).
+ */
+export const MAX_GOODS_PER_DEAL = 7;
 
 export function initializeSmuggling(rng?: Random, generation = 1): SmugglingData {
   return {
@@ -72,9 +78,16 @@ export function initializeSmuggling(rng?: Random, generation = 1): SmugglingData
  */
 export function exchangeOf(data: SmugglingData): ExchangeData {
   data.exchange ??= initializeExchange();
-  if (migrateExchange(data.exchange) === 'doubled') {
+  const migrated = migrateExchange(data.exchange);
+  if (migrated === 'doubled') {
     data.prophecy?.orders.forEach((order) => {
       order.limit = undoubledRate(order.side, order.good, order.limit);
+    });
+  }
+  if (migrated !== undefined) {
+    // Guild variant D (19 Nov 2026): no open prophecy may wait for a rate the narrower exchange never reaches
+    data.prophecy?.orders.forEach((order) => {
+      order.limit = order.side === 'sell' ? Math.min(order.limit, bestRate('sell', order.good)) : Math.max(order.limit, bestRate('buy', order.good));
     });
   }
   return data.exchange;
@@ -118,6 +131,35 @@ function currentPricing(data: SmugglingData) {
   // Moving spice is the same deal at the exchange rate, only limited to 5 spice
   const spicePair = {give: Resource.TITANIUM, get: Resource.MEGACREDITS, rate: {give: 1, get: sell.titanium}, maxGive: MAX_SPICE_PER_DEAL};
   return {values: {...sell}, buyValues: {...buy}, spicePair};
+}
+
+/**
+ * Guild prices with the goods limit: every pair that receives goods gets its own rate (the same as from the values)
+ * and gives at most as much as MAX_GOODS_PER_DEAL received goods cost. Giving goods is limited by the give options.
+ */
+function guildPricing(data: SmugglingData) {
+  const {values, buyValues, spicePair} = currentPricing(data);
+  const valued = {values, buyValues};
+  const pairs: Array<{give: Resource, get: Resource, rate: {give: number, get: number}, maxGive?: number}> = [spicePair];
+  for (const give of ALL_RESOURCES) {
+    for (const get of ALL_RESOURCES) {
+      if (get === give || get === Resource.MEGACREDITS) {
+        continue;
+      }
+      const rate = tradeRate(valued, give, get);
+      if (rate === undefined) {
+        continue;
+      }
+      pairs.push({give, get, rate, maxGive: rate.give * Math.max(1, Math.floor(MAX_GOODS_PER_DEAL / rate.get))});
+    }
+  }
+  return {values, buyValues, spicePair, pairs};
+}
+
+/** What one guild trade may give of a resource: the stock, for goods at most MAX_GOODS_PER_DEAL */
+function guildGiveMax(player: IPlayer, resource: Resource): number {
+  const stock = player.stock.get(resource);
+  return resource === Resource.MEGACREDITS ? stock : Math.min(stock, MAX_GOODS_PER_DEAL);
 }
 
 /** Level of the envy, at most the top of the track */
@@ -194,15 +236,15 @@ export function smuggleInput(player: IPlayer, data: SmugglingData, onlySpice: bo
   if (envyFull(data, player)) {
     return undefined;
   }
-  const {values, buyValues, spicePair} = currentPricing(data);
-  const pricing = onlySpice ? {pairs: [spicePair]} : {values, buyValues, pairs: [spicePair]};
+  const guild = guildPricing(data);
+  const pricing = onlySpice ? {pairs: [guild.spicePair]} : {values: guild.values, buyValues: guild.buyValues, pairs: guild.pairs};
   const generation = player.game.generation;
   // No trading there and back in one generation: what was bought cannot be sold, what was sold cannot be bought
   const getOptions = (onlySpice ? [Resource.MEGACREDITS] : ALL_RESOURCES)
     .filter((resource) => mayBuyFromGuild(data.roundTrips, player.id, generation, resource));
   // What pays for at least one unit of some other resource
   const affords = (resource: Resource) => getOptions.some((get) => get !== resource &&
-    player.stock.get(resource) >= (tradeRate(pricing, resource, get)?.give ?? Infinity));
+    guildGiveMax(player, resource) >= (tradeRate(pricing, resource, get)?.give ?? Infinity));
   const resources = (onlySpice ? [Resource.TITANIUM] : ALL_RESOURCES)
     .filter((resource) => maySellToGuild(data.roundTrips, player.id, generation, resource));
   if (!resources.some(affords)) {
@@ -212,8 +254,8 @@ export function smuggleInput(player: IPlayer, data: SmugglingData, onlySpice: bo
   // otherwise moving spice seems to be missing (Jens, 19 Oct 2026)
   const give = resources
     .filter((resource) => affords(resource) || resource === Resource.TITANIUM)
-    .map((resource) => ({resource, max: player.stock.get(resource)}));
-  // Only the stock and the rate (and limit) of each pair limit the amounts, not the received side
+    .map((resource) => ({resource, max: guildGiveMax(player, resource)}));
+  // The stock, the goods limit and the rate (and limit) of each pair limit the amounts
   return new SelectTrade(SMUGGLE_TITLE, 'Trade', give, getOptions, NO_LIMIT, pricing)
     .andThen((trade) => {
       // The line first: the changes after it land on its right in the log (logActions.ts)
@@ -298,13 +340,14 @@ export function aiWaterInput(player: IPlayer, data: SmugglingData): SelectTrade 
     !maySellToGuild(data.roundTrips, player.id, player.game.generation, Resource.HEAT)) {
     return undefined;
   }
-  const {values, buyValues, spicePair} = currentPricing(data);
-  const pricing = {values, buyValues, pairs: [spicePair]};
+  const guild = guildPricing(data);
+  const pricing = {values: guild.values, buyValues: guild.buyValues, pairs: guild.pairs};
   const rate = tradeRate(pricing, Resource.HEAT, Resource.MEGACREDITS);
-  if (rate === undefined || surplus < rate.give) {
+  const offer = Math.min(surplus, MAX_GOODS_PER_DEAL);
+  if (rate === undefined || offer < rate.give) {
     return undefined;
   }
-  return new SelectTrade(SMUGGLE_TITLE, 'Trade', [{resource: Resource.HEAT, max: surplus}], [Resource.MEGACREDITS], NO_LIMIT, pricing)
+  return new SelectTrade(SMUGGLE_TITLE, 'Trade', [{resource: Resource.HEAT, max: offer}], [Resource.MEGACREDITS], NO_LIMIT, pricing)
     .andThen((trade) => {
       player.game.log('${0} traded with the guild', (b) => b.player(player));
       player.stock.deduct(trade.give, trade.giveAmount, {log: true});

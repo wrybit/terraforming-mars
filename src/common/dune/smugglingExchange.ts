@@ -22,9 +22,10 @@ export const NORMAL_BUY: Readonly<ExchangePrices> = {megacredits: 1, steel: 4, t
 export const NORMAL_RATES: Readonly<Record<ExchangeSide, Readonly<ExchangePrices>>> = {sell: NORMAL_SELL, buy: NORMAL_BUY};
 
 // "Favour" of a rate: how far it lies from normal in the player's favour (selling higher, buying cheaper). Each rate
-// may go up to 4 in the player's favour and 2 against (Jens, 24 Oct 2026).
-export const FAVOUR_MIN = -2;
-export const FAVOUR_MAX = 4;
+// may go up to 3 in the player's favour and 1 against (Jens 19 Nov 2026, guild variant D; before +4 / −2, which made
+// goods-for-goods trades up to 12 times better than normal and the guild a money pump).
+export const FAVOUR_MIN = -1;
+export const FAVOUR_MAX = 3;
 /** From this favour on a rate counts as a peak (the tile shows it highlighted) */
 export const PEAK_FAVOUR = 3;
 

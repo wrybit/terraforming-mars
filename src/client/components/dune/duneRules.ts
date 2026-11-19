@@ -63,7 +63,9 @@ export function wormRules(layout: ArrakisLayout): ReadonlyArray<DuneRule> {
 export const CHOAM_RULES: ReadonlyArray<DuneRule> = [
   {picture: 'coin', text: 'Guild: the rates change every generation, the next one is known in advance'},
   {sign: 'levels', text: 'Market mood from −2 (slump) to +2 (boom) pulls all rates along; no rate stays the same longer than 2 generations'},
-  {sign: 'hidden', text: 'What you bought from the guild you cannot sell back to it in the same generation, and the other way round'},
+  {sign: 'hidden', text: 'What you bought from the guild you cannot sell back to it in the same or the next generation, and the other way round; energy and heat count as one good'},
+  // Guild variant D (Jens 19 Nov 2026): no money pump from stocking up and trading goods for goods at peak rates
+  {sign: 'slide', text: 'At most 7 goods per guild trade (Solari do not count); goods for goods at most twice as good as at the normal rates'},
   {sign: 'slide', text: 'Supply and demand: every 3 units all players sell net lower the next selling rate by 1, every 3 bought raise the next buying rate by 1'},
   {sign: 'die', text: 'Prophecy: 2 to 8 units on one rate; once the market reaches it you get exactly your column, premium included; withdrawing gives back half, at game end it is lost'},
   {picture: 'choam', text: 'Privilege: each generation the emperor wants one good and pays 1 Solari per unit more than the guild, only to the first'},
