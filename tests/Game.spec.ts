@@ -8,7 +8,7 @@ import {Birds} from '../src/server/cards/base/Birds';
 import {WaterImportFromEuropa} from '../src/server/cards/base/WaterImportFromEuropa';
 import {Phase} from '../src/common/Phase';
 import {addCity, addGreenery, addOcean, doWait, fakeCard, forceGenerationEnd, maxOutOceans, runAllActions, setOxygenLevel, setTemperature, setVenusScaleLevel, testGame} from './TestingUtils';
-import {cast, toName} from '../src/common/utils/utils';
+import {cast, isObject, toName} from '../src/common/utils/utils';
 import {TestPlayer} from './TestPlayer';
 import {SaturnSystems} from '../src/server/cards/corporation/SaturnSystems';
 import {Resource} from '../src/common/Resource';
@@ -1442,16 +1442,16 @@ describe('Game', () => {
   });
 });
 
-function assertIsJSON(serialized: any) {
-  for (const field in serialized) {
-    if (serialized.hasOwnProperty(field)) {
-      const val = serialized[field];
-      const type = typeof(val);
-      if (type === 'object') {
-        assertIsJSON(val);
-      } else if (type === 'function') {
-        throw new Error(field + ' is invalid');
-      }
+function assertIsJSON(serialized: unknown) {
+  if (!isObject(serialized)) {
+    return;
+  }
+  for (const [field, val] of Object.entries(serialized)) {
+    const type = typeof(val);
+    if (type === 'object') {
+      assertIsJSON(val);
+    } else if (type === 'function') {
+      throw new Error(field + ' is invalid');
     }
   }
 }

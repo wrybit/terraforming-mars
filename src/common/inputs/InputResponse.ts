@@ -6,11 +6,14 @@ import {PartyName} from '../turmoil/PartyName';
 import {PolicyId} from '../turmoil/Types';
 import {SpaceId} from '../Types';
 import {Units} from '../Units';
-import {twoWayDifference} from '../utils/utils';
+import {isObject, twoWayDifference} from '../utils/utils';
 import {AresGlobalParametersResponse} from './AresGlobalParametersResponse';
 import {Payment} from './Payment';
 
-function matches(response: any, fields: Array<string>) {
+function matches(response: unknown, fields: Array<string>) {
+  if (!isObject(response)) {
+    return false;
+  }
   return twoWayDifference(Object.keys(response), fields).length === 0;
 }
 export interface SelectOptionResponse {
