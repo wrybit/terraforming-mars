@@ -18,6 +18,11 @@ import {cast, range} from '../../src/common/utils/utils';
 
 dotenv.config({path: 'tests/integration/.env', debug: true, quiet: true});
 
+function incrementActionsTaken(player: IPlayer): void {
+  player.actionsTakenThisRound++;
+  player.actionsTakenThisGame++;
+}
+
 /*
  * This test can be run with `npm run test:integration` as long as the test is set up
  * correctly.
@@ -59,7 +64,7 @@ class TestPostgreSQL extends PostgreSQL implements ITestDatabase {
 
   public async afterEach() {
     for (const table of POSTGRESQL_TABLES) {
-      await this.client.query('DROP TABLE IF EXISTS ' + table);
+      await this.pool.query('DROP TABLE IF EXISTS ' + table);
     }
   }
 
@@ -77,7 +82,7 @@ class TestPostgreSQL extends PostgreSQL implements ITestDatabase {
   }
 
   async status(gameId: GameId): Promise<Status> {
-    const result = await this.client.query('SELECT DISTINCT status FROM games WHERE game_id = $1 LIMIT 1', [gameId]);
+    const result = await this.pool.query('SELECT DISTINCT status FROM games WHERE game_id = $1 LIMIT 1', [gameId]);
     const statusText = result.rows[0].status;
     if (statusText === 'running' || statusText === 'finished') {
       return statusText;
@@ -86,7 +91,7 @@ class TestPostgreSQL extends PostgreSQL implements ITestDatabase {
   }
 
   async completedTime(gameId: GameId): Promise<number | undefined> {
-    const res = await this.client.query('SELECT completed_time FROM completed_game WHERE game_id = $1', [gameId]);
+    const res = await this.pool.query('SELECT completed_time FROM completed_game WHERE game_id = $1', [gameId]);
     if (res.rows.length === 0 || res.rows[0] === undefined) {
       return undefined;
     }
@@ -94,20 +99,20 @@ class TestPostgreSQL extends PostgreSQL implements ITestDatabase {
     return row.completed_time;
   }
 
-  setCompletedTime(gameId: GameId, timestampSeconds: number): Promise<QueryResult<any>> {
-    return this.client.query('UPDATE completed_game SET completed_time = to_timestamp($1) WHERE game_id = $2', [timestampSeconds, gameId]);
+  setCompletedTime(gameId: GameId, timestampSeconds: number): Promise<QueryResult<Record<string, unknown>>> {
+    return this.pool.query('UPDATE completed_game SET completed_time = to_timestamp($1) WHERE game_id = $2', [timestampSeconds, gameId]);
   }
 
   // Simulates an orphaned row: deletes every `games` row for a game while leaving its
   // `game` and `participants` rows behind.
   public async deleteGamesRows(gameId: GameId): Promise<void> {
-    await this.client.query('DELETE FROM games WHERE game_id = $1', [gameId]);
+    await this.pool.query('DELETE FROM games WHERE game_id = $1', [gameId]);
   }
 
   // Reads the two raw storage columns for a single save so tests can assert which
   // representation (plain-text `game` vs. compressed `game_compressed`) is populated.
   public async getRawGame(gameId: GameId, saveId: number): Promise<{game: string | null, gameCompressed: Buffer | null}> {
-    const res = await this.client.query('SELECT game, game_compressed FROM games WHERE game_id = $1 AND save_id = $2', [gameId, saveId]);
+    const res = await this.pool.query('SELECT game, game_compressed FROM games WHERE game_id = $1 AND save_id = $2', [gameId, saveId]);
     return {game: res.rows[0].game, gameCompressed: res.rows[0].game_compressed};
   }
 }
@@ -225,7 +230,7 @@ describeDatabaseSuite({
         // A do-nothing player input
         const simpleOption = new SelectOption('');
         p.setWaitingFor(simpleOption, () => {
-          (p as any).incrementActionsTaken();
+          incrementActionsTaken(p);
           p.takeAction();
         });
       }
@@ -306,7 +311,7 @@ describeDatabaseSuite({
           return undefined;
         });
         p.setWaitingFor(simpleOption, () => {
-          (p as any).incrementActionsTaken();
+          incrementActionsTaken(p);
           p.takeAction();
         });
       }
@@ -388,7 +393,7 @@ describeDatabaseSuite({
           return undefined;
         });
         p.setWaitingFor(simpleOption, () => {
-          (p as any).incrementActionsTaken();
+          incrementActionsTaken(p);
           p.takeAction();
         });
       }
