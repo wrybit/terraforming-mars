@@ -88,14 +88,12 @@
   "blue": "Blau",
   "black": "Schwarz",
   "purple": "Lila",
-
   "victoryPoints": "Siegpunkte",
   "terraformRating": "Terraformwertung",
   "milestones": "Meilensteine",
   "Claimed": "Beansprucht ",
   "greenery": "Grünfläche",
   "city": "Stadt",
-
   "tharsis": "Tharsis",
   "hellas": "Hella",
   "elysium": "Elysium",
@@ -105,7 +103,6 @@
   "random all": "Zufällig (alle)",
   "random": "Zufällig",
   "Official": "Offiziell",
-
   "GEN": "GEN.",
   "Gen:": "Gen.:",
   "next": "nächst",
@@ -126,7 +123,6 @@
   "Show spinning circle in window title on your turn.": "Zeige einen sich drehenden Kreis im Fenstertitel, wenn du an der Reihe bist.",
   "Animated Title": "Animierter Titel",
   "Link opens in a new tab/window": "Link öffnet sich in einem neuen Tab/Fenster",
-
   "prel": "Präludium",
   "Prelude": "Präludium",
   "Prelude 2": "Präludium 2",
@@ -163,7 +159,6 @@
   "You": "Du",
   "you": "du",
   "researching": "erforschen",
-
   "Milestones": "Meilensteine",
   "Builder": "Bauherr",
   "Have 8 building tags in play": "Mindestens 8 eigene Gebäudesymbole im Spiel.",
@@ -172,7 +167,7 @@
   "Have 64 M€": "Benötigt mindestens 64 M€-Ressourcen.",
   "Colonizer": "Kolonisator",
   "Have 4 colonies": "Benötigt 4 Kolonien im Spiel.",
-  "T. Collector": "Erfinder",
+  "T. Collector": "Vollender",
   "Have 3 sets of automated (green), active (blue) and event (red) project cards in play": "Besitze 3 Sets aus automatischen, aktiven und Ereigniskarten.",
   "Diversifier": "Aufteiler",
   "Have 8 different tags in play": "Benötigt mindestens 8 unterschiediche, eigene Symbole im Spiel.",
@@ -295,13 +290,12 @@
   "Own 3 tiles adjacent to oceans": "Benötigt 3 eigene Plättchen, die an Ozeane grenzen.",
   "Architect": "Architekt",
   "Have 3 city tags in play": "Benötigt mindestens 3 eigene Stadtsymbole im Spiel.",
-
   "Awards": "Auszeichnungen",
   "Landlord": "Grundbesitzer",
   "Own the most tiles": "Die meisten Plättchen im Spiel.",
   "Banker": "Der Banker",
   "Have the most M€ production": "Die höchste M€-Produktion haben.",
-  "Scientist": "Forschung",
+  "Scientist": "Wissenschaftler",
   "Have the most science tags in play": "Die meisten Wissenschaftssymbole im Spiel (Ereigniskarten zählen nicht).",
   "Thermalist": "Wärmetechniker",
   "Have the most heat": "Die meisten Wärmeressourcen haben (nach der letzten Produktionsrunde).",
@@ -406,7 +400,6 @@
   "Most tiles on areas along the edges of the map": "Die meisten Plättchen an den Rändern des Spielfelds.",
   "Blacksmith": "Schmied",
   "Have the highest production of steel and titanium combined": "Die höchste Stahl- und Titanproduktion (in Summe) haben.",
-
   "Actions": "Aktionen",
   "Hide active cards": "Verstecke aktive Karten",
   "Show active cards": "Zeige aktive Karten",
@@ -429,7 +422,6 @@
   "Select CEO": "Wähle Geschäftsführer",
   "Select 1 CEO": "Wähle 1 Geschäftsführer",
   "Use CEO once per game action": "Einmal pro Spiel Fähigkeit des Geschäftsführers nutzen",
-
   "Select 2 Prelude cards": "Wähle 2 Präludium-Karten",
   "Select 2 preludes": "Wähle 2 Präludium-Karten",
   "You selected too many corporations": "Du hast zu viele Konzern-Karten gewählt",
@@ -438,7 +430,6 @@
   "Draw 3 Prelude cards, and play one of them": "Ziehe 3 Präludium-Karten und spiele eine davon",
   "Would you like pay 12 M€ and one Director to play ${0}": "Würdest du gerne 12 M€ und einen Direktor bezahlen, um ${0} zu spielen?",
   "This Prelude will fizzle. Playing it will give you 15M€.": "Diese Präludium-Karte wird floppen. Wenn du es spielst, bekommst du 15M€.",
-
   "Game details": "Spieldetails",
   "Milestones and awards": "Meilensteine und Auszeichnungen",
   "Turn order": "Zugreihenfolge",
@@ -467,7 +458,6 @@
   "played cards": "gespielte Karten",
   "Self-replicating Robots cards": "Selbstreplizierende Roboter Karten",
   "Claimed Underground Resource Tokens": "Beanspruchte unterirdische Ressourcenmarker",
-
   "Select All": "Alle auswählen",
   "Deselect All": "Auswahl aufheben",
   "Select which cards to take into hand": "Wähle, welche Karten du auf die Hand nehmen möchtest",
@@ -475,7 +465,6 @@
   "Select which production to increase 1 step.": "Wähle, welche Produktion um 1 erhöht werden soll.",
   "Select resource to discard": "Wähle Ressource, die du abgeben möchtest",
   "Select resource to gain": "Wähle Ressource, die du erhalten möchtest",
-
   "Convert 7 heat into temperature": "Wandle 7 Wärme in Temperatur um",
   "Convert 8 heat into temperature": "Wandle 8 Wärme in Temperatur um",
   "Convert heat": "Wandle Wärme",
@@ -509,7 +498,6 @@
   "Greenery": "Grünfläche",
   "City": "Stadt",
   "Buffer Gas": "Puffergas",
-
   "Pay trade fee": "Zahle Handelsgebühr",
   "Select colony tile for trade": "Wähle Kolonieplättchen zum Handeln",
   "Select colony tile for trade with": "Wähle Kolonieplättchen zum Handeln",
@@ -521,7 +509,6 @@
   "supply chain": "Lieferketten-Ressource",
   "Trade for free (use ${0} action)": "Handle frei (nutze die ${0} Aktion)",
   "Trade with a colony tile": "Mit einer Koloniekarte handeln",
-
   "Increase temperature": "Erhöhe Temperatur",
   "Increase oxygen": "Erhöhe Sauerstoffgehalt",
   "Add an ocean": "Platziere einen Ozean",
@@ -529,11 +516,9 @@
   "Increase the Moon habitat rate": "Erhöhe Habitatwertung",
   "Increase the Moon mining rate": "Erhöhe Minienwertung",
   "Increase the Moon logistic rate": "Erhöhe Logistikwertung",
-
   "Login": "Einloggen",
   "My Games": "Meine Spiele",
   "LoginOut": "Ausloggen",
-
   "Toggle all": "Alles einschalten",
   "Base": "Basis",
   "Agendas": "Agenden",
@@ -575,7 +560,6 @@
   "Filter description": "Filter-Beschreibung",
   "Sort by ID": "Nach ID sortieren",
   "go to map": "zum Spielbrett",
-
   "Remove colony": "Kolonie entfernen",
   "Select colony to gain trade income from": "Wähle ein Kolonieplättchen, von der du das Handelseinkommen erhälst",
   "Select colony tile to remove": "Wähle ein Kolonieplättchen, dass entfernt werden soll",
@@ -702,10 +686,8 @@
   "Copy": "Kopieren",
   "Do nothing": "Mache nichts",
   "Ok ${0}": "OK ${0}",
-
   "Starting M€:": "Startkapital:",
   "After Preludes:": "Nach Präludium:",
-
   "resources": "Resource(n)",
   "Fighter": "Jäger",
   "Select card to add 1 resource": "Wähle eine Karte um 1 Ressource hinzuzufügen",
@@ -1041,7 +1023,6 @@
   "Rotate Crashlanding": "Rotiere Bruchlandung",
   "Playing ${0} consumes ${1} ${2} from ${3}": "Um ${0} zu spielen, werden ${1} ${2} von der ${3} verbraucht",
   "Playing ${0} will cost ${1} M€ more because ${2} are in power": "Um ${0} zu spielen, wird die Karte ${1} M€ mehr kosten, weil die ${2} an der Macht sind.",
-
   "Search for ${0} tags": "Suche nach ${0}-Symbol",
   "Spend 1 M€ to gain 1 standard resource.": "Bezahle 1 M€, um 1 Standardressource zu erhalten.",
   "Spend 1 science resource here to gain 1 standard resource": "Bezahle hier 1 Wissenschaftsressource, um 1 Standardressource zu erhalten",
@@ -1059,7 +1040,6 @@
   "Global Event - Select 2 cards to discard": "Globales Ereignis - 2 Karten zum Abwerfen auswählen",
   "Dry Deserts Global Event - Remove an Ocean tile from the board": "Globales Ereignis: Trockene Wüsten - Entferne ein Ozean vom Spielbrett",
   "Dry Deserts Global Event - Gain ${0} resource(s) for influence": "Globales Ereignis: Trockene Wüsten - Erhalte ${0} Ressource für deinen Einfluss",
-
   "Choose 1 unit(s) of production to lose": "Wähle 1 Einheit Produktion, die verloren geht",
   "Choose 2 unit(s) of production to lose": "Wähle 2 Einheiten Produktion, die verloren gehen",
   "Choose 3 unit(s) of production to lose": "Wähle 3 Einheiten Produktion, die verloren gehen",
@@ -1091,7 +1071,6 @@
   "lose ${0} ${1} production": "Verliere ${0} ${1} Produktion",
   "${0} ${1} from ${2}": "${0} ${1} von ${2}",
   "${0} corruption": "${0} Korruption",
-
   "Spend 1 corruption to block an attack by ${0}?": "Willst du 1 Korruption bezahlen, um einen Angriff von ${0} zu blockieren?",
   "Block with corruption": "Block mit Korruption",
   "Block with ${0} fighters.": "Block mit ${0} Jägern.",
@@ -1108,7 +1087,6 @@
   "Spend 1 corruption to gain 3 of the same standard resource.": "Bezahle 1 Korruption, um 3 von derselben Standard-Ressource zu erhalten",
   "Spend 8 energy to raise oxygen 1 step.": "Bezahle 8 Energie, um den Sauerstoffsgehalt um 1% zu erhöhen.",
   "Spend 8 energy to raise Venus 1 step.": "Bezahle 8 Energie, um die Venuswertung um 2% zu erhöhen.",
-
   "Select Earth card(s) to discard": "Wähle Karte(n) mit Erd-Symbol, die du abwerfen möchtest",
   "Select a card to keep and pass the rest to ${0}": "Wähle eine Karte, die du behalten möchtest und gebe den Rest an ${0}",
   "Select two cards to keep and pass the rest to ${0}": "Wähle zwei Karten, die du behalten möchtest und gebe den Rest an ${0}",
@@ -1148,9 +1126,7 @@
   "Undo": "Rückgängig",
   "undo": "rückgängig",
   "12 Gens": "12 Generationen",
-
   "Your selected cards:": "Deine ausgewählten Karten",
-
   "All": "Alle",
   "All*": "Alle*",
   "None": "Keine",
@@ -1209,7 +1185,6 @@
   "Not enough cards selected": "Nicht genug Karten gewählt",
   "Select how to pay for action": "Wähle, wie du für die Aktion bezahlen möchtest",
   "Game Setup Details": "Spielaufbau Details",
-
   "distant": "zukunftiges",
   "coming": "nächstes",
   "current": "aktuelles",
@@ -1221,19 +1196,13 @@
   "[Greens] - Bonus: Gain 1 M€ for each plant, microbe and animal tag you have - Policy: When you place a greenery tile, gain 4 M€": "[Grün] - Bonus: 1 M€ für jedes Pflanzen-, Mikroben- und Tier-Symbol, das du hast - Politik: Wenn du ein Grünflächen-Plättchen legst, erhältst du 4 M€.",
   "[Reds] - Bonus: The players(s) with the lowest TR gains 1 TR - Policy: When you take an action that raises TR, you MUST pay 3 M€ per step raised": "[Rot] - Bonus: Der/die Spieler mit dem niedrigsten TW erhält 1 TW - Politik: Wenn du eine Aktion ausführst, die den TW erhöht, MUSST du 3 M€ pro Schritt zahlen.",
   "[Kelvinists] - Bonus: Gain 1 M€ for each heat production you have - Policy: Pay 10 M€ to increase your energy and heat production 1 step": "[Kelvinisten] - Bonus: Du erhältst 1 M€ für jede Wärmeproduktion, die du hast - Politik: Zahle 10 M€, um deine Energie- und Wärmeproduktion um 1 zu erhöhen.",
-
   "TR solo mode": "TW-Solo-Modus",
-
   "Players": "Spieler",
-
   "Goes First?": "Startspieler?",
-
   "Claim a milestone": "Beanspruche einen Meilenstein",
   "Build colony": "Baue Kolonie",
-
   "Place any final greenery from plants": "Platziere finale Grünflächen",
   "Don't place a greenery": "Keine Grünfläche platzieren",
-
   "Wetlands: counts as an ocean and a greenery. Does not count toward 9 oceans.": "Feuchtgebiete: zählt als ein Ozean und eine Grünfläche. Zählt nicht zu den 9 Ozeanen.",
   "Red City: 1 VP per empty adjacent area. No greeneries may be placed next to it.": "Rote Stadt: 1 SP pro leere angrenzendem Feld. Es dürfen keine Grünflächen daneben platziert werden.",
   "Moon Mine: 1 VP per adjacent road": "Mond-Mine: 1 SP pro angrenzender Straßeninfrastruktur",
@@ -1281,7 +1250,6 @@
   "Warning: This game will be purged in approximately ${0} hours.": "Warnung: Dieses Spiel wird in etwa ${0} Stunden gelöscht.",
   "Why?": "Warum?",
   "Pay a total of 2 production units": "Bezahle insgesamt 2 Produktionseinheiten",
-
   "How to pay?": "Bezahlung",
   "Please adjust payment amount": "Bitte passe den Zahlungsbetrag an",
   "Some ${0} are reserved and unavailable here.": "Etwas ${0} ist reserviert und hier nicht verfügbar.",
@@ -1319,7 +1287,6 @@
   "Unable to reach the server. It may be restarting or down for maintenance.": "Der Server kann nicht erreicht werden. Möglicherweise wird er gerade neu gestartet oder ist wegen Wartungsarbeiten nicht verfügbar.",
   "Unable to restore game ${game_id}": "Das Spiel ${game_id} kann nicht wiederhergestellt werden",
   "Game not found": "Partie nicht gefunden",
-
   "Cards List": "Kartenliste",
   "legacy card UI": "Alte Kartenliste",
   "Advanced »": "Erweitert »",
@@ -1334,7 +1301,6 @@
   "active": "aktiv",
   "automated": "automatisch",
   "standard_project": "Standard Projekt",
-
   "megacredits": "MegaCredit (M€)",
   "corruption": "Korruption",
   "MegaCredits [M€]": "MegaCredit (M€)",
@@ -1393,25 +1359,21 @@
   "oceanrequirementmod": "Die Ozeananforderungen betragen ±3",
   "oxygenrequirementmod": "Die Sauerstoffanforderungen betragen ±3",
   "temprequirementmod": "Die Temperaturanforderungen betragen ±6 °C",
-
   "Increase production": "Erhöhe Produktion",
   "Draw card": "Ziehe eine Karte",
   "Draw 1 card": "Ziehe 1 Karte",
   "Draw 2 cards": "Ziehe 2 Karten",
   "Draw 3 cards": "Ziehe 3 Karten",
   "Draw 4 cards, then discard 3 cards.": "Ziehe 4 Karten und lege dann 3 Karten ab.",
-
   "14 Gens": "14 Gen.",
   "TR all": "alle TW",
   "63 TR": "63 TW",
   "Ok": "OK",
-
   "The number of available actions on active cards": "Anzahl verfügbarer Aktionen auf aktiven Karten",
   "Escape Velocity penalty": "Fluchtgeschwindigkeits-Strafe",
   "Actions taken this game": "Durchgeführte Aktionen in diesem Spiel",
   "Show information that can be helpful to players who are still learning the games": "Zeige Informationen, die für neue\nSpieler nützlich sein könnten",
   "Test out any possible new experimental UI features for feedback.": "Teste neue experimentelle Funktionen der\nBenutzeroberfläche, um Feedback zu geben.",
-
   "Select how to pay for TR increase": "Wähle, wie du für die TW-Erhöhung bezahlen möchtest",
   "Select how to pay for Colony project": "Wähle, wie du für das Projekt Kolonie bezahlen möchtest",
   "Select how to pay for Air Scrapping project": "Wähle, wie du für das Projekt Luftaufbereitung bezahlen möchtest",
@@ -1435,7 +1397,6 @@
   "Select how to spend ${0} M€": "Wähle, wie du ${0} M€ bezahlen möchtest",
   "Stormcraft Incorporated Floaters (2 heat each)": "Schweber von Stormcraft Incorporated (je 2 Wärme)",
   "Play a card, ignoring global requirements": "Eine Karte ausspielen und dabei globale Bedingungen ignorieren",
-
   "Collusion:SP": "Absprachen",
   "Excavate:SP": "Ausgraben",
   "Power Plant:SP": "Kraftwerk",
@@ -1444,7 +1405,6 @@
   "Greenery:SP": "Grünfläche",
   "City:SP": "Stadt",
   "Select space for ocean from temperature increase": "Wähle ein Feld für einen Ozean, der aufgrund des Temperaturanstiegs platziert wird",
-
   "Select production to decrease one step and gain 4 resources": "Wähle eine Produktion, um einen Schritt zu reduzieren und 4 Ressourcen zu erhalten",
   "Decrease M€ production": "Reduziere M€-Produktion",
   "Decrease steel production": "Reduziere Stahl-Produktion",
@@ -1455,14 +1415,12 @@
   "Decrease production": "Reduziere Produktion",
   "Select award to fund": "Wähle eine Auszeichung, die du finanzieren möchtest",
   "Fund ${0} award": "Auszeichnung ${0} finanzieren",
-
   "Decrease temperature": "Reduziere Temperatur",
   "Remove an ocean tile": "Entferne ein Ozean-Plättchen",
   "Decrease oxygen level": "Reduziere Sauerstoff-Leiste",
   "Decrease Moon habitat rate": "Reduziere die Mond Habitat Wertung",
   "Decrease Moon mining rate": "Reduziere die Mond Minien Wertung",
   "Decrease Moon logistic rate": "Reduziere die Mond Logistik Wertung",
-
   "Increase megacredits production 1 step": "Erhöhe M€-Produktion um 1",
   "Increase steel production 1 step": "Erhöhe Stahl-Produktion um 1",
   "Increase titanium production 1 step": "Erhöhe Titan-Produktion um 1",
@@ -1734,5 +1692,22 @@
   "Memory snapshot (large download)": "Speicherabbild (große Datei)",
   "Player ${0}": "Spieler ${0}",
   "One": "Eins",
-  "Many": "Mehrere"
+  "Many": "Mehrere",
+  "Solo": "Einzelspiel",
+  "Remember": "Erinnern",
+  "Select boards to be randomly chosen": "Wähle die Karten nach dem Zufallsprinzip",
+  "amazonis planitia": "Amazonis Planitia",
+  "Random Official": "Zufällig (offiziell)",
+  "Random All": "Zufällig (alle)",
+  "Choose between ${0} to ${1} for each": "Wähle für jeden Meilenstein/Auszeichnung einen Betrag zwischen ${0} und ${1} aus",
+  "Clear": "Löschen",
+  "Yours": "Deine",
+  "Spacefarer": "Weltraumfahrer",
+  "Innovator": "Erfinder",
+  "The id of this game is S{0}": "Die ID dieses Spiels ist S{0}",
+  "Select card to remove 2 Floater(s)": "Wähle eine Karte um 2 Schweber zu entfernen",
+  "Spend 3 floaters here to raise Venus 1 step": "Bezahle 3 Schweber, um die Venuswertung um 2% zu erhöhen",
+  "Spend 3 floaters here to raise oxygen 1 step": "Bezahle 3 Schweber, um den Sauerstoffgehalt um 1% zu erhöhen",
+  "${0} plants": "${0} Pflanzen",
+  "Milestones and Awards": "Meilensteine und Auszeichnungen"
 }
