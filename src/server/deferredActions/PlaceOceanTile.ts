@@ -48,6 +48,13 @@ export class PlaceOceanTile extends DeferredAction<Space | undefined> {
       title = this.options?.title ?? this.getTitle(on);
     }
 
+    // Oceans are not maxed, but no space is left (Arrakis: the worm lies on the last free ocean space).
+    // Skip the placement like a maxed ocean instead of offering an empty selection that can never be answered.
+    if (availableSpaces.length === 0) {
+      this.player.defer(this.cb(undefined));
+      return undefined;
+    }
+
     return new SelectSpace(title, availableSpaces)
       .andThen((space) => {
         this.creditedPlayer.game.addOcean(this.creditedPlayer, space);

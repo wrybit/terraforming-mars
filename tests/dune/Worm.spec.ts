@@ -26,6 +26,7 @@ function wormOf(game: IGame): WormData {
 }
 import {wormDistanceSections} from '../../src/common/dune/wormDistance';
 import {Arrakis61Board} from '../../src/server/boards/Arrakis61Board';
+import {PlaceOceanTile} from '../../src/server/deferredActions/PlaceOceanTile';
 
 describe('Shai-Hulud (Dune module C)', () => {
   let game: IGame;
@@ -306,6 +307,20 @@ describe('Shai-Hulud (Dune module C)', () => {
     worm.direction = wormDirection(game.board, worm.spaceId, 1);
     moveWorm(game, worm, 1);
     expect((game.board as Arrakis61Board).wormSpaceId).eq(worm.spaceId);
+  });
+
+  it('blocks the last free ocean space: an ocean to place is skipped instead of failing', () => {
+    const board = game.board as Arrakis61Board;
+    const oceanSpaces = board.getAvailableSpacesForOcean(player1);
+    const last = oceanSpaces[oceanSpaces.length - 1];
+    // other tiles on every ocean space but the last, the worm on that one: no ocean is placed yet, so oceans are not maxed
+    oceanSpaces.slice(0, -1).forEach((space) => space.tile = {tileType: TileType.CITY});
+    board.wormSpaceId = last.id;
+    expect(game.canAddOcean()).is.true;
+    expect(board.getAvailableSpacesForOcean(player1)).is.empty;
+
+    expect(new PlaceOceanTile(player1).execute()).is.undefined;
+    expect(game.board.getOceanSpaces()).is.empty;
   });
 
   it('records its trail: every move with its generation, from the starting space on', () => {
