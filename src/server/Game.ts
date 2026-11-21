@@ -1714,6 +1714,7 @@ export class Game implements IGame, Logger {
     AresHandler.ifAres(this, (aresData) => {
       AresHandler.onOceanPlaced(aresData, player);
     });
+    DuneExpansion.onOceanPlaced(this, space);
   }
 
   public removeTile(spaceId: SpaceId): void {

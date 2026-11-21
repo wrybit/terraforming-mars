@@ -10,7 +10,7 @@ import {OrOptions} from '../inputs/OrOptions';
 import {SelectOption} from '../inputs/SelectOption';
 import {message} from '../logs/MessageBuilder';
 import {WormModel} from '../../common/dune/DuneModel';
-import {PendingLevy, takeLevy} from './WormLevy';
+import {PendingLevy, levyInput, takeLevy} from './WormLevy';
 import {arrakisCoordinate} from '../../common/dune/arrakisCoordinates';
 import {CardName} from '../../common/cards/CardName';
 import {Random} from '../../common/utils/Random';
@@ -263,6 +263,28 @@ function headingFace(direction: number): number {
 function rollDie(game: IGame, worm: WormData): void {
   worm.roll = game.rng.nextInt(6) + 1;
   worm.direction = wormDirection(game.board, worm.spaceId, worm.roll);
+}
+
+/**
+ * An ocean placed on the worm's space: Shai-Hulud gives way one space, heading rolled as for its move (Jens 21 Nov 2026).
+ * Before, the worm blocked the space, and with every other ocean space covered the last ocean could never be placed:
+ * the weakest player kept the worm there and the game never ended. The crossed space acts as in a move; a waiting
+ * Thumper or chooser of this generation's move is kept.
+ */
+export function displaceWorm(game: IGame, worm: WormData): void {
+  const chooser = worm.chooser;
+  const thumper = worm.thumper;
+  rollWorm(game, worm);
+  moveWorm(game, worm, 1);
+  worm.chooser = chooser;
+  worm.thumper = thumper;
+  // Levies of this step are asked right away (deferred), not with the move at the end of the generation
+  const levies = worm.levies ?? [];
+  worm.levies = undefined;
+  for (const levy of levies) {
+    const player = game.getPlayerById(levy.player);
+    player.defer(levyInput(player, levy));
+  }
 }
 
 export function moveWorm(game: IGame, worm: WormData, distance: number, chooser?: IPlayer): void {

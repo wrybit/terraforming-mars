@@ -7,10 +7,11 @@ import {Random} from '../../common/utils/Random';
 import {DuneModule} from '../../common/dune/DuneModule';
 import {DuneModel} from '../../common/dune/DuneModel';
 import {Arrakis61Board} from '../boards/Arrakis61Board';
+import {Space} from '../boards/Space';
 import {ARRAKIS_LAYOUT, ArrakisLayout, arrakisLayout} from '../../common/dune/arrakisLayout';
 import {VictoryPointsBreakdownBuilder} from '../game/VictoryPointsBreakdownBuilder';
 import {BazaarData, bazaarModel, bazaarTabActions, buyInput, initializeBazaar, slideAndRefill} from './Bazaar';
-import {WormData, distanceInput, rollWorm, wormChooser, wormModel, wormStart} from './Worm';
+import {WormData, displaceWorm, distanceInput, rollWorm, wormChooser, wormModel, wormStart} from './Worm';
 import {levyInput} from './WormLevy';
 import {KanlyData, initializeKanly, kanlyActions, kanlyModel, kanlyTabActions, resolveBattle} from './Kanly';
 import {SmugglingData, chargeSuspicion, closeExchange, initializeSmuggling, openExchange, smugglingModel} from './Smuggling';
@@ -130,7 +131,15 @@ export class DuneExpansion {
     return data;
   }
 
-  /** After creating or loading a game: tell the board where the worm lies (nothing may be placed there) */
+  /** An ocean on the worm's space: the worm gives way (Worm.ts displaceWorm) */
+  public static onOceanPlaced(game: IGame, space: Space): void {
+    const worm = game.duneData?.worm;
+    if (worm !== undefined && worm.spaceId === space.id) {
+      displaceWorm(game, worm);
+    }
+  }
+
+  /** After creating or loading a game: tell the board where the worm lies (no land tile may be placed there) */
   public static attach(game: IGame): void {
     if (game.board instanceof Arrakis61Board) {
       game.board.wormSpaceId = game.duneData?.worm?.spaceId;

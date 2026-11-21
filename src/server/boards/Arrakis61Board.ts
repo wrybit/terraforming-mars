@@ -43,8 +43,5 @@ export class Arrakis61Board extends MarsBoard {
   public override getAvailableSpacesOnLand(player: IPlayer, canAffordOptions?: CanAffordOptions, subjectToHazardAdjacency: boolean = true): ReadonlyArray<Space> {
     return super.getAvailableSpacesOnLand(player, canAffordOptions, subjectToHazardAdjacency).filter((space) => space.id !== this.wormSpaceId);
   }
-
-  public override getAvailableSpacesForOcean(player: IPlayer): ReadonlyArray<Space> {
-    return super.getAvailableSpacesForOcean(player).filter((space) => space.id !== this.wormSpaceId);
-  }
+  // Oceans may go on the worm's space: the worm then gives way (dune/Worm.ts displaceWorm)
 }
