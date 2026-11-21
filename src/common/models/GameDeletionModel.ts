@@ -2,7 +2,8 @@
 // statt nur "nicht geladen" (geloescht? automatisch entfernt? nie auf diesem Server gewesen?).
 // 'closed-unstarted': opened in the lobby, the creator left before anything happened and nobody else ever came
 // 'replaced-ai-training': a finished AI training game of the lobby, removed because a newer one took its place
-export type GameDeletionReason = 'deleted-in-admin-area' | 'purged-unfinished' | 'closed-unstarted' | 'replaced-ai-training';
+// 'removed-ai-only': a finished game without a human player, removed automatically (aiOnlyGames.ts)
+export type GameDeletionReason = 'deleted-in-admin-area' | 'purged-unfinished' | 'closed-unstarted' | 'replaced-ai-training' | 'removed-ai-only';
 
 export type GameDeletionModel =
   | {deleted: false}

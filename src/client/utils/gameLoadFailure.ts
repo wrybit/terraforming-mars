@@ -39,7 +39,9 @@ export async function describeGameLoadFailure(id: string, err: unknown): Promise
           translateTextWithParams('Game ${0} was closed on ${1}: its creator left before it began and nobody else joined.', [deletion.gameId, when]) :
           deletion.reason === 'replaced-ai-training' ?
             translateTextWithParams('Game ${0} was removed on ${1}: the lobby keeps only the last ${2} AI training games.', [deletion.gameId, when, String(AI_TRAINING_FINISHED_GAMES)]) :
-            translateTextWithParams('Game ${0} was deleted in the admin area on ${1}.', [deletion.gameId, when]);
+            deletion.reason === 'removed-ai-only' ?
+              translateTextWithParams('Game ${0} was removed automatically on ${1}: games without a human player are not kept on this server.', [deletion.gameId, when]) :
+              translateTextWithParams('Game ${0} was deleted in the admin area on ${1}.', [deletion.gameId, when]);
       return {
         title: translateText('Game deleted'),
         text: what + playersSentence(deletion.playerNames) + '\n' + translateText('Its data no longer exists on this server, so the link no longer works.'),
