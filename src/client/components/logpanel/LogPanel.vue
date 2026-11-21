@@ -284,6 +284,11 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    // Replay: the log up to the moment shown, instead of loading it from the server
+    stream: {
+      type: Array as () => Array<GenerationLog> | undefined,
+      default: undefined,
+    },
   },
   data(): LogPanelModel {
     return {
@@ -833,7 +838,8 @@ export default defineComponent({
       if (this.analysisGame) {
         void loadAiFeedback(this.viewModel.id);
       }
-      fetchLogStream(this.viewModel.id, this.generation).then((stream) => {
+      const pending = this.stream !== undefined ? Promise.resolve(this.stream) : fetchLogStream(this.viewModel.id, this.generation);
+      pending.then((stream) => {
         if (stream === undefined) {
           return;
         }
@@ -842,7 +848,7 @@ export default defineComponent({
         // Something new always brings the end of the log into view, unless the mouse rests on the log
         const hasNewEntries = messageCount(this.sections) > previousCount;
         // Cards just drawn: show them by themselves (only for live updates, not when the page loads)
-        const drawn = hasNewEntries && keepPosition ?
+        const drawn = hasNewEntries && keepPosition && this.stream === undefined ?
           latestDrawnCards(this.sections.flatMap((section) => section.messages).slice(previousCount), this.viewModel.thisPlayer?.color) :
           undefined;
         if (drawn !== undefined) {
@@ -982,7 +988,7 @@ export default defineComponent({
       this.applyMilestonesAwardsFocus(true);
     }
     // The known history renders right away, so the page doesn't shrink and jump while the current generation loads
-    this.sections = toSections(cachedLogStream(this.viewModel.id, this.generation));
+    this.sections = toSections(this.stream ?? cachedLogStream(this.viewModel.id, this.generation));
     this.internals.lastHeight = this.typedRefs.root?.offsetHeight ?? 0;
     window.addEventListener('scroll', this.onWindowScroll, {passive: true});
     if (typeof ResizeObserver !== 'undefined' && this.typedRefs.root !== undefined) {

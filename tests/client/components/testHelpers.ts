@@ -91,6 +91,7 @@ export function fakeGameModel(overrides?: RecursivePartial<GameModel>): GameMode
     discardedColonies: [],
     deckSize: 0,
     discardPileSize: 0,
+    name: 'game-name',
     otherDeckSizes: {
       corporations: {drawPile: 0, discardPile: 0},
       preludes: undefined,

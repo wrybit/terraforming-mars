@@ -85,6 +85,7 @@
     "Original",
     "Port",
     "Push",
+    "Replay",
     "Server",
     "Standard",
     "Tab",
@@ -94,8 +95,8 @@
     "Terraforming Mars",
     "Training",
     "Updates",
-    "Websites",
-    "Version"
+    "Version",
+    "Websites"
   ],
   "es": [
     "${0} AI",
@@ -247,6 +248,7 @@
     "Online",
     "Prelude + Prelude",
     "Prelude 2",
+    "Replay",
     "Server",
     "Standard",
     "Temp.",

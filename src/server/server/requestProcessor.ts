@@ -13,6 +13,7 @@ import {ApiGameDeletion} from '../routes/ApiGameDeletion';
 import {ApiGameHistory} from '../routes/ApiGameHistory';
 import {ApiAiFeedback} from '../routes/ApiAiFeedback';
 import {ApiGameLogs} from '../routes/ApiGameLogs';
+import {ApiReplay} from '../routes/ApiReplay';
 import {ApiAdminDeleteGame} from '../routes/ApiAdminDeleteGame';
 import {ApiAdminGames} from '../routes/ApiAdminGames';
 import {ApiAdminDashboard} from '../routes/ApiAdminDashboard';
@@ -143,6 +144,7 @@ const handlers: Map<string, IHandler> = new Map(
     [paths.API_GAME_DELETION, ApiGameDeletion.INSTANCE],
     [paths.API_GAME_HISTORY, ApiGameHistory.INSTANCE],
     [paths.API_GAME_LOGS, ApiGameLogs.INSTANCE],
+    [paths.API_REPLAY, ApiReplay.INSTANCE],
     [paths.API_AI_FEEDBACK, ApiAiFeedback.INSTANCE],
     [paths.AI_TRAINING_GAME, ApiAiTrainingGame.INSTANCE],
     [paths.API_DECISION_LOG, ApiDecisionLog.INSTANCE],
