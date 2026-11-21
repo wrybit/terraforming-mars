@@ -124,14 +124,19 @@ html body #game-end.game-end--replay > :not(.replay-view) {
 }
 
 // ---------- Panel ----------
+// Width unfolded; folded it is half as wide (but never too narrow for play, slider and position)
+@replay-panel-width: ~"min(1120px, 100vw - 32px)";
+@replay-panel-narrow-width: ~"max(min(1120px, 100vw - 32px) / 2, 420px)";
+
 .replay-panel {
   position: fixed;
   z-index: 60;
   left: 50%;
   bottom: 16px;
-  transform: translateX(-50%);
+  // Centred at its home position; the dragged offset of the folded bar comes from replayPanelMotion.ts
+  transform: translate(calc(-50% + var(--replay-panel-x, 0px)), var(--replay-panel-y, 0px));
   box-sizing: border-box;
-  width: min(1120px, calc(100vw - 32px));
+  width: @replay-panel-width;
   padding: @replay-panel-padding;
   border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 16px;
@@ -141,7 +146,19 @@ html body #game-end.game-end--replay > :not(.replay-view) {
   color: #eee;
   font-size: 14px;
   user-select: none;
-  transition: padding 0.38s @replay-ease, background 0.3s, box-shadow 0.3s, border-radius 0.38s;
+  transition: padding 0.38s @replay-ease, background 0.3s, box-shadow 0.3s, border-radius 0.38s,
+    width 0.3s @replay-ease, transform 0.3s @replay-ease;
+}
+
+.replay-panel--narrow {
+  width: @replay-panel-narrow-width;
+  cursor: grab;
+  touch-action: none;
+}
+
+.replay-panel--dragging {
+  cursor: grabbing;
+  transition: none;
 }
 
 .replay-panel--thin {
@@ -150,8 +167,8 @@ html body #game-end.game-end--replay > :not(.replay-view) {
   border-radius: (@replay-thin-control / 2 + @replay-thin-padding);
 }
 
-// Without the mouse nearby the thin bar stays in place and only becomes more transparent
-.replay-panel--away {
+// The folded bar is more transparent until the pointer is on it
+.replay-panel--thin:not(:hover, .replay-panel--dragging) {
   background: rgba(18, 19, 26, 0.4);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
@@ -295,7 +312,7 @@ html body #game-end.game-end--replay > :not(.replay-view) {
   transition: transform 0.3s;
 }
 
-.replay-panel--prefers-thin .replay-panel__size-toggle svg {
+.replay-panel--thin .replay-panel__size-toggle svg {
   transform: rotate(180deg);
 }
 
@@ -665,7 +682,7 @@ html body #game-end.game-end--replay > :not(.replay-view) {
   border-width: 3px;
 }
 
-.replay-panel--away .replay-timeline__thumb {
+.replay-panel--thin:not(:hover) .replay-timeline__thumb {
   box-shadow: 0 0 0 3px fade(@replay-accent-light, 18%), 0 2px 6px rgba(0, 0, 0, 0.5);
 }
 
@@ -707,13 +724,14 @@ html body #game-end.game-end--replay > :not(.replay-view) {
 // ---------- Below the desktop width: full width, compact ----------
 @media (max-width: (@bp-desktop - 1px)) {
   .replay-panel {
-    left: 8px;
-    right: 8px;
     bottom: 8px;
-    width: auto;
-    transform: none;
+    width: calc(100vw - 16px);
     padding: 12px;
     border-radius: 14px;
+  }
+
+  .replay-panel--narrow {
+    width: ~"min(100vw - 16px, 340px)";
   }
 
   .replay-panel--thin {

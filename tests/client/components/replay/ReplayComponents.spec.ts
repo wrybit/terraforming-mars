@@ -89,6 +89,23 @@ describe('ReplayPanel', () => {
   });
 });
 
+describe('ReplayPanel folding', () => {
+  it('unfolds on click and folds with Escape without closing', async () => {
+    const wrapper = mount(ReplayPanel, {...globalConfig, props: panelProps, attachTo: document.body});
+    // The root starts with a comment: the panel is the section, not the wrapper root
+    const panel = () => wrapper.find('.replay-panel').classes();
+    expect(panel()).contains('replay-panel--thin');
+    await wrapper.find('.replay-panel__size-toggle--small').trigger('click');
+    // Wide first, then tall (replayPanelMotion.ts)
+    await new Promise((resolve) => setTimeout(resolve, 400));
+    expect(panel()).not.contains('replay-panel--thin');
+    window.dispatchEvent(new KeyboardEvent('keydown', {key: 'Escape'}));
+    await wrapper.vm.$nextTick();
+    expect(panel()).contains('replay-panel--thin');
+    expect(wrapper.emitted('close')).is.undefined;
+  });
+});
+
 describe('ReplayView', () => {
   it('mounts with a reconstructed game', () => {
     const states = reconstructReplay(source);

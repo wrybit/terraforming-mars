@@ -1,8 +1,11 @@
 <template>
-  <!-- Floating replay control on frosted glass. Without the mouse nearby it folds into a thin bar (slider, play,
-       position) and becomes more transparent; coming closer unfolds it again. The size toggle keeps it thin. -->
-  <section ref="panel" class="replay-panel" :class="{'replay-panel--thin': thin, 'replay-panel--away': away, 'replay-panel--prefers-thin': prefersThin}"
-    :aria-label="$t('Replay')">
+  <!-- Floating replay control on frosted glass. Folded it is a narrow bar (play, slider, position) that can be dragged
+       anywhere; a click unfolds it, Escape or the size toggle folds it again (replayPanelMotion.ts). -->
+  <section ref="panel" class="replay-panel"
+    :class="{'replay-panel--thin': motion.thin.value, 'replay-panel--narrow': motion.narrow.value, 'replay-panel--dragging': motion.dragging.value}"
+    :style="{'--replay-panel-x': motion.offset.value.x + 'px', '--replay-panel-y': motion.offset.value.y + 'px'}"
+    :aria-label="$t('Replay')"
+    @pointerdown="motion.onPointerDown" @pointermove="motion.onPointerMove" @pointerup="motion.onPointerUp" @pointercancel="motion.onPointerCancel">
     <div class="replay-panel__fold replay-panel__fold--top">
       <div>
         <header class="replay-panel__head">
@@ -22,12 +25,12 @@
                 <span class="replay-panel__name">{{ player.name }}</span>
               </button>
             </div>
-            <button type="button" class="replay-panel__icon-button replay-panel__size-toggle" :aria-label="sizeToggleLabel" :title="sizeToggleLabel" @click="toggleSize">
+            <button type="button" class="replay-panel__icon-button replay-panel__size-toggle" :aria-label="sizeToggleLabel" :title="sizeToggleLabel" @click="motion.toggle">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.4 8.6 12 13.2l4.6-4.6L18 10l-6 6-6-6z" /></svg>
+              <HotkeyKeys :fixed="['Escape']" />
             </button>
             <button type="button" class="replay-panel__icon-button" :aria-label="$t('Close replay')" :title="$t('Close replay')" @click="$emit('close')">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.4 19 5 17.6l5.6-5.6L5 6.4 6.4 5l5.6 5.6L17.6 5 19 6.4 13.4 12l5.6 5.6-1.4 1.4-5.6-5.6z" /></svg>
-              <HotkeyKeys :fixed="['Escape']" />
             </button>
           </div>
         </header>
@@ -52,7 +55,7 @@
 
     <div class="replay-panel__graph">
       <ReplayTimeline :count="count" :current="current" :generations="generations" :raises="raises" :marks="marks"
-        :terraformRatings="terraformRatings" :playerNames="playerNames" :thin="thin"
+        :terraformRatings="terraformRatings" :playerNames="playerNames" :thin="motion.thin.value"
         @go="go" @scrubbing="onScrubbing" />
     </div>
     <!-- Thin bar: play on the left, position and size toggle on the right. Anchored to the panel edges, not to the
@@ -64,7 +67,7 @@
     </div>
     <div class="replay-panel__thin-right">
       <span class="replay-panel__thin-text"><b>{{ shortGeneration }}</b> · {{ current + 1 }}/{{ count }}</span>
-      <button type="button" class="replay-panel__icon-button replay-panel__size-toggle replay-panel__size-toggle--small" :aria-label="sizeToggleLabel" :title="sizeToggleLabel" @click="toggleSize">
+      <button type="button" class="replay-panel__icon-button replay-panel__size-toggle replay-panel__size-toggle--small" :aria-label="sizeToggleLabel" :title="sizeToggleLabel" @click="motion.toggle">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.4 8.6 12 13.2l4.6-4.6L18 10l-6 6-6-6z" /></svg>
       </button>
     </div>
@@ -112,6 +115,7 @@ import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 import HotkeyKeys from '@/client/components/hotkeys/HotkeyKeys.vue';
 import ReplayTimeline from './ReplayTimeline.vue';
 import {ReplayGeneration, ReplayMark, ReplayRaise} from './replaySteps';
+import {useReplayPanelMotion} from './replayPanelMotion';
 
 const props = defineProps<{
   count: number,
@@ -134,20 +138,13 @@ const PLAY_ICON = 'M8 5v14l11-7z';
 const PAUSE_ICON = 'M6 19h4V5H6zm8-14v14h4V5z';
 const SPEEDS = [1, 2, 4] as const;
 const STEP_MS = 700;
-// Coming closer than this unfolds the panel, moving further away than the smaller distance folds it again (no flicker)
-const NEAR_DISTANCE = 90;
-const LEAVE_DISTANCE = 40;
 
 const panel = ref<HTMLElement>();
+const motion = useReplayPanelMotion(panel);
 const playing = ref(false);
 const speed = ref<typeof SPEEDS[number]>(1);
-const prefersThin = ref(false);
-const near = ref(false);
-const scrubbing = ref(false);
 let timer: number | undefined;
 
-const thin = computed(() => prefersThin.value || (!near.value && !scrubbing.value));
-const away = computed(() => !near.value && !scrubbing.value);
 const playerNames = computed(() => Object.fromEntries(props.players.map((player) => [player.color, player.name])) as Partial<Record<Color, string>>);
 const currentGeneration = computed(() => props.generations.find((generation) => props.current >= generation.start && props.current < generation.start + generation.count));
 const generationText = computed(() => translateTextWithParams('Generation ${0}', [String(currentGeneration.value?.number ?? 1)]));
@@ -156,7 +153,7 @@ const stepText = computed(() => translateTextWithParams('Step ${0} of ${1}', [St
 const currentRatings = computed(() => props.terraformRatings.map((rating) => ({color: rating.color, value: rating.values[props.current]})));
 const temperatureText = computed(() => `${props.temperature > 0 ? '+' : props.temperature < 0 ? '−' : ''}${Math.abs(props.temperature)} °C`);
 const playLabel = computed(() => translateText(playing.value ? 'Pause playback' : 'Start playback'));
-const sizeToggleLabel = computed(() => translateText(prefersThin.value ? 'Show full' : 'Show thin'));
+const sizeToggleLabel = computed(() => translateText(motion.thin.value ? 'Show full' : 'Show thin'));
 
 const go = (step: number) => emit('go', Math.max(0, Math.min(props.count - 1, step)));
 function stop(): void {
@@ -202,38 +199,24 @@ function setSpeed(option: typeof SPEEDS[number]): void {
     play();
   }
 }
-const toggleSize = () => prefersThin.value = !prefersThin.value;
 function onScrubbing(active: boolean): void {
-  scrubbing.value = active;
   if (active) {
     stop();
   }
 }
 
-function onPointerMove(event: PointerEvent): void {
-  if (event.pointerType !== 'mouse' || panel.value === undefined) {
-    return;
-  }
-  const rect = panel.value.getBoundingClientRect();
-  const dx = Math.max(rect.left - event.clientX, 0, event.clientX - rect.right);
-  const dy = Math.max(rect.top - event.clientY, 0, event.clientY - rect.bottom);
-  near.value = Math.hypot(dx, dy) < (near.value ? LEAVE_DISTANCE : NEAR_DISTANCE);
-}
-// Touch: a tap on the bar unfolds it, a tap elsewhere folds it again
-function onPointerDown(event: PointerEvent): void {
-  if (event.pointerType !== 'mouse' && panel.value !== undefined) {
-    near.value = panel.value.contains(event.target as Node);
-  }
-}
-const onMouseLeave = () => near.value = false;
 function onKeyDown(event: KeyboardEvent): void {
   // An open dialog over the replay (enlarged Mars, card zoom) handles its own keys, Escape closes it first
   if (document.querySelector('.board-zoom-backdrop, [role="dialog"][aria-modal="true"]') !== null) {
     return;
   }
   if (event.key === 'Escape') {
+    // Escape folds the panel; closing the replay is the × button only
+    if (motion.thin.value) {
+      return;
+    }
     event.preventDefault();
-    emit('close');
+    motion.collapse();
   } else if (event.key === ' ') {
     event.preventDefault();
     togglePlay();
@@ -252,18 +235,10 @@ function onKeyDown(event: KeyboardEvent): void {
   event.stopImmediatePropagation();
 }
 
-onMounted(() => {
-  document.addEventListener('pointermove', onPointerMove);
-  document.addEventListener('pointerdown', onPointerDown);
-  document.documentElement.addEventListener('mouseleave', onMouseLeave);
-  window.addEventListener('keydown', onKeyDown, true);
-});
+onMounted(() => window.addEventListener('keydown', onKeyDown, true));
 onBeforeUnmount(() => {
   stop();
-  document.removeEventListener('pointermove', onPointerMove);
-  document.removeEventListener('pointerdown', onPointerDown);
-  document.documentElement.removeEventListener('mouseleave', onMouseLeave);
   window.removeEventListener('keydown', onKeyDown, true);
 });
-defineExpose({togglePlay, step, generationStep});
+defineExpose({togglePlay, step, generationStep, expand: motion.expand, collapse: motion.collapse});
 </script>
