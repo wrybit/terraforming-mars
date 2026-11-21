@@ -123,7 +123,8 @@
     "Updates",
     "Version",
     "normal ${0}",
-    "Websites"
+    "Websites",
+    "Replay"
   ],
   "es": [
     "${0} AI",
@@ -327,6 +328,7 @@
     "Pavonis Mons",
     "Prelude + Prelude",
     "Prelude 2",
+    "Replay",
     "Sardaukar",
     "Server",
     "Shai-Hulud",

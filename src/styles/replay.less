@@ -1,0 +1,758 @@
+// Replay of a finished game (components/replay): button on the results page, the read-only game view and the
+// floating replay panel on frosted glass with the course graph and the big slider.
+
+@replay-accent: rgb(87, 85, 217);
+@replay-accent-light: #8d8bf0;
+@replay-temperature: #ff7a4d;
+@replay-oxygen: #6ccf6a;
+@replay-oceans: #3fa0ff;
+@replay-muted: rgba(238, 238, 238, 0.62);
+@replay-line: rgba(255, 255, 255, 0.14);
+@replay-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+// Inner gap of a group is smaller than the gap between groups (law of proximity)
+@replay-gap-inner: 8px;
+@replay-gap-group: 16px;
+@replay-graph-left: 34px;
+@replay-graph-right: 18px;
+@replay-thin-left: 44px;
+@replay-thin-right: 200px;
+
+// ---------- Results page ----------
+.game-end-setup__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: @replay-gap-group;
+
+  h2 {
+    flex: 1;
+  }
+}
+
+.replay-button {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: @replay-gap-inner;
+}
+
+.replay-button__button {
+  display: inline-flex;
+  align-items: center;
+  gap: @replay-gap-inner;
+}
+
+.replay-button__icon {
+  width: 18px;
+  height: 18px;
+  fill: currentcolor;
+}
+
+.replay-button__spinner {
+  box-sizing: border-box;
+  width: 16px;
+  height: 16px;
+  flex: none;
+  border: 2px solid currentcolor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: replay-spin 0.9s linear infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation-duration: 3s;
+  }
+}
+
+@keyframes replay-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.replay-button__error {
+  max-width: 360px;
+  margin: 0;
+  color: #ff8b73;
+  font-size: 13px;
+  text-align: right;
+}
+
+// While the replay is open, the results page itself is hidden
+// (html body prefix: must beat the phone layout rules like "html.tm-mobile #game-end .game-end-hero")
+html body #game-end.game-end--replay > :not(.replay-view) {
+  display: none;
+}
+
+// ---------- Game view ----------
+#player-home.replay-view {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  overflow: auto;
+}
+
+// ---------- Panel ----------
+.replay-panel {
+  position: fixed;
+  z-index: 60;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  box-sizing: border-box;
+  width: min(1120px, calc(100vw - 32px));
+  padding: 14px 18px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 16px;
+  background: rgba(18, 19, 26, 0.58);
+  backdrop-filter: blur(22px) saturate(150%);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  color: #eee;
+  font-size: 14px;
+  user-select: none;
+  transition: padding 0.38s @replay-ease, background 0.3s, box-shadow 0.3s, border-radius 0.38s;
+}
+
+.replay-panel--thin {
+  padding: 7px 18px;
+  border-radius: 26px;
+}
+
+// Without the mouse nearby the thin bar stays in place and only becomes more transparent
+.replay-panel--away {
+  background: rgba(18, 19, 26, 0.4);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+// Folding parts via grid-template-rows 0fr ↔ 1fr: animates the height without knowing it
+.replay-panel__fold,
+.replay-timeline__fold {
+  display: grid;
+  grid-template-rows: 1fr;
+  opacity: 1;
+  transition: grid-template-rows 0.38s @replay-ease, opacity 0.25s 0.08s;
+
+  > div {
+    min-height: 0;
+    overflow: hidden;
+  }
+}
+
+.replay-panel--thin .replay-panel__fold,
+.replay-timeline--thin .replay-timeline__fold {
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows 0.38s @replay-ease, opacity 0.15s;
+}
+
+.replay-panel__head {
+  display: flex;
+  align-items: center;
+  gap: @replay-gap-group;
+  padding-top: 2px;
+}
+
+.replay-panel__title {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  min-width: 0;
+
+  b {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  b svg {
+    width: 18px;
+    height: 18px;
+    fill: @replay-accent-light;
+    align-self: center;
+  }
+
+  > span {
+    color: @replay-muted;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+}
+
+.replay-panel__head-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: @replay-gap-inner;
+}
+
+.replay-panel__view-label {
+  color: @replay-muted;
+  font-size: 12px;
+}
+
+.replay-panel__segments {
+  display: flex;
+  padding: 2px;
+  border: 1px solid @replay-line;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.25);
+
+  button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 28px;
+    padding: 0 9px;
+    border: 0;
+    border-radius: 6px;
+    background: none;
+    color: @replay-muted;
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+
+    &:hover {
+      color: #fff;
+    }
+
+    &[aria-pressed="true"] {
+      background: rgba(255, 255, 255, 0.14);
+      color: #fff;
+    }
+  }
+}
+
+.replay-panel__cube {
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  flex: none;
+  border-radius: 2px;
+  box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.replay-panel__icon-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 8px;
+  border: 1px solid @replay-line;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #eee;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  svg {
+    width: 18px;
+    height: 18px;
+    fill: currentcolor;
+  }
+}
+
+// Size toggle: the arrow points where the panel will move
+.replay-panel__size-toggle svg {
+  transition: transform 0.3s;
+}
+
+.replay-panel--prefers-thin .replay-panel__size-toggle svg {
+  transform: rotate(180deg);
+}
+
+.replay-panel__size-toggle--small {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.replay-panel__info {
+  display: flex;
+  align-items: flex-end;
+  gap: @replay-gap-group;
+  margin-top: @replay-gap-group;
+  padding-bottom: 2px;
+}
+
+.replay-panel__now {
+  min-width: 0;
+}
+
+.replay-panel__position {
+  font-size: 15px;
+
+  span {
+    color: @replay-muted;
+  }
+}
+
+.replay-panel__event {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 560px;
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+
+  span:last-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+// Info only: plain text, no pills
+.replay-panel__state {
+  margin-left: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 2px 14px;
+  color: @replay-muted;
+  font-size: 13px;
+  white-space: nowrap;
+
+  > span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  b {
+    color: #eee;
+    font-weight: 500;
+  }
+}
+
+.replay-panel__divider {
+  width: 1px;
+  height: 14px;
+  background: @replay-line;
+}
+
+.replay-panel__swatch {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+}
+
+.replay-panel__swatch--temperature,
+.replay-timeline__dot--temperature {
+  background: @replay-temperature;
+}
+
+.replay-panel__swatch--oxygen,
+.replay-timeline__dot--oxygen {
+  background: @replay-oxygen;
+}
+
+.replay-panel__swatch--oceans,
+.replay-timeline__dot--oceans {
+  background: @replay-oceans;
+}
+
+.replay-panel__graph {
+  position: relative;
+  margin: 10px @replay-graph-right 0 @replay-graph-left;
+  transition: margin 0.38s @replay-ease;
+}
+
+.replay-panel--thin .replay-panel__graph {
+  margin: 0 @replay-thin-right 0 @replay-thin-left;
+}
+
+// Thin bar: small play button on the left, position and size toggle on the right
+.replay-panel__thin-left,
+.replay-panel__thin-right {
+  position: absolute;
+  bottom: 0;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.replay-panel__thin-left {
+  left: -@replay-thin-left;
+}
+
+.replay-panel__thin-right {
+  right: -@replay-thin-right;
+  width: @replay-thin-right - 8px;
+  justify-content: flex-end;
+}
+
+.replay-panel--thin .replay-panel__thin-left,
+.replay-panel--thin .replay-panel__thin-right {
+  opacity: 1;
+  pointer-events: auto;
+  transition: opacity 0.25s 0.15s;
+}
+
+.replay-panel__mini-play {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: @replay-accent;
+  box-shadow: 0 2px 10px fade(@replay-accent, 50%);
+  cursor: pointer;
+
+  svg {
+    width: 18px;
+    height: 18px;
+    fill: #fff;
+  }
+}
+
+.replay-panel__thin-text {
+  color: @replay-muted;
+  font-size: 13px;
+  white-space: nowrap;
+
+  b {
+    color: #eee;
+    font-weight: 500;
+  }
+}
+
+.replay-panel__foot {
+  display: flex;
+  align-items: center;
+  gap: @replay-gap-group;
+  margin-top: 14px;
+}
+
+.replay-panel__hint {
+  color: @replay-muted;
+  font-size: 12px;
+}
+
+.replay-panel__transport {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: @replay-gap-inner;
+}
+
+.replay-panel__step {
+  height: 40px;
+}
+
+.replay-panel__play {
+  display: inline-flex;
+  align-items: center;
+  gap: @replay-gap-inner;
+
+  svg {
+    width: 20px;
+    height: 20px;
+    fill: currentcolor;
+  }
+}
+
+// ---------- Course graph and slider ----------
+.replay-timeline {
+  position: relative;
+}
+
+.replay-timeline__lanes {
+  position: relative;
+}
+
+.replay-timeline__tr {
+  display: block;
+  width: 100%;
+  height: 72px;
+  overflow: visible;
+}
+
+.replay-timeline__grid {
+  stroke: rgba(255, 255, 255, 0.07);
+  stroke-width: 1;
+}
+
+.replay-timeline__line {
+  fill: none;
+  stroke-width: 2;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.replay-timeline__line--future {
+  opacity: 0.22;
+}
+
+.replay-timeline__lane-label {
+  position: absolute;
+  left: -@replay-graph-left;
+  width: @replay-graph-left - 6px;
+  color: @replay-muted;
+  font-size: 10px;
+  line-height: 12px;
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.replay-timeline__lane-label--tr {
+  top: 30px;
+}
+
+.replay-timeline__marks {
+  position: relative;
+  height: 20px;
+  margin-top: 4px;
+}
+
+.replay-timeline__mark {
+  position: absolute;
+  bottom: 0;
+  width: 20px;
+  height: 20px;
+  margin-left: -10px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.15s;
+
+  svg {
+    width: 20px;
+    height: 20px;
+    filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.8));
+  }
+
+  &:hover {
+    transform: translateY(-2px) scale(1.12);
+  }
+}
+
+.replay-timeline__mark--future {
+  opacity: 0.32;
+}
+
+.replay-timeline__track {
+  position: relative;
+  height: 54px;
+  margin-top: 4px;
+}
+
+.replay-timeline__column {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+  transition: background 0.15s;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.09);
+  }
+}
+
+.replay-timeline__column--now {
+  background: fade(@replay-accent-light, 14%);
+}
+
+.replay-timeline__dot {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  margin-left: -4.5px;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px rgba(10, 10, 14, 0.75);
+  pointer-events: none;
+  transition: opacity 0.12s;
+}
+
+.replay-timeline__dot--future {
+  opacity: 0.25;
+}
+
+.replay-timeline__scrub {
+  position: relative;
+  height: 34px;
+  margin-top: 2px;
+  cursor: pointer;
+  touch-action: none;
+  outline: none;
+}
+
+.replay-timeline__bar {
+  position: absolute;
+  top: 13px;
+  height: 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.16);
+  overflow: hidden;
+
+  i {
+    position: absolute;
+    inset: 0 auto 0 0;
+    background: linear-gradient(90deg, @replay-accent, @replay-accent-light);
+  }
+}
+
+.replay-timeline__thumb {
+  position: absolute;
+  top: 3px;
+  box-sizing: border-box;
+  width: 28px;
+  height: 28px;
+  margin-left: -14px;
+  border: 4px solid @replay-accent-light;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 0 6px fade(@replay-accent-light, 22%), 0 4px 12px rgba(0, 0, 0, 0.6);
+  cursor: grab;
+  transition: width 0.3s, height 0.3s, margin 0.3s, top 0.3s, box-shadow 0.15s;
+}
+
+.replay-timeline__scrub:active .replay-timeline__thumb,
+.replay-timeline__scrub:focus-visible .replay-timeline__thumb {
+  box-shadow: 0 0 0 10px fade(@replay-accent-light, 28%), 0 4px 12px rgba(0, 0, 0, 0.6);
+}
+
+.replay-timeline--thin .replay-timeline__thumb {
+  top: 6px;
+  width: 22px;
+  height: 22px;
+  margin-left: -11px;
+  border-width: 3px;
+}
+
+.replay-panel--away .replay-timeline__thumb {
+  box-shadow: 0 0 0 3px fade(@replay-accent-light, 18%), 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+.replay-timeline__labels {
+  position: relative;
+  height: 16px;
+  color: @replay-muted;
+  font-size: 11px;
+
+  span {
+    position: absolute;
+    transform: translateX(-50%);
+    white-space: nowrap;
+  }
+}
+
+.replay-timeline__label--now {
+  color: #fff;
+  font-weight: 500;
+}
+
+.replay-timeline__playhead {
+  position: absolute;
+  top: 0;
+  bottom: 33px;
+  width: 2px;
+  margin-left: -1px;
+  border-radius: 1px;
+  background: rgba(255, 255, 255, 0.75);
+  box-shadow: 0 0 8px fade(@replay-accent-light, 90%);
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.replay-timeline--thin .replay-timeline__playhead {
+  opacity: 0;
+}
+
+// ---------- Below the desktop width: full width, compact ----------
+@media (max-width: (@bp-desktop - 1px)) {
+  .replay-panel {
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    width: auto;
+    transform: none;
+    padding: 12px;
+    border-radius: 14px;
+  }
+
+  .replay-panel__title > span,
+  .replay-panel__view-label,
+  .replay-panel__hint,
+  .replay-panel__speed,
+  .replay-panel__name {
+    display: none;
+  }
+
+  .replay-panel__cube {
+    width: 14px;
+    height: 14px;
+  }
+
+  .replay-panel__info {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+    margin-top: 12px;
+  }
+
+  .replay-panel__state {
+    margin-left: 0;
+    justify-content: flex-start;
+    gap: 4px 12px;
+    font-size: 12px;
+  }
+
+  .replay-panel__transport {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .replay-panel__play {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .replay-panel--thin {
+    padding: 6px 12px;
+  }
+
+  .replay-panel--thin .replay-panel__graph {
+    margin: 0 128px 0 42px;
+  }
+
+  .replay-panel__thin-left {
+    left: -42px;
+  }
+
+  .replay-panel__thin-right {
+    right: -128px;
+    width: 120px;
+    gap: 8px;
+  }
+
+  .replay-timeline__tr {
+    height: 48px;
+  }
+
+  .replay-timeline__track {
+    height: 48px;
+  }
+}

@@ -1,5 +1,5 @@
 <template>
-  <div id="game-end" class="game_end_cont">
+  <div id="game-end" class="game_end_cont" :class="{'game-end--replay': replay !== undefined}">
     <!-- Header across both columns, without its own box: winner on the left, navigation on the right -->
     <div class="game-end-hero">
       <!-- Menu and Mars logo at the top left like on the other pages (card list, statistics); the logo leads to the start screen -->
@@ -69,7 +69,11 @@
 
         <!-- Basis of the game above the players: its settings in the groups of the create form -->
         <section class="game-end-box game-end-setup">
-          <h2 v-i18n>Game settings</h2>
+          <!-- Replay of the whole game: reconstructed from start, end and log when opened (ReplayButton) -->
+          <div class="game-end-setup__head">
+            <h2 v-i18n>Game settings</h2>
+            <ReplayButton :participantId="participant.id" :gameId="game.name" @open="openReplay" />
+          </div>
           <GameSetupGroups :chips="setupChips" />
         </section>
 
@@ -259,12 +263,15 @@
         </div>
       </div>
     </div>
+    <!-- Replay over the whole page (the rest of the results page is hidden meanwhile) -->
+    <ReplayView v-if="replay !== undefined" :final="participant" :source="replay.source" :states="replay.states" :steps="replay.steps"
+      @close="replay = undefined" />
   </div>
 </template>
 
 <script lang="ts">
 
-import {defineComponent} from 'vue';
+import {defineComponent, markRaw} from 'vue';
 import {gameDocumentTitle} from '@/client/utils/documentTitle';
 import {setFaviconStatus} from '@/client/utils/favicon';
 import {getPreferences} from '@/client/utils/PreferencesManager';
@@ -286,6 +293,9 @@ import PlanetaryTracks from '@/client/components/pathfinders/PlanetaryTracks.vue
 import DeltaProjectBoard from '@/client/components/delta/DeltaProjectBoard.vue';
 import LogPanel from '@/client/components/logpanel/LogPanel.vue';
 import GameSetupGroups from '@/client/components/common/GameSetupGroups.vue';
+import ReplayButton from '@/client/components/replay/ReplayButton.vue';
+import {ReplayData} from '@/client/components/replay/replayData';
+import ReplayView from '@/client/components/replay/ReplayView.vue';
 import {GameSetupChip} from '@/client/components/common/gameSetupChips';
 import {viewSetupChips} from '@/client/components/common/viewSetupChips';
 import {DataSet} from '@/client/components/gameend/VictoryPointChart.vue';
@@ -468,8 +478,10 @@ export default defineComponent({
       return new Map(this.playerContributionsData.map((data) => [data.color, data]));
     },
   },
-  data(): {tileView: TileView, boardZoomOpen: boolean, zoomBoard: ZoomBoard, columnBoardElement: HTMLElement | undefined, decisionLogLink: string | undefined} {
+  data(): {tileView: TileView, boardZoomOpen: boolean, zoomBoard: ZoomBoard, columnBoardElement: HTMLElement | undefined, decisionLogLink: string | undefined, replay: ReplayData | undefined} {
     return {
+      // Open replay (ReplayButton): not reactive inside, the states are many and never change
+      replay: undefined,
       // Set once the server confirms an admin and a decision log for this game
       decisionLogLink: undefined,
       tileView: 'show',
@@ -489,6 +501,8 @@ export default defineComponent({
     MarsHomeLink,
     LogPanel,
     GameSetupGroups,
+    ReplayButton,
+    ReplayView,
     MoonBoard,
     PlanetaryTracks,
     DeltaProjectBoard,
@@ -572,6 +586,9 @@ export default defineComponent({
       if (goal !== undefined && !this.canHover()) {
         this.goalPreview()?.pin(goal, {x: event.clientX, y: event.clientY});
       }
+    },
+    openReplay(replay: ReplayData): void {
+      this.replay = markRaw(replay);
     },
     async findDecisionLog(): Promise<void> {
       const id = new URLSearchParams(window.location.search).get('id') ?? '';

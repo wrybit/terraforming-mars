@@ -18,6 +18,7 @@ import {UptimeRecord} from '../admin/dashboard/uptimeRecord';
 import {presenceRecord} from '../admin/dashboard/presenceRecord';
 import {pendingUpdateRequest} from '../admin/dashboard/updateRequest';
 import {withoutAiTrainingGames} from '../aiTraining/aiTrainingGameIds';
+import {isAiOnlyGame} from '../aiTraining/aiOnlyGames';
 import {checkReachability, publicStatusUrl} from '../admin/dashboard/reachability';
 import raw_settings from '../../genfiles/settings.json';
 import recentCommits from '../../genfiles/recentCommits.json';
@@ -42,8 +43,8 @@ export class ApiAdminDashboard extends Handler {
     // AI training games are only for watching from the lobby (aiTrainingGameIds.ts): not counted, no activity
     for (const {gameId} of withoutAiTrainingGames(await ctx.gameLoader.getIds())) {
       const game = await ctx.gameLoader.getGame(gameId);
-      // A broken game state must not break the dashboard
-      if (game !== undefined) {
+      // A broken game state must not break the dashboard; games without a human belong to the AI training (aiOnlyGames.ts)
+      if (game !== undefined && !isAiOnlyGame(game)) {
         games.push(game);
       }
     }
