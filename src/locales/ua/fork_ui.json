@@ -1415,5 +1415,6 @@
   "Converting plants or heat": "Обмін рослин або тепла",
   "Passing": "Пас",
   "pays ${0}": "платить ${0}",
-  "Amount ${0}": "Кількість ${0}"
+  "Amount ${0}": "Кількість ${0}",
+  "Game ${0} was removed automatically on ${1}: games without a human player are not kept on this server.": "Гру ${0} автоматично видалено ${1}: ігри без живих гравців на цьому сервері не зберігаються."
 }

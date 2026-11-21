@@ -2241,5 +2241,6 @@
   "Converting plants or heat": "转换植物或热量",
   "Passing": "跳过",
   "pays ${0}": "支付 ${0}",
-  "Amount ${0}": "数量 ${0}"
+  "Amount ${0}": "数量 ${0}",
+  "Game ${0} was removed automatically on ${1}: games without a human player are not kept on this server.": "游戏 ${0} 已于 ${1} 自动移除：本服务器不保留没有人类玩家的游戏。"
 }

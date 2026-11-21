@@ -26,6 +26,7 @@ import {Lobby} from './lobby/Lobby';
 import {LobbyPush} from './lobby/LobbyPush';
 import {lobbyGameProbe} from './lobby/lobbyGameProbe';
 import {GameLoader} from '@/server/database/GameLoader';
+import {removeAiOnlyGames} from './aiTraining/aiOnlyGames';
 import {globalInitialize} from '@/server/globalInitialize';
 import {SessionManager} from '@/server/server/auth/SessionManager';
 import {installDecisionLogFile} from '@/server/ai/decisionLogFile';
@@ -171,6 +172,12 @@ async function start() {
   if (process.env.MAX_GAME_DAYS !== undefined) {
     setInterval(() => GameLoader.getInstance().maintenance(), 60 * 60 * 1000).unref();
   }
+  // Games without a human belong to the AI training, not to this server: removed at start and every hour (aiOnlyGames.ts)
+  const removeAiOnly = () => removeAiOnlyGames(GameLoader.getInstance())
+    .then((removed) => removed.length > 0 && console.log(`Removed ${removed.length} AI-only games`))
+    .catch((err) => console.error(err));
+  removeAiOnly();
+  setInterval(removeAiOnly, 60 * 60 * 1000).unref();
   const decisionLogDirectory = process.env.AI_DECISION_LOG_DIR;
   if (decisionLogDirectory) {
     installDecisionLogFile(decisionLogDirectory);

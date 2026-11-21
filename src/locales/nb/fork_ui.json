@@ -1623,5 +1623,6 @@
   "Converting plants or heat": "Omgjøre planter eller varme",
   "Passing": "Passe",
   "pays ${0}": "betaler ${0}",
-  "Amount ${0}": "Mengde ${0}"
+  "Amount ${0}": "Mengde ${0}",
+  "Game ${0} was removed automatically on ${1}: games without a human player are not kept on this server.": "Spillet ${0} ble fjernet automatisk ${1}: spill uten menneskelige spillere beholdes ikke på denne serveren."
 }

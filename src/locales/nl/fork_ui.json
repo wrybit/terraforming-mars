@@ -1884,5 +1884,6 @@
   "Converting plants or heat": "Planten of warmte omzetten",
   "Passing": "Beurt overslaan",
   "pays ${0}": "betaalt ${0}",
-  "Amount ${0}": "Aantal ${0}"
+  "Amount ${0}": "Aantal ${0}",
+  "Game ${0} was removed automatically on ${1}: games without a human player are not kept on this server.": "Spel ${0} is op ${1} automatisch verwijderd: spellen zonder menselijke speler worden op deze server niet bewaard."
 }

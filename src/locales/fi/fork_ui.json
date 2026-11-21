@@ -1257,5 +1257,6 @@
   "Converting plants or heat": "Kasvien tai lämmön muunto",
   "Passing": "Passaaminen",
   "pays ${0}": "maksaa ${0}",
-  "Amount ${0}": "Määrä ${0}"
+  "Amount ${0}": "Määrä ${0}",
+  "Game ${0} was removed automatically on ${1}: games without a human player are not kept on this server.": "Peli ${0} poistettiin automaattisesti ${1}: pelejä ilman ihmispelaajaa ei säilytetä tällä palvelimella."
 }

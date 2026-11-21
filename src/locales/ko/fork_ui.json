@@ -1509,5 +1509,6 @@
   "Converting plants or heat": "식물 또는 열 전환",
   "Passing": "패스",
   "pays ${0}": "${0} 지불",
-  "Amount ${0}": "수량 ${0}"
+  "Amount ${0}": "수량 ${0}",
+  "Game ${0} was removed automatically on ${1}: games without a human player are not kept on this server.": "게임 ${0}이(가) ${1}에 자동으로 삭제되었습니다: 사람 플레이어가 없는 게임은 이 서버에 보관되지 않습니다."
 }

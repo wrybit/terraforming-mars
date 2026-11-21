@@ -1631,5 +1631,6 @@
   "Converting plants or heat": "植物か熱の変換",
   "Passing": "パス",
   "pays ${0}": "${0} を支払う",
-  "Amount ${0}": "数量：${0}"
+  "Amount ${0}": "数量：${0}",
+  "Game ${0} was removed automatically on ${1}: games without a human player are not kept on this server.": "ゲーム ${0} は ${1} に自動で削除されました：人間のプレイヤーがいないゲームはこのサーバーに保存されません。"
 }

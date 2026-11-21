@@ -2535,5 +2535,6 @@
   "Converting plants or heat": "Convertir plantas o calor",
   "Passing": "Pasar",
   "pays ${0}": "paga ${0}",
-  "Amount ${0}": "Cantidad ${0}"
+  "Amount ${0}": "Cantidad ${0}",
+  "Game ${0} was removed automatically on ${1}: games without a human player are not kept on this server.": "La partida ${0} se eliminó automáticamente el ${1}: las partidas sin jugadores humanos no se conservan en este servidor."
 }

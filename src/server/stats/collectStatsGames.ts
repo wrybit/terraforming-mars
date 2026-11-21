@@ -15,6 +15,7 @@ import {withScreenshotSetup} from './screenshotSetup';
 import {CardName} from '../../common/cards/CardName';
 import {StatsGameDetails} from '../../common/stats/StatsGame';
 import {withoutAiTrainingGames} from '../aiTraining/aiTrainingGameIds';
+import {isAiOnlyGame} from '../aiTraining/aiOnlyGames';
 
 // Finished games no longer change: once evaluated, they stay in memory.
 // Saves building the complete final states on every statistics request.
@@ -123,7 +124,7 @@ export async function collectStatsGames(
     }
     // Games of AI players only (test runs) say nothing about the group: only games with at
     // least one human count.
-    if (game.players.every((player) => player.aiLevel !== undefined)) {
+    if (isAiOnlyGame(game)) {
       aiOnlyGames.add(gameId);
       continue;
     }

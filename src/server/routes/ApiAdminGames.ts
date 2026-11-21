@@ -7,6 +7,7 @@ import {AdminGameSummary} from '../../common/admin/AdminGameSummary';
 import {localGameSummary} from '../admin/localGameSummary';
 import {ImportedGamesStore} from '../admin/ImportedGamesStore';
 import {withoutAiTrainingGames} from '../aiTraining/aiTrainingGameIds';
+import {isAiOnlyGame} from '../aiTraining/aiOnlyGames';
 
 /** All games for the admin overview: own games and imported results, newest first. */
 export class ApiAdminGames extends Handler {
@@ -21,8 +22,8 @@ export class ApiAdminGames extends Handler {
     const localSummaries: Array<AdminGameSummary> = [];
     for (const {gameId} of ledger) {
       const game = await ctx.gameLoader.getGame(gameId);
-      // A broken game state must not break the whole overview
-      if (game !== undefined) {
+      // A broken game state must not break the whole overview; games without a human belong to the AI training (aiOnlyGames.ts)
+      if (game !== undefined && !isAiOnlyGame(game)) {
         localSummaries.push(localGameSummary(game));
       }
     }

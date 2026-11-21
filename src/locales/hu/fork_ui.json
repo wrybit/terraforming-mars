@@ -1439,5 +1439,6 @@
   "Converting plants or heat": "Növény vagy hő átváltása",
   "Passing": "Passzolás",
   "pays ${0}": "fizet: ${0}",
-  "Amount ${0}": "Mennyiség: ${0}"
+  "Amount ${0}": "Mennyiség: ${0}",
+  "Game ${0} was removed automatically on ${1}: games without a human player are not kept on this server.": "A(z) ${0} játékot ${1} időpontban automatikusan eltávolítottuk: emberi játékos nélküli játékokat ez a szerver nem őriz meg."
 }
