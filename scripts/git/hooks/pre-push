@@ -6,6 +6,10 @@
 set -euo pipefail
 
 repository=$(git rev-parse --show-toplevel)
+# git hands hooks GIT_DIR and friends: in a linked worktree (e.g. ~/projects/terraforming-mars-dune) that is an
+# absolute path, so the test merge below ran in that worktree itself, moved its branch to an unsigned "check" merge
+# and left its files behind (Jens, 21 Nov 2026). Without them every git call works on the directory it runs in.
+unset GIT_DIR GIT_WORK_TREE GIT_INDEX_FILE GIT_PREFIX
 mainCommit=$(git rev-parse --verify --quiet origin/main || true)
 duneCommit=$(git rev-parse --verify --quiet origin/dune || true)
 pushesBranch=false
