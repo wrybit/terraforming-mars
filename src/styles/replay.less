@@ -12,10 +12,16 @@
 // Inner gap of a group is smaller than the gap between groups (law of proximity)
 @replay-gap-inner: 8px;
 @replay-gap-group: 16px;
-@replay-graph-left: 34px;
-@replay-graph-right: 18px;
-@replay-thin-left: 44px;
-@replay-thin-right: 200px;
+// Panel: the same inner distance on every side, everything starts and ends there
+@replay-panel-padding: 16px;
+// Thin bar: round controls as high as the slider row, with the same distance to the edge on all sides
+@replay-thin-padding: 6px;
+@replay-thin-control: 34px;
+// Slider in the thin bar: the same distance to the play button on the left as to the position text on the right
+@replay-thin-gap: 14px;
+@replay-thin-text: 92px;
+@replay-thin-left: @replay-thin-control + @replay-thin-gap;
+@replay-thin-right: @replay-thin-gap + @replay-thin-text + @replay-gap-inner + @replay-thin-control;
 
 // ---------- Results page ----------
 .game-end-setup__head {
@@ -126,7 +132,7 @@ html body #game-end.game-end--replay > :not(.replay-view) {
   transform: translateX(-50%);
   box-sizing: border-box;
   width: min(1120px, calc(100vw - 32px));
-  padding: 14px 18px 16px;
+  padding: @replay-panel-padding;
   border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 16px;
   background: rgba(18, 19, 26, 0.58);
@@ -139,8 +145,9 @@ html body #game-end.game-end--replay > :not(.replay-view) {
 }
 
 .replay-panel--thin {
-  padding: 7px 18px;
-  border-radius: 26px;
+  padding: @replay-thin-padding;
+  // Concentric with the round controls
+  border-radius: (@replay-thin-control / 2 + @replay-thin-padding);
 }
 
 // Without the mouse nearby the thin bar stays in place and only becomes more transparent
@@ -293,8 +300,9 @@ html body #game-end.game-end--replay > :not(.replay-view) {
 }
 
 .replay-panel__size-toggle--small {
-  width: 30px;
-  height: 30px;
+  box-sizing: border-box;
+  width: @replay-thin-control;
+  height: @replay-thin-control;
   padding: 0;
   justify-content: center;
   border-radius: 50%;
@@ -388,7 +396,7 @@ html body #game-end.game-end--replay > :not(.replay-view) {
 
 .replay-panel__graph {
   position: relative;
-  margin: 10px @replay-graph-right 0 @replay-graph-left;
+  margin-top: 10px;
   transition: margin 0.38s @replay-ease;
 }
 
@@ -396,28 +404,26 @@ html body #game-end.game-end--replay > :not(.replay-view) {
   margin: 0 @replay-thin-right 0 @replay-thin-left;
 }
 
-// Thin bar: small play button on the left, position and size toggle on the right
+// Thin bar: small play button on the left, position and size toggle on the right, at the panel edges
 .replay-panel__thin-left,
 .replay-panel__thin-right {
   position: absolute;
-  bottom: 0;
-  height: 34px;
+  bottom: @replay-thin-padding;
+  height: @replay-thin-control;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: @replay-gap-inner;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s;
 }
 
 .replay-panel__thin-left {
-  left: -@replay-thin-left;
+  left: @replay-thin-padding;
 }
 
 .replay-panel__thin-right {
-  right: -@replay-thin-right;
-  width: @replay-thin-right - 8px;
-  justify-content: flex-end;
+  right: @replay-thin-padding;
 }
 
 .replay-panel--thin .replay-panel__thin-left,
@@ -431,8 +437,8 @@ html body #game-end.game-end--replay > :not(.replay-view) {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: @replay-thin-control;
+  height: @replay-thin-control;
   padding: 0;
   border: 0;
   border-radius: 50%;
@@ -448,8 +454,11 @@ html body #game-end.game-end--replay > :not(.replay-view) {
 }
 
 .replay-panel__thin-text {
+  // Fixed width, left aligned: the slider ends the same distance before it as it starts after the play button
+  width: @replay-thin-text;
   color: @replay-muted;
   font-size: 13px;
+  font-variant-numeric: tabular-nums;
   white-space: nowrap;
 
   b {
@@ -523,23 +532,6 @@ html body #game-end.game-end--replay > :not(.replay-view) {
 
 .replay-timeline__line--future {
   opacity: 0.22;
-}
-
-.replay-timeline__lane-label {
-  position: absolute;
-  left: -@replay-graph-left;
-  width: @replay-graph-left - 6px;
-  color: @replay-muted;
-  font-size: 10px;
-  line-height: 12px;
-  text-align: right;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.replay-timeline__lane-label--tr {
-  top: 30px;
 }
 
 .replay-timeline__marks {
@@ -660,6 +652,11 @@ html body #game-end.game-end--replay > :not(.replay-view) {
   box-shadow: 0 0 0 10px fade(@replay-accent-light, 28%), 0 4px 12px rgba(0, 0, 0, 0.6);
 }
 
+// Thin bar: the slider row is exactly as high as the round controls, so they sit evenly in the bar
+.replay-timeline--thin .replay-timeline__scrub {
+  margin-top: 0;
+}
+
 .replay-timeline--thin .replay-timeline__thumb {
   top: 6px;
   width: 22px;
@@ -719,6 +716,11 @@ html body #game-end.game-end--replay > :not(.replay-view) {
     border-radius: 14px;
   }
 
+  .replay-panel--thin {
+    padding: @replay-thin-padding;
+    border-radius: (@replay-thin-control / 2 + @replay-thin-padding);
+  }
+
   .replay-panel__title > span,
   .replay-panel__view-label,
   .replay-panel__hint,
@@ -756,23 +758,6 @@ html body #game-end.game-end--replay > :not(.replay-view) {
     justify-content: center;
   }
 
-  .replay-panel--thin {
-    padding: 6px 12px;
-  }
-
-  .replay-panel--thin .replay-panel__graph {
-    margin: 0 128px 0 42px;
-  }
-
-  .replay-panel__thin-left {
-    left: -42px;
-  }
-
-  .replay-panel__thin-right {
-    right: -128px;
-    width: 120px;
-    gap: 8px;
-  }
 
   .replay-timeline__tr {
     height: 48px;

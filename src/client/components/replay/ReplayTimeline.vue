@@ -17,7 +17,6 @@
               <polyline :points="line.points" :stroke="line.stroke" class="replay-timeline__line" :clip-path="`url(#${clipId}-past)`" />
             </template>
           </svg>
-          <span class="replay-timeline__lane-label replay-timeline__lane-label--tr" v-i18n>TR</span>
           <div class="replay-timeline__marks">
             <button v-for="(mark, index) in marks" :key="index" type="button" class="replay-timeline__mark"
               :class="{'replay-timeline__mark--future': mark.step > current}" :style="{left: xOf(mark.step) + 'px'}"
@@ -32,7 +31,6 @@
               v-glass-tooltip="generationText(generation)" :aria-label="generationText(generation)" @click="$emit('go', generation.start)"></button>
             <span v-for="(raise, index) in raises" :key="'r' + index" class="replay-timeline__dot" :class="['replay-timeline__dot--' + raise.parameter, {'replay-timeline__dot--future': raise.step > current}]"
               :style="{left: (xOf(raise.step) + raise.index * 4) + 'px', top: laneTop(raise.parameter)}"></span>
-            <span v-for="(lane, index) in LANES" :key="lane" class="replay-timeline__lane-label" :style="{top: laneLabelTop(index)}">{{ laneLabel(lane) }}</span>
           </div>
         </div>
       </div>
@@ -43,7 +41,7 @@
       <span v-for="(segment, index) in segments" :key="index" class="replay-timeline__bar" :style="{left: segment.left + 'px', width: segment.width + 'px'}">
         <i :style="{width: Math.max(0, Math.min(segment.width, currentX - segment.left)) + 'px'}"></i>
       </span>
-      <span class="replay-timeline__thumb" :style="{left: currentX + 'px'}"></span>
+      <span class="replay-timeline__thumb" :style="{left: thumbX + 'px'}"></span>
     </div>
     <div class="replay-timeline__fold">
       <div>
@@ -53,7 +51,7 @@
         </div>
       </div>
     </div>
-    <span class="replay-timeline__playhead" :style="{left: currentX + 'px'}" aria-hidden="true"></span>
+    <span class="replay-timeline__playhead" :style="{left: thumbX + 'px'}" aria-hidden="true"></span>
   </div>
 </template>
 
@@ -124,6 +122,12 @@ const xOf = (step: number): number => {
 };
 const currentX = computed(() => xOf(props.current));
 const currentGeneration = computed(() => generationIndexOf(props.current));
+// The thumb never sticks out of the bar: at the first and last step it touches the bar ends (radius as in replay.less)
+const THUMB_RADIUS = {thin: 11, full: 14};
+const thumbX = computed(() => {
+  const radius = props.thin ? THUMB_RADIUS.thin : THUMB_RADIUS.full;
+  return Math.min(Math.max(currentX.value, radius), width.value - radius);
+});
 
 // Numbers of the generations thin out where they would touch; first and last stay inside the bar
 const labels = computed(() => {
@@ -158,8 +162,6 @@ const trLines = computed(() => props.terraformRatings.map((rating) => ({
 
 const laneHeight = TRACK_HEIGHT / LANES.length;
 const laneTop = (parameter: ReplayParameter) => `${LANES.indexOf(parameter) * laneHeight + (laneHeight - DOT_SIZE) / 2}px`;
-const laneLabelTop = (index: number) => `${index * laneHeight + laneHeight / 2 - 6}px`;
-const laneLabel = (lane: ReplayParameter) => lane === 'temperature' ? '°C' : lane === 'oxygen' ? 'O₂' : translateText('Oceans');
 const markColor = (color: Color) => replayColor(color);
 const generationLabel = (generation: number) => translateTextWithParams('G${0}', [String(generation)]);
 const markText = (mark: ReplayMark) => `${translateText(mark.kind === 'milestone' ? 'Milestone' : 'Award')} ${translateText(mark.name)} · ${props.playerNames[mark.color] ?? ''}`;

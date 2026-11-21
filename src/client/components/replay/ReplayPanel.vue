@@ -54,17 +54,19 @@
       <ReplayTimeline :count="count" :current="current" :generations="generations" :raises="raises" :marks="marks"
         :terraformRatings="terraformRatings" :playerNames="playerNames" :thin="thin"
         @go="go" @scrubbing="onScrubbing" />
-      <div class="replay-panel__thin-left">
-        <button type="button" class="replay-panel__mini-play" :aria-label="playLabel" @click="togglePlay">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path :d="playing ? PAUSE_ICON : PLAY_ICON" /></svg>
-        </button>
-      </div>
-      <div class="replay-panel__thin-right">
-        <span class="replay-panel__thin-text"><b>{{ shortGeneration }}</b> · {{ current + 1 }}/{{ count }}</span>
-        <button type="button" class="replay-panel__icon-button replay-panel__size-toggle replay-panel__size-toggle--small" :aria-label="sizeToggleLabel" :title="sizeToggleLabel" @click="toggleSize">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.4 8.6 12 13.2l4.6-4.6L18 10l-6 6-6-6z" /></svg>
-        </button>
-      </div>
+    </div>
+    <!-- Thin bar: play on the left, position and size toggle on the right. Anchored to the panel edges, not to the
+         slider: while the panel unfolds they only fade, instead of travelling sideways with the slider margins. -->
+    <div class="replay-panel__thin-left">
+      <button type="button" class="replay-panel__mini-play" :aria-label="playLabel" @click="togglePlay">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path :d="playing ? PAUSE_ICON : PLAY_ICON" /></svg>
+      </button>
+    </div>
+    <div class="replay-panel__thin-right">
+      <span class="replay-panel__thin-text"><b>{{ shortGeneration }}</b> · {{ current + 1 }}/{{ count }}</span>
+      <button type="button" class="replay-panel__icon-button replay-panel__size-toggle replay-panel__size-toggle--small" :aria-label="sizeToggleLabel" :title="sizeToggleLabel" @click="toggleSize">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.4 8.6 12 13.2l4.6-4.6L18 10l-6 6-6-6z" /></svg>
+      </button>
     </div>
 
     <div class="replay-panel__fold">
