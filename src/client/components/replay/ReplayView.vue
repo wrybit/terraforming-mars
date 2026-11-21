@@ -16,7 +16,8 @@
       <template #main>
         <PlayersOverview class="player_home_block player_home_block--players nofloat" :playerView="viewModel" />
         <RowResizeHandle kind="players" />
-        <div class="player_home_block player_home_block--hand">
+        <!-- Same id as in the game: the layout (player_home_fixed.less) lets only this hand block fill the column -->
+        <div class="player_home_block player_home_block--hand" id="shortkey-hand">
           <div class="or-tabs" role="tablist">
             <HandCardsTab :count="handCount" :active="true" />
           </div>
