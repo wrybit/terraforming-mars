@@ -20,13 +20,39 @@
 // ---------- Results page ----------
 .game-end-setup__head {
   display: flex;
+  flex-wrap: wrap;
   align-items: flex-start;
   justify-content: space-between;
-  gap: @replay-gap-group;
+  gap: @replay-gap-inner @replay-gap-group;
+  // The space below the head comes from here, not from the title: when the buttons wrap they stay close to the title
+  margin-bottom: 14px;
 
   h2 {
-    flex: 1;
+    flex: 1 1 auto;
+    align-self: center;
+    margin-bottom: 0;
   }
+}
+
+.game-end-setup__actions {
+  // Too narrow for title and buttons (phone): the buttons move to their own row below the title
+  margin-left: auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: @replay-gap-inner;
+}
+
+.game-end-setup__action {
+  display: inline-flex;
+  align-items: center;
+  gap: @replay-gap-inner;
+}
+
+.game-end-setup__action-icon {
+  width: 18px;
+  height: 18px;
 }
 
 .replay-button {
