@@ -30,11 +30,6 @@
           <svg class="game-end-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" /></svg>
           <span v-i18n>All statistics</span>
         </a>
-        <!-- Admins: the detailed log of a self-play game of the new AI, which the training reads -->
-        <a v-if="decisionLogLink !== undefined" :href="decisionLogLink" class="btn btn-lg btn-rounded game-end-nav-button">
-          <svg class="game-end-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16M4 12h10M4 19h13" /><circle cx="19" cy="12" r="2" /></svg>
-          <span v-i18n>Decision log</span>
-        </a>
       </div>
     </div>
     <!-- From @bp-desktop (breakpoints.less) two columns as in the game view: result on the left, board, charts, log on the right -->
@@ -72,7 +67,15 @@
           <!-- Replay of the whole game: reconstructed from start, end and log when opened (ReplayButton) -->
           <div class="game-end-setup__head">
             <h2 v-i18n>Game settings</h2>
-            <ReplayButton :participantId="participant.id" :gameId="game.name" @open="openReplay" />
+            <!-- Both ways to look back at the course of the game side by side -->
+            <div class="game-end-setup__actions">
+              <!-- Admins: the detailed log of a self-play game of the new AI, which the training reads -->
+              <a v-if="decisionLogLink !== undefined" :href="decisionLogLink" class="btn btn-rounded game-end-setup__action">
+                <svg class="game-end-setup__action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16M4 12h10M4 19h13" /><circle cx="19" cy="12" r="2" /></svg>
+                <span v-i18n>Decision log</span>
+              </a>
+              <ReplayButton :participantId="participant.id" :gameId="game.name" @open="openReplay" />
+            </div>
           </div>
           <GameSetupGroups :chips="setupChips" />
         </section>
