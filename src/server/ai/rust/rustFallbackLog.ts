@@ -66,6 +66,6 @@ export const rustFallbackLog = new RustFallbackLog(path.join(RUST_BOT_EVENTS, 'f
 
 /** Kind of a decision for the record, e.g. "or: Take your first action". */
 export function decisionLabel(input: PlayerInput): string {
-  const title = typeof input.title === 'string' ? input.title : input.title.message;
+  const title = (typeof input.title === 'string' ? input.title : input.title.message).trim();
   return title === '' ? input.type : input.type + ': ' + title;
 }

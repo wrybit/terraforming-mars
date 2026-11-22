@@ -31,6 +31,9 @@ const SETTINGS: Record<AiLevel, RustBotSettings> = {
 
 type StoredEvent = {saveId: number, event: Record<string, unknown>};
 
+// A bot that keeps dying while it is rebuilt will not recover in this game
+const MAX_REBUILD_FAILURES = 3;
+
 // Waiting time on top of the thinking time before the TypeScript AI makes the decision instead (admin setting)
 const DEFAULT_EXTRA_WAIT_MILLISECONDS = 10_000;
 
@@ -63,6 +66,8 @@ export class RustMirror {
   // Requests run one after the other: events must reach the bot in game order
   private queue: Promise<unknown> = Promise.resolve();
   private broken: string | undefined = undefined;
+  // Bots in a row that died while being rebuilt; at MAX_REBUILD_FAILURES the TypeScript AI plays the rest of the game
+  private rebuildFailures = 0;
   private readonly events: Array<StoredEvent>;
 
   private constructor(game: IGame, private readonly setup: Record<string, unknown>, events: Array<StoredEvent>) {
@@ -202,9 +207,14 @@ export class RustMirror {
         }
       });
     } catch (error) {
-      this.giveUp(`cannot rebuild the game: ${(error as Error).message}`);
+      bot.close();
+      this.rebuildFailures++;
+      if (this.rebuildFailures >= MAX_REBUILD_FAILURES) {
+        this.giveUp(`cannot rebuild the game ${this.rebuildFailures} times: ${(error as Error).message}`);
+      }
       throw error;
     }
+    this.rebuildFailures = 0;
     return bot;
   }
 

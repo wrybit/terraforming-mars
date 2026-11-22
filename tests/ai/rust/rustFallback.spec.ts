@@ -88,6 +88,17 @@ describe('Rust AI fallback', () => {
     mirror.close();
   }).timeout(5000);
 
+  it('gives the rest of the game to the TypeScript AI when the bot dies three times while being rebuilt', async () => {
+    useFakeBot('dead');
+    const {player, mirror} = mirrorOf();
+    for (let decision = 0; decision < 4; decision++) {
+      expect(await mirror.decide(player, new SelectOption('Pass'), 'easy')).is.undefined;
+    }
+    expect(started).has.length(3);
+    expect(log.summary().recent.map((entry) => entry.decision)).contains('rest of the game');
+    mirror.close();
+  });
+
   it('plays the TypeScript AI\'s decision when the game refuses the Rust answer, and records it', () => {
     const input = new SelectOption('Pass');
     const processed: Array<InputResponse> = [];
