@@ -142,7 +142,11 @@ const SPEEDS = [1, 2, 4] as const;
 const STEP_MS: Record<typeof SPEEDS[number], number> = {1: 1500, 2: 750, 4: 325};
 
 const panel = ref<HTMLElement>();
-const motion = useReplayPanelMotion(panel);
+// Open, the replay shows its whole panel for a moment, so one sees everything it offers, then folds to the thin bar
+const INTRO_MS = 1000;
+const motion = useReplayPanelMotion(panel, true);
+let introTimer: number | undefined;
+const endIntro = () => window.clearTimeout(introTimer);
 const playing = ref(false);
 const speed = ref<typeof SPEEDS[number]>(1);
 let timer: number | undefined;
@@ -237,8 +241,14 @@ function onKeyDown(event: KeyboardEvent): void {
   event.stopImmediatePropagation();
 }
 
-onMounted(() => window.addEventListener('keydown', onKeyDown, true));
+onMounted(() => {
+  window.addEventListener('keydown', onKeyDown, true);
+  introTimer = window.setTimeout(() => motion.collapse(), INTRO_MS);
+  // Touched during the intro: the panel stays as the reader left it
+  panel.value?.addEventListener('pointerdown', endIntro, {once: true});
+});
 onBeforeUnmount(() => {
+  endIntro();
   stop();
   window.removeEventListener('keydown', onKeyDown, true);
 });

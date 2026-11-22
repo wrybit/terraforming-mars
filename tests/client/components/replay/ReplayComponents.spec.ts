@@ -94,6 +94,9 @@ describe('ReplayPanel folding', () => {
     const wrapper = mount(ReplayPanel, {...globalConfig, props: panelProps, attachTo: document.body});
     // The root starts with a comment: the panel is the section, not the wrapper root
     const panel = () => wrapper.find('.replay-panel').classes();
+    // Unfolded at first, folded after the intro (1 s, then the fold)
+    expect(panel()).not.contains('replay-panel--thin');
+    await new Promise((resolve) => setTimeout(resolve, 1500));
     expect(panel()).contains('replay-panel--thin');
     await wrapper.find('.replay-panel__size-toggle--small').trigger('click');
     // Wide first, then tall (replayPanelMotion.ts)

@@ -18,10 +18,11 @@ export type ReplayPanelOffset = {x: number, y: number};
 
 const wait = (ms: number) => new Promise((resolve) => window.setTimeout(resolve, ms));
 
-export function useReplayPanelMotion(panel: Ref<HTMLElement | undefined>) {
+// unfolded: start with the full panel (it folds itself after the intro, ReplayPanel.vue)
+export function useReplayPanelMotion(panel: Ref<HTMLElement | undefined>, unfolded = false) {
   // thin: only the slider row is shown; narrow: half width. Folded = both, unfolded = neither.
-  const thin = ref(true);
-  const narrow = ref(true);
+  const thin = ref(!unfolded);
+  const narrow = ref(!unfolded);
   const offset = ref<ReplayPanelOffset>({x: 0, y: 0});
   const dragging = ref(false);
   // A newer expand/collapse cancels the steps of an older one
