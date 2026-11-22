@@ -6,6 +6,7 @@ import {paths} from '../../common/app/paths';
 import {isActiveParticipant} from '../server/activeParticipants';
 import {participantLanguage} from '../server/participantLanguages';
 import {isIProjectCard} from '../cards/IProjectCard';
+import {aiEngineOfGame} from '../../common/ai/AiEngine';
 
 /** Summarizes a game played on this server for the admin overview. */
 export function localGameSummary(game: IGame): AdminGameSummary {
@@ -34,5 +35,6 @@ export function localGameSummary(game: IGame): AdminGameSummary {
     lastActivityTimeMs: game.lastActivityTime.getTime(),
     playedCardCount: game.players.reduce((sum, player) => sum + player.playedCards.asArray().filter(isIProjectCard).length, 0),
     players: toAdminPlayerSummaries(scores, isFinished, game.isSoloModeWin()),
+    aiEngine: aiEngineOfGame(game.players),
   };
 }

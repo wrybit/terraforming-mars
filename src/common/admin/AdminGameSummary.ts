@@ -43,6 +43,8 @@ export type AdminGameSummary = {
   /** Project cards played by all players together (local games only) – tells barely started games apart. */
   playedCardCount?: number;
   players: Array<AdminPlayerSummary>;
+  /** AI program of a local game with AI players (shown small to admins) */
+  aiEngine?: 'rust' | 'typescript';
 };
 
 export type AdminDeleteGameRequest = {

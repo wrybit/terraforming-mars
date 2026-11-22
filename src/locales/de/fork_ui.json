@@ -951,12 +951,6 @@
   "Some of the awards you selected need expansions you have not enabled.": "Einige der gewählten Auszeichnungen brauchen Erweiterungen, die nicht aktiviert sind.",
   "Keyboard layout": "Tastaturlayout",
   "Automatic (${0})": "Automatisch (${0})",
-  "Classic": "Klassisch",
-  "New β": "Neu β",
-  "New AI, learns from its own games. Still being tested.": "Neue AI, lernt aus eigenen Partien. Noch in Erprobung.",
-  "The new AI is not available on this server": "Die neue AI ist auf diesem Server nicht verfügbar",
-  "Switch off the new AI": "Neue AI ausschalten",
-  "New games cannot choose the new AI. Games already running keep it. Takes effect at once.": "Neue Spiele können die neue AI nicht wählen. Laufende Spiele behalten sie. Wirkt sofort.",
   "${0} is thinking": "${0} denkt nach",
   "${0} is pondering": "${0} grübelt",
   "${0} is weighing the options": "${0} wägt ab",
@@ -1053,7 +1047,11 @@
   "Minimize": "Verkleinern",
   "${0} s per step": "${0} s pro Schritt",
   "${0} remaining": "noch ${0}",
-  "New β can do this": "Neu β kann das",
-  "New β not yet compatible with:": "Neu β noch nicht kompatibel mit:",
-  "New β cannot play these settings yet": "Neu β kann diese Einstellungen noch nicht spielen"
+  "The AI can do this": "Die AI kann das",
+  "AI engine": "AI-Engine",
+  "Program that plays the AI seats of new games. Running games keep theirs. Takes effect at once.": "Programm, das die AI-Plätze neuer Partien spielt. Laufende Partien behalten ihres. Wirkt sofort.",
+  "TypeScript as a stand-in": "TypeScript als Ersatz",
+  "On: settings the Rust AI cannot play get the TypeScript AI. Off: they count as not compatible with the AI.": "An: Einstellungen, die die Rust-AI nicht kann, bekommen die TypeScript-AI. Aus: Sie gelten als nicht kompatibel mit der AI.",
+  "Extra waiting time for the Rust AI (ms)": "Zusätzliche Wartezeit für die Rust-AI (ms)",
+  "On top of its thinking time. Without an answer by then the TypeScript AI makes this decision. Empty: 10000.": "Zusätzlich zur Denkzeit. Kommt bis dahin keine Antwort, trifft die TypeScript-AI diese Entscheidung. Leer: 10000."
 }

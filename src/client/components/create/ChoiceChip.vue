@@ -15,13 +15,13 @@
     <span v-if="$slots.detail" class="create-game-chip-text">
       <span class="create-game-chip-name">
         <span class="create-game-chip-label" :class="{capitalized}">{{ translatedLabel }}</span>
-        <RustAiMark v-if="rustAi" />
+        <AiCanMark v-if="aiCan" />
       </span>
       <span class="create-game-chip-detail"><slot name="detail"></slot></span>
     </span>
     <span v-else class="create-game-chip-name">
       <span class="create-game-chip-label" :class="{capitalized}">{{ translatedLabel }}</span>
-      <RustAiMark v-if="rustAi" />
+      <AiCanMark v-if="aiCan" />
     </span>
     <slot></slot>
     <InfoLink v-if="href" :href="href" />
@@ -32,12 +32,12 @@
 import {defineComponent} from 'vue';
 import {translateText} from '@/client/directives/i18n';
 import InfoLink from './InfoLink.vue';
-import RustAiMark from './RustAiMark.vue';
+import AiCanMark from './AiCanMark.vue';
 
 // Selectable tile (expansion, game board, filter). Not a <button>, because it may contain an info link
 export default defineComponent({
   name: 'ChoiceChip',
-  components: {InfoLink, RustAiMark},
+  components: {InfoLink, AiCanMark},
   emits: ['select'],
   props: {
     label: {
@@ -66,8 +66,8 @@ export default defineComponent({
       type: String,
       required: false,
     },
-    // True: the new AI can play this (robot behind the name)
-    rustAi: {
+    // True: the AI can play this (robot behind the name)
+    aiCan: {
       type: Boolean,
       default: false,
     },

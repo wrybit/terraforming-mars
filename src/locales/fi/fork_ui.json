@@ -1174,12 +1174,6 @@
   "Some of the awards you selected need expansions you have not enabled.": "Osa valituista palkinnoista vaatii laajennuksia, joita ei ole otettu käyttöön.",
   "Keyboard layout": "Näppäimistöasettelu",
   "Automatic (${0})": "Automaattinen (${0})",
-  "Classic": "Klassinen",
-  "New β": "Uusi β",
-  "New AI, learns from its own games. Still being tested.": "Uusi tekoäly, oppii omista peleistään. Vielä testissä.",
-  "The new AI is not available on this server": "Uusi tekoäly ei ole käytettävissä tällä palvelimella",
-  "Switch off the new AI": "Poista uusi tekoäly käytöstä",
-  "New games cannot choose the new AI. Games already running keep it. Takes effect at once.": "Uudet pelit eivät voi valita uutta tekoälyä. Käynnissä olevat pelit pitävät sen. Tulee voimaan heti.",
   "Where to place a tile, how to pay … Empty: 1000.": "Mihin laatta asetetaan, miten maksetaan … Tyhjä: 1000.",
   "Thinking time of a hard AI (normal: two thirds, easy: one third). Empty: 3000.": "Vaikean tekoälyn miettimisaika (normaali: kaksi kolmasosaa, helppo: kolmasosa). Tyhjä: 3000.",
   "${0} is thinking": "${0} miettii",
@@ -1279,7 +1273,11 @@
   "Minimize": "Pienennä",
   "${0} s per step": "${0} s per askel",
   "${0} remaining": "${0} jäljellä",
-  "New β can do this": "Uusi β osaa tämän",
-  "New β not yet compatible with:": "Uusi β ei vielä tue:",
-  "New β cannot play these settings yet": "Uusi β ei vielä osaa pelata näillä asetuksilla"
+  "The AI can do this": "AI osaa tämän",
+  "AI engine": "AI-moottori",
+  "Program that plays the AI seats of new games. Running games keep theirs. Takes effect at once.": "Ohjelma, joka pelaa uusien pelien AI-paikat. Käynnissä olevat pelit pitävät omansa. Voimaan heti.",
+  "TypeScript as a stand-in": "TypeScript varalla",
+  "On: settings the Rust AI cannot play get the TypeScript AI. Off: they count as not compatible with the AI.": "Päällä: asetukset, joita Rust-AI ei osaa, saavat TypeScript-AI:n. Pois: ne katsotaan AI:n kanssa yhteensopimattomiksi.",
+  "Extra waiting time for the Rust AI (ms)": "Lisäodotus Rust-AI:lle (ms)",
+  "On top of its thinking time. Without an answer by then the TypeScript AI makes this decision. Empty: 10000.": "Miettimisajan lisäksi. Jos vastausta ei tule siihen mennessä, TypeScript-AI tekee päätöksen. Tyhjä: 10000."
 }

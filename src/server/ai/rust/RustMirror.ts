@@ -35,10 +35,6 @@ export function rustAiInstalled(): boolean {
   return BINARY !== undefined && DATA !== undefined && fs.existsSync(BINARY);
 }
 
-/** New games may choose the Rust AI: installed and not switched off by the admin (NEW_AI_OFF, read at every call). */
-export function rustAiOffered(): boolean {
-  return rustAiInstalled() && process.env.NEW_AI_OFF !== 'true';
-}
 
 export class RustMirror {
   private static readonly mirrors = new Map<string, RustMirror>();

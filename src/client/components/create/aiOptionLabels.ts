@@ -1,10 +1,10 @@
-import {RustAiOption} from '@/common/ai/RustAiSupport';
+import {AiOption} from '@/common/ai/aiSupportContract';
 
 /** Name of an option row in the create form; icon as in its row or its expansion's options. */
-export type RustAiOptionLabel = {label: string, iconClass?: string};
+export type AiOptionLabel = {label: string, iconClass?: string};
 
 // Same labels as the option rows (CreateGameForm.vue), so a reason chip reads like the row it points to
-export const RUST_AI_OPTION_LABELS: Record<RustAiOption, RustAiOptionLabel> = {
+export const AI_OPTION_LABELS: Record<AiOption, AiOptionLabel> = {
   draftVariant: {label: 'Draft variant'},
   initialDraftVariant: {label: 'Initial Draft variant'},
   preludeDraftVariant: {label: 'Prelude Draft', iconClass: 'expansion-icon-prelude'},

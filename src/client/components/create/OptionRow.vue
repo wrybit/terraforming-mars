@@ -3,7 +3,7 @@
     <span class="create-game-option-name">
       <span v-if="iconClass" :class="'create-game-expansion-icon ' + iconClass"></span>
       <span v-i18n>{{ label }}</span>
-      <RustAiMark v-if="rustAi" />
+      <AiCanMark v-if="aiCan" />
       <InfoLink v-if="href" :href="href" />
     </span>
     <slot></slot>
@@ -13,12 +13,12 @@
 <script lang="ts">
 import {defineComponent} from 'vue';
 import InfoLink from './InfoLink.vue';
-import RustAiMark from './RustAiMark.vue';
+import AiCanMark from './AiCanMark.vue';
 
 // One setting: name (with icon and info link) on the left, control on the right
 export default defineComponent({
   name: 'OptionRow',
-  components: {InfoLink, RustAiMark},
+  components: {InfoLink, AiCanMark},
   props: {
     label: {
       type: String,
@@ -32,8 +32,8 @@ export default defineComponent({
       type: String,
       required: false,
     },
-    // True: the new AI can play this (robot behind the name)
-    rustAi: {
+    // True: the AI can play this (robot behind the name)
+    aiCan: {
       type: Boolean,
       default: false,
     },

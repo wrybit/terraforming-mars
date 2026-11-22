@@ -1,7 +1,7 @@
 import {AiLevel, DEFAULT_AI_LEVEL, isAiLevel} from '../../common/ai/AiLevel';
-import {AiEngine} from '../../common/ai/AiEngine';
 import {AI_ANALYSIS_DEFAULT} from '../../common/ai/aiAnalysisDefault';
-import {aiUnsupportedReasons} from '../../common/ai/aiSupport';
+import {decideAiEngine} from '../ai/aiEngineChoice';
+import {AiBlocker} from '../../common/ai/aiCompatibility';
 import {Color, PLAYER_COLORS} from '../../common/Color';
 import {setupOptionsFromConfig} from '../../common/game/GameSetupOptions';
 import {NewGameConfig, NewPlayerModel} from '../../common/game/NewGameConfig';
@@ -69,8 +69,7 @@ type HumanSeat = {kind: 'human', participant: string, profile: LobbyProfile, rea
 // seat over in the lobby; playerId: the player's link once the game runs. Both only ever go to the host.
 type GuestSeat = {kind: 'guest', name: string, color: Color, handicap?: number, token?: string, playerId?: PlayerId};
 // Color and name as chosen in the create form; seats turned into AI in the lobby have none
-// aiEngine: the new AI chosen in the create form (missing = classic TS AI)
-type AiSeat = {kind: 'ai', aiLevel: AiLevel, aiEngine?: AiEngine, color?: Color, name?: string};
+type AiSeat = {kind: 'ai', aiLevel: AiLevel, color?: Color, name?: string};
 type Seat = {kind: 'free'} | AiSeat | HumanSeat | GuestSeat;
 
 type Room = {
@@ -522,7 +521,7 @@ export class Lobby {
   private aiSeat(player: NewPlayerModel, aiLevel: AiLevel): AiSeat {
     // Same cleanup as a guest's name and color; an empty name stays empty so the AI is named after its color
     const chosen = sanitizeProfile({name: player.name || capitalize(player.color), color: player.color, emoji: ''});
-    return {kind: 'ai', aiLevel, aiEngine: player.aiEngine === 'rust' ? 'rust' : undefined, color: chosen.color, name: player.name ? chosen.name : undefined};
+    return {kind: 'ai', aiLevel, color: chosen.color, name: player.name ? chosen.name : undefined};
   }
 
   /** A player entered by the host; an unchanged guest of the previous layout keeps the link already sent */
@@ -532,11 +531,18 @@ export class Lobby {
     return {kind: 'guest', name: guest.name, color: guest.color, handicap: Number(player.handicap) || 0, token: same?.token ?? randomSeatToken()};
   }
 
-  /** No AI seat for settings the AI cannot handle (same check as the create form and ApiCreateGame, aiSupport.ts) */
+  /** No AI seat for settings no AI can play (same decision as the create form and ApiCreateGame, aiEngineChoice.ts) */
   private assertAiPossible(room: Room): void {
-    if (aiUnsupportedReasons({expansions: room.config.expansions, twoCorpsVariant: room.config.twoCorpsVariant}).length > 0) {
+    if (this.aiBlockers(room).length > 0) {
       throw new LobbyError('AI players are not available with these settings.');
     }
+  }
+
+  /** Settings of the room no AI can play; a random board is not known yet and never a reason */
+  private aiBlockers(room: Room): ReadonlyArray<AiBlocker> {
+    const boards = room.config.boards ?? [];
+    const decision = decideAiEngine(room.config, boards.length === 1 ? boards[0] : undefined);
+    return decision.engine === 'none' ? decision.reasons : [];
   }
 
   /** Host only: every free seat becomes an AI player and the game starts */
@@ -639,8 +645,7 @@ export class Lobby {
       const aiLevel = seat.kind === 'ai' ? seat.aiLevel : DEFAULT_AI_LEVEL;
       // A name of its own stays; otherwise the AI is named after its color, as in the create form
       const name = seat.kind === 'ai' && seat.name !== undefined && ownColor !== undefined ? seat.name : capitalize(color);
-      const aiEngine = seat.kind === 'ai' ? seat.aiEngine : undefined;
-      return {name, color, beginner: false, handicap: 0, first: false, aiLevel, aiEngine};
+      return {name, color, beginner: false, handicap: 0, first: false, aiLevel};
     });
     // Seat order is the form's order, so its "goes first" star still points at the right seat
     const chosenFirst = room.config.players.findIndex((player) => player.first === true);
@@ -686,6 +691,7 @@ export class Lobby {
         boards: config.boards ?? [],
         randomBoard: (config.boards ?? []).length > 1,
         options: setupOptionsFromConfig(config),
+        aiBlockers: room.state === 'open' ? this.aiBlockers(room) : [],
       },
       config: me === room.host && room.state === 'open' ? room.config : undefined,
       yourAccess: me === undefined ? undefined : room.declined?.includes(me) ? 'declined' :

@@ -6,5 +6,5 @@ export const RUST_BOT_BINARY = process.env.RUST_BOT_BINARY ?? path.resolve('db',
 export const RUST_BOT_DATA = process.env.RUST_BOT_DATA ?? path.resolve('db', 'rust-ai', 'data');
 export const RUST_BOT_EVENTS = process.env.RUST_BOT_EVENTS ?? path.resolve('db', 'rust-bot');
 
-/** Support file shipped with every bot deploy, next to the bot program (common/ai/RustAiSupport.ts). */
+/** Support file shipped with every bot deploy, next to the bot program (common/ai/aiSupportContract.ts). */
 export const RUST_AI_SUPPORT_FILE = path.join(path.dirname(RUST_BOT_BINARY), 'rust-ai-support.json');

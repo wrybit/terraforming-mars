@@ -1972,12 +1972,6 @@
   "Some of the awards you selected need expansions you have not enabled.": "Niektóre wybrane nagrody wymagają niewłączonych dodatków.",
   "Keyboard layout": "Układ klawiatury",
   "Automatic (${0})": "Automatycznie (${0})",
-  "Classic": "Klasyczna",
-  "New β": "Nowa β",
-  "New AI, learns from its own games. Still being tested.": "Nowa SI, uczy się na własnych partiach. Wciąż w testach.",
-  "The new AI is not available on this server": "Nowa SI nie jest dostępna na tym serwerze",
-  "Switch off the new AI": "Wyłącz nową SI",
-  "New games cannot choose the new AI. Games already running keep it. Takes effect at once.": "Nowe gry nie mogą wybrać nowej SI. Trwające gry ją zachowują. Działa od razu.",
   "Where to place a tile, how to pay … Empty: 1000.": "Gdzie umieścić obszar, jak zapłacić … Puste: 1000.",
   "Thinking time of a hard AI (normal: two thirds, easy: one third). Empty: 3000.": "Czas namysłu trudnego AI (normalne: dwie trzecie, łatwe: jedna trzecia). Puste: 3000.",
   "${0} is thinking": "${0} myśli",
@@ -2078,7 +2072,11 @@
   "Minimize": "Zmniejsz",
   "${0} s per step": "${0} s na krok",
   "${0} remaining": "zostało ${0}",
-  "New β can do this": "Nowa β to potrafi",
-  "New β not yet compatible with:": "Nowa β jeszcze nie obsługuje:",
-  "New β cannot play these settings yet": "Nowa β nie umie jeszcze grać z tymi ustawieniami"
+  "The AI can do this": "AI to potrafi",
+  "AI engine": "Silnik AI",
+  "Program that plays the AI seats of new games. Running games keep theirs. Takes effect at once.": "Program grający na miejscach AI w nowych partiach. Trwające partie zachowują swój. Działa od razu.",
+  "TypeScript as a stand-in": "TypeScript jako zastępstwo",
+  "On: settings the Rust AI cannot play get the TypeScript AI. Off: they count as not compatible with the AI.": "Wł.: ustawienia, których AI Rust nie umie, dostają AI TypeScript. Wył.: uznaje się je za niezgodne z AI.",
+  "Extra waiting time for the Rust AI (ms)": "Dodatkowy czas oczekiwania na AI Rust (ms)",
+  "On top of its thinking time. Without an answer by then the TypeScript AI makes this decision. Empty: 10000.": "Ponad czas namysłu. Bez odpowiedzi do tego czasu decyzję podejmuje AI TypeScript. Puste: 10000."
 }

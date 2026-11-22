@@ -10,7 +10,6 @@ import {presenceRecord} from '../admin/dashboard/presenceRecord';
 import {isLanguage, noteParticipantLanguage} from '../server/participantLanguages';
 import {isPlayerId} from '../../common/Types';
 import {Phase} from '../../common/Phase';
-import {rustAiOffered} from '../ai/rust/RustMirror';
 
 /** Polled by every open page (serverStatus.ts) and by update scripts on the server itself. */
 export class ApiStatus extends Handler {
@@ -38,7 +37,6 @@ export class ApiStatus extends Handler {
       updating: isServerUpdating(),
       startedAt: serverStartedAt,
       activeParticipants: activeParticipantCount(),
-      newAi: rustAiOffered(),
     };
     const commits = serverUpdateCommits();
     if (commits.length > 0) {

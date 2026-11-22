@@ -2,7 +2,7 @@ import {expect} from 'chai';
 import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
-import {EMPTY_RUST_AI_SUPPORT} from '../../../src/common/ai/RustAiSupport';
+import {EMPTY_AI_SUPPORT} from '../../../src/common/ai/aiSupportContract';
 import {RustAiSupportFile} from '../../../src/server/ai/rust/rustAiSupportFile';
 
 const FIXTURE = path.resolve('tests', 'fixtures', 'rust-ai-support.json');
@@ -35,9 +35,9 @@ describe('RustAiSupportFile', () => {
 
   it('supports nothing without a file or with a broken one', () => {
     const reader = new RustAiSupportFile(file);
-    expect(reader.get()).deep.eq(EMPTY_RUST_AI_SUPPORT);
+    expect(reader.get()).deep.eq(EMPTY_AI_SUPPORT);
     fs.writeFileSync(file, '{"version": 1, "expansions": [');
-    expect(reader.get()).deep.eq(EMPTY_RUST_AI_SUPPORT);
+    expect(reader.get()).deep.eq(EMPTY_AI_SUPPORT);
     expect(warnings).has.length(1);
   });
 

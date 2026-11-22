@@ -67,6 +67,8 @@
           <!-- Replay of the whole game: reconstructed from start, end and log when opened (ReplayButton) -->
           <div class="game-end-setup__head">
             <h2 v-i18n>Game settings</h2>
+            <!-- Admins: which AI program played (fixed when the game was created) -->
+            <span v-if="aiEngineText !== undefined" class="game-end-setup__engine">{{ aiEngineText }}</span>
             <!-- Both ways to look back at the course of the game side by side -->
             <div class="game-end-setup__actions">
               <!-- Admins: the detailed log of a self-play game of the new AI, which the training reads -->
@@ -299,6 +301,7 @@ import {MADetail} from '@/common/game/VictoryPointsBreakdown';
 import {AwardName} from '@/common/ma/AwardName';
 import {paths} from '@/common/app/paths';
 import {checkAdminLoginOnce} from '@/client/components/admin/adminSession';
+import {aiEngineLabel} from '@/client/components/admin/aiEngineLabel';
 
 type PlayerContributions = {player: string, color: Color, temp: number, oxygen: number, oceans: number, venus?: number, moonHabitat?: number, moonMining?: number, moonLogistic?: number, total: number};
 
@@ -447,12 +450,13 @@ export default defineComponent({
       return new Map(this.playerContributionsData.map((data) => [data.color, data]));
     },
   },
-  data(): {tileView: TileView, boardZoomOpen: boolean, zoomBoard: ZoomBoard, columnBoardElement: HTMLElement | undefined, decisionLogLink: string | undefined, replay: ReplayData | undefined} {
+  data(): {tileView: TileView, boardZoomOpen: boolean, zoomBoard: ZoomBoard, columnBoardElement: HTMLElement | undefined, decisionLogLink: string | undefined, aiEngineText: string | undefined, replay: ReplayData | undefined} {
     return {
       // Open replay (ReplayButton): not reactive inside, the states are many and never change
       replay: undefined,
       // Set once the server confirms an admin and a decision log for this game
       decisionLogLink: undefined,
+      aiEngineText: undefined,
       tileView: 'show',
       boardZoomOpen: false,
       // Board shown in the enlargement (Mars or Moon)
@@ -513,6 +517,7 @@ export default defineComponent({
         return;
       }
       const answer = await fetch(`${paths.API_DECISION_LOG}?id=${encodeURIComponent(id)}&check`).then((response) => response.ok ? response.json() : undefined).catch(() => undefined);
+      this.aiEngineText = aiEngineLabel(answer?.aiEngine);
       if (answer?.available === true) {
         this.decisionLogLink = `${paths.DECISION_LOG}?id=${encodeURIComponent(id)}`;
       }
