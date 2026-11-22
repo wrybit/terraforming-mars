@@ -16,14 +16,9 @@
       <template #main>
         <PlayersOverview class="player_home_block player_home_block--players nofloat" :playerView="viewModel" />
         <RowResizeHandle kind="players" />
-        <!-- Same id as in the game: the layout (player_home_fixed.less) lets only this hand block fill the column -->
-        <div class="player_home_block player_home_block--hand" id="shortkey-hand">
-          <div class="or-tabs" role="tablist">
-            <HandCardsTab :count="handCount" :active="true" />
-          </div>
-          <div v-docked-tab class="or-tab-panel or-tab-panel--view" role="tabpanel">
-            <HandCardsPanel :playerView="viewModel" />
-          </div>
+        <!-- The game's action tabs (hand cards first) fill the rest of the column like on a player's turn -->
+        <div class="player_home_block player_home_block--actions nofloat">
+          <ReplayActionTabs :playerView="viewModel" :menu="actionMenu" :focus="ownFocus" :stepKey="current" />
         </div>
       </template>
     </HomeColumns>
@@ -49,7 +44,7 @@
 </template>
 
 <script setup lang="ts">
-import {computed, ref} from 'vue';
+import {computed, reactive, ref} from 'vue';
 import {Color} from '@/common/Color';
 import {ViewModel} from '@/common/models/PlayerModel';
 import {ReplaySourceModel} from '@/common/models/ReplaySourceModel';
@@ -57,16 +52,15 @@ import {LogMessage} from '@/common/logs/LogMessage';
 import {LogMessageType} from '@/common/logs/LogMessageType';
 import {LogMessageDataType} from '@/common/logs/LogMessageDataType';
 import {translateMessage} from '@/client/directives/i18n';
-import {vDockedTab} from '@/client/directives/DockedTab';
 import {nextTileView, TileView} from '@/client/components/board/TileView';
 import HomeColumns from '@/client/components/HomeColumns.vue';
 import GameBoardView from '@/client/components/GameBoardView.vue';
 import LogPanel from '@/client/components/logpanel/LogPanel.vue';
 import PlayersOverview from '@/client/components/overview/PlayersOverview.vue';
 import RowResizeHandle from '@/client/components/RowResizeHandle.vue';
-import HandCardsTab from '@/client/components/HandCardsTab.vue';
-import HandCardsPanel from '@/client/components/HandCardsPanel.vue';
 import ReplayPanel from './ReplayPanel.vue';
+import ReplayActionTabs from './ReplayActionTabs.vue';
+import {replayActionFocus, replayActionMenu} from './replayActionMenu';
 import {ReplayState} from './reconstructReplay';
 import {replayGenerations, replayMarks, replayRaises, ReplayStep} from './replaySteps';
 import {replayLogStream, replayViewModel} from './replayViewModel';
@@ -98,7 +92,15 @@ const state = computed(() => props.states[step.value.state]);
 const last = computed(() => current.value === props.steps.length - 1);
 const viewModel = computed(() => replayViewModel(props.final, props.source, state.value, perspective.value, last.value));
 const stream = computed(() => replayLogStream(props.source, step.value.state, perspective.value));
-const handCount = computed(() => viewModel.value.cardsInHand.length);
+// Action tabs of the chosen player, as they were before this step; its own action opens and marks its tab
+const ownFocus = computed(() => step.value.actor === perspective.value ? replayActionFocus(props.source, step.value) : undefined);
+const actionMenu = computed(() => {
+  const before = props.states[Math.max(0, step.value.line - 1)];
+  const index = Math.max(0, props.source.players.findIndex((player) => player.color === perspective.value));
+  // Reactive like the input of the game (WaitingFor): the tabs find their selected option in it again
+  return reactive(replayActionMenu(props.source, before, before.players[index],
+    props.final.game.milestones.map((milestone) => milestone.name), props.final.game.awards.map((award) => award.name), ownFocus.value));
+});
 // What happened in this step: its first log line, translated like in the log
 const eventText = computed(() => {
   const entry = props.source.log[step.value.line];

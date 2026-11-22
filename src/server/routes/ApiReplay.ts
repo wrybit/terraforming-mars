@@ -32,6 +32,6 @@ export class ApiReplay extends Handler {
     } catch {
       throw RouteError.notFound(`start of game ${game.id} is not saved on this server`);
     }
-    responses.writeJson(res, ctx, replaySource(start, game.serialize()));
+    responses.writeJson(res, ctx, replaySource(start, game.serialize(), game.standardProjects.map((card) => card.name)));
   }
 }

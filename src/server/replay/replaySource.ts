@@ -5,6 +5,7 @@ import {PlayerId} from '../../common/Types';
 import {Phase} from '../../common/Phase';
 import {MIN_OXYGEN_LEVEL, MIN_TEMPERATURE} from '../../common/constants';
 import {SerializedPlayer} from '../SerializedPlayer';
+import {CardName} from '../../common/cards/CardName';
 
 // TR every game starts with (Game.ts): 14 alone, otherwise 20, plus the player's handicap
 function initialTerraformRating(game: SerializedGame, player: SerializedPlayer): number {
@@ -15,7 +16,7 @@ function initialTerraformRating(game: SerializedGame, player: SerializedPlayer):
  * Raw material for a replay (api/replay): everything the client needs to reconstruct the game step by step from
  * its first and its last save. Player ids are replaced by colours.
  */
-export function replaySource(start: SerializedGame, end: SerializedGame): ReplaySourceModel {
+export function replaySource(start: SerializedGame, end: SerializedGame, standardProjects: ReadonlyArray<CardName> = []): ReplaySourceModel {
   // Imported games (self-play archive, games of other servers) are saved only once, already finished: their first
   // save is the end. Then the replay starts from the values every game starts with instead of the final ones.
   const startIsEnd = start.phase === Phase.END;
@@ -56,5 +57,6 @@ export function replaySource(start: SerializedGame, end: SerializedGame): Replay
       ...(space.tile.card !== undefined ? {card: space.tile.card} : {}),
     }]),
     log,
+    standardProjects,
   };
 }

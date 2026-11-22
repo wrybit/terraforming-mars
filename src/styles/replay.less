@@ -123,6 +123,51 @@ html body #game-end.game-end--replay > :not(.replay-view) {
   overflow: auto;
 }
 
+// ---------- Action tabs (ReplayActionTabs.vue) ----------
+// Same chain down to the tab box as for the game's WaitingFor (player_home_fixed.less)
+.player-home--fixed .replay-action-tabs > .wf-options {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+// View only: buttons show what could be done, but nothing is sent; there is nothing to cancel or to pay
+.replay-action-tabs .or-tab-footer {
+  pointer-events: none;
+
+  > :not(.or-tab-save) {
+    display: none;
+  }
+}
+
+.replay-action-tabs .cancel-action-button {
+  display: none;
+}
+
+// What the player chose in this step: the tab, the card or the button pulse in the accent colour
+.replay-action-tabs__focus {
+  border-radius: 10px;
+  box-shadow: 0 0 0 3px @replay-accent-light, 0 0 18px 4px fade(@replay-accent-light, 70%);
+  animation: replay-focus-pulse 1.4s ease-in-out infinite;
+}
+
+.or-tab.replay-action-tabs__focus {
+  border-radius: 8px 8px 0 0;
+}
+
+@keyframes replay-focus-pulse {
+  50% {
+    box-shadow: 0 0 0 3px @replay-accent-light, 0 0 6px 1px fade(@replay-accent-light, 40%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .replay-action-tabs__focus {
+    animation: none;
+  }
+}
+
 // ---------- Panel ----------
 // Width unfolded; folded it is half as wide (but never too narrow for play, slider and position)
 @replay-panel-width: ~"min(1120px, 100vw - 32px)";
