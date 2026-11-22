@@ -1455,5 +1455,8 @@
   "Max. thinking time (ms)": "Макс. час на роздуми (мс)",
   "The search stops here. Only a limit, so the AI is equally strong on fast and slow servers.": "Тут пошук зупиняється. Лише межа, щоб AI була однаково сильною на швидких і повільних серверах.",
   "Randomness (%)": "Випадковість (%)",
-  "0: always the best move. Higher: more often a slightly worse one, never nonsense. Needs a bot that supports it.": "0: завжди найкращий хід. Вище: частіше трохи гірший, але ніколи безглуздий. Потрібен бот, що це вміє."
+  "0: always the best move. Higher: more often a slightly worse one, never nonsense. Needs a bot that supports it.": "0: завжди найкращий хід. Вище: частіше трохи гірший, але ніколи безглуздий. Потрібен бот, що це вміє.",
+  "What the AI can play": "Що вміє ШІ",
+  "No bot or no rust-ai-support.json in its folder: the Rust AI plays nothing.": "Немає бота або rust-ai-support.json у його теці: ШІ на Rust нічого не вміє.",
+  "Bot ${0}, file of ${1}": "Бот ${0}, файл від ${1}"
 }

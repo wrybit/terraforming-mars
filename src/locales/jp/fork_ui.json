@@ -1672,5 +1672,8 @@
   "Max. thinking time (ms)": "最大思考時間（ms）",
   "The search stops here. Only a limit, so the AI is equally strong on fast and slow servers.": "ここで探索を止めます。速いサーバーでも遅いサーバーでも同じ強さになるよう、上限としてだけ使います。",
   "Randomness (%)": "ランダム性（%）",
-  "0: always the best move. Higher: more often a slightly worse one, never nonsense. Needs a bot that supports it.": "0：常に最善手。高くすると少し劣る手をより頻繁に選ぶが、無茶な手は選ばない。対応するボットが必要。"
+  "0: always the best move. Higher: more often a slightly worse one, never nonsense. Needs a bot that supports it.": "0：常に最善手。高くすると少し劣る手をより頻繁に選ぶが、無茶な手は選ばない。対応するボットが必要。",
+  "What the AI can play": "AIが遊べる内容",
+  "No bot or no rust-ai-support.json in its folder: the Rust AI plays nothing.": "ボットがないか、フォルダーに rust-ai-support.json がありません：Rust AI は何も遊べません。",
+  "Bot ${0}, file of ${1}": "ボット ${0}、ファイル ${1}"
 }

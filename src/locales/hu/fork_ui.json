@@ -1480,5 +1480,8 @@
   "Max. thinking time (ms)": "Max. gondolkodási idő (ms)",
   "The search stops here. Only a limit, so the AI is equally strong on fast and slow servers.": "Itt áll le a keresés. Csak felső határ, hogy az AI gyors és lassú szerveren is egyformán erős legyen.",
   "Randomness (%)": "Véletlen (%)",
-  "0: always the best move. Higher: more often a slightly worse one, never nonsense. Needs a bot that supports it.": "0: mindig a legjobb lépés. Magasabb: gyakrabban egy kicsit rosszabb, sosem értelmetlen. Ehhez támogató bot kell."
+  "0: always the best move. Higher: more often a slightly worse one, never nonsense. Needs a bot that supports it.": "0: mindig a legjobb lépés. Magasabb: gyakrabban egy kicsit rosszabb, sosem értelmetlen. Ehhez támogató bot kell.",
+  "What the AI can play": "Amit az AI tud",
+  "No bot or no rust-ai-support.json in its folder: the Rust AI plays nothing.": "Nincs bot, vagy nincs rust-ai-support.json a mappájában: a Rust AI semmit sem tud.",
+  "Bot ${0}, file of ${1}": "Bot ${0}, fájl: ${1}"
 }

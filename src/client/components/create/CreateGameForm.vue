@@ -354,14 +354,7 @@
                 <div v-if="aiBlockers.length > 0" class="create-game-validation-box create-game-validation-box--warning create-game-seat-warning" role="status">
                   <h3 class="create-game-validation-title"><span aria-hidden="true">&#9888;&#xFE0E;</span><span v-i18n>AI not yet compatible with:</span></h3>
                   <!-- Same chips as the summary above the Create button -->
-                  <div class="create-game-summary">
-                    <span v-for="blocker in aiBlockerChips" :key="blocker.key" class="create-game-summary-chip">
-                      <img v-if="blocker.picture !== undefined" class="create-game-expansion-icon" :src="blocker.picture" alt="">
-                      <span v-else-if="blocker.iconClass !== undefined" :class="blocker.iconClass"></span>
-                      <span v-else class="create-game-summary-toggle" aria-hidden="true"></span>
-                      <span :class="{capitalized: blocker.capitalized}" v-i18n>{{ blocker.label }}</span>
-                    </span>
-                  </div>
+                  <AiSettingChips :chips="aiBlockerChips" />
                 </div>
                 <SegmentedControl v-else v-model="aiPlayersCount" :options="aiCountOptions" class="create-game-segmented--equal create-game-segmented--seats" />
               </div>
@@ -501,6 +494,7 @@ import {AiOption, AiSupport, EMPTY_AI_SUPPORT} from '@/common/ai/aiSupportContra
 import {AiBlocker, AiEngineDecision, aiEngineFor, aiSettingsOf, playableAiSupport} from '@/common/ai/aiCompatibility';
 import {TYPESCRIPT_AI_SUPPORT} from '@/common/ai/typescript/typescriptAiSupport';
 import {AiBlockerChip, aiBlockerChip} from './aiBlockerChip';
+import AiSettingChips from './AiSettingChips.vue';
 import ColoniesFilter from '@/client/components/create/ColoniesFilter.vue';
 import {ColonyName} from '@/common/colonies/ColonyName';
 import CardsFilter from '@/client/components/create/CardsFilter.vue';
@@ -665,6 +659,7 @@ export default defineComponent({
   // Lobby: 'close' and 'open-in-lobby' (not declared as emits: typed emits would break showAlert(this))
   components: {
     ThemeSwitch,
+    AiSettingChips,
     LobbyEmojiPicker,
     GameSetupChips,
     AppButton,

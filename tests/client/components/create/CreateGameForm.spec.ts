@@ -198,8 +198,9 @@ describe('CreateGameForm', () => {
     expect(vm.aiPlayersCount).eq(0);
     expect(vm.aiBlockers).deep.eq([{kind: 'expansion', id: 'colonies'}]);
     expect(vm.aiBlockerChips.map((chip: any) => chip.label)).deep.eq(['Colonies']);
-    // Warning box instead of the AI count
-    expect(wrapper.find('.create-game-seat-warning').text()).contains('Colonies');
+    // Warning box instead of the AI count, with the chips of the blockers
+    const chips = wrapper.find('.create-game-seat-warning').findComponent({name: 'AiSettingChips'});
+    expect(chips.props('chips').map((chip: any) => chip.label)).deep.eq(['Colonies']);
 
     vm.expansions.colonies = false;
     await wrapper.vm.$nextTick();
