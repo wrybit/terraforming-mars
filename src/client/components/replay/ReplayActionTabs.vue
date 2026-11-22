@@ -57,12 +57,14 @@ function update(menu: OrOptionsModel): void {
 }
 
 const root = ref<HTMLElement>();
-// Read only: the player only switches tabs; cards, buttons, filters and payments react to the replay alone. The
+// Read only: the player only switches tabs and uses the view controls above the cards (filter, zoom, sorting – they
+// change only how the cards are shown); cards, buttons and payments react to the replay alone. The
 // replay marks the chosen card with a click of its own (not trusted), so only the user's own input is stopped; the
 // change events that follow a click come from the browser (trusted), so they are not stopped here.
+const VIEW_CONTROLS = '.or-tabs, .card-filter-bar';
 function readOnly(event: Event): void {
   const target = event.target as Element | null;
-  if (!event.isTrusted || target?.closest('.or-tabs') !== null) {
+  if (!event.isTrusted || target?.closest(VIEW_CONTROLS) !== null) {
     return;
   }
   // Keyboard: only Enter and Space would trigger something
