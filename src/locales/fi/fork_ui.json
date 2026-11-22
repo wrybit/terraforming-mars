@@ -448,7 +448,7 @@
   "Blacksmith": "Seppä",
   "Concession Rights": "Toimiluvat",
   "${0} (Turmoil ${1})": "${0} (Myllerrys ${1})",
-  "AI opponents": "Tekoälyvastustajat",
+  "AI opponents": "AI-vastustajat",
   "Active after restart": "Voimassa uudelleenkäynnistyksen jälkeen",
   "Admin passphrase (serverId)": "Ylläpidon salasana (serverId)",
   "Blocked addresses": "Estetyt osoitteet",

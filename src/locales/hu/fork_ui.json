@@ -614,7 +614,7 @@
   "corruption-count": "Korrupció-számláló",
   "plant1": "1 palánta",
   "${0} (Turmoil ${1})": "${0} (Hatalmi játszma ${1})",
-  "AI opponents": "MI-ellenfelek",
+  "AI opponents": "AI-ellenfelek",
   "Active after restart": "Újraindítás után él",
   "Admin passphrase (serverId)": "Admin jelszó (serverId)",
   "Blocked addresses": "Letiltott címek",
