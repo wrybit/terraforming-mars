@@ -141,3 +141,28 @@ export function aiEngineFor(settings: AiSettings, supports: {rust: AiSupport, ty
 export function aiBlockerText(blocker: AiBlocker): string {
   return blocker.kind + ' ' + blocker.id;
 }
+
+function union<T>(first: ReadonlyArray<T>, second: ReadonlyArray<T>): Array<T> {
+  return [...first, ...second.filter((entry) => !first.includes(entry))];
+}
+
+/**
+ * What an AI plays on this server under the admin settings: the TypeScript AI's support, the Rust AI's, or with the
+ * stand-in both together (each setting gets one of them). The create form marks these settings.
+ */
+export function playableAiSupport(supports: {rust: AiSupport, typescript: AiSupport}, admin: AiAdminSettings): AiSupport {
+  if (admin.engine === 'typescript') {
+    return supports.typescript;
+  }
+  if (!admin.typescriptFallback) {
+    return supports.rust;
+  }
+  const {rust, typescript} = supports;
+  return {
+    ...rust,
+    expansions: union(rust.expansions, typescript.expansions),
+    boards: union(rust.boards, typescript.boards),
+    options: union(rust.options, typescript.options),
+    duneModules: union(rust.duneModules, typescript.duneModules),
+  };
+}

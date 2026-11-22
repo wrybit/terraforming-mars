@@ -497,8 +497,8 @@ import {DuneModule} from '@/common/dune/DuneModule';
 import {DUNE_MODULE_DETAIL, DUNE_MODULE_FIELD, DUNE_MODULE_ICON, DUNE_MODULE_LABEL, PLAYABLE_DUNE_MODULES, chosenDuneModules} from './duneModuleFields';
 import {duneGraphic} from '@/client/components/dune/duneGraphic';
 import {aiSupportInfo, loadAiSupport} from '@/client/utils/aiSupportState';
-import {AiOption, EMPTY_AI_SUPPORT} from '@/common/ai/aiSupportContract';
-import {AiBlocker, AiEngineDecision, aiEngineFor, aiSettingsOf} from '@/common/ai/aiCompatibility';
+import {AiOption, AiSupport, EMPTY_AI_SUPPORT} from '@/common/ai/aiSupportContract';
+import {AiBlocker, AiEngineDecision, aiEngineFor, aiSettingsOf, playableAiSupport} from '@/common/ai/aiCompatibility';
 import {TYPESCRIPT_AI_SUPPORT} from '@/common/ai/typescript/typescriptAiSupport';
 import {AiBlockerChip, aiBlockerChip} from './aiBlockerChip';
 import ColoniesFilter from '@/client/components/create/ColoniesFilter.vue';
@@ -1025,9 +1025,14 @@ export default defineComponent({
     aiBlockerChips(): Array<AiBlockerChip> {
       return this.aiBlockers.map((blocker) => this.aiBlockerChip(blocker));
     },
-    // Robots only while the Rust AI plays new games (an admin choice) and the server's answer is there
+    // Robots once the server's answer is there, for whichever AI plays new games here (admin choice)
     aiMarksShown(): boolean {
-      return aiSupportInfo.value?.engine === 'rust';
+      return aiSupportInfo.value !== undefined;
+    },
+    // What an AI plays under the admin settings; undefined before the server's answer
+    markedAiSupport(): AiSupport | undefined {
+      const info = aiSupportInfo.value;
+      return info === undefined ? undefined : playableAiSupport({rust: info.rust, typescript: TYPESCRIPT_AI_SUPPORT}, info);
     },
     humanPlayersCount: {
       get(): number {
@@ -1205,8 +1210,8 @@ export default defineComponent({
     },
     /** True: the AI can play this setting (robot behind its name). */
     aiCan(kind: 'expansion' | 'board' | 'option' | 'duneModule', id: string): boolean {
-      const support = aiSupportInfo.value?.rust;
-      if (!this.aiMarksShown || support === undefined) {
+      const support = this.markedAiSupport;
+      if (support === undefined) {
         return false;
       }
       switch (kind) {

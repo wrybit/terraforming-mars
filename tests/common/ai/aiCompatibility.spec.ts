@@ -1,7 +1,7 @@
 import {expect} from 'chai';
 import {BoardName} from '../../../src/common/boards/BoardName';
 import {EMPTY_AI_SUPPORT, AiSupport} from '../../../src/common/ai/aiSupportContract';
-import {AiSettings, aiEngineFor, isAiCompatible, aiSettingsOf} from '../../../src/common/ai/aiCompatibility';
+import {AiSettings, aiEngineFor, isAiCompatible, aiSettingsOf, playableAiSupport} from '../../../src/common/ai/aiCompatibility';
 import {NewGameConfig} from '../../../src/common/game/NewGameConfig';
 import {RandomMAOptionType} from '../../../src/common/ma/RandomMAOptionType';
 
@@ -105,5 +105,16 @@ describe('aiEngineFor', () => {
   it('plays nothing with Rust without a support file and without the stand-in', () => {
     expect(aiEngineFor(base, {rust: EMPTY_AI_SUPPORT, typescript}, {engine: 'rust', typescriptFallback: false}).engine).eq('none');
     expect(aiEngineFor(base, {rust: EMPTY_AI_SUPPORT, typescript}, {engine: 'rust', typescriptFallback: true}).engine).eq('typescript');
+  });
+});
+
+describe('playableAiSupport', () => {
+  const typescript: AiSupport = {...EMPTY_AI_SUPPORT, expansions: ['corpera', 'venus']};
+  const rust: AiSupport = {...EMPTY_AI_SUPPORT, expansions: ['corpera', 'colonies']};
+
+  it('is the support of the AI that plays, both together with the stand-in', () => {
+    expect(playableAiSupport({rust, typescript}, {engine: 'typescript', typescriptFallback: true}).expansions).deep.eq(['corpera', 'venus']);
+    expect(playableAiSupport({rust, typescript}, {engine: 'rust', typescriptFallback: false}).expansions).deep.eq(['corpera', 'colonies']);
+    expect(playableAiSupport({rust, typescript}, {engine: 'rust', typescriptFallback: true}).expansions).deep.eq(['corpera', 'colonies', 'venus']);
   });
 });
