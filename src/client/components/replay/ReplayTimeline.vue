@@ -1,5 +1,5 @@
 <template>
-  <!-- Course of the game above the big slider: TR of every player as lines, the milestones and awards (flag/trophy)
+  <!-- Course of the game above the big slider: victory points (TR included) of every player as lines, the milestones and awards (flag/trophy)
        and one dot per raised step of temperature, oxygen and oceans, each exactly at its step. Generation columns are
        as wide as their number of steps, so graph and slider always line up. Everything after the current step is pale. -->
   <div ref="graph" class="replay-timeline" :class="{'replay-timeline--thin': thin}">
@@ -69,8 +69,8 @@ const props = defineProps<{
   generations: ReadonlyArray<ReplayGeneration>,
   raises: ReadonlyArray<ReplayRaise>,
   marks: ReadonlyArray<ReplayMark>,
-  // TR of every player at every step
-  terraformRatings: ReadonlyArray<{color: Color, values: ReadonlyArray<number>}>,
+  // Victory points (TR included) of every player at every step
+  victoryPoints: ReadonlyArray<{color: Color, values: ReadonlyArray<number>}>,
   playerNames: Partial<Record<Color, string>>,
   thin: boolean,
 }>();
@@ -143,7 +143,7 @@ const labels = computed(() => {
   });
 });
 
-const allRatings = computed(() => props.terraformRatings.flatMap((rating) => rating.values));
+const allRatings = computed(() => props.victoryPoints.flatMap((rating) => rating.values));
 const trMin = computed(() => Math.min(...allRatings.value, 20) - 1);
 const trMax = computed(() => Math.max(...allRatings.value, 21) + 1);
 const trY = (value: number) => trHeight - 4 - (value - trMin.value) / (trMax.value - trMin.value) * (trHeight - 8);
@@ -154,7 +154,7 @@ const trGrid = computed(() => {
   }
   return values;
 });
-const trLines = computed(() => props.terraformRatings.map((rating) => ({
+const trLines = computed(() => props.victoryPoints.map((rating) => ({
   color: rating.color,
   stroke: replayColor(rating.color),
   points: rating.values.map((value, step) => `${xOf(step).toFixed(1)},${trY(value).toFixed(1)}`).join(' '),

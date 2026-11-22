@@ -44,7 +44,7 @@
             </div>
           </div>
           <div class="replay-panel__state">
-            <span v-for="rating in currentRatings" :key="rating.color"><span class="replay-panel__cube" :class="'player_bg_color_' + rating.color"></span><b>{{ rating.value }}</b></span>
+            <span v-for="rating in currentPoints" :key="rating.color"><span class="replay-panel__cube" :class="'player_bg_color_' + rating.color"></span><b>{{ rating.value }}</b></span>
             <span class="replay-panel__divider" aria-hidden="true"></span>
             <span><i class="replay-panel__swatch replay-panel__swatch--temperature"></i><b>{{ temperatureText }}</b></span>
             <span><i class="replay-panel__swatch replay-panel__swatch--oxygen"></i><b>{{ oxygen }} %</b> O₂</span>
@@ -56,7 +56,7 @@
 
     <div class="replay-panel__graph" :title="$t('Click a flag, a trophy or a generation to jump there')">
       <ReplayTimeline :count="count" :current="current" :generations="generations" :raises="raises" :marks="marks"
-        :terraformRatings="terraformRatings" :playerNames="playerNames" :thin="motion.thin.value"
+        :victoryPoints="victoryPoints" :playerNames="playerNames" :thin="motion.thin.value"
         @go="go" @scrubbing="onScrubbing" />
     </div>
     <!-- Thin bar: play on the left, position and size toggle on the right. Anchored to the panel edges, not to the
@@ -134,7 +134,7 @@ const props = defineProps<{
   generations: ReadonlyArray<ReplayGeneration>,
   raises: ReadonlyArray<ReplayRaise>,
   marks: ReadonlyArray<ReplayMark>,
-  terraformRatings: ReadonlyArray<{color: Color, values: ReadonlyArray<number>}>,
+  victoryPoints: ReadonlyArray<{color: Color, values: ReadonlyArray<number>}>,
   players: ReadonlyArray<{color: Color, name: string}>,
   perspective: Color,
   eventText: string,
@@ -168,7 +168,7 @@ const currentGeneration = computed(() => props.generations.find((generation) => 
 const generationText = computed(() => translateTextWithParams('Generation ${0}', [String(currentGeneration.value?.number ?? 1)]));
 const shortGeneration = computed(() => translateTextWithParams('G${0}', [String(currentGeneration.value?.number ?? 1)]));
 const stepText = computed(() => translateTextWithParams('Step ${0} of ${1}', [String(props.current + 1), String(props.count)]));
-const currentRatings = computed(() => props.terraformRatings.map((rating) => ({color: rating.color, value: rating.values[props.current]})));
+const currentPoints = computed(() => props.victoryPoints.map((rating) => ({color: rating.color, value: rating.values[props.current]})));
 const temperatureText = computed(() => `${props.temperature > 0 ? '+' : props.temperature < 0 ? '−' : ''}${Math.abs(props.temperature)} °C`);
 const playLabel = computed(() => translateText(playing.value ? 'Pause playback' : 'Start playback'));
 const sizeToggleLabel = computed(() => translateText(motion.thin.value ? 'Show full' : 'Minimize'));

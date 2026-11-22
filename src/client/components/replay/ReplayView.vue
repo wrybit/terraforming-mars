@@ -33,7 +33,7 @@
       :generations="generations"
       :raises="raises"
       :marks="marks"
-      :terraformRatings="terraformRatings"
+      :victoryPoints="victoryPoints"
       :players="panelPlayers"
       :perspective="perspective"
       :eventText="eventText"
@@ -74,6 +74,7 @@ import {reuseUnchanged} from './replayReuse';
 import {replayColor} from './replayColors';
 import {replayPlacedSpaces} from './replayPlacedSpaces';
 import {readReplayPlayer, writeReplayPlayer} from './replayAddress';
+import {replayVictoryPoints} from './replayPoints';
 
 const props = defineProps<{
   // Final view of the results page: everything that doesn't change during a game comes from it
@@ -96,10 +97,15 @@ const mobile = computed(() => mobileLayout.value);
 const generations = computed(() => replayGenerations(props.steps));
 const raises = computed(() => replayRaises(props.steps, props.states));
 const marks = computed(() => replayMarks(props.steps, props.states));
-const terraformRatings = computed(() => props.source.players.map((player, index) => ({
-  color: player.color,
-  values: props.steps.map((step) => props.states[step.state].players[index].terraformRating),
-})));
+// Victory points (TR included) of every player at every step for the graph and the scores in the panel
+const victoryPoints = computed(() => props.source.players.map((player, index) => {
+  const final = props.final.players.find((candidate) => candidate.color === player.color);
+  const ratings = props.steps.map((step) => props.states[step.state].players[index].terraformRating);
+  return {
+    color: player.color,
+    values: replayVictoryPoints(ratings, generations.value, final?.victoryPointsByGeneration ?? [], final?.victoryPointsBreakdown.total ?? ratings[ratings.length - 1] ?? 0),
+  };
+}));
 const panelPlayers = computed(() => props.source.players.map((player) => ({color: player.color, name: player.name})));
 
 const step = computed(() => props.steps[current.value]);

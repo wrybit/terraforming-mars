@@ -33,7 +33,7 @@ const source: ReplaySourceModel = {
 const panelProps = {
   count: 3, current: 0, generations: [{number: 1, start: 0, count: 3}], raises: [],
   marks: [{step: 1, kind: 'milestone' as const, name: 'Terraformer', color: 'red' as const}],
-  terraformRatings: [{color: 'red' as const, values: [20, 20, 21]}, {color: 'blue' as const, values: [20, 20, 20]}],
+  victoryPoints: [{color: 'red' as const, values: [20, 20, 21]}, {color: 'blue' as const, values: [20, 20, 20]}],
   players: [{color: 'red' as const, name: 'red'}, {color: 'blue' as const, name: 'blue'}],
   perspective: 'red' as const, eventText: 'red passed', actor: 'red' as const, temperature: -30, oxygen: 0, oceans: 0,
 };
@@ -72,10 +72,10 @@ describe('ReplayButton', () => {
 
 describe('ReplayTimeline', () => {
   it('draws one TR line per player and jumps to a milestone', async () => {
-    const {count, current, generations, raises, marks, terraformRatings} = panelProps;
+    const {count, current, generations, raises, marks, victoryPoints} = panelProps;
     const wrapper = mount(ReplayTimeline, {
       ...globalConfig,
-      props: {count, current, generations, raises, marks, terraformRatings, playerNames: {red: 'red', blue: 'blue'}, thin: false},
+      props: {count, current, generations, raises, marks, victoryPoints, playerNames: {red: 'red', blue: 'blue'}, thin: false},
     });
     expect(wrapper.findAll('polyline').length).eq(4);
     await wrapper.find('.replay-timeline__mark').trigger('click');
