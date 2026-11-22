@@ -5,6 +5,7 @@ import {ReplaySourceMessage, ReplaySourceModel} from '@/common/models/ReplaySour
 import {REPLAY_TAB, replayActionFocus, replayActionMenu} from '@/client/components/replay/replayActionMenu';
 import {ReplayPlayerState, ReplayState} from '@/client/components/replay/reconstructReplay';
 import {ReplayStep} from '@/client/components/replay/replaySteps';
+import {replayPlacedSpaces} from '@/client/components/replay/replayPlacedSpaces';
 
 const line = (message: string, values: Array<string | Array<string>>, viewer?: 'red' | 'blue'): ReplaySourceMessage => ({
   message, data: values.map((value) => ({type: LogMessageDataType.STRING, value} as any)), ...(viewer !== undefined ? {viewer} : {}),
@@ -63,5 +64,17 @@ describe('replayActionMenu', () => {
     // Second award costs 14
     expect((menu.options[1].title as any).data[0].value).eq('14');
     expect(titles[menu.initialIdx ?? -1]).eq(REPLAY_TAB.playCard);
+  });
+});
+
+describe('replayPlacedSpaces', () => {
+  it('names each space of the step once', () => {
+    const space = (value: string) => ({type: LogMessageDataType.SPACE, value} as any);
+    const log = source([
+      {message: '${0} placed ${1} at ${2}', data: [{type: LogMessageDataType.PLAYER, value: 'red'}, {type: LogMessageDataType.STRING, value: 'city'}, space('35')]} as ReplaySourceMessage,
+      {message: '${0} gained ${1} at ${2}', data: [space('35')]} as ReplaySourceMessage,
+      line('${0} played ${1}', ['red', CardName.ASTEROID]),
+    ]);
+    expect(replayPlacedSpaces(log, step(0, 1))).deep.eq(['35']);
   });
 });

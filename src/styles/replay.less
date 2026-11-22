@@ -143,6 +143,37 @@ html body #game-end.game-end--replay > :not(.replay-view) {
   padding-bottom: @replay-gap-group + @replay-thin-control + 2 * @replay-thin-padding + @replay-gap-group;
 }
 
+@replay-hex-ring: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 46 51' preserveAspectRatio='none'%3E%3Cpolygon points='23,3.5 42.5,14.4 42.5,36.6 23,47.5 3.5,36.6 3.5,14.4' fill='%23000' fill-opacity='0.22' stroke='%23000' stroke-width='7'/%3E%3C/svg%3E");
+
+// Tile placed in this step (ReplayView.vue): the space pulses in its player's colour until the next step
+.replay-view .board-log-highlight.replay-placed {
+  // Above the tile, which lies absolutely in the same space
+  position: relative;
+  z-index: 1;
+  background-color: var(--replay-placed, #fff);
+  // A ring along the hex edge in that colour and a light tint: the tile itself stays visible
+  -webkit-mask: @replay-hex-ring center / 100% 100% no-repeat;
+  mask: @replay-hex-ring center / 100% 100% no-repeat;
+  animation: replay-placed-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes replay-placed-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.4;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .replay-view .board-log-highlight.replay-placed {
+    animation: none;
+  }
+}
+
 // ---------- Action tabs (ReplayActionTabs.vue) ----------
 // Same chain down to the tab box as for the game's WaitingFor (player_home_fixed.less)
 .player-home--fixed .replay-action-tabs > .wf-options {

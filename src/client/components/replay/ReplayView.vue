@@ -1,7 +1,7 @@
 <template>
   <!-- Replay of a finished game in the normal game view, read only: players, Mars, log with milestones & awards and
        the hand cards of the chosen player, as they were at the step of the replay panel below. -->
-  <div id="player-home" class="player-home--fixed replay-view">
+  <div id="player-home" ref="root" class="player-home--fixed replay-view">
     <HomeColumns>
       <template #board>
         <div class="player_home_block player-home-columns__mars">
@@ -44,7 +44,7 @@
 </template>
 
 <script setup lang="ts">
-import {computed, ref} from 'vue';
+import {computed, onMounted, ref, watch} from 'vue';
 import {Color} from '@/common/Color';
 import {ViewModel} from '@/common/models/PlayerModel';
 import {ReplaySourceModel} from '@/common/models/ReplaySourceModel';
@@ -66,6 +66,7 @@ import {replayGenerations, replayMarks, replayRaises, ReplayStep} from './replay
 import {replayLogStream, replayViewModel} from './replayViewModel';
 import {reuseUnchanged} from './replayReuse';
 import {replayColor} from './replayColors';
+import {replayPlacedSpaces} from './replayPlacedSpaces';
 
 const props = defineProps<{
   // Final view of the results page: everything that doesn't change during a game comes from it
@@ -90,6 +91,25 @@ const terraformRatings = computed(() => props.source.players.map((player, index)
 const panelPlayers = computed(() => props.source.players.map((player) => ({color: player.color, name: player.name})));
 
 const step = computed(() => props.steps[current.value]);
+// Tiles placed in this step glow on Mars in the colour of their player until the next step
+const root = ref<HTMLElement>();
+const PLACED_CLASS = 'replay-placed';
+function markPlaced(): void {
+  const element = root.value;
+  if (element === undefined) {
+    return;
+  }
+  element.querySelectorAll<HTMLElement>('.' + PLACED_CLASS).forEach((marked) => marked.classList.remove(PLACED_CLASS));
+  const color = step.value.actor === undefined ? '#fff' : replayColor(step.value.actor);
+  replayPlacedSpaces(props.source, step.value).forEach((space) => {
+    element.querySelectorAll<HTMLElement>(`.board-log-highlight[data_log_highlight_id="${space}"]`).forEach((marker) => {
+      marker.classList.add(PLACED_CLASS);
+      marker.style.setProperty('--replay-placed', color);
+    });
+  });
+}
+watch([step, tileView, perspective], markPlaced, {flush: 'post'});
+onMounted(markPlaced);
 const state = computed(() => props.states[step.value.state]);
 const last = computed(() => current.value === props.steps.length - 1);
 // Parts that stay the same between steps keep their objects (replayReuse.ts): only what changed renders anew
