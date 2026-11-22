@@ -20,6 +20,7 @@ import {quickTradeResponse} from './tradeResponse';
 import {Units} from '../../common/Units';
 import {PRODUCTION_MINIMUMS} from '../../common/constants';
 import {randomResponse} from './randomResponse';
+import {heatPaymentResponse} from './heatPayment';
 import {cardPayment, greedyPayment} from './greedyPayment';
 import {spaceValue, tileKindOf} from './spaceValue';
 import {cardPrior} from './cardPriors';
@@ -88,6 +89,10 @@ export function quickResponse(input: PlayerInput, player: IPlayer): InputRespons
     return {type: 'and', responses: input.options.map((_option, index) => ({type: 'amount', amount: index === 0 ? input.count : 0}))};
   }
   if (input instanceof AndOptions) {
+    const heatPayment = heatPaymentResponse(input);
+    if (heatPayment !== undefined) {
+      return heatPayment;
+    }
     return {type: 'and', responses: input.options.map((option) => quickResponse(option, player))};
   }
   if (input instanceof SelectOption) {

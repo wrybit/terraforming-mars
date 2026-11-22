@@ -11,6 +11,23 @@ import {PlayerInput} from '../../PlayerInput';
 import {Resource} from '../../../common/Resource';
 import {message} from '../../logs/MessageBuilder';
 
+// Shared with the AI (src/server/ai/heatPayment.ts), so both sides use the same title and the same payment rule.
+export const SPEND_HEAT_TITLE = 'Select how to spend ${0} heat';
+
+/** Why a split of heat and floaters (2 heat each) cannot pay targetAmount, or undefined when it is valid. */
+export function heatSplitError(targetAmount: number, heatAmount: number, floaterAmount: number): string | undefined {
+  if (heatAmount + (floaterAmount * 2) < targetAmount) {
+    return `Need to pay ${targetAmount} heat`;
+  }
+  if (heatAmount > 0 && heatAmount - 1 + (floaterAmount * 2) >= targetAmount) {
+    return 'You cannot overspend heat';
+  }
+  if (floaterAmount > 0 && heatAmount + ((floaterAmount - 1) * 2) >= targetAmount) {
+    return 'You cannot overspend floaters';
+  }
+  return undefined;
+}
+
 export class StormCraftIncorporated extends ActiveCorporationCard {
   constructor() {
     super({
@@ -61,18 +78,13 @@ export class StormCraftIncorporated extends ActiveCorporationCard {
           floaterAmount = amount;
           return undefined;
         })).andThen(() => {
-      if (heatAmount + (floaterAmount * 2) < targetAmount) {
-        throw new Error(`Need to pay ${targetAmount} heat`);
-      }
-      if (heatAmount > 0 && heatAmount - 1 + (floaterAmount * 2) >= targetAmount) {
-        throw new Error('You cannot overspend heat');
-      }
-      if (floaterAmount > 0 && heatAmount + ((floaterAmount - 1) * 2) >= targetAmount) {
-        throw new Error('You cannot overspend floaters');
+      const error = heatSplitError(targetAmount, heatAmount, floaterAmount);
+      if (error !== undefined) {
+        throw new Error(error);
       }
       player.removeResourceFrom(this, floaterAmount);
       player.stock.deduct(Resource.HEAT, heatAmount);
       return cb();
-    }).setTitle(message('Select how to spend ${0} heat', (b) => b.number(targetAmount)));
+    }).setTitle(message(SPEND_HEAT_TITLE, (b) => b.number(targetAmount)));
   }
 }
