@@ -27,6 +27,7 @@ const SHORT_LABELS: Readonly<Record<string, string>> = {
   // Initial selection (SelectInitialCards, titles from common/inputs/SelectInitialCards.ts)
   'Select corporation': 'Corporation',
   'Select 2 Prelude cards': 'Prelude cards',
+  'Select prelude card to play': 'Prelude',
   'Select CEO': 'CEO',
   'Select initial cards to buy': 'Buy cards',
   // Inputs outside the action menu (WaitingForTabs)

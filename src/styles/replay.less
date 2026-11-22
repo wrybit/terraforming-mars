@@ -131,6 +131,11 @@ html body #game-end.game-end--replay > :not(.replay-view) {
   }
 }
 
+// The thin bar floats above the bottom of the log: the newest entry stays above it (bar + its distance to the edge)
+.replay-view .log-scroll-frame .panel-body {
+  padding-bottom: @replay-gap-group + @replay-thin-control + 2 * @replay-thin-padding + @replay-gap-group;
+}
+
 // ---------- Action tabs (ReplayActionTabs.vue) ----------
 // Same chain down to the tab box as for the game's WaitingFor (player_home_fixed.less)
 .player-home--fixed .replay-action-tabs > .wf-options {
@@ -153,23 +158,26 @@ html body #game-end.game-end--replay > :not(.replay-view) {
   display: none;
 }
 
-// What the player chose in this step: the tab, the card or the button pulse in the accent colour
+// What the player does next: the tab, the card or the button pulse in that player's colour (--replay-focus,
+// set by ReplayActionTabs.vue), so one sees whose menu the box shows
+@replay-focus: var(--replay-focus, @replay-accent-light);
+
 .replay-action-tabs__focus {
   border-radius: 10px;
-  box-shadow: 0 0 0 3px @replay-accent-light, 0 0 18px 4px fade(@replay-accent-light, 70%);
+  box-shadow: 0 0 0 3px @replay-focus, 0 0 18px 4px color-mix(in srgb, @replay-focus 70%, transparent);
   animation: replay-focus-pulse 1.4s ease-in-out infinite;
 }
 
 .or-tab.replay-action-tabs__focus {
   // A ring would close the tab at the bottom and draw a line between tab and box: the tab only glows above
   border-radius: 8px 8px 0 0;
-  box-shadow: 0 -6px 16px -4px fade(@replay-accent-light, 80%);
+  box-shadow: 0 -6px 16px -4px color-mix(in srgb, @replay-focus 80%, transparent);
   animation: none;
 }
 
 @keyframes replay-focus-pulse {
   50% {
-    box-shadow: 0 0 0 3px @replay-accent-light, 0 0 6px 1px fade(@replay-accent-light, 40%);
+    box-shadow: 0 0 0 3px @replay-focus, 0 0 6px 1px color-mix(in srgb, @replay-focus 40%, transparent);
   }
 }
 

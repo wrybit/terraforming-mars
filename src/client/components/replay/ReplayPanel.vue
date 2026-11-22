@@ -138,7 +138,8 @@ const PLAY_ICON = 'M8 5v14l11-7z';
 const PAUSE_ICON = 'M6 19h4V5H6zm8-14v14h4V5z';
 const SPEEDS = [1, 2, 4] as const;
 // Time per action at 1×: long enough to see the card, the tab and the board change (Jens: 1× 4 s, 2× 2 s, 4× 1 s)
-const STEP_MS = 4000;
+// Dauer eines Schritts je Tempo in ms
+const STEP_MS: Record<typeof SPEEDS[number], number> = {1: 1500, 2: 750, 4: 325};
 
 const panel = ref<HTMLElement>();
 const motion = useReplayPanelMotion(panel);
@@ -173,7 +174,7 @@ function play(): void {
     } else {
       go(props.current + 1);
     }
-  }, STEP_MS / speed.value);
+  }, STEP_MS[speed.value]);
 }
 const togglePlay = () => playing.value ? stop() : play();
 function step(direction: number): void {

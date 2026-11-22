@@ -5,6 +5,7 @@ import {OrOptionsModel, PlayerInputModel, SelectCardModel, SelectOptionModel, Se
 import {LogMessageDataType} from '@/common/logs/LogMessageDataType';
 import {ReplaySourceModel} from '@/common/models/ReplaySourceModel';
 import {getCard} from '@/client/cards/ClientCardManifest';
+import {SELECT_CEO_TITLE, SELECT_CORPORATION_TITLE} from '@/common/inputs/SelectInitialCards';
 import {ReplayPlayerState, ReplayState} from './reconstructReplay';
 import {ReplayStep} from './replaySteps';
 
@@ -24,7 +25,13 @@ export const REPLAY_TAB = {
   standardProjects: 'Standard projects',
   pass: 'Pass for this generation',
   sell: 'Sell patents',
+  // Start of the game: chosen like in the game's own selection, not from the action menu
+  corporation: SELECT_CORPORATION_TITLE,
+  prelude: 'Select prelude card to play',
+  ceo: SELECT_CEO_TITLE,
 } as const;
+// Tabs that only exist for the step that uses them
+const START_TABS: ReadonlyArray<ReplayTab> = [REPLAY_TAB.corporation, REPLAY_TAB.prelude, REPLAY_TAB.ceo];
 export type ReplayTab = typeof REPLAY_TAB[keyof typeof REPLAY_TAB];
 
 export type ReplayActionFocus = {
@@ -33,6 +40,8 @@ export type ReplayActionFocus = {
   cards: ReadonlyArray<CardName>,
   // Milestone or award
   item?: string,
+  // Cards that came into the hand (drawn, bought, kept): shown in the hand after the step, marked but not selected
+  added?: boolean,
 };
 
 // Standard projects when an older server didn't send the game's list (base game)
@@ -45,6 +54,12 @@ const PLANTS_FOR_GREENERY = 8;
 
 const valueAt = (step: ReplayStep, source: ReplaySourceModel, index: number) => String(source.log[step.line]?.data[index]?.value ?? '');
 
+// Tab of a played card by its type: projects from the hand, the rest at the start of the game
+const PLAYED_TABS = new Map<CardType | undefined, ReplayTab>([
+  [CardType.ACTIVE, REPLAY_TAB.playCard], [CardType.AUTOMATED, REPLAY_TAB.playCard], [CardType.EVENT, REPLAY_TAB.playCard],
+  [CardType.CORPORATION, REPLAY_TAB.corporation], [CardType.PRELUDE, REPLAY_TAB.prelude], [CardType.CEO, REPLAY_TAB.ceo],
+]);
+
 // What the actor of a step chose, as a tab and its entry; undefined for steps that are no own action (generation start …)
 export function replayActionFocus(source: ReplaySourceModel, step: ReplayStep): ReplayActionFocus | undefined {
   const message = source.log[step.line]?.message;
@@ -52,10 +67,8 @@ export function replayActionFocus(source: ReplaySourceModel, step: ReplayStep): 
   switch (message) {
   case '${0} played ${1}':
   case '${0} played ${1} [ ${2} ]': {
-    const type = getCard(value as CardName)?.type;
-    // Corporations and preludes are played at the start, not from the action menu
-    const project = type === CardType.ACTIVE || type === CardType.AUTOMATED || type === CardType.EVENT;
-    return project ? {tab: REPLAY_TAB.playCard, cards: [value as CardName]} : undefined;
+    const tab = PLAYED_TABS.get(getCard(value as CardName)?.type);
+    return tab === undefined ? undefined : {tab, cards: [value as CardName]};
   }
   case '${0} used ${1} action':
     return {tab: REPLAY_TAB.cardAction, cards: [value as CardName]};
@@ -72,6 +85,11 @@ export function replayActionFocus(source: ReplaySourceModel, step: ReplayStep): 
     return {tab: REPLAY_TAB.pass, cards: []};
   case '${0} ended turn':
     return {tab: REPLAY_TAB.endTurn, cards: []};
+  case '${0} ${1} ${2} card(s)':
+  case '${0} kept ${1} project cards':
+  case '${0} drew ${1}':
+  case '${0} bought ${1}':
+    return {tab: REPLAY_TAB.playCard, cards: addedCards(source, step), added: true};
   case '${0} claimed ${1} milestone':
     return {tab: REPLAY_TAB.milestone, cards: [], item: value};
   case '${0} funded ${1} award':
@@ -87,6 +105,18 @@ function soldCards(source: ReplaySourceModel, step: ReplayStep): Array<CardName>
   const line = lines.find((message) => message.message === '${0} sold ${1}');
   const value = line?.data[line.data.length - 1]?.value;
   return (Array.isArray(value) ? value : [value]).filter((card): card is CardName => typeof card === 'string');
+}
+
+// Cards the actor got in this step: public lines name them for everyone, private lines only for the actor
+const ADDED_LINES = new Set(['${0} drew ${1}', '${0} bought ${1}']);
+function addedCards(source: ReplaySourceModel, step: ReplayStep): Array<CardName> {
+  return source.log.slice(step.line, step.state + 1)
+    .filter((message) => ADDED_LINES.has(message.message) && (message.viewer === undefined || message.viewer === step.actor))
+    .flatMap((message) => {
+      const value = message.data[message.data.length - 1]?.value;
+      return Array.isArray(value) ? value : [value];
+    })
+    .filter((card): card is CardName => typeof card === 'string');
 }
 
 const cardModel = (name: CardName, isDisabled = false): CardModel => ({name, calculatedCost: getCard(name)?.cost, ...(isDisabled ? {isDisabled} : {})});
@@ -112,6 +142,10 @@ export function replayActionMenu(
   awardNames: ReadonlyArray<string>,
   focus: ReplayActionFocus | undefined): OrOptionsModel {
   const options: Array<PlayerInputModel> = [];
+  // The dealt choice isn't known, only the chosen card
+  if (focus !== undefined && START_TABS.includes(focus.tab)) {
+    options.push(cardList(focus.tab, 'Confirm', focus.cards.map((name) => cardModel(name)), {max: 1, min: 1}));
+  }
   const openMilestones = milestoneNames.filter((name) => !before.milestones.some((claimed) => claimed.name === name));
   if (openMilestones.length > 0) {
     const milestones: OrOptionsModel = {type: 'or', title: REPLAY_TAB.milestone, buttonLabel: 'Confirm',

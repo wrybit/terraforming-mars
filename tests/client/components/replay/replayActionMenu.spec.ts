@@ -6,7 +6,7 @@ import {REPLAY_TAB, replayActionFocus, replayActionMenu} from '@/client/componen
 import {ReplayPlayerState, ReplayState} from '@/client/components/replay/reconstructReplay';
 import {ReplayStep} from '@/client/components/replay/replaySteps';
 
-const line = (message: string, values: Array<string | Array<string>>, viewer?: 'red'): ReplaySourceMessage => ({
+const line = (message: string, values: Array<string | Array<string>>, viewer?: 'red' | 'blue'): ReplaySourceMessage => ({
   message, data: values.map((value) => ({type: LogMessageDataType.STRING, value} as any)), ...(viewer !== undefined ? {viewer} : {}),
 });
 const source = (log: Array<ReplaySourceMessage>): ReplaySourceModel => ({players: [], startTemperature: -30, startOxygenLevel: 0, endTiles: [], log});
@@ -22,10 +22,10 @@ const state = (overrides: Partial<ReplayState> = {}): ReplayState => ({
 const titleOf = (title: unknown) => typeof title === 'string' ? title : (title as {message: string}).message;
 
 describe('replayActionMenu', () => {
-  it('opens the play tab on a played project card, not on a corporation', () => {
+  it('opens the play tab on a played project card, the corporation tab on a corporation', () => {
     const log = source([line('${0} played ${1}', ['red', CardName.ASTEROID]), line('${0} played ${1}', ['red', CardName.CREDICOR])]);
     expect(replayActionFocus(log, step(0, 0))).deep.eq({tab: REPLAY_TAB.playCard, cards: [CardName.ASTEROID]});
-    expect(replayActionFocus(log, step(1, 1))).is.undefined;
+    expect(replayActionFocus(log, step(1, 1))).deep.eq({tab: REPLAY_TAB.corporation, cards: [CardName.CREDICOR]});
   });
 
   it('takes the sold cards from the private line of the step', () => {
@@ -35,6 +35,15 @@ describe('replayActionMenu', () => {
       line('${0} sold ${1}', ['red', [CardName.ASTEROID, CardName.ALGAE]], 'red'),
     ]);
     expect(replayActionFocus(log, step(0, 2))).deep.eq({tab: REPLAY_TAB.sell, cards: [CardName.ASTEROID, CardName.ALGAE]});
+  });
+
+  it('marks drawn and bought cards in the hand, only those the actor sees', () => {
+    const log = source([
+      line('${0} ${1} ${2} card(s)', ['red', 'bought', '2']),
+      line('${0} bought ${1}', ['red', [CardName.ASTEROID, CardName.ALGAE]], 'red'),
+      line('${0} drew ${1}', ['blue', [CardName.BIRDS]], 'blue'),
+    ]);
+    expect(replayActionFocus(log, step(0, 2))).deep.eq({tab: REPLAY_TAB.playCard, cards: [CardName.ASTEROID, CardName.ALGAE], added: true});
   });
 
   it('preselects the tab and the milestone of the action', () => {

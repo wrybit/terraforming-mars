@@ -18,7 +18,7 @@
         <RowResizeHandle kind="players" />
         <!-- The game's action tabs (hand cards first) fill the rest of the column like on a player's turn -->
         <div class="player_home_block player_home_block--actions nofloat">
-          <ReplayActionTabs :playerView="viewModel" :menu="actionMenu" :focus="ownFocus" />
+          <ReplayActionTabs :playerView="viewModel" :menu="actionMenu" :focus="nextFocus" :color="replayColor(menuColor)" />
         </div>
       </template>
     </HomeColumns>
@@ -65,6 +65,7 @@ import {ReplayState} from './reconstructReplay';
 import {replayGenerations, replayMarks, replayRaises, ReplayStep} from './replaySteps';
 import {replayLogStream, replayViewModel} from './replayViewModel';
 import {reuseUnchanged} from './replayReuse';
+import {replayColor} from './replayColors';
 
 const props = defineProps<{
   // Final view of the results page: everything that doesn't change during a game comes from it
@@ -96,13 +97,28 @@ let previousView: unknown;
 let previousStream: unknown;
 const viewModel = computed(() => previousView = reuseUnchanged(previousView, replayViewModel(props.final, props.source, state.value, perspective.value, last.value)));
 const stream = computed(() => previousStream = reuseUnchanged(previousStream, replayLogStream(props.source, step.value.state, perspective.value)));
-// Action tabs of the chosen player, as they were before this step; its own action opens and marks its tab
-const ownFocus = computed(() => step.value.actor === perspective.value ? replayActionFocus(props.source, step.value) : undefined);
+// The action tabs show what comes next: the menu of the next step's actor as it was before that step, with its
+// action open and marked – so one sees the choice before its result. Steps without an action (generation start …)
+// keep the player of the last action, so the box doesn't jump.
+const nextStep = computed(() => props.steps[current.value + 1]);
+const menuColor = computed(() => {
+  for (let index = current.value + 1; index >= 0; index--) {
+    const candidate = props.steps[index];
+    if (candidate?.actor !== undefined && replayActionFocus(props.source, candidate) !== undefined) {
+      return candidate.actor;
+    }
+  }
+  return perspective.value;
+});
+const nextFocus = computed(() => nextStep.value !== undefined && nextStep.value.actor === menuColor.value ?
+  replayActionFocus(props.source, nextStep.value) : undefined);
 const actionMenu = computed(() => {
-  const before = props.states[Math.max(0, step.value.line - 1)];
-  const index = Math.max(0, props.source.players.findIndex((player) => player.color === perspective.value));
-  return replayActionMenu(props.source, before, before.players[index],
-    props.final.game.milestones.map((milestone) => milestone.name), props.final.game.awards.map((award) => award.name), ownFocus.value);
+  // New cards in the hand: the hand after that step, otherwise the menu before the action
+  const reference = nextStep.value ?? step.value;
+  const shown = props.states[nextFocus.value?.added === true || nextStep.value === undefined ? reference.state : Math.max(0, reference.line - 1)];
+  const index = Math.max(0, props.source.players.findIndex((player) => player.color === menuColor.value));
+  return replayActionMenu(props.source, shown, shown.players[index],
+    props.final.game.milestones.map((milestone) => milestone.name), props.final.game.awards.map((award) => award.name), nextFocus.value);
 });
 // What happened in this step: its first log line, translated like in the log
 const eventText = computed(() => {

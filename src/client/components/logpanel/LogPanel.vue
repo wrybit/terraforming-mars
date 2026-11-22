@@ -855,7 +855,10 @@ export default defineComponent({
           this.showDrawnCards(drawn);
           return;
         }
-        if (hasNewEntries && keepPosition) {
+        if (this.stream !== undefined) {
+          // Replay: das Log zeigt immer das Ende, auch beim Zurückspulen
+          this.following = true;
+        } else if (hasNewEntries && keepPosition) {
           if (this.internals.pointerOverLog) {
             this.internals.newEntriesWhileHovered = true;
           } else {
@@ -954,6 +957,10 @@ export default defineComponent({
     },
     // The game view is no longer remounted on every update (upstream b669327): load the new entries in place
     viewModel(): void {
+      this.loadStream(true);
+    },
+    // Replay: neuer Schritt bringt neuen Log-Stand, auch wenn das View-Modell gleich bleibt
+    stream(): void {
       this.loadStream(true);
     },
     // A change of turn decides the box anew, as on mount: own turn → milestones & awards (toggle on), otherwise the log

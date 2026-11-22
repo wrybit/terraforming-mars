@@ -1529,5 +1529,6 @@
   "Replay of game ${0} not possible: its start is not saved on this server.": "게임 ${0}의 리플레이를 볼 수 없습니다: 이 서버에 시작 상태가 저장되어 있지 않습니다.",
   "Replay of game ${0} not possible: the game is not finished yet.": "게임 ${0}의 리플레이를 볼 수 없습니다: 게임이 아직 끝나지 않았습니다.",
   "Replay of game ${0} could not be loaded (server error ${1}). Please try again later.": "게임 ${0}의 리플레이를 불러오지 못했습니다(서버 오류 ${1}). 나중에 다시 시도하세요.",
-  "Replay of game ${0} could not be loaded: no connection to the server. Please check the connection and try again.": "게임 ${0}의 리플레이를 불러오지 못했습니다: 서버에 연결할 수 없습니다. 연결을 확인하고 다시 시도하세요."
+  "Replay of game ${0} could not be loaded: no connection to the server. Please check the connection and try again.": "게임 ${0}의 리플레이를 불러오지 못했습니다: 서버에 연결할 수 없습니다. 연결을 확인하고 다시 시도하세요.",
+  "${0} lost ${1} ${2}": "${0} 플레이어가 ${2} ${1}개 상실"
 }

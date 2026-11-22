@@ -2225,5 +2225,6 @@
   "Replay of game ${0} not possible: its start is not saved on this server.": "Повторение на игра ${0} не е възможно: началното ѝ състояние не е запазено на този сървър.",
   "Replay of game ${0} not possible: the game is not finished yet.": "Повторение на игра ${0} не е възможно: играта още не е приключила.",
   "Replay of game ${0} could not be loaded (server error ${1}). Please try again later.": "Повторението на игра ${0} не можа да се зареди (грешка на сървъра ${1}). Опитай отново по-късно.",
-  "Replay of game ${0} could not be loaded: no connection to the server. Please check the connection and try again.": "Повторението на игра ${0} не можа да се зареди: няма връзка със сървъра. Провери връзката и опитай отново."
+  "Replay of game ${0} could not be loaded: no connection to the server. Please check the connection and try again.": "Повторението на игра ${0} не можа да се зареди: няма връзка със сървъра. Провери връзката и опитай отново.",
+  "${0} lost ${1} ${2}": "${0} загуби ${1} ${2}"
 }

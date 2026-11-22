@@ -1,7 +1,7 @@
 <template>
-  <!-- The game's own action tabs, view only: the menu of the chosen player at this step (replayActionMenu.ts).
+  <!-- The game's own action tabs, view only: the menu of the step's actor (replayActionMenu.ts).
        On an own action its tab is open and the chosen card, milestone or award is marked. -->
-  <div ref="root" class="replay-action-tabs">
+  <div ref="root" class="replay-action-tabs" :style="{'--replay-focus': color}">
     <PlayerInputFactory :players="playerView.players" :playerView="playerView" :playerinput="model"
       :onsave="ignore" :showsave="true" :showtitle="true" />
   </div>
@@ -23,6 +23,8 @@ const props = defineProps<{
   playerView: PlayerViewModel,
   menu: OrOptionsModel,
   focus: ReplayActionFocus | undefined,
+  // Colour of the player whose menu this is: the marking glows in it
+  color: string,
 }>();
 
 // Tabs like in the game; there is nothing to send or to cancel in a replay
@@ -84,7 +86,7 @@ async function showFocus(): Promise<void> {
     click(tile?.querySelector('input'));
   }
   // Pass, end turn, conversions: the tab's own button is what the player pressed
-  if (focus.cards.length === 0 && focus.item === undefined) {
+  if (focus.cards.length === 0 && focus.item === undefined && focus.added !== true) {
     element.querySelector('.or-tab-save')?.classList.add(FOCUS_CLASS);
   }
   focus.cards.forEach((card, index) => {
@@ -94,7 +96,7 @@ async function showFocus(): Promise<void> {
     box?.classList.add(FOCUS_CLASS);
     // Chosen like a click in the game: the card is the selected one (radio) or among the selected ones (sold cards)
     const input = box?.closest('label')?.querySelector<HTMLInputElement>('input');
-    if (input !== undefined && input !== null && !input.checked) {
+    if (focus.added !== true && input !== undefined && input !== null && !input.checked) {
       input.click();
     }
     if (index === 0) {
