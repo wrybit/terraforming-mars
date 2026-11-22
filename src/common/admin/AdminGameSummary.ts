@@ -46,6 +46,8 @@ export type AdminGameSummary = {
   /** Theme the game is played in; missing means Mars (imports, games stored before themes existed). */
   theme?: Theme;
   players: Array<AdminPlayerSummary>;
+  /** AI program of a local game with AI players (shown small to admins) */
+  aiEngine?: 'rust' | 'typescript';
 };
 
 export type AdminDeleteGameRequest = {

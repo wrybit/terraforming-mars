@@ -62,6 +62,8 @@
       <p v-else class="games-overview-note" v-i18n>First values after one minute of running</p>
     </section>
 
+    <DashboardRustFallbacks v-if="dashboard.rustFallbacks !== undefined" :fallbacks="dashboard.rustFallbacks" />
+
     <DashboardCommits :dashboard="dashboard" @changed="$emit('changed')" />
   </div>
 </template>
@@ -73,6 +75,7 @@ import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 import StatsBarChart from '@/client/components/stats/StatsBarChart.vue';
 import {StatsBar} from '@/client/components/stats/statsTypes';
 import DashboardFacts from '@/client/components/admin/dashboard/DashboardFacts.vue';
+import DashboardRustFallbacks from '@/client/components/admin/dashboard/DashboardRustFallbacks.vue';
 import DashboardServerLogo from '@/client/components/admin/dashboard/DashboardServerLogo.vue';
 import DashboardMeter from '@/client/components/admin/dashboard/DashboardMeter.vue';
 import DashboardCommits from '@/client/components/admin/dashboard/DashboardCommits.vue';
@@ -87,7 +90,7 @@ import {formatDateTime, formatDuration, periodBars} from '@/client/components/ad
 
 export default defineComponent({
   name: 'ServerDashboardView',
-  components: {DashboardCommits, DashboardDayOverlay, DashboardFacts, DashboardGraphics, DashboardOnlineCount, DashboardMeter, DashboardServerLogo, DashboardSplitBar, DashboardUpdateButton, StatsBarChart},
+  components: {DashboardCommits, DashboardDayOverlay, DashboardFacts, DashboardGraphics, DashboardOnlineCount, DashboardMeter, DashboardRustFallbacks, DashboardServerLogo, DashboardSplitBar, DashboardUpdateButton, StatsBarChart},
   props: {
     dashboard: {type: Object as PropType<ServerDashboard>, required: true},
   },

@@ -303,6 +303,34 @@ describe('ApiCreateGame', () => {
     expect(res.content).contains('at least one human player');
   });
 
+  const withAi = () => ({...newGameConfigForTest(), players: [
+    {name: 'Jens', color: 'red', beginner: false, handicap: 0, first: true},
+    {name: 'Bot', color: 'blue', beginner: false, handicap: 0, first: false, aiLevel: 'hard'},
+  ]});
+
+  it('refuses AI players where no AI can play the settings', async () => {
+    apiCreateGame = new ApiCreateGame([{limit: 99999, perMs: 1}], () => ({engine: 'none', reasons: [{kind: 'expansion', id: 'colonies'}]}));
+    await postConfig(withAi());
+    expect(res.statusCode).eq(statusCode.badRequest);
+    expect(res.content).contains('AI players are not available with: expansion colonies');
+  });
+
+  it('stores the TypeScript AI when it stands in for the Rust AI, ignoring what the request asks for', async () => {
+    apiCreateGame = new ApiCreateGame([{limit: 99999, perMs: 1}], () => ({engine: 'typescript', reasons: [{kind: 'expansion', id: 'venus'}]}));
+    const log = console.log;
+    console.log = () => {};
+    try {
+      const config = withAi();
+      (config.players[1] as Record<string, unknown>).aiEngine = 'rust';
+      await postConfig(config);
+    } finally {
+      console.log = log;
+    }
+    expect(res.statusCode).eq(statusCode.ok);
+    const game = await scaffolding.ctx.gameLoader.getGame((JSON.parse(res.content) as SimpleGameModel).id);
+    expect(game!.players[1].aiEngine).is.undefined;
+  });
+
   // Issues one create-game POST against `handler`, using fresh request/response objects,
   // reusing `scaffolding.ctx` (and therefore its ip and clock) across calls.
   function postGame(handler: ApiCreateGame, request: MockRequest, response: MockResponse, config: object = newGameConfigForTest()) {

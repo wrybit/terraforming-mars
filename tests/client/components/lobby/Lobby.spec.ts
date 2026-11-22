@@ -31,7 +31,7 @@ const host: LobbySeatModel = {kind: 'human', name: 'Ann', color: 'red', emoji: '
 function room(seats: Array<LobbySeatModel>, change: Partial<LobbyRoomModel> = {}): LobbyRoomModel {
   return {
     id: 'l1', title: 'Evening game', ageMs: 180_000, state: 'open', listed: true, seats,
-    setup: {expansions: {corpera: true, prelude: true} as LobbyRoomModel['setup']['expansions'], boards: [BoardName.THARSIS], randomBoard: false, options: OPTIONS},
+    setup: {expansions: {corpera: true, prelude: true} as LobbyRoomModel['setup']['expansions'], boards: [BoardName.THARSIS], randomBoard: false, options: OPTIONS, aiBlockers: []},
     ...change,
   };
 }
@@ -250,7 +250,7 @@ describe('Lobby components', () => {
 
   it('LobbyRoomDialog disables "Seat an AI" for settings the AI cannot handle', () => {
     const withColonies = room([{...host, you: true}, {kind: 'free'}]);
-    withColonies.setup.expansions = {...withColonies.setup.expansions, colonies: true};
+    withColonies.setup = {...withColonies.setup, expansions: {...withColonies.setup.expansions, colonies: true}, aiBlockers: [{kind: 'expansion', id: 'colonies'}]};
     const wrapper = mount(LobbyRoomDialog, {...globalConfig, props: {open: true, room: withColonies}, attachTo: document.body});
     const disabled = Array.from(document.body.querySelectorAll('.lobby-room-dialog button[disabled]')).map((button) => button.textContent?.trim());
     expect(disabled).to.include.members(['Seat an AI']);

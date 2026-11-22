@@ -101,12 +101,6 @@ export const AI_LEVEL_OPTIONS: ReadonlyArray<SegmentOption> = [
   {value: 'hard', label: 'Hard'},
 ];
 
-// Program behind an AI seat (common/ai/AiEngine.ts): the TS AI and the new Rust AI, named for players
-export const AI_ENGINE_OPTIONS: ReadonlyArray<SegmentOption> = [
-  {value: 'ts', label: 'Classic'},
-  {value: 'rust', label: 'New β', title: 'New AI, learns from its own games. Still being tested.'},
-];
-
 export const MILESTONE_OPTIONS: ReadonlyArray<SegmentOption> = [
   {value: RandomMAOptionType.NONE, label: 'Board-defined'},
   {value: RandomMAOptionType.LIMITED, label: 'Random limited'},

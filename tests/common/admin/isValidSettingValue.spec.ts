@@ -32,6 +32,13 @@ describe('isValidSettingValue', () => {
     expect(isValidSettingValue(faviconColor, 'purple-ish')).is.false;
   });
 
+  it('takes only the listed values of a segmented setting', () => {
+    const engine = serverSettingDefinition('AI_ENGINE')!;
+    expect(isValidSettingValue(engine, 'rust')).is.true;
+    expect(isValidSettingValue(engine, '')).is.true;
+    expect(isValidSettingValue(engine, 'python')).is.false;
+  });
+
   it('does not check settings that are not numbers', () => {
     expect(isValidSettingValue(serverName, 'ten')).is.true;
   });

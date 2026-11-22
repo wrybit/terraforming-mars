@@ -1,5 +1,4 @@
 import {startGame} from '../ai/rust/startRustGame';
-import {aiUnsupportedReasons} from '../../common/ai/aiSupport';
 import {DEFAULT_THEME, THEMES, isTheme, themeConflicts} from '../../common/theme/Theme';
 import {duneModuleConflicts} from '../../common/dune/DuneModule';
 import {aiPlayerName, isAiLevel} from '../../common/ai/AiLevel';
@@ -31,10 +30,8 @@ import {GAME_NAME_MAX_LENGTH} from '../../common/game/GameName';
 import {validateCustomMA} from '../../common/ma/CustomMA';
 import {RandomMAOptionType} from '../../common/ma/RandomMAOptionType';
 import {validateCustomMAExpansions} from '../ma/MilestoneAwardSelector';
-import {RustAiSupport} from '../../common/ai/RustAiSupport';
-import {rustAiSettingsOf} from '../../common/ai/isRustAiCompatible';
-import {rustAiSupportFile} from '../ai/rust/rustAiSupportFile';
-import {fallBackToClassicAi} from '../ai/rust/rustAiFallback';
+import {AiEngineDecision, aiBlockerText} from '../../common/ai/aiCompatibility';
+import {decideAiEngine as decideServerAiEngine} from '../ai/aiEngineChoice';
 
 function parseQuotaConfig(struct: any): QuotaConfig {
   let {limit} = struct;
@@ -82,7 +79,7 @@ export class ApiCreateGame extends Handler {
   private quotaHandlers: Array<QuotaHandler>;
 
   public constructor(quotaConfigs: Array<QuotaConfig> = getQuotaConfigs(),
-    private readonly rustAiSupport: () => RustAiSupport = () => rustAiSupportFile.get()) {
+    private readonly decideAiEngine: (config: NewGameConfig, boardName: BoardName) => AiEngineDecision = decideServerAiEngine) {
     super();
     this.quotaHandlers = quotaConfigs.map((config) => new QuotaHandler(config));
   }
@@ -226,11 +223,6 @@ export class ApiCreateGame extends Handler {
     if (duneErrors.length > 0) {
       throw RouteError.badRequest(duneErrors.join(' '));
     }
-    // Same rule as the create-game form (common/ai/aiSupport.ts): no AI players with settings it cannot handle
-    const aiBlockers = aiUnsupportedReasons({expansions: gameReq.expansions, twoCorpsVariant: gameReq.twoCorpsVariant});
-    if (aiBlockers.length > 0 && gameReq.players.some((p) => isAiLevel(p.aiLevel))) {
-      throw RouteError.badRequest(`AI players are not available with: ${aiBlockers.join(', ')}`);
-    }
     // A game of AI players only plays itself without pause and keeps the server busy for everyone.
     // The create form always has at least one human; only an admin may start such a game (e.g. for tests).
     if (gameReq.players.every((p) => isAiLevel(p.aiLevel)) && !this.isServerIdValid(ctx)) {
@@ -248,7 +240,6 @@ export class ApiCreateGame extends Handler {
         safeCast(generateRandomId('p'), isPlayerId),
       );
       player.aiLevel = aiLevel;
-      player.aiEngine = aiLevel !== undefined && p.aiEngine === 'rust' ? 'rust' : undefined;
       return player;
     });
     let firstPlayerIdx = 0;
@@ -262,8 +253,18 @@ export class ApiCreateGame extends Handler {
     // Board drawn from the board seed of the request: the same board the preview on the page showed
     const boardRng = boardRandom(gameReq.boardSeed);
     const gameOptions = ApiCreateGame.gameOptions(gameReq, pickBoard(gameReq, boardRng));
-    // Same check as the create form (common/ai/isRustAiCompatible.ts), with the support file of this server's bot
-    fallBackToClassicAi(players, rustAiSettingsOf(gameReq, gameOptions.boardName), this.rustAiSupport());
+    // Same decision as the create form (common/ai/aiCompatibility.ts); binding, stored with each AI player
+    const aiPlayers = players.filter((player) => player.aiLevel !== undefined);
+    if (aiPlayers.length > 0) {
+      const decision = this.decideAiEngine(gameReq, gameOptions.boardName);
+      if (decision.engine === 'none') {
+        throw RouteError.badRequest(`AI players are not available with: ${decision.reasons.map(aiBlockerText).join(', ')}`);
+      }
+      if (decision.reasons.length > 0) {
+        console.log(`Rust AI cannot play ${decision.reasons.map(aiBlockerText).join(', ')}; the TypeScript AI plays instead`);
+      }
+      aiPlayers.forEach((player) => player.aiEngine = decision.engine === 'rust' ? 'rust' : undefined);
+    }
 
     try {
       validateCustomMA(gameOptions.customMA, gameOptions.randomMA, gameOptions.venusNextExtension);

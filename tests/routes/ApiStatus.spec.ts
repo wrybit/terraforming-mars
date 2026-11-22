@@ -45,7 +45,7 @@ describe('ApiStatus', () => {
   }
 
   it('reports a running server', async () => {
-    expect(await status('/api/status')).deep.eq({updating: false, startedAt: serverStartedAt, activeParticipants: 0, newAi: false});
+    expect(await status('/api/status')).deep.eq({updating: false, startedAt: serverStartedAt, activeParticipants: 0});
   });
 
   it('reports an announced update until the flag is removed', async () => {
