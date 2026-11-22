@@ -462,7 +462,7 @@ export class PostgreSQL implements IDatabase {
   async deleteGame(gameId: GameId): Promise<void> {
     // All tables that know a game_id – otherwise participant links remain pointing to a game that no longer exists
     for (const table of ['games', 'game', 'participants', 'game_results', 'completed_game']) {
-      await this.client.query(`DELETE FROM ${table} WHERE game_id = $1`, [gameId]);
+      await this.pool.query(`DELETE FROM ${table} WHERE game_id = $1`, [gameId]);
     }
   }
 
