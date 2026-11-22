@@ -48,9 +48,10 @@
       </template>
     </MobileNav>
 
-    <Transition name="mb-sheet">
+    <!-- Slides only when opened or closed by hand; the steps switch it without the drawer moving -->
+    <Transition :name="sheetSlides ? 'mb-sheet' : 'replay-sheet'">
       <MobileTurnSheet v-if="sheetOpen" ref="sheet" :menu="turnMenu" :title="eventText" :actionNumber="undefined" :actionsPerTurn="2"
-        :playerView="playerView" @close="sheetOpen = false" @select="startTask" @confirm="sheetOpen = false" />
+        :playerView="playerView" @close="closeSheet" @select="startTask" @confirm="sheetOpen = false" />
     </Transition>
   </div>
 </template>
@@ -100,6 +101,7 @@ const FOCUS_CLASS = 'replay-action-tabs__focus';
 const screen = ref<MobileScreen>('mars');
 const playersSegment = ref<PlayersSegment>('players');
 const sheetOpen = ref(false);
+const sheetSlides = ref(false);
 const task = ref<TurnMenuTile | undefined>(undefined);
 const carousel = ref<CarouselState | undefined>(undefined);
 const turnSection = ref<HTMLElement>();
@@ -122,6 +124,7 @@ function showMilestones(): void {
 // The turn button opens the sheet, like in the game
 function navigate(next: MobileScreen): void {
   if (next === 'turn') {
+    sheetSlides.value = true;
     sheetOpen.value = true;
   } else {
     go(next);
@@ -150,9 +153,14 @@ async function showFocusedCard(): Promise<void> {
     scrollCarouselTo(section, index);
   }
 }
+function closeSheet(): void {
+  sheetSlides.value = true;
+  sheetOpen.value = false;
+}
 function leaveTask(): void {
   task.value = undefined;
   go('mars');
+  sheetSlides.value = true;
   sheetOpen.value = true;
 }
 function scrollCarousel(index: number): void {
@@ -180,6 +188,7 @@ async function markSheetTile(tile: TurnMenuTile): Promise<void> {
 // view; actions without a task (pass, conversions …) stay in the sheet
 watch(() => props.step, () => {
   window.clearTimeout(sheetTimer);
+  sheetSlides.value = false;
   const tile = focusTile.value;
   if (props.placed) {
     sheetOpen.value = false;
