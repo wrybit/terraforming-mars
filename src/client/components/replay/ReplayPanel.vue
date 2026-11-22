@@ -1,7 +1,7 @@
 <template>
   <!-- Floating replay control on frosted glass. Folded it is a narrow bar (play, slider, position) that can be dragged
        anywhere; a click unfolds it, Escape or the size toggle folds it again (replayPanelMotion.ts). -->
-  <section ref="panel" class="replay-panel"
+  <section ref="panel" class="replay-panel" data-scrollbar-obstacle
     :class="{'replay-panel--thin': motion.thin.value, 'replay-panel--narrow': motion.narrow.value, 'replay-panel--dragging': motion.dragging.value}"
     :style="{'--replay-panel-x': motion.offset.value.x + 'px', '--replay-panel-y': motion.offset.value.y + 'px'}"
     :aria-label="$t('Replay')"

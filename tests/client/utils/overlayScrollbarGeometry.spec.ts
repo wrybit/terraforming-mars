@@ -1,7 +1,7 @@
 import {expect} from 'chai';
 import {
   OVERLAY_SCROLLBAR_GAP, OVERLAY_SCROLLBAR_MIN_THUMB, OVERLAY_SCROLLBAR_THICKNESS,
-  boxContains, railBox, scrollDeltaForDrag, snapToFrame, thumbGeometry,
+  avoidObstacles, boxContains, railBox, scrollDeltaForDrag, snapToFrame, thumbGeometry,
 } from '@/client/utils/overlayScrollbarGeometry';
 
 describe('overlayScrollbarGeometry', () => {
@@ -47,5 +47,19 @@ describe('overlayScrollbarGeometry', () => {
     expect(boxContains(box, 9, 40, 1)).is.true;
     expect(boxContains(box, 20, 66, 6)).is.true;
     expect(boxContains(box, 20, 67, 6)).is.false;
+  });
+});
+
+describe('avoidObstacles', () => {
+  const bar = {left: 100, top: 0, right: 108, bottom: 500};
+  it('ends a vertical bar above a floating element over it', () => {
+    expect(avoidObstacles(bar, 'vertical', [{left: 50, top: 400, right: 300, bottom: 480}])).deep.eq({left: 100, top: 0, right: 108, bottom: 397});
+  });
+  it('keeps the bar when the element lies beside it', () => {
+    expect(avoidObstacles(bar, 'vertical', [{left: 200, top: 400, right: 300, bottom: 480}])).deep.eq(bar);
+  });
+  it('drops the bar without room left', () => {
+    const box = avoidObstacles(bar, 'vertical', [{left: 50, top: 10, right: 300, bottom: 480}]);
+    expect(box.bottom - box.top).eq(0);
   });
 });

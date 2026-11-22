@@ -1,7 +1,7 @@
 // One overlay scrollbar (one direction of one scroll area): the bar element, its placement and the
 // mouse interaction (drag the thumb, click the track to page). Visibility timing: overlayScrollbars.ts.
-import {endInset, innerBox, frameOf, isScrollable, scrollMetrics} from '@/client/utils/overlayScrollbarArea';
-import {Box, railBox, ScrollAxis, scrollDeltaForDrag, snapToFrame, thumbGeometry} from '@/client/utils/overlayScrollbarGeometry';
+import {endInset, innerBox, frameOf, isScrollable, obstacleBoxes, scrollMetrics} from '@/client/utils/overlayScrollbarArea';
+import {avoidObstacles, Box, OVERLAY_SCROLLBAR_MIN_THUMB, railBox, ScrollAxis, scrollDeltaForDrag, snapToFrame, thumbGeometry} from '@/client/utils/overlayScrollbarGeometry';
 
 // Share of a page the track click scrolls, so a bit of the previous view stays for orientation
 const PAGE_SHARE = 0.9;
@@ -14,7 +14,7 @@ export function railBoxOf(scrollArea: Element, axis: ScrollAxis): Box {
     edges.bottom -= endInset(scrollArea);
   }
   const other: ScrollAxis = axis === 'vertical' ? 'horizontal' : 'vertical';
-  return railBox(edges, axis, isScrollable(scrollArea, other));
+  return avoidObstacles(railBox(edges, axis, isScrollable(scrollArea, other)), axis, obstacleBoxes());
 }
 
 export class OverlayScrollbarRail {
@@ -85,6 +85,8 @@ export class OverlayScrollbarRail {
     Object.assign(this.element.style, {
       left: `${box.left}px`, top: `${box.top}px`,
       width: `${box.right - box.left}px`, height: `${box.bottom - box.top}px`,
+      // No room left beside a floating element (avoidObstacles): no bar
+      visibility: this.track(box) < OVERLAY_SCROLLBAR_MIN_THUMB ? 'hidden' : '',
     });
     const thumb = thumbGeometry(scrollMetrics(this.scrollArea, this.axis), this.track(box));
     if (this.axis === 'vertical') {
