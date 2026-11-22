@@ -1,3 +1,4 @@
+@import (reference) "./selection_highlight.less";
 // Replay of a finished game (components/replay): button on the results page, the read-only game view and the
 // floating replay panel on frosted glass with the course graph and the big slider.
 
@@ -131,8 +132,28 @@ html body #game-end.game-end--replay > :not(.replay-view) {
 }
 
 // Mobile view: the panel floats above the footer bar
-html.tm-mobile .replay-view--mobile .replay-panel {
-  bottom: calc(@mb-nav-height + env(safe-area-inset-bottom) + 8px);
+html.tm-mobile .replay-view--mobile {
+  .replay-panel {
+    bottom: calc(@mb-nav-height + env(safe-area-inset-bottom) + 8px);
+    // Above the mobile screens' own floating parts (the tab's button)
+    z-index: 200;
+  }
+
+  // Actions screen: the turn screen's layout, but with the tab bar like on desktop (in the game the task is chosen in
+  // the turn sheet, so the turn screen hides it); the button stays in the flow instead of sticking to the bottom edge,
+  // where it would lie over the replay panel
+  .mb-screen--turn .or-tabs {
+    display: flex !important;
+  }
+
+  .mb-screen--turn .or-tab-footer {
+    position: static;
+  }
+
+  // Room for the floating panel below the content
+  .mb-main {
+    padding-bottom: (@replay-thin-control + 2 * @replay-thin-padding + @replay-gap-group);
+  }
 }
 
 // The replay lies inside the results page, whose row handles have other distances (game_end_columns.less):
@@ -201,26 +222,35 @@ html.tm-mobile .replay-view--mobile .replay-panel {
   display: none;
 }
 
-// What the player does next: the tab, the card or the button pulse in that player's colour (--replay-focus,
-// set by ReplayActionTabs.vue), so one sees whose menu the box shows
-@replay-focus: var(--replay-focus, @replay-accent-light);
-
+// What the player does next, in the theme's selection colour like a choice in the game (selection_highlight.less):
+// the tab and the button glow; the chosen card or tile is selected like a click and shows the game's own highlight
 .replay-action-tabs__focus {
   border-radius: 10px;
-  box-shadow: 0 0 0 3px @replay-focus, 0 0 18px 4px color-mix(in srgb, @replay-focus 70%, transparent);
+  box-shadow: 0 0 0 3px @selection-color, 0 0 18px 4px fade(@selection-color, 70%);
   animation: replay-focus-pulse 1.4s ease-in-out infinite;
+}
+
+label.replay-action-tabs__focus,
+.cardbox.replay-action-tabs__focus {
+  box-shadow: none;
+  animation: none;
+}
+
+// Cards that came into the hand are not selected: they get the same highlight themselves
+.replay-action-tabs__focus--added .filterDiv {
+  .selection-highlight();
 }
 
 .or-tab.replay-action-tabs__focus {
   // A ring would close the tab at the bottom and draw a line between tab and box: the tab only glows above
   border-radius: 8px 8px 0 0;
-  box-shadow: 0 -6px 16px -4px color-mix(in srgb, @replay-focus 80%, transparent);
+  box-shadow: 0 -6px 16px -4px fade(@selection-color, 80%);
   animation: none;
 }
 
 @keyframes replay-focus-pulse {
   50% {
-    box-shadow: 0 0 0 3px @replay-focus, 0 0 6px 1px color-mix(in srgb, @replay-focus 40%, transparent);
+    box-shadow: 0 0 0 3px @selection-color, 0 0 6px 1px fade(@selection-color, 40%);
   }
 }
 

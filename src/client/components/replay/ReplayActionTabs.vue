@@ -1,7 +1,7 @@
 <template>
   <!-- The game's own action tabs, view only: the menu of the step's actor (replayActionMenu.ts).
        On an own action its tab is open and the chosen card, milestone or award is marked. -->
-  <div ref="root" class="replay-action-tabs" :style="{'--replay-focus': color}">
+  <div ref="root" class="replay-action-tabs">
     <PlayerInputFactory :players="playerView.players" :playerView="playerView" :playerinput="model"
       :onsave="ignore" :showsave="true" :showtitle="true" />
   </div>
@@ -23,8 +23,6 @@ const props = defineProps<{
   playerView: PlayerViewModel,
   menu: OrOptionsModel,
   focus: ReplayActionFocus | undefined,
-  // Colour of the player whose menu this is: the marking glows in it
-  color: string,
 }>();
 
 // Tabs like in the game; there is nothing to send or to cancel in a replay
@@ -59,6 +57,8 @@ function update(menu: OrOptionsModel): void {
 
 const root = ref<HTMLElement>();
 const FOCUS_CLASS = 'replay-action-tabs__focus';
+// Cards that came into the hand: not selected, so they are highlighted themselves
+const ADDED_CLASS = 'replay-action-tabs__focus--added';
 const click = (element: Element | null | undefined) => (element as HTMLElement | null | undefined)?.click();
 
 // Opens the tab of the step's action like a click and marks what was chosen
@@ -68,7 +68,7 @@ async function showFocus(): Promise<void> {
   if (element === undefined) {
     return;
   }
-  element.querySelectorAll('.' + FOCUS_CLASS).forEach((marked) => marked.classList.remove(FOCUS_CLASS));
+  element.querySelectorAll('.' + FOCUS_CLASS).forEach((marked) => marked.classList.remove(FOCUS_CLASS, ADDED_CLASS));
   const focus = props.focus;
   // No own action in this step: the open tab stays (switching would build its card list anew every step)
   if (focus === undefined) {
@@ -94,6 +94,9 @@ async function showFocus(): Promise<void> {
     const found = element.querySelector(`.or-tab-panel [class~="${slug}"]`);
     const box = found?.closest('label, .cardbox') ?? found;
     box?.classList.add(FOCUS_CLASS);
+    if (focus.added === true) {
+      box?.classList.add(ADDED_CLASS);
+    }
     // Chosen like a click in the game: the card is the selected one (radio) or among the selected ones (sold cards)
     const input = box?.closest('label')?.querySelector<HTMLInputElement>('input');
     if (focus.added !== true && input !== undefined && input !== null && !input.checked) {

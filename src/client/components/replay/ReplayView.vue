@@ -12,9 +12,9 @@
         <section v-show="screen === 'hand'" class="mb-screen mb-screen--hand">
           <HandCardsPanel :playerView="viewModel" hideUndergroundTokens />
         </section>
-        <!-- Not the game's turn screen (its task bar takes over the footer): the action tabs as they are -->
-        <section v-show="screen === 'turn'" class="mb-screen mb-screen--replay-actions">
-          <ReplayActionTabs :playerView="viewModel" :menu="actionMenu" :focus="nextFocus" :color="replayColor(menuColor)" />
+        <!-- The turn screen's content styles, but not its task bar (root class replay-actions instead of turn) -->
+        <section v-show="screen === 'turn'" class="mb-screen mb-screen--turn">
+          <ReplayActionTabs :playerView="viewModel" :menu="actionMenu" :focus="nextFocus" />
         </section>
         <section v-show="screen === 'players'" :class="['mb-screen', 'mb-screen--players', {'mb-screen--players-scroll': viewModel.players.length > 2}]">
           <MobilePlayersPanel :viewModel="viewModel" :viewerColor="perspective" v-model:segment="playersSegment" />
@@ -45,7 +45,7 @@
         <RowResizeHandle kind="players" />
         <!-- The game's action tabs (hand cards first) fill the rest of the column like on a player's turn -->
         <div class="player_home_block player_home_block--actions nofloat">
-          <ReplayActionTabs :playerView="viewModel" :menu="actionMenu" :focus="nextFocus" :color="replayColor(menuColor)" />
+          <ReplayActionTabs :playerView="viewModel" :menu="actionMenu" :focus="nextFocus" />
         </div>
       </template>
     </HomeColumns>
