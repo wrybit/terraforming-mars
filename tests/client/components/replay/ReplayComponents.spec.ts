@@ -111,7 +111,7 @@ describe('Replay speed', () => {
     expect(playing.find('.replay-play').attributes('style')).contains('--replay-step-ms: 750ms');
   });
 
-  it('starts in the middle and changes with + and −', async () => {
+  it('starts at the default speed and changes with + and −', async () => {
     const wrapper = mount(ReplayPanel, {...globalConfig, props: panelProps, attachTo: document.body});
     const lit = () => wrapper.findAll('.replay-panel__speed .replay-speed-bars__bar--lit').length;
     expect(lit()).eq(REPLAY_DEFAULT_SPEED + 1);
