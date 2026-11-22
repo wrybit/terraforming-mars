@@ -1655,5 +1655,9 @@
   "TypeScript as a stand-in": "TypeScript を代替に",
   "On: settings the Rust AI cannot play get the TypeScript AI. Off: they count as not compatible with the AI.": "オン：Rust AI が扱えない設定は TypeScript AI が担当。オフ：AI 非対応として扱います。",
   "Extra waiting time for the Rust AI (ms)": "Rust AI の追加待ち時間（ms）",
-  "On top of its thinking time. Without an answer by then the TypeScript AI makes this decision. Empty: 10000.": "思考時間に加算。それまでに応答がなければ TypeScript AI がこの判断をします。空欄：10000。"
+  "On top of its thinking time. Without an answer by then the TypeScript AI makes this decision. Empty: 10000.": "思考時間に加算。それまでに応答がなければ TypeScript AI がこの判断をします。空欄：10000。",
+  "Rust AI fallbacks": "Rust AI のフォールバック",
+  "Last 24 hours": "直近 24 時間",
+  "Decision": "判断",
+  "Reason": "理由"
 }

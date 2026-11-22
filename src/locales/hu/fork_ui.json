@@ -1463,5 +1463,9 @@
   "TypeScript as a stand-in": "TypeScript helyettesként",
   "On: settings the Rust AI cannot play get the TypeScript AI. Off: they count as not compatible with the AI.": "Be: a Rust AI által nem ismert beállítások a TypeScript AI-t kapják. Ki: ezek nem kompatibilisek az AI-val.",
   "Extra waiting time for the Rust AI (ms)": "Többletvárakozás a Rust AI-ra (ms)",
-  "On top of its thinking time. Without an answer by then the TypeScript AI makes this decision. Empty: 10000.": "A gondolkodási időn felül. Ha addig nincs válasz, a TypeScript AI hozza meg a döntést. Üres: 10000."
+  "On top of its thinking time. Without an answer by then the TypeScript AI makes this decision. Empty: 10000.": "A gondolkodási időn felül. Ha addig nincs válasz, a TypeScript AI hozza meg a döntést. Üres: 10000.",
+  "Rust AI fallbacks": "Rust AI-visszaesések",
+  "Last 24 hours": "Elmúlt 24 óra",
+  "Decision": "Döntés",
+  "Reason": "Ok"
 }

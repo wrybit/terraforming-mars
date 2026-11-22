@@ -22,6 +22,7 @@ import {isAiOnlyGame} from '../aiTraining/aiOnlyGames';
 import {checkReachability, publicStatusUrl} from '../admin/dashboard/reachability';
 import raw_settings from '../../genfiles/settings.json';
 import recentCommits from '../../genfiles/recentCommits.json';
+import {rustFallbackLog} from '../ai/rust/rustFallbackLog';
 
 // Values the server runs with (like every setting: a change applies after the restart)
 function serverLogo(hostname: string): ServerDashboard['identity'] {
@@ -79,6 +80,7 @@ export class ApiAdminDashboard extends Handler {
       updateRequest: pendingUpdateRequest(dataFolder, nowMs),
       // Also written every 5 minutes; a build takes a few minutes, so half an hour old means the script died
       deployRun: readOperatorFile<DashboardDeployRun>(dataFolder, DEPLOY_STATE_FILE, 30 * 60 * 1000, nowMs),
+      rustFallbacks: rustFallbackLog.summary(),
     };
     responses.writeJson(res, ctx, dashboard);
   }

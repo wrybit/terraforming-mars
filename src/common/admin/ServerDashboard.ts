@@ -1,3 +1,4 @@
+import {RustFallbackSummary} from './RustFallback';
 /** One commit of the deployed code (newest first), written at build time. */
 export type DashboardCommit = {
   hash: string,
@@ -134,6 +135,8 @@ export type DashboardReachability = {
 /** Answer of GET api/admin/dashboard: everything the admin dashboard shows. */
 export type ServerDashboard = {
   generatedAtMs: number,
+  /** Decisions the TypeScript AI made for the Rust AI (crash, no answer in time, refused answer) */
+  rustFallbacks?: RustFallbackSummary,
   /** Name and logo shown large on the server card (SERVER_LOGO_NAME, SERVER_LOGO_IMAGE) */
   identity: {
     name: string,

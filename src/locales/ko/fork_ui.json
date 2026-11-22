@@ -1533,5 +1533,9 @@
   "TypeScript as a stand-in": "TypeScript 대체",
   "On: settings the Rust AI cannot play get the TypeScript AI. Off: they count as not compatible with the AI.": "켜기: Rust AI가 못 하는 설정은 TypeScript AI가 맡습니다. 끄기: AI와 호환되지 않는 것으로 봅니다.",
   "Extra waiting time for the Rust AI (ms)": "Rust AI 추가 대기 시간(ms)",
-  "On top of its thinking time. Without an answer by then the TypeScript AI makes this decision. Empty: 10000.": "생각 시간에 더해집니다. 그때까지 응답이 없으면 TypeScript AI가 이 결정을 내립니다. 비우면: 10000."
+  "On top of its thinking time. Without an answer by then the TypeScript AI makes this decision. Empty: 10000.": "생각 시간에 더해집니다. 그때까지 응답이 없으면 TypeScript AI가 이 결정을 내립니다. 비우면: 10000.",
+  "Rust AI fallbacks": "Rust AI 대체",
+  "Last 24 hours": "최근 24시간",
+  "Decision": "결정",
+  "Reason": "이유"
 }

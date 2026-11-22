@@ -1645,5 +1645,9 @@
   "TypeScript as a stand-in": "TypeScript som reserve",
   "On: settings the Rust AI cannot play get the TypeScript AI. Off: they count as not compatible with the AI.": "På: innstillinger Rust-AI-en ikke kan, får TypeScript-AI-en. Av: de regnes som ikke kompatible med AI-en.",
   "Extra waiting time for the Rust AI (ms)": "Ekstra ventetid for Rust-AI-en (ms)",
-  "On top of its thinking time. Without an answer by then the TypeScript AI makes this decision. Empty: 10000.": "I tillegg til tenketiden. Uten svar innen da tar TypeScript-AI-en denne avgjørelsen. Tom: 10000."
+  "On top of its thinking time. Without an answer by then the TypeScript AI makes this decision. Empty: 10000.": "I tillegg til tenketiden. Uten svar innen da tar TypeScript-AI-en denne avgjørelsen. Tom: 10000.",
+  "Rust AI fallbacks": "Reserveløsninger for Rust-AI",
+  "Last 24 hours": "Siste 24 timer",
+  "Decision": "Avgjørelse",
+  "Reason": "Grunn"
 }

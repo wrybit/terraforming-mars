@@ -11,6 +11,9 @@ export type RustBotSettings = {rollouts: number, threads: number, horizon: numbe
 
 type Waiting = {resolve: (value: any) => void, reject: (error: Error) => void, timer: ReturnType<typeof setTimeout>};
 
+/** The parts of a bot process the mirror uses (a fake one in tests). */
+export type RustBot = Pick<RustBotProcess, 'alive' | 'request' | 'close'>;
+
 export class RustBotProcess {
   private readonly child: ChildProcessWithoutNullStreams;
   private readonly waiting: Array<Waiting> = [];
@@ -40,13 +43,17 @@ export class RustBotProcess {
     return this.failure === undefined;
   }
 
-  /** Sends one request; the promise rejects when the bot answers with an error, dies or takes too long. */
-  public request(message: unknown): Promise<any> {
+  /**
+   * Sends one request; the promise rejects when the bot answers with an error, dies or takes too long.
+   *
+   * Too long ends the process: its later answers would belong to the wrong requests.
+   */
+  public request(message: unknown, timeoutMilliseconds: number = REQUEST_TIMEOUT_MILLISECONDS): Promise<any> {
     if (this.failure !== undefined) {
       return Promise.reject(this.failure);
     }
     return new Promise((resolve, reject) => {
-      const timer = setTimeout(() => this.fail(new Error('rust bot did not answer in time')), REQUEST_TIMEOUT_MILLISECONDS);
+      const timer = setTimeout(() => this.fail(new Error(`rust bot did not answer within ${timeoutMilliseconds} ms`)), timeoutMilliseconds);
       this.waiting.push({resolve: (answer) => {
         if (answer?.error !== undefined) {
           reject(new Error(String(answer.error)));

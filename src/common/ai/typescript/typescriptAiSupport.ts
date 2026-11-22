@@ -2,7 +2,7 @@ import {BoardName} from '../../boards/BoardName';
 import {AI_OPTIONS, AiSupport} from '../aiSupportContract';
 import {KNOWN_DUNE_MODULE_IDS} from '../aiDuneModules';
 
-// Part of the TypeScript AI (see _docs/typescript-ai-removal.md): goes when that AI goes.
+// Part of the TypeScript AI: goes when that AI goes.
 
 /** What the TypeScript AI plays: every board, option and Dune module except Merger, these expansions only. */
 export const TYPESCRIPT_AI_SUPPORT: AiSupport = {

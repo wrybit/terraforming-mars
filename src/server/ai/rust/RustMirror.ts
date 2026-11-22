@@ -9,7 +9,8 @@ import {IPlayer} from '../../IPlayer';
 import {PlayerInput} from '../../PlayerInput';
 import {InputResponse} from '../../../common/inputs/InputResponse';
 import {AiLevel} from '../../../common/ai/AiLevel';
-import {RustBotProcess, RustBotSettings} from './RustBotProcess';
+import {RustBot, RustBotProcess, RustBotSettings} from './RustBotProcess';
+import {RustFallbackLog, decisionLabel, rustFallbackLog} from './rustFallbackLog';
 import {RandomRecord, recordRandom, takeRandom} from './rustRandom';
 import {steps} from './rustSteps';
 import {responseFor} from './rustContract';
@@ -30,6 +31,15 @@ const SETTINGS: Record<AiLevel, RustBotSettings> = {
 
 type StoredEvent = {saveId: number, event: Record<string, unknown>};
 
+// Waiting time on top of the thinking time before the TypeScript AI makes the decision instead (admin setting)
+const DEFAULT_EXTRA_WAIT_MILLISECONDS = 10_000;
+
+/** How long a decision of the Rust AI may take: its thinking time plus the extra waiting time (read at every use). */
+export function rustDecisionTimeout(level: AiLevel): number {
+  const extra = Number(process.env.AI_RUST_EXTRA_WAIT_MS);
+  return SETTINGS[level].timeLimit + (Number.isFinite(extra) && extra > 0 ? extra : DEFAULT_EXTRA_WAIT_MILLISECONDS);
+}
+
 /** True when this server has the Rust AI program. */
 export function rustAiInstalled(): boolean {
   return BINARY !== undefined && DATA !== undefined && fs.existsSync(BINARY);
@@ -38,10 +48,18 @@ export function rustAiInstalled(): boolean {
 
 export class RustMirror {
   private static readonly mirrors = new Map<string, RustMirror>();
+  /** for testing: the program behind the mirrors */
+  public static createBot: (level: AiLevel) => RustBot = (level) => new RustBotProcess(BINARY ?? '', DATA ?? '', SETTINGS[level]);
+  /** for testing */
+  public static installed: () => boolean = rustAiInstalled;
+  /** for testing */
+  public static eventDirectory = EVENT_DIRECTORY;
+  /** for testing */
+  public static fallbackLog: RustFallbackLog = rustFallbackLog;
 
   private game: IGame;
   private random: RandomRecord;
-  private readonly bots = new Map<AiLevel, RustBotProcess>();
+  private readonly bots = new Map<AiLevel, RustBot>();
   // Requests run one after the other: events must reach the bot in game order
   private queue: Promise<unknown> = Promise.resolve();
   private broken: string | undefined = undefined;
@@ -54,12 +72,12 @@ export class RustMirror {
   }
 
   private static file(gameId: string): string {
-    return path.join(EVENT_DIRECTORY, `${gameId}.jsonl`);
+    return path.join(RustMirror.eventDirectory, `${gameId}.jsonl`);
   }
 
   /** A new game with Rust players: keeps its setup (first line of the event file). */
   public static start(game: IGame, setup: Record<string, unknown>): void {
-    fs.mkdirSync(EVENT_DIRECTORY, {recursive: true});
+    fs.mkdirSync(RustMirror.eventDirectory, {recursive: true});
     fs.writeFileSync(RustMirror.file(game.id), JSON.stringify({setup}) + '\n');
     RustMirror.mirrors.set(game.id, new RustMirror(game, setup, []));
   }
@@ -139,29 +157,41 @@ export class RustMirror {
     }
   }
 
-  /** The Rust bot's answer for `player`, or undefined when it cannot give one (the TS AI moves then). */
+  /**
+   * The Rust bot's answer for `player`, or undefined when it cannot give one: the TypeScript AI makes this decision
+   * then and the game goes on.
+   *
+   * A crashed bot or one without an answer in time (rustDecisionTimeout) is ended and started again for the next
+   * decision, rebuilt from the event file; every such fallback is recorded (rustFallbackLog).
+   */
   public async decide(player: IPlayer, input: PlayerInput, level: AiLevel): Promise<InputResponse | undefined> {
-    if (this.broken !== undefined || !rustAiInstalled()) {
+    if (this.broken !== undefined || !RustMirror.installed()) {
       return undefined;
     }
     const seat = this.game.players.indexOf(player);
     try {
       const bot = await this.botFor(level);
-      const answer = await this.enqueue(() => bot.request({decide: {player: seat}}));
+      const answer = await this.enqueue(() => bot.request({decide: {player: seat}}, rustDecisionTimeout(level)));
       return responseFor(input, answer.chain);
     } catch (error) {
-      console.warn(`Rust AI of ${player.name} in game ${this.game.id}: ${(error as Error).message}; the TS AI moves instead`);
+      this.recordFallback(input, (error as Error).message);
       return undefined;
     }
   }
 
-  /** A bot per strength, started on first use with the setup and all events so far. */
-  private async botFor(level: AiLevel): Promise<RustBotProcess> {
+  /** Records a decision of this game the TypeScript AI makes instead of the Rust AI. */
+  public recordFallback(input: PlayerInput, reason: string): void {
+    RustMirror.fallbackLog.record({gameId: this.game.id, generation: this.game.generation, decision: decisionLabel(input), reason});
+  }
+
+  /** A bot per strength, started on first use with the setup and all events so far; after a crash a new one. */
+  private async botFor(level: AiLevel): Promise<RustBot> {
     const running = this.bots.get(level);
     if (running?.alive) {
       return running;
     }
-    const bot = new RustBotProcess(BINARY ?? '', DATA ?? '', SETTINGS[level]);
+    running?.close();
+    const bot = RustMirror.createBot(level);
     this.bots.set(level, bot);
     const events = this.events.map((stored) => stored.event);
     try {
@@ -190,7 +220,7 @@ export class RustMirror {
   private giveUp(reason: string): void {
     if (this.broken === undefined) {
       this.broken = reason;
-      console.warn(`Rust AI in game ${this.game.id}: ${reason}; its players continue with the TS AI`);
+      RustMirror.fallbackLog.record({gameId: this.game.id, generation: this.game.generation, decision: 'rest of the game', reason});
     }
     for (const bot of this.bots.values()) {
       bot.close();

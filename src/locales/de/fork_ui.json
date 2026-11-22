@@ -1053,5 +1053,9 @@
   "TypeScript as a stand-in": "TypeScript als Ersatz",
   "On: settings the Rust AI cannot play get the TypeScript AI. Off: they count as not compatible with the AI.": "An: Einstellungen, die die Rust-AI nicht kann, bekommen die TypeScript-AI. Aus: Sie gelten als nicht kompatibel mit der AI.",
   "Extra waiting time for the Rust AI (ms)": "Zusätzliche Wartezeit für die Rust-AI (ms)",
-  "On top of its thinking time. Without an answer by then the TypeScript AI makes this decision. Empty: 10000.": "Zusätzlich zur Denkzeit. Kommt bis dahin keine Antwort, trifft die TypeScript-AI diese Entscheidung. Leer: 10000."
+  "On top of its thinking time. Without an answer by then the TypeScript AI makes this decision. Empty: 10000.": "Zusätzlich zur Denkzeit. Kommt bis dahin keine Antwort, trifft die TypeScript-AI diese Entscheidung. Leer: 10000.",
+  "Rust AI fallbacks": "Rust-AI-Rückfälle",
+  "Last 24 hours": "Letzte 24 Stunden",
+  "Decision": "Entscheidung",
+  "Reason": "Grund"
 }

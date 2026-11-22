@@ -2265,5 +2265,9 @@
   "TypeScript as a stand-in": "TypeScript 作为替补",
   "On: settings the Rust AI cannot play get the TypeScript AI. Off: they count as not compatible with the AI.": "开：Rust AI 不支持的设置改用 TypeScript AI。关：这些设置视为与 AI 不兼容。",
   "Extra waiting time for the Rust AI (ms)": "Rust AI 额外等待时间（毫秒）",
-  "On top of its thinking time. Without an answer by then the TypeScript AI makes this decision. Empty: 10000.": "在思考时间之外。到时仍无回答，则由 TypeScript AI 做这个决定。留空：10000。"
+  "On top of its thinking time. Without an answer by then the TypeScript AI makes this decision. Empty: 10000.": "在思考时间之外。到时仍无回答，则由 TypeScript AI 做这个决定。留空：10000。",
+  "Rust AI fallbacks": "Rust AI 回退",
+  "Last 24 hours": "最近 24 小时",
+  "Decision": "决定",
+  "Reason": "原因"
 }

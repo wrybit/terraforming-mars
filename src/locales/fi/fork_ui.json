@@ -1279,5 +1279,9 @@
   "TypeScript as a stand-in": "TypeScript varalla",
   "On: settings the Rust AI cannot play get the TypeScript AI. Off: they count as not compatible with the AI.": "Päällä: asetukset, joita Rust-AI ei osaa, saavat TypeScript-AI:n. Pois: ne katsotaan AI:n kanssa yhteensopimattomiksi.",
   "Extra waiting time for the Rust AI (ms)": "Lisäodotus Rust-AI:lle (ms)",
-  "On top of its thinking time. Without an answer by then the TypeScript AI makes this decision. Empty: 10000.": "Miettimisajan lisäksi. Jos vastausta ei tule siihen mennessä, TypeScript-AI tekee päätöksen. Tyhjä: 10000."
+  "On top of its thinking time. Without an answer by then the TypeScript AI makes this decision. Empty: 10000.": "Miettimisajan lisäksi. Jos vastausta ei tule siihen mennessä, TypeScript-AI tekee päätöksen. Tyhjä: 10000.",
+  "Rust AI fallbacks": "Rust-AI:n varatoimet",
+  "Last 24 hours": "Viimeiset 24 tuntia",
+  "Decision": "Päätös",
+  "Reason": "Syy"
 }

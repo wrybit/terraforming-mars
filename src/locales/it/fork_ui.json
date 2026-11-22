@@ -2545,5 +2545,9 @@
   "TypeScript as a stand-in": "TypeScript come sostituto",
   "On: settings the Rust AI cannot play get the TypeScript AI. Off: they count as not compatible with the AI.": "Attivo: le impostazioni che l'AI Rust non sa giocare ricevono l'AI TypeScript. Spento: valgono come incompatibili con l'AI.",
   "Extra waiting time for the Rust AI (ms)": "Attesa extra per l'AI Rust (ms)",
-  "On top of its thinking time. Without an answer by then the TypeScript AI makes this decision. Empty: 10000.": "Oltre al tempo di riflessione. Senza risposta entro allora decide l'AI TypeScript. Vuoto: 10000."
+  "On top of its thinking time. Without an answer by then the TypeScript AI makes this decision. Empty: 10000.": "Oltre al tempo di riflessione. Senza risposta entro allora decide l'AI TypeScript. Vuoto: 10000.",
+  "Rust AI fallbacks": "Ripieghi dell'AI Rust",
+  "Last 24 hours": "Ultime 24 ore",
+  "Decision": "Decisione",
+  "Reason": "Motivo"
 }
