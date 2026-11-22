@@ -71,7 +71,7 @@ describe('ReplayButton', () => {
 });
 
 describe('ReplayTimeline', () => {
-  it('draws one TR line per player and jumps to a milestone', async () => {
+  it('draws one points line per player and jumps to a milestone', async () => {
     const {count, current, generations, raises, marks, victoryPoints} = panelProps;
     const wrapper = mount(ReplayTimeline, {
       ...globalConfig,
@@ -80,6 +80,18 @@ describe('ReplayTimeline', () => {
     expect(wrapper.findAll('polyline').length).eq(4);
     await wrapper.find('.replay-timeline__mark').trigger('click');
     expect(wrapper.emitted('go')?.[0]).deep.eq([1]);
+  });
+
+  it('puts the thumb at the very start and end of the bar', async () => {
+    const {count, generations, raises, marks, victoryPoints} = panelProps;
+    const wrapper = mount(ReplayTimeline, {
+      ...globalConfig,
+      props: {count, current: 0, generations, raises, marks, victoryPoints, playerNames: {}, thin: false},
+    });
+    // Default width 600, thumb radius 14
+    expect(wrapper.find('.replay-timeline__thumb').attributes('style')).contains('left: 14px');
+    await wrapper.setProps({current: count - 1});
+    expect(wrapper.find('.replay-timeline__thumb').attributes('style')).contains('left: 586px');
   });
 });
 

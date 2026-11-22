@@ -41,7 +41,7 @@
       <span v-for="(segment, index) in segments" :key="index" class="replay-timeline__bar" :style="{left: segment.left + 'px', width: segment.width + 'px'}">
         <i :style="{width: Math.max(0, Math.min(segment.width, currentX - segment.left)) + 'px'}"></i>
       </span>
-      <span class="replay-timeline__thumb" :style="{left: thumbX + 'px'}"></span>
+      <span class="replay-timeline__thumb" :style="{left: currentX + 'px'}"></span>
     </div>
     <div class="replay-timeline__fold">
       <div>
@@ -51,7 +51,7 @@
         </div>
       </div>
     </div>
-    <span class="replay-timeline__playhead" :style="{left: thumbX + 'px'}" aria-hidden="true"></span>
+    <span class="replay-timeline__playhead" :style="{left: currentX + 'px'}" aria-hidden="true"></span>
   </div>
 </template>
 
@@ -111,7 +111,8 @@ const segments = computed(() => {
   });
 });
 const generationIndexOf = (step: number) => Math.max(0, props.generations.findIndex((generation) => step >= generation.start && step < generation.start + generation.count));
-const xOf = (step: number): number => {
+// Position of a step inside its generation column
+const columnX = (step: number): number => {
   const index = generationIndexOf(step);
   const generation = props.generations[index];
   const segment = segments.value[index];
@@ -120,14 +121,20 @@ const xOf = (step: number): number => {
   }
   return segment.left + (step - generation.start + 0.5) / generation.count * segment.width;
 };
+// The first and last step sit exactly at the thumb's end positions (radius as in replay.less), so thumb, filled bar,
+// playhead and graph meet at every step – the slider covers the whole bar from 0 to 100 %.
+const THUMB_RADIUS = {thin: 11, full: 14};
+const xOf = (step: number): number => {
+  const radius = props.thin ? THUMB_RADIUS.thin : THUMB_RADIUS.full;
+  const first = columnX(0);
+  const last = columnX(Math.max(0, props.count - 1));
+  if (last <= first) {
+    return width.value / 2;
+  }
+  return radius + (columnX(step) - first) / (last - first) * (width.value - 2 * radius);
+};
 const currentX = computed(() => xOf(props.current));
 const currentGeneration = computed(() => generationIndexOf(props.current));
-// The thumb never sticks out of the bar: at the first and last step it touches the bar ends (radius as in replay.less)
-const THUMB_RADIUS = {thin: 11, full: 14};
-const thumbX = computed(() => {
-  const radius = props.thin ? THUMB_RADIUS.thin : THUMB_RADIUS.full;
-  return Math.min(Math.max(currentX.value, radius), width.value - radius);
-});
 
 // Numbers of the generations thin out where they would touch; first and last stay inside the bar
 const labels = computed(() => {
