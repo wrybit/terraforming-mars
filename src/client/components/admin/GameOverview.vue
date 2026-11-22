@@ -11,6 +11,8 @@
       <a v-else-if="summary.importedParticipantId !== undefined" :href="importedResultUrl" target="_blank" class="games-overview-source" v-i18n :title="$t('Result page saved on this server')">Imported</a>
       <span v-else class="games-overview-id">{{ summary.id }}</span>
       <span class="games-overview-date">{{ dateText }}</span>
+      <!-- Which AI program played: fixed when the game was created -->
+      <span v-if="aiEngineText !== undefined" class="games-overview-engine">{{ aiEngineText }}</span>
     </td>
     <!-- 0 = unknown (e.g. screenshot without generation info) -->
     <td class="games-overview-generation">{{ summary.generation > 0 ? summary.generation : '–' }}</td>
@@ -55,6 +57,7 @@ import {relativeTimeText} from '@/client/utils/relativeTime';
 import {gameLocaleToIntlLocale} from '@/client/utils/LocaleUtils';
 import {getPreferences} from '@/client/utils/PreferencesManager';
 import {shortDateTime} from '@/client/utils/shortDateTime';
+import {aiEngineLabel} from './aiEngineLabel';
 
 export default defineComponent({
   name: 'GameOverview',
@@ -89,6 +92,9 @@ export default defineComponent({
     resultUrl(): string | undefined {
       return this.summary.resultUrl ?? this.summary.screenshotUrl ??
         (this.summary.importedParticipantId === undefined ? undefined : this.importedResultUrl);
+    },
+    aiEngineText(): string | undefined {
+      return aiEngineLabel(this.summary.aiEngine);
     },
     dateText(): string {
       return shortDateTime(this.summary.createdTimeMs);

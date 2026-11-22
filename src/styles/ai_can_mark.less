@@ -1,0 +1,30 @@
+// Quiet robot right behind a name: text size, the dim color of the AI seat label
+.ai-can-mark {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  color: @create-game-dim;
+
+  .seat-icon {
+    width: 1.05em;
+    height: 1.05em;
+  }
+}
+
+// Chip name: the label keeps its ellipsis, the mark stays right behind it
+.create-game-chip-name {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+
+  .create-game-chip-label {
+    flex: 0 1 auto;
+  }
+
+  // Room for the checkmark flag once a long name pushes the mark to the edge
+  .ai-can-mark {
+    margin-right: 10px;
+  }
+}

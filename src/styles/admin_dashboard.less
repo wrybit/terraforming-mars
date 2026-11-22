@@ -453,3 +453,38 @@
 .server-dashboard-gpus {
   gap: 20px;
 }
+
+// ---------- Rust AI fallbacks ----------
+// Above zero the count stands out in the warning color, at zero it stays quiet like the online count
+.dashboard-rust-fallbacks--some .dashboard-online-count {
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 1;
+  color: @dashboard-warning;
+}
+
+.dashboard-rust-fallbacks-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+
+  th {
+    color: @dashboard-dim;
+    font-weight: normal;
+    text-align: left;
+  }
+
+  th,
+  td {
+    padding: 4px 12px 4px 0;
+    vertical-align: top;
+  }
+
+  tbody tr + tr td {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+}
+
+.dashboard-rust-fallbacks-game {
+  font-family: monospace;
+}

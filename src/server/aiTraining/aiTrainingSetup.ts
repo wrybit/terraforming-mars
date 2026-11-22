@@ -10,5 +10,7 @@ export function aiTrainingSetup(gameOptions: GameOptions): LobbySetupModel {
     boards: [gameOptions.boardName],
     randomBoard: false,
     options: setupOptionsFromGame(Server.getGameOptionsAsModel(gameOptions)),
+    // Running test games: nobody adds AI seats there
+    aiBlockers: [],
   };
 }

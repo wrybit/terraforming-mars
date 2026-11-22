@@ -113,7 +113,7 @@ import LobbyAvatar from './LobbyAvatar.vue';
 import {lobbySetupChips} from './lobbySetupChips';
 import {lobbyRoomPath, lobbySeatInvitePath} from '@/common/lobby/lobbyUrl';
 import {continueHref} from './lobbyLinks';
-import {aiUnsupportedReasons} from '@/common/ai/aiSupport';
+import {aiBlockerChip} from '@/client/components/create/aiBlockerChip';
 import {glassTooltip as vGlassTooltip} from '@/client/directives/GlassTooltip';
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 import {AI_LEVEL_OPTIONS} from '@/client/components/create/createGameChoices';
@@ -157,11 +157,10 @@ const shareLink = computed((): {title: string, url: string} | undefined => {
   }
   return freeSeats.value > 0 ? {title: 'Invite friends', url: new URL(lobbyRoomPath(room.id, room.title), document.baseURI).href} : undefined;
 });
-// Same check as the create form and the server (aiSupport.ts); empty = AI players possible
+// The server's decision for this room (aiEngineChoice.ts); empty = AI players possible
 const aiBlockedText = computed(() => {
-  const setup = props.room?.setup;
-  const reasons = setup === undefined ? [] : aiUnsupportedReasons({expansions: setup.expansions, twoCorpsVariant: setup.options.twoCorpsVariant});
-  return reasons.length === 0 ? '' : translateText('AI not yet compatible with:') + ' ' + reasons.map((reason) => translateText(reason)).join(', ');
+  const reasons = props.room?.setup.aiBlockers ?? [];
+  return reasons.length === 0 ? '' : translateText('AI not yet compatible with:') + ' ' + reasons.map((reason) => translateText(aiBlockerChip(reason).label)).join(', ');
 });
 const started = computed(() => props.room?.state === 'started');
 const continueLink = computed(() => props.room === undefined ? undefined : continueHref(props.room));

@@ -5,6 +5,7 @@ import {Color} from '../Color';
 import {GameSetupOptions} from '../game/GameSetupOptions';
 import {NewGameConfig} from '../game/NewGameConfig';
 import {PlayerId, SpectatorId} from '../Types';
+import {AiBlocker} from '../ai/aiCompatibility';
 
 // Contract between the lobby page (client/components/lobby) and the lobby routes (server/lobby).
 // Both sides test against these types and limits.
@@ -60,6 +61,8 @@ export type LobbySetupModel = {
   boards: ReadonlyArray<BoardName>;
   randomBoard: boolean;
   options: GameSetupOptions;
+  /** Settings no AI of this server can play (aiCompatibility.ts); empty: AI seats are possible */
+  aiBlockers: ReadonlyArray<AiBlocker>;
 };
 
 export type LobbyRoomState = 'open' | 'started';

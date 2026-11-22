@@ -14,8 +14,6 @@ export type ServerStatusModel = {
   startedAt: number,
   /** Players of running games with a page open in the last minutes (decides whether an update may run now). */
   activeParticipants: number,
-  /** The new AI (Rust program) is installed: the create form offers it per AI seat. */
-  newAi?: boolean,
   /**
    * Commits of the update: while updating the ones about to be installed, afterwards the ones the running
    * server brought in. Missing when unknown (restart without new code, update script without commit list).

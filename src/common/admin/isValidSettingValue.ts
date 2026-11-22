@@ -9,7 +9,7 @@ export function isValidSettingValue(definition: ServerSettingDefinition, value: 
   if (value === null || value === '') {
     return true;
   }
-  if (definition.kind === 'choice') {
+  if (definition.kind === 'choice' || definition.kind === 'segmented') {
     return (definition.choices ?? []).some((choice) => choice.value === value);
   }
   if (definition.kind !== 'number') {

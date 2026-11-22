@@ -13,10 +13,16 @@
     <slot name="icon"><span v-if="iconClass" :class="'create-game-expansion-icon ' + iconClass"></span></slot>
     <!-- With a detail line (expansions: what they add) name and detail stack, tight together -->
     <span v-if="$slots.detail" class="create-game-chip-text">
-      <span class="create-game-chip-label" :class="{capitalized}">{{ translatedLabel }}</span>
+      <span class="create-game-chip-name">
+        <span class="create-game-chip-label" :class="{capitalized}">{{ translatedLabel }}</span>
+        <AiCanMark v-if="aiCan" />
+      </span>
       <span class="create-game-chip-detail"><slot name="detail"></slot></span>
     </span>
-    <span v-else class="create-game-chip-label" :class="{capitalized}">{{ translatedLabel }}</span>
+    <span v-else class="create-game-chip-name">
+      <span class="create-game-chip-label" :class="{capitalized}">{{ translatedLabel }}</span>
+      <AiCanMark v-if="aiCan" />
+    </span>
     <slot></slot>
     <InfoLink v-if="href" :href="href" />
   </div>
@@ -26,11 +32,12 @@
 import {defineComponent} from 'vue';
 import {translateText} from '@/client/directives/i18n';
 import InfoLink from './InfoLink.vue';
+import AiCanMark from './AiCanMark.vue';
 
 // Selectable tile (expansion, game board, filter). Not a <button>, because it may contain an info link
 export default defineComponent({
   name: 'ChoiceChip',
-  components: {InfoLink},
+  components: {InfoLink, AiCanMark},
   emits: ['select'],
   props: {
     label: {
@@ -58,6 +65,11 @@ export default defineComponent({
     tooltip: {
       type: String,
       required: false,
+    },
+    // True: the AI can play this (robot behind the name)
+    aiCan: {
+      type: Boolean,
+      default: false,
     },
     // Game board names come lowercase from the enum
     capitalized: {

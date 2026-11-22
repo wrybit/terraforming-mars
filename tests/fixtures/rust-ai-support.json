@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "generated": "2026-11-22T18:00:00Z",
+  "botVersion": "test-build",
+  "expansions": ["corpera", "prelude", "prelude2", "colonies"],
+  "boards": ["tharsis", "hellas", "elysium"],
+  "options": ["draftVariant", "initialDraftVariant", "preludeDraftVariant"],
+  "duneModules": []
+}

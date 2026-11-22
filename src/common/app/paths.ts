@@ -40,6 +40,7 @@ export const paths = {
   API_SPECTATOR: 'api/spectator',
   API_STATS: 'api/stats',
   API_STATUS: 'api/status',
+  API_AI_SUPPORT: 'api/ai-support',
   API_STATS_BOARD: 'api/stats/board',
   API_STATS_GAMES: 'api/stats/games',
   API_WAITING_FOR: 'api/waitingfor',

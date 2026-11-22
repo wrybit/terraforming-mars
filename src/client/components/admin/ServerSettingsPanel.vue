@@ -28,8 +28,10 @@
             </div>
             <div class="server-settings-field">
               <label v-if="setting.kind === 'toggle'" class="server-settings-toggle">
-                <input :id="'server-setting-' + setting.key" type="checkbox" :checked="isOn(values[setting.key])" @change="setValue(setting.key, ($event.target as HTMLInputElement).checked ? 'true' : '')">
+                <input :id="'server-setting-' + setting.key" type="checkbox" :checked="isToggleOn(setting, values[setting.key])" @change="setToggle(setting, ($event.target as HTMLInputElement).checked)">
               </label>
+              <SegmentedControl v-else-if="setting.kind === 'segmented'" class="server-settings-segmented"
+                :modelValue="values[setting.key] ?? ''" :options="segmentOptions(setting)" @update:modelValue="setValue(setting.key, String($event))" />
               <ServerSettingImageField v-else-if="setting.kind === 'image'" :inputId="'server-setting-' + setting.key"
                 :value="values[setting.key] ?? ''" @update="setValue(setting.key, $event)" />
               <ServerSettingChoiceField v-else-if="setting.kind === 'choice'" :inputId="'server-setting-' + setting.key"
@@ -73,6 +75,8 @@ import {restartServer} from '@/client/components/admin/adminActions';
 import {vDockedTab} from '@/client/directives/DockedTab';
 import ServerSettingImageField from '@/client/components/admin/ServerSettingImageField.vue';
 import ServerSettingChoiceField from '@/client/components/admin/ServerSettingChoiceField.vue';
+import SegmentedControl from '@/client/components/create/SegmentedControl.vue';
+import {SegmentOption} from '@/client/components/create/createGameChoices';
 import {translateText} from '@/client/directives/i18n';
 import {
   SERVER_SETTING_GROUPS, SERVER_SETTINGS, ServerSettingDefinition, ServerSettingState, ServerSettingsModel, ServerSettingsUpdate,
@@ -97,7 +101,7 @@ function isOnValue(value: string | undefined): boolean {
 
 export default defineComponent({
   name: 'ServerSettingsPanel',
-  components: {ServerSettingImageField, ServerSettingChoiceField},
+  components: {ServerSettingImageField, ServerSettingChoiceField, SegmentedControl},
   directives: {dockedTab: vDockedTab},
   data(): DataModel {
     return {status: 'loading', states: [], values: {}, revealed: {}, busy: false, message: '', messageIsError: false, selectedGroup: SERVER_SETTING_GROUPS[0]};
@@ -138,8 +142,17 @@ export default defineComponent({
       const state = this.state(key);
       return state !== undefined && (state.value ?? '') !== (state.running ?? '');
     },
-    isOn(value: string | undefined): boolean {
-      return isOnValue(value);
+    // A toggle with defaultOn is on while its line is missing
+    isToggleOn(setting: ServerSettingDefinition, value: string | undefined): boolean {
+      return (value === undefined || value === '') ? setting.defaultOn === true : isOnValue(value);
+    },
+    // The default state removes the line from the .env, the other one is written out
+    setToggle(setting: ServerSettingDefinition, on: boolean): void {
+      this.setValue(setting.key, on === (setting.defaultOn === true) ? '' : String(on));
+    },
+    // Choices are names of programs (TypeScript, Rust): the same in every language
+    segmentOptions(setting: ServerSettingDefinition): Array<SegmentOption> {
+      return (setting.choices ?? []).map((choice) => ({value: choice.value, label: choice.label, raw: true}));
     },
     inputType(setting: ServerSettingDefinition): string {
       if (setting.kind === 'secret' && this.revealed[setting.key] !== true) {

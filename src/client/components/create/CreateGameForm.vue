@@ -56,6 +56,7 @@
                     <ChoiceChip v-for="tile in group.tiles" :key="tile.module"
                       :label="tile.choice?.label ?? 'Base game'" :iconClass="tile.choice?.iconClass ?? 'expansion-icon-base'"
                       :selected="tile.choice === undefined || expansions[tile.choice.expansion]" :locked="tile.choice === undefined"
+                      :aiCan="tile.choice === undefined ? aiMarksShown : aiCan('expansion', tile.choice.expansion)"
                       :href="tile.choice?.info ? wikiUrls[tile.choice.expansion] : undefined"
                       :tooltip="tile.choice === undefined ? undefined : requiredByTooltip(tile.choice.expansion, expansions)"
                       @select="tile.choice !== undefined && toggleExpansion(tile.choice.expansion)">
@@ -76,8 +77,8 @@
               <CollapsibleSection title="Expansion options" storageKey="expansionOptions" :changed="expansionOptionsNote">
                 <div v-if="expansions.venus" class="create-game-option-group">
                   <div class="create-game-option-group-title"><span class="create-game-expansion-icon expansion-icon-venus"></span><span v-i18n>Venus Next</span></div>
-                  <OptionRow label="Alt. Venus Board" :href="wikiUrls.alternativeVenusBoard"><SwitchInput v-model="altVenusBoard" /></OptionRow>
-                  <OptionRow v-if="playersCount > 1" label="Mandatory Venus Terraforming" :href="wikiUrls.venusTerraforming">
+                  <OptionRow label="Alt. Venus Board" :aiCan="aiCan('option', 'altVenusBoard')" :href="wikiUrls.alternativeVenusBoard"><SwitchInput v-model="altVenusBoard" /></OptionRow>
+                  <OptionRow v-if="playersCount > 1" label="Mandatory Venus Terraforming" :aiCan="aiCan('option', 'requiresVenusTrackCompletion')" :href="wikiUrls.venusTerraforming">
                     <SwitchInput v-model="requiresVenusTrackCompletion" />
                   </OptionRow>
                 </div>
@@ -87,19 +88,19 @@
                     <SwitchInput :modelValue="isPoliticalAgendasExtensionEnabled()" @update:modelValue="politicalAgendasExtensionToggle()" />
                   </OptionRow>
                   <SegmentedControl v-if="isPoliticalAgendasExtensionEnabled()" class="create-game-segmented--sub" v-model="politicalAgendasExtension" :options="AGENDA_OPTIONS" />
-                  <OptionRow label="Remove negative Global Events" :href="wikiUrls.removeNegativeGlobalEvents">
+                  <OptionRow label="Remove negative Global Events" :aiCan="aiCan('option', 'removeNegativeGlobalEventsOption')" :href="wikiUrls.removeNegativeGlobalEvents">
                     <SwitchInput v-model="removeNegativeGlobalEventsOption" />
                   </OptionRow>
                 </div>
                 <div v-if="expansions.moon" class="create-game-option-group">
                   <div class="create-game-option-group-title"><span class="create-game-expansion-icon expansion-icon-themoon"></span><span v-i18n>The Moon</span></div>
-                  <OptionRow label="Mandatory Moon Terraforming"><SwitchInput v-model="requiresMoonTrackCompletion" /></OptionRow>
-                  <OptionRow label="Standard Project Variant #1" :href="wikiUrls.moonStandardProjectVariant"><SwitchInput v-model="moonStandardProjectVariant1" /></OptionRow>
-                  <OptionRow label="Standard Project Variant #2" :href="wikiUrls.moonStandardProjectVariant"><SwitchInput v-model="moonStandardProjectVariant" /></OptionRow>
+                  <OptionRow label="Mandatory Moon Terraforming" :aiCan="aiCan('option', 'requiresMoonTrackCompletion')"><SwitchInput v-model="requiresMoonTrackCompletion" /></OptionRow>
+                  <OptionRow label="Standard Project Variant #1" :aiCan="aiCan('option', 'moonStandardProjectVariant1')" :href="wikiUrls.moonStandardProjectVariant"><SwitchInput v-model="moonStandardProjectVariant1" /></OptionRow>
+                  <OptionRow label="Standard Project Variant #2" :aiCan="aiCan('option', 'moonStandardProjectVariant')" :href="wikiUrls.moonStandardProjectVariant"><SwitchInput v-model="moonStandardProjectVariant" /></OptionRow>
                 </div>
                 <div v-if="expansions.ares" class="create-game-option-group">
                   <div class="create-game-option-group-title"><span class="create-game-expansion-icon expansion-icon-ares"></span><span v-i18n>Ares</span></div>
-                  <OptionRow label="Extreme" :href="wikiUrls.aresExtreme"><SwitchInput v-model="aresExtremeVariant" /></OptionRow>
+                  <OptionRow label="Extreme" :aiCan="aiCan('option', 'aresExtremeVariant')" :href="wikiUrls.aresExtreme"><SwitchInput v-model="aresExtremeVariant" /></OptionRow>
                 </div>
               </CollapsibleSection>
             </section>
@@ -113,7 +114,7 @@
                 <SwitchInput v-model="randomBoard" />
               </OptionRow>
               <SegmentedControl v-if="randomBoard" v-model="randomBoardScope" :options="RANDOM_BOARD_OPTIONS" />
-              <OptionRow label="Randomize board tiles" :href="wikiUrls.randomizeBoardTiles">
+              <OptionRow label="Randomize board tiles" :aiCan="aiCan('option', 'shuffleMapOption')" :href="wikiUrls.randomizeBoardTiles">
                 <SwitchInput v-model="shuffleMapOption" />
               </OptionRow>
               <template v-for="group in boardGroups" :key="group.title">
@@ -121,7 +122,7 @@
                 <CollapsibleSection variant="subhead" :title="group.title" :collapsible="group.fan" storageKey="fanBoards" :changed="group.fan ? fanBoardNote : undefined">
                   <div class="create-game-chip-grid">
                     <ChoiceChip v-for="boardName in group.boards" :key="boardName"
-                      :label="boardName" capitalized :selected="boards.includes(boardName)"
+                      :label="boardName" capitalized :selected="boards.includes(boardName)" :aiCan="aiCan('board', boardName)"
                       @select="selectBoard(boardName)">
                       <template #icon><span :class="getBoardColorClass(boardName)"></span></template>
                       <span v-if="ALPHA_BOARDS.includes(boardName)" class="create-game-alpha" :title="$t('Alpha — work in progress')">α</span>
@@ -147,15 +148,15 @@
                 <NumberStepper v-model="startingCeos" :min="1" :max="6" />
               </OptionRow>
               <div v-if="expansions.prelude || playersCount > 1" class="create-game-divider"></div>
-              <OptionRow v-if="expansions.prelude" label="Merger" iconClass="expansion-icon-prelude" :href="wikiUrls.merger">
+              <OptionRow v-if="expansions.prelude" label="Merger" :aiCan="aiCan('option', 'twoCorpsVariant')" iconClass="expansion-icon-prelude" :href="wikiUrls.merger">
                 <SwitchInput v-model="twoCorpsVariant" />
               </OptionRow>
               <template v-if="playersCount > 1">
-                <OptionRow label="Draft variant"><SwitchInput v-model="draftVariant" /></OptionRow>
-                <OptionRow label="Initial Draft variant" :href="wikiUrls.initialDraft"><SwitchInput v-model="initialDraft" /></OptionRow>
+                <OptionRow label="Draft variant" :aiCan="aiCan('option', 'draftVariant')"><SwitchInput v-model="draftVariant" /></OptionRow>
+                <OptionRow label="Initial Draft variant" :aiCan="aiCan('option', 'initialDraftVariant')" :href="wikiUrls.initialDraft"><SwitchInput v-model="initialDraft" /></OptionRow>
                 <template v-if="initialDraft">
-                  <OptionRow v-if="expansions.prelude" label="Prelude Draft" sub><SwitchInput v-model="preludeDraftVariant" /></OptionRow>
-                  <OptionRow v-if="expansions.ceo" label="CEO Draft" sub><SwitchInput v-model="ceosDraftVariant" /></OptionRow>
+                  <OptionRow v-if="expansions.prelude" label="Prelude Draft" :aiCan="aiCan('option', 'preludeDraftVariant')" sub><SwitchInput v-model="preludeDraftVariant" /></OptionRow>
+                  <OptionRow v-if="expansions.ceo" label="CEO Draft" :aiCan="aiCan('option', 'ceosDraftVariant')" sub><SwitchInput v-model="ceosDraftVariant" /></OptionRow>
                 </template>
               </template>
             </section>
@@ -163,10 +164,10 @@
           <Teleport :to="columnTarget('rules')">
             <section class="create-game-card" :style="cardStyle('rules')">
               <div class="create-game-card-head"><h2 v-i18n>House-rule variants &amp; pace</h2></div>
-              <OptionRow label="World Government Terraforming" :href="wikiUrls.worldGovernmentTerraforming">
+              <OptionRow label="World Government Terraforming" :aiCan="aiCan('option', 'solarPhaseOption')" :href="wikiUrls.worldGovernmentTerraforming">
                 <SwitchInput v-model="solarPhaseOption" />
               </OptionRow>
-              <OptionRow v-if="playersCount === 1" label="63 TR solo mode" :href="wikiUrls.trSoloMode">
+              <OptionRow v-if="playersCount === 1" label="63 TR solo mode" :aiCan="aiCan('option', 'soloTR')" :href="wikiUrls.trSoloMode">
                 <SwitchInput v-model="soloTR" />
               </OptionRow>
               <OptionRow label="Allow undo" :href="wikiUrls.allowUndo"><SwitchInput v-model="undoOption" /></OptionRow>
@@ -214,12 +215,12 @@
                 <!-- Manual milestones and awards only come from an imported setting -->
                 <div v-if="isManualMA" class="create-game-note" v-i18n>Manual milestones and awards are not configurable in the UI yet.</div>
                 <template v-if="isRandomMAEnabled()">
-                  <OptionRow label="Official Random α" sub><SwitchInput v-model="modularMA" /></OptionRow>
+                  <OptionRow label="Official Random α" :aiCan="aiCan('option', 'modularMA')" sub><SwitchInput v-model="modularMA" /></OptionRow>
                   <div v-if="modularMA" class="create-game-note">
                     <span v-i18n>The new Milestones and Awards are still in active development. Please don't report anything unless it breaks the game.</span>
                     <b v-i18n>These are always fully random.</b>
                   </div>
-                  <OptionRow label="Include fan Milestones/Awards" sub><SwitchInput v-model="includeFanMA" /></OptionRow>
+                  <OptionRow label="Include fan Milestones/Awards" :aiCan="aiCan('option', 'includeFanMA')" sub><SwitchInput v-model="includeFanMA" /></OptionRow>
                 </template>
               </CollapsibleSection>
             </section>
@@ -309,8 +310,11 @@
                   <h3 class="create-game-validation-title"><span aria-hidden="true">&#9888;&#xFE0E;</span><span v-i18n>AI not yet compatible with:</span></h3>
                   <!-- Same chips as the summary above the Create button -->
                   <div class="create-game-summary">
-                    <span v-for="blocker in aiBlockerChips" :key="blocker.label" class="create-game-summary-chip">
-                      <span :class="['create-game-expansion-icon', blocker.iconClass]"></span><span v-i18n>{{ blocker.label }}</span>
+                    <span v-for="blocker in aiBlockerChips" :key="blocker.key" class="create-game-summary-chip">
+                      <img v-if="blocker.picture !== undefined" class="create-game-expansion-icon" :src="blocker.picture" alt="">
+                      <span v-else-if="blocker.iconClass !== undefined" :class="blocker.iconClass"></span>
+                      <span v-else class="create-game-summary-toggle" aria-hidden="true"></span>
+                      <span :class="{capitalized: blocker.capitalized}" v-i18n>{{ blocker.label }}</span>
                     </span>
                   </div>
                 </div>
@@ -374,13 +378,10 @@
                       <PlayerCube :color="color" :view="newPlayer.color === color ? 'slight' : 'top'" :size="newPlayer.color === color ? 17 : 16" animated />
                     </button>
                   </div>
-                  <!-- Strength and which AI plays the seat (the classic TS AI or the new one, where the server has it) -->
+                  <!-- Strength of the AI; which program plays is the admin's choice (aiEngineChoice.ts) -->
                   <div v-if="newPlayer.aiLevel !== undefined" class="create-game-ai-settings">
                     <span v-i18n>Strength</span>
                     <SegmentedControl v-model="newPlayer.aiLevel" :options="AI_LEVEL_OPTIONS" class="create-game-segmented--equal" />
-                    <span v-i18n>Version</span>
-                    <SegmentedControl :model-value="newPlayer.aiEngine ?? DEFAULT_AI_ENGINE" :options="aiEngineOptions"
-                      class="create-game-segmented--equal" @update:model-value="newPlayer.aiEngine = $event" />
                   </div>
                   <div class="create-game-player-extra">
                     <!-- The beginner corporation is a help for humans; AI players do not need it -->
@@ -441,9 +442,11 @@ import {cardPoolChanged, expansionOptionsChanged, milestonesChanged} from '@/cli
 import {ColumnCount, currentColumnCount, placementOf, SettingsCard, watchColumnCount} from '@/client/components/create/createGameColumns';
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 import {describeFailure, failureFromResponse, failureOf, RequestFailedError} from '@/client/utils/requestFailure';
-import {AI_SUPPORTED_EXPANSIONS, aiUnsupportedReasons, newAiUnsupportedReasons} from '@/common/ai/aiSupport';
-import {DEFAULT_AI_ENGINE} from '@/common/ai/AiEngine';
-import {newAiAvailable} from '@/client/utils/serverStatus';
+import {aiSupportInfo, loadAiSupport} from '@/client/utils/aiSupportState';
+import {AiOption, EMPTY_AI_SUPPORT} from '@/common/ai/aiSupportContract';
+import {AiBlocker, AiEngineDecision, aiEngineFor, aiSettingsOf} from '@/common/ai/aiCompatibility';
+import {TYPESCRIPT_AI_SUPPORT} from '@/common/ai/typescript/typescriptAiSupport';
+import {AiBlockerChip, aiBlockerChip} from './aiBlockerChip';
 import ColoniesFilter from '@/client/components/create/ColoniesFilter.vue';
 import {ColonyName} from '@/common/colonies/ColonyName';
 import CardsFilter from '@/client/components/create/CardsFilter.vue';
@@ -487,7 +490,7 @@ import NumberStepper from './NumberStepper.vue';
 import OptionRow from './OptionRow.vue';
 import SegmentedControl from './SegmentedControl.vue';
 import SwitchInput from './SwitchInput.vue';
-import {AGENDA_OPTIONS, AI_ENGINE_OPTIONS, AI_LEVEL_OPTIONS, ExpansionChoice, FAN_EXPANSIONS, MILESTONE_OPTIONS, MANUAL_MILESTONE_OPTION, OFFICIAL_BOARDS, ALPHA_BOARDS, OFFICIAL_EXPANSIONS, PLAYER_COUNT_OPTIONS, RANDOM_BOARD_OPTIONS, SegmentOption, FAN_BOARDS} from './createGameChoices';
+import {AGENDA_OPTIONS, AI_LEVEL_OPTIONS, ExpansionChoice, FAN_EXPANSIONS, MILESTONE_OPTIONS, MANUAL_MILESTONE_OPTION, OFFICIAL_BOARDS, ALPHA_BOARDS, PLAYER_COUNT_OPTIONS, RANDOM_BOARD_OPTIONS, SegmentOption, FAN_BOARDS} from './createGameChoices';
 import {ExpansionGroup, ExpansionGrouping, ExpansionTile, groupExpansions, loadExpansionGrouping, saveExpansionGrouping} from './expansionGrouping';
 import {ContentLinePart, contentLine} from './expansionContentLine';
 import {ContentKey, TraitKey} from '@/common/game/expansionFacts';
@@ -644,7 +647,7 @@ export default defineComponent({
       }
     },
     // A setting the AI cannot handle removes the AI players right away
-    aiBlockers(blockers: Array<string>) {
+    aiBlockers(blockers: Array<AiBlocker>) {
       if (blockers.length > 0 && this.aiPlayersCount > 0) {
         this.setSeatCounts(this.humanPlayersCount, 0, 'ai');
       }
@@ -734,6 +737,7 @@ export default defineComponent({
     }
   },
   mounted() {
+    void loadAiSupport();
     this.stopStickyObserver = observeStickyBottom(this.$refs.createCard as HTMLElement, CREATE_CARD_BOTTOM_PX, (stuck) => {
       this.createCardStuck = stuck;
     });
@@ -911,9 +915,6 @@ export default defineComponent({
     PLAYER_COUNT_OPTIONS(): typeof PLAYER_COUNT_OPTIONS {
       return PLAYER_COUNT_OPTIONS;
     },
-    DEFAULT_AI_ENGINE(): typeof DEFAULT_AI_ENGINE {
-      return DEFAULT_AI_ENGINE;
-    },
     AI_LEVEL_OPTIONS(): typeof AI_LEVEL_OPTIONS {
       return AI_LEVEL_OPTIONS;
     },
@@ -939,22 +940,22 @@ export default defineComponent({
         return {value: count, label: String(count)};
       });
     },
-    // Version of an AI seat: the new AI only where the server has it and knows the settings; the hover says why not
-    aiEngineOptions(): ReadonlyArray<SegmentOption> {
-      const reason = !newAiAvailable.value ? 'The new AI is not available on this server' :
-        newAiUnsupportedReasons({expansions: this.expansions}).length > 0 ? 'The new AI cannot play these expansions yet' : undefined;
-      return AI_ENGINE_OPTIONS.map((option) => option.value === 'rust' && reason !== undefined ? {...option, disabled: true, title: reason} : option);
+    // Same decision as the server (common/ai/aiCompatibility.ts); before its answer the TypeScript AI's rules
+    aiDecision(): AiEngineDecision {
+      const info = aiSupportInfo.value;
+      const admin = info ?? {engine: 'typescript' as const, typescriptFallback: true};
+      return aiEngineFor(aiSettingsOf(this.newGameConfig, this.summaryBoard), {rust: info?.rust ?? EMPTY_AI_SUPPORT, typescript: TYPESCRIPT_AI_SUPPORT}, admin);
     },
-    // Settings the AI cannot handle (common/ai/aiSupport.ts), e.g. ['Colonies', 'Merger']
-    aiBlockers(): Array<string> {
-      return aiUnsupportedReasons({expansions: this.expansions, twoCorpsVariant: this.twoCorpsVariant});
+    // Settings no AI can play here; a stand-in TypeScript AI is invisible to players
+    aiBlockers(): Array<AiBlocker> {
+      return this.aiDecision.engine === 'none' ? this.aiDecision.reasons : [];
     },
-    // The blocking settings with their icons: expansions as in the expansion list, Merger with the Prelude icon like its option row
-    aiBlockerChips(): Array<Pick<ExpansionChoice, 'label' | 'iconClass'>> {
-      const blockingExpansions = [...OFFICIAL_EXPANSIONS, ...FAN_EXPANSIONS]
-        .filter((choice) => this.expansions[choice.expansion] && !AI_SUPPORTED_EXPANSIONS.includes(choice.expansion));
-      const mergerChips = this.twoCorpsVariant ? [{label: 'Merger', iconClass: 'expansion-icon-prelude'}] : [];
-      return [...blockingExpansions, ...mergerChips];
+    aiBlockerChips(): Array<AiBlockerChip> {
+      return this.aiBlockers.map((blocker) => this.aiBlockerChip(blocker));
+    },
+    // Robots only while the Rust AI plays new games (an admin choice) and the server's answer is there
+    aiMarksShown(): boolean {
+      return aiSupportInfo.value?.engine === 'rust';
     },
     humanPlayersCount: {
       get(): number {
@@ -1073,6 +1074,21 @@ export default defineComponent({
       this.playersCount = total;
       const firstPosition = arranged.indexOf(firstPlayer);
       this.firstIndex = firstPosition >= 0 && firstPosition < total ? firstPosition + 1 : 1;
+    },
+    /** True: the AI can play this setting (robot behind its name). */
+    aiCan(kind: 'expansion' | 'board' | 'option', id: string): boolean {
+      const support = aiSupportInfo.value?.rust;
+      if (!this.aiMarksShown || support === undefined) {
+        return false;
+      }
+      switch (kind) {
+      case 'expansion': return (support.expansions as ReadonlyArray<string>).includes(id);
+      case 'board': return (support.boards as ReadonlyArray<string>).includes(id);
+      case 'option': return support.options.includes(id as AiOption);
+      }
+    },
+    aiBlockerChip(blocker: AiBlocker): AiBlockerChip {
+      return aiBlockerChip(blocker);
     },
     seatKey(player: NewPlayerModel): number {
       return seatKey(player);

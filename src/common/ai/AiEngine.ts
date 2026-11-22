@@ -8,3 +8,11 @@ export const DEFAULT_AI_ENGINE: AiEngine = 'ts';
 export function isAiEngine(value: unknown): value is AiEngine {
   return typeof value === 'string' && (AI_ENGINES as ReadonlyArray<string>).includes(value);
 }
+
+/** AI program that played a game, for admins: Rust when any seat had the Rust AI, TypeScript for other AI seats. */
+export function aiEngineOfGame(players: ReadonlyArray<{aiLevel?: unknown, aiEngine?: unknown}>): 'rust' | 'typescript' | undefined {
+  if (players.some((player) => player.aiLevel !== undefined && player.aiEngine === 'rust')) {
+    return 'rust';
+  }
+  return players.some((player) => player.aiLevel !== undefined) ? 'typescript' : undefined;
+}

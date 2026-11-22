@@ -17,6 +17,8 @@ export type SegmentOption = {
   icon?: SeatIconKind;
   /** Shown but not selectable, e.g. a seat taken by the other kind of player. */
   disabled?: boolean;
+  /** Shown as written, never translated (proper names such as the themes) */
+  raw?: boolean;
   /** Hover text (English, translated), e.g. why the option is not selectable. */
   title?: string;
 };
@@ -97,12 +99,6 @@ export const AI_LEVEL_OPTIONS: ReadonlyArray<SegmentOption> = [
   {value: 'easy', label: 'Easy'},
   {value: 'normal', label: 'Normal'},
   {value: 'hard', label: 'Hard'},
-];
-
-// Program behind an AI seat (common/ai/AiEngine.ts): the TS AI and the new Rust AI, named for players
-export const AI_ENGINE_OPTIONS: ReadonlyArray<SegmentOption> = [
-  {value: 'ts', label: 'Classic'},
-  {value: 'rust', label: 'New β', title: 'New AI, learns from its own games. Still being tested.'},
 ];
 
 export const MILESTONE_OPTIONS: ReadonlyArray<SegmentOption> = [

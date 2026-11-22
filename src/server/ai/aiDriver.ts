@@ -28,10 +28,38 @@ const MOVE_DELAY_MILLISECONDS = Number(process.env.AI_MOVE_DELAY_MS ?? 1000);
 const LEVEL_SHARE: Record<AiLevel, number> = {easy: 1 / 3, normal: 2 / 3, hard: 1};
 const RANDOM_ATTEMPTS = 50;
 
-function processWithFallback(player: IPlayer, input: PlayerInput, chosen: InputResponse | undefined): void {
+/** The AI's answer to one input and whether the Rust AI gave it. */
+export type AiAnswer = {chosen: InputResponse | undefined, fromRust: boolean};
+
+/**
+ * Plays the first answer the game accepts: the chosen one; for a refused Rust answer the TypeScript AI's decision
+ * (recorded as a fallback); then a quick and finally random answers, so the game never stops.
+ */
+export function processWithFallback(player: Pick<IPlayer, 'process' | 'getWaitingFor' | 'name' | 'game'>, input: PlayerInput, answer: AiAnswer,
+  typescriptChoice: () => InputResponse | undefined, onRustRefused: (reason: string) => void): void {
+  const {chosen, fromRust} = answer;
+  if (chosen !== undefined) {
+    try {
+      player.process(chosen);
+      return;
+    } catch (error) {
+      if (player.getWaitingFor() !== input) {
+        return; // the input was answered after all
+      }
+      if (fromRust) {
+        onRustRefused('the game refused its answer: ' + (error as Error).message);
+      }
+    }
+  }
   const attempts: Array<() => void> = [
-    ...(chosen !== undefined ? [() => player.process(chosen)] : []),
-    () => player.process(quickResponse(input, player)),
+    ...(fromRust ? [() => {
+      const typescript = typescriptChoice();
+      if (typescript === undefined) {
+        throw new Error('no TypeScript answer');
+      }
+      player.process(typescript);
+    }] : []),
+    () => player.process(quickResponse(input, player as IPlayer)),
   ];
   for (const attempt of attempts) {
     try {
@@ -45,7 +73,7 @@ function processWithFallback(player: IPlayer, input: PlayerInput, chosen: InputR
   }
   for (let attempt = 0; attempt < RANDOM_ATTEMPTS; attempt++) {
     try {
-      player.process(randomResponse(input, player, Math.random));
+      player.process(randomResponse(input, player as IPlayer, Math.random));
       return;
     } catch {
       // try another random answer
@@ -54,14 +82,14 @@ function processWithFallback(player: IPlayer, input: PlayerInput, chosen: InputR
   console.warn(`AI player ${player.name} could not answer input ${input.type} in game ${player.game.id}`);
 }
 
-type Choice = {chosen: InputResponse | undefined, summary: ReturnType<typeof takeAiDecisionSummary>};
+type Choice = AiAnswer & {summary: ReturnType<typeof takeAiDecisionSummary>};
 
 async function choose(player: IPlayer, input: PlayerInput): Promise<Choice> {
   // Rust AI players: the Rust bot's answer; without one (not installed, lost the game) the TS AI moves
   if (player.aiEngine === 'rust') {
     const answer = await RustMirror.of(player.game)?.decide(player, input, player.aiLevel ?? 'normal');
     if (answer !== undefined) {
-      return {chosen: answer, summary: undefined};
+      return {chosen: answer, fromRust: true, summary: undefined};
     }
   }
   let chosen: InputResponse | undefined;
@@ -72,7 +100,7 @@ async function choose(player: IPlayer, input: PlayerInput): Promise<Choice> {
   }
   // Analysis game: the lines this move logs point to the decision (options and values). Taken right after the
   // decision: while a Rust bot thinks, other games' AI players decide too.
-  return {chosen, summary: takeAiDecisionSummary()};
+  return {chosen, fromRust: false, summary: takeAiDecisionSummary()};
 }
 
 function isCurrent(player: IPlayer, input: PlayerInput): boolean {
@@ -105,7 +133,7 @@ async function decideAndMove(player: IPlayer, input: PlayerInput, minimumMillise
   // The thinking time counts towards the pause humans need to follow the game: before, the
   // rollouts (up to 4 s) came on top of the 2 s pause.
   const start = Date.now();
-  const {chosen, summary} = await choose(player, input);
+  const {chosen, fromRust, summary} = await choose(player, input);
   // the game may have moved on while the Rust bot was thinking (undo, reload)
   const after = await GameLoader.getInstance().getGame(player.game.id);
   if (!isCurrent(player, input) || (after !== undefined && after !== player.game)) {
@@ -116,7 +144,10 @@ async function decideAndMove(player: IPlayer, input: PlayerInput, minimumMillise
     await new Promise((resolve) => setTimeout(resolve, rest));
   }
   if (isCurrent(player, input)) {
-    runWithAiDecision(player, summary, () => processWithFallback(player, input, chosen));
+    // A refused Rust answer: the TypeScript AI decides (typescriptChoice) and the fallback is recorded
+    const typescriptChoice = () => chooseResponse(input, player, player.aiLevel ?? 'normal');
+    const onRustRefused = (reason: string) => RustMirror.of(player.game)?.recordFallback(input, reason);
+    runWithAiDecision(player, summary, () => processWithFallback(player, input, {chosen, fromRust}, typescriptChoice, onRustRefused));
   }
 }
 

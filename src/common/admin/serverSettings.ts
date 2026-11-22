@@ -7,7 +7,7 @@ import {DEFAULT_FAVICON_COLOR, DEFAULT_FAVICON_ICON, FAVICON_COLORS, FAVICON_ICO
 
 // image: an address (http… or an uploaded file, see ApiAdminServerLogo) with upload button and preview
 // choice: one of fixed values, a drop-down with a picture per value (choices, choiceImage)
-export type ServerSettingKind = 'text' | 'number' | 'secret' | 'toggle' | 'image' | 'choice';
+export type ServerSettingKind = 'text' | 'number' | 'secret' | 'toggle' | 'image' | 'choice' | 'segmented';
 
 export type ServerSettingChoice = {
   /** Value in the .env file; '' = the default (the line is removed) */
@@ -27,13 +27,15 @@ export type ServerSettingDefinition = {
   description: string,
   /** kind 'number': the smallest allowed value (default 0) */
   minimum?: number,
-  /** kind 'choice': the allowed values */
+  /** kind 'choice' or 'segmented': the allowed values */
   choices?: ReadonlyArray<ServerSettingChoice>,
   /**
    * kind 'choice': picture of a value; gets the values of all fields, so a choice can show itself
    * together with another one (the icon in the chosen color and the other way round)
    */
   choiceImage?: (value: string, values: Readonly<Record<string, string>>) => string,
+  /** kind 'toggle': on while the .env has no line for it; the line then holds 'false' when switched off */
+  defaultOn?: boolean,
   /** Takes effect when saved, without a restart (the server reads it at every use) */
   live?: boolean,
 };
@@ -85,8 +87,13 @@ const BASE_SETTINGS: ReadonlyArray<ServerSettingDefinition> = [
     description: 'Where to place a tile, how to pay … Empty: 1000.'},
   {key: 'AI_ACTION_DELAY_MS', group: 'AI opponents', kind: 'number', label: 'Pause before a new action (ms)',
     description: 'Thinking time of a hard AI (normal: two thirds, easy: one third). Empty: 3000.'},
-  {key: 'NEW_AI_OFF', group: 'AI opponents', kind: 'toggle', live: true, label: 'Switch off the new AI',
-    description: 'New games cannot choose the new AI. Games already running keep it. Takes effect at once.'},
+  {key: 'AI_ENGINE', group: 'AI opponents', kind: 'segmented', live: true, label: 'AI engine',
+    choices: [{value: '', label: 'TypeScript'}, {value: 'rust', label: 'Rust'}],
+    description: 'Program that plays the AI seats of new games. Running games keep theirs. Takes effect at once.'},
+  {key: 'AI_TYPESCRIPT_FALLBACK', group: 'AI opponents', kind: 'toggle', defaultOn: true, live: true, label: 'TypeScript as a stand-in',
+    description: 'On: settings the Rust AI cannot play get the TypeScript AI. Off: they count as not compatible with the AI.'},
+  {key: 'AI_RUST_EXTRA_WAIT_MS', group: 'AI opponents', kind: 'number', live: true, label: 'Extra waiting time for the Rust AI (ms)',
+    description: 'On top of its thinking time. Without an answer by then the TypeScript AI makes this decision. Empty: 10000.'},
   {key: 'AI_DECISION_LOG_DIR', group: 'AI opponents', kind: 'text', label: 'Folder for decision logs',
     description: 'The AI writes every decision there (for training). Empty: no logs.'},
   {key: 'AI_TRAINING_FEED', group: 'AI opponents', kind: 'text', label: 'AI test runs in the lobby',
