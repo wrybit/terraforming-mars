@@ -23,7 +23,7 @@
       <section v-show="screen === 'turn'" ref="turnSection" class="mb-screen mb-screen--turn">
         <MobileTaskHead v-if="task !== undefined" :title="$t(task.label)" :sub="task.detail !== undefined ? $t(task.detail) : task.count"
           :tone="task.tone !== undefined && task.tone !== 'highlight' ? task.tone : undefined" @back="leaveTask" />
-        <ReplayActionTabs :playerView="playerView" :menu="menu" :focus="focus" />
+        <ReplayActionTabs v-if="menu.options.length > 0" :playerView="playerView" :menu="menu" :focus="focus" />
       </section>
     </main>
 

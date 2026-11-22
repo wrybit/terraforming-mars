@@ -33,7 +33,7 @@ const source: ReplaySourceModel = {
 const panelProps = {
   count: 3, current: 0, generations: [{number: 1, start: 0, count: 3}], raises: [],
   marks: [{step: 1, kind: 'milestone' as const, name: 'Terraformer', color: 'red' as const}],
-  terraformRatings: [{color: 'red' as const, values: [20, 20, 21]}, {color: 'blue' as const, values: [20, 20, 20]}],
+  victoryPoints: [{color: 'red' as const, values: [20, 20, 21]}, {color: 'blue' as const, values: [20, 20, 20]}],
   players: [{color: 'red' as const, name: 'red'}, {color: 'blue' as const, name: 'blue'}],
   perspective: 'red' as const, eventText: 'red passed', actor: 'red' as const, temperature: -30, oxygen: 0, oceans: 0,
 };
@@ -71,15 +71,27 @@ describe('ReplayButton', () => {
 });
 
 describe('ReplayTimeline', () => {
-  it('draws one TR line per player and jumps to a milestone', async () => {
-    const {count, current, generations, raises, marks, terraformRatings} = panelProps;
+  it('draws one points line per player and jumps to a milestone', async () => {
+    const {count, current, generations, raises, marks, victoryPoints} = panelProps;
     const wrapper = mount(ReplayTimeline, {
       ...globalConfig,
-      props: {count, current, generations, raises, marks, terraformRatings, playerNames: {red: 'red', blue: 'blue'}, thin: false},
+      props: {count, current, generations, raises, marks, victoryPoints, playerNames: {red: 'red', blue: 'blue'}, thin: false},
     });
     expect(wrapper.findAll('polyline').length).eq(4);
     await wrapper.find('.replay-timeline__mark').trigger('click');
     expect(wrapper.emitted('go')?.[0]).deep.eq([1]);
+  });
+
+  it('puts the thumb at the very start and end of the bar', async () => {
+    const {count, generations, raises, marks, victoryPoints} = panelProps;
+    const wrapper = mount(ReplayTimeline, {
+      ...globalConfig,
+      props: {count, current: 0, generations, raises, marks, victoryPoints, playerNames: {}, thin: false},
+    });
+    // Default width 600, thumb radius 14
+    expect(wrapper.find('.replay-timeline__thumb').attributes('style')).contains('left: 14px');
+    await wrapper.setProps({current: count - 1});
+    expect(wrapper.find('.replay-timeline__thumb').attributes('style')).contains('left: 586px');
   });
 });
 

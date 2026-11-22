@@ -1,5 +1,5 @@
 <template>
-  <!-- Course of the game above the big slider: TR of every player as lines, the milestones and awards (flag/trophy)
+  <!-- Course of the game above the big slider: victory points (TR included) of every player as lines, the milestones and awards (flag/trophy)
        and one dot per raised step of temperature, oxygen and oceans, each exactly at its step. Generation columns are
        as wide as their number of steps, so graph and slider always line up. Everything after the current step is pale. -->
   <div ref="graph" class="replay-timeline" :class="{'replay-timeline--thin': thin}">
@@ -41,7 +41,7 @@
       <span v-for="(segment, index) in segments" :key="index" class="replay-timeline__bar" :style="{left: segment.left + 'px', width: segment.width + 'px'}">
         <i :style="{width: Math.max(0, Math.min(segment.width, currentX - segment.left)) + 'px'}"></i>
       </span>
-      <span class="replay-timeline__thumb" :style="{left: thumbX + 'px'}"></span>
+      <span class="replay-timeline__thumb" :style="{left: currentX + 'px'}"></span>
     </div>
     <div class="replay-timeline__fold">
       <div>
@@ -51,7 +51,7 @@
         </div>
       </div>
     </div>
-    <span class="replay-timeline__playhead" :style="{left: thumbX + 'px'}" aria-hidden="true"></span>
+    <span class="replay-timeline__playhead" :style="{left: currentX + 'px'}" aria-hidden="true"></span>
   </div>
 </template>
 
@@ -69,8 +69,8 @@ const props = defineProps<{
   generations: ReadonlyArray<ReplayGeneration>,
   raises: ReadonlyArray<ReplayRaise>,
   marks: ReadonlyArray<ReplayMark>,
-  // TR of every player at every step
-  terraformRatings: ReadonlyArray<{color: Color, values: ReadonlyArray<number>}>,
+  // Victory points (TR included) of every player at every step
+  victoryPoints: ReadonlyArray<{color: Color, values: ReadonlyArray<number>}>,
   playerNames: Partial<Record<Color, string>>,
   thin: boolean,
 }>();
@@ -111,7 +111,8 @@ const segments = computed(() => {
   });
 });
 const generationIndexOf = (step: number) => Math.max(0, props.generations.findIndex((generation) => step >= generation.start && step < generation.start + generation.count));
-const xOf = (step: number): number => {
+// Position of a step inside its generation column
+const columnX = (step: number): number => {
   const index = generationIndexOf(step);
   const generation = props.generations[index];
   const segment = segments.value[index];
@@ -120,14 +121,20 @@ const xOf = (step: number): number => {
   }
   return segment.left + (step - generation.start + 0.5) / generation.count * segment.width;
 };
+// The first and last step sit exactly at the thumb's end positions (radius as in replay.less), so thumb, filled bar,
+// playhead and graph meet at every step – the slider covers the whole bar from 0 to 100 %.
+const THUMB_RADIUS = {thin: 11, full: 14};
+const xOf = (step: number): number => {
+  const radius = props.thin ? THUMB_RADIUS.thin : THUMB_RADIUS.full;
+  const first = columnX(0);
+  const last = columnX(Math.max(0, props.count - 1));
+  if (last <= first) {
+    return width.value / 2;
+  }
+  return radius + (columnX(step) - first) / (last - first) * (width.value - 2 * radius);
+};
 const currentX = computed(() => xOf(props.current));
 const currentGeneration = computed(() => generationIndexOf(props.current));
-// The thumb never sticks out of the bar: at the first and last step it touches the bar ends (radius as in replay.less)
-const THUMB_RADIUS = {thin: 11, full: 14};
-const thumbX = computed(() => {
-  const radius = props.thin ? THUMB_RADIUS.thin : THUMB_RADIUS.full;
-  return Math.min(Math.max(currentX.value, radius), width.value - radius);
-});
 
 // Numbers of the generations thin out where they would touch; first and last stay inside the bar
 const labels = computed(() => {
@@ -143,7 +150,7 @@ const labels = computed(() => {
   });
 });
 
-const allRatings = computed(() => props.terraformRatings.flatMap((rating) => rating.values));
+const allRatings = computed(() => props.victoryPoints.flatMap((rating) => rating.values));
 const trMin = computed(() => Math.min(...allRatings.value, 20) - 1);
 const trMax = computed(() => Math.max(...allRatings.value, 21) + 1);
 const trY = (value: number) => trHeight - 4 - (value - trMin.value) / (trMax.value - trMin.value) * (trHeight - 8);
@@ -154,7 +161,7 @@ const trGrid = computed(() => {
   }
   return values;
 });
-const trLines = computed(() => props.terraformRatings.map((rating) => ({
+const trLines = computed(() => props.victoryPoints.map((rating) => ({
   color: rating.color,
   stroke: replayColor(rating.color),
   points: rating.values.map((value, step) => `${xOf(step).toFixed(1)},${trY(value).toFixed(1)}`).join(' '),
