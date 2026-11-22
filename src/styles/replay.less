@@ -20,8 +20,15 @@
 // Slider in the thin bar: the same distance to the play button on the left as to the position text on the right
 @replay-thin-gap: 14px;
 @replay-thin-text: 92px;
-@replay-thin-left: @replay-thin-control + @replay-thin-gap;
-@replay-thin-right: @replay-thin-gap + @replay-thin-text + @replay-gap-inner + @replay-thin-control;
+// Speed in the thin bar: small bars and the seconds
+@replay-thin-speed: 78px;
+// Drag grips at both ends of the thin bar
+@replay-thin-grip: 8px;
+@replay-thin-left: @replay-thin-grip + 4px + @replay-thin-control + @replay-thin-gap;
+@replay-thin-right: @replay-thin-gap + @replay-thin-speed + @replay-gap-inner + @replay-thin-text + @replay-gap-inner + @replay-thin-control + 4px + @replay-thin-grip;
+// Controls of the unfolded panel: squares with their key inside, as big as the play button
+@replay-key-button: 48px;
+@replay-key-radius: 10px;
 
 // ---------- Results page ----------
 .game-end-setup__head {
@@ -371,22 +378,13 @@ html body #game-end.game-end--replay > :not(.replay-view) {
   }
 }
 
-// Size toggle: the arrow points where the panel will move
-.replay-panel__size-toggle svg {
-  transition: transform 0.3s;
-}
-
-.replay-panel--thin .replay-panel__size-toggle svg {
-  transform: rotate(180deg);
-}
-
 .replay-panel__size-toggle--small {
   box-sizing: border-box;
   width: @replay-thin-control;
   height: @replay-thin-control;
   padding: 0;
   justify-content: center;
-  border-radius: 50%;
+  border-radius: 8px;
 }
 
 .replay-panel__info {
@@ -514,23 +512,41 @@ html body #game-end.game-end--replay > :not(.replay-view) {
   transition: opacity 0.25s 0.15s;
 }
 
-.replay-panel__mini-play {
+.replay-panel__grip {
+  flex: none;
+  width: @replay-thin-grip;
+  height: 16px;
+  fill: @replay-muted;
+  cursor: grab;
+}
+
+.replay-panel__thin-left > .replay-play {
+  margin-left: -4px;
+}
+
+.replay-panel__thin-right .replay-panel__grip {
+  margin-left: -4px;
+}
+
+.replay-panel--dragging .replay-panel__grip {
+  cursor: grabbing;
+}
+
+.replay-panel__thin-left .replay-play {
+  box-shadow: 0 2px 10px fade(@replay-accent, 50%);
+}
+
+.replay-panel__thin-speed {
+  width: @replay-thin-speed;
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: @replay-thin-control;
-  height: @replay-thin-control;
-  padding: 0;
-  border: 0;
-  border-radius: 50%;
-  background: @replay-accent;
-  box-shadow: 0 2px 10px fade(@replay-accent, 50%);
-  cursor: pointer;
+  gap: 6px;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 
-  svg {
-    width: 18px;
-    height: 18px;
-    fill: #fff;
+  b {
+    font-weight: 500;
   }
 }
 
@@ -550,36 +566,209 @@ html body #game-end.game-end--replay > :not(.replay-view) {
 
 .replay-panel__foot {
   display: flex;
-  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: stretch;
   gap: @replay-gap-group;
   margin-top: 14px;
 }
 
-.replay-panel__hint {
-  color: @replay-muted;
-  font-size: 12px;
-}
-
-.replay-panel__transport {
-  margin-left: auto;
+// A box groups what belongs together (law of proximity): the controls, and the speed with the position
+.replay-panel__box {
   display: flex;
   align-items: center;
-  gap: @replay-gap-inner;
+  gap: 6px;
+  padding: 6px;
+  border-radius: (@replay-key-radius + 4px);
+  background: rgba(0, 0, 0, 0.25);
 }
 
-.replay-panel__step {
-  height: 40px;
-}
-
-.replay-panel__play {
-  display: inline-flex;
+.replay-panel__key-button {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: @replay-gap-inner;
+  justify-content: center;
+  gap: 3px;
+  width: @replay-key-button;
+  height: @replay-key-button;
+  padding: 0;
+  border: 1px solid @replay-line;
+  border-radius: @replay-key-radius;
+  background: rgba(255, 255, 255, 0.04);
+  color: #eee;
+  cursor: pointer;
 
-  svg {
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  > svg:not(.replay-play__countdown) {
     width: 20px;
     height: 20px;
     fill: currentcolor;
+  }
+
+  // Keys as small as in the tabs: the symbol stays the main thing
+  .hotkey-key {
+    min-width: 15px;
+    height: 15px;
+    padding: 0 3px;
+    border-bottom-width: 1.5px;
+    border-radius: 3px;
+    font-size: 9px;
+  }
+
+  .hotkey-key__icon {
+    width: 10px;
+    height: 10px;
+  }
+}
+
+.replay-panel__speed {
+  gap: 12px;
+  padding: 6px 14px 6px 12px;
+}
+
+.replay-panel__speed-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  color: @replay-muted;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+
+  b {
+    color: #eee;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .hotkey-keys {
+    margin-left: 4px;
+  }
+
+  .hotkey-key {
+    min-width: 15px;
+    height: 15px;
+    font-size: 9px;
+  }
+}
+
+// ---------- Play button with countdown (ReplayPlayButton.vue) ----------
+.replay-play {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  width: var(--replay-play-size);
+  height: var(--replay-play-size);
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: @replay-accent;
+  color: #fff;
+  cursor: pointer;
+
+  &.replay-panel__key-button {
+    border: 0;
+    border-radius: @replay-key-radius;
+    background: @replay-accent;
+
+    &:hover {
+      background: lighten(@replay-accent, 5%);
+    }
+  }
+}
+
+.replay-play__icon {
+  width: 20px;
+  height: 20px;
+  fill: currentcolor;
+}
+
+.replay-play__countdown {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+
+  rect {
+    fill: none;
+    stroke-width: 2.5;
+  }
+}
+
+// Subtle: one sees the time running without it drawing the eye away from the game
+.replay-play__track {
+  stroke: rgba(0, 0, 0, 0.12);
+}
+
+.replay-play__run {
+  stroke: rgba(173, 171, 255, 0.55);
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: replay-countdown var(--replay-step-ms) linear forwards;
+}
+
+@keyframes replay-countdown {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .replay-play__run {
+    display: none;
+  }
+}
+
+// ---------- Speed bars (ReplaySpeedBars.vue) ----------
+.replay-speed-bars {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 34px;
+}
+
+.replay-speed-bars__bar {
+  display: flex;
+  align-items: flex-end;
+  width: 10px;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+
+  i {
+    width: 100%;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.18);
+    transition: background 0.15s;
+  }
+
+  &:hover i {
+    background: rgba(255, 255, 255, 0.35);
+  }
+}
+
+.replay-speed-bars__bar--lit i,
+.replay-speed-bars__bar--lit:hover i {
+  background: @replay-accent-light;
+}
+
+.replay-speed-bars--small {
+  gap: 2px;
+  height: 20px;
+
+  .replay-speed-bars__bar {
+    width: 6px;
   }
 }
 
@@ -805,8 +994,7 @@ html body #game-end.game-end--replay > :not(.replay-view) {
 
   .replay-panel__title > span,
   .replay-panel__view-label,
-  .replay-panel__hint,
-  .replay-panel__speed,
+  .replay-panel__size-toggle > span,
   .replay-panel__name {
     display: none;
   }
@@ -830,13 +1018,21 @@ html body #game-end.game-end--replay > :not(.replay-view) {
     font-size: 12px;
   }
 
-  .replay-panel__transport {
-    width: 100%;
-    justify-content: space-between;
+  .replay-panel__foot {
+    gap: @replay-gap-inner;
   }
 
-  .replay-panel__play {
-    flex: 1;
+  // Thin bar on a phone: no room for the speed, the slider keeps its length
+  .replay-panel__thin-speed {
+    display: none;
+  }
+
+  .replay-panel--thin .replay-panel__graph {
+    margin-right: (@replay-thin-right - @replay-thin-speed - @replay-gap-inner);
+  }
+
+  .replay-panel__box {
+    flex: 1 1 100%;
     justify-content: center;
   }
 

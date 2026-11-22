@@ -1891,7 +1891,6 @@
   "View of": "Weergave van",
   "Close replay": "Herhaling sluiten",
   "Show full": "Volledig tonen",
-  "Show thin": "Smal tonen",
   "Step ${0} of ${1}": "Stap ${0} van ${1}",
   "Click a flag, a trophy or a generation to jump there": "Klik op een vlag, een trofee of een generatie om daarheen te springen",
   "Speed": "Snelheid",
@@ -1905,5 +1904,8 @@
   "Replay of game ${0} not possible: the game is not finished yet.": "Herhaling van spel ${0} niet mogelijk: het spel is nog niet afgelopen.",
   "Replay of game ${0} could not be loaded (server error ${1}). Please try again later.": "Herhaling van spel ${0} kon niet worden geladen (serverfout ${1}). Probeer het later opnieuw.",
   "Replay of game ${0} could not be loaded: no connection to the server. Please check the connection and try again.": "Herhaling van spel ${0} kon niet worden geladen: geen verbinding met de server. Controleer de verbinding en probeer het opnieuw.",
-  "${0} lost ${1} ${2}": "${0} verloor ${1} ${2}"
+  "${0} lost ${1} ${2}": "${0} verloor ${1} ${2}",
+  "Minimize": "Verkleinen",
+  "${0} s per step": "${0} s per stap",
+  "${0} remaining": "nog ${0}"
 }

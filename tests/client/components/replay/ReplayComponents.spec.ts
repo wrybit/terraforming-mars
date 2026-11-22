@@ -4,6 +4,9 @@ import {globalConfig} from '../getLocalVue';
 import {fakePlayerViewModel} from '../testHelpers';
 import ReplayButton from '@/client/components/replay/ReplayButton.vue';
 import ReplayPanel from '@/client/components/replay/ReplayPanel.vue';
+import ReplayPlayButton from '@/client/components/replay/ReplayPlayButton.vue';
+import ReplaySpeedBars from '@/client/components/replay/ReplaySpeedBars.vue';
+import {REPLAY_DEFAULT_SPEED, replayRemaining, replaySeconds} from '@/client/components/replay/replaySpeed';
 import ReplayTimeline from '@/client/components/replay/ReplayTimeline.vue';
 import ReplayView from '@/client/components/replay/ReplayView.vue';
 import {reconstructReplay} from '@/client/components/replay/reconstructReplay';
@@ -86,6 +89,46 @@ describe('ReplayPanel', () => {
     expect(wrapper.emitted('go')?.[0]).deep.eq([1]);
     await wrapper.find('[aria-label="Close replay"]').trigger('click');
     expect(wrapper.emitted('close')).has.length(1);
+  });
+});
+
+describe('Replay speed', () => {
+  it('lights the bars up to the chosen speed and reports a click', async () => {
+    const wrapper = mount(ReplaySpeedBars, {...globalConfig, props: {modelValue: 2}});
+    const bars = wrapper.findAll('.replay-speed-bars__bar');
+    expect(bars).has.length(5);
+    expect(bars.map((bar) => bar.classes().includes('replay-speed-bars__bar--lit'))).deep.eq([true, true, true, false, false]);
+    await bars[4].trigger('click');
+    expect(wrapper.emitted('update:modelValue')?.[0]).deep.eq([4]);
+  });
+
+  it('runs the countdown only while playing, within the button', () => {
+    const props = {playing: false, label: 'Play', size: 48, radius: 10, stepMs: 750, runKey: 1};
+    expect(mount(ReplayPlayButton, {...globalConfig, props}).find('.replay-play__run').exists()).is.false;
+    const playing = mount(ReplayPlayButton, {...globalConfig, props: {...props, playing: true}});
+    const run = playing.find('.replay-play__run');
+    expect(run.attributes('width')).eq('45.5');
+    expect(playing.find('.replay-play').attributes('style')).contains('--replay-step-ms: 750ms');
+  });
+
+  it('starts in the middle and changes with + and −', async () => {
+    const wrapper = mount(ReplayPanel, {...globalConfig, props: panelProps, attachTo: document.body});
+    const lit = () => wrapper.findAll('.replay-panel__speed .replay-speed-bars__bar--lit').length;
+    expect(lit()).eq(REPLAY_DEFAULT_SPEED + 1);
+    window.dispatchEvent(new KeyboardEvent('keydown', {key: '+'}));
+    await wrapper.vm.$nextTick();
+    expect(lit()).eq(REPLAY_DEFAULT_SPEED + 2);
+    window.dispatchEvent(new KeyboardEvent('keydown', {key: '-'}));
+    window.dispatchEvent(new KeyboardEvent('keydown', {key: '-'}));
+    await wrapper.vm.$nextTick();
+    expect(lit()).eq(REPLAY_DEFAULT_SPEED);
+    wrapper.unmount();
+  });
+
+  it('formats seconds and the remaining time', () => {
+    expect(replaySeconds(3000)).eq((3).toLocaleString());
+    expect(replayRemaining(120, 1500)).eq('3:00');
+    expect(replayRemaining(-1, 1500)).eq('0:00');
   });
 });
 

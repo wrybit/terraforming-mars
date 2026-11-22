@@ -1638,7 +1638,6 @@
   "View of": "視点",
   "Close replay": "リプレイを閉じる",
   "Show full": "大きく表示",
-  "Show thin": "細く表示",
   "Step ${0} of ${1}": "${1}手中${0}手目",
   "Click a flag, a trophy or a generation to jump there": "旗、トロフィー、世代をクリックするとそこへ移動します",
   "Speed": "速度",
@@ -1652,5 +1651,9 @@
   "Replay of game ${0} not possible: the game is not finished yet.": "ゲーム ${0} のリプレイはできません：ゲームはまだ終了していません。",
   "Replay of game ${0} could not be loaded (server error ${1}). Please try again later.": "ゲーム ${0} のリプレイを読み込めませんでした（サーバーエラー ${1}）。後でもう一度お試しください。",
   "Replay of game ${0} could not be loaded: no connection to the server. Please check the connection and try again.": "ゲーム ${0} のリプレイを読み込めませんでした：サーバーに接続できません。接続を確認してもう一度お試しください。",
-  "${0} lost ${1} ${2}": "${0}が${1}${2}を失った"
+  "${0} lost ${1} ${2}": "${0}が${1}${2}を失った",
+  "Minimize": "縮小",
+  "${0} s": "${0}秒",
+  "${0} s per step": "1ステップ${0}秒",
+  "${0} remaining": "残り${0}"
 }

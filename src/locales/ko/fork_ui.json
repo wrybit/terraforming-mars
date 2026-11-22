@@ -1516,7 +1516,6 @@
   "View of": "시점",
   "Close replay": "리플레이 닫기",
   "Show full": "크게 보기",
-  "Show thin": "작게 보기",
   "Step ${0} of ${1}": "${1}단계 중 ${0}단계",
   "Click a flag, a trophy or a generation to jump there": "깃발, 트로피 또는 세대를 클릭하면 그 지점으로 이동합니다",
   "Speed": "속도",
@@ -1530,5 +1529,9 @@
   "Replay of game ${0} not possible: the game is not finished yet.": "게임 ${0}의 리플레이를 볼 수 없습니다: 게임이 아직 끝나지 않았습니다.",
   "Replay of game ${0} could not be loaded (server error ${1}). Please try again later.": "게임 ${0}의 리플레이를 불러오지 못했습니다(서버 오류 ${1}). 나중에 다시 시도하세요.",
   "Replay of game ${0} could not be loaded: no connection to the server. Please check the connection and try again.": "게임 ${0}의 리플레이를 불러오지 못했습니다: 서버에 연결할 수 없습니다. 연결을 확인하고 다시 시도하세요.",
-  "${0} lost ${1} ${2}": "${0} 플레이어가 ${2} ${1}개 상실"
+  "${0} lost ${1} ${2}": "${0} 플레이어가 ${2} ${1}개 상실",
+  "Minimize": "축소",
+  "${0} s": "${0}초",
+  "${0} s per step": "단계당 ${0}초",
+  "${0} remaining": "${0} 남음"
 }

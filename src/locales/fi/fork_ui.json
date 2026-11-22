@@ -1264,7 +1264,6 @@
   "View of": "Näkymä",
   "Close replay": "Sulje uusinta",
   "Show full": "Näytä kokonaan",
-  "Show thin": "Näytä kapeana",
   "Step ${0} of ${1}": "Vaihe ${0}/${1}",
   "Click a flag, a trophy or a generation to jump there": "Napsauta lippua, pokaalia tai sukupolvea siirtyäksesi sinne",
   "Speed": "Nopeus",
@@ -1277,5 +1276,8 @@
   "Replay of game ${0} not possible: its start is not saved on this server.": "Pelin ${0} uusinta ei ole mahdollinen: sen alkutilaa ei ole tallennettu tälle palvelimelle.",
   "Replay of game ${0} not possible: the game is not finished yet.": "Pelin ${0} uusinta ei ole mahdollinen: peli ei ole vielä päättynyt.",
   "Replay of game ${0} could not be loaded (server error ${1}). Please try again later.": "Pelin ${0} uusintaa ei voitu ladata (palvelinvirhe ${1}). Yritä myöhemmin uudelleen.",
-  "Replay of game ${0} could not be loaded: no connection to the server. Please check the connection and try again.": "Pelin ${0} uusintaa ei voitu ladata: ei yhteyttä palvelimeen. Tarkista yhteys ja yritä uudelleen."
+  "Replay of game ${0} could not be loaded: no connection to the server. Please check the connection and try again.": "Pelin ${0} uusintaa ei voitu ladata: ei yhteyttä palvelimeen. Tarkista yhteys ja yritä uudelleen.",
+  "Minimize": "Pienennä",
+  "${0} s per step": "${0} s per askel",
+  "${0} remaining": "${0} jäljellä"
 }
