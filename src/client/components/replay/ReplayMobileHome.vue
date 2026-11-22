@@ -1,7 +1,8 @@
 <template>
   <div id="player-home" :class="['mb-home', 'mb-home--' + screen]">
-    <!-- The replay on phones and tablets: the game's mobile view (MobilePlayerHome.vue), read only. Before an action the
-         turn sheet opens with the chosen action marked, then its task view with the chosen card, like a player does it. -->
+    <!-- The replay on phones and tablets: the game's mobile view (MobilePlayerHome.vue), read only. Before an action
+         its task view opens with the chosen card, like after choosing it in the turn sheet; the sheet itself only
+         opens by hand. -->
     <MobileHeader :game="playerView.game" :aria-label="$t('Players')" @click="go('players')" />
 
     <main class="mb-main">
@@ -9,6 +10,7 @@
         :tileView="tileView" :acting="false" :bannerTitle="eventText" :viewerColor="perspective"
         @toggleTileView="$emit('toggleTileView')" @showMilestones="showMilestones" />
       <section v-show="screen === 'hand'" class="mb-screen mb-screen--hand">
+        <MobileTaskHead :title="$t('All cards')" :back="false" />
         <HandCardsPanel :playerView="playerView" hideUndergroundTokens />
       </section>
       <section v-show="screen === 'players'" :class="['mb-screen', 'mb-screen--players', {'mb-screen--players-scroll': playerView.players.length > 2}]">
@@ -19,20 +21,9 @@
       </section>
       <!-- Task view as in the game: header with Back, the action and its count, below it only the chosen tab -->
       <section v-show="screen === 'turn'" ref="turnSection" class="mb-screen mb-screen--turn">
-        <div v-if="task !== undefined" :class="['mb-task-head', task.tone !== undefined && task.tone !== 'highlight' ? 'mb-task-head--' + task.tone : '']">
-          <button type="button" class="mb-icon-button" :aria-label="$t('Back')" @click="leaveTask">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
-          </button>
-          <span class="mb-task-title">{{ $t(task.label) }}</span>
-          <span class="mb-task-sub">{{ task.detail !== undefined ? $t(task.detail) : task.count ?? '' }}</span>
-        </div>
+        <MobileTaskHead v-if="task !== undefined" :title="$t(task.label)" :sub="task.detail !== undefined ? $t(task.detail) : task.count"
+          :tone="task.tone !== undefined && task.tone !== 'highlight' ? task.tone : undefined" @back="leaveTask" />
         <ReplayActionTabs :playerView="playerView" :menu="menu" :focus="focus" />
-        <div v-if="carousel !== undefined && carousel.count > 1" class="mb-dots">
-          <button v-for="index in carousel.count" :key="index" type="button"
-            :class="['mb-dot', {'mb-dot--active': index - 1 === carousel.index, 'mb-dot--unavailable': carousel.unavailable[index - 1]}]"
-            :aria-label="String(index)" @click="scrollCarousel(index - 1)"></button>
-          <span class="mb-dots-count">{{ carousel.index + 1 }} / {{ carousel.count }}</span>
-        </div>
       </section>
     </main>
 
@@ -48,8 +39,8 @@
       </template>
     </MobileNav>
 
-    <!-- Slides only when opened or closed by hand; the steps switch it without the drawer moving -->
-    <Transition :name="sheetSlides ? 'mb-sheet' : 'replay-sheet'">
+    <!-- Only opened by hand (turn button, Back): the steps never open it -->
+    <Transition name="mb-sheet">
       <MobileTurnSheet v-if="sheetOpen" ref="sheet" :menu="turnMenu" :title="eventText" :actionNumber="undefined" :actionsPerTurn="2"
         :playerView="playerView" @close="closeSheet" @select="startTask" @confirm="sheetOpen = false" />
     </Transition>
@@ -57,7 +48,7 @@
 </template>
 
 <script setup lang="ts">
-import {computed, nextTick, onBeforeUnmount, onMounted, ref, watch} from 'vue';
+import {computed, nextTick, onBeforeUnmount, ref, watch} from 'vue';
 import {Color} from '@/common/Color';
 import {PlayerViewModel} from '@/common/models/PlayerModel';
 import {OrOptionsModel} from '@/common/models/PlayerInputModel';
@@ -74,7 +65,8 @@ import MobileTurnButton from '@/client/components/mobile/MobileTurnButton.vue';
 import MobileTurnSheet from '@/client/components/mobile/MobileTurnSheet.vue';
 import {MOBILE_NAV, MobileScreen, PlayersSegment} from '@/client/components/mobile/mobileScreens';
 import {buildTurnMenu, findTurnMenuTile, selectTurnMenuTile, TurnMenuTile} from '@/client/components/mobile/turnMenu';
-import {CarouselState, observeCardCarousel, scrollCarouselTo} from '@/client/components/mobile/cardCarousel';
+import {showCardInGrid} from '@/client/components/mobile/cardGrid';
+import MobileTaskHead from '@/client/components/mobile/MobileTaskHead.vue';
 import ReplayActionTabs from './ReplayActionTabs.vue';
 import {ReplayActionFocus} from './replayActionMenu';
 
@@ -94,20 +86,14 @@ const props = defineProps<{
 }>();
 defineEmits<{(event: 'toggleTileView'): void}>();
 
-// How long the turn sheet shows the chosen action before its task view opens
-const SHEET_MS = 500;
 const FOCUS_CLASS = 'replay-action-tabs__focus';
 
 const screen = ref<MobileScreen>('mars');
 const playersSegment = ref<PlayersSegment>('players');
 const sheetOpen = ref(false);
-const sheetSlides = ref(false);
 const task = ref<TurnMenuTile | undefined>(undefined);
-const carousel = ref<CarouselState | undefined>(undefined);
 const turnSection = ref<HTMLElement>();
 const sheet = ref<{$el: HTMLElement}>();
-let sheetTimer: number | undefined;
-let stopCarousel: (() => void) | undefined;
 
 const turnMenu = computed(() => buildTurnMenu(props.menu));
 // Tile of the next action: tabs and tiles are numbered in display order (orOptionsDisplayed.ts)
@@ -124,14 +110,12 @@ function showMilestones(): void {
 // The turn button opens the sheet, like in the game
 function navigate(next: MobileScreen): void {
   if (next === 'turn') {
-    sheetSlides.value = true;
-    sheetOpen.value = true;
+    openSheet();
   } else {
     go(next);
   }
 }
 function startTask(index: number): void {
-  window.clearTimeout(sheetTimer);
   if (turnSection.value !== undefined) {
     selectTurnMenuTile(turnSection.value, index);
   }
@@ -140,33 +124,30 @@ function startTask(index: number): void {
   go('turn');
   showFocusedCard();
 }
-// The carousel selects the card in its middle: swipe to the chosen card, like "Play card" from the large view
+// Scroll the chosen card (marked by ReplayActionTabs) into view, like "Play card" from the large view
 async function showFocusedCard(): Promise<void> {
   await nextTick();
-  // The screen was hidden until now: wait for its layout before swiping
+  // The screen was hidden until now: wait for its layout before scrolling
   await new Promise((resolve) => requestAnimationFrame(resolve));
   const section = turnSection.value;
-  const list = Array.from(section?.querySelectorAll<HTMLElement>('.payments_cont') ?? []).find((element) => element.offsetWidth > 0);
-  const cards = Array.from(list?.querySelectorAll(':scope > label.payments_cards') ?? []);
-  const index = cards.findIndex((card) => card.classList.contains(FOCUS_CLASS) || card.querySelector('.' + FOCUS_CLASS) !== null);
-  if (section !== undefined && index >= 0) {
-    scrollCarouselTo(section, index);
+  if (section !== undefined) {
+    showCardInGrid(section, (card) => card.classList.contains(FOCUS_CLASS) || card.querySelector('.' + FOCUS_CLASS) !== null, false);
   }
 }
 function closeSheet(): void {
-  sheetSlides.value = true;
   sheetOpen.value = false;
+}
+// Opened by hand, the sheet marks the next action like the replay's tabs
+function openSheet(): void {
+  sheetOpen.value = true;
+  if (focusTile.value !== undefined) {
+    markSheetTile(focusTile.value);
+  }
 }
 function leaveTask(): void {
   task.value = undefined;
   go('mars');
-  sheetSlides.value = true;
-  sheetOpen.value = true;
-}
-function scrollCarousel(index: number): void {
-  if (turnSection.value !== undefined) {
-    scrollCarouselTo(turnSection.value, index);
-  }
+  openSheet();
 }
 
 // Marks the chosen tile in the open sheet: the tiles stand in the order of the menu's sections (MobileTurnSheet.vue)
@@ -184,37 +165,20 @@ async function markSheetTile(tile: TurnMenuTile): Promise<void> {
   element.querySelectorAll('.mb-tile')[position]?.classList.add(FOCUS_CLASS);
 }
 
-// Each step shows what happens: Mars for a placed tile; before an action the sheet with the action, then its task
-// view; actions without a task (pass, conversions …) stay in the sheet
+// Each step shows what happens, without the turn sheet: Mars for a placed tile, the task view of the next action
+// (its tab with the chosen card); actions without a task view (pass, end turn, conversions) show Mars
 watch(() => props.step, () => {
-  window.clearTimeout(sheetTimer);
-  sheetSlides.value = false;
+  sheetOpen.value = false;
   const tile = focusTile.value;
-  if (props.placed) {
-    sheetOpen.value = false;
+  const ownTask = tile !== undefined && tile.confirmation === undefined && tile !== turnMenu.value.pass && tile !== turnMenu.value.skip;
+  if (!props.placed && ownTask) {
+    startTask(tile.index);
+  } else if (props.placed || tile !== undefined) {
     task.value = undefined;
     go('mars');
-  } else if (tile !== undefined) {
-    if (screen.value === 'turn') {
-      task.value = undefined;
-      go('mars');
-    }
-    sheetOpen.value = true;
-    markSheetTile(tile);
-    const ownTask = tile.confirmation === undefined && tile !== turnMenu.value.pass && tile !== turnMenu.value.skip;
-    if (ownTask) {
-      sheetTimer = window.setTimeout(() => startTask(tile.index), SHEET_MS);
-    }
   }
 }, {flush: 'post'});
 
-onMounted(() => {
-  if (turnSection.value !== undefined) {
-    stopCarousel = observeCardCarousel(turnSection.value, (state) => carousel.value = state);
-  }
-});
 onBeforeUnmount(() => {
-  window.clearTimeout(sheetTimer);
-  stopCarousel?.();
 });
 </script>

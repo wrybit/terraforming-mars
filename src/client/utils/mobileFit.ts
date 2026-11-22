@@ -130,7 +130,7 @@ const RULES: ReadonlyArray<FitRule> = [
   {selector: '#game-end .game_end_table.mb-transposed', columns: () => 1},
   // Milestones & awards as a table across the full width
   {selector: '.mb-screen .ma-table', columns: () => 1},
-  // Standard projects: all at a glance, no carousel (cf. cardCarousel.ts); landscape as square as possible (5 → 3×2),
+  // Standard projects: all at a glance, as a centered block; landscape as square as possible (5 → 3×2),
   // portrait more rows (5 → 2×3), and
   // centered as on desktop (choiceBlock.ts). Gaps like the milestone/award tiles (mobile.less)
   {
@@ -157,8 +157,13 @@ const RULES: ReadonlyArray<FitRule> = [
     choiceGap: CHOICE_GAP,
     grid: CARD_CHOICE_LIST,
   },
-  // Card carousel (play card): one large card in the middle
-  {selector: '.mb-screen--turn .payments_cont .card-container', columns: () => 1},
+  // Play card: as many per row as fit, like the hand cards (two on the phone), scrolling vertically (cardGrid.ts)
+  {
+    selector: `.mb-screen--turn ${STANDARD_PROJECT_LIST} > label > .card-container`,
+    columns: cardColumns,
+    choiceGap: CHOICE_GAP,
+    grid: STANDARD_PROJECT_LIST,
+  },
   {
     selector: '.card-container',
     // Log preview, cards in explainer tiles and nested cards keep their size

@@ -1,6 +1,5 @@
 <template>
-  <div class="payments_cont choice-block" :class="[choiceBlockClass(allCards.length, isHandSelection), {'choice-block--sections': unplayableCards.length > 0}]" :style="choiceBlockStyle(allCards.length)"
-    @tm-carousel-unselect="unselectCard">
+  <div class="payments_cont choice-block" :class="[choiceBlockClass(allCards.length, isHandSelection), {'choice-block--sections': unplayableCards.length > 0}]" :style="choiceBlockStyle(allCards.length)">
     <!-- Cards as a choice block (choice_block.less) like when buying and for standard projects -->
     <div v-if="showtitle === true">{{ $t(playerinput.title) }}</div>
     <!-- Same filter and sorting as in the hand tab, at the top of the box – only for hand cards (not standard projects) -->
@@ -37,7 +36,7 @@
       </div>
     </template>
     <WarningsComponent v-if="card !== undefined" :warnings="card.warnings" />
-    <!-- Not playable: view only, grey and half transparent; no radio, so neither a click nor the mobile carousel selects them -->
+    <!-- Not playable: view only, grey and half transparent; no radio, so a click doesn't select them -->
     <template v-if="shownUnplayableCount > 0">
       <h3 class="hand-cards-panel__title choice-section-title choice-section-title--separated">
         {{ $t('Not playable') }} <small>{{ shownUnplayableCount }}</small>
@@ -269,12 +268,6 @@ export default defineComponent({
     },
     choiceBlockClass,
     choiceBlockStyle,
-    // Mobile carousel came to rest on a card without a radio (not playable, cardCarousel.ts): nothing is chosen,
-    // so the payment area and its play button disappear instead of playing a card that is out of view
-    unselectCard() {
-      this.cardName = undefined;
-      this.card = undefined;
-    },
     getCard() {
       const card = this.cards.find((c) => c.name === this.cardName);
       if (card === undefined) {

@@ -28,6 +28,7 @@
       </MobileMarsScreen>
 
       <section v-show="screen === 'hand'" class="mb-screen mb-screen--hand" @click.capture="zoomCard">
+        <MobileTaskHead :title="$t('All cards')" :back="false" />
         <div v-if="playerView.draftedCards.length > 0" class="mb-drafted">
           <h3 class="mb-section-label">{{ $t('Drafted cards') }}</h3>
           <div class="mb-card-list">
@@ -53,25 +54,13 @@
       <!-- The input always stays mounted: WaitingFor asks the server about the own turn.
            As task view: header with Back, title and counter, below it only the content of the chosen task -->
       <section v-show="screen === 'turn'" class="mb-screen mb-screen--turn" ref="turnSection">
-        <div v-if="!isSetupPhase && (isActionMenu ? task !== undefined : inputTitle !== undefined)"
-          :class="['mb-task-head', isActionMenu && task?.tone !== undefined && task.tone !== 'highlight' ? 'mb-task-head--' + task.tone : '']">
-          <button type="button" class="mb-icon-button" :aria-label="$t('Back')" @click="leaveTask">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
-          </button>
-          <template v-if="isActionMenu && task !== undefined">
-            <span class="mb-task-title">{{ $t(task.label) }}</span>
-            <span class="mb-task-sub">{{ taskSubText(task) }}</span>
-          </template>
-          <span v-else class="mb-task-title">{{ inputTitle }}</span>
-        </div>
+        <MobileTaskHead v-if="!isSetupPhase && (isActionMenu ? task !== undefined : inputTitle !== undefined)"
+          :title="isActionMenu && task !== undefined ? $t(task.label) : inputTitle ?? ''"
+          :sub="isActionMenu && task !== undefined ? taskSubText(task) : undefined"
+          :tone="isActionMenu && task?.tone !== undefined && task.tone !== 'highlight' ? task.tone : undefined"
+          @back="leaveTask" />
         <!-- Initial selection confirmed: header like a task, below it the own selection (PlayerSetupView); status of who is still choosing -->
-        <div v-else-if="isSetupConfirmed" class="mb-task-head">
-          <button type="button" class="mb-icon-button" :aria-label="$t('Back')" @click="go('mars')">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
-          </button>
-          <span class="mb-task-title">{{ $t('Your selection') }}</span>
-          <span class="mb-task-sub">{{ bannerTitle }}</span>
-        </div>
+        <MobileTaskHead v-else-if="isSetupConfirmed" :title="$t('Your selection')" :sub="bannerTitle" @back="go('mars')" />
         <!-- Initial selection in steps like in the mockup: corporation, preludes, cards – only one column visible at a time -->
         <div v-if="isSetupPhase && setupSteps.length > 1" class="mb-steps" role="tablist">
           <button v-for="(step, index) in setupSteps" :key="index" type="button" role="tab"
@@ -94,13 +83,6 @@
         <template v-else-if="!isSetupPhase">
           <p v-if="playerView.waitingFor === undefined" class="mb-empty">{{ bannerTitle }}</p>
           <WaitingFor v-if="game.phase !== 'end'" :playerView="playerView" :waitingfor="playerView.waitingFor" :requestId="playerView.requestId" />
-          <!-- Card carousel (play card): position and count, tapping a dot swipes there -->
-          <div v-if="carousel !== undefined && carousel.count > 1" class="mb-dots">
-            <button v-for="index in carousel.count" :key="index" type="button"
-              :class="['mb-dot', {'mb-dot--active': index - 1 === carousel.index, 'mb-dot--unavailable': carousel.unavailable[index - 1]}]"
-              :aria-label="String(index)" @click="scrollCarousel(index - 1)"></button>
-            <span class="mb-dots-count">{{ carousel.index + 1 }} / {{ carousel.count }}</span>
-          </div>
         </template>
       </section>
     </main>
@@ -172,9 +154,10 @@ import {playersToWaitFor} from '@/client/utils/playersToWaitFor';
 import {waitingStatusText} from '@/client/utils/waitingStatusText';
 import {requestPlacementZoom} from '@/client/components/board/placementZoom';
 import {markHorizontalScroll} from '@/client/components/mobile/horizontalScroll';
-import {CarouselState, observeCardCarousel, scrollCarouselTo} from '@/client/components/mobile/cardCarousel';
+import {showCardInGrid} from '@/client/components/mobile/cardGrid';
+import MobileTaskHead from '@/client/components/mobile/MobileTaskHead.vue';
 
-// Cleanup function of the observers (space selection, carousel); there is only one player view per page
+// Cleanup function of the observers (space selection, footer space); there is only one player view per page
 let stopObserving: (() => void) | undefined;
 
 // Visible footer area of the input (Confirm, Pay); fixed at the bottom, the content needs that much space below it
@@ -199,7 +182,6 @@ type DataModel = {
   // Title of an input outside the action menu (read from the input tab)
   inputTitle: string | undefined;
   playersSegment: PlayersSegment;
-  carousel: CarouselState | undefined;
   // Card shown large (tap in hand or on a player screen)
   zoomedCard: CardModel | undefined;
   zoomedCardOrigin: DOMRect | undefined;
@@ -283,7 +265,6 @@ export default defineComponent({
       task: undefined,
       inputTitle: undefined,
       playersSegment: 'players',
-      carousel: undefined,
       zoomedCard: undefined,
       zoomedCardOrigin: undefined,
       zoomedCardList: [],
@@ -307,6 +288,7 @@ export default defineComponent({
     MobileTurnSheet,
     MobileCardZoom,
     MobileTurnButton,
+    MobileTaskHead,
     PlayerTimer,
   },
   computed: {
@@ -548,7 +530,7 @@ export default defineComponent({
       this.zoomedCardOrigin = container?.getBoundingClientRect() ?? undefined;
       this.zoomedCard = card;
     },
-    // "Play card" from the large view: open the carousel and swipe to this card
+    // "Play card" from the large view: open the task, select this card and scroll it into view
     playZoomedCard() {
       const card = this.zoomedCard;
       const tile = this.zoomedCardPlayTile;
@@ -559,10 +541,8 @@ export default defineComponent({
       this.startTask(tile.index);
       this.$nextTick(() => {
         const section = this.$refs.turnSection as HTMLElement | undefined;
-        const labels = Array.from(section?.querySelectorAll('.payments_cont > label.payments_cards') ?? []);
-        const index = labels.findIndex((label) => label.querySelector('.' + CSS.escape(cardClassName(card.name))) !== null);
-        if (index >= 0) {
-          this.scrollCarousel(index);
+        if (section !== undefined) {
+          showCardInGrid(section, (label) => label.querySelector('.' + CSS.escape(cardClassName(card.name))) !== null, true);
         }
       });
     },
@@ -576,12 +556,6 @@ export default defineComponent({
         this.setupSteps = steps;
         // The view is updated in place: a step that no longer exists falls back to the last one
         this.setupStep = Math.max(0, Math.min(this.setupStep, steps.length - 1));
-      }
-    },
-    scrollCarousel(index: number) {
-      const section = this.$refs.turnSection as HTMLElement | undefined;
-      if (section !== undefined) {
-        scrollCarouselTo(section, index);
       }
     },
     showMilestones() {
@@ -621,14 +595,8 @@ export default defineComponent({
         this.refreshSetupSteps(element);
       });
       placement.observe(element, {childList: true, subtree: true, attributes: true, attributeFilter: ['class']});
-      const stopCarousel = observeCardCarousel(element, (state) => {
-        if (state?.count !== this.carousel?.count || state?.index !== this.carousel?.index) {
-          this.carousel = state;
-        }
-      });
       stopObserving = () => {
         placement.disconnect();
-        stopCarousel();
       };
     },
   },
