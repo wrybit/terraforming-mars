@@ -151,12 +151,13 @@ export class RustMirror {
       this.broken = `event file: ${(error as Error).message}`;
       return;
     }
-    for (const bot of this.bots.values()) {
-      // a bot that cannot follow an event has lost the game: the TS AI takes over for good (a bot closed because
-      // the game was loaded again does not count, a new one starts from the event file)
-      this.enqueue(() => bot.request({event})).catch((error) => {
-        if ([...this.bots.values()].includes(bot)) {
-          this.giveUp(`lost sync: ${(error as Error).message}`);
+    for (const [level, bot] of this.bots) {
+      // A bot that crashed or cannot follow an event is ended; the next decision starts a new one from the event
+      // file (botFor), and a bot that keeps failing there gives the game to the TypeScript AI
+      this.enqueue(() => bot.request({event})).catch(() => {
+        if (this.bots.get(level) === bot) {
+          bot.close();
+          this.bots.delete(level);
         }
       });
     }
