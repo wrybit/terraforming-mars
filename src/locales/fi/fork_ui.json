@@ -1283,5 +1283,18 @@
   "Rust AI fallbacks": "Rust-AI:n varatoimet",
   "Last 24 hours": "Viimeiset 24 tuntia",
   "Decision": "Päätös",
-  "Reason": "Syy"
+  "Reason": "Syy",
+  "AI strength": "AI:n vahvuus",
+  "Rollouts": "Simulaatiot",
+  "Games played ahead per candidate move. The main lever of strength.": "Etukäteen pelatut pelit ehdokassiirtoa kohden. Vahvuuden tärkein vipu.",
+  "Threads": "Säikeet",
+  "Processor cores per decision. More is faster, not stronger.": "Suoritinytimiä päätöstä kohden. Enemmän on nopeampi, ei vahvempi.",
+  "Lookahead (moves)": "Ennakointi (siirrot)",
+  "How far each rollout looks ahead. 0: to the end of the game.": "Kuinka pitkälle kukin simulaatio katsoo. 0: pelin loppuun.",
+  "Candidates": "Ehdokkaat",
+  "Moves the AI considers at all. Fewer: it overlooks good moves.": "Siirrot, joita AI ylipäätään harkitsee. Vähemmän: se ohittaa hyviä siirtoja.",
+  "Max. thinking time (ms)": "Suurin miettimisaika (ms)",
+  "The search stops here. Only a limit, so the AI is equally strong on fast and slow servers.": "Haku pysähtyy tähän. Vain yläraja, jotta AI on yhtä vahva nopeilla ja hitailla palvelimilla.",
+  "Randomness (%)": "Satunnaisuus (%)",
+  "0: always the best move. Higher: more often a slightly worse one, never nonsense. Needs a bot that supports it.": "0: aina paras siirto. Korkeampi: useammin hieman huonompi, ei koskaan järjetön. Vaatii botin, joka tukee tätä."
 }

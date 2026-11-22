@@ -3,6 +3,8 @@
 // in this order and grouping (ServerSettingsPanel.vue).
 
 import {COMMON_EXTENSIONS} from '../../genfiles/extensionsCommon';
+import {AI_LEVELS} from '../ai/AiLevel';
+import {DEFAULT_RUST_BOT_STRENGTH, RUST_BOT_STRENGTH_FIELDS, RUST_BOT_STRENGTH_LIMITS, RustBotStrengthField, rustBotStrengthKey} from '../ai/rustBotStrength';
 import {DEFAULT_FAVICON_COLOR, DEFAULT_FAVICON_ICON, FAVICON_COLORS, FAVICON_ICONS, FaviconOption, faviconImage} from './favicons';
 
 // image: an address (http… or an uploaded file, see ApiAdminServerLogo) with upload button and preview
@@ -27,6 +29,15 @@ export type ServerSettingDefinition = {
   description: string,
   /** kind 'number': the smallest allowed value (default 0) */
   minimum?: number,
+  /** kind 'number': the largest allowed value (default none) */
+  maximum?: number,
+  /** Shown in the empty field: the value that applies without a line in the .env */
+  placeholder?: string,
+  /**
+   * Part of a table instead of a row of its own: settings with the same row share one line, one field per column
+   * (AI strength: a field for easy, normal and hard)
+   */
+  grid?: {row: string, column: string},
   /** kind 'choice' or 'segmented': the allowed values */
   choices?: ReadonlyArray<ServerSettingChoice>,
   /**
@@ -45,7 +56,30 @@ function faviconChoices(options: ReadonlyArray<FaviconOption>, defaultId: string
   return options.map(({id, label}) => ({value: id === defaultId ? '' : id, label}));
 }
 
-const BASE_SETTING_GROUPS: ReadonlyArray<ServerSettingGroup> = ['Appearance', 'Games', 'Limits', 'AI opponents', 'Access', 'Technical'];
+const BASE_SETTING_GROUPS: ReadonlyArray<ServerSettingGroup> = ['Appearance', 'Games', 'Limits', 'AI opponents', 'AI strength', 'Access', 'Technical'];
+
+// One line per value of the Rust bot, one field per strength (common/ai/rustBotStrength.ts)
+const AI_STRENGTH_ROWS: Record<RustBotStrengthField, {label: string, description: string}> = {
+  rollouts: {label: 'Rollouts', description: 'Games played ahead per candidate move. The main lever of strength.'},
+  threads: {label: 'Threads', description: 'Processor cores per decision. More is faster, not stronger.'},
+  horizon: {label: 'Lookahead (moves)', description: 'How far each rollout looks ahead. 0: to the end of the game.'},
+  candidates: {label: 'Candidates', description: 'Moves the AI considers at all. Fewer: it overlooks good moves.'},
+  timeLimit: {label: 'Max. thinking time (ms)', description: 'The search stops here. Only a limit, so the AI is equally strong on fast and slow servers.'},
+  randomness: {label: 'Randomness (%)', description: '0: always the best move. Higher: more often a slightly worse one, never nonsense. Needs a bot that supports it.'},
+};
+
+const AI_STRENGTH_SETTINGS: Array<ServerSettingDefinition> = RUST_BOT_STRENGTH_FIELDS.flatMap((field) => AI_LEVELS.map((level): ServerSettingDefinition => ({
+  key: rustBotStrengthKey(level, field),
+  group: 'AI strength',
+  kind: 'number',
+  live: true,
+  label: AI_STRENGTH_ROWS[field].label,
+  description: AI_STRENGTH_ROWS[field].description,
+  minimum: RUST_BOT_STRENGTH_LIMITS[field].minimum,
+  maximum: RUST_BOT_STRENGTH_LIMITS[field].maximum,
+  placeholder: String(DEFAULT_RUST_BOT_STRENGTH[level][field]),
+  grid: {row: field, column: level},
+})));
 
 const BASE_SETTINGS: ReadonlyArray<ServerSettingDefinition> = [
   {key: 'SERVER_NAME', group: 'Appearance', kind: 'text', label: 'Server name',
@@ -94,6 +128,7 @@ const BASE_SETTINGS: ReadonlyArray<ServerSettingDefinition> = [
     description: 'On: settings the Rust AI cannot play get the TypeScript AI. Off: they count as not compatible with the AI.'},
   {key: 'AI_RUST_EXTRA_WAIT_MS', group: 'AI opponents', kind: 'number', live: true, label: 'Extra waiting time for the Rust AI (ms)',
     description: 'On top of its thinking time. Without an answer by then the TypeScript AI makes this decision. Empty: 10000.'},
+  ...AI_STRENGTH_SETTINGS,
   {key: 'AI_DECISION_LOG_DIR', group: 'AI opponents', kind: 'text', label: 'Folder for decision logs',
     description: 'The AI writes every decision there (for training). Empty: no logs.'},
   {key: 'AI_TRAINING_FEED', group: 'AI opponents', kind: 'text', label: 'AI test runs in the lobby',

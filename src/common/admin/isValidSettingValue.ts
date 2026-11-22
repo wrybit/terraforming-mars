@@ -15,5 +15,6 @@ export function isValidSettingValue(definition: ServerSettingDefinition, value: 
   if (definition.kind !== 'number') {
     return true;
   }
-  return /^[0-9]+$/.test(value.trim()) && Number(value) >= (definition.minimum ?? 0);
+  const number = Number(value);
+  return /^[0-9]+$/.test(value.trim()) && number >= (definition.minimum ?? 0) && (definition.maximum === undefined || number <= definition.maximum);
 }

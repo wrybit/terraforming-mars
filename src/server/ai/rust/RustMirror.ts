@@ -10,6 +10,9 @@ import {PlayerInput} from '../../PlayerInput';
 import {InputResponse} from '../../../common/inputs/InputResponse';
 import {AiLevel} from '../../../common/ai/AiLevel';
 import {RustBot, RustBotProcess, RustBotSettings} from './RustBotProcess';
+import {rustBotStrength} from '../../../common/ai/rustBotStrength';
+import {BotFeature} from '../../../common/ai/aiSupportContract';
+import {rustAiSupportFile} from './rustAiSupportFile';
 import {RustFallbackLog, decisionLabel, rustFallbackLog} from './rustFallbackLog';
 import {RandomRecord, recordRandom, takeRandom} from './rustRandom';
 import {steps} from './rustSteps';
@@ -20,14 +23,6 @@ const BINARY = RUST_BOT_BINARY;
 const DATA = RUST_BOT_DATA;
 const EVENT_DIRECTORY = RUST_BOT_EVENTS;
 
-// Search effort per strength. The time limit keeps the bot about as quick as the TS AI on slow servers (AK1: 64
-// rollouts took 9 s for one decision): the search stops there with fewer rollouts. A started rollout still ends and
-// the first round over all candidates always runs, so a decision takes up to about twice the limit on AK1.
-const SETTINGS: Record<AiLevel, RustBotSettings> = {
-  easy: {rollouts: 4, threads: 1, horizon: 0, candidates: 4, timeLimit: 750},
-  normal: {rollouts: 16, threads: 2, horizon: 0, candidates: 6, timeLimit: 1700},
-  hard: {rollouts: 64, threads: 2, horizon: 0, candidates: 8, timeLimit: 2600},
-};
 
 type StoredEvent = {saveId: number, event: Record<string, unknown>};
 
@@ -37,10 +32,20 @@ const MAX_REBUILD_FAILURES = 3;
 // Waiting time on top of the thinking time before the TypeScript AI makes the decision instead (admin setting)
 const DEFAULT_EXTRA_WAIT_MILLISECONDS = 10_000;
 
+/**
+ * Start values of a bot of this strength: the admin's (AI strength, read at every bot start) or the defaults.
+ *
+ * Randomness only goes to a bot that announced it in its support file; an older bot would refuse the extra value.
+ */
+export function rustBotSettings(level: AiLevel, botFeatures: ReadonlyArray<BotFeature> = rustAiSupportFile.get().botFeatures): RustBotSettings {
+  const {randomness, ...search} = rustBotStrength(level, process.env);
+  return botFeatures.includes('randomness') ? {...search, randomness} : search;
+}
+
 /** How long a decision of the Rust AI may take: its thinking time plus the extra waiting time (read at every use). */
 export function rustDecisionTimeout(level: AiLevel): number {
   const extra = Number(process.env.AI_RUST_EXTRA_WAIT_MS);
-  return SETTINGS[level].timeLimit + (Number.isFinite(extra) && extra > 0 ? extra : DEFAULT_EXTRA_WAIT_MILLISECONDS);
+  return rustBotStrength(level, process.env).timeLimit + (Number.isFinite(extra) && extra > 0 ? extra : DEFAULT_EXTRA_WAIT_MILLISECONDS);
 }
 
 /** True when this server has the Rust AI program. */
@@ -52,7 +57,7 @@ export function rustAiInstalled(): boolean {
 export class RustMirror {
   private static readonly mirrors = new Map<string, RustMirror>();
   /** for testing: the program behind the mirrors */
-  public static createBot: (level: AiLevel) => RustBot = (level) => new RustBotProcess(BINARY ?? '', DATA ?? '', SETTINGS[level]);
+  public static createBot: (level: AiLevel) => RustBot = (level) => new RustBotProcess(BINARY ?? '', DATA ?? '', rustBotSettings(level));
   /** for testing */
   public static installed: () => boolean = rustAiInstalled;
   /** for testing */

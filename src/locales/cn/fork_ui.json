@@ -2269,5 +2269,18 @@
   "Rust AI fallbacks": "Rust AI 回退",
   "Last 24 hours": "最近 24 小时",
   "Decision": "决定",
-  "Reason": "原因"
+  "Reason": "原因",
+  "AI strength": "AI 强度",
+  "Rollouts": "推演次数",
+  "Games played ahead per candidate move. The main lever of strength.": "每个候选步预演的对局数。决定强度的主要参数。",
+  "Threads": "线程",
+  "Processor cores per decision. More is faster, not stronger.": "每个决定使用的处理器核心。更多只会更快，不会更强。",
+  "Lookahead (moves)": "前瞻（步数）",
+  "How far each rollout looks ahead. 0: to the end of the game.": "每次推演看多远。0：直到对局结束。",
+  "Candidates": "候选步",
+  "Moves the AI considers at all. Fewer: it overlooks good moves.": "AI 会考虑的步数。越少越容易错过好步。",
+  "Max. thinking time (ms)": "最长思考时间（毫秒）",
+  "The search stops here. Only a limit, so the AI is equally strong on fast and slow servers.": "搜索在此停止。只是上限，使 AI 在快慢服务器上强度一致。",
+  "Randomness (%)": "随机性（%）",
+  "0: always the best move. Higher: more often a slightly worse one, never nonsense. Needs a bot that supports it.": "0：总是最佳步。更高：更常选稍差的一步，但绝不胡来。需要支持此功能的机器人。"
 }

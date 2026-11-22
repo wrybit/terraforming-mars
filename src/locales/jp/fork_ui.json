@@ -1659,5 +1659,18 @@
   "Rust AI fallbacks": "Rust AI のフォールバック",
   "Last 24 hours": "直近 24 時間",
   "Decision": "判断",
-  "Reason": "理由"
+  "Reason": "理由",
+  "AI strength": "AI の強さ",
+  "Rollouts": "ロールアウト",
+  "Games played ahead per candidate move. The main lever of strength.": "候補手ごとに先読みで遊ぶゲーム数。強さを決める主な値。",
+  "Threads": "スレッド",
+  "Processor cores per decision. More is faster, not stronger.": "判断ごとのプロセッサコア数。多いと速くなるが強くはならない。",
+  "Lookahead (moves)": "先読み（手数）",
+  "How far each rollout looks ahead. 0: to the end of the game.": "各ロールアウトの先読みの深さ。0：ゲーム終了まで。",
+  "Candidates": "候補手",
+  "Moves the AI considers at all. Fewer: it overlooks good moves.": "AI が検討する手の数。少ないと良い手を見落とす。",
+  "Max. thinking time (ms)": "最大思考時間（ms）",
+  "The search stops here. Only a limit, so the AI is equally strong on fast and slow servers.": "ここで探索を止めます。速いサーバーでも遅いサーバーでも同じ強さになるよう、上限としてだけ使います。",
+  "Randomness (%)": "ランダム性（%）",
+  "0: always the best move. Higher: more often a slightly worse one, never nonsense. Needs a bot that supports it.": "0：常に最善手。高くすると少し劣る手をより頻繁に選ぶが、無茶な手は選ばない。対応するボットが必要。"
 }

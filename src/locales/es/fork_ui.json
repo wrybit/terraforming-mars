@@ -2562,5 +2562,18 @@
   "Rust AI fallbacks": "Relevos de la AI Rust",
   "Last 24 hours": "Últimas 24 horas",
   "Decision": "Decisión",
-  "Reason": "Motivo"
+  "Reason": "Motivo",
+  "AI strength": "Fuerza de la AI",
+  "Rollouts": "Simulaciones",
+  "Games played ahead per candidate move. The main lever of strength.": "Partidas jugadas por adelantado por cada jugada candidata. La palanca principal de la fuerza.",
+  "Threads": "Hilos",
+  "Processor cores per decision. More is faster, not stronger.": "Núcleos de procesador por decisión. Más es más rápido, no más fuerte.",
+  "Lookahead (moves)": "Previsión (jugadas)",
+  "How far each rollout looks ahead. 0: to the end of the game.": "Hasta dónde mira cada simulación. 0: hasta el final de la partida.",
+  "Candidates": "Candidatas",
+  "Moves the AI considers at all. Fewer: it overlooks good moves.": "Jugadas que la AI llega a considerar. Menos: pasa por alto buenas jugadas.",
+  "Max. thinking time (ms)": "Tiempo máx. de reflexión (ms)",
+  "The search stops here. Only a limit, so the AI is equally strong on fast and slow servers.": "Aquí se detiene la búsqueda. Solo un límite, para que la AI sea igual de fuerte en servidores rápidos y lentos.",
+  "Randomness (%)": "Azar (%)",
+  "0: always the best move. Higher: more often a slightly worse one, never nonsense. Needs a bot that supports it.": "0: siempre la mejor jugada. Más: más a menudo una algo peor, nunca un disparate. Requiere un bot que lo admita."
 }

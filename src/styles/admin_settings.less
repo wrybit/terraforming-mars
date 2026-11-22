@@ -570,3 +570,80 @@
   position: static;
   background: none;
 }
+
+// ---------- Table settings (AI strength): a line per value, a field per strength ----------
+.server-settings-grid-fields {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+
+// Inputs like the single fields (.server-settings-input input); defaults stand grey as placeholder
+.server-settings-grid-input {
+  width: 100%;
+  min-width: 0;
+  height: 34px;
+  padding: 0 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  color: #eee;
+  font-size: 14px;
+  text-align: right;
+
+  &::placeholder {
+    color: rgba(238, 238, 238, 0.4);
+  }
+
+  &:focus {
+    outline: 2px solid fade(#908fdb, 70%);
+  }
+}
+
+// Column heads: close above their fields, the first line of the table
+.server-settings-grid-head {
+  padding-bottom: 0;
+}
+
+.server-settings-grid-column {
+  color: rgba(238, 238, 238, 0.62);
+  font-size: 13px;
+  text-align: right;
+  padding-right: 10px;
+}
+
+// The head belongs to the fields below it: no line between them
+.server-settings-grid-head + .server-settings-row {
+  border-top: none;
+  padding-top: 4px;
+}
+
+.server-settings-grid-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  margin: 0;
+}
+
+.server-settings-grid-cell-name {
+  display: none;
+  color: rgba(238, 238, 238, 0.62);
+  font-size: 12px;
+  text-align: right;
+  padding-right: 10px;
+}
+
+@media (max-width: @max-below-tablet) {
+  .server-settings-grid-head {
+    display: none;
+  }
+
+  .server-settings-grid-head + .server-settings-row {
+    padding-top: 0;
+  }
+
+  .server-settings-grid-cell-name {
+    display: block;
+  }
+}

@@ -34,7 +34,7 @@ export type AiOption = typeof AI_OPTIONS[number];
  *
  * The file is built in the lab repository and shipped with every bot deploy, never edited in this repository.
  * Format: {"version": 1, "generated": ISO time, "botVersion": build id, "expansions": [...], "boards": [...],
- * "options": [...], "duneModules": [...]}. Everything listed is supported, everything else is not; the base game
+ * "options": [...], "duneModules": [...], "botFeatures": [...]}. Everything listed is supported, everything else is not; the base game
  * always is. IDs are the code's IDs: expansion IDs (GameModule.ts), board names (BoardName.ts, also written as
  * slug, e.g. "arrakis-61"), GameOptions keys (AI_OPTIONS) and Dune module IDs.
  */
@@ -46,6 +46,8 @@ export type AiSupport = {
   boards: ReadonlyArray<BoardName>;
   options: ReadonlyArray<AiOption>;
   duneModules: ReadonlyArray<string>;
+  /** Start parameters the bot understands beyond the basic ones (BOT_FEATURES), e.g. randomness */
+  botFeatures: ReadonlyArray<BotFeature>;
 };
 
 /** Support of a server without a (readable) file: the new AI plays nothing. */
@@ -57,7 +59,12 @@ export const EMPTY_AI_SUPPORT: AiSupport = {
   boards: [],
   options: [],
   duneModules: [],
+  botFeatures: [],
 };
+
+/** Start parameters a bot may announce: randomness = share of moves that are not the best (common/ai/rustBotStrength.ts). */
+export const BOT_FEATURES = ['randomness'] as const;
+export type BotFeature = typeof BOT_FEATURES[number];
 
 /** Contract version this code reads. */
 export const AI_SUPPORT_VERSION = 1;
@@ -118,6 +125,7 @@ export function parseAiSupport(raw: unknown): ParsedAiSupport {
       boards,
       options,
       duneModules,
+      botFeatures: known('botFeatures', strings(data.botFeatures), (id) => BOT_FEATURES.find((feature) => feature === id)),
     },
     unknownIds,
   };

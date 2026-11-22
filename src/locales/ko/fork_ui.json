@@ -1537,5 +1537,18 @@
   "Rust AI fallbacks": "Rust AI 대체",
   "Last 24 hours": "최근 24시간",
   "Decision": "결정",
-  "Reason": "이유"
+  "Reason": "이유",
+  "AI strength": "AI 강도",
+  "Rollouts": "롤아웃",
+  "Games played ahead per candidate move. The main lever of strength.": "후보 수마다 미리 플레이하는 게임 수. 강도를 좌우하는 핵심 값.",
+  "Threads": "스레드",
+  "Processor cores per decision. More is faster, not stronger.": "결정마다 쓰는 프로세서 코어. 많을수록 빨라질 뿐 강해지지는 않습니다.",
+  "Lookahead (moves)": "앞보기(수)",
+  "How far each rollout looks ahead. 0: to the end of the game.": "각 롤아웃이 얼마나 앞을 보는지. 0: 게임 끝까지.",
+  "Candidates": "후보",
+  "Moves the AI considers at all. Fewer: it overlooks good moves.": "AI가 고려하는 수. 적으면 좋은 수를 놓칩니다.",
+  "Max. thinking time (ms)": "최대 생각 시간(ms)",
+  "The search stops here. Only a limit, so the AI is equally strong on fast and slow servers.": "여기서 탐색을 멈춥니다. 빠른 서버와 느린 서버에서 AI 강도가 같도록 상한일 뿐입니다.",
+  "Randomness (%)": "무작위성(%)",
+  "0: always the best move. Higher: more often a slightly worse one, never nonsense. Needs a bot that supports it.": "0: 항상 최선의 수. 높을수록 조금 못한 수를 더 자주 두지만 엉뚱한 수는 두지 않습니다. 이를 지원하는 봇이 필요합니다."
 }
