@@ -2156,5 +2156,18 @@
   "Rust AI fallbacks": "Откаты AI Rust",
   "Last 24 hours": "Последние 24 часа",
   "Decision": "Решение",
-  "Reason": "Причина"
+  "Reason": "Причина",
+  "AI strength": "Сила AI",
+  "Rollouts": "Розыгрыши",
+  "Games played ahead per candidate move. The main lever of strength.": "Партий, сыгранных наперёд, на каждый ход-кандидат. Главный рычаг силы.",
+  "Threads": "Потоки",
+  "Processor cores per decision. More is faster, not stronger.": "Ядер процессора на решение. Больше быстрее, но не сильнее.",
+  "Lookahead (moves)": "Просчёт (ходы)",
+  "How far each rollout looks ahead. 0: to the end of the game.": "Насколько далеко смотрит каждый розыгрыш. 0: до конца игры.",
+  "Candidates": "Кандидаты",
+  "Moves the AI considers at all. Fewer: it overlooks good moves.": "Ходы, которые AI вообще рассматривает. Меньше: она упускает хорошие ходы.",
+  "Max. thinking time (ms)": "Макс. время раздумий (мс)",
+  "The search stops here. Only a limit, so the AI is equally strong on fast and slow servers.": "Здесь поиск останавливается. Только предел, чтобы AI была одинаково сильной на быстрых и медленных серверах.",
+  "Randomness (%)": "Случайность (%)",
+  "0: always the best move. Higher: more often a slightly worse one, never nonsense. Needs a bot that supports it.": "0: всегда лучший ход. Выше: чаще чуть худший, но никогда не бессмыслица. Нужен бот, который это умеет."
 }

@@ -1442,5 +1442,18 @@
   "Rust AI fallbacks": "Відкати AI Rust",
   "Last 24 hours": "Останні 24 години",
   "Decision": "Рішення",
-  "Reason": "Причина"
+  "Reason": "Причина",
+  "AI strength": "Сила AI",
+  "Rollouts": "Розіграші",
+  "Games played ahead per candidate move. The main lever of strength.": "Партій, зіграних наперед, на кожен хід-кандидат. Головний важіль сили.",
+  "Threads": "Потоки",
+  "Processor cores per decision. More is faster, not stronger.": "Ядер процесора на рішення. Більше швидше, але не сильніше.",
+  "Lookahead (moves)": "Прорахунок (ходи)",
+  "How far each rollout looks ahead. 0: to the end of the game.": "Наскільки далеко дивиться кожен розіграш. 0: до кінця гри.",
+  "Candidates": "Кандидати",
+  "Moves the AI considers at all. Fewer: it overlooks good moves.": "Ходи, які AI взагалі розглядає. Менше: вона пропускає добрі ходи.",
+  "Max. thinking time (ms)": "Макс. час на роздуми (мс)",
+  "The search stops here. Only a limit, so the AI is equally strong on fast and slow servers.": "Тут пошук зупиняється. Лише межа, щоб AI була однаково сильною на швидких і повільних серверах.",
+  "Randomness (%)": "Випадковість (%)",
+  "0: always the best move. Higher: more often a slightly worse one, never nonsense. Needs a bot that supports it.": "0: завжди найкращий хід. Вище: частіше трохи гірший, але ніколи безглуздий. Потрібен бот, що це вміє."
 }

@@ -14,4 +14,5 @@ export const TYPESCRIPT_AI_SUPPORT: AiSupport = {
   // Merger: two corporations per player, the TypeScript AI only picks one
   options: AI_OPTIONS.filter((option) => option !== 'twoCorpsVariant'),
   duneModules: KNOWN_DUNE_MODULE_IDS ?? [],
+  botFeatures: [],
 };

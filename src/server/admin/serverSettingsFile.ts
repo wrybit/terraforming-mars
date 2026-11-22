@@ -111,7 +111,7 @@ export function writeServerSettings(update: ServerSettingsUpdate): ServerSetting
     if (!isValidSettingValue(definition, value)) {
       throw new Error(definition.kind === 'choice' || definition.kind === 'segmented' ?
         `${key} needs one of ${(definition.choices ?? []).map((choice) => choice.value).filter((choiceValue) => choiceValue !== '').join(', ')}` :
-        `${key} needs a whole number of at least ${definition.minimum ?? 0}`);
+        `${key} needs a whole number of at least ${definition.minimum ?? 0}` + (definition.maximum === undefined ? '' : ` and at most ${definition.maximum}`));
     }
   }
   writeValues(update);

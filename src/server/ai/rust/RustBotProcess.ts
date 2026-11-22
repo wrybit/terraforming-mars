@@ -2,12 +2,13 @@
 // line on stdin, one JSON answer per line on stdout, answers in request order.
 import {ChildProcessWithoutNullStreams, spawn} from 'child_process';
 import * as readline from 'readline';
+import {RustBotStrength} from '../../../common/ai/rustBotStrength';
 
 // A request the bot does not answer in this time counts as failed (the TS AI then moves instead)
 const REQUEST_TIMEOUT_MILLISECONDS = 60_000;
 
-/** Search effort; timeLimit: thinking time per decision in milliseconds (the bot stops its search there) */
-export type RustBotSettings = {rollouts: number, threads: number, horizon: number, candidates: number, timeLimit: number};
+/** Search effort (common/ai/rustBotStrength.ts); randomness only goes to bots that announced it (botFeatures). */
+export type RustBotSettings = Omit<RustBotStrength, 'randomness'> & {randomness?: number};
 
 type Waiting = {resolve: (value: any) => void, reject: (error: Error) => void, timer: ReturnType<typeof setTimeout>};
 
@@ -21,7 +22,7 @@ export class RustBotProcess {
 
   constructor(binary: string, data: string, settings: RustBotSettings) {
     this.child = spawn(binary, [data, String(settings.rollouts), String(settings.threads), String(settings.horizon), String(settings.candidates),
-      'search', String(settings.timeLimit)]);
+      'search', String(settings.timeLimit), ...(settings.randomness === undefined ? [] : [String(settings.randomness)])]);
     readline.createInterface({input: this.child.stdout}).on('line', (line) => {
       const next = this.waiting.shift();
       if (next === undefined) {

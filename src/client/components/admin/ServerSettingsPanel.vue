@@ -20,6 +20,7 @@
           </button>
         </div>
         <div v-docked-tab class="or-tab-panel or-tab-panel--view server-settings-group" role="tabpanel">
+          <ServerSettingGrid v-if="selectedGridSettings.length > 0" :settings="selectedGridSettings" :values="values" @update="setValue" />
           <div v-for="setting in selectedSettings" :key="setting.key" class="server-settings-row">
             <div class="server-settings-text">
               <label :for="'server-setting-' + setting.key" class="server-settings-label" v-i18n>{{ setting.label }}</label>
@@ -42,6 +43,7 @@
                   :type="inputType(setting)"
                   :inputmode="setting.kind === 'number' ? 'numeric' : undefined"
                   :value="values[setting.key]"
+                  :placeholder="setting.placeholder"
                   autocomplete="off"
                   @input="setValue(setting.key, ($event.target as HTMLInputElement).value)">
                 <button v-if="setting.kind === 'secret'" type="button" class="btn btn-sm btn-tone-quiet" @click="toggleReveal(setting.key)" v-i18n>{{ revealed[setting.key] ? 'Hide' : 'Show' }}</button>
@@ -76,6 +78,7 @@ import {vDockedTab} from '@/client/directives/DockedTab';
 import ServerSettingImageField from '@/client/components/admin/ServerSettingImageField.vue';
 import ServerSettingChoiceField from '@/client/components/admin/ServerSettingChoiceField.vue';
 import SegmentedControl from '@/client/components/create/SegmentedControl.vue';
+import ServerSettingGrid from '@/client/components/admin/ServerSettingGrid.vue';
 import {SegmentOption} from '@/client/components/create/createGameChoices';
 import {translateText} from '@/client/directives/i18n';
 import {
@@ -101,7 +104,7 @@ function isOnValue(value: string | undefined): boolean {
 
 export default defineComponent({
   name: 'ServerSettingsPanel',
-  components: {ServerSettingImageField, ServerSettingChoiceField, SegmentedControl},
+  components: {ServerSettingImageField, ServerSettingChoiceField, ServerSettingGrid, SegmentedControl},
   directives: {dockedTab: vDockedTab},
   data(): DataModel {
     return {status: 'loading', states: [], values: {}, revealed: {}, busy: false, message: '', messageIsError: false, selectedGroup: SERVER_SETTING_GROUPS[0]};
@@ -110,8 +113,12 @@ export default defineComponent({
     groups(): Array<{name: string, settings: Array<ServerSettingDefinition>}> {
       return SERVER_SETTING_GROUPS.map((name) => ({name, settings: SERVER_SETTINGS.filter((setting) => setting.group === name)}));
     },
+    // Settings with a row of their own; those of a table come in selectedGridSettings
     selectedSettings(): Array<ServerSettingDefinition> {
-      return SERVER_SETTINGS.filter((setting) => setting.group === this.selectedGroup);
+      return SERVER_SETTINGS.filter((setting) => setting.group === this.selectedGroup && setting.grid === undefined);
+    },
+    selectedGridSettings(): Array<ServerSettingDefinition> {
+      return SERVER_SETTINGS.filter((setting) => setting.group === this.selectedGroup && setting.grid !== undefined);
     },
     dirty(): boolean {
       return SERVER_SETTINGS.some(({key}) => this.values[key] !== this.configured(key));

@@ -47,6 +47,7 @@
     "Temp.",
     "Terraforming Mars",
     "Tharsis Tholus",
+    "Threads",
     "Underworld 2",
     "Venus Next",
     "Virtual",
@@ -126,7 +127,9 @@
     "normal ${0}",
     "Websites",
     "Replay",
-    "${0} s"
+    "${0} s",
+    "Rollouts",
+    "Threads"
   ],
   "es": [
     "${0} AI",
@@ -249,6 +252,7 @@
     "Temp.",
     "Terraforming Mars",
     "Tharsis Tholus",
+    "Threads",
     "Underworld 2",
     "Venus Next",
     "Version",
@@ -508,7 +512,8 @@
     "vastitas borealis nova",
     "worm",
     "Websites",
-    "${0} s"
+    "${0} s",
+    "Threads"
   ],
   "pl": [
     "${0} AI",
