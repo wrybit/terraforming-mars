@@ -1,3 +1,5 @@
+import {isObject} from '@/common/utils/utils';
+
 export type CardRenderDescription = {
   text: string,
   align: 'left' | 'center' | 'right',
@@ -5,6 +7,6 @@ export type CardRenderDescription = {
   lead?: boolean,
 }
 
-export function isDescription(item: any): item is CardRenderDescription {
-  return item && item.text && typeof(item.text) === 'string';
+export function isDescription(item: unknown): item is CardRenderDescription {
+  return isObject(item) && 'text' in item && typeof item.text === 'string';
 }

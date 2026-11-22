@@ -13,7 +13,7 @@ import {LogMessage} from '../common/logs/LogMessage';
 import {Phase} from '../common/Phase';
 import {IPlayer} from './IPlayer';
 import {PlayerId, GameId, SpectatorId, SpaceId, isGameId} from '../common/Types';
-import {AndThen, DeferredAction} from './deferredActions/DeferredAction';
+import {AndThen, IDeferredAction} from './deferredActions/DeferredAction';
 import {Priority} from './deferredActions/Priority';
 import {DeferredActionsQueue} from './deferredActions/DeferredActionsQueue';
 import {SerializedGame} from './SerializedGame';
@@ -27,7 +27,7 @@ import {MoonData} from './moon/MoonData';
 import {SeededRandom} from '../common/utils/Random';
 import {PathfindersData} from './pathfinders/PathfindersData';
 import {GameOptions} from './game/GameOptions';
-import {CorporationDeck, PreludeDeck, ProjectDeck, CeoDeck} from './cards/Deck';
+import {CorporationDeck, PreludeDeck, ProjectDeck, CeoDeck} from '@/server/cards/Decks';
 import {Tag} from '../common/cards/Tag';
 import {Tile} from './Tile';
 import {Logger} from './logs/Logger';
@@ -38,6 +38,7 @@ import {OrOptions} from './inputs/OrOptions';
 import {IStandardProjectCard} from './cards/IStandardProjectCard';
 import {GlobalParameterTracks} from '@/server/boards/GlobalParameterTracks';
 import {Resource} from '@/common/Resource';
+import {isObject} from '@/common/utils/utils';
 
 export interface Score {
   corporation: String;
@@ -176,7 +177,7 @@ export interface IGame extends Logger {
   isSoloMode() :boolean;
   // Retrieve a player by its id
   getPlayerById(id: PlayerId): IPlayer;
-  defer<T>(action: DeferredAction<T>, priority?: Priority): AndThen<T>;
+  defer<T>(action: IDeferredAction<T>, priority?: Priority): AndThen<T>;
   milestoneClaimed(milestone: IMilestone): boolean;
   /** Returns true if Mars is fully terraformed, meaning the game should end with this generation. */
   marsIsTerraformed(): boolean;
@@ -322,6 +323,6 @@ export interface IGame extends Logger {
   getActionCount(): number;
 }
 
-export function isIGame(object: any): object is IGame {
-  return object !== undefined && object.hasOwnProperty('id') && isGameId(object.id);
+export function isIGame(object: unknown): object is IGame {
+  return isObject(object) && 'id' in object && typeof object.id === 'string' && isGameId(object.id);
 }
