@@ -2,7 +2,7 @@ import {expect} from 'chai';
 import {CardName} from '@/common/cards/CardName';
 import {LogMessageDataType} from '@/common/logs/LogMessageDataType';
 import {ReplaySourceMessage, ReplaySourceModel} from '@/common/models/ReplaySourceModel';
-import {REPLAY_TAB, replayActionFocus, replayActionMenu} from '@/client/components/replay/replayActionMenu';
+import {REPLAY_TAB, replayActionFocus, replayActionMenu, replayMoneyReliable} from '@/client/components/replay/replayActionMenu';
 import {ReplayPlayerState, ReplayState} from '@/client/components/replay/reconstructReplay';
 import {ReplayStep} from '@/client/components/replay/replaySteps';
 import {replayPlacedSpaces} from '@/client/components/replay/replayPlacedSpaces';
@@ -51,7 +51,7 @@ describe('replayActionMenu', () => {
   it('preselects the tab and the milestone of the action', () => {
     const log = source([line('${0} claimed ${1} milestone', ['red', 'Builder'])]);
     const focus = replayActionFocus(log, step(0, 0));
-    const menu = replayActionMenu(log, state(), player(), ['Terraformer', 'Builder'], ['Banker'], focus);
+    const menu = replayActionMenu(log, state(), player({terraformRating: 40}), 'red', [{name: 'Terraformer', threshold: 35}, {name: 'Builder', threshold: 8}], ['Banker'], focus);
     const selected = menu.options[menu.initialIdx ?? -1];
     expect(titleOf(selected.title)).eq(REPLAY_TAB.milestone);
     expect((selected as any).initialIdx).eq(1);
@@ -59,12 +59,63 @@ describe('replayActionMenu', () => {
 
   it('builds the tabs from the state before the step', () => {
     const menu = replayActionMenu(source([]), state({awards: [{name: 'Banker', color: 'red'}]} as Partial<ReplayState>), player(),
-      [], ['Banker', 'Miner'], undefined);
+      'red', [], ['Banker', 'Miner'], undefined);
     const titles = menu.options.map((option) => titleOf(option.title));
     expect(titles).deep.eq([REPLAY_TAB.playCard, REPLAY_TAB.award, REPLAY_TAB.standardProjects, REPLAY_TAB.pass, REPLAY_TAB.sell]);
     // Second award costs 14
     expect((menu.options[1].title as any).data[0].value).eq('14');
     expect(titles[menu.initialIdx ?? -1]).eq(REPLAY_TAB.playCard);
+  });
+
+  const titlesOf = (menu: ReturnType<typeof replayActionMenu>) => menu.options.map((option) => titleOf(option.title));
+  const milestones = [{name: 'Terraformer', threshold: 35}, {name: 'Mayor', threshold: 3}, {name: 'Builder', threshold: 8}];
+
+  it('offers milestones only while fewer than three are claimed, with 8 M€ and the target reached', () => {
+    const claimed = state({milestones: [{name: 'Mayor', color: 'red'}, {name: 'Builder', color: 'blue'}, {name: 'Gardener', color: 'red'}]} as Partial<ReplayState>);
+    expect(titlesOf(replayActionMenu(source([]), claimed, player({terraformRating: 40}), 'red', milestones, [], undefined))).not.contains(REPLAY_TAB.milestone);
+    const open = replayActionMenu(source([]), state(), player({terraformRating: 40}), 'red', milestones, [], undefined);
+    expect((open.options[0] as any).options.map((entry: any) => entry.title)).deep.eq(['Terraformer']);
+    expect(titlesOf(replayActionMenu(source([]), state(), player({terraformRating: 20}), 'red', milestones, [], undefined))).not.contains(REPLAY_TAB.milestone);
+    expect(titlesOf(replayActionMenu(source([]), state(), player({terraformRating: 40, resources: [5, 0, 0, 0, 0, 0]}), 'red', milestones, [], undefined)))
+      .not.contains(REPLAY_TAB.milestone);
+  });
+
+  it('offers heat and plants only with enough of them', () => {
+    expect(titlesOf(replayActionMenu(source([]), state(), player(), 'red', [], [], undefined))).not.contains(REPLAY_TAB.heat);
+    const rich = replayActionMenu(source([]), state(), player({resources: [30, 0, 0, 8, 0, 8]}), 'red', [], [], undefined);
+    expect(titlesOf(rich)).contains(REPLAY_TAB.heat).and.contains(REPLAY_TAB.plants);
+  });
+
+  it('offers only cards the player can pay for and whose requirements are met', () => {
+    // Algae needs 5 oceans, Asteroid costs 14
+    const poor = replayActionMenu(source([]), state(), player({resources: [10, 0, 0, 0, 0, 0]}), 'red', [], [], undefined);
+    expect(titlesOf(poor)).not.contains(REPLAY_TAB.playCard);
+    const able = replayActionMenu(source([]), state({oceans: 5} as Partial<ReplayState>), player({resources: [20, 0, 0, 0, 0, 0]}), 'red', [], [], undefined);
+    expect((able.options.find((option) => titleOf(option.title) === REPLAY_TAB.playCard) as any).cards.map((card: any) => card.name))
+      .deep.eq([CardName.ASTEROID, CardName.ALGAE]);
+    // Titanium pays for the space card
+    const titanium = replayActionMenu(source([]), state(), player({resources: [5, 0, 3, 0, 0, 0]}), 'red', [], [], undefined);
+    expect((titanium.options.find((option) => titleOf(option.title) === REPLAY_TAB.playCard) as any).cards.map((card: any) => card.name))
+      .deep.eq([CardName.ASTEROID]);
+  });
+
+  it('offers awards only when affordable and greys out standard projects that are too expensive', () => {
+    const menu = replayActionMenu(source([]), state(), player({resources: [12, 0, 0, 0, 0, 0]}), 'red', [], ['Banker'], undefined);
+    expect(titlesOf(menu)).contains(REPLAY_TAB.award);
+    const projects = menu.options.find((option) => titleOf(option.title) === REPLAY_TAB.standardProjects) as any;
+    expect(projects.cards.filter((card: any) => card.isDisabled !== true).map((card: any) => card.name)).deep.eq([CardName.POWER_PLANT_STANDARD_PROJECT]);
+    expect(titlesOf(replayActionMenu(source([]), state(), player({resources: [7, 0, 0, 0, 0, 0]}), 'red', [], ['Banker'], undefined))).not.contains(REPLAY_TAB.award);
+  });
+
+  it('ignores costs when the game played something the reconstruction could not afford', () => {
+    const log = source([line('${0} played ${1}', ['red', CardName.ASTEROID])]);
+    (log as any).players = [{color: 'red'}];
+    const poor = state({players: [player({resources: [0, 0, 0, 0, 0, 0]})]} as Partial<ReplayState>);
+    const rich = state({players: [player({resources: [20, 0, 0, 0, 0, 0]})]} as Partial<ReplayState>);
+    expect(replayMoneyReliable(log, [poor], [step(0, 0)])).is.false;
+    expect(replayMoneyReliable(log, [rich], [step(0, 0)])).is.true;
+    const menu = replayActionMenu(source([]), state(), player({resources: [0, 0, 0, 0, 0, 0]}), 'red', [], ['Banker'], undefined, false);
+    expect(titlesOf(menu)).contains(REPLAY_TAB.playCard).and.contains(REPLAY_TAB.award);
   });
 });
 

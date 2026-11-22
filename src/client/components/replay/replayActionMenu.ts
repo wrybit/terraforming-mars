@@ -1,4 +1,5 @@
 import {CardName} from '@/common/cards/CardName';
+import {MILESTONE_COST} from '@/common/constants';
 import {CardType} from '@/common/cards/CardType';
 import {CardModel} from '@/common/models/CardModel';
 import {OrOptionsModel, PlayerInputModel, SelectCardModel, SelectOptionModel, SelectProjectCardToPlayModel} from '@/common/models/PlayerInputModel';
@@ -8,6 +9,8 @@ import {getCard} from '@/client/cards/ClientCardManifest';
 import {SELECT_CEO_TITLE, SELECT_CORPORATION_TITLE} from '@/common/inputs/SelectInitialCards';
 import {ReplayPlayerState, ReplayState} from './reconstructReplay';
 import {ReplayStep} from './replaySteps';
+import {Color} from '@/common/Color';
+import {ReplayMilestone, replayCanAffordProject, replayCardPlayable, replayClaimableMilestones, replayGreeneryPlants, replayMegacredits} from './replayPlayable';
 
 // The action tabs of the replay: the same menu the server offers a player on their turn (Player.getActions), rebuilt
 // from the reconstructed state, and what the player chose in a step. The replay opens that tab and marks the card,
@@ -50,7 +53,7 @@ const BASE_STANDARD_PROJECTS: ReadonlyArray<CardName> = [
   CardName.GREENERY_STANDARD_PROJECT, CardName.CITY_STANDARD_PROJECT,
 ];
 const AWARD_COSTS = [8, 14, 20];
-const PLANTS_FOR_GREENERY = 8;
+const HEAT_FOR_TEMPERATURE = 8;
 
 const valueAt = (step: ReplayStep, source: ReplaySourceModel, index: number) => String(source.log[step.line]?.data[index]?.value ?? '');
 
@@ -131,32 +134,39 @@ const projectCards = (title: string, buttonLabel: string, cards: Array<CardModel
 });
 
 /**
- * The action menu of a player before a step, in the server's order. `before` is the game state before the step
- * (the hand still holds the card about to be played). The tab of `focus` is preselected, and its milestone or award.
+ * The action menu of a player before a step, in the server's order and with its conditions (replayPlayable.ts).
+ * `before` is the game state before the step (the hand still holds the card about to be played). The tab of `focus`
+ * is preselected, and its milestone or award; what the player chose is always offered.
  */
 export function replayActionMenu(
   source: ReplaySourceModel,
   before: ReplayState,
   player: ReplayPlayerState,
-  milestoneNames: ReadonlyArray<string>,
+  color: Color,
+  milestones: ReadonlyArray<ReplayMilestone>,
   awardNames: ReadonlyArray<string>,
-  focus: ReplayActionFocus | undefined): OrOptionsModel {
+  focus: ReplayActionFocus | undefined,
+  checkCosts = true): OrOptionsModel {
   const options: Array<PlayerInputModel> = [];
   // The dealt choice isn't known, only the chosen card
   if (focus !== undefined && START_TABS.includes(focus.tab)) {
     options.push(cardList(focus.tab, 'Confirm', focus.cards.map((name) => cardModel(name)), {max: 1, min: 1}));
   }
-  const openMilestones = milestoneNames.filter((name) => !before.milestones.some((claimed) => claimed.name === name));
+  const claimable = replayClaimableMilestones(milestones, before, player, color, checkCosts);
+  const openMilestones = milestones.map((milestone) => milestone.name)
+    .filter((name) => claimable.includes(name) || (focus?.tab === REPLAY_TAB.milestone && focus.item === name));
   if (openMilestones.length > 0) {
     const milestones: OrOptionsModel = {type: 'or', title: REPLAY_TAB.milestone, buttonLabel: 'Confirm',
       options: openMilestones.map((name) => option(name, 'Claim - (' + name + ')'))};
     milestones.initialIdx = Math.max(0, openMilestones.indexOf(focus?.item ?? ''));
     options.push(milestones);
   }
-  if (player.resources[3] >= PLANTS_FOR_GREENERY || focus?.tab === REPLAY_TAB.plants) {
-    options.push({...option(REPLAY_TAB.plants, 'Confirm'), title: {message: REPLAY_TAB.plants, data: [{type: LogMessageDataType.RAW_STRING, value: String(PLANTS_FOR_GREENERY)}]}});
+  const plants = replayGreeneryPlants(player);
+  if (player.resources[3] >= plants || focus?.tab === REPLAY_TAB.plants) {
+    options.push({...option(REPLAY_TAB.plants, 'Confirm'), title: {message: REPLAY_TAB.plants, data: [{type: LogMessageDataType.RAW_STRING, value: String(plants)}]}});
   }
-  if (player.resources[5] >= 8 || focus?.tab === REPLAY_TAB.heat) {
+  // Like in the game also at maximum temperature (no step, no TR, the server only warns)
+  if (player.resources[5] >= HEAT_FOR_TEMPERATURE || focus?.tab === REPLAY_TAB.heat) {
     options.push(option(REPLAY_TAB.heat, 'Convert heat'));
   }
   const actionCards = player.played.filter((name) => getCard(name)?.hasAction === true);
@@ -166,15 +176,17 @@ export function replayActionMenu(
       actionCards.map((name) => cardModel(name, player.actionsThisGeneration.includes(name) && !focus?.cards.includes(name))),
       {max: 1, min: 1, selectBlueCardAction: true}));
   }
-  if (player.hand.length > 0) {
-    options.push(projectCards(REPLAY_TAB.playCard, 'Play card', player.hand.map((name) => cardModel(name))));
+  // Only cards the player could play; the others show greyed out below (unplayableHandCards)
+  const playable = player.hand.filter((name) => replayCardPlayable(name, before, player, checkCosts) || (focus?.tab === REPLAY_TAB.playCard && focus.cards.includes(name)));
+  if (playable.length > 0) {
+    options.push(projectCards(REPLAY_TAB.playCard, 'Play card', playable.map((name) => cardModel(name))));
   }
   if (focus?.tab === REPLAY_TAB.endTurn) {
     options.push(option(REPLAY_TAB.endTurn, 'End'));
   }
   const openAwards = awardNames.filter((name) => !before.awards.some((funded) => funded.name === name));
-  if (openAwards.length > 0 && before.awards.length < AWARD_COSTS.length) {
-    const cost = AWARD_COSTS[before.awards.length];
+  const cost = AWARD_COSTS[before.awards.length];
+  if (openAwards.length > 0 && cost !== undefined && (!checkCosts || replayMegacredits(player) >= cost || focus?.tab === REPLAY_TAB.award)) {
     const awards: OrOptionsModel = {
       type: 'or',
       title: {message: REPLAY_TAB.award, data: [{type: LogMessageDataType.RAW_STRING, value: String(cost)}]},
@@ -186,7 +198,8 @@ export function replayActionMenu(
   }
   const standardProjects = source.standardProjects !== undefined && source.standardProjects.length > 0 ? source.standardProjects : BASE_STANDARD_PROJECTS;
   options.push(projectCards(REPLAY_TAB.standardProjects, 'Confirm',
-    standardProjects.filter((name) => name !== CardName.SELL_PATENTS_STANDARD_PROJECT).map((name) => cardModel(name))));
+    standardProjects.filter((name) => name !== CardName.SELL_PATENTS_STANDARD_PROJECT)
+      .map((name) => cardModel(name, !replayCanAffordProject(name, player, checkCosts) && !focus?.cards.includes(name)))));
   options.push(option(REPLAY_TAB.pass, 'Pass'));
   if (player.hand.length > 0) {
     options.push(cardList(REPLAY_TAB.sell, 'Sell', player.hand.map((name) => cardModel(name))));
@@ -204,3 +217,37 @@ export function replayActionMenu(
 }
 
 const titleOf = (input: PlayerInputModel): string => typeof input.title === 'string' ? input.title : input.title.message;
+
+/**
+ * Whether the reconstructed money of a game can decide what a player could afford: only when every card, milestone,
+ * award and standard project actually bought in the game was affordable in the reconstruction. Games whose log lacks
+ * payments (older servers) otherwise would hide options the player had.
+ */
+export function replayMoneyReliable(source: ReplaySourceModel, states: ReadonlyArray<ReplayState>, steps: ReadonlyArray<ReplayStep>): boolean {
+  const colors = source.players.map((entry) => entry.color);
+  return steps.every((step) => {
+    const focus = replayActionFocus(source, step);
+    const index = step.actor === undefined ? -1 : colors.indexOf(step.actor);
+    if (focus === undefined || focus.added === true || index < 0) {
+      return true;
+    }
+    const before = states[Math.max(0, step.line - 1)];
+    const player = before?.players[index];
+    if (player === undefined) {
+      return true;
+    }
+    switch (focus.tab) {
+    case REPLAY_TAB.playCard:
+      return focus.cards.every((name) => replayCardPlayable(name, before, player) || !replayCardPlayable(name, before, player, false));
+    case REPLAY_TAB.standardProjects:
+      return focus.cards.every((name) => replayCanAffordProject(name, player));
+    case REPLAY_TAB.milestone:
+      return replayMegacredits(player) >= MILESTONE_COST;
+    case REPLAY_TAB.award:
+      return replayMegacredits(player) >= (AWARD_COSTS[before.awards.length] ?? 0);
+    default:
+      return true;
+    }
+  });
+}
+

@@ -22,7 +22,7 @@
         <RowResizeHandle kind="players" />
         <!-- The game's action tabs (hand cards first) fill the rest of the column like on a player's turn -->
         <div class="player_home_block player_home_block--actions nofloat">
-          <ReplayActionTabs :playerView="viewModel" :menu="actionMenu" :focus="nextFocus" />
+          <ReplayActionTabs v-if="actionMenu.options.length > 0" :playerView="viewModel" :menu="actionMenu" :focus="nextFocus" />
         </div>
       </template>
     </HomeColumns>
@@ -66,7 +66,7 @@ import {mobileLayout} from '@/client/utils/mobileLayout';
 import ReplayPanel from './ReplayPanel.vue';
 import ReplayActionTabs from './ReplayActionTabs.vue';
 import ReplayMobileHome from './ReplayMobileHome.vue';
-import {replayActionFocus, replayActionMenu} from './replayActionMenu';
+import {replayActionFocus, replayActionMenu, replayMoneyReliable} from './replayActionMenu';
 import {ReplayState} from './reconstructReplay';
 import {replayGenerations, replayMarks, replayRaises, ReplayStep} from './replaySteps';
 import {replayLogStream, replayViewModel} from './replayViewModel';
@@ -152,13 +152,24 @@ const menuColor = computed(() => {
 });
 const nextFocus = computed(() => nextStep.value !== undefined && nextStep.value.actor === menuColor.value ?
   replayActionFocus(props.source, nextStep.value) : undefined);
+// From the final greenery placement on the game offers no actions any more
+const finalStep = computed(() => {
+  const index = props.steps.findIndex((candidate) => props.source.log[candidate.line]?.message === 'Final greenery placement');
+  return index < 0 ? props.steps.length : index;
+});
+// Costs only decide the menu when the reconstructed money is trustworthy for this game
+const checkCosts = computed(() => replayMoneyReliable(props.source, props.states, props.steps));
+const milestones = computed(() => props.final.game.milestones.map((milestone) => ({name: milestone.name, threshold: milestone.threshold})));
 const actionMenu = computed(() => {
   // New cards in the hand: the hand after that step, otherwise the menu before the action
   const reference = nextStep.value ?? step.value;
+  if (current.value + 1 >= finalStep.value) {
+    return {type: 'or' as const, title: 'Take your next action', buttonLabel: 'Take action', options: [], initialIdx: 0};
+  }
   const shown = props.states[nextFocus.value?.added === true || nextStep.value === undefined ? reference.state : Math.max(0, reference.line - 1)];
   const index = Math.max(0, props.source.players.findIndex((player) => player.color === menuColor.value));
-  return replayActionMenu(props.source, shown, shown.players[index],
-    props.final.game.milestones.map((milestone) => milestone.name), props.final.game.awards.map((award) => award.name), nextFocus.value);
+  return replayActionMenu(props.source, shown, shown.players[index], menuColor.value,
+    milestones.value, props.final.game.awards.map((award) => award.name), nextFocus.value, checkCosts.value);
 });
 // What happened in this step: its first log line, translated like in the log
 const eventText = computed(() => {
