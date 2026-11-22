@@ -123,6 +123,14 @@ html body #game-end.game-end--replay > :not(.replay-view) {
   overflow: auto;
 }
 
+// The replay lies inside the results page, whose row handles have other distances (game_end_columns.less):
+// in the replay they keep those of the game (resize_handle.less), so the tabs get their room below the handle
+@media (min-width: @bp-desktop) {
+  html:not(.tm-mobile) #game-end .player-home--fixed.replay-view .row-resize-handle {
+    margin: (-@player-home-block-gap + @player-home-columns-gap / 2 - @resize-handle-thickness / 2) 0 (@player-home-columns-gap / 2 - @resize-handle-thickness / 2);
+  }
+}
+
 // ---------- Action tabs (ReplayActionTabs.vue) ----------
 // Same chain down to the tab box as for the game's WaitingFor (player_home_fixed.less)
 .player-home--fixed .replay-action-tabs > .wf-options {
@@ -153,7 +161,10 @@ html body #game-end.game-end--replay > :not(.replay-view) {
 }
 
 .or-tab.replay-action-tabs__focus {
+  // A ring would close the tab at the bottom and draw a line between tab and box: the tab only glows above
   border-radius: 8px 8px 0 0;
+  box-shadow: 0 -6px 16px -4px fade(@replay-accent-light, 80%);
+  animation: none;
 }
 
 @keyframes replay-focus-pulse {
