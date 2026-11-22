@@ -165,18 +165,21 @@ describe('ReplayView', () => {
 });
 
 describe('ReplayMobileHome', () => {
-  it('opens the turn sheet before an action, Mars after a tile', async () => {
-    const menu = {type: 'or', title: '', buttonLabel: '', options: [{type: 'option', title: 'Pass for this generation', buttonLabel: 'Pass'}], initialIdx: 0} as any;
+  it('opens the task view before an action, never the turn sheet by itself', async () => {
+    const menu = {type: 'or', title: '', buttonLabel: '', initialIdx: 0, options: [
+      {type: 'card', title: 'Perform an action from a played card', buttonLabel: 'Take action', cards: [], min: 1, max: 1},
+      {type: 'option', title: 'Pass for this generation', buttonLabel: 'Pass'},
+    ]} as any;
     const props = {playerView: fakePlayerViewModel(), stream: [], menu, focus: undefined, eventText: '', perspective: 'red' as const,
       tileView: 'show' as const, step: 0, placed: false};
     const wrapper = shallowMount(ReplayMobileHome, {...globalConfig, props});
-    expect(wrapper.findComponent({name: 'MobileTurnSheet'}).exists()).is.false;
-    await wrapper.setProps({step: 1, focus: {tab: 'Pass for this generation', cards: []}});
+    await wrapper.setProps({step: 1, focus: {tab: 'Perform an action from a played card', cards: []}});
     await flushPromises();
-    expect(wrapper.findComponent({name: 'MobileTurnSheet'}).exists()).is.true;
-    await wrapper.setProps({step: 2, focus: undefined, placed: true});
-    await flushPromises();
+    expect(wrapper.classes()).contains('mb-home--turn');
     expect(wrapper.findComponent({name: 'MobileTurnSheet'}).exists()).is.false;
+    await wrapper.setProps({step: 2, menu: {...menu, initialIdx: 1}, focus: {tab: 'Pass for this generation', cards: []}});
+    await flushPromises();
     expect(wrapper.classes()).contains('mb-home--mars');
+    expect(wrapper.findComponent({name: 'MobileTurnSheet'}).exists()).is.false;
   });
 });

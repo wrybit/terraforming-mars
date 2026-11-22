@@ -217,6 +217,12 @@ html.tm-mobile .replay-view--mobile {
   display: none;
 }
 
+// Read only: the buttons of the action tabs (play card, sell, raise temperature, pass …) show what was done, but do
+// nothing; the tabs and the cards stay clickable to look around
+.replay-action-tabs :is(.wf-action, .or-tab-footer) :is(button, .btn, input) {
+  pointer-events: none;
+}
+
 // What the player does next, in the theme's selection colour like a choice in the game (selection_highlight.less):
 // the tab and the button glow; the chosen card or tile is selected like a click and shows the game's own highlight
 .replay-action-tabs__focus {
