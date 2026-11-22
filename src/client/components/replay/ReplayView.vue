@@ -152,6 +152,18 @@ function markPlaced(): void {
   });
 }
 watch([step, tileView, perspective], markPlaced, {flush: 'post'});
+// Mobile: one screen at a time, so each step opens the one that shows it, like the desktop shows both at once:
+// Mars when the step placed a tile, otherwise the actions when the next step is an action (opened upfront)
+watch(step, () => {
+  if (!mobile.value) {
+    return;
+  }
+  if (replayPlacedSpaces(props.source, step.value).length > 0) {
+    screen.value = 'mars';
+  } else if (nextFocus.value !== undefined) {
+    screen.value = 'turn';
+  }
+});
 onMounted(markPlaced);
 const state = computed(() => props.states[step.value.state]);
 const last = computed(() => current.value === props.steps.length - 1);
