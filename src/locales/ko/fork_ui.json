@@ -1432,7 +1432,6 @@
   "The new AI is not available on this server": "이 서버에서는 새 AI를 사용할 수 없습니다",
   "Switch off the new AI": "새 AI 끄기",
   "New games cannot choose the new AI. Games already running keep it. Takes effect at once.": "새 게임은 새 AI를 선택할 수 없습니다. 진행 중인 게임은 유지됩니다. 즉시 적용됩니다.",
-  "The new AI cannot play these expansions yet": "새 AI는 아직 이 확장을 플레이할 수 없습니다",
   "Where to place a tile, how to pay … Empty: 1000.": "타일 배치 위치, 지불 방법 … 비우면: 1000.",
   "Thinking time of a hard AI (normal: two thirds, easy: one third). Empty: 3000.": "어려움 AI의 생각 시간 (보통: 3분의 2, 쉬움: 3분의 1). 비우면: 3000.",
   "${0} is thinking": "${0} 생각 중",
@@ -1533,5 +1532,8 @@
   "Minimize": "축소",
   "${0} s": "${0}초",
   "${0} s per step": "단계당 ${0}초",
-  "${0} remaining": "${0} 남음"
+  "${0} remaining": "${0} 남음",
+  "New β can do this": "신규 β 지원",
+  "New β not yet compatible with:": "신규 β 아직 미지원:",
+  "New β cannot play these settings yet": "신규 β는 아직 이 설정으로 플레이할 수 없습니다"
 }

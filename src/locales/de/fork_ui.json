@@ -957,7 +957,6 @@
   "The new AI is not available on this server": "Die neue AI ist auf diesem Server nicht verfügbar",
   "Switch off the new AI": "Neue AI ausschalten",
   "New games cannot choose the new AI. Games already running keep it. Takes effect at once.": "Neue Spiele können die neue AI nicht wählen. Laufende Spiele behalten sie. Wirkt sofort.",
-  "The new AI cannot play these expansions yet": "Die neue AI kann diese Erweiterungen noch nicht spielen",
   "${0} is thinking": "${0} denkt nach",
   "${0} is pondering": "${0} grübelt",
   "${0} is weighing the options": "${0} wägt ab",
@@ -1053,5 +1052,8 @@
   "Replay of game ${0} could not be loaded: no connection to the server. Please check the connection and try again.": "Replay der Partie ${0} konnte nicht geladen werden: keine Verbindung zum Server. Bitte Verbindung prüfen und erneut versuchen.",
   "Minimize": "Verkleinern",
   "${0} s per step": "${0} s pro Schritt",
-  "${0} remaining": "noch ${0}"
+  "${0} remaining": "noch ${0}",
+  "New β can do this": "Neu β kann das",
+  "New β not yet compatible with:": "Neu β noch nicht kompatibel mit:",
+  "New β cannot play these settings yet": "Neu β kann diese Einstellungen noch nicht spielen"
 }

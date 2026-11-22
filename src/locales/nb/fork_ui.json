@@ -1546,7 +1546,6 @@
   "The new AI is not available on this server": "Den nye AI-en er ikke tilgjengelig på denne serveren",
   "Switch off the new AI": "Slå av den nye AI-en",
   "New games cannot choose the new AI. Games already running keep it. Takes effect at once.": "Nye spill kan ikke velge den nye AI-en. Pågående spill beholder den. Virker med en gang.",
-  "The new AI cannot play these expansions yet": "Den nye AI-en kan ikke spille disse utvidelsene ennå",
   "Where to place a tile, how to pay … Empty: 1000.": "Hvor en brikke skal plasseres, hvordan det betales … Tom: 1000.",
   "Thinking time of a hard AI (normal: two thirds, easy: one third). Empty: 3000.": "Tenketid for en vanskelig AI (normal: to tredjedeler, lett: en tredjedel). Tom: 3000.",
   "${0} is thinking": "${0} tenker",
@@ -1645,5 +1644,8 @@
   "Replay of game ${0} could not be loaded: no connection to the server. Please check the connection and try again.": "Reprisen av spill ${0} kunne ikke lastes: ingen forbindelse til serveren. Sjekk forbindelsen og prøv igjen.",
   "Minimize": "Forminsk",
   "${0} s per step": "${0} s per steg",
-  "${0} remaining": "${0} igjen"
+  "${0} remaining": "${0} igjen",
+  "New β can do this": "Ny β kan dette",
+  "New β not yet compatible with:": "Ny β er ennå ikke kompatibel med:",
+  "New β cannot play these settings yet": "Ny β kan ikke spille med disse innstillingene ennå"
 }

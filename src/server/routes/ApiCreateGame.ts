@@ -28,6 +28,10 @@ import {GAME_NAME_MAX_LENGTH} from '../../common/game/GameName';
 import {validateCustomMA} from '../../common/ma/CustomMA';
 import {RandomMAOptionType} from '../../common/ma/RandomMAOptionType';
 import {validateCustomMAExpansions} from '../ma/MilestoneAwardSelector';
+import {RustAiSupport} from '../../common/ai/RustAiSupport';
+import {rustAiSettingsOf} from '../../common/ai/isRustAiCompatible';
+import {rustAiSupportFile} from '../ai/rust/rustAiSupportFile';
+import {fallBackToClassicAi} from '../ai/rust/rustAiFallback';
 
 function parseQuotaConfig(struct: any): QuotaConfig {
   let {limit} = struct;
@@ -74,7 +78,8 @@ export class ApiCreateGame extends Handler {
   public static readonly INSTANCE = new ApiCreateGame();
   private quotaHandlers: Array<QuotaHandler>;
 
-  public constructor(quotaConfigs: Array<QuotaConfig> = getQuotaConfigs()) {
+  public constructor(quotaConfigs: Array<QuotaConfig> = getQuotaConfigs(),
+    private readonly rustAiSupport: () => RustAiSupport = () => rustAiSupportFile.get()) {
     super();
     this.quotaHandlers = quotaConfigs.map((config) => new QuotaHandler(config));
   }
@@ -240,6 +245,8 @@ export class ApiCreateGame extends Handler {
     // Board drawn from the board seed of the request: the same board the preview on the page showed
     const boardRng = boardRandom(gameReq.boardSeed);
     const gameOptions = ApiCreateGame.gameOptions(gameReq, pickBoard(gameReq, boardRng));
+    // Same check as the create form (common/ai/isRustAiCompatible.ts), with the support file of this server's bot
+    fallBackToClassicAi(players, rustAiSettingsOf(gameReq, gameOptions.boardName), this.rustAiSupport());
 
     try {
       validateCustomMA(gameOptions.customMA, gameOptions.randomMA, gameOptions.venusNextExtension);

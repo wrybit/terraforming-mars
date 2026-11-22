@@ -2128,7 +2128,6 @@
   "The new AI is not available on this server": "Новият ИИ не е достъпен на този сървър",
   "Switch off the new AI": "Изключи новия ИИ",
   "New games cannot choose the new AI. Games already running keep it. Takes effect at once.": "Новите игри не могат да изберат новия ИИ. Текущите игри го запазват. Действа веднага.",
-  "The new AI cannot play these expansions yet": "Новият ИИ още не може да играе тези разширения",
   "Where to place a tile, how to pay … Empty: 1000.": "Къде да се постави плочка, как да се плати … Празно: 1000.",
   "Thinking time of a hard AI (normal: two thirds, easy: one third). Empty: 3000.": "Време за размисъл на труден ИИ (нормален: две трети, лесен: една трета). Празно: 3000.",
   "${0} is thinking": "${0} мисли",
@@ -2229,5 +2228,8 @@
   "Minimize": "Смали",
   "${0} s": "${0} с",
   "${0} s per step": "${0} с на стъпка",
-  "${0} remaining": "остават ${0}"
+  "${0} remaining": "остават ${0}",
+  "New β can do this": "Нова β може това",
+  "New β not yet compatible with:": "Нова β все още не е съвместима с:",
+  "New β cannot play these settings yet": "Нова β още не може да играе с тези настройки"
 }

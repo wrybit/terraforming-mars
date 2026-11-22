@@ -2164,7 +2164,6 @@
   "The new AI is not available on this server": "此服务器上新AI不可用",
   "Switch off the new AI": "关闭新AI",
   "New games cannot choose the new AI. Games already running keep it. Takes effect at once.": "新游戏无法选择新AI。进行中的游戏保留它。立即生效。",
-  "The new AI cannot play these expansions yet": "新AI还不能玩这些扩展",
   "Where to place a tile, how to pay … Empty: 1000.": "板块放在哪里、如何支付…… 留空：1000。",
   "Thinking time of a hard AI (normal: two thirds, easy: one third). Empty: 3000.": "困难 AI 的思考时间（普通：三分之二，简单：三分之一）。留空：3000。",
   "${0} is thinking": "${0} 正在思考",
@@ -2265,5 +2264,8 @@
   "Minimize": "缩小",
   "${0} s": "${0} 秒",
   "${0} s per step": "每步 ${0} 秒",
-  "${0} remaining": "剩余 ${0}"
+  "${0} remaining": "剩余 ${0}",
+  "New β can do this": "新版 β 支持",
+  "New β not yet compatible with:": "新版 β 暂不兼容：",
+  "New β cannot play these settings yet": "新版 β 还不能玩这些设置"
 }

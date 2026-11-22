@@ -1235,7 +1235,6 @@
   "The new AI is not available on this server": "La nouvelle IA n’est pas disponible sur ce serveur",
   "Switch off the new AI": "Désactiver la nouvelle IA",
   "New games cannot choose the new AI. Games already running keep it. Takes effect at once.": "Les nouvelles parties ne peuvent pas choisir la nouvelle IA. Les parties en cours la gardent. Effet immédiat.",
-  "The new AI cannot play these expansions yet": "La nouvelle IA ne sait pas encore jouer ces extensions",
   "Where to place a tile, how to pay … Empty: 1000.": "Où placer une tuile, comment payer … Vide : 1000.",
   "Thinking time of a hard AI (normal: two thirds, easy: one third). Empty: 3000.": "Temps de réflexion d'une IA difficile (normale : deux tiers, facile : un tiers). Vide : 3000.",
   "${0} is thinking": "${0} réfléchit",
@@ -1334,5 +1333,8 @@
   "Replay of game ${0} could not be loaded: no connection to the server. Please check the connection and try again.": "Impossible de charger la rediffusion de la partie ${0} : pas de connexion au serveur. Vérifiez la connexion et réessayez.",
   "Minimize": "Réduire",
   "${0} s per step": "${0} s par étape",
-  "${0} remaining": "encore ${0}"
+  "${0} remaining": "encore ${0}",
+  "New β can do this": "Nouvelle β sait le faire",
+  "New β not yet compatible with:": "Nouvelle β pas encore compatible avec :",
+  "New β cannot play these settings yet": "Nouvelle β ne sait pas encore jouer ces réglages"
 }

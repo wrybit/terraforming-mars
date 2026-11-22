@@ -1362,7 +1362,6 @@
   "The new AI is not available on this server": "Az új MI nem érhető el ezen a szerveren",
   "Switch off the new AI": "Új MI kikapcsolása",
   "New games cannot choose the new AI. Games already running keep it. Takes effect at once.": "Új játékok nem választhatják az új MI-t. A futó játékok megtartják. Azonnal érvényes.",
-  "The new AI cannot play these expansions yet": "Az új MI még nem tudja játszani ezeket a kiegészítőket",
   "Where to place a tile, how to pay … Empty: 1000.": "Hová kerüljön egy lapka, hogyan fizessen … Üres: 1000.",
   "Thinking time of a hard AI (normal: two thirds, easy: one third). Empty: 3000.": "A nehéz MI gondolkodási ideje (normál: kétharmad, könnyű: egyharmad). Üres: 3000.",
   "${0} is thinking": "${0} gondolkodik",
@@ -1463,5 +1462,8 @@
   "Minimize": "Kicsinyítés",
   "${0} s": "${0} mp",
   "${0} s per step": "${0} mp lépésenként",
-  "${0} remaining": "még ${0}"
+  "${0} remaining": "még ${0}",
+  "New β can do this": "Az Új β ezt tudja",
+  "New β not yet compatible with:": "Az Új β még nem kompatibilis ezzel:",
+  "New β cannot play these settings yet": "Az Új β még nem tudja játszani ezeket a beállításokat"
 }
