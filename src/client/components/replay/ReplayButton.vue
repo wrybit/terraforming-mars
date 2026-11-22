@@ -24,6 +24,8 @@ import {ReplayData} from './replayData';
 
 const props = defineProps<{participantId: ParticipantId, gameId: string}>();
 const emit = defineEmits<{(event: 'open', replay: ReplayData): void}>();
+// Opened via the replay address (replay?id=…): load right away, as if the button was pressed
+defineExpose({open});
 
 const loading = ref(false);
 const error = ref<string | undefined>(undefined);

@@ -194,6 +194,7 @@ const handlers: Map<string, IHandler> = new Map(
     [paths.STATS, ServeApp.INSTANCE],
     ['styles.css', ServeAsset.INSTANCE],
     [paths.THE_END, ServeApp.INSTANCE],
+    [paths.REPLAY, ServeApp.INSTANCE],
   ],
 );
 // Routes of the optional extensions present (src/extensions/, see make_extensions.ts)

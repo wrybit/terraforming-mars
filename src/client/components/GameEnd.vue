@@ -74,7 +74,7 @@
                 <svg class="game-end-setup__action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16M4 12h10M4 19h13" /><circle cx="19" cy="12" r="2" /></svg>
                 <span v-i18n>Decision log</span>
               </a>
-              <ReplayButton :participantId="participant.id" :gameId="game.name" @open="openReplay" />
+              <ReplayButton ref="replayButton" :participantId="participant.id" :gameId="game.name" @open="openReplay" />
             </div>
           </div>
           <GameSetupGroups :chips="setupChips" />
@@ -244,7 +244,7 @@
     </div>
     <!-- Replay over the whole page (the rest of the results page is hidden meanwhile) -->
     <ReplayView v-if="replay !== undefined" :final="participant" :source="replay.source" :states="replay.states" :steps="replay.steps"
-      @close="replay = undefined" />
+      @close="closeReplay" />
   </div>
 </template>
 
@@ -479,6 +479,10 @@ export default defineComponent({
   },
   mounted() {
     void this.findDecisionLog();
+    // Replay address (replay?id=…): the replay opens right away
+    if (window.location.pathname.endsWith('/' + paths.REPLAY)) {
+      (this.$refs.replayButton as InstanceType<typeof ReplayButton> | undefined)?.open();
+    }
     document.title = gameDocumentTitle({game: this.game, thisPlayer: this.participant.thisPlayer}, '🏁');
     if (getPreferences().experimental_ui) {
       setFaviconStatus('ended');
@@ -487,6 +491,19 @@ export default defineComponent({
   methods: {
     openReplay(replay: ReplayData): void {
       this.replay = markRaw(replay);
+      // The open replay has its own address, to share or reload (…/replay?id=…, same folder as the results page)
+      this.setPageAddress(paths.REPLAY);
+    },
+    closeReplay(): void {
+      this.replay = undefined;
+      this.setPageAddress(paths.THE_END);
+    },
+    // Swaps the last part of the path (the-end ⇄ replay), keeping a world folder (/mars/, /dune/) and the id
+    setPageAddress(page: string): void {
+      const path = window.location.pathname.replace(/[^/]*$/, page);
+      if (path !== window.location.pathname) {
+        window.history.replaceState(window.history.state, '', path + window.location.search);
+      }
     },
     async findDecisionLog(): Promise<void> {
       const id = new URLSearchParams(window.location.search).get('id') ?? '';
