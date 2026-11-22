@@ -1,7 +1,8 @@
 <template>
   <!-- The game's own action tabs, view only: the menu of the step's actor (replayActionMenu.ts).
        On an own action its tab is open and the chosen card, milestone or award is marked. -->
-  <div ref="root" class="replay-action-tabs">
+  <div ref="root" class="replay-action-tabs"
+    @click.capture="readOnly" @pointerdown.capture="readOnly" @mousedown.capture="readOnly" @keydown.capture="readOnly">
     <PlayerInputFactory :players="playerView.players" :playerView="playerView" :playerinput="model"
       :onsave="ignore" :showsave="true" :showtitle="true" />
   </div>
@@ -56,6 +57,21 @@ function update(menu: OrOptionsModel): void {
 }
 
 const root = ref<HTMLElement>();
+// Read only: the player only switches tabs; cards, buttons, filters and payments react to the replay alone. The
+// replay marks the chosen card with a click of its own (not trusted), so only the user's own input is stopped; the
+// change events that follow a click come from the browser (trusted), so they are not stopped here.
+function readOnly(event: Event): void {
+  const target = event.target as Element | null;
+  if (!event.isTrusted || target?.closest('.or-tabs') !== null) {
+    return;
+  }
+  // Keyboard: only Enter and Space would trigger something
+  if (event instanceof KeyboardEvent && event.key !== 'Enter' && event.key !== ' ') {
+    return;
+  }
+  event.preventDefault();
+  event.stopPropagation();
+}
 const FOCUS_CLASS = 'replay-action-tabs__focus';
 // Cards that came into the hand: not selected, so they are highlighted themselves
 const ADDED_CLASS = 'replay-action-tabs__focus--added';

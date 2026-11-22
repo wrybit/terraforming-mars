@@ -217,10 +217,12 @@ html.tm-mobile .replay-view--mobile {
   display: none;
 }
 
-// Read only: the buttons of the action tabs (play card, sell, raise temperature, pass …) show what was done, but do
-// nothing; the tabs and the cards stay clickable to look around
-.replay-action-tabs :is(.wf-action, .or-tab-footer) :is(button, .btn, input) {
-  pointer-events: none;
+// Read only (ReplayActionTabs.vue stops the input): outside the tab bar nothing looks clickable
+.replay-action-tabs .or-tab-panel,
+.replay-action-tabs .or-tab-panel *,
+.replay-action-tabs .or-tab-footer,
+.replay-action-tabs .or-tab-footer * {
+  cursor: default !important;
 }
 
 // What the player does next, in the theme's selection colour like a choice in the game (selection_highlight.less):

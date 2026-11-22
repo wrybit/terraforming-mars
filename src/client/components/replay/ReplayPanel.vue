@@ -254,6 +254,9 @@ function onKeyDown(event: KeyboardEvent): void {
     } else {
       step(direction);
     }
+  } else if ((event.key === 'Enter' || /^[0-9]$/.test(event.key)) && !(event.target as Element | null)?.closest('input, textarea, [contenteditable]')) {
+    // Read only: the game's shortcuts that confirm or choose (Enter, numbers) do nothing; letters still switch tabs
+    event.preventDefault();
   } else {
     return;
   }
