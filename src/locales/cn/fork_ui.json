@@ -2282,5 +2282,8 @@
   "Max. thinking time (ms)": "最长思考时间（毫秒）",
   "The search stops here. Only a limit, so the AI is equally strong on fast and slow servers.": "搜索在此停止。只是上限，使 AI 在快慢服务器上强度一致。",
   "Randomness (%)": "随机性（%）",
-  "0: always the best move. Higher: more often a slightly worse one, never nonsense. Needs a bot that supports it.": "0：总是最佳步。更高：更常选稍差的一步，但绝不胡来。需要支持此功能的机器人。"
+  "0: always the best move. Higher: more often a slightly worse one, never nonsense. Needs a bot that supports it.": "0：总是最佳步。更高：更常选稍差的一步，但绝不胡来。需要支持此功能的机器人。",
+  "What the AI can play": "AI 能玩的内容",
+  "No bot or no rust-ai-support.json in its folder: the Rust AI plays nothing.": "没有机器人，或其文件夹中没有 rust-ai-support.json：Rust AI 什么都不能玩。",
+  "Bot ${0}, file of ${1}": "机器人 ${0}，文件日期 ${1}"
 }

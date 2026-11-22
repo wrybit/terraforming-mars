@@ -100,5 +100,6 @@
   "Discord",
   "src/client/components/lobby/LobbyRoomDialog.vue: AI",
   "Rust",
+  "Dune expansion",
   "TypeScript"
 ]

@@ -647,3 +647,67 @@
     display: block;
   }
 }
+
+// Overview "What the AI can play": one card per AI program, groups inside closer together than the cards
+.ai-support-overview {
+  padding: @server-settings-row-gap 0 0;
+  border-top: 1px solid @server-settings-line;
+}
+
+.ai-support-overview-title {
+  margin: 0 0 12px;
+  font-size: 15px;
+}
+
+.ai-support-overview-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 20px;
+}
+
+.ai-support-overview-column {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.ai-support-overview-engine {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 0;
+  font-size: 14px;
+}
+
+.ai-support-overview-active {
+  color: @server-settings-dim;
+  font-size: 12px;
+  font-weight: normal;
+}
+
+.ai-support-overview-note {
+  margin: -8px 0 0;
+  color: @server-settings-dim;
+  font-size: 12px;
+}
+
+.ai-support-overview-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ai-support-overview-group-title {
+  color: @server-settings-dim;
+  font-size: 12px;
+}
+
+@media (max-width: @max-below-tablet) {
+  .ai-support-overview-columns {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

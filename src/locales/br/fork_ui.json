@@ -2456,5 +2456,8 @@
   "Max. thinking time (ms)": "Tempo máx. de reflexão (ms)",
   "The search stops here. Only a limit, so the AI is equally strong on fast and slow servers.": "A busca para aqui. Só um limite, para a AI ser igualmente forte em servidores rápidos e lentos.",
   "Randomness (%)": "Aleatoriedade (%)",
-  "0: always the best move. Higher: more often a slightly worse one, never nonsense. Needs a bot that supports it.": "0: sempre a melhor jogada. Mais: com mais frequência uma um pouco pior, nunca absurda. Exige um bot que suporte isso."
+  "0: always the best move. Higher: more often a slightly worse one, never nonsense. Needs a bot that supports it.": "0: sempre a melhor jogada. Mais: com mais frequência uma um pouco pior, nunca absurda. Exige um bot que suporte isso.",
+  "What the AI can play": "O que a IA sabe jogar",
+  "No bot or no rust-ai-support.json in its folder: the Rust AI plays nothing.": "Sem bot ou sem rust-ai-support.json na pasta dele: a IA Rust não joga nada.",
+  "Bot ${0}, file of ${1}": "Bot ${0}, arquivo de ${1}"
 }

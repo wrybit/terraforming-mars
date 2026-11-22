@@ -54,6 +54,8 @@
               </span>
             </div>
           </div>
+          <!-- Below the AI settings: what each AI program can play, so the engine is chosen knowingly -->
+          <AiSupportOverview v-if="selectedGroup === 'AI opponents'" />
         </div>
       </div>
 
@@ -79,6 +81,7 @@ import ServerSettingImageField from '@/client/components/admin/ServerSettingImag
 import ServerSettingChoiceField from '@/client/components/admin/ServerSettingChoiceField.vue';
 import SegmentedControl from '@/client/components/create/SegmentedControl.vue';
 import ServerSettingGrid from '@/client/components/admin/ServerSettingGrid.vue';
+import AiSupportOverview from '@/client/components/admin/AiSupportOverview.vue';
 import {SegmentOption} from '@/client/components/create/createGameChoices';
 import {translateText} from '@/client/directives/i18n';
 import {
@@ -104,7 +107,7 @@ function isOnValue(value: string | undefined): boolean {
 
 export default defineComponent({
   name: 'ServerSettingsPanel',
-  components: {ServerSettingImageField, ServerSettingChoiceField, ServerSettingGrid, SegmentedControl},
+  components: {ServerSettingImageField, ServerSettingChoiceField, ServerSettingGrid, SegmentedControl, AiSupportOverview},
   directives: {dockedTab: vDockedTab},
   data(): DataModel {
     return {status: 'loading', states: [], values: {}, revealed: {}, busy: false, message: '', messageIsError: false, selectedGroup: SERVER_SETTING_GROUPS[0]};
