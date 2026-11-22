@@ -8,7 +8,7 @@ import {Birds} from '../src/server/cards/base/Birds';
 import {WaterImportFromEuropa} from '../src/server/cards/base/WaterImportFromEuropa';
 import {Phase} from '../src/common/Phase';
 import {addCity, addGreenery, addOcean, doWait, fakeCard, forceGenerationEnd, maxOutOceans, runAllActions, setOxygenLevel, setTemperature, setVenusScaleLevel, testGame} from './TestingUtils';
-import {cast, toName} from '../src/common/utils/utils';
+import {cast, isObject, toName} from '../src/common/utils/utils';
 import {TestPlayer} from './TestPlayer';
 import {SaturnSystems} from '../src/server/cards/corporation/SaturnSystems';
 import {Resource} from '../src/common/Resource';
@@ -24,7 +24,6 @@ import {RandomMAOptionType} from '../src/common/ma/RandomMAOptionType';
 import {SpaceBonus} from '../src/common/boards/SpaceBonus';
 import {TileType} from '../src/common/TileType';
 import {SelectResource} from '../src/server/inputs/SelectResource';
-import {IColony} from '../src/server/colonies/IColony';
 import {IAward} from '../src/server/awards/IAward';
 import {SerializedGame} from '../src/server/SerializedGame';
 import {SelectInitialCards} from '../src/server/inputs/SelectInitialCards';
@@ -1150,7 +1149,6 @@ describe('Game', () => {
   });
 
   it('deserializing a colonies game includes discarded colonies #4522', () => {
-    const toName = (x: IColony) => x.name;
     const player = TestPlayer.BLUE.newPlayer();
     const player2 = TestPlayer.RED.newPlayer();
     const game = Game.newInstance('gameid', [player, player2], player, 'spectatorid', {coloniesExtension: false});
@@ -1444,16 +1442,16 @@ describe('Game', () => {
   });
 });
 
-function assertIsJSON(serialized: any) {
-  for (const field in serialized) {
-    if (serialized.hasOwnProperty(field)) {
-      const val = serialized[field];
-      const type = typeof(val);
-      if (type === 'object') {
-        assertIsJSON(val);
-      } else if (type === 'function') {
-        throw new Error(field + ' is invalid');
-      }
+function assertIsJSON(serialized: unknown) {
+  if (!isObject(serialized)) {
+    return;
+  }
+  for (const [field, val] of Object.entries(serialized)) {
+    const type = typeof(val);
+    if (type === 'object') {
+      assertIsJSON(val);
+    } else if (type === 'function') {
+      throw new Error(field + ' is invalid');
     }
   }
 }

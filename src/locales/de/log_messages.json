@@ -22,17 +22,15 @@
   "${0} took the first action of ${1} corporation": "${0} hat die erste Aktion des ${1}-Konzerns durchgeführt",
   "Take first action of ${0} corporation": "Führe die erste Aktion des ${0}-Konzerns aus",
   "First player this generation is ${0}": "Der Startspieler dieser Generation ist ${0}",
-  "Don\u2019t place a greenery": "Platziere KEINE Grünfläche",
+  "Don’t place a greenery": "Platziere KEINE Grünfläche",
   "All players lose 1:i:tr:.": "Alle Spieler verlieren 1:i:tr:.",
-
   "increased": "erhöht",
   "decreased": "vermindert",
-  "${0}'s ${1} amount ${2} by ${3}": "${0}\u2019s ${1} Menge wurde um ${3} ${2}",
-  "${0}'s ${1} production ${2} by ${3}": "${0}\u2019s ${1} Produktion wurde um ${3} ${2}",
-  "${0}'s ${1} amount ${2} by ${3} by ${4}": "${0}\u2019s ${1} Menge wurde um ${3} ${2} von ${4}",
-  "${0}'s ${1} production ${2} by ${3} by ${4}": "${0}\u2019s ${1} Produktion wurde um ${3} ${2} von ${4}",
-  "${0} removed ${1} resource(s) from ${2}\u2019s ${3}": "${0} entfernte ${1} Ressource(n) von ${2}\u2019s ${3}",
-
+  "${0}'s ${1} amount ${2} by ${3}": "${0}’s ${1} Menge wurde um ${3} ${2}",
+  "${0}'s ${1} production ${2} by ${3}": "${0}’s ${1} Produktion wurde um ${3} ${2}",
+  "${0}'s ${1} amount ${2} by ${3} by ${4}": "${0}’s ${1} Menge wurde um ${3} ${2} von ${4}",
+  "${0}'s ${1} production ${2} by ${3} by ${4}": "${0}’s ${1} Produktion wurde um ${3} ${2} von ${4}",
+  "${0} removed ${1} resource(s) from ${2}’s ${3}": "${0} entfernte ${1} Ressource(n) von ${2}’s ${3}",
   "${0} gained ${1}${2}": "${0} erhielt ${1}${2}",
   "${0} gained ${1}${2} because of ${3}": "${0} erhielt ${1}${2} wegen ${3}",
   "${0} gained ${1} ${2} from ${3}": "${0} erhielt ${1} ${2} von ${3}",
@@ -44,7 +42,6 @@
   "${3} stole ${1} ${2} from ${0} because of ${3}": "${3} stahl ${1} ${2} von ${0} wegen ${3}",
   "${0} stole ${1}${2} from the neutral player": "${0} hat ${1}${2} von dem neutralen Spieler gestohlen",
   "${0} moved 1 ${1} from ${2} to ${3}.": "${0} bewegt 1 ${1} von ${2} nach ${3}.",
-
   "Card not found": "Karte nicht gefunden",
   "${0} played ${1} to find a Turmoil card but none were found.": "${0} spielte ${1} um eine Aufruhr-Karte zu finden, aber es wurde keine gefunden.",
   "The project discard pile has been shuffled to form a new deck.": "Der Projektkarten-Ablagestapel wurde neu gemischt, um einen neuen Nachziehstapel zu bilden.",
@@ -71,7 +68,6 @@
   "Final greenery placement": "Finale Platzierung der Grünflächen",
   "Final greenery phase is skipped since you did not complete the win condition.": "Die letzte Grünflächenphase wird übersprungen, da du die Siegbedingung nicht erfüllt hast.",
   "This game id was ${0}": "Die Spiel-ID war ${0}",
-
   "${0} gained ${1}": "${0} erhielt ${1}",
   "${0} gained 1 ${1} and 1 ${2} from ${3}": "${0} erhielt 1 ${1} und 1 ${2} von ${3}",
   "${0} gained ${1}:r:mc: by discarding ${2} cards": "${0} erhielt ${1}:r:mc: durch Abwerfen von ${2} Karten",
@@ -198,7 +194,6 @@
   "Temperature requirements are ±6 °C": "die Temperaturanforderungen betragen ±6 °C",
   "Oxygen requirements are ±3": "die Sauerstoffanforderungen betragen ±3%",
   "Ocean requirements are ±3": "die Ozeananforderungen sind ±3",
-
   "${0} played ${1}": "${0} hat ${1} gespielt",
   "${0} played ${1} [ ${2} ]": "${0} hat ${1} gespielt [ ${2} ]",
   "${0} used ${1} action": "${0} hat eine Aktion von ${1} genutzt",
@@ -251,7 +246,6 @@
   "${0} decreased temperature 1 step": "${0} senkte die Temperatur um 2 °C",
   "${0} decreased oxygen level 1 step": "${0} senkte den Sauerstoffgehalt um 1%",
   "${0} decreased Venus scale level 1 step": "${0} senkte die Venuswertung um 2%",
-
   "${0} drew ${1}": "${0} zog ${1}",
   "${0} drew no cards": "${0} zog keine Karten",
   "${0} sold ${1} patents": "${0} hat ${1} Patente verkauft",
@@ -313,7 +307,6 @@
   "Select space next to greenery for special tile": "Wähle ein Feld neben einer Grünfläche für das Spezialplättchen",
   "Gain plants": "Erhalte Pflanzen",
   "Add animals": "Tiere hinzufügen",
-
   "No players may trade next generation, except ${0}.": "Kein Spieler darf in der nächsten Generation handeln, außer ${0}.",
   "${0} spent ${1}:r:energy: to trade with ${2}": "${0} bezahlte ${1}:r:energy:, um mit ${2} zu handeln",
   "${0} spent ${1}:r:titanium: to trade with ${2}": "${0} bezahlte ${1}:r:titanium:, um mit ${2} zu handeln",
@@ -327,7 +320,6 @@
   "${0} gained ${1} VP": "${0} erhielt ${1} SP",
   "${0} increased Venus scale ${1} step(s)": "${0} erhöhte die Venuswertung um ${1}",
   "${0} raised the Venus scale ${1} step(s)": "${0} erhöhte die Venuswertung um ${1}",
-
   "${0} have upgraded to ${1}": "${0} wurde verstärkt zu ${1}",
   "${0}'s TR increases 1 step for eliminating dust storms.": "${0}s TW erhöht sich um 1 durch Eliminierung von Sandstürmen.",
   "${0} gains ${1} for placing next to ${2}": "${0} erhält ${1} durch Platzierung angrenzend an ${2}",
@@ -429,7 +421,6 @@
   "${0} gained 2 ${1} from ${2}": "${0} erhielt 2 ${1} von ${2}",
   "${0} gained 4:r:mc: for playing ${1}, which has no tags.": "${0} erhielt 4:r:mc: für das Ausspielen von ${1}, das kein Symbol hat.",
   "${0} gained 1:r:mc: for playing ${1}, which has exactly 1 tag.": "${0} erhielt 1:r:mc: für das Ausspielen von ${1}, das genau 1 Symbol hat.",
-
   "${0} excavated ${1} from the draw pile": "${0} hat ${1} vom Nachziehstapel ausgegraben",
   "${0} identified ${1} from the draw pile": "${0} hat ${1} vom Nachziehstapel identifiziert",
   "${0} had no underground resources to discard": "${0} hatte keine unterirdische Ressource zum Abwerfen",
@@ -455,7 +446,6 @@
   "${0} selected Global Event ${1} for the current global event": "${0} wählte globales Ereignis ${1} für das aktuelle globale Ereignis aus",
   "Neutral delegate added to ${0}": "Neutrale Delegierte zu ${0} hinzugefügt",
   "${0} sent 1 Neutral delegate in ${1} area": "${0} schickt 1 neutralen Delegierten in die ${1} Partei",
-
   "${0} searched for ${1} tags": "${0} suchte nach ${1} Symbol",
   "earth": "Erde",
   "venus": "Venus",
@@ -488,5 +478,6 @@
   "${0} kept ${1} project cards": "${0} behielt ${1} Projektkarten",
   "Unable to perform undo operation. Error retrieving game from database. Please try again.": "Konnte Aktion nicht rückgängig machen. Es trat ein Fehler beim Laden des Spieles aus der Datenbank auf. Bitte versuche es noch einmal.",
   "${0} removed ${1}:cr:floater: from ${2} to gain ${3}${4}": "${0} entfernte ${1}:cr:floater: von ${2}, um ${3}${4} zu erhalten",
-  "${0} discarded ${1}, ending its bonus for this generation": "${0} warf ${1} ab, der Bonus endet für diese Generation"
+  "${0} discarded ${1}, ending its bonus for this generation": "${0} warf ${1} ab, der Bonus endet für diese Generation",
+  "${0} gained 1:r:steel: and 1:r:plants: from ${1}": "${0} hat 1:r:steel: und 1:r:plants: von ${1} erhalten"
 }

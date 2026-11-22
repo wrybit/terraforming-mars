@@ -6,7 +6,7 @@ import {PriorityQueue} from './PriorityQueue';
 import {CardName} from '../../common/cards/CardName';
 
 export class DeferredActionsQueue {
-  private queue = new PriorityQueue<IDeferredAction<any>, PlayerId>();
+  private queue = new PriorityQueue<IDeferredAction<unknown>, PlayerId>();
   // Card whose effect is currently running (playing it, card action, executing one of its actions).
   // Everything queued in the meantime remembers it, and inputs arising from that carry it
   // to the client (PlayerInput.sourceCard), so card name and text appear there instead of "Select one option".
@@ -21,18 +21,18 @@ export class DeferredActionsQueue {
     return this.queue.length;
   }
 
-  public push(action: IDeferredAction<any>): void {
+  public push(action: IDeferredAction): void {
     action.sourceCard ??= this.currentSourceCard;
     this.queue.push(action, action.priority, action.player.id);
   }
 
   // Public for tests
-  public peek(): IDeferredAction<any> | undefined {
+  public peek(): IDeferredAction | undefined {
     return this.queue.peek();
   }
 
   // Public for tests
-  public pop(): IDeferredAction<any> | undefined {
+  public pop(): IDeferredAction | undefined {
     return this.queue.pop();
   }
 

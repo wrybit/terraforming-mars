@@ -248,7 +248,8 @@ export function cast<T>(obj: any, klass: undefined): undefined;
 export function cast<T>(obj: any, klass: ConstructorOf<T> | undefined): T | undefined {
   if (klass === undefined) {
     if (obj !== undefined) {
-      throw new Error(`Expected undefined, got type ${obj.constructor.name}`);
+      const constructorName = isObject(obj) ? obj.constructor?.name : undefined;
+      throw new Error(`Expected undefined, got type ${constructorName ?? typeof obj}`);
     }
     return undefined;
   }
@@ -265,4 +266,8 @@ export function cast<T>(obj: any, klass: ConstructorOf<T> | undefined): T | unde
  */
 export function assertNever(x: never): never {
   throw new Error('unexpected value: ' + x);
+}
+
+export function isObject(o: unknown): o is object {
+  return typeof o === 'object' && o !== null;
 }
