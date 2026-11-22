@@ -1422,7 +1422,6 @@
   "View of": "Вигляд гравця",
   "Close replay": "Закрити повтор",
   "Show full": "Розгорнути",
-  "Show thin": "Згорнути",
   "Step ${0} of ${1}": "Крок ${0} з ${1}",
   "Click a flag, a trophy or a generation to jump there": "Натисніть прапор, кубок або покоління, щоб перейти туди",
   "Speed": "Швидкість",
@@ -1435,5 +1434,9 @@
   "Replay of game ${0} not possible: its start is not saved on this server.": "Повтор гри ${0} неможливий: її початковий стан не збережено на цьому сервері.",
   "Replay of game ${0} not possible: the game is not finished yet.": "Повтор гри ${0} неможливий: гра ще не завершена.",
   "Replay of game ${0} could not be loaded (server error ${1}). Please try again later.": "Не вдалося завантажити повтор гри ${0} (помилка сервера ${1}). Спробуйте пізніше.",
-  "Replay of game ${0} could not be loaded: no connection to the server. Please check the connection and try again.": "Не вдалося завантажити повтор гри ${0}: немає з'єднання з сервером. Перевірте з'єднання та спробуйте знову."
+  "Replay of game ${0} could not be loaded: no connection to the server. Please check the connection and try again.": "Не вдалося завантажити повтор гри ${0}: немає з'єднання з сервером. Перевірте з'єднання та спробуйте знову.",
+  "Minimize": "Згорнути",
+  "${0} s": "${0} с",
+  "${0} s per step": "${0} с на крок",
+  "${0} remaining": "залишилось ${0}"
 }

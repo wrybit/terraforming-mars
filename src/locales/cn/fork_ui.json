@@ -2248,7 +2248,6 @@
   "View of": "视角",
   "Close replay": "关闭回放",
   "Show full": "完整显示",
-  "Show thin": "精简显示",
   "Step ${0} of ${1}": "第 ${0} 步，共 ${1} 步",
   "Click a flag, a trophy or a generation to jump there": "点击旗帜、奖杯或世代即可跳转",
   "Speed": "速度",
@@ -2261,5 +2260,10 @@
   "Replay of game ${0} not possible: its start is not saved on this server.": "无法回放对局 ${0}：此服务器未保存其初始状态。",
   "Replay of game ${0} not possible: the game is not finished yet.": "无法回放对局 ${0}：对局尚未结束。",
   "Replay of game ${0} could not be loaded (server error ${1}). Please try again later.": "无法加载对局 ${0} 的回放（服务器错误 ${1}）。请稍后再试。",
-  "Replay of game ${0} could not be loaded: no connection to the server. Please check the connection and try again.": "无法加载对局 ${0} 的回放：无法连接服务器。请检查网络连接后重试。"
+  "Replay of game ${0} could not be loaded: no connection to the server. Please check the connection and try again.": "无法加载对局 ${0} 的回放：无法连接服务器。请检查网络连接后重试。",
+  "${0} lost ${1} ${2}": "${0} 失去了 ${1} ${2}",
+  "Minimize": "缩小",
+  "${0} s": "${0} 秒",
+  "${0} s per step": "每步 ${0} 秒",
+  "${0} remaining": "剩余 ${0}"
 }

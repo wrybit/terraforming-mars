@@ -67,6 +67,8 @@ export const paths = {
   SPECTATOR: 'spectator',
   STATS: 'stats',
   THE_END: 'the-end',
+  // Replay of a finished game: the results page with the replay open (replay/ReplayView.vue)
+  REPLAY: 'replay',
   // Archived self-play game of the new AI: imported on first use, then its result page (aiTraining/selfplayArchive.ts)
   AI_TRAINING_GAME: 'ai-training-game',
   // Decision log of an archived self-play game, admins only

@@ -2424,7 +2424,6 @@
   "View of": "Visão de",
   "Close replay": "Fechar reprodução",
   "Show full": "Mostrar completo",
-  "Show thin": "Mostrar fino",
   "Step ${0} of ${1}": "Passo ${0} de ${1}",
   "Click a flag, a trophy or a generation to jump there": "Clique em uma bandeira, um troféu ou uma geração para ir até lá",
   "Speed": "Velocidade",
@@ -2437,5 +2436,9 @@
   "Replay of game ${0} not possible: its start is not saved on this server.": "Não é possível reproduzir a partida ${0}: o estado inicial não está salvo neste servidor.",
   "Replay of game ${0} not possible: the game is not finished yet.": "Não é possível reproduzir a partida ${0}: a partida ainda não terminou.",
   "Replay of game ${0} could not be loaded (server error ${1}). Please try again later.": "Não foi possível carregar a reprodução da partida ${0} (erro do servidor ${1}). Tente novamente mais tarde.",
-  "Replay of game ${0} could not be loaded: no connection to the server. Please check the connection and try again.": "Não foi possível carregar a reprodução da partida ${0}: sem conexão com o servidor. Verifique a conexão e tente novamente."
+  "Replay of game ${0} could not be loaded: no connection to the server. Please check the connection and try again.": "Não foi possível carregar a reprodução da partida ${0}: sem conexão com o servidor. Verifique a conexão e tente novamente.",
+  "${0} lost ${1} ${2}": "${0} perdeu ${1} ${2}",
+  "Minimize": "Reduzir",
+  "${0} s per step": "${0} s por passo",
+  "${0} remaining": "faltam ${0}"
 }

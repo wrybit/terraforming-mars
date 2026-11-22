@@ -7,6 +7,7 @@ import {SpaceId} from '@/common/Types';
 import {TileType} from '@/common/TileType';
 import {getCard} from '@/client/cards/ClientCardManifest';
 import {actionCost, costsOnPlay, globalItems, productionBox, RESOURCE_COUNT, ResourceIndex} from './replayCardRules';
+import {normalizeSource, ReplayMessage} from './replayLogFormats';
 
 // Reconstructs a finished game line by line from its start, its end and its log (api/replay), so nothing has to be
 // stored for a replay. Exact where the log says it (played cards, tiles, production, TR, parameters, hand size);
@@ -87,6 +88,16 @@ function cardCost(player: PlayerWork, name: CardName): {cost: number, tags: Read
   return {cost: Math.max(0, cost), tags};
 }
 
+// M€ payment; Helion pays what is missing with heat (1:1)
+function payMegacredits(player: PlayerWork, amount: number): void {
+  player.resources[0] -= amount;
+  if (player.resources[0] < 0 && player.played.includes(CardName.HELION)) {
+    const fromHeat = Math.min(player.resources[5], -player.resources[0]);
+    player.resources[5] -= fromHeat;
+    player.resources[0] += fromHeat;
+  }
+}
+
 // The log doesn't say how a card was paid: steel or titanium first like most players do, the rest in M€
 function pay(player: PlayerWork, amount: number, tags: ReadonlyArray<string>): void {
   let cost = amount;
@@ -100,7 +111,7 @@ function pay(player: PlayerWork, amount: number, tags: ReadonlyArray<string>): v
     player.resources[2] -= used;
     cost -= used * player.titaniumValue;
   }
-  player.resources[0] -= cost;
+  payMegacredits(player, cost);
 }
 
 function removeOnce<T>(list: Array<T>, item: T): boolean {
@@ -195,6 +206,18 @@ function reconstructPass(source: ReplaySourceModel, sales: Map<number, Array<Car
     return false;
   };
   const plantsForGreenery = (player: PlayerWork) => player.played.includes(CardName.ECOLINE) ? 7 : 8;
+  // Production phase (also after the last generation, before the final greeneries):
+  // energy becomes heat, then all productions and TR as M€
+  let produced = false;
+  const produce = () => {
+    produced = true;
+    for (const player of players) {
+      player.resources[5] += player.resources[4];
+      player.resources[4] = 0;
+      player.resources[0] += player.terraformRating;
+      player.production.forEach((value, index) => player.resources[index] += value);
+    }
+  };
 
   log.forEach((message, line) => {
     const text = message.message;
@@ -216,18 +239,13 @@ function reconstructPass(source: ReplaySourceModel, sales: Map<number, Array<Car
       if (text === 'Generation ${0}' || message.type === LogMessageType.NEW_GENERATION) {
         generation = numberOf(message, 0) || generation;
       }
-      passed = [];
-      players.forEach((player) => player.actionsThisGeneration = []);
-      if (text === 'Final greenery placement' || generation > 1) {
-        // Production phase (also after the last generation, before the final greeneries):
-        // energy becomes heat, then all productions and TR as M€
-        for (const player of players) {
-          player.resources[5] += player.resources[4];
-          player.resources[4] = 0;
-          player.resources[0] += player.terraformRating;
-          player.production.forEach((value, index) => player.resources[index] += value);
-        }
+      // Fallback for logs where not every pass is written: production at the latest here
+      if (!produced && (text === 'Final greenery placement' || generation > 1)) {
+        produce();
       }
+      passed = [];
+      produced = false;
+      players.forEach((player) => player.actionsThisGeneration = []);
     } else if (text === '${0} played ${1}' && who !== undefined) {
       const player = players[who];
       const name = stringOf(message, 1) as CardName;
@@ -246,13 +264,20 @@ function reconstructPass(source: ReplaySourceModel, sales: Map<number, Array<Car
         if (!removeOnce(player.hand, name) && player.unknownHand > 0) {
           player.unknownHand--;
         }
-        let {cost} = cardCost(player, name);
-        const {tags} = cardCost(player, name);
-        if (player.nextCardDiscount > 0) {
-          cost = Math.max(0, cost - player.nextCardDiscount);
+        const payment = (message as ReplayMessage).payment;
+        if (payment !== undefined) {
+          // Newer logs name the payment exactly ("[ -2 steel -8 M€ ]")
+          payment.forEach((value, index) => player.resources[index] -= value);
           player.nextCardDiscount = 0;
+        } else {
+          let {cost} = cardCost(player, name);
+          const {tags} = cardCost(player, name);
+          if (player.nextCardDiscount > 0) {
+            cost = Math.max(0, cost - player.nextCardDiscount);
+            player.nextCardDiscount = 0;
+          }
+          pay(player, cost, tags);
         }
-        pay(player, cost, tags);
         if (name === CardName.INDENTURED_WORKERS) {
           player.nextCardDiscount = INDENTURED_WORKERS_DISCOUNT;
         }
@@ -276,7 +301,8 @@ function reconstructPass(source: ReplaySourceModel, sales: Map<number, Array<Car
       if (getCard(name)?.resourceType !== undefined && !removesFromCard(line, name)) {
         printed = {temperature: 0, oxygen: 0, tr: 0};
       }
-      const cost = actionCost(name);
+      // Power Infrastructure spends as much energy as it gives M€: paid where the log names the M€ (below)
+      const cost = name === CardName.POWER_INFRASTRUCTURE ? undefined : actionCost(name);
       cost?.amounts.forEach((value, index) => {
         if (index === 0 && cost.titaniumAllowed) {
           pay(players[who], value, ['space']);
@@ -289,7 +315,7 @@ function reconstructPass(source: ReplaySourceModel, sales: Map<number, Array<Car
       players[who].terraformRating += printed.tr;
     } else if (text === '${0} used ${1} standard project' && who !== undefined) {
       const name = stringOf(message, 1).split(':')[0];
-      players[who].resources[0] -= STANDARD_PROJECT_COST[name] ?? 0;
+      payMegacredits(players[who], STANDARD_PROJECT_COST[name] ?? 0);
       // Power plant and city raise production; older logs don't write it, newer ones right after
       const index: ResourceIndex | undefined = name === 'Power Plant' ? 4 : name === 'City' ? 0 : undefined;
       if (index !== undefined) {
@@ -309,6 +335,11 @@ function reconstructPass(source: ReplaySourceModel, sales: Map<number, Array<Car
       }
     } else if (text === '${0} passed' && who !== undefined) {
       passed.push(actorColor);
+      // The production phase follows the last pass at once – before what happens between the generations
+      // (Dune: the Landsraad vote can cost TR, which would otherwise count too little)
+      if (passed.length >= players.length && !produced) {
+        produce();
+      }
     } else if (text === '${0} sold ${1} patents' && who !== undefined) {
       const count = numberOf(message, 1);
       players[who].resources[0] += count;
@@ -321,10 +352,13 @@ function reconstructPass(source: ReplaySourceModel, sales: Map<number, Array<Car
       const index = RESOURCE_WORDS[stringOf(message, 2)];
       if (index !== undefined) {
         players[who].resources[index] += numberOf(message, 1);
+        if (index === 0 && stringOf(message, 3) === CardName.POWER_INFRASTRUCTURE) {
+          players[who].resources[4] -= numberOf(message, 1);
+        }
       }
     } else if (text === '${0} gained 2 ${1} from ${2}' && who !== undefined) {
       players[who].resources[RESOURCE_WORDS[stringOf(message, 1)] ?? 3] += 2;
-    } else if (text === '${0} lost ${1} ${2} because of ${3}' && who !== undefined) {
+    } else if ((text === '${0} lost ${1} ${2} because of ${3}' || text === '${0} lost ${1} ${2}') && who !== undefined) {
       const index = RESOURCE_WORDS[stringOf(message, 2)];
       if (index !== undefined) {
         players[who].resources[index] -= numberOf(message, 1);
@@ -361,6 +395,8 @@ function reconstructPass(source: ReplaySourceModel, sales: Map<number, Array<Car
       if (thief !== undefined) {
         players[thief].resources[index] += numberOf(message, 1);
       }
+    } else if (text === '${0} lost ${1} TR' && who !== undefined) {
+      players[who].terraformRating -= numberOf(message, 1);
     } else if (text === '${0} gained ${1} TR' && who !== undefined) {
       if (pendingTr.player === who && pendingTr.amount !== 0) {
         players[who].terraformRating -= pendingTr.amount; // the printed TR is logged here already
@@ -430,10 +466,10 @@ function reconstructPass(source: ReplaySourceModel, sales: Map<number, Array<Car
         players[owner].cardResources[card] = Math.max(0, (players[owner].cardResources[card] ?? 0) - numberOf(message, 1));
       }
     } else if (text === '${0} claimed ${1} milestone' && who !== undefined) {
-      players[who].resources[0] -= MILESTONE_COST;
+      payMegacredits(players[who], MILESTONE_COST);
       milestones.push({name: stringOf(message, 1), color: actorColor});
     } else if (text === '${0} funded ${1} award' && who !== undefined) {
-      players[who].resources[0] -= AWARD_COSTS[Math.min(awards.length, 2)];
+      payMegacredits(players[who], AWARD_COSTS[Math.min(awards.length, 2)]);
       awards.push({name: stringOf(message, 1), color: actorColor});
     }
 
@@ -469,7 +505,9 @@ function anchorToEnd(states: Array<ReplayState>, source: ReplaySourceModel): voi
  * One state per log line: states[i] is the game after line i. Two passes: the first shows which cards vanish from
  * the hands without being played, the second assigns them to the patents sold.
  */
-export function reconstructReplay(source: ReplaySourceModel): Array<ReplayState> {
+export function reconstructReplay(original: ReplaySourceModel): Array<ReplayState> {
+  // Newer log lines in the older form (replayLogFormats.ts); one line each, so the states keep the log's numbering
+  const source = normalizeSource(original);
   const first = reconstructPass(source, new Map());
   const leftovers: Array<{player: number, card: CardName, line: number}> = [];
   first.players.forEach((player, index) => {

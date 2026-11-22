@@ -50,4 +50,6 @@ export type ReplaySourceModel = {
   startOxygenLevel: number,
   endTiles: ReadonlyArray<ReplaySourceTile>,
   log: ReadonlyArray<ReplaySourceMessage>,
+  // Standard projects of this game (with its expansions), for the action tabs of the replay
+  standardProjects?: ReadonlyArray<CardName>,
 };

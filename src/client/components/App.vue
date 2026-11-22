@@ -367,7 +367,8 @@ export default defineComponent({
               window.location.search.includes('&noredirect') === false
           ) {
             app.screen = 'the-end';
-            if (currentPathname !== paths.THE_END) {
+            // The replay address keeps its own name: the results page opens the replay from it
+            if (currentPathname !== paths.THE_END && currentPathname !== paths.REPLAY) {
               window.history.replaceState(
                 model,
                 `${constants.APP_NAME} - Player`,
@@ -428,7 +429,7 @@ export default defineComponent({
     const app = this as unknown as MainAppData & {updatePlayer(): void; updateSpectator(): void};
     if (currentPathname === paths.PLAYER) {
       app.updatePlayer();
-    } else if (currentPathname === paths.THE_END) {
+    } else if (currentPathname === paths.THE_END || currentPathname === paths.REPLAY) {
       const urlParams = new URLSearchParams(window.location.search);
       const id = urlParams.get('id') || '';
       if (isPlayerId(id)) {

@@ -52,13 +52,6 @@
 @mb-payment-icon: 28px;
 // Height of the game-end notice above the planet (center of the board in the Mars screen)
 @mb-game-over-top: 240px;
-// Half card width in the carousel (cards unzoomed 248 px, cf. mobileFit.ts)
-@mb-carousel-card-half: 124px;
-@mb-carousel-room-top: 34px;
-@mb-carousel-room-bottom: 28px;
-@mb-carousel-dots-height: 26px;
-// Height of the footer when paying with three currencies (steel, titanium, M€): fixed axis for the carousel cards
-@mb-carousel-footer-reserve: 253px;
 // Gaps between choice tiles (milestones/awards, standard projects; cf. CHOICE_GAP in mobileFit.ts):
 // between rows additionally room for the checkmark flag (selection_highlight.less)
 @mb-choice-gap: 14px;
@@ -1250,77 +1243,32 @@ html.tm-mobile {
     margin: 0 !important;
   }
 
-  // ---------- Card carousel (play card, cardCarousel.ts) ----------
-  // Cards side by side, one per swipe, the centered one is selected; the neighbours peek in left and right
-  // Standard projects excluded: they all lie visible in the card grid (mobileFit.ts, cardCarousel.ts)
+  // ---------- Play card: card grid like the hand cards (cardGrid.ts) ----------
+  // Two columns on the phone (column count from mobileFit.ts), scrolling vertically; a tap selects a card.
+  // Standard projects excluded: they have their own centered choice grid (below). Section headings
+  // ("Playable now", "Not playable") and hints span the full width
   .mb-screen--turn .payments_cont:has(> label.payments_cards):not(:has(.card-standard-project)) {
-    display: flex !important;
-    flex-wrap: nowrap !important;
-    gap: 14px !important;
-    // Cards centered in the space between task header and payment area (payment area height from MobilePlayerHome).
-    // Always computed with the tallest usual payment area (three currencies) so the cards stay on the same
-    // axis whether paying with one, two or three currencies; only an even taller footer pushes them up
-    align-items: center;
-    min-height: calc(100dvh - @mb-top-height - @mb-task-head-height - @mb-carousel-dots-height - max(var(--mb-footer-height, @mb-nav-height), @mb-carousel-footer-reserve) - 24px);
-    box-sizing: border-box;
-    margin: 0 -8px;
-    // Room at the top for the selection checkmark above the card, at the bottom for its glow (overflow-x would clip both)
-    padding: @mb-carousel-room-top calc(50% - @mb-carousel-card-half) @mb-carousel-room-bottom;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    .scrollbar-hidden();
+    display: grid !important;
+    grid-template-columns: repeat(var(--mb-grid-columns, 2), max-content);
+    justify-content: center;
+    align-content: start;
+    // Room at the top for the selection flag of the first row (with sections the heading provides it, below)
+    padding-top: @selection-tab-offset;
+    // Overhang on the right by the gap: the gap behind the right column falls out of view (choiceGap in mobileFit.ts)
+    margin-right: -@mb-choice-gap;
 
-    > label.payments_cards {
-      flex-shrink: 0;
-      scroll-snap-align: center;
+    &:has(> .choice-section-title) {
+      padding-top: 0;
     }
 
     > :not(label) {
-      flex-basis: 100%;
-      flex-shrink: 0;
+      grid-column: 1 / -1;
     }
 
-    // Section headings of the build tab ("Playable now", "Not playable"): in the carousel the not playable cards
-    // simply follow at the end, greyed out (cards.less) – a heading would become a page of its own
+    // The selection flag sits above the card: keep it off the heading
     > .choice-section-title {
-      display: none;
+      margin-bottom: (@selection-tab-offset + 6px);
     }
-  }
-
-  .mb-dots {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 6px;
-    padding: 2px 16px 12px;
-  }
-
-  .mb-dot {
-    width: 8px;
-    height: 8px;
-    padding: 0;
-    border: 0;
-    border-radius: 4px;
-    background: #3a4152;
-    transition: width 0.2s, background 0.2s;
-  }
-
-  .mb-dot--active {
-    width: 22px;
-    background: @mb-accent;
-  }
-
-  // Card that can't be played (end of the carousel): dot as faint as the card
-  .mb-dot--unavailable {
-    opacity: 0.5;
-  }
-
-  .mb-dots-count {
-    margin-left: 8px;
-    font-size: 12px;
-    color: @mb-muted;
-    font-variant-numeric: tabular-nums;
   }
 
   // ---------- Choose milestone/award (MilestoneAwardOptions.vue) ----------
@@ -1421,14 +1369,39 @@ html.tm-mobile {
     }
   }
 
+  // Header of the task view and the card screens (MobileTaskHead.vue): stays below the status bar while the cards
+  // scroll beneath it, so back, filter and sorting are always at hand
   .mb-task-head {
+    position: sticky;
+    top: @mb-top-height;
+    z-index: 15;
     display: flex;
     align-items: center;
     gap: 10px;
     margin: -10px -8px 0;
     padding: 10px 12px;
-    background: @mb-surface;
+    .mb-bar-surface();
     border-bottom: 1px solid @mb-line;
+    // Slight shadow downwards like the status bar: it lies over the scrolling cards
+    box-shadow: @mb-bar-shadow-down;
+  }
+
+  // Filter and sorting of the card list on the right (CardFilterBar.vue moves itself in)
+  .mb-task-tools {
+    display: flex;
+    flex: none;
+    align-items: center;
+    margin-left: auto;
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  // clip instead of hidden: hidden would make the screen a scroll box and the sticky header would stick to it, not to the page
+  .mb-screen--turn,
+  .mb-screen--hand {
+    overflow-x: clip;
   }
 
   .mb-task-title {

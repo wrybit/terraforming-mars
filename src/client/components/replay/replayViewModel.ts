@@ -63,6 +63,8 @@ function gameModel(final: GameModel, state: ReplayState, source: ReplaySourceMod
   const nameOf = (color: Color | undefined) => source.players.find((player) => player.color === color)?.name;
   return {
     ...final,
+    // No clocks: they would show the final playing time at every step and, running live, update the view every second
+    gameOptions: {...final.gameOptions, showTimers: false},
     generation: state.generation,
     temperature: state.temperature,
     oxygenLevel: state.oxygenLevel,

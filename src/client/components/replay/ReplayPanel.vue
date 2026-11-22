@@ -1,8 +1,11 @@
 <template>
-  <!-- Floating replay control on frosted glass. Without the mouse nearby it folds into a thin bar (slider, play,
-       position) and becomes more transparent; coming closer unfolds it again. The size toggle keeps it thin. -->
-  <section ref="panel" class="replay-panel" :class="{'replay-panel--thin': thin, 'replay-panel--away': away, 'replay-panel--prefers-thin': prefersThin}"
-    :aria-label="$t('Replay')">
+  <!-- Floating replay control on frosted glass. Folded it is a narrow bar (play, slider, position) that can be dragged
+       anywhere; a click unfolds it, Escape or the size toggle folds it again (replayPanelMotion.ts). -->
+  <section ref="panel" class="replay-panel"
+    :class="{'replay-panel--thin': motion.thin.value, 'replay-panel--narrow': motion.narrow.value, 'replay-panel--dragging': motion.dragging.value}"
+    :style="{'--replay-panel-x': motion.offset.value.x + 'px', '--replay-panel-y': motion.offset.value.y + 'px'}"
+    :aria-label="$t('Replay')"
+    @pointerdown="motion.onPointerDown" @pointermove="motion.onPointerMove" @pointerup="motion.onPointerUp" @pointercancel="motion.onPointerCancel">
     <div class="replay-panel__fold replay-panel__fold--top">
       <div>
         <header class="replay-panel__head">
@@ -22,18 +25,19 @@
                 <span class="replay-panel__name">{{ player.name }}</span>
               </button>
             </div>
-            <button type="button" class="replay-panel__icon-button replay-panel__size-toggle" :aria-label="sizeToggleLabel" :title="sizeToggleLabel" @click="toggleSize">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.4 8.6 12 13.2l4.6-4.6L18 10l-6 6-6-6z" /></svg>
+            <button type="button" class="replay-panel__icon-button replay-panel__size-toggle" :aria-label="sizeToggleLabel" :title="sizeToggleLabel" @click="motion.toggle">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path :d="SHRINK_ICON" /></svg>
+              <span v-i18n>Minimize</span>
+              <HotkeyKeys :fixed="['Escape']" />
             </button>
             <button type="button" class="replay-panel__icon-button" :aria-label="$t('Close replay')" :title="$t('Close replay')" @click="$emit('close')">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.4 19 5 17.6l5.6-5.6L5 6.4 6.4 5l5.6 5.6L17.6 5 19 6.4 13.4 12l5.6 5.6-1.4 1.4-5.6-5.6z" /></svg>
-              <HotkeyKeys :fixed="['Escape']" />
             </button>
           </div>
         </header>
         <div class="replay-panel__info">
           <div class="replay-panel__now">
-            <div class="replay-panel__position"><b>{{ generationText }}</b> <span>· {{ stepText }}</span></div>
+            <div class="replay-panel__position"><b>{{ generationText }}</b></div>
             <div class="replay-panel__event">
               <span v-if="actor !== undefined" class="replay-panel__cube" :class="'player_bg_color_' + actor"></span>
               <span>{{ eventText }}</span>
@@ -50,52 +54,61 @@
       </div>
     </div>
 
-    <div class="replay-panel__graph">
+    <div class="replay-panel__graph" :title="$t('Click a flag, a trophy or a generation to jump there')">
       <ReplayTimeline :count="count" :current="current" :generations="generations" :raises="raises" :marks="marks"
-        :terraformRatings="terraformRatings" :playerNames="playerNames" :thin="thin"
+        :terraformRatings="terraformRatings" :playerNames="playerNames" :thin="motion.thin.value"
         @go="go" @scrubbing="onScrubbing" />
-      <div class="replay-panel__thin-left">
-        <button type="button" class="replay-panel__mini-play" :aria-label="playLabel" @click="togglePlay">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path :d="playing ? PAUSE_ICON : PLAY_ICON" /></svg>
-        </button>
-      </div>
-      <div class="replay-panel__thin-right">
-        <span class="replay-panel__thin-text"><b>{{ shortGeneration }}</b> · {{ current + 1 }}/{{ count }}</span>
-        <button type="button" class="replay-panel__icon-button replay-panel__size-toggle replay-panel__size-toggle--small" :aria-label="sizeToggleLabel" :title="sizeToggleLabel" @click="toggleSize">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.4 8.6 12 13.2l4.6-4.6L18 10l-6 6-6-6z" /></svg>
-        </button>
-      </div>
+    </div>
+    <!-- Thin bar: play on the left, position and size toggle on the right. Anchored to the panel edges, not to the
+         slider: while the panel unfolds they only fade, instead of travelling sideways with the slider margins. -->
+    <div class="replay-panel__thin-left">
+      <!-- Grips at both ends: the thin bar can be dragged anywhere -->
+      <svg class="replay-panel__grip" viewBox="0 0 8 16" aria-hidden="true"><circle v-for="dot in GRIP_DOTS" :key="dot.x + '-' + dot.y" :cx="dot.x" :cy="dot.y" r="1.3" /></svg>
+      <ReplayPlayButton :playing="playing" :label="playLabel" :size="34" :radius="8" :stepMs="stepMs" :runKey="current" @toggle="togglePlay" />
+    </div>
+    <div class="replay-panel__thin-right">
+      <span class="replay-panel__thin-speed">
+        <ReplaySpeedBars v-model="speed" small />
+        <b>{{ secondsText }}</b>
+      </span>
+      <span class="replay-panel__thin-text"><b>{{ shortGeneration }}</b> · {{ current + 1 }}/{{ count }}</span>
+      <button type="button" class="replay-panel__icon-button replay-panel__size-toggle replay-panel__size-toggle--small" :aria-label="sizeToggleLabel" :title="sizeToggleLabel" @click="motion.toggle">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path :d="EXPAND_ICON" /></svg>
+      </button>
+      <svg class="replay-panel__grip" viewBox="0 0 8 16" aria-hidden="true"><circle v-for="dot in GRIP_DOTS" :key="dot.x + '-' + dot.y" :cx="dot.x" :cy="dot.y" r="1.3" /></svg>
     </div>
 
     <div class="replay-panel__fold">
       <div>
+        <!-- Two boxes: the controls, and the speed with the position. Every control is a square with its key inside. -->
         <footer class="replay-panel__foot">
-          <span class="replay-panel__hint" v-i18n>Click a flag, a trophy or a generation to jump there</span>
-          <div class="replay-panel__transport">
-            <div class="replay-panel__segments replay-panel__speed" role="group" :aria-label="$t('Speed')">
-              <button v-for="option in SPEEDS" :key="option" type="button" :aria-pressed="option === speed" @click="setSpeed(option)">{{ option }}×</button>
-            </div>
-            <button type="button" class="replay-panel__icon-button replay-panel__step" :aria-label="$t('Previous generation')" :title="$t('Previous generation')" @click="generationStep(-1)">
+          <div class="replay-panel__box replay-panel__transport">
+            <button type="button" class="replay-panel__key-button" :aria-label="$t('Previous generation')" :title="$t('Previous generation')" @click="generationStep(-1)">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18V6h2v12zm3.5-6L18 6v12z" /></svg>
               <HotkeyKeys :fixed="['⇧', 'ArrowLeft']" />
             </button>
-            <button type="button" class="replay-panel__icon-button replay-panel__step" :aria-label="$t('Step back')" :title="$t('Step back')" @click="step(-1)">
+            <button type="button" class="replay-panel__key-button" :aria-label="$t('Step back')" :title="$t('Step back')" @click="step(-1)">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 18-6-6 6-6 1.4 1.4-4.6 4.6 4.6 4.6z" /></svg>
               <HotkeyKeys :fixed="['ArrowLeft']" />
             </button>
-            <button type="button" class="btn btn-primary btn-rounded replay-panel__play" @click="togglePlay">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path :d="playing ? PAUSE_ICON : PLAY_ICON" /></svg>
-              <span>{{ playLabel }}</span>
+            <ReplayPlayButton class="replay-panel__key-button" :playing="playing" :label="playLabel" :size="48" :radius="10" :stepMs="stepMs" :runKey="current" @toggle="togglePlay">
               <HotkeyKeys :fixed="['Space']" />
-            </button>
-            <button type="button" class="replay-panel__icon-button replay-panel__step" :aria-label="$t('Step forward')" :title="$t('Step forward')" @click="step(1)">
+            </ReplayPlayButton>
+            <button type="button" class="replay-panel__key-button" :aria-label="$t('Step forward')" :title="$t('Step forward')" @click="step(1)">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.6 12 8 7.4 9.4 6l6 6-6 6L8 16.6z" /></svg>
               <HotkeyKeys :fixed="['ArrowRight']" />
             </button>
-            <button type="button" class="replay-panel__icon-button replay-panel__step" :aria-label="$t('Next generation')" :title="$t('Next generation')" @click="generationStep(1)">
+            <button type="button" class="replay-panel__key-button" :aria-label="$t('Next generation')" :title="$t('Next generation')" @click="generationStep(1)">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 18V6h2v12zM6 18V6l8.5 6z" /></svg>
               <HotkeyKeys :fixed="['⇧', 'ArrowRight']" />
             </button>
+          </div>
+          <div class="replay-panel__box replay-panel__speed">
+            <ReplaySpeedBars v-model="speed" />
+            <div class="replay-panel__speed-text">
+              <span><b>{{ secondsPerStepText }}</b> <HotkeyKeys :fixed="['-', '+']" /></span>
+              <span>{{ stepText }} · {{ remainingText }}</span>
+            </div>
           </div>
         </footer>
       </div>
@@ -104,12 +117,16 @@
 </template>
 
 <script setup lang="ts">
-import {computed, onBeforeUnmount, onMounted, ref} from 'vue';
+import {computed, onBeforeUnmount, onMounted, ref, watch} from 'vue';
 import {Color} from '@/common/Color';
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 import HotkeyKeys from '@/client/components/hotkeys/HotkeyKeys.vue';
 import ReplayTimeline from './ReplayTimeline.vue';
+import ReplayPlayButton from './ReplayPlayButton.vue';
+import ReplaySpeedBars from './ReplaySpeedBars.vue';
+import {REPLAY_DEFAULT_SPEED, REPLAY_STEP_MS, replayRemaining, replaySeconds} from './replaySpeed';
 import {ReplayGeneration, ReplayMark, ReplayRaise} from './replaySteps';
+import {useReplayPanelMotion} from './replayPanelMotion';
 
 const props = defineProps<{
   count: number,
@@ -128,24 +145,24 @@ const props = defineProps<{
 }>();
 const emit = defineEmits<{(event: 'go', step: number): void, (event: 'perspective', color: Color): void, (event: 'close'): void}>();
 
-const PLAY_ICON = 'M8 5v14l11-7z';
-const PAUSE_ICON = 'M6 19h4V5H6zm8-14v14h4V5z';
-const SPEEDS = [1, 2, 4] as const;
-const STEP_MS = 700;
-// Coming closer than this unfolds the panel, moving further away than the smaller distance folds it again (no flicker)
-const NEAR_DISTANCE = 90;
-const LEAVE_DISTANCE = 40;
+// Size toggle: arrows pointing inwards (make smaller) and outwards (make full)
+const SHRINK_ICON = 'M22 3.41 16.71 8.7H20v2h-6.7V4h2v3.29L20.59 2zM3.41 22l5.29-5.29V20h2v-6.7H4v2h3.29L2 20.59z';
+// Drag grip: two columns of three dots
+const GRIP_DOTS = [2, 6].flatMap((x) => [3, 8, 13].map((y) => ({x, y})));
+const EXPAND_ICON = 'M21 11V3h-8l3.29 3.29-10 10L3 13v8h8l-3.29-3.29 10-10z';
 
 const panel = ref<HTMLElement>();
+// Open, the replay shows its whole panel for a moment, so one sees everything it offers, then folds to the thin bar
+const INTRO_MS = 1000;
+const motion = useReplayPanelMotion(panel, true);
+let introTimer: number | undefined;
+const endIntro = () => window.clearTimeout(introTimer);
 const playing = ref(false);
-const speed = ref<typeof SPEEDS[number]>(1);
-const prefersThin = ref(false);
-const near = ref(false);
-const scrubbing = ref(false);
+// Index in REPLAY_STEP_MS
+const speed = ref(REPLAY_DEFAULT_SPEED);
+const stepMs = computed(() => REPLAY_STEP_MS[speed.value]);
 let timer: number | undefined;
 
-const thin = computed(() => prefersThin.value || (!near.value && !scrubbing.value));
-const away = computed(() => !near.value && !scrubbing.value);
 const playerNames = computed(() => Object.fromEntries(props.players.map((player) => [player.color, player.name])) as Partial<Record<Color, string>>);
 const currentGeneration = computed(() => props.generations.find((generation) => props.current >= generation.start && props.current < generation.start + generation.count));
 const generationText = computed(() => translateTextWithParams('Generation ${0}', [String(currentGeneration.value?.number ?? 1)]));
@@ -154,7 +171,10 @@ const stepText = computed(() => translateTextWithParams('Step ${0} of ${1}', [St
 const currentRatings = computed(() => props.terraformRatings.map((rating) => ({color: rating.color, value: rating.values[props.current]})));
 const temperatureText = computed(() => `${props.temperature > 0 ? '+' : props.temperature < 0 ? '−' : ''}${Math.abs(props.temperature)} °C`);
 const playLabel = computed(() => translateText(playing.value ? 'Pause playback' : 'Start playback'));
-const sizeToggleLabel = computed(() => translateText(prefersThin.value ? 'Show full' : 'Show thin'));
+const sizeToggleLabel = computed(() => translateText(motion.thin.value ? 'Show full' : 'Minimize'));
+const secondsText = computed(() => translateTextWithParams('${0} s', [replaySeconds(stepMs.value)]));
+const secondsPerStepText = computed(() => translateTextWithParams('${0} s per step', [replaySeconds(stepMs.value)]));
+const remainingText = computed(() => translateTextWithParams('${0} remaining', [replayRemaining(props.count - 1 - props.current, stepMs.value)]));
 
 const go = (step: number) => emit('go', Math.max(0, Math.min(props.count - 1, step)));
 function stop(): void {
@@ -173,7 +193,7 @@ function play(): void {
     } else {
       go(props.current + 1);
     }
-  }, STEP_MS / speed.value);
+  }, stepMs.value);
 }
 const togglePlay = () => playing.value ? stop() : play();
 function step(direction: number): void {
@@ -193,48 +213,39 @@ function generationStep(direction: number): void {
     go(index < props.generations.length - 1 ? props.generations[index + 1].start : props.count - 1);
   }
 }
-function setSpeed(option: typeof SPEEDS[number]): void {
-  speed.value = option;
+// A new speed applies from the next step on
+watch(speed, () => {
   if (playing.value) {
     stop();
     play();
   }
-}
-const toggleSize = () => prefersThin.value = !prefersThin.value;
+});
+const changeSpeed = (direction: number) => speed.value = Math.max(0, Math.min(REPLAY_STEP_MS.length - 1, speed.value + direction));
 function onScrubbing(active: boolean): void {
-  scrubbing.value = active;
   if (active) {
     stop();
   }
 }
 
-function onPointerMove(event: PointerEvent): void {
-  if (event.pointerType !== 'mouse' || panel.value === undefined) {
-    return;
-  }
-  const rect = panel.value.getBoundingClientRect();
-  const dx = Math.max(rect.left - event.clientX, 0, event.clientX - rect.right);
-  const dy = Math.max(rect.top - event.clientY, 0, event.clientY - rect.bottom);
-  near.value = Math.hypot(dx, dy) < (near.value ? LEAVE_DISTANCE : NEAR_DISTANCE);
-}
-// Touch: a tap on the bar unfolds it, a tap elsewhere folds it again
-function onPointerDown(event: PointerEvent): void {
-  if (event.pointerType !== 'mouse' && panel.value !== undefined) {
-    near.value = panel.value.contains(event.target as Node);
-  }
-}
-const onMouseLeave = () => near.value = false;
 function onKeyDown(event: KeyboardEvent): void {
-  // An open dialog over the replay (enlarged Mars, card zoom) handles its own keys, Escape closes it first
-  if (document.querySelector('.board-zoom-backdrop, [role="dialog"][aria-modal="true"]') !== null) {
+  // An open dialog over the replay (enlarged Mars, card zoom) handles its own keys, Escape closes it first. The
+  // replay's own turn sheet (mobile) is no such dialog: it only shows the next action
+  if (document.querySelector('.board-zoom-backdrop, [role="dialog"][aria-modal="true"]:not(.mb-sheet)') !== null) {
     return;
   }
   if (event.key === 'Escape') {
+    // Escape folds the panel; closing the replay is the × button only
+    if (motion.thin.value) {
+      return;
+    }
     event.preventDefault();
-    emit('close');
+    motion.collapse();
   } else if (event.key === ' ') {
     event.preventDefault();
     togglePlay();
+  } else if (event.key === '+' || event.key === '-') {
+    event.preventDefault();
+    changeSpeed(event.key === '+' ? 1 : -1);
   } else if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
     event.preventDefault();
     const direction = event.key === 'ArrowLeft' ? -1 : 1;
@@ -251,17 +262,15 @@ function onKeyDown(event: KeyboardEvent): void {
 }
 
 onMounted(() => {
-  document.addEventListener('pointermove', onPointerMove);
-  document.addEventListener('pointerdown', onPointerDown);
-  document.documentElement.addEventListener('mouseleave', onMouseLeave);
   window.addEventListener('keydown', onKeyDown, true);
+  introTimer = window.setTimeout(() => motion.collapse(), INTRO_MS);
+  // Touched during the intro: the panel stays as the reader left it
+  panel.value?.addEventListener('pointerdown', endIntro, {once: true});
 });
 onBeforeUnmount(() => {
+  endIntro();
   stop();
-  document.removeEventListener('pointermove', onPointerMove);
-  document.removeEventListener('pointerdown', onPointerDown);
-  document.documentElement.removeEventListener('mouseleave', onMouseLeave);
   window.removeEventListener('keydown', onKeyDown, true);
 });
-defineExpose({togglePlay, step, generationStep});
+defineExpose({togglePlay, step, generationStep, expand: motion.expand, collapse: motion.collapse});
 </script>

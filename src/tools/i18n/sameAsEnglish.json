@@ -15,6 +15,7 @@
     "${0} d ${1} h",
     "${0} h ${1} min",
     "${0} min",
+    "${0} s",
     "&nbsp;Cheung Shing",
     "1 commit",
     "2 Sardaukar",
@@ -124,7 +125,8 @@
     "Version",
     "normal ${0}",
     "Websites",
-    "Replay"
+    "Replay",
+    "${0} s"
   ],
   "es": [
     "${0} AI",
@@ -132,6 +134,7 @@
     "${0} d ${1} h",
     "${0} h ${1} min",
     "${0} min",
+    "${0} s",
     "&nbsp;Cheung Shing",
     "1 commit",
     "2 Sardaukar",
@@ -171,6 +174,7 @@
     "${0} AI",
     "${0} h ${1} min",
     "${0} min",
+    "${0} s",
     "&nbsp;Cheung Shing",
     "1 commit",
     "1 data / 2 °C",
@@ -201,6 +205,7 @@
     "${0} corruption",
     "${0} h ${1} min",
     "${0} min",
+    "${0} s",
     "&nbsp;Cheung Shing",
     "1 Sardaukar",
     "1 commit",
@@ -294,6 +299,7 @@
     "${0} AI",
     "${0} h ${1} min",
     "${0} min",
+    "${0} s",
     "&nbsp;Cheung Shing",
     "(max 3)",
     "1 Sardaukar",
@@ -377,6 +383,7 @@
   "nb": [
     "${0} AI",
     "${0} min",
+    "${0} s",
     "&nbsp;Cheung Shing",
     "1 commit",
     "1 data / 2 °C",
@@ -500,11 +507,13 @@
     "vastitas borealis",
     "vastitas borealis nova",
     "worm",
-    "Websites"
+    "Websites",
+    "${0} s"
   ],
   "pl": [
     "${0} AI",
     "${0} min",
+    "${0} s",
     "&nbsp;Cheung Shing",
     "1 Sardaukar",
     "1 commit",

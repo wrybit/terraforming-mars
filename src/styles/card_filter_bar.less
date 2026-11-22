@@ -70,6 +70,17 @@
   background-image: linear-gradient(to bottom, transparent, @card-filter-row-background);
 }
 
+// Place marker of the row (CardFilterBar.vue): measures whether the list is visible; out of the flow, so it adds
+// no gap in flex and grid lists
+.card-filter-anchor {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  pointer-events: none;
+}
+
 // Inside a choice grid the row and the hint span all columns
 .choice-block > .card-filter-bar,
 .choice-block > .card-filter-empty {
@@ -200,6 +211,41 @@ html.tm-mobile {
     > .card-filter-empty {
       grid-row: 2;
     }
+  }
+
+  // Row moved into the screen header (MobileTaskHead.vue): only its icon buttons, no own surface or line;
+  // the header carries them on the right
+  .mb-task-tools > .card-filter-bar {
+    position: static;
+    width: auto;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    backdrop-filter: none;
+
+    // Without an active filter the count says nothing: no reserved space between the two buttons in the header
+    .card-filter-bar__count--idle {
+      display: none;
+    }
+  }
+
+  // Lead of a row in the header ("Select all"): stays above the cards as its own row
+  .card-filter-lead-row {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: flex-start;
+    // Same gap to the selection flags below as a section heading (mobile.less)
+    margin: 0 0 (@selection-tab-offset + 6px);
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  .mb-screen--turn .wf-component--select-card.choice-block > .card-filter-lead-row {
+    grid-row: 1;
   }
 
   .mb-screen--players .other_player_panel .other_player_cont > .card-filter-bar {
