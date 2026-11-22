@@ -7,9 +7,16 @@ import {ReplayState} from './reconstructReplay';
 // passing ...) with all lines it caused. The slider and the graph of the replay panel work with these steps.
 
 const STEP_STARTS = new Set([
-  '${0} played ${1}', '${0} used ${1} action', '${0} used ${1} standard project', '${0} used ${1} standard action',
+  '${0} played ${1}', '${0} played ${1} [ ${2} ]', '${0} used ${1} action', '${0} used ${1} standard project',
+  '${0} used ${1} standard action', '${0} took the first action of ${1} corporation',
   '${0} passed', '${0} ended turn', '${0} claimed ${1} milestone', '${0} funded ${1} award',
   '${0} ${1} ${2} card(s)', '${0} kept ${1} project cards', 'Final greenery placement',
+  // Actions of the Dune modules (src/server/dune): each is a move of its own
+  '${0} traded with the guild', '${0} bought ${1} at the bazaar for ${2} M€', '${0} took ${1} from the bazaar',
+  '${0} delivered ${1} ${2} to the emperor for ${3} M€', '${0} offers ${1} ${2} for ${3} ${4} at the CHOAM exchange',
+  '${0} accepted the CHOAM contract of ${1}', '${0} withdrew the CHOAM offer', '${0} made a prophecy',
+  '${0} withdrew a prophecy', '${0} paid tribute to the great houses', '${0} declares Kanly on ${1}',
+  '${0} sent ${1} Sardaukar to the war field', '${0} swapped an agenda', '${0} pays the levy to Shai-Hulud',
 ]);
 
 export type ReplayParameter = 'temperature' | 'oxygen' | 'oceans';

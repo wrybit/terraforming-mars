@@ -137,7 +137,8 @@ const emit = defineEmits<{(event: 'go', step: number): void, (event: 'perspectiv
 const PLAY_ICON = 'M8 5v14l11-7z';
 const PAUSE_ICON = 'M6 19h4V5H6zm8-14v14h4V5z';
 const SPEEDS = [1, 2, 4] as const;
-const STEP_MS = 700;
+// Time per action at 1×: long enough to see the card, the tab and the board change (Jens: 1× 4 s, 2× 2 s, 4× 1 s)
+const STEP_MS = 4000;
 
 const panel = ref<HTMLElement>();
 const motion = useReplayPanelMotion(panel);

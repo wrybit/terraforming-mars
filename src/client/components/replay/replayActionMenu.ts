@@ -50,7 +50,8 @@ export function replayActionFocus(source: ReplaySourceModel, step: ReplayStep): 
   const message = source.log[step.line]?.message;
   const value = valueAt(step, source, 1);
   switch (message) {
-  case '${0} played ${1}': {
+  case '${0} played ${1}':
+  case '${0} played ${1} [ ${2} ]': {
     const type = getCard(value as CardName)?.type;
     // Corporations and preludes are played at the start, not from the action menu
     const project = type === CardType.ACTIVE || type === CardType.AUTOMATED || type === CardType.EVENT;
