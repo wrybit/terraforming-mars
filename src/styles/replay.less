@@ -1073,6 +1073,16 @@ label.replay-action-tabs__focus,
     height: 14px;
   }
 
+  // The chosen perspective keeps its name, shortened with … when it is long; the others only show their colour
+  .replay-panel__segments button[aria-pressed="true"] .replay-panel__name {
+    display: inline-block;
+    max-width: 88px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+
   .replay-panel__info {
     flex-direction: column;
     align-items: stretch;
