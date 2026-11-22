@@ -228,8 +228,9 @@ function onScrubbing(active: boolean): void {
 }
 
 function onKeyDown(event: KeyboardEvent): void {
-  // An open dialog over the replay (enlarged Mars, card zoom) handles its own keys, Escape closes it first
-  if (document.querySelector('.board-zoom-backdrop, [role="dialog"][aria-modal="true"]') !== null) {
+  // An open dialog over the replay (enlarged Mars, card zoom) handles its own keys, Escape closes it first. The
+  // replay's own turn sheet (mobile) is no such dialog: it only shows the next action
+  if (document.querySelector('.board-zoom-backdrop, [role="dialog"][aria-modal="true"]:not(.mb-sheet)') !== null) {
     return;
   }
   if (event.key === 'Escape') {

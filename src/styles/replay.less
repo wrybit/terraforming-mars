@@ -124,7 +124,8 @@ html body #game-end.game-end--replay > :not(.replay-view) {
 }
 
 // ---------- Game view ----------
-#player-home.replay-view {
+#player-home.replay-view,
+.replay-view--mobile {
   position: fixed;
   inset: 0;
   z-index: 50;
@@ -139,15 +140,9 @@ html.tm-mobile .replay-view--mobile {
     z-index: 200;
   }
 
-  // Actions screen: the turn screen's layout, but with the tab bar like on desktop (in the game the task is chosen in
-  // the turn sheet, so the turn screen hides it); the button stays in the flow instead of sticking to the bottom edge,
-  // where it would lie over the replay panel
-  .mb-screen--turn .or-tabs {
-    display: flex !important;
-  }
-
-  .mb-screen--turn .or-tab-footer {
-    position: static;
+  // Room for the floating panel below the turn sheet's last row
+  .mb-sheet-panel {
+    padding-bottom: calc(@mb-nav-height + 8px + @replay-thin-control + 2 * @replay-thin-padding + 12px + env(safe-area-inset-bottom));
   }
 
   // Room for the floating panel below the content

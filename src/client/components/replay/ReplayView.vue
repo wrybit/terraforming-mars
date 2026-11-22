@@ -1,34 +1,11 @@
 <template>
   <!-- Replay of a finished game in the normal game view, read only: players, Mars, log with milestones & awards and
        the hand cards of the chosen player, as they were at the step of the replay panel below. -->
-  <div id="player-home" ref="root" :class="['replay-view', mobile ? ['mb-home', 'mb-home--' + (screen === 'turn' ? 'replay-actions' : screen), 'replay-view--mobile'] : 'player-home--fixed']">
-    <!-- Phones and tablets: the mobile view of the game (one screen at a time, footer bar), like MobilePlayerHome.vue -->
-    <template v-if="mobile">
-      <MobileHeader :game="viewModel.game" :aria-label="$t('Players')" @click="screen = 'players'" />
-      <main class="mb-main">
-        <MobileMarsScreen v-show="screen === 'mars'" :game="viewModel.game" :players="viewModel.players" :participantId="viewModel.id"
-          :tileView="tileView" :acting="false" :bannerTitle="eventText" :viewerColor="perspective"
-          @toggleTileView="tileView = nextTileView(tileView)" @showMilestones="showMilestones" />
-        <section v-show="screen === 'hand'" class="mb-screen mb-screen--hand">
-          <HandCardsPanel :playerView="viewModel" hideUndergroundTokens />
-        </section>
-        <!-- The turn screen's content styles, but not its task bar (root class replay-actions instead of turn) -->
-        <section v-show="screen === 'turn'" class="mb-screen mb-screen--turn">
-          <ReplayActionTabs :playerView="viewModel" :menu="actionMenu" :focus="nextFocus" />
-        </section>
-        <section v-show="screen === 'players'" :class="['mb-screen', 'mb-screen--players', {'mb-screen--players-scroll': viewModel.players.length > 2}]">
-          <MobilePlayersPanel :viewModel="viewModel" :viewerColor="perspective" v-model:segment="playersSegment" />
-        </section>
-        <section v-show="screen === 'log'" class="mb-screen mb-screen--log">
-          <LogPanel :viewModel="viewModel" :stream="stream" />
-        </section>
-      </main>
-      <MobileNav :items="MOBILE_NAV" :active="screen" @navigate="screen = $event">
-        <template #turn>
-          <MobileTurnButton :acting="false" :actionNumber="undefined" :actionsPerTurn="2" />
-        </template>
-      </MobileNav>
-    </template>
+  <div ref="root" :id="mobile ? undefined : 'player-home'" :class="['replay-view', mobile ? 'replay-view--mobile' : 'player-home--fixed']">
+    <!-- Phones and tablets: the mobile view of the game -->
+    <ReplayMobileHome v-if="mobile" :playerView="viewModel" :stream="stream" :menu="actionMenu" :focus="nextFocus"
+      :eventText="eventText" :perspective="perspective" :tileView="tileView" :step="current" :placed="placedSpaces.length > 0"
+      @toggleTileView="tileView = nextTileView(tileView)" />
     <HomeColumns v-else>
       <template #board>
         <div class="player_home_block player-home-columns__mars">
@@ -85,16 +62,10 @@ import GameBoardView from '@/client/components/GameBoardView.vue';
 import LogPanel from '@/client/components/logpanel/LogPanel.vue';
 import PlayersOverview from '@/client/components/overview/PlayersOverview.vue';
 import RowResizeHandle from '@/client/components/RowResizeHandle.vue';
-import HandCardsPanel from '@/client/components/HandCardsPanel.vue';
-import MobileHeader from '@/client/components/mobile/MobileHeader.vue';
-import MobileMarsScreen from '@/client/components/mobile/MobileMarsScreen.vue';
-import MobileNav from '@/client/components/mobile/MobileNav.vue';
-import MobilePlayersPanel from '@/client/components/mobile/MobilePlayersPanel.vue';
-import MobileTurnButton from '@/client/components/mobile/MobileTurnButton.vue';
-import {MOBILE_NAV, MobileScreen, PlayersSegment} from '@/client/components/mobile/mobileScreens';
 import {mobileLayout} from '@/client/utils/mobileLayout';
 import ReplayPanel from './ReplayPanel.vue';
 import ReplayActionTabs from './ReplayActionTabs.vue';
+import ReplayMobileHome from './ReplayMobileHome.vue';
 import {replayActionFocus, replayActionMenu} from './replayActionMenu';
 import {ReplayState} from './reconstructReplay';
 import {replayGenerations, replayMarks, replayRaises, ReplayStep} from './replaySteps';
@@ -115,14 +86,8 @@ defineEmits<{(event: 'close'): void}>();
 const current = ref(0);
 const perspective = ref<Color>(props.final.thisPlayer?.color ?? props.source.players[0].color);
 const tileView = ref<TileView>('show');
-// Mobile view: which screen of the footer bar is open, and the toggle of the players screen
+// Phones and tablets get the game's mobile view
 const mobile = computed(() => mobileLayout.value);
-const screen = ref<MobileScreen>('mars');
-const playersSegment = ref<PlayersSegment>('players');
-function showMilestones(): void {
-  playersSegment.value = 'ma';
-  screen.value = 'players';
-}
 
 const generations = computed(() => replayGenerations(props.steps));
 const raises = computed(() => replayRaises(props.steps, props.states));
@@ -134,6 +99,8 @@ const terraformRatings = computed(() => props.source.players.map((player, index)
 const panelPlayers = computed(() => props.source.players.map((player) => ({color: player.color, name: player.name})));
 
 const step = computed(() => props.steps[current.value]);
+// Spaces of this step's tiles
+const placedSpaces = computed(() => replayPlacedSpaces(props.source, step.value));
 // Tiles placed in this step glow on Mars in the colour of their player until the next step
 const root = ref<HTMLElement>();
 const PLACED_CLASS = 'replay-placed';
@@ -144,7 +111,7 @@ function markPlaced(): void {
   }
   element.querySelectorAll<HTMLElement>('.' + PLACED_CLASS).forEach((marked) => marked.classList.remove(PLACED_CLASS));
   const color = step.value.actor === undefined ? '#fff' : replayColor(step.value.actor);
-  replayPlacedSpaces(props.source, step.value).forEach((space) => {
+  placedSpaces.value.forEach((space) => {
     element.querySelectorAll<HTMLElement>(`.board-log-highlight[data_log_highlight_id="${space}"]`).forEach((marker) => {
       marker.classList.add(PLACED_CLASS);
       marker.style.setProperty('--replay-placed', color);
@@ -152,18 +119,6 @@ function markPlaced(): void {
   });
 }
 watch([step, tileView, perspective], markPlaced, {flush: 'post'});
-// Mobile: one screen at a time, so each step opens the one that shows it, like the desktop shows both at once:
-// Mars when the step placed a tile, otherwise the actions when the next step is an action (opened upfront)
-watch(step, () => {
-  if (!mobile.value) {
-    return;
-  }
-  if (replayPlacedSpaces(props.source, step.value).length > 0) {
-    screen.value = 'mars';
-  } else if (nextFocus.value !== undefined) {
-    screen.value = 'turn';
-  }
-});
 onMounted(markPlaced);
 const state = computed(() => props.states[step.value.state]);
 const last = computed(() => current.value === props.steps.length - 1);

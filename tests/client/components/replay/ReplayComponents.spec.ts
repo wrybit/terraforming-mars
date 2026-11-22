@@ -4,6 +4,7 @@ import {globalConfig} from '../getLocalVue';
 import {fakePlayerViewModel} from '../testHelpers';
 import ReplayButton from '@/client/components/replay/ReplayButton.vue';
 import ReplayPanel from '@/client/components/replay/ReplayPanel.vue';
+import ReplayMobileHome from '@/client/components/replay/ReplayMobileHome.vue';
 import ReplayPlayButton from '@/client/components/replay/ReplayPlayButton.vue';
 import ReplaySpeedBars from '@/client/components/replay/ReplaySpeedBars.vue';
 import {REPLAY_DEFAULT_SPEED, replayRemaining, replaySeconds} from '@/client/components/replay/replaySpeed';
@@ -160,5 +161,22 @@ describe('ReplayView', () => {
       props: {final: fakePlayerViewModel(), source, states, steps: replaySteps(source, states)},
     });
     expect(wrapper.find('.replay-view').exists()).is.true;
+  });
+});
+
+describe('ReplayMobileHome', () => {
+  it('opens the turn sheet before an action, Mars after a tile', async () => {
+    const menu = {type: 'or', title: '', buttonLabel: '', options: [{type: 'option', title: 'Pass for this generation', buttonLabel: 'Pass'}], initialIdx: 0} as any;
+    const props = {playerView: fakePlayerViewModel(), stream: [], menu, focus: undefined, eventText: '', perspective: 'red' as const,
+      tileView: 'show' as const, step: 0, placed: false};
+    const wrapper = shallowMount(ReplayMobileHome, {...globalConfig, props});
+    expect(wrapper.findComponent({name: 'MobileTurnSheet'}).exists()).is.false;
+    await wrapper.setProps({step: 1, focus: {tab: 'Pass for this generation', cards: []}});
+    await flushPromises();
+    expect(wrapper.findComponent({name: 'MobileTurnSheet'}).exists()).is.true;
+    await wrapper.setProps({step: 2, focus: undefined, placed: true});
+    await flushPromises();
+    expect(wrapper.findComponent({name: 'MobileTurnSheet'}).exists()).is.false;
+    expect(wrapper.classes()).contains('mb-home--mars');
   });
 });
