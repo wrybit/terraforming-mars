@@ -118,6 +118,8 @@ export default defineComponent({
       scrollContent: undefined as HTMLElement | undefined,
       // Each fitting run gets a number; a newer run stops an older one that is still waiting for the DOM
       fitRun: 0,
+      // Key of the row zoom measurement in layoutBatch.ts (one per card, beside the card's own scroll area job)
+      rowZoomJob: markRaw({}),
       resizeObserver: undefined as ResizeObserver | undefined,
       measuredSize: '',
     };
@@ -147,6 +149,7 @@ export default defineComponent({
   beforeUnmount() {
     this.resizeObserver?.disconnect();
     cancelLayoutJob(this.$el as HTMLElement);
+    cancelLayoutJob(this.rowZoomJob);
     if (this.scrollContent !== undefined) {
       cancelLayoutJob(this.scrollContent);
     }
@@ -164,8 +167,8 @@ export default defineComponent({
     // icons larger, smaller where the widest row would not fit the box. On Mars nothing changes.
     async fitIntoCard(): Promise<void> {
       const run = ++this.fitRun;
-      this.rowZoom = undefined;
       if (this.theme !== 'dune') {
+        this.rowZoom = undefined;
         this.scrollStyle = undefined;
         this.scrollContent = undefined;
         return;
@@ -174,35 +177,38 @@ export default defineComponent({
       if (run !== this.fitRun) {
         return;
       }
-      // Measured together with all other cards of the frame (layoutBatch.ts): measuring each card right after the
-      // previous one wrote its result recalculated the styles of the whole page once per card (a tab with 16 cards
-      // took 450 ms)
+      // Both measurements run in the same frame, before it is painted (layoutBatch.ts): first the scroll area, then –
+      // once every card of the frame wrote its area (afterOthers) – the row zoom, measured at the full zoom. The card
+      // keeps its previous zoom until the new one is written. Before, the zoom was reset first and measured one
+      // frame later: every re-rendered card showed one frame with oversized icons (flickered, e.g. in the replay).
+      // Measuring all cards together instead of one after the other recalculates the page styles only once
+      // (a tab with 16 cards took 450 ms).
       const card = this.$el as HTMLElement;
+      // House cards keep their icons at 100 % at most (theme-extra.css)
+      const full = this.isCorporationCard ? 1 : CARD_ROW_ZOOM;
       scheduleLayoutJob(card, {
         measure: () => this.measureScrollArea(card),
         apply: (measured) => {
           if (run !== this.fitRun || measured === undefined) {
             return;
           }
+          // Written to the element right away as well: the row zoom below is measured in this frame, before Vue renders
+          Object.entries(measured.style).forEach(([name, value]) => card.style.setProperty(name, value));
           this.scrollStyle = measured.style;
           // Raw: a reactive proxy of a DOM element breaks its methods (addEventListener)
           this.scrollContent = markRaw(measured.content);
-          // The row zoom is measured once the scroll area is in place (next render)
-          nextTick(() => {
-            if (run !== this.fitRun) {
-              return;
-            }
-            // Own key: a newer first round of this card must not be replaced by this older second one
-            scheduleLayoutJob(measured.content, {
-              // House cards keep their icons at 100 % at most (theme-extra.css)
-              measure: () => fittingRowZoom(card, this.isCorporationCard ? 1 : CARD_ROW_ZOOM),
-              apply: (zoom) => {
-                if (run === this.fitRun) {
-                  this.rowZoom = zoom;
-                }
-              },
-            });
-          });
+        },
+      });
+      scheduleLayoutJob(this.rowZoomJob, {
+        afterOthers: true,
+        prepare: () => card.style.setProperty('--card-row-zoom', String(full)),
+        measure: () => fittingRowZoom(card, full),
+        apply: (zoom) => {
+          if (run !== this.fitRun) {
+            return;
+          }
+          card.style.setProperty('--card-row-zoom', String(zoom));
+          this.rowZoom = zoom;
         },
       });
     },
