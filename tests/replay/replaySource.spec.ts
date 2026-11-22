@@ -3,6 +3,7 @@ import {testGame} from '../TestGame';
 import {replaySource} from '../../src/server/replay/replaySource';
 import {SpaceType} from '../../src/common/boards/SpaceType';
 import {TileType} from '../../src/common/TileType';
+import {Phase} from '../../src/common/Phase';
 
 describe('replaySource', () => {
   it('takes start values from the first save and end values from the last', () => {
@@ -18,6 +19,20 @@ describe('replaySource', () => {
     expect(source.players[0].endResources.megacredits).eq(42);
     expect(source.players[1].startTerraformRating).eq(20);
     expect(source.startTemperature).eq(-30);
+  });
+
+  it('starts imported games, whose only save is the end, from the usual start values', () => {
+    const [game, player, other] = testGame(2);
+    other.terraformRating = 37;
+    game.increaseTemperature(player, 3);
+    game.phase = Phase.END;
+    const end = game.serialize();
+    const source = replaySource(end, end);
+
+    expect(source.players[1].startTerraformRating).eq(20);
+    expect(source.startTemperature).eq(-30);
+    expect(source.startOxygenLevel).eq(0);
+    expect(source.players[0].dealtProjectCards).deep.eq([]);
   });
 
   it('names private log lines by colour, never by player id', () => {
