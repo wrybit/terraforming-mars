@@ -73,6 +73,7 @@ import {replayLogStream, replayViewModel} from './replayViewModel';
 import {reuseUnchanged} from './replayReuse';
 import {replayColor} from './replayColors';
 import {replayPlacedSpaces} from './replayPlacedSpaces';
+import {readReplayPlayer, writeReplayPlayer} from './replayAddress';
 
 const props = defineProps<{
   // Final view of the results page: everything that doesn't change during a game comes from it
@@ -84,7 +85,10 @@ const props = defineProps<{
 defineEmits<{(event: 'close'): void}>();
 
 const current = ref(0);
-const perspective = ref<Color>(props.final.thisPlayer?.color ?? props.source.players[0].color);
+// From the address first (a shared link shows the same view), then the own seat, then the first player
+const perspective = ref<Color>(readReplayPlayer(props.source.players.map((player) => player.color)) ??
+  props.final.thisPlayer?.color ?? props.source.players[0].color);
+watch(perspective, writeReplayPlayer, {immediate: true});
 const tileView = ref<TileView>('show');
 // Phones and tablets get the game's mobile view
 const mobile = computed(() => mobileLayout.value);

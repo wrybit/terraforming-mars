@@ -1804,7 +1804,6 @@
   "Classic": "Klassiek",
   "New β": "Nieuw β",
   "New AI, learns from its own games. Still being tested.": "Nieuwe AI, leert van eigen potjes. Nog in de testfase.",
-  "The new AI cannot play these expansions yet": "De nieuwe AI kan deze uitbreidingen nog niet spelen",
   "Where to place a tile, how to pay … Empty: 1000.": "Waar een tegel komt, hoe je betaalt … Leeg: 1000.",
   "Thinking time of a hard AI (normal: two thirds, easy: one third). Empty: 3000.": "Bedenktijd van een moeilijke AI (normaal: twee derde, makkelijk: een derde). Leeg: 3000.",
   "${0} is thinking": "${0} denkt na",
@@ -1907,5 +1906,8 @@
   "${0} lost ${1} ${2}": "${0} verloor ${1} ${2}",
   "Minimize": "Verkleinen",
   "${0} s per step": "${0} s per stap",
-  "${0} remaining": "nog ${0}"
+  "${0} remaining": "nog ${0}",
+  "New β can do this": "Nieuw β kan dit",
+  "New β not yet compatible with:": "Nieuw β nog niet compatibel met:",
+  "New β cannot play these settings yet": "Nieuw β kan deze instellingen nog niet spelen"
 }

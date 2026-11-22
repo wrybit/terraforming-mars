@@ -2048,7 +2048,6 @@
   "Classic": "Классическая",
   "New β": "Новая β",
   "New AI, learns from its own games. Still being tested.": "Новый ИИ, учится на своих партиях. Ещё тестируется.",
-  "The new AI cannot play these expansions yet": "Новый ИИ пока не умеет играть с этими дополнениями",
   "Where to place a tile, how to pay … Empty: 1000.": "Куда выложить тайл, как заплатить … Пусто: 1000.",
   "Thinking time of a hard AI (normal: two thirds, easy: one third). Empty: 3000.": "Время на ход сложного ИИ (обычный: две трети, лёгкий: треть). Пусто: 3000.",
   "${0} is thinking": "${0} думает",
@@ -2152,5 +2151,8 @@
   "Minimize": "Свернуть",
   "${0} s": "${0} с",
   "${0} s per step": "${0} с на шаг",
-  "${0} remaining": "осталось ${0}"
+  "${0} remaining": "осталось ${0}",
+  "New β can do this": "Новая β это умеет",
+  "New β not yet compatible with:": "Новая β пока не совместима с:",
+  "New β cannot play these settings yet": "Новая β пока не умеет играть с этими настройками"
 }

@@ -59,6 +59,7 @@
                     <ChoiceChip v-for="tile in group.tiles" :key="tile.module"
                       :label="tile.choice?.label ?? 'Base game'" :iconClass="tile.choice?.iconClass ?? 'expansion-icon-base'"
                       :selected="tile.choice === undefined || expansions[tile.choice.expansion]" :locked="tile.choice === undefined"
+                      :rustAi="tile.choice === undefined ? rustAiMarksShown : rustAiCan('expansion', tile.choice.expansion)"
                       :href="tile.choice?.info ? wikiUrls[tile.choice.expansion] : undefined"
                       :unavailable="tile.choice !== undefined && !expansionAvailable(tile.choice.expansion)"
                       :tooltip="tile.choice === undefined ? undefined : expansionTooltip(tile.choice.expansion)"
@@ -81,7 +82,7 @@
                 </template>
                 <div class="create-game-chip-grid create-game-expansion-grid">
                   <ChoiceChip v-for="module in PLAYABLE_DUNE_MODULES" :key="module" :label="DUNE_MODULE_LABEL[module]"
-                    :selected="$data[DUNE_MODULE_FIELD[module]]" @select="toggleDuneModule(module)">
+                    :selected="$data[DUNE_MODULE_FIELD[module]]" :rustAi="rustAiCan('duneModule', module)" @select="toggleDuneModule(module)">
                     <template #icon><img class="create-game-expansion-icon" :src="duneGraphic(DUNE_MODULE_ICON[module])" alt=""></template>
                     <template #detail><span v-i18n>{{ DUNE_MODULE_DETAIL[module] }}</span></template>
                   </ChoiceChip>
@@ -95,8 +96,8 @@
               <CollapsibleSection title="Expansion options" storageKey="expansionOptions" :changed="expansionOptionsNote">
                 <div v-if="expansions.venus" class="create-game-option-group">
                   <div class="create-game-option-group-title"><span class="create-game-expansion-icon expansion-icon-venus"></span><span v-i18n>Venus Next</span></div>
-                  <OptionRow label="Alt. Venus Board" :href="wikiUrls.alternativeVenusBoard"><SwitchInput v-model="altVenusBoard" /></OptionRow>
-                  <OptionRow v-if="playersCount > 1" label="Mandatory Venus Terraforming" :href="wikiUrls.venusTerraforming">
+                  <OptionRow label="Alt. Venus Board" :rustAi="rustAiCan('option', 'altVenusBoard')" :href="wikiUrls.alternativeVenusBoard"><SwitchInput v-model="altVenusBoard" /></OptionRow>
+                  <OptionRow v-if="playersCount > 1" label="Mandatory Venus Terraforming" :rustAi="rustAiCan('option', 'requiresVenusTrackCompletion')" :href="wikiUrls.venusTerraforming">
                     <SwitchInput v-model="requiresVenusTrackCompletion" />
                   </OptionRow>
                 </div>
@@ -106,19 +107,19 @@
                     <SwitchInput :modelValue="isPoliticalAgendasExtensionEnabled()" @update:modelValue="politicalAgendasExtensionToggle()" />
                   </OptionRow>
                   <SegmentedControl v-if="isPoliticalAgendasExtensionEnabled()" class="create-game-segmented--sub" v-model="politicalAgendasExtension" :options="AGENDA_OPTIONS" />
-                  <OptionRow label="Remove negative Global Events" :href="wikiUrls.removeNegativeGlobalEvents">
+                  <OptionRow label="Remove negative Global Events" :rustAi="rustAiCan('option', 'removeNegativeGlobalEventsOption')" :href="wikiUrls.removeNegativeGlobalEvents">
                     <SwitchInput v-model="removeNegativeGlobalEventsOption" />
                   </OptionRow>
                 </div>
                 <div v-if="expansions.moon" class="create-game-option-group">
                   <div class="create-game-option-group-title"><span class="create-game-expansion-icon expansion-icon-themoon"></span><span v-i18n>The Moon</span></div>
-                  <OptionRow label="Mandatory Moon Terraforming"><SwitchInput v-model="requiresMoonTrackCompletion" /></OptionRow>
-                  <OptionRow label="Standard Project Variant #1" :href="wikiUrls.moonStandardProjectVariant"><SwitchInput v-model="moonStandardProjectVariant1" /></OptionRow>
-                  <OptionRow label="Standard Project Variant #2" :href="wikiUrls.moonStandardProjectVariant"><SwitchInput v-model="moonStandardProjectVariant" /></OptionRow>
+                  <OptionRow label="Mandatory Moon Terraforming" :rustAi="rustAiCan('option', 'requiresMoonTrackCompletion')"><SwitchInput v-model="requiresMoonTrackCompletion" /></OptionRow>
+                  <OptionRow label="Standard Project Variant #1" :rustAi="rustAiCan('option', 'moonStandardProjectVariant1')" :href="wikiUrls.moonStandardProjectVariant"><SwitchInput v-model="moonStandardProjectVariant1" /></OptionRow>
+                  <OptionRow label="Standard Project Variant #2" :rustAi="rustAiCan('option', 'moonStandardProjectVariant')" :href="wikiUrls.moonStandardProjectVariant"><SwitchInput v-model="moonStandardProjectVariant" /></OptionRow>
                 </div>
                 <div v-if="expansions.ares" class="create-game-option-group">
                   <div class="create-game-option-group-title"><span class="create-game-expansion-icon expansion-icon-ares"></span><span v-i18n>Ares</span></div>
-                  <OptionRow label="Extreme" :href="wikiUrls.aresExtreme"><SwitchInput v-model="aresExtremeVariant" /></OptionRow>
+                  <OptionRow label="Extreme" :rustAi="rustAiCan('option', 'aresExtremeVariant')" :href="wikiUrls.aresExtreme"><SwitchInput v-model="aresExtremeVariant" /></OptionRow>
                 </div>
               </CollapsibleSection>
             </section>
@@ -128,7 +129,7 @@
               <div class="create-game-card-head"><h2 v-i18n>Board</h2></div>
               <!-- Dune: the standard and the large Arrakis (common/dune/arrakisLayout.ts) -->
               <div v-if="theme === 'dune'" class="create-game-chip-grid create-game-theme-board">
-                <ChoiceChip v-for="boardName in DUNE_BOARDS" :key="boardName" :label="boardName" capitalized :selected="boards[0] === boardName"
+                <ChoiceChip v-for="boardName in DUNE_BOARDS" :key="boardName" :label="boardName" capitalized :selected="boards[0] === boardName" :rustAi="rustAiCan('board', boardName)"
                   @select="boards = [boardName]">
                   <template #icon><span :class="getBoardColorClass(boardName)"></span></template>
                   <!-- What tells the boards apart (boardFacts.ts) -->
@@ -146,7 +147,7 @@
                   <SwitchInput v-model="randomBoard" />
                 </OptionRow>
                 <SegmentedControl v-if="randomBoard" v-model="randomBoardScope" :options="RANDOM_BOARD_OPTIONS" />
-                <OptionRow label="Randomize board tiles" :href="wikiUrls.randomizeBoardTiles">
+                <OptionRow label="Randomize board tiles" :rustAi="rustAiCan('option', 'shuffleMapOption')" :href="wikiUrls.randomizeBoardTiles">
                   <SwitchInput v-model="shuffleMapOption" />
                 </OptionRow>
                 <template v-for="group in boardGroups" :key="group.title">
@@ -154,7 +155,7 @@
                   <CollapsibleSection variant="subhead" :title="group.title" :collapsible="group.fan" storageKey="fanBoards" :changed="group.fan ? fanBoardNote : undefined">
                     <div class="create-game-chip-grid">
                       <ChoiceChip v-for="boardName in group.boards" :key="boardName"
-                        :label="boardName" capitalized :selected="boards.includes(boardName)"
+                        :label="boardName" capitalized :selected="boards.includes(boardName)" :rustAi="rustAiCan('board', boardName)"
                         @select="selectBoard(boardName)">
                         <template #icon><span :class="getBoardColorClass(boardName)"></span></template>
                         <template #detail>
@@ -186,15 +187,15 @@
                 <NumberStepper v-model="startingCeos" :min="1" :max="6" />
               </OptionRow>
               <div v-if="expansions.prelude || playersCount > 1" class="create-game-divider"></div>
-              <OptionRow v-if="expansions.prelude" label="Merger" iconClass="expansion-icon-prelude" :href="wikiUrls.merger">
+              <OptionRow v-if="expansions.prelude" label="Merger" :rustAi="rustAiCan('option', 'twoCorpsVariant')" iconClass="expansion-icon-prelude" :href="wikiUrls.merger">
                 <SwitchInput v-model="twoCorpsVariant" />
               </OptionRow>
               <template v-if="playersCount > 1">
-                <OptionRow label="Draft variant"><SwitchInput v-model="draftVariant" /></OptionRow>
-                <OptionRow label="Initial Draft variant" :href="wikiUrls.initialDraft"><SwitchInput v-model="initialDraft" /></OptionRow>
+                <OptionRow label="Draft variant" :rustAi="rustAiCan('option', 'draftVariant')"><SwitchInput v-model="draftVariant" /></OptionRow>
+                <OptionRow label="Initial Draft variant" :rustAi="rustAiCan('option', 'initialDraftVariant')" :href="wikiUrls.initialDraft"><SwitchInput v-model="initialDraft" /></OptionRow>
                 <template v-if="initialDraft">
-                  <OptionRow v-if="expansions.prelude" label="Prelude Draft" sub><SwitchInput v-model="preludeDraftVariant" /></OptionRow>
-                  <OptionRow v-if="expansions.ceo" label="CEO Draft" sub><SwitchInput v-model="ceosDraftVariant" /></OptionRow>
+                  <OptionRow v-if="expansions.prelude" label="Prelude Draft" :rustAi="rustAiCan('option', 'preludeDraftVariant')" sub><SwitchInput v-model="preludeDraftVariant" /></OptionRow>
+                  <OptionRow v-if="expansions.ceo" label="CEO Draft" :rustAi="rustAiCan('option', 'ceosDraftVariant')" sub><SwitchInput v-model="ceosDraftVariant" /></OptionRow>
                 </template>
               </template>
             </section>
@@ -202,10 +203,10 @@
           <Teleport :to="columnTarget('rules')">
             <section class="create-game-card" :style="cardStyle('rules')">
               <div class="create-game-card-head"><h2 v-i18n>House-rule variants &amp; pace</h2></div>
-              <OptionRow label="World Government Terraforming" :href="wikiUrls.worldGovernmentTerraforming">
+              <OptionRow label="World Government Terraforming" :rustAi="rustAiCan('option', 'solarPhaseOption')" :href="wikiUrls.worldGovernmentTerraforming">
                 <SwitchInput v-model="solarPhaseOption" />
               </OptionRow>
-              <OptionRow v-if="playersCount === 1" label="63 TR solo mode" :href="wikiUrls.trSoloMode">
+              <OptionRow v-if="playersCount === 1" label="63 TR solo mode" :rustAi="rustAiCan('option', 'soloTR')" :href="wikiUrls.trSoloMode">
                 <SwitchInput v-model="soloTR" />
               </OptionRow>
               <OptionRow label="Allow undo" :href="wikiUrls.allowUndo"><SwitchInput v-model="undoOption" /></OptionRow>
@@ -259,12 +260,12 @@
                   <span v-i18n>Drawn from the goals of Arrakis, the module Milestones & awards of Arrakis and one milestone of each module in play.</span>
                 </div>
                 <template v-if="theme !== 'dune' && isRandomMAEnabled()">
-                  <OptionRow label="Official Random α" sub><SwitchInput v-model="modularMA" /></OptionRow>
+                  <OptionRow label="Official Random α" :rustAi="rustAiCan('option', 'modularMA')" sub><SwitchInput v-model="modularMA" /></OptionRow>
                   <div v-if="modularMA" class="create-game-note">
                     <span v-i18n>The new Milestones and Awards are still in active development. Please don't report anything unless it breaks the game.</span>
                     <b v-i18n>These are always fully random.</b>
                   </div>
-                  <OptionRow label="Include fan Milestones/Awards" sub><SwitchInput v-model="includeFanMA" /></OptionRow>
+                  <OptionRow label="Include fan Milestones/Awards" :rustAi="rustAiCan('option', 'includeFanMA')" sub><SwitchInput v-model="includeFanMA" /></OptionRow>
                 </template>
               </CollapsibleSection>
             </section>
@@ -360,6 +361,18 @@
                   </div>
                 </div>
                 <SegmentedControl v-else v-model="aiPlayersCount" :options="aiCountOptions" class="create-game-segmented--equal create-game-segmented--seats" />
+              </div>
+              <!-- New AI blocked by a setting: why New β is greyed in the AI cards, with the same chips -->
+              <div v-if="rustAiWarningShown" class="create-game-validation-box create-game-validation-box--warning create-game-seat-warning" role="status">
+                <h3 class="create-game-validation-title"><span aria-hidden="true">&#9888;&#xFE0E;</span><span><span v-for="(part, index) in betaKeptParts($t('New β not yet compatible with:'))" :key="index" :class="{'rust-ai-beta': part === 'β'}">{{ part }}</span></span></h3>
+                <div class="create-game-summary">
+                  <span v-for="blocker in rustAiBlockerChips" :key="blocker.key" class="create-game-summary-chip">
+                    <img v-if="blocker.picture !== undefined" class="create-game-expansion-icon" :src="blocker.picture" alt="">
+                    <span v-else-if="blocker.iconClass !== undefined" :class="blocker.iconClass"></span>
+                    <span v-else class="create-game-summary-toggle" aria-hidden="true"></span>
+                    <span :class="{capitalized: blocker.capitalized}" v-i18n>{{ blocker.label }}</span>
+                  </span>
+                </div>
               </div>
               <!-- Lobby: every game is listed there (running ones too) unless it is private -->
               <OptionRow class="create-game-players-first" label="Public game"><SwitchInput v-model="lobbyPublic" /></OptionRow>
@@ -488,7 +501,7 @@ import {ColumnCount, currentColumnCount, placementOf, SettingsCard, watchColumnC
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 import {drawDuneNames, withoutDrawnDuneNames} from '@/client/components/create/duneNames';
 import {describeFailure, failureFromResponse, failureOf, RequestFailedError} from '@/client/utils/requestFailure';
-import {AI_SUPPORTED_EXPANSIONS, aiUnsupportedReasons, newAiUnsupportedReasons} from '@/common/ai/aiSupport';
+import {AI_SUPPORTED_EXPANSIONS, aiUnsupportedReasons} from '@/common/ai/aiSupport';
 import {DEFAULT_AI_ENGINE} from '@/common/ai/AiEngine';
 import {newAiAvailable} from '@/client/utils/serverStatus';
 import {DUNE_BOARD, DUNE_BOARDS, Theme, isDuneBoard, themeAllowsExpansion} from '@/common/theme/Theme';
@@ -498,6 +511,10 @@ import ThemeSwitch from '@/client/components/common/ThemeSwitch.vue';
 import {DuneModule} from '@/common/dune/DuneModule';
 import {DUNE_MODULE_DETAIL, DUNE_MODULE_FIELD, DUNE_MODULE_ICON, DUNE_MODULE_LABEL, PLAYABLE_DUNE_MODULES, chosenDuneModules} from './duneModuleFields';
 import {duneGraphic} from '@/client/components/dune/duneGraphic';
+import {loadRustAiSupport, rustAiSupport} from '@/client/utils/rustAiSupport';
+import {RustAiOption} from '@/common/ai/RustAiSupport';
+import {RustAiBlocker, RustAiCompatibility, isRustAiCompatible, rustAiSettingsOf} from '@/common/ai/isRustAiCompatible';
+import {RUST_AI_OPTION_LABELS} from './rustAiOptionLabels';
 import ColoniesFilter from '@/client/components/create/ColoniesFilter.vue';
 import {ColonyName} from '@/common/colonies/ColonyName';
 import CardsFilter from '@/client/components/create/CardsFilter.vue';
@@ -574,6 +591,8 @@ type FormModel = {
   boardSeed: number;
   /** Board the preview drew (random board) */
   drawnBoard: BoardName | undefined;
+  /** Seats (seatKey) that chose New β while a setting blocked it: back to New β once the setting is gone */
+  rustAiSeatsOnHold: Array<number>;
   /** Create card sticks to the bottom edge (stickyBottomObserver.ts) */
   createCardStuck: boolean;
   /** Summary chips start open (viewport at least TALL_VIEWPORT_PX high) */
@@ -629,6 +648,7 @@ export default defineComponent({
       lastFixedBoard: BoardName.THARSIS,
       boardSeed: Math.random(),
       drawnBoard: undefined,
+      rustAiSeatsOnHold: [],
       createCardStuck: false,
       summaryOpenByDefault: typeof window === 'undefined' || window.innerHeight >= TALL_VIEWPORT_PX,
       createButtonBelow: false,
@@ -683,6 +703,18 @@ export default defineComponent({
     ValidationProblems,
   },
   watch: {
+    // A blocking setting moves New β seats to Classic; without it they go back to New β
+    rustAiBlocked(blocked: boolean) {
+      const aiSeats = this.players.filter((player) => player.aiLevel !== undefined);
+      if (blocked) {
+        const rustSeats = aiSeats.filter((player) => player.aiEngine === 'rust');
+        this.rustAiSeatsOnHold = rustSeats.map((player) => seatKey(player));
+        rustSeats.forEach((player) => player.aiEngine = 'ts');
+      } else {
+        aiSeats.filter((player) => this.rustAiSeatsOnHold.includes(seatKey(player))).forEach((player) => player.aiEngine = 'rust');
+        this.rustAiSeatsOnHold = [];
+      }
+    },
     // Lobby: the own seat is the lobby profile; every keystroke (and color or picture) goes straight to it,
     // so the lobby uses the name even when the form is closed without opening a game
     hostProfile(profile: LobbyProfile | undefined) {
@@ -798,6 +830,7 @@ export default defineComponent({
     }
   },
   mounted() {
+    void loadRustAiSupport();
     this.stopStickyObserver = observeStickyBottom(this.$refs.createCard as HTMLElement, CREATE_CARD_BOTTOM_PX, (stuck) => {
       this.createCardStuck = stuck;
     });
@@ -1014,8 +1047,31 @@ export default defineComponent({
     // Version of an AI seat: the new AI only where the server has it and knows the settings; the hover says why not
     aiEngineOptions(): ReadonlyArray<SegmentOption> {
       const reason = !newAiAvailable.value ? 'The new AI is not available on this server' :
-        newAiUnsupportedReasons({expansions: this.expansions}).length > 0 ? 'The new AI cannot play these expansions yet' : undefined;
+        this.rustAiBlocked ? 'New β cannot play these settings yet' : undefined;
       return AI_ENGINE_OPTIONS.map((option) => option.value === 'rust' && reason !== undefined ? {...option, disabled: true, title: reason} : option);
+    },
+    // What the new AI of this server cannot play; before the server answered: nothing (the server checks again)
+    rustAiCompatibility(): RustAiCompatibility {
+      const support = rustAiSupport.value;
+      if (support === undefined || !newAiAvailable.value) {
+        return {ok: true, reasons: []};
+      }
+      return isRustAiCompatible(rustAiSettingsOf(this.newGameConfig, this.summaryBoard), support);
+    },
+    rustAiBlocked(): boolean {
+      return !this.rustAiCompatibility.ok;
+    },
+    // Robots only where this server has the new AI and its answer is there
+    rustAiMarksShown(): boolean {
+      return newAiAvailable.value && rustAiSupport.value !== undefined;
+    },
+    // Only while the classic AI plays: otherwise the classic warning already stands there
+    rustAiWarningShown(): boolean {
+      return this.rustAiBlocked && this.aiPlayersCount > 0 && this.aiBlockers.length === 0;
+    },
+    // Reasons as summary chips: expansions and boards with their icons, options with their row's icon or a switch
+    rustAiBlockerChips(): Array<{key: string, label: string, iconClass?: string, picture?: string, capitalized?: boolean}> {
+      return this.rustAiCompatibility.reasons.map((blocker) => ({key: blocker.kind + ':' + blocker.id, ...this.rustAiBlockerChip(blocker)}));
     },
     // Settings the AI cannot handle (common/ai/aiSupport.ts), e.g. ['Colonies', 'Merger']
     aiBlockers(): Array<string> {
@@ -1201,6 +1257,41 @@ export default defineComponent({
       this.playersCount = total;
       const firstPosition = arranged.indexOf(firstPlayer);
       this.firstIndex = firstPosition >= 0 && firstPosition < total ? firstPosition + 1 : 1;
+    },
+    // The title is in capitals; a capital β reads as a B, so β keeps its case
+    betaKeptParts(text: string): Array<string> {
+      return text.split(/(β)/).filter((part) => part !== '');
+    },
+    /** True: the new AI can play this setting (robot behind its name). */
+    rustAiCan(kind: 'expansion' | 'board' | 'option' | 'duneModule', id: string): boolean {
+      const support = rustAiSupport.value;
+      if (!this.rustAiMarksShown || support === undefined) {
+        return false;
+      }
+      switch (kind) {
+      case 'expansion': return (support.expansions as ReadonlyArray<string>).includes(id);
+      case 'board': return (support.boards as ReadonlyArray<string>).includes(id);
+      case 'option': return support.options.includes(id as RustAiOption);
+      case 'duneModule': return support.duneModules.includes(id);
+      }
+    },
+    rustAiBlockerChip(blocker: RustAiBlocker): {label: string, iconClass?: string, picture?: string, capitalized?: boolean} {
+      switch (blocker.kind) {
+      case 'expansion': {
+        const choice = [...OFFICIAL_EXPANSIONS, ...FAN_EXPANSIONS].find((entry) => entry.expansion === blocker.id);
+        return {label: choice?.label ?? blocker.id, iconClass: choice === undefined ? undefined : 'create-game-expansion-icon ' + choice.iconClass};
+      }
+      case 'board':
+        return {label: blocker.id, iconClass: this.getBoardColorClass(blocker.id), capitalized: true};
+      case 'option': {
+        const option = RUST_AI_OPTION_LABELS[blocker.id];
+        return {label: option.label, iconClass: option.iconClass === undefined ? undefined : 'create-game-expansion-icon ' + option.iconClass};
+      }
+      case 'duneModule': {
+        const module = blocker.id as DuneModule;
+        return {label: DUNE_MODULE_LABEL[module] ?? module, picture: DUNE_MODULE_ICON[module] === undefined ? undefined : duneGraphic(DUNE_MODULE_ICON[module])};
+      }
+      }
     },
     seatKey(player: NewPlayerModel): number {
       return seatKey(player);

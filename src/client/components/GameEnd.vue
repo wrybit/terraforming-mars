@@ -299,6 +299,7 @@ import GameSetupGroups from '@/client/components/common/GameSetupGroups.vue';
 import ReplayButton from '@/client/components/replay/ReplayButton.vue';
 import {ReplayData} from '@/client/components/replay/replayData';
 import ReplayView from '@/client/components/replay/ReplayView.vue';
+import {writeReplayPlayer} from '@/client/components/replay/replayAddress';
 import {GameSetupChip} from '@/client/components/common/gameSetupChips';
 import {viewSetupChips} from '@/client/components/common/viewSetupChips';
 import {DataSet} from '@/client/components/gameend/VictoryPointChart.vue';
@@ -601,6 +602,7 @@ export default defineComponent({
     },
     closeReplay(): void {
       this.replay = undefined;
+      writeReplayPlayer(undefined);
       this.setPageAddress(paths.THE_END);
     },
     // Swaps the last part of the path (the-end ⇄ replay), keeping a world folder (/mars/, /dune/) and the id

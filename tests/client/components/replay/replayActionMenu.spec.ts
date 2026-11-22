@@ -6,6 +6,7 @@ import {REPLAY_TAB, replayActionFocus, replayActionMenu} from '@/client/componen
 import {ReplayPlayerState, ReplayState} from '@/client/components/replay/reconstructReplay';
 import {ReplayStep} from '@/client/components/replay/replaySteps';
 import {replayPlacedSpaces} from '@/client/components/replay/replayPlacedSpaces';
+import {readReplayPlayer, writeReplayPlayer} from '@/client/components/replay/replayAddress';
 
 const line = (message: string, values: Array<string | Array<string>>, viewer?: 'red' | 'blue'): ReplaySourceMessage => ({
   message, data: values.map((value) => ({type: LogMessageDataType.STRING, value} as any)), ...(viewer !== undefined ? {viewer} : {}),
@@ -76,5 +77,18 @@ describe('replayPlacedSpaces', () => {
       line('${0} played ${1}', ['red', CardName.ASTEROID]),
     ]);
     expect(replayPlacedSpaces(log, step(0, 1))).deep.eq(['35']);
+  });
+});
+
+describe('replayAddress', () => {
+  it('reads and writes the perspective of the replay address', () => {
+    window.history.replaceState(null, '', '/replay?id=g1');
+    expect(readReplayPlayer(['red', 'blue'])).is.undefined;
+    writeReplayPlayer('blue');
+    expect(window.location.search).eq('?id=g1&player=blue');
+    expect(readReplayPlayer(['red', 'blue'])).eq('blue');
+    expect(readReplayPlayer(['red'])).is.undefined;
+    writeReplayPlayer(undefined);
+    expect(window.location.search).eq('?id=g1');
   });
 });

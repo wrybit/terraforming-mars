@@ -217,10 +217,12 @@ html.tm-mobile .replay-view--mobile {
   display: none;
 }
 
-// Read only: the buttons of the action tabs (play card, sell, raise temperature, pass …) show what was done, but do
-// nothing; the tabs and the cards stay clickable to look around
-.replay-action-tabs :is(.wf-action, .or-tab-footer) :is(button, .btn, input) {
-  pointer-events: none;
+// Read only (ReplayActionTabs.vue stops the input): outside the tab bar nothing looks clickable
+.replay-action-tabs .or-tab-panel,
+.replay-action-tabs .or-tab-panel *,
+.replay-action-tabs .or-tab-footer,
+.replay-action-tabs .or-tab-footer * {
+  cursor: default !important;
 }
 
 // What the player does next, in the theme's selection colour like a choice in the game (selection_highlight.less):
@@ -302,7 +304,7 @@ label.replay-action-tabs__focus,
 .replay-panel--thin {
   padding: @replay-thin-padding;
   // Concentric with the round controls
-  border-radius: (@replay-thin-control / 2 + @replay-thin-padding);
+  border-radius: @button-radius;
 }
 
 // The folded bar is more transparent until the pointer is on it
@@ -1056,7 +1058,7 @@ label.replay-action-tabs__focus,
 
   .replay-panel--thin {
     padding: @replay-thin-padding;
-    border-radius: (@replay-thin-control / 2 + @replay-thin-padding);
+    border-radius: @button-radius;
   }
 
   .replay-panel__title > span,
@@ -1069,6 +1071,16 @@ label.replay-action-tabs__focus,
   .replay-panel__cube {
     width: 14px;
     height: 14px;
+  }
+
+  // The chosen perspective keeps its name, shortened with … when it is long; the others only show their colour
+  .replay-panel__segments button[aria-pressed="true"] .replay-panel__name {
+    display: inline-block;
+    max-width: 88px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: middle;
   }
 
   .replay-panel__info {

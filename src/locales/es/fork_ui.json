@@ -2455,7 +2455,6 @@
   "Classic": "Clásica",
   "New β": "Nueva β",
   "New AI, learns from its own games. Still being tested.": "Nueva IA, aprende de sus propias partidas. Aún en pruebas.",
-  "The new AI cannot play these expansions yet": "La nueva IA aún no puede jugar estas expansiones",
   "Where to place a tile, how to pay … Empty: 1000.": "Dónde colocar una loseta, cómo pagar… Vacío: 1000.",
   "Thinking time of a hard AI (normal: two thirds, easy: one third). Empty: 3000.": "Tiempo de reflexión de una IA difícil (normal: dos tercios, fácil: un tercio). Vacío: 3000.",
   "${0} is thinking": "${0} está pensando",
@@ -2558,5 +2557,8 @@
   "${0} lost ${1} ${2}": "${0} ha perdido ${1} ${2}",
   "Minimize": "Reducir",
   "${0} s per step": "${0} s por paso",
-  "${0} remaining": "quedan ${0}"
+  "${0} remaining": "quedan ${0}",
+  "New β can do this": "Nueva β puede con esto",
+  "New β not yet compatible with:": "Nueva β aún no es compatible con:",
+  "New β cannot play these settings yet": "Nueva β aún no puede jugar con estos ajustes"
 }

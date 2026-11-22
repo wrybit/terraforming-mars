@@ -33,6 +33,7 @@ import {installDecisionLogFile} from '@/server/ai/decisionLogFile';
 import {clearServerUpdateFlag} from '@/server/server/serverUpdate';
 import {startUptimeRecording} from '@/server/admin/dashboard/uptimeRecord';
 import {startPresenceRecording} from '@/server/admin/dashboard/presenceRecord';
+import {rustAiSupportFile} from './ai/rust/rustAiSupportFile';
 
 process.on('uncaughtException', (err: any) => {
   console.error('UNCAUGHT EXCEPTION', err);
@@ -124,6 +125,8 @@ async function start() {
   });
   prometheus.collectDefaultMetrics();
   globalInitialize();
+  // Logs a broken support file or unknown IDs right at startup instead of at the first create form
+  rustAiSupportFile.get();
 
   const server = createServer();
 

@@ -43,6 +43,32 @@ export function railBox(edges: Box, axis: ScrollAxis, bothAxes: boolean): Box {
   return {left: edges.left + OVERLAY_SCROLLBAR_GAP, top: bottom - OVERLAY_SCROLLBAR_THICKNESS, right: edges.right - OVERLAY_SCROLLBAR_GAP - corner, bottom};
 }
 
+/**
+ * The bar ends before floating elements that lie over its scroll area (e.g. the replay panel): a vertical bar stops
+ * above them, a horizontal bar beside them. Too little room left: the bar has no length (not shown).
+ */
+export function avoidObstacles(box: Box, axis: ScrollAxis, obstacles: ReadonlyArray<Box>): Box {
+  const result = {...box};
+  obstacles.forEach((obstacle) => {
+    const overlaps = obstacle.left < result.right && obstacle.right > result.left && obstacle.top < result.bottom && obstacle.bottom > result.top;
+    if (!overlaps) {
+      return;
+    }
+    if (axis === 'vertical') {
+      result.bottom = Math.max(result.top, obstacle.top - OVERLAY_SCROLLBAR_GAP);
+    } else if (obstacle.left > result.left) {
+      result.right = Math.max(result.left, obstacle.left - OVERLAY_SCROLLBAR_GAP);
+    } else {
+      result.left = Math.min(result.right, obstacle.right + OVERLAY_SCROLLBAR_GAP);
+    }
+  });
+  const length = axis === 'vertical' ? result.bottom - result.top : result.right - result.left;
+  if (length < OVERLAY_SCROLLBAR_MIN_THUMB) {
+    return axis === 'vertical' ? {...result, bottom: result.top} : {...result, right: result.left};
+  }
+  return result;
+}
+
 export type ScrollMetrics = {viewport: number, content: number, position: number};
 
 /** Is the point inside the box, or at most `slack` px outside of it? */

@@ -13,12 +13,11 @@ import {RustBotProcess, RustBotSettings} from './RustBotProcess';
 import {RandomRecord, recordRandom, takeRandom} from './rustRandom';
 import {steps} from './rustSteps';
 import {responseFor} from './rustContract';
+import {RUST_BOT_BINARY, RUST_BOT_DATA, RUST_BOT_EVENTS} from './rustBotPaths';
 
-// Where the program and its data are (only on servers that installed the Rust AI): by default in the database
-// folder, which survives updates of the server image, so installing is copying two things there
-const BINARY = process.env.RUST_BOT_BINARY ?? path.resolve('db', 'rust-ai', 'bot');
-const DATA = process.env.RUST_BOT_DATA ?? path.resolve('db', 'rust-ai', 'data');
-const EVENT_DIRECTORY = process.env.RUST_BOT_EVENTS ?? path.resolve('db', 'rust-bot');
+const BINARY = RUST_BOT_BINARY;
+const DATA = RUST_BOT_DATA;
+const EVENT_DIRECTORY = RUST_BOT_EVENTS;
 
 // Search effort per strength. The time limit keeps the bot about as quick as the TS AI on slow servers (AK1: 64
 // rollouts took 9 s for one decision): the search stops there with fewer rollouts. A started rollout still ends and

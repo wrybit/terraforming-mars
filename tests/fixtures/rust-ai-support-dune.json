@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "generated": "2026-11-22T18:00:00Z",
+  "botVersion": "test-build",
+  "expansions": ["corpera", "prelude", "prelude2", "colonies"],
+  "boards": ["tharsis", "hellas", "elysium", "arrakis-61", "arrakis-91"],
+  "options": ["draftVariant", "initialDraftVariant", "preludeDraftVariant"],
+  "duneModules": ["bazaar", "worm", "kanly", "schemes", "choam", "goals"]
+}

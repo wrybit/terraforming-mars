@@ -1338,7 +1338,6 @@
   "The new AI is not available on this server": "Новий ШІ недоступний на цьому сервері",
   "Switch off the new AI": "Вимкнути новий ШІ",
   "New games cannot choose the new AI. Games already running keep it. Takes effect at once.": "Нові ігри не можуть вибрати новий ШІ. Поточні ігри зберігають його. Діє одразу.",
-  "The new AI cannot play these expansions yet": "Новий ШІ ще не вміє грати з цими доповненнями",
   "Where to place a tile, how to pay … Empty: 1000.": "Куди покласти тайл, як заплатити … Порожньо: 1000.",
   "Thinking time of a hard AI (normal: two thirds, easy: one third). Empty: 3000.": "Час на роздуми складного ШІ (звичайний: дві третини, легкий: третина). Порожньо: 3000.",
   "${0} is thinking": "${0} думає",
@@ -1438,5 +1437,8 @@
   "Minimize": "Згорнути",
   "${0} s": "${0} с",
   "${0} s per step": "${0} с на крок",
-  "${0} remaining": "залишилось ${0}"
+  "${0} remaining": "залишилось ${0}",
+  "New β can do this": "Нова β це вміє",
+  "New β not yet compatible with:": "Нова β поки не сумісна з:",
+  "New β cannot play these settings yet": "Нова β ще не вміє грати з цими налаштуваннями"
 }

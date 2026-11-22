@@ -93,6 +93,14 @@ export function endInset(element: Element): number {
   return Number.isFinite(inset) ? inset * screenScale(element).y : 0;
 }
 
+/** Floating elements the bars keep clear of (attribute data-scrollbar-obstacle, e.g. the replay panel). */
+export function obstacleBoxes(): Array<Box> {
+  return Array.from(document.querySelectorAll('[data-scrollbar-obstacle]')).map((element) => {
+    const rect = element.getBoundingClientRect();
+    return {left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom};
+  });
+}
+
 /** Box whose border the bar of this area may snap to; without one, the area itself. */
 export function frameOf(element: Element): Element {
   return isPageScroller(element) ? element : (element.closest(FRAME_SELECTOR) ?? element);
