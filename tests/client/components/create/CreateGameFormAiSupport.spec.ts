@@ -36,8 +36,8 @@ describe('CreateGameForm and the AI support', () => {
     return {wrapper, vm};
   }
 
-  it('marks what the Rust AI can play while it plays new games', async () => {
-    serverAnswers('rust', true);
+  it('marks what the Rust AI can play while it plays new games without a stand-in', async () => {
+    serverAnswers('rust', false);
     const {vm} = await formWithAiSeat();
     expect(vm.aiCan('expansion', 'corpera')).is.true;
     expect(vm.aiCan('expansion', 'venus')).is.false;
@@ -45,12 +45,27 @@ describe('CreateGameForm and the AI support', () => {
     expect(vm.aiCan('option', 'soloTR')).is.false;
   });
 
-  it('shows no marks with the TypeScript AI or before the server answered', async () => {
+  it('shows no marks before the server answered', async () => {
     const {vm} = await formWithAiSeat();
     expect(vm.aiCan('expansion', 'corpera')).is.false;
+  });
+
+  it('marks what the TypeScript AI can play while it plays new games', async () => {
     serverAnswers('typescript', true);
+    const {vm} = await formWithAiSeat();
+    expect(vm.aiCan('expansion', 'venus')).is.true;
+    expect(vm.aiCan('expansion', 'colonies')).is.false;
+    expect(vm.aiCan('board', BoardName.HELLAS)).is.true;
+    expect(vm.aiCan('option', 'twoCorpsVariant')).is.false;
+  });
+
+  it('marks what either AI plays while the TypeScript AI stands in for the Rust AI, only Rust without it', async () => {
+    serverAnswers('rust', true);
+    const {vm} = await formWithAiSeat();
+    expect(vm.aiCan('expansion', 'venus')).is.true;
+    serverAnswers('rust', false);
     await nextTick();
-    expect(vm.aiCan('expansion', 'corpera')).is.false;
+    expect(vm.aiCan('expansion', 'venus')).is.false;
   });
 
   it('keeps the AI seats when the TypeScript AI stands in, without a word about it', async () => {
