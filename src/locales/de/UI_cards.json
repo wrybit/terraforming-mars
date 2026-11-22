@@ -15,12 +15,13 @@
   "Gain 3 plants.": "Erhalte 3 Pflanzen.",
   "colony": "Kolonie",
   "awards": "Auszeichnungen",
-
   "play": "spielen",
   "replay": "nochmal spielen",
-
   "1 VP per 2 animals on this card.": "1 SP für jedes zweite Tier auf dieser Karte.",
-
   "Life found.": "Leben gefunden.",
-  "No further VP possible!": "Keine weiteren SP möglich!"
+  "No further VP possible!": "Keine weiteren SP möglich!",
+  "x2": "",
+  "-x": "",
+  "max": "",
+  "max 5": ""
 }
