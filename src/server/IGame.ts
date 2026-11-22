@@ -317,5 +317,5 @@ export interface IGame extends Logger {
 }
 
 export function isIGame(object: unknown): object is IGame {
-  return isObject(object) && 'id' in object && isGameId(object.id);
+  return isObject(object) && 'id' in object && typeof object.id === 'string' && isGameId(object.id);
 }

@@ -44,8 +44,9 @@ function isUnits(arg: unknown): arg is Units {
   if (!isObject(arg)) {
     return false;
   }
+  const record = arg as Record<string, unknown>;
   return keys.every((key) =>
-    typeof arg[key] === 'number' && !isNaN(arg[key]));
+    typeof record[key] === 'number' && !isNaN(record[key]));
 }
 
 /**

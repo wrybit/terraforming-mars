@@ -55,7 +55,7 @@ export class Cloner {
       if (isPlayerId(val)) {
         const idx = oldPlayerIds.indexOf(val);
         if (idx > -1) {
-          obj[key] = newPlayerIds[idx];
+          Reflect.set(obj, key, newPlayerIds[idx]);
         }
       } else if (typeof val === 'object') {
         Cloner.replacePlayerIds(val, oldPlayerIds, newPlayerIds);

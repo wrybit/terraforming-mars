@@ -479,9 +479,5 @@
   "Unable to perform undo operation. Error retrieving game from database. Please try again.": "Konnte Aktion nicht rückgängig machen. Es trat ein Fehler beim Laden des Spieles aus der Datenbank auf. Bitte versuche es noch einmal.",
   "${0} removed ${1}:cr:floater: from ${2} to gain ${3}${4}": "${0} entfernte ${1}:cr:floater: von ${2}, um ${3}${4} zu erhalten",
   "${0} discarded ${1}, ending its bonus for this generation": "${0} warf ${1} ab, der Bonus endet für diese Generation",
-  "A neutral delegate is the new leader of the ${0} party": "Ein neutraler Delegierter ist der neue Vorsitzende der ${0}-Partei",
-  "${0} is the new leader of the ${1} party": "${0} ist der neue Vorsitzende der ${1}-Partei",
-  "The ruling party is: ${0}": "Die Regierungspartei ist: ${0}",
-  "${0} raised the temperature ${1} step(s)": "${0} hat die Temperatur um ${1} Schritte(n) erhöht",
   "${0} gained 1:r:steel: and 1:r:plants: from ${1}": "${0} hat 1:r:steel: und 1:r:plants: von ${1} erhalten"
 }
