@@ -130,6 +130,11 @@ html body #game-end.game-end--replay > :not(.replay-view) {
   overflow: auto;
 }
 
+// Mobile view: the panel floats above the footer bar
+html.tm-mobile .replay-view--mobile .replay-panel {
+  bottom: calc(@mb-nav-height + env(safe-area-inset-bottom) + 8px);
+}
+
 // The replay lies inside the results page, whose row handles have other distances (game_end_columns.less):
 // in the replay they keep those of the game (resize_handle.less), so the tabs get their room below the handle
 @media (min-width: @bp-desktop) {

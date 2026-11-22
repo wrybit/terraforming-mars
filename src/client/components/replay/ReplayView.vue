@@ -1,8 +1,35 @@
 <template>
   <!-- Replay of a finished game in the normal game view, read only: players, Mars, log with milestones & awards and
        the hand cards of the chosen player, as they were at the step of the replay panel below. -->
-  <div id="player-home" ref="root" class="player-home--fixed replay-view">
-    <HomeColumns>
+  <div id="player-home" ref="root" :class="['replay-view', mobile ? ['mb-home', 'mb-home--' + (screen === 'turn' ? 'replay-actions' : screen), 'replay-view--mobile'] : 'player-home--fixed']">
+    <!-- Phones and tablets: the mobile view of the game (one screen at a time, footer bar), like MobilePlayerHome.vue -->
+    <template v-if="mobile">
+      <MobileHeader :game="viewModel.game" :aria-label="$t('Players')" @click="screen = 'players'" />
+      <main class="mb-main">
+        <MobileMarsScreen v-show="screen === 'mars'" :game="viewModel.game" :players="viewModel.players" :participantId="viewModel.id"
+          :tileView="tileView" :acting="false" :bannerTitle="eventText" :viewerColor="perspective"
+          @toggleTileView="tileView = nextTileView(tileView)" @showMilestones="showMilestones" />
+        <section v-show="screen === 'hand'" class="mb-screen mb-screen--hand">
+          <HandCardsPanel :playerView="viewModel" hideUndergroundTokens />
+        </section>
+        <!-- Not the game's turn screen (its task bar takes over the footer): the action tabs as they are -->
+        <section v-show="screen === 'turn'" class="mb-screen mb-screen--replay-actions">
+          <ReplayActionTabs :playerView="viewModel" :menu="actionMenu" :focus="nextFocus" :color="replayColor(menuColor)" />
+        </section>
+        <section v-show="screen === 'players'" :class="['mb-screen', 'mb-screen--players', {'mb-screen--players-scroll': viewModel.players.length > 2}]">
+          <MobilePlayersPanel :viewModel="viewModel" :viewerColor="perspective" v-model:segment="playersSegment" />
+        </section>
+        <section v-show="screen === 'log'" class="mb-screen mb-screen--log">
+          <LogPanel :viewModel="viewModel" :stream="stream" />
+        </section>
+      </main>
+      <MobileNav :items="MOBILE_NAV" :active="screen" @navigate="screen = $event">
+        <template #turn>
+          <MobileTurnButton :acting="false" :actionNumber="undefined" :actionsPerTurn="2" />
+        </template>
+      </MobileNav>
+    </template>
+    <HomeColumns v-else>
       <template #board>
         <div class="player_home_block player-home-columns__mars">
           <GameBoardView :game="viewModel.game" :tileView="tileView" :players="viewModel.players" :viewerColor="perspective"
@@ -58,6 +85,14 @@ import GameBoardView from '@/client/components/GameBoardView.vue';
 import LogPanel from '@/client/components/logpanel/LogPanel.vue';
 import PlayersOverview from '@/client/components/overview/PlayersOverview.vue';
 import RowResizeHandle from '@/client/components/RowResizeHandle.vue';
+import HandCardsPanel from '@/client/components/HandCardsPanel.vue';
+import MobileHeader from '@/client/components/mobile/MobileHeader.vue';
+import MobileMarsScreen from '@/client/components/mobile/MobileMarsScreen.vue';
+import MobileNav from '@/client/components/mobile/MobileNav.vue';
+import MobilePlayersPanel from '@/client/components/mobile/MobilePlayersPanel.vue';
+import MobileTurnButton from '@/client/components/mobile/MobileTurnButton.vue';
+import {MOBILE_NAV, MobileScreen, PlayersSegment} from '@/client/components/mobile/mobileScreens';
+import {mobileLayout} from '@/client/utils/mobileLayout';
 import ReplayPanel from './ReplayPanel.vue';
 import ReplayActionTabs from './ReplayActionTabs.vue';
 import {replayActionFocus, replayActionMenu} from './replayActionMenu';
@@ -80,6 +115,14 @@ defineEmits<{(event: 'close'): void}>();
 const current = ref(0);
 const perspective = ref<Color>(props.final.thisPlayer?.color ?? props.source.players[0].color);
 const tileView = ref<TileView>('show');
+// Mobile view: which screen of the footer bar is open, and the toggle of the players screen
+const mobile = computed(() => mobileLayout.value);
+const screen = ref<MobileScreen>('mars');
+const playersSegment = ref<PlayersSegment>('players');
+function showMilestones(): void {
+  playersSegment.value = 'ma';
+  screen.value = 'players';
+}
 
 const generations = computed(() => replayGenerations(props.steps));
 const raises = computed(() => replayRaises(props.steps, props.states));
