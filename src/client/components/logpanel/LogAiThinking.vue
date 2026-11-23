@@ -49,23 +49,38 @@ export default defineComponent({
         }
         this.deadlines = next;
         this.now = now;
+        // Count only while a line shows: an endless per-frame update forced the whole page to be composited anew in
+        // every frame, which dropped frames (visible as flicker) even when no AI was thinking
+        if (entries.length > 0) {
+          this.startTicking();
+        } else {
+          this.stopTicking();
+        }
       },
     },
   },
-  mounted() {
-    // Milliseconds count down smoothly: one update per frame
-    const tick = () => {
-      this.now = Date.now();
-      this.frame = window.requestAnimationFrame(tick);
-    };
-    tick();
-  },
   unmounted() {
-    if (this.frame !== undefined) {
-      window.cancelAnimationFrame(this.frame);
-    }
+    this.stopTicking();
   },
   methods: {
+    // Milliseconds count down smoothly: one update per frame, until the countdown has reached 0
+    startTicking(): void {
+      if (this.frame !== undefined) {
+        return;
+      }
+      const tick = () => {
+        this.now = Date.now();
+        const running = [...this.deadlines.values()].some((deadline) => deadline.at > this.now);
+        this.frame = running ? window.requestAnimationFrame(tick) : undefined;
+      };
+      this.frame = window.requestAnimationFrame(tick);
+    },
+    stopTicking(): void {
+      if (this.frame !== undefined) {
+        window.cancelAnimationFrame(this.frame);
+        this.frame = undefined;
+      }
+    },
     playerName(color: Color): string {
       return this.players.find((player) => player.color === color)?.name ?? color;
     },
