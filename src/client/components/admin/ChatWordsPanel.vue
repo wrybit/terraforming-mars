@@ -7,7 +7,7 @@
     <p class="server-settings-description" v-i18n>Every list applies to every message, players write in mixed languages.</p>
     <p v-if="status === 'loading'" class="games-overview-note" v-i18n>Loading…</p>
     <template v-else>
-      <div class="chat-words-columns">
+      <div ref="grid" class="chat-words-columns" :style="{'--chat-words-columns': columnsPerRow}">
         <label v-for="language in languages" :key="language" class="chat-words-column">
           <span class="chat-words-head" :title="`${LANGUAGES[language][0]} (${LANGUAGES[language][1]})`">
             <LanguageFlag :lang="language" class="chat-words-flag" />
@@ -42,9 +42,15 @@ type Texts = Record<LANGUAGE, string>;
 const BOTTOM_ROOM = 100;
 // Below this width the columns wrap into many rows: the page scrolls, every list keeps a fixed height
 const MIN_FILL_WIDTH = 600;
+// Narrowest column and the gap between columns (admin_settings.less): how many columns fit in a row
+const MIN_COLUMN_WIDTH = 120;
+const COLUMN_GAP = 10;
 
 const languages = ALL_LANGUAGES;
 const root = ref<HTMLElement | null>(null);
+const grid = ref<HTMLElement | null>(null);
+// Columns per row: as few rows as the width allows, the languages spread evenly over them (17 → 9 + 8, not 13 + 4)
+const columnsPerRow = ref<number>(ALL_LANGUAGES.length);
 const height = ref<number | undefined>(undefined);
 const status = ref<'loading' | 'done'>('loading');
 const texts = ref<Texts>(toTexts(undefined));
@@ -74,8 +80,16 @@ function apply(model: ChatWordsModel): void {
   defaults.value = model.defaults;
 }
 
+function fitColumns(): void {
+  const width = grid.value?.clientWidth ?? 0;
+  const fitting = Math.max(1, Math.floor((width + COLUMN_GAP) / (MIN_COLUMN_WIDTH + COLUMN_GAP)));
+  const rows = Math.ceil(ALL_LANGUAGES.length / fitting);
+  columnsPerRow.value = Math.ceil(ALL_LANGUAGES.length / rows);
+}
+
 // The section ends at the bottom edge of the window: its height is what is left below its top
 function fitHeight(): void {
+  fitColumns();
   const element = root.value;
   if (element === null || window.innerWidth < MIN_FILL_WIDTH) {
     height.value = undefined;

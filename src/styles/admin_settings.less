@@ -564,8 +564,8 @@
 .chat-words-columns {
   display: grid;
   flex: 1;
-  // Narrow enough that all 17 languages fit in one row on a wide screen
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  // As many columns per row as the panel works out (ChatWordsPanel.vue: evenly spread rows); at least 120px each
+  grid-template-columns: repeat(var(--chat-words-columns, 2), minmax(0, 1fr));
   grid-auto-rows: minmax(0, 1fr);
   gap: 16px 10px;
   min-height: 0;

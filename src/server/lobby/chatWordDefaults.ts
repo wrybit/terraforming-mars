@@ -5,80 +5,113 @@ import {LANGUAGE} from '../../common/constants';
 // message (players write in mixed languages); the languages only keep the lists maintainable on the admin page.
 //
 // An entry also catches longer words it starts ("arsch" in "Arschloch", not in "Barsch"). So entries that start
-// ordinary words of ANY language are left out, e.g. German "homo" (homogen), Dutch "kut" (German Kutsche),
-// Norwegian "kuk" (Finnish kukka = flower), "negro" (Spanish and Portuguese for black), "fica" (Portuguese: stays),
-// "paki" (Pakistan), "spic" (spicy), Hungarian "fasz" (Faszination), Russian "жид" (жидкий = liquid).
-// Chinese and Japanese entries match anywhere in a text: those scripts have no spaces between words.
+// ordinary words of ANY language are left out, e.g. "homo" (homogen), "kut" (Kutsche), "kuk" (Finnish kukka),
+// "negro" (Spanish and Portuguese for black), "fica" (Portuguese: stays), "paki" (Pakistan), "spic" (spicy),
+// "cock" (cocktail), "fasz" (Faszination), "жид" (жидкий), "хер" (Херсон), "pikk" (Finnish pikku), "kusi" (Polish
+// kusić), "dago" (Dagobert), "spaz" (Italian spazio), "конча" (кончать). Chinese and Japanese entries match anywhere
+// in a text, those scripts have no spaces between words; so short ones that sit inside ordinary words are left out
+// there too (カス in カスタム, デブ in デブリ, 日你 in 今日你好).
+// The test of the chat filters checks a list of such ordinary words against all defaults.
 export const DEFAULT_CHAT_WORDS: Readonly<Record<LANGUAGE, ReadonlyArray<string>>> = {
   en: [
-    'asshole', 'bastard', 'beaner', 'bitch', 'bullshit', 'chink', 'cocksucker', 'coon', 'cunt', 'dickhead', 'dumbass', 'dyke',
-    'fag', 'faggot', 'feminazi', 'fuck', 'gas the jews', 'gook', 'heil hitler', 'jigaboo', 'kike', 'kill yourself', 'kys', 'motherfucker',
-    'nigga', 'nigger', 'piss', 'porch monkey', 'pussy', 'raghead', 'retard', 'sandnigger', 'shemale', 'shit', 'sieg heil',
-    'skank', 'slut', 'subhuman', 'towelhead', 'tranny', 'twat', 'wanker', 'wetback', 'white power', 'whore', '1488',
+    'arsehole', 'assclown', 'asshole', 'asswipe', 'bastard', 'beaner', 'bellend', 'bitch', 'bollocks', 'bullshit', 'ching chong',
+    'chink', 'cocksucker', 'coon', 'cumdump', 'cumslut', 'cunt', 'dagos', 'darkie', 'dickhead', 'dipshit', 'douchebag', 'dumbass',
+    'dumbfuck', 'dyke', 'f4ggot', 'fag', 'faggit', 'faggot', 'fatass', 'feminazi', 'fuck', 'gas the jews', 'gaylord', 'go back to africa',
+    'golliwog', 'gook', 'half-breed', 'heil hitler', 'holohoax', 'honky', 'injuns', 'jigaboo', 'jizz', 'kike', 'kill yourself', 'kkk',
+    'kys', 'lesbo', 'libtard', 'motherfucker', 'n1gga', 'n1gger', 'nigga', 'nigger', 'nignog', 'oven dodger', 'paedo', 'pikey', 'piss',
+    'polack', 'poofter', 'porch monkey', 'pussy', 'raghead', 'rapist', 'redskin', 'retard', 'sandnigger', 'shemale', 'shit', 'sieg heil',
+    'skank', 'slut', 'subhuman', 'towelhead', 'trannie', 'tranny', 'turd', 'twat', 'wanker', 'wetback', 'white power',
+    'white pride', 'whore', 'wog', 'zipperhead', '1488',
   ],
   de: [
-    'arsch', 'arschgeige', 'arschloch', 'bastard', 'depp', 'drecksau', 'dreckskerl', 'fick', 'flittchen', 'fotze', 'hackfresse',
-    'heil hitler', 'hurensohn', 'hure', 'idiot', 'judenpack', 'judensau', 'kackbratze', 'kameltreiber', 'kampflesbe', 'kanacke',
-    'kanake', 'kümmeltürke', 'missgeburt', 'mistgeburt', 'nafri', 'nazi', 'neger', 'nutte', 'penner', 'pisser', 'rassenschande',
-    'scheiß', 'scheiss', 'schlampe', 'schlitzauge', 'schwanzlutscher', 'schwuchtel', 'sieg heil', 'spast', 'spasti', 'transe',
-    'trottel', 'tunte', 'umvolkung', 'untermensch', 'verpiss', 'volksverräter', 'vollidiot', 'votze', 'wichser', 'wixer', 'zigeuner',
+    'abschaum', 'affenarsch', 'arsch', 'arschgeige', 'arschloch', 'asoziale', 'ausländer raus', 'bastard', 'behindi', 'blödmann',
+    'depp', 'deutschland den deutschen', 'drecks', 'drecksau', 'dreckskerl', 'dummfick', 'fettsack', 'fettschwein', 'fick',
+    'flittchen', 'fotze', 'gaskammer', 'hackfresse', 'heil hitler', 'hirnamputiert', 'hohlbirne', 'hurensohn', 'hure', 'idiot',
+    'judenpack', 'juden raus', 'judensau', 'judenschwein', 'kackbratze', 'kameltreiber', 'kampflesbe', 'kanacke', 'kanake',
+    'kinderficker', 'kopftuchmädchen', 'krüppel', 'kümmeltürke', 'missgeburt', 'mistgeburt', 'nafri', 'nazi', 'neger', 'nutte',
+    'penner', 'pimmel', 'pisser', 'pissnelke', 'polacke', 'rassenschande', 'saftsack', 'scheiß', 'scheiss', 'schlampe', 'schlitzauge',
+    'schlitzi', 'schwachkopf', 'schwachmat', 'schwanzlutscher', 'schwuchtel', 'sieg heil', 'spacko', 'spast', 'spasti', 'stricher',
+    'titten', 'transe', 'trottel', 'tunte', 'umvolkung', 'untermensch', 'vergasen', 'verpiss', 'volksverräter', 'vollidiot',
+    'vollpfosten', 'votze', 'wichs', 'wichser', 'wixer', 'zigeuner',
   ],
   fr: [
-    'bamboula', 'bâtard', 'batard', 'bougnoule', 'chinetoque', 'connard', 'connasse', 'crouille', 'enculé', 'encule', 'enfoiré',
-    'enfoire', 'fils de pute', 'gouine', 'merde', 'nègre', 'négro', 'nique ta mère', 'pédé', 'pétasse', 'pute', 'putain',
-    'salope', 'sale arabe', 'sale juif', 'sale noir', 'tapette', 'travelo', 'youpin',
+    'abruti', 'baltringue', 'bamboula', 'bâtard', 'batard', 'bicot', 'boche', 'bougnoule', 'branleur', 'branleuse', 'casse-toi',
+    'chienne', 'chinetoque', 'chintok', 'conasse', 'connard', 'connasse', 'couille', 'crétin', 'crouille', 'enculé', 'encule',
+    'enculer', 'enfoiré', 'enfoire', 'fils de pute', 'garce', 'gouine', 'grognasse', 'merde', 'nègre', 'négresse', 'négro',
+    'niakoué', 'nique', 'pédé', 'pétasse', 'pouffiasse', 'pute', 'putain', 'raclure', 'ritals', 'salaud', 'salope', 'sale arabe',
+    'sale juif', 'sale noir', 'ta gueule', 'tafiole', 'tapette', 'tarlouze', 'travelo', 'trou du cul', 'va te faire', 'youpin',
   ],
   ru: [
-    'бля', 'гандон', 'долбоеб', 'долбоёб', 'еба', 'ебл', 'жиды', 'жидов', 'заеб', 'зиг хайль', 'москаль', 'мудак', 'нахуй', 'пидор', 'пидар',
-    'педик', 'пизд', 'сдохни', 'сука', 'хохол', 'хуй', 'хуе', 'хуё', 'чурка', 'черножоп', 'шлюха',
+    'ахуе', 'бля', 'выеб', 'гандон', 'гнида', 'говно', 'даун', 'дебил', 'дерьмо', 'долбан', 'долбоеб', 'долбоёб', 'еба', 'ебл', 'жидов',
+    'жиды', 'заеб', 'залупа', 'зиг хайль', 'москаль', 'мразь', 'мудак', 'мудил', 'нахуй', 'нигер', 'обосра', 'отсос', 'падла',
+    'пендос', 'педераст', 'педик', 'пидар', 'пидор', 'пизд', 'потаскуха', 'распизд', 'сдохни', 'срань', 'сука', 'сучк', 'тварь',
+    'уеб', 'уёб', 'ублюдок', 'урод', 'хохлы', 'хохол', 'хуе', 'хуё', 'хуй', 'черномаз', 'черножоп', 'чмо', 'чурка', 'чучмек',
+    'шалава', 'шлюха',
   ],
   cn: [
-    '傻逼', '傻屄', '煞笔', '草泥马', '操你妈', '肏你', '他妈的', '婊子', '贱人', '王八蛋', '狗娘养', '黑鬼', '支那', '小日本',
-    '日本鬼子', '基佬', '人妖', '尼哥', '脑残', '智障', '去死',
+    '傻逼', '傻屄', '傻b', '煞笔', '草泥马', '草你妈', '操你妈', '肏', '妈逼', '他妈的', '你妈死了', '滚你妈', '屌', '鸡巴',
+    '婊子', '绿茶婊', '骚货', '贱货', '贱人', '王八蛋', '狗日', '狗娘养', '杂种', '畜生', '蠢货', '废物', '死全家', '去死', '脑残',
+    '智障', '黑鬼', '黑奴', '尼哥', '支那', '小日本', '日本鬼子', '鬼佬', '阿三', '基佬', '娘炮', '人妖',
   ],
   pl: [
-    'chuj', 'ciapaty', 'ciota', 'cwel', 'czarnuch', 'debil', 'dziwka', 'huj', 'jebać', 'jebac', 'jebany', 'kurwa', 'kurwy', 'kutas',
-    'murzyn', 'pedał', 'pierdol', 'pizda', 'skurwysyn', 'spierdal', 'szmata', 'zjeb',
+    'brudas', 'chuj', 'ciapaty', 'ciota', 'cipa', 'ciul', 'cwel', 'czarnuch', 'debil', 'dupek', 'dziwka', 'gnój', 'gówno', 'huj',
+    'idiota', 'jeba', 'jebać', 'jebac', 'jebany', 'jebn', 'kretyn', 'kurew', 'kurwa', 'kurwy', 'kutas', 'lesba', 'murzyn', 'pedał',
+    'pierdol', 'pizda', 'pojeb', 'popapraniec', 'ruchać', 'skurwysyn', 'spierdal', 'sukinsyn', 'szmata', 'wypierdal', 'zjeb', 'żydek',
   ],
   es: [
-    'cabrón', 'cabron', 'chinga', 'coño', 'culero', 'gilipollas', 'hijo de puta', 'joto', 'mamón', 'marica', 'maricón', 'maricon',
-    'mierda', 'mongólico', 'negrata', 'pendejo', 'puta', 'puto', 'retrasado', 'subnormal', 'sudaca', 'tortillera', 'travelo', 'verga',
+    'bollera', 'boludo', 'cabrón', 'cabron', 'carajo', 'chinga', 'concha de tu madre', 'conchetumare', 'coño', 'culero', 'follar',
+    'gilipollas', 'hijo de puta', 'hijueputa', 'imbécil', 'joder', 'jodido', 'joto', 'malnacido', 'malparido', 'mamaguevo', 'mamón',
+    'marica', 'maricón', 'maricon', 'marimacho', 'mariposón', 'mierda', 'mongólico', 'negrata', 'pajero', 'pelotudo', 'pendejo',
+    'pinche', 'polla', 'puta', 'puto', 'retrasado', 'sarasa', 'sidoso', 'subnormal', 'sudaca', 'tarado', 'tortillera', 'travelo', 'verga',
     'zorra',
   ],
   br: [
-    'arrombado', 'babaca', 'buceta', 'caralho', 'crioulo', 'cuzão', 'desgraçado', 'fdp', 'filho da puta', 'foda-se', 'merda',
-    'mongoloide', 'otário', 'porra', 'puta', 'retardado', 'sapatão', 'traveco', 'vagabunda', 'viado',
+    'arrombada', 'arrombado', 'babaca', 'baitola', 'boiola', 'bosta', 'buceta', 'cacete', 'caralho', 'corno', 'crioulo', 'cuzão',
+    'desgraçado', 'escroto', 'fdp', 'filha da puta', 'filho da puta', 'foda-se', 'foder', 'fodido', 'imbecil', 'merda', 'mongoloide',
+    'otário', 'pau no cu', 'porra', 'punheteiro', 'puta', 'putinha', 'retardado', 'safado', 'sapatão', 'tição', 'traveco', 'vadia',
+    'vagabunda', 'vai se foder', 'vai tomar no cu', 'viado', 'xoxota',
   ],
   it: [
-    'bastardo', 'cazzo', 'coglione', 'dio cane', 'frocio', 'mignotta', 'mongoloide', 'porco dio', 'puttana', 'ricchione',
-    'ritardato', 'stronza', 'stronzo', 'terrone', 'troia', 'vaffanculo', 'zingaro',
+    'bagascia', 'baldracca', 'bastardo', 'bocchinara', 'cagna', 'cazzo', 'checca', 'coglione', 'cornuto', 'culattone', 'dio cane',
+    'fottiti', 'fottuto', 'frocio', 'imbecille', 'mignotta', 'minchia', 'mongoloide', 'muso giallo', 'negraccio', 'porca madonna',
+    'porco dio', 'puttana', 'ricchione', 'rincoglionito', 'ritardato', 'sborra', 'segaiolo', 'sfigato', 'stronza', 'stronzo',
+    'succhiacazzi', 'terrone', 'troia', 'troione', 'vaffanculo', 'zingaro', 'zoccola',
   ],
   ko: [
-    '개새끼', '걸레년', '게이새끼', '김치녀', '꺼져', '니거', '된장녀', '미친년', '미친놈', '병신', '보지', '시발', '씨발', '씨팔',
-    '자지', '좆', '지랄', '짱깨', '쪽바리', '한남충',
+    'ㅂㅅ', 'ㅅㅂ', '개같은', '개년', '개놈', '개새끼', '걸레년', '게이새끼', '김치녀', '꺼져', '꼴통', '느금마', '니거', '니애미',
+    '닥쳐', '된장녀', '등신', '또라이', '똥남아', '미친년', '미친놈', '미친새끼', '병신', '보지', '븅신', '빡대가리', '시발', '썅',
+    '씨발', '씨팔', '씹', '애미', '엠창', '자지', '좆', '지랄', '짱깨', '쪽바리', '창녀', '튀기', '한남충', '호로', '흑형',
   ],
   nl: [
-    'flikker', 'godverdomme', 'hoer', 'kanker', 'klootzak', 'kutwijf', 'mietje', 'mongool', 'neger', 'slet', 'tering', 'trut', 'tyfus',
+    'aars', 'achterlijk', 'debiel', 'flikker', 'godver', 'godverdomme', 'hoer', 'kanker', 'klootzak', 'kuthoer', 'kutwijf', 'kutzooi',
+    'lesbo', 'makak', 'mietje', 'mongool', 'neger', 'nikker', 'pokkenlijer', 'potenrammer', 'schijt', 'slet', 'sodemieter', 'sukkel',
+    'tering', 'trut', 'tyfus', 'zwartjoekel',
   ],
   hu: [
-    'baszd meg', 'bazdmeg', 'buzi', 'faszfej', 'geci', 'köcsög', 'kurva', 'néger', 'nyomorék', 'picsa', 'retardált', 'ribanc', 'szarházi',
+    'anyád', 'baszd meg', 'bazdmeg', 'bazmeg', 'buzeráns', 'buzi', 'büdös cigány', 'faszfej', 'faszkalap', 'faszság',
+    'fasszopó', 'geci', 'hülye', 'idióta', 'kibaszott', 'köcsög', 'kurva', 'lófasz', 'mocskos', 'néger', 'nyomorék', 'picsa', 'pöcs',
+    'retardált', 'retkes', 'ribanc', 'seggfej', 'szarházi', 'szarjál', 'szopj',
   ],
   jp: [
-    'クソ野郎', '馬鹿野郎', '死ね', '殺すぞ', 'キモい', 'ブス', 'チョン', 'ニガー', '黒んぼ', '支那人', 'オカマ', 'ガイジ',
-    'まんこ', 'ちんこ',
+    'キチガイ', '気違い', 'きちがい', 'クズ', 'クソ野郎', '馬鹿野郎', '死ね', '殺すぞ', 'くたばれ', '消えろ', 'キモい', 'ブス', 'ビッチ',
+    'ヤリマン', 'まんこ', 'ちんこ', 'ちんぽ', 'チョン', 'チャンコロ', 'ジャップ', 'ニガー', '黒んぼ', '土人', '支那人', 'オカマ',
+    'ガイジ', '池沼',
   ],
   bg: [
-    'гъз', 'да ти еба', 'еба ти', 'копеле', 'курва', 'лайно', 'майна', 'мангал', 'педал', 'педераст', 'путка', 'тъпанар', 'шибан',
+    'гъз', 'да ти еба', 'дебил', 'еба ти', 'идиот', 'копеле', 'кучи син', 'курва', 'лайно', 'майна', 'мангал', 'мръсник', 'педал',
+    'педераст', 'пиклю', 'пичка', 'путка', 'седесар', 'скапаняк', 'тъпак', 'тъпанар', 'урод', 'чернилка', 'шибан',
   ],
   nb: [
-    'drittsekk', 'faen', 'fitte', 'homse', 'horunge', 'jævla', 'jævel', 'neger', 'pakkis', 'soper', 'svarting',
+    'drittsekk', 'faen', 'fanden', 'fitta', 'fitte', 'føkk', 'helvete', 'hestkuk', 'homse', 'horebukk', 'horunge', 'jævel', 'jævla',
+    'kødd', 'kuksuger', 'neger', 'pakkis', 'rasshøl', 'soper', 'svarting', 'svartskalle', 'tulling',
   ],
   ua: [
-    'блядь', 'довбойоб', 'жиди', 'засранець', 'кацап', 'курва', 'мудак', 'підар', 'підор', 'пізд', 'повія', 'русня', 'сука', 'хуй',
-    'хуйло', 'чурка', 'шльондра',
+    'бидло', 'блядь', 'виблядок', 'гівно', 'дебіл', 'довбень', 'довбойоб', 'жиди', 'засранець', 'їба', 'йобан', 'кацап', 'курва',
+    'лайно', 'мразь', 'мудак', 'нахуй', 'підар', 'підор', 'пізд', 'повія', 'покидьок', 'русня', 'срака', 'сука', 'тварюка', 'уйобок',
+    'хуй', 'хуйло', 'чмо', 'чурка', 'шльондра', 'шмара',
   ],
   fi: [
-    'haista vittu', 'hintti', 'huora', 'jumalauta', 'kusipää', 'kyrpä', 'lutka', 'mulkku', 'mutakuono', 'neekeri', 'paska', 'perkele',
-    'ryssä', 'saatana', 'vittu',
+    'haista vittu', 'hintti', 'huora', 'jumalauta', 'kusipää', 'kyrpä', 'lutka', 'mulkku', 'mutakuono', 'neekeri', 'paska',
+    'paskiainen', 'perkele', 'pillu', 'runkkari', 'ryssä', 'saatana', 'vittu', 'vitun',
   ],
 };
