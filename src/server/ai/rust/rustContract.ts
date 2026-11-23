@@ -46,9 +46,17 @@ function menuIndex(options: Array<any>, option: string, choice: ContractChoice =
  * Nested inputs that need their own decision take the next chain element.
  */
 export function responseFor(input: any, chain: Array<ContractChoice>, position = 0): any {
-  const choice = chain[position];
+  let choice = chain[position];
   if (choice === undefined) {
     throw new Error(`no bot choice for ${titleOf(input)}`);
+  }
+  // Buying cards: TS asks for the cards and the payment separately, the bot answers both with the same chain
+  // (cards, then payment). The payment question takes the payment element, otherwise it would pay nothing.
+  if (input.type === 'payment' && choice.kind !== 'payment') {
+    const paymentPosition = chain.findIndex((candidate, index) => index > position && candidate.kind === 'payment');
+    if (paymentPosition >= 0) {
+      choice = chain[paymentPosition];
+    }
   }
   switch (input.type) {
   case 'initialCards': {
