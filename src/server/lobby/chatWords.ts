@@ -1,6 +1,6 @@
 import * as path from 'path';
 import {fileStorage, LobbyStorage} from './lobbyStorage';
-import {ALL_LANGUAGES, LANGUAGE} from '../../common/constants';
+import {ALL_LANGUAGES} from '../../common/constants';
 import {ChatWordLists} from '../../common/lobby/LobbyChatModel';
 import {DEFAULT_CHAT_WORDS} from './chatWordDefaults';
 
@@ -26,11 +26,16 @@ const WITHOUT_SPACES = /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}]/u
  */
 export function maskWords(text: string, words: ReadonlyArray<string>): string {
   const entries = words.map((word) => word.trim()).filter((word) => word !== '');
-  const spaced = entries.filter((word) => !WITHOUT_SPACES.test(word));
+  // Number codes (88) only as a whole number: as a word start they would also mask 880 or 8800
+  const numbers = entries.filter((word) => /^[0-9]+$/.test(word));
   const unspaced = entries.filter((word) => WITHOUT_SPACES.test(word));
+  const spaced = entries.filter((word) => !WITHOUT_SPACES.test(word) && !numbers.includes(word));
   const parts: Array<string> = [];
   if (spaced.length > 0) {
     parts.push(`(?<![\\p{L}\\p{N}])(?:${spaced.map(escapeForRegExp).join('|')})[\\p{L}\\p{N}]*`);
+  }
+  if (numbers.length > 0) {
+    parts.push(`(?<![\\p{L}\\p{N}])(?:${numbers.join('|')})(?![\\p{L}\\p{N}])`);
   }
   if (unspaced.length > 0) {
     parts.push(`(?:${unspaced.map(escapeForRegExp).join('|')})`);
@@ -61,18 +66,42 @@ export function defaultChatWordLists(): ChatWordLists {
 }
 
 /**
- * The saved lists. Before the lists per language the file held one list: its words keep the language of the
- * default list they appear in, own additions go to German (the admin's language then), and the new default
- * words of every language join them.
+ * What the file holds: the lists, and every default word known when they were saved. A default word added to the
+ * code since then joins its list; a default word the admin deleted stays deleted (it is known, but not in the list).
+ */
+type SavedChatWords = {lists: ChatWordLists, knownDefaults: Array<string>};
+
+function allDefaultWords(): Array<string> {
+  return Array.from(new Set(Object.values(defaultChatWordLists()).flat()));
+}
+
+/**
+ * The saved lists. Older files held one list for all languages (its own additions go to German, the admin's
+ * language then) or the lists without the known defaults; both get every default word added.
  */
 function loadChatWordLists(saved: unknown): ChatWordLists {
-  if (!Array.isArray(saved)) {
-    return saved === undefined ? defaultChatWordLists() : normalizeChatWordLists(saved);
+  if (saved === undefined) {
+    return defaultChatWordLists();
   }
-  const lists: Record<LANGUAGE, Array<string>> = {...defaultChatWordLists()};
-  const known = new Set(Object.values(lists).flat());
-  const additions = normalizeChatWords(saved).filter((word) => !known.has(word));
-  lists.de = normalizeChatWords([...lists.de, ...additions]);
+  let lists: ChatWordLists;
+  let known: Set<string>;
+  if (Array.isArray(saved)) {
+    lists = normalizeChatWordLists({de: saved});
+    known = new Set();
+  } else if (typeof saved === 'object' && saved !== null && 'knownDefaults' in saved) {
+    const file = saved as Partial<SavedChatWords>;
+    lists = normalizeChatWordLists(file.lists);
+    known = new Set(Array.isArray(file.knownDefaults) ? file.knownDefaults : []);
+  } else {
+    lists = normalizeChatWordLists(saved);
+    known = new Set();
+  }
+  const defaults = defaultChatWordLists();
+  const used = new Set(Object.values(lists).flat());
+  for (const language of ALL_LANGUAGES) {
+    const added = defaults[language].filter((word) => !known.has(word) && !used.has(word));
+    lists[language] = normalizeChatWords([...lists[language], ...added]);
+  }
   return lists;
 }
 
@@ -96,7 +125,8 @@ export class ChatWordList {
 
   public set(lists: unknown): ChatWordLists {
     this.lists = normalizeChatWordLists(lists);
-    this.storage.save(this.lists);
+    const saved: SavedChatWords = {lists: this.lists, knownDefaults: allDefaultWords()};
+    this.storage.save(saved);
     return this.lists;
   }
 }

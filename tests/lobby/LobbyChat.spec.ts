@@ -139,7 +139,19 @@ describe('chat filters', () => {
     expect(list.get().de).includes('arsch').and.includes('meinwort');
     expect(list.get().fr).includes('salope');
     list.set({de: ['Eins'], xx: ['ignored']});
-    expect(saved).deep.include({de: ['eins'], en: []});
+    expect((saved as {lists: object}).lists).deep.include({de: ['eins'], en: []});
     expect(list.allWords()).deep.eq(['eins']);
+    // Saved with every default known: deleted defaults stay deleted after a restart
+    expect(new ChatWordList({load: () => saved, save: () => {}}).allWords()).deep.eq(['eins']);
+  });
+
+  it('adds default words that came after the save, keeps the ones the admin deleted', () => {
+    const saved = {lists: {de: ['arsch']}, knownDefaults: ['arsch', 'hure']};
+    const lists = new ChatWordList({load: () => saved, save: () => {}}).get();
+    expect(lists.de).includes('arsch').and.includes('hitler').and.not.includes('hure');
+  });
+
+  it('masks number codes only as a whole number', () => {
+    expect(maskWords('88 und 880 und x88', ['88'])).eq('** und 880 und x88');
   });
 });
