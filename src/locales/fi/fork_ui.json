@@ -1307,5 +1307,7 @@
   "Processor over the last ${0} seconds": "Suoritin viimeisten ${0} sekunnin aikana",
   "${0} s ago": "${0} s sitten",
   "The AI share is only measured on Linux servers.": "AI:n osuus mitataan vain Linux-palvelimilla.",
-  "This server has ${0} cores: at most ${0} threads.": "Tällä palvelimella on ${0} ydintä: enintään ${0} säiettä."
+  "This server has ${0} cores: at most ${0} threads.": "Tällä palvelimella on ${0} ydintä: enintään ${0} säiettä.",
+  "Load per core": "Kuorma ytimittäin",
+  "90 % or more": "90 % tai enemmän"
 }

@@ -1466,5 +1466,7 @@
   "Processor over the last ${0} seconds": "Процесор за останні ${0} секунд",
   "${0} s ago": "${0} с тому",
   "The AI share is only measured on Linux servers.": "Частку AI вимірюють лише сервери на Linux.",
-  "This server has ${0} cores: at most ${0} threads.": "Цей сервер має ${0} ядер: щонайбільше ${0} потоків."
+  "This server has ${0} cores: at most ${0} threads.": "Цей сервер має ${0} ядер: щонайбільше ${0} потоків.",
+  "Load per core": "Навантаження на ядро",
+  "90 % or more": "90 % і більше"
 }

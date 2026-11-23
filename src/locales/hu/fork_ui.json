@@ -1491,5 +1491,7 @@
   "Processor over the last ${0} seconds": "Processzor az utolsó ${0} másodpercben",
   "${0} s ago": "${0} mp-e",
   "The AI share is only measured on Linux servers.": "Az AI részarányát csak Linux-szerver méri.",
-  "This server has ${0} cores: at most ${0} threads.": "Ennek a szervernek ${0} magja van: legfeljebb ${0} szál."
+  "This server has ${0} cores: at most ${0} threads.": "Ennek a szervernek ${0} magja van: legfeljebb ${0} szál.",
+  "Load per core": "Terhelés magonként",
+  "90 % or more": "90 % vagy több"
 }

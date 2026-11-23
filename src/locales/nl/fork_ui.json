@@ -1934,5 +1934,7 @@
   "Processor over the last ${0} seconds": "Processor in de laatste ${0} seconden",
   "${0} s ago": "${0} s geleden",
   "The AI share is only measured on Linux servers.": "Het AI-aandeel wordt alleen op Linux-servers gemeten.",
-  "This server has ${0} cores: at most ${0} threads.": "Deze server heeft ${0} kernen: hoogstens ${0} threads."
+  "This server has ${0} cores: at most ${0} threads.": "Deze server heeft ${0} kernen: hoogstens ${0} threads.",
+  "Load per core": "Belasting per kern",
+  "90 % or more": "90 % of meer"
 }

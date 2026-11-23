@@ -2180,5 +2180,7 @@
   "Processor over the last ${0} seconds": "Процессор за последние ${0} секунд",
   "${0} s ago": "${0} с назад",
   "The AI share is only measured on Linux servers.": "Долю AI измеряют только серверы на Linux.",
-  "This server has ${0} cores: at most ${0} threads.": "У этого сервера ${0} ядер: не больше ${0} потоков."
+  "This server has ${0} cores: at most ${0} threads.": "У этого сервера ${0} ядер: не больше ${0} потоков.",
+  "Load per core": "Нагрузка на ядро",
+  "90 % or more": "90 % и выше"
 }

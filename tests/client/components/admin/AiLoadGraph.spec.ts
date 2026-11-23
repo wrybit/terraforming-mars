@@ -24,6 +24,8 @@ describe('AiLoadGraph', () => {
     expect(wrapper.findAll('.ai-load-area')).has.length(3);
     expect(wrapper.findAll('.ai-load-core')).has.length(4);
     expect(wrapper.findAll('.ai-load-core-fill--full')).has.length(1);
+    // The legend names both bar colors
+    expect(wrapper.findAll('.ai-load-core-swatch')).has.length(2);
     expect(wrapper.find('.ai-load-machine').text()).contains('Test CPU');
     expect(wrapper.find('.ai-load-legend').text()).contains('25 %');
     expect(wrapper.emitted('measured')?.[0]).deep.eq([SAMPLE]);

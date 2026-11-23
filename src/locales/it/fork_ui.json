@@ -2573,5 +2573,7 @@
   "Processor over the last ${0} seconds": "Processore negli ultimi ${0} secondi",
   "${0} s ago": "${0} s fa",
   "The AI share is only measured on Linux servers.": "La quota dell'AI si misura solo sui server Linux.",
-  "This server has ${0} cores: at most ${0} threads.": "Questo server ha ${0} core: al massimo ${0} thread."
+  "This server has ${0} cores: at most ${0} threads.": "Questo server ha ${0} core: al massimo ${0} thread.",
+  "Load per core": "Carico per core",
+  "90 % or more": "90 % o più"
 }

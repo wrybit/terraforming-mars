@@ -1561,5 +1561,7 @@
   "Processor over the last ${0} seconds": "최근 ${0}초 동안의 프로세서",
   "${0} s ago": "${0}초 전",
   "The AI share is only measured on Linux servers.": "AI 비중은 Linux 서버에서만 측정됩니다.",
-  "This server has ${0} cores: at most ${0} threads.": "이 서버의 코어는 ${0}개: 스레드는 최대 ${0}개."
+  "This server has ${0} cores: at most ${0} threads.": "이 서버의 코어는 ${0}개: 스레드는 최대 ${0}개.",
+  "Load per core": "코어별 부하",
+  "90 % or more": "90% 이상"
 }

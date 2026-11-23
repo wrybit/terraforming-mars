@@ -41,8 +41,13 @@
       </div>
       <div class="ai-load-cores">
         <div v-for="(value, index) in latest.corePercent" :key="index" class="ai-load-core" :title="`${index + 1}: ${value.toFixed(0)} %`">
-          <div class="ai-load-core-fill" :class="{'ai-load-core-fill--full': value >= 90}" :style="{height: value + '%'}"></div>
+          <div class="ai-load-core-fill" :class="{'ai-load-core-fill--full': value >= FULL_CORE_PERCENT}" :style="{height: value + '%'}"></div>
         </div>
+      </div>
+      <!-- What the two bar colors mean: gray the load of a core, yellow a core that is (almost) full -->
+      <div class="ai-load-legend">
+        <span class="ai-load-legend-item"><i class="dashboard-split-swatch ai-load-core-swatch"></i><span v-i18n>Load per core</span></span>
+        <span class="ai-load-legend-item"><i class="dashboard-split-swatch ai-load-core-swatch ai-load-core-swatch--full"></i><span v-i18n>90 % or more</span></span>
       </div>
 
       <DashboardSplitBar class="ai-load-memory" label="Memory" :segments="memorySegments" :total="latest.memory.totalBytes" />
@@ -65,6 +70,8 @@ import {LIVE_LOAD_WINDOW, LOAD_LAYERS, LoadLayerKind, liveMemorySegments, loadPa
 const WIDTH = 600;
 const HEIGHT = 140;
 const POLL_MILLISECONDS = 1000;
+// A core this busy is marked yellow: more threads would only wait for it
+const FULL_CORE_PERCENT = 90;
 
 type DataModel = {
   samples: Array<LiveLoadSample>,
@@ -87,6 +94,9 @@ export default defineComponent({
     },
     HEIGHT(): number {
       return HEIGHT;
+    },
+    FULL_CORE_PERCENT(): number {
+      return FULL_CORE_PERCENT;
     },
     layers(): typeof LOAD_LAYERS {
       return LOAD_LAYERS;

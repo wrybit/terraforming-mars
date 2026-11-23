@@ -2293,5 +2293,7 @@
   "Processor over the last ${0} seconds": "最近 ${0} 秒的处理器",
   "${0} s ago": "${0} 秒前",
   "The AI share is only measured on Linux servers.": "仅在 Linux 服务器上测量 AI 占比。",
-  "This server has ${0} cores: at most ${0} threads.": "此服务器有 ${0} 个核心：最多 ${0} 个线程。"
+  "This server has ${0} cores: at most ${0} threads.": "此服务器有 ${0} 个核心：最多 ${0} 个线程。",
+  "Load per core": "每个核心的负载",
+  "90 % or more": "90% 及以上"
 }

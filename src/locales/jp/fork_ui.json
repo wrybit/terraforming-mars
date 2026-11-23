@@ -1683,5 +1683,7 @@
   "Processor over the last ${0} seconds": "直近 ${0} 秒のプロセッサー",
   "${0} s ago": "${0} 秒前",
   "The AI share is only measured on Linux servers.": "AIの割合はLinuxサーバーでのみ計測されます。",
-  "This server has ${0} cores: at most ${0} threads.": "このサーバーのコアは ${0} 個：スレッドは最大 ${0}。"
+  "This server has ${0} cores: at most ${0} threads.": "このサーバーのコアは ${0} 個：スレッドは最大 ${0}。",
+  "Load per core": "コアごとの負荷",
+  "90 % or more": "90 % 以上"
 }
