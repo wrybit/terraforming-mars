@@ -118,6 +118,8 @@ export function setupOf(game: IGame, optionsText: string, duneRandom: Array<numb
     colors: game.players.map((player) => player.color),
     // TS draws the first player at random; the Rust game starts with seat 0 unless told otherwise
     firstPlayer: game.players.indexOf(game.first),
+    // names the bot's decision log (TM_DECISION_LOG/<gameId>.jsonl)
+    gameId: game.id,
     duneRandom,
     players: game.players.map((player: any) => ({
       corporations: player.dealtCorporationCards.map((card: any) => card.name),

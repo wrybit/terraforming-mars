@@ -19,7 +19,7 @@ import {RandomRecord, recordRandom, takeRandom} from './rustRandom';
 import {steps} from './rustSteps';
 import {responseFor} from './rustContract';
 import {RustDecisionRecord} from './rustDecisionTrace';
-import {RUST_BOT_BINARY, RUST_BOT_DATA, RUST_BOT_EVENTS} from './rustBotPaths';
+import {RUST_BOT_BINARY, RUST_BOT_DATA, RUST_BOT_DECISIONS, RUST_BOT_EVENTS} from './rustBotPaths';
 
 const BINARY = RUST_BOT_BINARY;
 const DATA = RUST_BOT_DATA;
@@ -60,10 +60,20 @@ export function rustAiInstalled(): boolean {
 }
 
 
+/** The folder of the bot's decision logs, created on first use; none when it cannot be created. */
+function decisionLogFolder(): string | undefined {
+  try {
+    fs.mkdirSync(RUST_BOT_DECISIONS, {recursive: true});
+    return RUST_BOT_DECISIONS;
+  } catch {
+    return undefined;
+  }
+}
+
 export class RustMirror {
   private static readonly mirrors = new Map<string, RustMirror>();
   /** for testing: the program behind the mirrors */
-  public static createBot: (level: AiLevel) => RustBot = (level) => new RustBotProcess(BINARY ?? '', DATA ?? '', rustBotSettings(level));
+  public static createBot: (level: AiLevel) => RustBot = (level) => new RustBotProcess(BINARY ?? '', DATA ?? '', rustBotSettings(level), decisionLogFolder());
   /** for testing */
   public static installed: () => boolean = rustAiInstalled;
   /** for testing */
