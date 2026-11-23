@@ -31,7 +31,7 @@
             </li>
           </ul>
         </div>
-        <p class="ai-decision-dialog__hint">{{ valueHint }}</p>
+        <p v-if="valueHint !== ''" class="ai-decision-dialog__hint">{{ valueHint }}</p>
       </section>
 
       <!-- Ratings of the other players -->
@@ -147,10 +147,14 @@ const showsCards = computed(() => {
   return decision !== undefined && CARD_KINDS.includes(decision.kind) && decision.options.some((option) => option.card !== undefined);
 });
 const groups = computed(() => dialog.value?.decision === undefined ? [] : optionGroups(dialog.value.decision));
-// What the values mean: M€ of position value (TS AI) or the point lead in the Rust AI's trial games
+// What the values mean: M€ of position value (TS AI) or the point lead in the Rust AI's trial games.
+// No hint without values (a single option: the Rust AI plays it without trial games).
 const valueHint = computed(() => {
   const decision = dialog.value?.decision;
-  if (decision?.valueUnit !== 'points') {
+  if (decision === undefined || decision.options.every((option) => option.value === undefined)) {
+    return '';
+  }
+  if (decision.valueUnit !== 'points') {
     return translateText('Value in M€ as estimated by the AI (higher is better).');
   }
   const samples = Math.max(0, ...decision.options.map((option) => option.samples ?? 0));
