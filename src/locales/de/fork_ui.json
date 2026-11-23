@@ -1051,8 +1051,6 @@
   "Program that plays the AI seats of new games. Running games keep theirs. Takes effect at once.": "Programm, das die AI-Plätze neuer Partien spielt. Laufende Partien behalten ihres. Wirkt sofort.",
   "TypeScript as a stand-in": "TypeScript als Ersatz",
   "On: settings the Rust AI cannot play get the TypeScript AI. Off: they count as not compatible with the AI.": "An: Einstellungen, die die Rust-AI nicht kann, bekommen die TypeScript-AI. Aus: Sie gelten als nicht kompatibel mit der AI.",
-  "Extra waiting time for the Rust AI (ms)": "Zusätzliche Wartezeit für die Rust-AI (ms)",
-  "On top of its thinking time. Without an answer by then the TypeScript AI makes this decision. Empty: 10000.": "Zusätzlich zur Denkzeit. Kommt bis dahin keine Antwort, trifft die TypeScript-AI diese Entscheidung. Leer: 10000.",
   "Rust AI fallbacks": "Rust-AI-Rückfälle",
   "Last 24 hours": "Letzte 24 Stunden",
   "Decision": "Entscheidung",
@@ -1064,8 +1062,6 @@
   "How far each rollout looks ahead. 0: to the end of the game.": "Wie weit jeder Rollout vorausschaut. 0: bis zum Spielende.",
   "Candidates": "Kandidaten",
   "Moves the AI considers at all. Fewer: it overlooks good moves.": "Züge, die die AI überhaupt erwägt. Weniger: Sie übersieht gute Züge.",
-  "Max. thinking time (ms)": "Max. Denkzeit (ms)",
-  "The search stops here. Only a limit, so the AI is equally strong on fast and slow servers.": "Hier bricht die Suche ab. Nur eine Obergrenze, damit die AI auf schnellen und langsamen Servern gleich stark ist.",
   "Randomness (%)": "Zufall (%)",
   "0: always the best move. Higher: more often a slightly worse one, never nonsense. Needs a bot that supports it.": "0: immer der beste Zug. Höher: öfter ein etwas schlechterer, nie Unsinn. Braucht einen Bot, der das kann.",
   "What the AI can play": "Was die AI kann",
@@ -1080,5 +1076,13 @@
   "The AI share is only measured on Linux servers.": "Den AI-Anteil misst nur ein Linux-Server.",
   "This server has ${0} cores: at most ${0} threads.": "Dieser Server hat ${0} Kerne: höchstens ${0} Threads.",
   "Load per core": "Last je Kern",
-  "90 % or more": "ab 90 %"
+  "90 % or more": "ab 90 %",
+  "Waiting times": "Wartezeiten",
+  "Training data": "Trainingsdaten",
+  "Thinking time (ms)": "Denkzeit (ms)",
+  "Per move while humans play along: the AI takes this long, the Rust AI searches for this long. Without humans it plays at full speed.": "Pro Zug, solange Menschen mitspielen: So lange braucht die AI, so lange sucht die Rust-AI. Ohne Menschen spielt sie mit voller Geschwindigkeit.",
+  "Fallback to TypeScript after (ms)": "Fallback auf TypeScript nach (ms)",
+  "Extra time on top of the thinking time. Without an answer of the Rust AI by then, the TypeScript AI makes this decision. Empty: 10000.": "Zusätzlich zur Denkzeit. Kommt bis dahin keine Antwort der Rust-AI, trifft die TypeScript-AI diese Entscheidung. Leer: 10000.",
+  "AI program": "AI-Programm",
+  "Strength of the Rust AI": "Stärke der Rust-AI"
 }

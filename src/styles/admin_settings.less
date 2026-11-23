@@ -723,11 +723,30 @@
   }
 }
 
-// Narrow: the second column continues the first one, so it starts with a line like every other row
+// Blocks of a tab (AI tab: engine, waiting times, training data, strength): the heading close above its rows,
+// the blocks further apart than the rows inside them (law of proximity)
+.server-settings-section + .server-settings-section {
+  margin-top: 20px;
+}
+
+.server-settings-section-title {
+  margin: 0;
+  padding-bottom: 6px;
+  border-bottom: 1px solid @server-settings-line;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+// Below a heading the first row needs no line of its own (the heading carries it)
+.server-settings-section-title + .server-settings-row,
+.server-settings-section-title + .server-settings-grid .server-settings-grid-head {
+  border-top: none;
+}
+
+// Narrow: the second column continues below the first one, with the same distance as between blocks
 @media (max-width: @max-below-desktop) {
-  .server-settings-columns--two .server-settings-column + .server-settings-column .server-settings-grid-head {
-    border-top: 1px solid @server-settings-line;
-    padding-top: @server-settings-row-gap;
+  .server-settings-column + .server-settings-column {
+    margin-top: 20px;
   }
 }
 
@@ -751,8 +770,29 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
-  padding: @server-settings-row-gap 0;
-  border-top: 1px solid @server-settings-line;
+  margin-bottom: 20px;
+  padding: 4px 0 @server-settings-row-gap;
+  border-bottom: 1px solid @server-settings-line;
+}
+
+// Processor (widest: it has the time axis), cores and memory; apart like blocks, close inside
+.ai-load-parts {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px 48px;
+  align-items: start;
+}
+
+.ai-load-part {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+@media (min-width: @bp-desktop) {
+  .ai-load-parts {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr);
+  }
 }
 
 .ai-load-head {
@@ -789,7 +829,6 @@
 .ai-load-chart-head {
   display: flex;
   justify-content: space-between;
-  margin-top: 10px;
   font-size: 13px;
 }
 
@@ -926,8 +965,4 @@
   &--full {
     background: #f4c20d;
   }
-}
-
-.ai-load-memory {
-  margin-top: 10px;
 }

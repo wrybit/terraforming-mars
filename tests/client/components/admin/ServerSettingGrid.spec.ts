@@ -4,14 +4,14 @@ import {globalConfig} from '../getLocalVue';
 import ServerSettingGrid from '@/client/components/admin/ServerSettingGrid.vue';
 import {SERVER_SETTINGS} from '@/common/admin/serverSettings';
 
-const STRENGTH = SERVER_SETTINGS.filter((setting) => setting.grid !== undefined);
+const STRENGTH = SERVER_SETTINGS.filter((setting) => setting.side === true);
 
 describe('ServerSettingGrid', () => {
   it('shows a line per value with a field for easy, normal and hard, defaults as placeholder', () => {
     const wrapper = mount(ServerSettingGrid, {...globalConfig, props: {settings: STRENGTH, values: {AI_HARD_ROLLOUTS: '96'}}});
     expect(wrapper.findAll('.server-settings-grid-column').map((column) => column.text())).deep.eq(['Easy', 'Normal', 'Hard']);
     const rows = wrapper.findAll('.server-settings-row:not(.server-settings-grid-head)');
-    expect(rows).has.length(6);
+    expect(rows).has.length(5);
     expect(rows[0].find('code').text()).eq('AI_*_ROLLOUTS');
     const inputs = rows[0].findAll('input');
     expect(inputs.map((input) => input.attributes('placeholder'))).deep.eq(['4', '16', '64']);
@@ -28,7 +28,7 @@ describe('ServerSettingGrid', () => {
   it('limits the threads to the cores of the server and marks a value above it', () => {
     const wrapper = mount(ServerSettingGrid, {...globalConfig, props: {settings: STRENGTH, values: {AI_HARD_THREADS: '8'},
       rowLimits: {threads: {maximum: 1, note: 'This server has 1 cores'}}}});
-    const threads = wrapper.findAll('.server-settings-row:not(.server-settings-grid-head)')[1];
+    const threads = wrapper.findAll('.server-settings-row:not(.server-settings-grid-head)').find((row) => row.find('code').text() === 'AI_*_THREADS')!;
     expect(threads.find('.server-settings-grid-limit').text()).eq('This server has 1 cores');
     const inputs = threads.findAll('input');
     expect(inputs.map((input) => input.attributes('max'))).deep.eq(['1', '1', '1']);

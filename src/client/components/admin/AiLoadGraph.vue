@@ -1,57 +1,62 @@
 <template>
-  <!-- Live load of the machine next to the AI strength: change threads or rollouts, watch the cores fill up -->
+  <!-- Live load of the machine above the AI settings: change threads or rollouts, watch the cores fill up.
+       Processor, cores and memory side by side on wide screens, one below the other on narrow ones -->
   <section class="ai-load" :aria-label="$t('Server load, live')">
     <div class="ai-load-head">
       <h3 class="ai-load-title" v-i18n>Server load, live</h3>
       <span v-if="latest !== undefined" class="ai-load-machine">{{ machineText }}</span>
     </div>
     <p v-if="failure !== ''" class="ai-load-failure">{{ failure }}</p>
-    <template v-if="latest !== undefined">
-      <!-- Processor over the last minute, stacked: AI at the bottom, so its share reads straight off the axis -->
-      <div class="ai-load-chart-head">
-        <span class="ai-load-label" v-i18n>Processor</span>
-        <span class="ai-load-value">{{ latest.cpu.totalPercent.toFixed(0) }} %</span>
+    <div v-if="latest !== undefined" class="ai-load-parts">
+      <div class="ai-load-part">
+        <!-- Processor over the last minute, stacked: AI at the bottom, so its share reads straight off the axis -->
+        <div class="ai-load-chart-head">
+          <span class="ai-load-label" v-i18n>Processor</span>
+          <span class="ai-load-value">{{ latest.cpu.totalPercent.toFixed(0) }} %</span>
+        </div>
+        <div class="ai-load-chart" @mousemove="hover" @mouseleave="hoverIndex = undefined">
+          <svg class="ai-load-svg" :viewBox="`0 0 ${WIDTH} ${HEIGHT}`" preserveAspectRatio="none" role="img" :aria-label="chartLabel">
+            <line v-for="level in [25, 50, 75]" :key="level" class="ai-load-grid" x1="0" :x2="WIDTH" :y1="HEIGHT - level / 100 * HEIGHT" :y2="HEIGHT - level / 100 * HEIGHT" />
+            <path v-for="layer in layers" :key="layer.kind" class="ai-load-area" :class="'ai-load-area--' + layer.kind" :d="paths[layer.kind]" />
+            <line v-if="hoverX !== undefined" class="ai-load-crosshair" :x1="hoverX" :x2="hoverX" y1="0" :y2="HEIGHT" />
+          </svg>
+          <div class="ai-load-axis" aria-hidden="true"><span>100 %</span><span>50 %</span><span>0 %</span></div>
+          <div v-if="hovered !== undefined" class="ai-load-tooltip" :style="{left: tooltipLeft}">
+            <strong>{{ secondsAgo(hovered) }}</strong>
+            <span v-for="layer in [...layers].reverse()" :key="layer.kind"><i class="dashboard-split-swatch" :class="'dashboard-split-segment--' + layer.kind"></i>{{ $t(layer.label) }} {{ partsOf(hovered)[layer.kind].toFixed(0) }} %</span>
+          </div>
+        </div>
+        <!-- Legend always present, with the current value of each part -->
+        <div class="ai-load-legend">
+          <span v-for="layer in [...layers].reverse()" :key="layer.kind" class="ai-load-legend-item">
+            <i class="dashboard-split-swatch" :class="'dashboard-split-segment--' + layer.kind"></i>
+            <span v-i18n>{{ layer.label }}</span>
+            <span class="ai-load-legend-value">{{ partsOf(latest)[layer.kind].toFixed(0) }} %</span>
+          </span>
+        </div>
+        <p v-if="latest.cpu.aiPercent === undefined" class="ai-load-note" v-i18n>The AI share is only measured on Linux servers.</p>
       </div>
-      <div class="ai-load-chart" @mousemove="hover" @mouseleave="hoverIndex = undefined">
-        <svg class="ai-load-svg" :viewBox="`0 0 ${WIDTH} ${HEIGHT}`" preserveAspectRatio="none" role="img" :aria-label="chartLabel">
-          <line v-for="level in [25, 50, 75]" :key="level" class="ai-load-grid" x1="0" :x2="WIDTH" :y1="HEIGHT - level / 100 * HEIGHT" :y2="HEIGHT - level / 100 * HEIGHT" />
-          <path v-for="layer in layers" :key="layer.kind" class="ai-load-area" :class="'ai-load-area--' + layer.kind" :d="paths[layer.kind]" />
-          <line v-if="hoverX !== undefined" class="ai-load-crosshair" :x1="hoverX" :x2="hoverX" y1="0" :y2="HEIGHT" />
-        </svg>
-        <div class="ai-load-axis" aria-hidden="true"><span>100 %</span><span>50 %</span><span>0 %</span></div>
-        <div v-if="hovered !== undefined" class="ai-load-tooltip" :style="{left: tooltipLeft}">
-          <strong>{{ secondsAgo(hovered) }}</strong>
-          <span v-for="layer in [...layers].reverse()" :key="layer.kind"><i class="dashboard-split-swatch" :class="'dashboard-split-segment--' + layer.kind"></i>{{ $t(layer.label) }} {{ partsOf(hovered)[layer.kind].toFixed(0) }} %</span>
+      <div class="ai-load-part">
+        <!-- One bar per core: shows whether the AI threads spread over the machine or wait for each other -->
+        <div class="ai-load-chart-head">
+          <span class="ai-load-label" v-i18n>Cores</span>
+          <span class="ai-load-value">{{ latest.cores }}</span>
+        </div>
+        <div class="ai-load-cores">
+          <div v-for="(value, index) in latest.corePercent" :key="index" class="ai-load-core" :title="`${index + 1}: ${value.toFixed(0)} %`">
+            <div class="ai-load-core-fill" :class="{'ai-load-core-fill--full': value >= FULL_CORE_PERCENT}" :style="{height: value + '%'}"></div>
+          </div>
+        </div>
+        <!-- What the two bar colors mean: gray the load of a core, yellow a core that is (almost) full -->
+        <div class="ai-load-legend">
+          <span class="ai-load-legend-item"><i class="dashboard-split-swatch ai-load-core-swatch"></i><span v-i18n>Load per core</span></span>
+          <span class="ai-load-legend-item"><i class="dashboard-split-swatch ai-load-core-swatch ai-load-core-swatch--full"></i><span v-i18n>90 % or more</span></span>
         </div>
       </div>
-      <!-- Legend always present, with the current value of each part -->
-      <div class="ai-load-legend">
-        <span v-for="layer in [...layers].reverse()" :key="layer.kind" class="ai-load-legend-item">
-          <i class="dashboard-split-swatch" :class="'dashboard-split-segment--' + layer.kind"></i>
-          <span v-i18n>{{ layer.label }}</span>
-          <span class="ai-load-legend-value">{{ partsOf(latest)[layer.kind].toFixed(0) }} %</span>
-        </span>
+      <div class="ai-load-part">
+        <DashboardSplitBar label="Memory" :segments="memorySegments" :total="latest.memory.totalBytes" />
       </div>
-      <p v-if="latest.cpu.aiPercent === undefined" class="ai-load-note" v-i18n>The AI share is only measured on Linux servers.</p>
-
-      <!-- One bar per core: shows whether the AI threads spread over the machine or wait for each other -->
-      <div class="ai-load-chart-head">
-        <span class="ai-load-label" v-i18n>Cores</span>
-        <span class="ai-load-value">{{ latest.cores }}</span>
-      </div>
-      <div class="ai-load-cores">
-        <div v-for="(value, index) in latest.corePercent" :key="index" class="ai-load-core" :title="`${index + 1}: ${value.toFixed(0)} %`">
-          <div class="ai-load-core-fill" :class="{'ai-load-core-fill--full': value >= FULL_CORE_PERCENT}" :style="{height: value + '%'}"></div>
-        </div>
-      </div>
-      <!-- What the two bar colors mean: gray the load of a core, yellow a core that is (almost) full -->
-      <div class="ai-load-legend">
-        <span class="ai-load-legend-item"><i class="dashboard-split-swatch ai-load-core-swatch"></i><span v-i18n>Load per core</span></span>
-        <span class="ai-load-legend-item"><i class="dashboard-split-swatch ai-load-core-swatch ai-load-core-swatch--full"></i><span v-i18n>90 % or more</span></span>
-      </div>
-
-      <DashboardSplitBar class="ai-load-memory" label="Memory" :segments="memorySegments" :total="latest.memory.totalBytes" />
-    </template>
+    </div>
     <p v-else-if="failure === ''" class="ai-load-note" v-i18n>Loading…</p>
   </section>
 </template>

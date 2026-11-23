@@ -4,7 +4,7 @@
 
 import {COMMON_EXTENSIONS} from '../../genfiles/extensionsCommon';
 import {AI_LEVELS} from '../ai/AiLevel';
-import {DEFAULT_RUST_BOT_STRENGTH, RUST_BOT_STRENGTH_FIELDS, RUST_BOT_STRENGTH_LIMITS, RustBotStrengthField, rustBotStrengthKey} from '../ai/rustBotStrength';
+import {DEFAULT_RUST_BOT_STRENGTH, RUST_BOT_STRENGTH_LIMITS, RustBotStrengthField, rustBotStrengthKey} from '../ai/rustBotStrength';
 import {DEFAULT_FAVICON_COLOR, DEFAULT_FAVICON_ICON, FAVICON_COLORS, FAVICON_ICONS, FaviconOption, faviconImage} from './favicons';
 
 // image: an address (http… or an uploaded file, see ApiAdminServerLogo) with upload button and preview
@@ -38,6 +38,13 @@ export type ServerSettingDefinition = {
    * (AI strength: a field for easy, normal and hard)
    */
   grid?: {row: string, column: string},
+  /**
+   * Heading of a block of related settings within the tab (e.g. all waiting times together); settings of one
+   * section follow each other in this list. Translated.
+   */
+  section?: string,
+  /** In the second column on wide screens (AI tab: the strength table next to the general settings) */
+  side?: boolean,
   /** kind 'choice' or 'segmented': the allowed values */
   choices?: ReadonlyArray<ServerSettingChoice>,
   /**
@@ -64,23 +71,29 @@ const AI_STRENGTH_ROWS: Record<RustBotStrengthField, {label: string, description
   threads: {label: 'Threads', description: 'Processor cores per decision. More is faster, not stronger.'},
   horizon: {label: 'Lookahead (moves)', description: 'How far each rollout looks ahead. 0: to the end of the game.'},
   candidates: {label: 'Candidates', description: 'Moves the AI considers at all. Fewer: it overlooks good moves.'},
-  timeLimit: {label: 'Max. thinking time (ms)', description: 'The search stops here. Only a limit, so the AI is equally strong on fast and slow servers.'},
+  timeLimit: {label: 'Thinking time (ms)',
+    description: 'Per move while humans play along: the AI takes this long, the Rust AI searches for this long. Without humans it plays at full speed.'},
   randomness: {label: 'Randomness (%)', description: '0: always the best move. Higher: more often a slightly worse one, never nonsense. Needs a bot that supports it.'},
 };
 
-const AI_STRENGTH_SETTINGS: Array<ServerSettingDefinition> = RUST_BOT_STRENGTH_FIELDS.flatMap((field) => AI_LEVELS.map((level): ServerSettingDefinition => ({
-  key: rustBotStrengthKey(level, field),
-  // In the AI tab next to the other AI settings, as a table (ServerSettingGrid.vue)
-  group: 'AI opponents',
-  kind: 'number',
-  live: true,
-  label: AI_STRENGTH_ROWS[field].label,
-  description: AI_STRENGTH_ROWS[field].description,
-  minimum: RUST_BOT_STRENGTH_LIMITS[field].minimum,
-  maximum: RUST_BOT_STRENGTH_LIMITS[field].maximum,
-  placeholder: String(DEFAULT_RUST_BOT_STRENGTH[level][field]),
-  grid: {row: field, column: level},
-})));
+// The thinking time is a waiting time: it stands with the other ones, the search values form the strength table
+function aiStrengthSettings(fields: ReadonlyArray<RustBotStrengthField>, section: string, side: boolean): Array<ServerSettingDefinition> {
+  return fields.flatMap((field) => AI_LEVELS.map((level): ServerSettingDefinition => ({
+    key: rustBotStrengthKey(level, field),
+    // In the AI tab next to the other AI settings, as a table (ServerSettingGrid.vue)
+    group: 'AI opponents',
+    section,
+    side,
+    kind: 'number',
+    live: true,
+    label: AI_STRENGTH_ROWS[field].label,
+    description: AI_STRENGTH_ROWS[field].description,
+    minimum: RUST_BOT_STRENGTH_LIMITS[field].minimum,
+    maximum: RUST_BOT_STRENGTH_LIMITS[field].maximum,
+    placeholder: String(DEFAULT_RUST_BOT_STRENGTH[level][field]),
+    grid: {row: field, column: level},
+  })));
+}
 
 const BASE_SETTINGS: ReadonlyArray<ServerSettingDefinition> = [
   {key: 'SERVER_NAME', group: 'Appearance', kind: 'text', label: 'Server name',
@@ -118,21 +131,21 @@ const BASE_SETTINGS: ReadonlyArray<ServerSettingDefinition> = [
   {key: 'IP_BLOCKLIST', group: 'Limits', kind: 'text', label: 'Blocked addresses',
     description: 'IP addresses separated by spaces that get no answer.'},
 
-  {key: 'AI_MOVE_DELAY_MS', group: 'AI opponents', kind: 'number', label: 'Pause before follow-up questions (ms)',
-    description: 'Where to place a tile, how to pay … Empty: 1000.'},
-  {key: 'AI_ACTION_DELAY_MS', group: 'AI opponents', kind: 'number', label: 'Pause before a new action (ms)',
-    description: 'Thinking time of a hard AI (normal: two thirds, easy: one third). Empty: 3000.'},
-  {key: 'AI_ENGINE', group: 'AI opponents', kind: 'segmented', live: true, label: 'AI engine',
+  {key: 'AI_ENGINE', group: 'AI opponents', section: 'AI program', kind: 'segmented', live: true, label: 'AI engine',
     choices: [{value: '', label: 'TypeScript'}, {value: 'rust', label: 'Rust'}],
     description: 'Program that plays the AI seats of new games. Running games keep theirs. Takes effect at once.'},
-  {key: 'AI_TYPESCRIPT_FALLBACK', group: 'AI opponents', kind: 'toggle', defaultOn: true, live: true, label: 'TypeScript as a stand-in',
+  {key: 'AI_TYPESCRIPT_FALLBACK', group: 'AI opponents', section: 'AI program', kind: 'toggle', defaultOn: true, live: true, label: 'TypeScript as a stand-in',
     description: 'On: settings the Rust AI cannot play get the TypeScript AI. Off: they count as not compatible with the AI.'},
-  {key: 'AI_RUST_EXTRA_WAIT_MS', group: 'AI opponents', kind: 'number', live: true, label: 'Extra waiting time for the Rust AI (ms)',
-    description: 'On top of its thinking time. Without an answer by then the TypeScript AI makes this decision. Empty: 10000.'},
-  ...AI_STRENGTH_SETTINGS,
-  {key: 'AI_DECISION_LOG_DIR', group: 'AI opponents', kind: 'text', label: 'Folder for decision logs',
+  // All times of a move together: the thinking time per strength (also the pause humans need to follow the game)
+  // and how long the Rust AI may take beyond it before the TypeScript AI decides instead
+  ...aiStrengthSettings(['timeLimit'], 'Waiting times', false),
+  {key: 'AI_RUST_EXTRA_WAIT_MS', group: 'AI opponents', section: 'Waiting times', kind: 'number', live: true, label: 'Fallback to TypeScript after (ms)',
+    description: 'Extra time on top of the thinking time. Without an answer of the Rust AI by then, the TypeScript AI makes this decision. Empty: 10000.'},
+  // Search values only the Rust AI has: how much it searches first, the hardware (threads) last
+  ...aiStrengthSettings(['rollouts', 'candidates', 'horizon', 'randomness', 'threads'], 'Strength of the Rust AI', true),
+  {key: 'AI_DECISION_LOG_DIR', group: 'AI opponents', section: 'Training data', kind: 'text', label: 'Folder for decision logs',
     description: 'The AI writes every decision there (for training). Empty: no logs.'},
-  {key: 'AI_TRAINING_FEED', group: 'AI opponents', kind: 'text', label: 'AI test runs in the lobby',
+  {key: 'AI_TRAINING_FEED', group: 'AI opponents', section: 'Training data', kind: 'text', label: 'AI test runs in the lobby',
     description: 'Address of the AI test run feed with the name of this computer, e.g. http://…/api/lobby-feed?instance=ak1. The lobby shows its running games and the last finished ones. Empty: none.'},
 
   {key: 'SERVER_ID', group: 'Access', kind: 'secret', label: 'Admin passphrase (serverId)',

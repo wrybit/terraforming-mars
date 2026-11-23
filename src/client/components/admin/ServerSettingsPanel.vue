@@ -23,47 +23,53 @@
           <!-- Chat filter: its own list with its own save, applied at once (no .env, no restart) -->
           <ChatWordsPanel v-if="selectedGroup === CHAT_TAB" />
           <template v-else>
-            <!-- Rows on the left, a table (AI strength) with the live load of the machine on the right; one column when narrow -->
-            <div class="server-settings-columns" :class="{'server-settings-columns--two': selectedGridSettings.length > 0}">
-              <div class="server-settings-column">
-                <div v-for="setting in selectedSettings" :key="setting.key" class="server-settings-row">
-                  <div class="server-settings-text">
-                    <label :for="'server-setting-' + setting.key" class="server-settings-label" v-i18n>{{ setting.label }}</label>
-                    <span class="server-settings-description" v-i18n>{{ setting.description }}</span>
-                    <code class="server-settings-key">{{ setting.key }}</code>
-                  </div>
-                  <div class="server-settings-field">
-                    <label v-if="setting.kind === 'toggle'" class="server-settings-toggle">
-                      <input :id="'server-setting-' + setting.key" type="checkbox" :checked="isToggleOn(setting, values[setting.key])" @change="setToggle(setting, ($event.target as HTMLInputElement).checked)">
-                    </label>
-                    <SegmentedControl v-else-if="setting.kind === 'segmented'" class="server-settings-segmented"
-                      :modelValue="values[setting.key] ?? ''" :options="segmentOptions(setting)" @update:modelValue="setValue(setting.key, String($event))" />
-                    <ServerSettingImageField v-else-if="setting.kind === 'image'" :inputId="'server-setting-' + setting.key"
-                      :value="values[setting.key] ?? ''" @update="setValue(setting.key, $event)" />
-                    <ServerSettingChoiceField v-else-if="setting.kind === 'choice'" :inputId="'server-setting-' + setting.key"
-                      :value="values[setting.key] ?? ''" :choices="setting.choices ?? []"
-                      :image="(choice: string) => setting.choiceImage?.(choice, values) ?? ''" @update="setValue(setting.key, $event)" />
-                    <div v-else class="server-settings-input">
-                      <input :id="'server-setting-' + setting.key"
-                        :type="inputType(setting)"
-                        :inputmode="setting.kind === 'number' ? 'numeric' : undefined"
-                        :value="values[setting.key]"
-                        :placeholder="setting.placeholder"
-                        autocomplete="off"
-                        @input="setValue(setting.key, ($event.target as HTMLInputElement).value)">
-                      <button v-if="setting.kind === 'secret'" type="button" class="btn btn-sm btn-tone-quiet" @click="toggleReveal(setting.key)" v-i18n>{{ revealed[setting.key] ? 'Hide' : 'Show' }}</button>
+            <!-- AI tab: the live load of the machine first, over the full width, so threads and rollouts below are set
+                 with the hardware in view -->
+            <AiLoadGraph v-if="selectedGroup === 'AI opponents'" @measured="processorCores = $event.cores" />
+            <!-- Blocks in the main column, side settings (strength of the Rust AI) next to them; one column when narrow -->
+            <div class="server-settings-columns" :class="{'server-settings-columns--two': columns[1].length > 0}">
+              <template v-for="(sections, columnIndex) in columns" :key="columnIndex">
+                <div v-if="sections.length > 0" class="server-settings-column">
+                  <!-- A block per section (e.g. all waiting times together), its heading above it -->
+                  <section v-for="section in sections" :key="section.title" class="server-settings-section">
+                    <h3 v-if="section.title !== ''" class="server-settings-section-title" v-i18n>{{ section.title }}</h3>
+                    <ServerSettingGrid v-if="section.grid.length > 0" :settings="section.grid" :values="values" :rowLimits="gridLimits" @update="setValue" />
+                    <div v-for="setting in section.rows" :key="setting.key" class="server-settings-row">
+                      <div class="server-settings-text">
+                        <label :for="'server-setting-' + setting.key" class="server-settings-label" v-i18n>{{ setting.label }}</label>
+                        <span class="server-settings-description" v-i18n>{{ setting.description }}</span>
+                        <code class="server-settings-key">{{ setting.key }}</code>
+                      </div>
+                      <div class="server-settings-field">
+                        <label v-if="setting.kind === 'toggle'" class="server-settings-toggle">
+                          <input :id="'server-setting-' + setting.key" type="checkbox" :checked="isToggleOn(setting, values[setting.key])" @change="setToggle(setting, ($event.target as HTMLInputElement).checked)">
+                        </label>
+                        <SegmentedControl v-else-if="setting.kind === 'segmented'" class="server-settings-segmented"
+                          :modelValue="values[setting.key] ?? ''" :options="segmentOptions(setting)" @update:modelValue="setValue(setting.key, String($event))" />
+                        <ServerSettingImageField v-else-if="setting.kind === 'image'" :inputId="'server-setting-' + setting.key"
+                          :value="values[setting.key] ?? ''" @update="setValue(setting.key, $event)" />
+                        <ServerSettingChoiceField v-else-if="setting.kind === 'choice'" :inputId="'server-setting-' + setting.key"
+                          :value="values[setting.key] ?? ''" :choices="setting.choices ?? []"
+                          :image="(choice: string) => setting.choiceImage?.(choice, values) ?? ''" @update="setValue(setting.key, $event)" />
+                        <div v-else class="server-settings-input">
+                          <input :id="'server-setting-' + setting.key"
+                            :type="inputType(setting)"
+                            :inputmode="setting.kind === 'number' ? 'numeric' : undefined"
+                            :value="values[setting.key]"
+                            :placeholder="setting.placeholder"
+                            autocomplete="off"
+                            @input="setValue(setting.key, ($event.target as HTMLInputElement).value)">
+                          <button v-if="setting.kind === 'secret'" type="button" class="btn btn-sm btn-tone-quiet" @click="toggleReveal(setting.key)" v-i18n>{{ revealed[setting.key] ? 'Hide' : 'Show' }}</button>
+                        </div>
+                        <!-- Saved in the .env file but not yet in effect: the server reads it at its next start -->
+                        <span v-if="pendingRestart(setting.key)" class="server-settings-source">
+                          <strong class="server-settings-pending" v-i18n>Active after restart</strong>
+                        </span>
+                      </div>
                     </div>
-                    <!-- Saved in the .env file but not yet in effect: the server reads it at its next start -->
-                    <span v-if="pendingRestart(setting.key)" class="server-settings-source">
-                      <strong class="server-settings-pending" v-i18n>Active after restart</strong>
-                    </span>
-                  </div>
+                  </section>
                 </div>
-              </div>
-              <div v-if="selectedGridSettings.length > 0" class="server-settings-column">
-                <ServerSettingGrid :settings="selectedGridSettings" :values="values" :rowLimits="gridLimits" @update="setValue" />
-                <AiLoadGraph @measured="processorCores = $event.cores" />
-              </div>
+              </template>
             </div>
             <!-- Below the AI settings: what each AI program can play, so the engine is chosen knowingly -->
             <AiSupportOverview v-if="selectedGroup === 'AI opponents'" />
@@ -117,6 +123,23 @@ type DataModel = {
   processorCores: number | undefined,
 };
 
+/** A block of settings under one heading ('' = none): a table first (settings with a grid position), then rows. */
+type SettingsSection = {title: string, grid: Array<ServerSettingDefinition>, rows: Array<ServerSettingDefinition>};
+
+function settingsSections(settings: ReadonlyArray<ServerSettingDefinition>): Array<SettingsSection> {
+  const sections: Array<SettingsSection> = [];
+  for (const setting of settings) {
+    const title = setting.section ?? '';
+    let section = sections.find((candidate) => candidate.title === title);
+    if (section === undefined) {
+      section = {title, grid: [], rows: []};
+      sections.push(section);
+    }
+    (setting.grid === undefined ? section.rows : section.grid).push(setting);
+  }
+  return sections;
+}
+
 // A tab of its own without .env settings: the words the lobby chat masks, after the limits (both keep players in check)
 const CHAT_TAB = 'Chat filter';
 
@@ -149,12 +172,10 @@ export default defineComponent({
       }
       return {threads: {maximum: cores, note: translateTextWithParams('This server has ${0} cores: at most ${0} threads.', [String(cores)])}};
     },
-    // Settings with a row of their own; those of a table come in selectedGridSettings
-    selectedSettings(): Array<ServerSettingDefinition> {
-      return SERVER_SETTINGS.filter((setting) => setting.group === this.selectedGroup && setting.grid === undefined);
-    },
-    selectedGridSettings(): Array<ServerSettingDefinition> {
-      return SERVER_SETTINGS.filter((setting) => setting.group === this.selectedGroup && setting.grid !== undefined);
+    // Main column and second column (side settings, e.g. the AI strength), each as blocks in the order of the list
+    columns(): [Array<SettingsSection>, Array<SettingsSection>] {
+      const settings = SERVER_SETTINGS.filter((setting) => setting.group === this.selectedGroup);
+      return [settingsSections(settings.filter((setting) => setting.side !== true)), settingsSections(settings.filter((setting) => setting.side === true))];
     },
     dirty(): boolean {
       return SERVER_SETTINGS.some(({key}) => this.values[key] !== this.configured(key));
