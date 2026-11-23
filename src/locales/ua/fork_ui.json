@@ -1461,7 +1461,6 @@
   "This server has ${0} cores: at most ${0} threads.": "Цей сервер має ${0} ядер: щонайбільше ${0} потоків.",
   "Load per core": "Навантаження на ядро",
   "90 % or more": "90 % і більше",
-  "Waiting times": "Час очікування",
   "Training data": "Дані для навчання",
   "Thinking time (ms)": "Час на хід (мс)",
   "Per move while humans play along: the AI takes this long, the Rust AI searches for this long. Without humans it plays at full speed.": "На кожен хід, поки грають люди: стільки думає AI, стільки шукає AI на Rust. Без людей грає на повній швидкості.",

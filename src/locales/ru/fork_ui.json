@@ -2175,7 +2175,6 @@
   "This server has ${0} cores: at most ${0} threads.": "У этого сервера ${0} ядер: не больше ${0} потоков.",
   "Load per core": "Нагрузка на ядро",
   "90 % or more": "90 % и выше",
-  "Waiting times": "Время ожидания",
   "Training data": "Данные для обучения",
   "Thinking time (ms)": "Время на ход (мс)",
   "Per move while humans play along: the AI takes this long, the Rust AI searches for this long. Without humans it plays at full speed.": "На каждый ход, пока играют люди: столько думает AI, столько ищет AI на Rust. Без людей играет на полной скорости.",

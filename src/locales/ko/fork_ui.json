@@ -1556,7 +1556,6 @@
   "This server has ${0} cores: at most ${0} threads.": "이 서버의 코어는 ${0}개: 스레드는 최대 ${0}개.",
   "Load per core": "코어별 부하",
   "90 % or more": "90% 이상",
-  "Waiting times": "대기 시간",
   "Training data": "학습 데이터",
   "Thinking time (ms)": "생각 시간 (ms)",
   "Per move while humans play along: the AI takes this long, the Rust AI searches for this long. Without humans it plays at full speed.": "사람이 함께할 때 한 수마다: AI가 이만큼 걸리고, Rust AI는 이만큼 탐색합니다. 사람이 없으면 최대 속도로 둡니다.",

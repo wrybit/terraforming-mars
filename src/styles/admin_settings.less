@@ -567,11 +567,75 @@
   background: none;
 }
 
-// ---------- Table settings (AI strength): a line per value, a field per strength ----------
-.server-settings-grid-fields {
+// ---------- Table settings (AI strength): a line per value, a column per strength ----------
+// One grid for the whole table. Each strength column is a band from its head to its last field, tinted in the color
+// of its strength (the AI accounts of the statistics: [AI-] yellow, [AI] orange, [AI+] red), so the three strengths
+// read as vertical groups; the lines between the values run only under the text, the bands stay whole.
+@server-settings-ai: #b3b2ff;
+@server-settings-ai-easy: #f4c20d;
+@server-settings-ai-normal: #f4a259;
+@server-settings-ai-hard: #ff6b6b;
+@server-settings-grid-column-width: 104px;
+
+.server-settings-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 6px;
+  grid-template-columns: minmax(0, 1fr) repeat(3, @server-settings-grid-column-width);
+  column-gap: 8px;
+}
+
+.server-settings-grid-band {
+  --band-color: @server-settings-ai;
+
+  grid-column: var(--grid-column);
+  grid-row: 1 / span var(--grid-rows);
+  border: 1px solid color-mix(in srgb, var(--band-color) 45%, transparent);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--band-color) 10%, transparent);
+
+  &--easy { --band-color: @server-settings-ai-easy; }
+  &--normal { --band-color: @server-settings-ai-normal; }
+  &--hard { --band-color: @server-settings-ai-hard; }
+}
+
+.server-settings-grid-head {
+  grid-column: var(--grid-column);
+  grid-row: 1;
+  display: flex;
+  justify-content: center;
+  padding: 8px 6px 4px;
+  font-size: 13px;
+}
+
+// Rows place their cells straight into the table grid
+.server-settings-grid-row {
+  display: contents;
+
+  .server-settings-text {
+    grid-column: 1;
+    grid-row: var(--grid-row);
+    padding: @server-settings-row-gap 0;
+    border-top: 1px solid @server-settings-line;
+  }
+}
+
+.server-settings-grid-head + .server-settings-grid-head + .server-settings-grid-head + .server-settings-grid-row .server-settings-text {
+  border-top: none;
+}
+
+.server-settings-grid-cell {
+  grid-column: var(--grid-column);
+  grid-row: var(--grid-row);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  margin: 0;
+  padding: @server-settings-row-gap 8px;
+}
+
+.server-settings-grid-cell-name {
+  display: none;
+  font-size: 12px;
 }
 
 // Inputs like the single fields (.server-settings-input input); defaults stand grey as placeholder
@@ -596,51 +660,60 @@
   }
 }
 
-// Column heads: close above their fields, the first line of the table
-.server-settings-grid-head {
-  padding-bottom: 0;
+// A strength as in the game: robot and name, the marker of AI names a shade fainter
+.ai-strength-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+
+  .seat-icon {
+    flex: none;
+    color: @server-settings-ai;
+  }
 }
 
-.server-settings-grid-column {
-  color: rgba(238, 238, 238, 0.62);
-  font-size: 13px;
-  text-align: right;
-  padding-right: 10px;
+.ai-strength-label-marker {
+  color: rgba(238, 238, 238, 0.5);
 }
 
-// The head belongs to the fields below it: no line between them
-.server-settings-grid-head + .server-settings-row {
-  border-top: none;
-  padding-top: 4px;
-}
-
-.server-settings-grid-cell {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
-  margin: 0;
-}
-
-.server-settings-grid-cell-name {
-  display: none;
-  color: rgba(238, 238, 238, 0.62);
-  font-size: 12px;
-  text-align: right;
-  padding-right: 10px;
-}
-
+// Phones: no room for three columns beside the text; a block per value, its fields below, each one named
 @media (max-width: @max-below-tablet) {
+  .server-settings-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .server-settings-grid-band,
   .server-settings-grid-head {
     display: none;
   }
 
-  .server-settings-grid-head + .server-settings-row {
-    padding-top: 0;
+  .server-settings-grid-row {
+    .server-settings-text {
+      grid-column: 1 / -1;
+      grid-row: auto;
+      padding-bottom: 6px;
+    }
+  }
+
+  .server-settings-grid-cell {
+    grid-column: auto;
+    grid-row: auto;
+    padding: 0 0 @server-settings-row-gap;
   }
 
   .server-settings-grid-cell-name {
-    display: block;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  // Without the bands each field carries the color of its strength itself
+  .server-settings-grid-cell--easy .server-settings-grid-input { border-color: fade(@server-settings-ai-easy, 55%); }
+  .server-settings-grid-cell--normal .server-settings-grid-input { border-color: fade(@server-settings-ai-normal, 55%); }
+  .server-settings-grid-cell--hard .server-settings-grid-input { border-color: fade(@server-settings-ai-hard, 55%); }
+
+  .server-settings-grid-row:first-of-type .server-settings-text {
+    border-top: none;
   }
 }
 
@@ -738,8 +811,7 @@
 }
 
 // Below a heading the first row needs no line of its own (the heading carries it)
-.server-settings-section-title + .server-settings-row,
-.server-settings-section-title + .server-settings-grid .server-settings-grid-head {
+.server-settings-section-title + .server-settings-row {
   border-top: none;
 }
 

@@ -1486,7 +1486,6 @@
   "This server has ${0} cores: at most ${0} threads.": "Ennek a szervernek ${0} magja van: legfeljebb ${0} szál.",
   "Load per core": "Terhelés magonként",
   "90 % or more": "90 % vagy több",
-  "Waiting times": "Várakozási idők",
   "Training data": "Tanítóadatok",
   "Thinking time (ms)": "Gondolkodási idő (ms)",
   "Per move while humans play along: the AI takes this long, the Rust AI searches for this long. Without humans it plays at full speed.": "Lépésenként, amíg emberek is játszanak: ennyi ideig tart az AI, ennyi ideig keres a Rust-AI. Emberek nélkül teljes sebességgel játszik.",

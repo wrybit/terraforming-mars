@@ -1077,7 +1077,6 @@
   "This server has ${0} cores: at most ${0} threads.": "Dieser Server hat ${0} Kerne: höchstens ${0} Threads.",
   "Load per core": "Last je Kern",
   "90 % or more": "ab 90 %",
-  "Waiting times": "Wartezeiten",
   "Training data": "Trainingsdaten",
   "Thinking time (ms)": "Denkzeit (ms)",
   "Per move while humans play along: the AI takes this long, the Rust AI searches for this long. Without humans it plays at full speed.": "Pro Zug, solange Menschen mitspielen: So lange braucht die AI, so lange sucht die Rust-AI. Ohne Menschen spielt sie mit voller Geschwindigkeit.",

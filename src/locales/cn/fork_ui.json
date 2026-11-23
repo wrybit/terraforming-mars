@@ -2288,7 +2288,6 @@
   "This server has ${0} cores: at most ${0} threads.": "此服务器有 ${0} 个核心：最多 ${0} 个线程。",
   "Load per core": "每个核心的负载",
   "90 % or more": "90% 及以上",
-  "Waiting times": "等待时间",
   "Training data": "训练数据",
   "Thinking time (ms)": "思考时间（毫秒）",
   "Per move while humans play along: the AI takes this long, the Rust AI searches for this long. Without humans it plays at full speed.": "有人类玩家时每步：AI 用这么久，Rust AI 搜索这么久。没有人类时全速进行。",

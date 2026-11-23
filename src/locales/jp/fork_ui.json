@@ -1678,7 +1678,6 @@
   "This server has ${0} cores: at most ${0} threads.": "このサーバーのコアは ${0} 個：スレッドは最大 ${0}。",
   "Load per core": "コアごとの負荷",
   "90 % or more": "90 % 以上",
-  "Waiting times": "待ち時間",
   "Training data": "学習データ",
   "Thinking time (ms)": "思考時間 (ms)",
   "Per move while humans play along: the AI takes this long, the Rust AI searches for this long. Without humans it plays at full speed.": "人間が参加中の1手ごと：AIはこの時間をかけ、Rust AIはこの時間探索します。人間がいなければ全速で進みます。",

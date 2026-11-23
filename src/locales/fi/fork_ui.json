@@ -1302,7 +1302,6 @@
   "This server has ${0} cores: at most ${0} threads.": "Tällä palvelimella on ${0} ydintä: enintään ${0} säiettä.",
   "Load per core": "Kuorma ytimittäin",
   "90 % or more": "90 % tai enemmän",
-  "Waiting times": "Odotusajat",
   "Training data": "Koulutusdata",
   "Thinking time (ms)": "Miettimisaika (ms)",
   "Per move while humans play along: the AI takes this long, the Rust AI searches for this long. Without humans it plays at full speed.": "Siirtoa kohden, kun ihmisiä pelaa mukana: näin kauan AI miettii, näin kauan Rust-AI etsii. Ilman ihmisiä se pelaa täydellä nopeudella.",

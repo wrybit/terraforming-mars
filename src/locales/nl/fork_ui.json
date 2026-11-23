@@ -1929,7 +1929,6 @@
   "This server has ${0} cores: at most ${0} threads.": "Deze server heeft ${0} kernen: hoogstens ${0} threads.",
   "Load per core": "Belasting per kern",
   "90 % or more": "90 % of meer",
-  "Waiting times": "Wachttijden",
   "Training data": "Trainingsgegevens",
   "Thinking time (ms)": "Denktijd (ms)",
   "Per move while humans play along: the AI takes this long, the Rust AI searches for this long. Without humans it plays at full speed.": "Per zet zolang er mensen meespelen: zo lang doet de AI erover, zo lang zoekt de Rust-AI. Zonder mensen speelt hij op volle snelheid.",

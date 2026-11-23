@@ -1668,7 +1668,6 @@
   "This server has ${0} cores: at most ${0} threads.": "Denne serveren har ${0} kjerner: høyst ${0} tråder.",
   "Load per core": "Last per kjerne",
   "90 % or more": "90 % eller mer",
-  "Waiting times": "Ventetider",
   "Training data": "Treningsdata",
   "Thinking time (ms)": "Tenketid (ms)",
   "Per move while humans play along: the AI takes this long, the Rust AI searches for this long. Without humans it plays at full speed.": "Per trekk mens mennesker spiller: så lenge bruker AI-en, så lenge søker Rust-AI-en. Uten mennesker spiller den i full fart.",

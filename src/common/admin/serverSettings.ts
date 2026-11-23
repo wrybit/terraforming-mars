@@ -76,7 +76,7 @@ const AI_STRENGTH_ROWS: Record<RustBotStrengthField, {label: string, description
   randomness: {label: 'Randomness (%)', description: '0: always the best move. Higher: more often a slightly worse one, never nonsense. Needs a bot that supports it.'},
 };
 
-// The thinking time is a waiting time: it stands with the other ones, the search values form the strength table
+// The strength table: one row per value, one field per strength
 function aiStrengthSettings(fields: ReadonlyArray<RustBotStrengthField>, section: string, side: boolean): Array<ServerSettingDefinition> {
   return fields.flatMap((field) => AI_LEVELS.map((level): ServerSettingDefinition => ({
     key: rustBotStrengthKey(level, field),
@@ -136,13 +136,11 @@ const BASE_SETTINGS: ReadonlyArray<ServerSettingDefinition> = [
     description: 'Program that plays the AI seats of new games. Running games keep theirs. Takes effect at once.'},
   {key: 'AI_TYPESCRIPT_FALLBACK', group: 'AI opponents', section: 'AI program', kind: 'toggle', defaultOn: true, live: true, label: 'TypeScript as a stand-in',
     description: 'On: settings the Rust AI cannot play get the TypeScript AI. Off: they count as not compatible with the AI.'},
-  // All times of a move together: the thinking time per strength (also the pause humans need to follow the game)
-  // and how long the Rust AI may take beyond it before the TypeScript AI decides instead
-  ...aiStrengthSettings(['timeLimit'], 'Waiting times', false),
-  {key: 'AI_RUST_EXTRA_WAIT_MS', group: 'AI opponents', section: 'Waiting times', kind: 'number', live: true, label: 'Fallback to TypeScript after (ms)',
+  {key: 'AI_RUST_EXTRA_WAIT_MS', group: 'AI opponents', section: 'AI program', kind: 'number', live: true, label: 'Fallback to TypeScript after (ms)',
     description: 'Extra time on top of the thinking time. Without an answer of the Rust AI by then, the TypeScript AI makes this decision. Empty: 10000.'},
-  // Search values only the Rust AI has: how much it searches first, the hardware (threads) last
-  ...aiStrengthSettings(['rollouts', 'candidates', 'horizon', 'randomness', 'threads'], 'Strength of the Rust AI', true),
+  // Per strength: the thinking time first (it also paces the TypeScript AI), then how much the Rust AI searches,
+  // the hardware (threads) last
+  ...aiStrengthSettings(['timeLimit', 'rollouts', 'candidates', 'horizon', 'randomness', 'threads'], 'Strength of the Rust AI', true),
   {key: 'AI_DECISION_LOG_DIR', group: 'AI opponents', section: 'Training data', kind: 'text', label: 'Folder for decision logs',
     description: 'The AI writes every decision there (for training). Empty: no logs.'},
   {key: 'AI_TRAINING_FEED', group: 'AI opponents', section: 'Training data', kind: 'text', label: 'AI test runs in the lobby',
