@@ -127,7 +127,8 @@ describe('chat filters', () => {
   it('keeps ordinary words of other languages unmasked by the default lists', () => {
     const words = new ChatWordList({load: () => undefined, save: () => {}}).allWords();
     for (const text of ['Pakistan', 'spicy', 'Faszination', 'homogen', 'Kutsche', 'жидкий', 'horen', 'kukka', 'cocktail', 'Dagobert',
-      'Barometer', 'spazio', 'Gogol', 'Ritalin', 'кончать', 'Херсон', 'mamut', 'injunction', 'pikku', 'kusić', '今日你好', 'カスタム', 'デブリ']) {
+      'Barometer', 'spazio', 'Gogol', 'Ritalin', 'кончать', 'Херсон', 'mamut', 'injunction', 'pikku', 'kusić', '今日你好', 'カスタム', 'デブリ',
+      'dritte', 'Neukölln', 'sukat', 'Pinakothek', 'Figaro', 'szmatka', '低能力', 'かたわら', '妈妈的', '操作', '逼近', 'Kolonien', 'Grünfläche']) {
       expect(maskWords(text, words)).eq(text);
     }
     expect(maskWords('Du Arschloch', words)).eq('Du *********');
