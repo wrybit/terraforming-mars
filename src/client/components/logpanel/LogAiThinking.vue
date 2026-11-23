@@ -14,6 +14,10 @@ import {PublicPlayerModel} from '@/common/models/PlayerModel';
 import {Color} from '@/common/Color';
 import {translateText} from '@/client/directives/i18n';
 
+// The countdown needs no more: higher rates only cost frames, the last digits can't be read anyway
+const COUNTDOWN_FRAMES_PER_SECOND = 30;
+const COUNTDOWN_FRAME_MS = 1000 / COUNTDOWN_FRAMES_PER_SECOND;
+
 type DataModel = {
   now: number,
   // Local end of the thinking time per seat: counted from the moment the server's answer arrived (no clock sync needed)
@@ -63,14 +67,18 @@ export default defineComponent({
     this.stopTicking();
   },
   methods: {
-    // Milliseconds count down smoothly: one update per frame, until the countdown has reached 0
+    // Milliseconds count down at COUNTDOWN_FRAMES_PER_SECOND, until the countdown has reached 0
     startTicking(): void {
       if (this.frame !== undefined) {
         return;
       }
       const tick = () => {
-        this.now = Date.now();
-        const running = [...this.deadlines.values()].some((deadline) => deadline.at > this.now);
+        const now = Date.now();
+        const running = [...this.deadlines.values()].some((deadline) => deadline.at > now);
+        // The last step always shows: the countdown ends on 0, not on a value from the previous update
+        if (!running || now - this.now >= COUNTDOWN_FRAME_MS) {
+          this.now = now;
+        }
         this.frame = running ? window.requestAnimationFrame(tick) : undefined;
       };
       this.frame = window.requestAnimationFrame(tick);

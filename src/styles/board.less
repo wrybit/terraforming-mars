@@ -446,12 +446,14 @@
   }
 }
 
+// opacity instead of filter: opacity(): the same look, but the GPU fades it; a filter animation had every
+// selectable space restyled and repainted in every frame
 @keyframes board-tile-blink-animation {
-  0% { filter: opacity(1)}
-  49% { filter: opacity(1)}
-  70% { filter: opacity(0.4)}
-  99% { filter: opacity(0.4)}
-  100% { filter: opacity(1)}
+  0% { opacity: 1; }
+  49% { opacity: 1; }
+  70% { opacity: 0.4; }
+  99% { opacity: 0.4; }
+  100% { opacity: 1; }
 }
 
 @keyframes board-tile-highlight-animation {
