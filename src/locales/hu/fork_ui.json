@@ -1493,5 +1493,10 @@
   "How long a login (admin and Discord) stays valid, e.g. 30d or 12h.": "Meddig érvényes egy bejelentkezés (admin és Discord), pl. 30d vagy 12h.",
   "Faster inputs of a player are refused (against bots). 0: no limit.": "A játékos gyorsabb bevitelei elutasításra kerülnek (botok ellen). 0: nincs korlát.",
   "How long browsers keep images and fonts without asking the server again. 0: they always ask.": "Mennyi ideig tartják meg a böngészők a képeket és betűtípusokat a szerver újbóli megkérdezése nélkül. 0: mindig kérdeznek.",
-  "Solo (player count)": "Szóló"
+  "Solo (player count)": "Szóló",
+  "System notification, only while the tab is hidden or another window is in front.": "Rendszerértesítés, csak ha a lap rejtve van, vagy egy másik ablak van elöl.",
+  "The notification was handed to the system. If no notification appears, the system blocks it: allow notifications for this browser in the system settings and check Focus or Do Not Disturb.": "Az értesítést átadtuk a rendszernek. Ha nem jelenik meg értesítés, a rendszer blokkolja: engedélyezd az értesítéseket ennek a böngészőnek a rendszerbeállításokban, és ellenőrizd a Fókusz vagy a Ne zavarjanak módot.",
+  "Not shown: this tab was in front. In the game that is intended; switch to another app or tab during the countdown.": "Nem jelent meg: ez a lap elöl volt. A játékban ez a szándékos viselkedés; a visszaszámlálás alatt válts másik alkalmazásra vagy lapra.",
+  "Notifications are not allowed for this site: allow them in the browser and test again.": "Ennél az oldalnál nincsenek engedélyezve az értesítések: engedélyezd őket a böngészőben, és teszteld újra.",
+  "The browser refused to show the notification: check the notification permission of this site.": "A böngésző nem volt hajlandó megjeleníteni az értesítést: ellenőrizd az oldal értesítési engedélyét."
 }

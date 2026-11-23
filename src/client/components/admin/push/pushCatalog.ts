@@ -85,8 +85,9 @@ export const PUSH_CATALOG: ReadonlyArray<PushCatalogEntry> = [
     rows: [
       {label: 'Fires when', text: 'The open game page notices that the player has to act.'},
       {label: 'Recipient', text: 'Only the open game tab: nothing arrives with the tab closed.'},
+      {label: 'Shown as', text: 'System notification, only while the tab is hidden or another window is in front.'},
     ],
-    code: 'WaitingFor.notify()',
+    code: 'WaitingFor.notify() → showTurnNotification()',
     parameters: [],
     deepLink: undefined,
     deepLinkNote: 'None: the tab is already open.',

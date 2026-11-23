@@ -2259,5 +2259,10 @@
   "How long a login (admin and Discord) stays valid, e.g. 30d or 12h.": "Колко дълго важи влизането (админ и Discord), напр. 30d или 12h.",
   "Faster inputs of a player are refused (against bots). 0: no limit.": "По-бързите действия на играч се отхвърлят (срещу ботове). 0: без ограничение.",
   "How long browsers keep images and fonts without asking the server again. 0: they always ask.": "Колко дълго браузърите пазят изображения и шрифтове, без да питат сървъра отново. 0: винаги питат.",
-  "Solo (player count)": "Соло"
+  "Solo (player count)": "Соло",
+  "System notification, only while the tab is hidden or another window is in front.": "Системно известие, само докато разделът е скрит или отпред е друг прозорец.",
+  "The notification was handed to the system. If no notification appears, the system blocks it: allow notifications for this browser in the system settings and check Focus or Do Not Disturb.": "Известието беше предадено на системата. Ако не се появи известие, системата го блокира: разреши известията за този браузър в системните настройки и провери режим Фокус или Не безпокойте.",
+  "Not shown: this tab was in front. In the game that is intended; switch to another app or tab during the countdown.": "Не е показано: този раздел беше отпред. В играта това е нарочно; по време на обратното броене премини към друго приложение или раздел.",
+  "Notifications are not allowed for this site: allow them in the browser and test again.": "Известията не са разрешени за този сайт: разреши ги в браузъра и тествай отново.",
+  "The browser refused to show the notification: check the notification permission of this site.": "Браузърът отказа да покаже известието: провери разрешението за известия на този сайт."
 }

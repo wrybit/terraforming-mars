@@ -29,4 +29,11 @@ describe('rustContract', () => {
     const chain = [{kind: 'cards', cards: ['Pets']}, {kind: 'resource', resource: 'plants'}];
     expect(responseFor(input, chain)).deep.eq({type: 'and', responses: [{type: 'resource', resource: 'plants'}, {type: 'card', cards: ['Pets']}]});
   });
+
+  it('pays an M€-only payment inside an option the bot answered without a payment step (St. Joseph of Cupertino Mission)', () => {
+    const offer = {type: 'or', title: 'Select one option', options: [{type: 'payment', title: 'Pay 2 M€ to draw a card', amount: 2}, {type: 'option', title: 'Do not buy a card'}]};
+    const response = responseFor(offer, [{kind: 'index', index: 0}]);
+    expect(response.index).eq(0);
+    expect(response.response.payment.megacredits).eq(2);
+  });
 });

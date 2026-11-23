@@ -1936,5 +1936,10 @@
   "How long a login (admin and Discord) stays valid, e.g. 30d or 12h.": "Hoe lang een login (beheer en Discord) geldig blijft, bijv. 30d of 12h.",
   "Faster inputs of a player are refused (against bots). 0: no limit.": "Snellere invoer van een speler wordt geweigerd (tegen bots). 0: geen limiet.",
   "How long browsers keep images and fonts without asking the server again. 0: they always ask.": "Hoe lang browsers afbeeldingen en lettertypen bewaren zonder de server opnieuw te vragen. 0: ze vragen altijd.",
-  "Solo (player count)": "Solo"
+  "Solo (player count)": "Solo",
+  "System notification, only while the tab is hidden or another window is in front.": "Systeemmelding, alleen als het tabblad verborgen is of een ander venster vooraan staat.",
+  "The notification was handed to the system. If no notification appears, the system blocks it: allow notifications for this browser in the system settings and check Focus or Do Not Disturb.": "De melding is aan het systeem doorgegeven. Verschijnt er geen melding, dan blokkeert het systeem die: sta meldingen voor deze browser toe in de systeeminstellingen en controleer Focus of Niet storen.",
+  "Not shown: this tab was in front. In the game that is intended; switch to another app or tab during the countdown.": "Niet getoond: dit tabblad stond vooraan. In het spel is dat de bedoeling; wissel tijdens het aftellen naar een andere app of een ander tabblad.",
+  "Notifications are not allowed for this site: allow them in the browser and test again.": "Meldingen zijn voor deze site niet toegestaan: sta ze toe in de browser en test opnieuw.",
+  "The browser refused to show the notification: check the notification permission of this site.": "De browser weigerde de melding te tonen: controleer de meldingstoestemming van deze site."
 }

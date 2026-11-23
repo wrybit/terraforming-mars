@@ -256,5 +256,10 @@ function innerResponse(option: any, choice: ContractChoice, chain: Array<Contrac
   if (option.type === 'card' && Array.isArray(choice.cards)) {
     return {type: 'card', cards: choice.cards};
   }
+  // a payment the bot does not ask as a choice of its own (only M€ possible, St. Joseph of Cupertino Mission: pay 2 M€
+  // to draw a card): the amount in M€
+  if (option.type === 'payment' && chain[position + 1] === undefined) {
+    return {type: 'payment', payment: payment({megacredits: option.amount})};
+  }
   return responseFor(option, chain, position + 1);
 }

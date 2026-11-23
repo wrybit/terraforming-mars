@@ -34,7 +34,6 @@
 
 import {replaceCleanup} from '@/client/utils/instanceCleanup';
 import {defineComponent} from 'vue';
-import * as constants from '@/common/constants';
 import raw_settings from '@/genfiles/settings.json';
 import {vueRoot} from '@/client/components/vueRoot';
 import {translateText} from '@/client/directives/i18n';
@@ -64,7 +63,7 @@ import {describeFailure, failureFromResponse, RequestFailedError, RequestFailure
 import {describeGameLoadFailure} from '@/client/utils/gameLoadFailure';
 import {registerMoveSender} from '@/client/components/dune/duneMoves';
 import {aiThinking, takeAiThinking} from '@/client/utils/aiThinking';
-import {isPageInFront} from '@/client/utils/pageInFront';
+import {showTurnNotification} from '@/client/utils/turnNotification';
 
 let ui_update_timeout_id: number | undefined;
 let otherPlayersTimer: number | undefined;
@@ -408,33 +407,7 @@ export default defineComponent({
         SoundManager.playActivePlayerSound();
       }
 
-      if (Notification.permission !== 'granted') {
-        Notification.requestPermission();
-      } else if (isPageInFront()) {
-        // Seite vorne und im Fokus: der Spieler sieht den Zugwechsel selbst, keine System-Benachrichtigung
-        return;
-      } else {
-        const notificationOptions = {
-          icon: 'favicon.ico',
-          body: translateText('It\'s your turn!'),
-        };
-        const notificationTitle = constants.APP_NAME;
-        try {
-          new Notification(notificationTitle, notificationOptions);
-        } catch (e) {
-          // ok so the native Notification doesn't work which will happen
-          // try to use the service worker
-          if (!window.isSecureContext || !navigator.serviceWorker) {
-            return;
-          }
-          navigator.serviceWorker.ready.then((registration) => {
-            registration.showNotification(notificationTitle, notificationOptions);
-          }).catch((err) => {
-            // avoid promise going uncaught
-            console.warn('Failed to display notification with serviceWorker', err);
-          });
-        }
-      }
+      void showTurnNotification();
     },
     playerName(color: Color) {
       const player = this.playerView.players.find((p) => p.color === color);
