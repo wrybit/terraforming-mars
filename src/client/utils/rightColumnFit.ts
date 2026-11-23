@@ -145,6 +145,7 @@ function fitMarsHeight(column: HTMLElement, block: HTMLElement, board: HTMLEleme
 // every part of the board (overflowScale, centerMars) – that was about a third of each update (Jens, 23 Oct 2026).
 type FitResult = {
   key: string,
+  quickKey: string,
   steps: Array<string>,
   fitZoom: string,
   wideZoom: string,
@@ -177,9 +178,33 @@ function applyFit(column: HTMLElement, block: HTMLElement | null, board: HTMLEle
   }
 }
 
+// The fit's inputs read WITHOUT resetting the zoom: the board's offset and scroll sizes don't change with the zoom on
+// .board-cont, the reference and the block's top lie outside of it. Resetting the zoom to 1 just to measure restyled and
+// re-laid out the whole page twice per game update (about 150 ms) and made the GPU raster the board anew, which showed
+// as flicker (frames with missing tiles).
+function quickKeyOf(column: HTMLElement, block: HTMLElement | null, board: HTMLElement | null): string {
+  const reference = widthReference(column);
+  const referenceBox = reference === undefined ? undefined : contentBox(reference);
+  return [getComputedStyle(column).maxHeight, window.innerHeight, referenceBox?.left, referenceBox?.width,
+    board?.offsetWidth, board?.offsetHeight, board?.scrollWidth, board?.scrollHeight, block?.getBoundingClientRect().top,
+    column.getAttribute(MARS_HEIGHT_ATTRIBUTE), column.closest(FIXED_LAYOUT_SELECTOR) !== null].join('|');
+}
+
+// The column still shows the result (a re-render can drop the classes or the inline styles)
+function showsFit(column: HTMLElement, block: HTMLElement | null, board: HTMLElement | null, result: FitResult): boolean {
+  return STEPS.every((step) => column.classList.contains(step) === result.steps.includes(step)) &&
+    column.style.getPropertyValue(BOARD_FIT_ZOOM_VARIABLE) === result.fitZoom &&
+    column.style.getPropertyValue(BOARD_WIDE_ZOOM_VARIABLE) === result.wideZoom &&
+    column.getAttribute(MARS_MIN_HEIGHT_ATTRIBUTE) === result.minHeight &&
+    column.getAttribute(MARS_MAX_HEIGHT_ATTRIBUTE) === result.maxHeight &&
+    (block === null || block.style.height === result.blockHeight) &&
+    (board === null || board.style.translate === result.translate);
+}
+
 function recordFit(column: HTMLElement, block: HTMLElement | null, board: HTMLElement | null, key: string): void {
   lastFits.set(column, {
     key,
+    quickKey: quickKeyOf(column, block, board),
     steps: STEPS.filter((step) => column.classList.contains(step)),
     fitZoom: column.style.getPropertyValue(BOARD_FIT_ZOOM_VARIABLE),
     wideZoom: column.style.getPropertyValue(BOARD_WIDE_ZOOM_VARIABLE),
@@ -191,6 +216,19 @@ function recordFit(column: HTMLElement, block: HTMLElement | null, board: HTMLEl
 }
 
 function fit(column: HTMLElement): void {
+  // Nothing the fit depends on changed (the usual case after a game update): keep the result, write nothing
+  const last = lastFits.get(column);
+  if (last !== undefined) {
+    const currentBlock = column.querySelector<HTMLElement>(MARS_BLOCK_SELECTOR);
+    const currentBoard = column.querySelector<HTMLElement>('.board-cont');
+    if (last.quickKey === quickKeyOf(column, currentBlock, currentBoard)) {
+      if (!showsFit(column, currentBlock, currentBoard, last)) {
+        column.classList.remove(...STEPS);
+        applyFit(column, currentBlock, currentBoard, last);
+      }
+      return;
+    }
+  }
   column.classList.remove(...STEPS);
   column.style.setProperty(BOARD_FIT_ZOOM_VARIABLE, '1');
   const block = column.querySelector<HTMLElement>(MARS_BLOCK_SELECTOR);
@@ -214,9 +252,9 @@ function fit(column: HTMLElement): void {
   const key = [available, window.innerHeight, referenceBox?.left, referenceBox?.width, boardRect?.width, boardRect?.height,
     board?.scrollWidth, board?.scrollHeight, block?.getBoundingClientRect().top, column.getAttribute(MARS_HEIGHT_ATTRIBUTE),
     column.closest(FIXED_LAYOUT_SELECTOR) !== null].join('|');
-  const last = lastFits.get(column);
   if (last !== undefined && last.key === key) {
     applyFit(column, block, board, last);
+    recordFit(column, block, board, key);
     return;
   }
   column.style.setProperty(BOARD_WIDE_ZOOM_VARIABLE, String(widenZoom));
