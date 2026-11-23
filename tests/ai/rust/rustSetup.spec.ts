@@ -39,4 +39,10 @@ describe('setupOf', () => {
     const game = Game.newInstance('game-first-player', players, players[1], 'spectator-first-player');
     expect(setupOf(game, '', []).firstPlayer).eq(1);
   });
+
+  it('names the game, so the bot writes its decision log to <gameId>.jsonl', () => {
+    const players = [TestPlayer.BLUE.newPlayer(), TestPlayer.ORANGE.newPlayer()];
+    const game = Game.newInstance('game-decision-log', players, players[0], 'spectator-decision-log');
+    expect(setupOf(game, '', []).gameId).eq('game-decision-log');
+  });
 });

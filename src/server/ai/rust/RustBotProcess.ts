@@ -21,9 +21,11 @@ export class RustBotProcess {
   private readonly waiting: Array<Waiting> = [];
   private failure: Error | undefined = undefined;
 
-  constructor(binary: string, data: string, settings: RustBotSettings) {
+  /** `decisionLog`: folder the bot writes its decisions to (TM_DECISION_LOG), none without it */
+  constructor(binary: string, data: string, settings: RustBotSettings, decisionLog?: string) {
     this.child = spawn(binary, [data, String(settings.rollouts), String(settings.threads), String(settings.horizon), String(settings.candidates),
-      'search', String(settings.timeLimit), ...(settings.randomness === undefined ? [] : [String(settings.randomness)])]);
+      'search', String(settings.timeLimit), ...(settings.randomness === undefined ? [] : [String(settings.randomness)])],
+    {env: decisionLog === undefined ? process.env : {...process.env, TM_DECISION_LOG: decisionLog}});
     // Known to the live load of the admin page, which shows how much of the machine the AI takes
     const processId = this.child.pid;
     if (processId !== undefined) {
