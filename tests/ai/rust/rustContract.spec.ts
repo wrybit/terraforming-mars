@@ -36,4 +36,9 @@ describe('rustContract', () => {
     expect(response.index).eq(0);
     expect(response.response.payment.megacredits).eq(2);
   });
+
+  it('finds the standard project the bot names with :SP in the TS list (Established Methods)', () => {
+    const input = {type: 'projectCard', title: 'Select your first standard project', cards: [{name: 'City'}, {name: 'Greenery'}]};
+    expect(responseFor(input, [{kind: 'projectCard', card: 'City:SP', payment: {megacredits: 25}}]).card).eq('City');
+  });
 });
