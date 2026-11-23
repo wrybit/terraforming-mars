@@ -62,6 +62,7 @@ import {ingestView} from '@/client/utils/changeTracker';
 import {describeFailure, failureFromResponse, RequestFailedError, RequestFailure} from '@/client/utils/requestFailure';
 import {describeGameLoadFailure} from '@/client/utils/gameLoadFailure';
 import {aiThinking, takeAiThinking} from '@/client/utils/aiThinking';
+import {isPageInFront} from '@/client/utils/pageInFront';
 
 let ui_update_timeout_id: number | undefined;
 let otherPlayersTimer: number | undefined;
@@ -403,7 +404,10 @@ export default defineComponent({
 
       if (Notification.permission !== 'granted') {
         Notification.requestPermission();
-      } else if (Notification.permission === 'granted') {
+      } else if (isPageInFront()) {
+        // Seite vorne und im Fokus: der Spieler sieht den Zugwechsel selbst, keine System-Benachrichtigung
+        return;
+      } else {
         const notificationOptions = {
           icon: 'favicon.ico',
           body: translateText('It\'s your turn!'),
