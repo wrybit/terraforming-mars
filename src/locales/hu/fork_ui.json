@@ -1492,5 +1492,6 @@
   "Fallback to TypeScript after (ms)": "Átváltás TypeScriptre ennyi után (ms)",
   "Extra time on top of the thinking time. Without an answer of the Rust AI by then, the TypeScript AI makes this decision. Empty: 10000.": "A gondolkodási időn felül. Ha addig nem válaszol a Rust-AI, a TypeScript-AI dönt. Üres: 10000.",
   "AI program": "AI-program",
-  "Strength of the Rust AI": "A Rust-AI erőssége"
+  "Strength of the Rust AI": "A Rust-AI erőssége",
+  "Every list applies to every message, players write in mixed languages.": "Minden lista minden üzenetre érvényes, mert a játékosok vegyesen írnak több nyelven."
 }

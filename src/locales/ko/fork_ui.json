@@ -1562,5 +1562,6 @@
   "Fallback to TypeScript after (ms)": "TypeScript로 전환까지 (ms)",
   "Extra time on top of the thinking time. Without an answer of the Rust AI by then, the TypeScript AI makes this decision. Empty: 10000.": "생각 시간에 더해지는 시간. 그때까지 Rust AI가 답하지 않으면 TypeScript AI가 결정합니다. 비움: 10000.",
   "AI program": "AI 프로그램",
-  "Strength of the Rust AI": "Rust AI 강도"
+  "Strength of the Rust AI": "Rust AI 강도",
+  "Every list applies to every message, players write in mixed languages.": "플레이어가 여러 언어를 섞어 쓰므로 모든 목록이 모든 메시지에 적용됩니다."
 }

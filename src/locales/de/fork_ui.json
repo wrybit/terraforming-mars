@@ -1083,5 +1083,6 @@
   "Fallback to TypeScript after (ms)": "Fallback auf TypeScript nach (ms)",
   "Extra time on top of the thinking time. Without an answer of the Rust AI by then, the TypeScript AI makes this decision. Empty: 10000.": "Zusätzlich zur Denkzeit. Kommt bis dahin keine Antwort der Rust-AI, trifft die TypeScript-AI diese Entscheidung. Leer: 10000.",
   "AI program": "AI-Programm",
-  "Strength of the Rust AI": "Stärke der Rust-AI"
+  "Strength of the Rust AI": "Stärke der Rust-AI",
+  "Every list applies to every message, players write in mixed languages.": "Jede Liste gilt für jede Nachricht, denn Spieler schreiben gemischt in mehreren Sprachen."
 }

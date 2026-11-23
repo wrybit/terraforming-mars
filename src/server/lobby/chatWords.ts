@@ -1,20 +1,13 @@
 import * as path from 'path';
 import {fileStorage, LobbyStorage} from './lobbyStorage';
+import {ALL_LANGUAGES, LANGUAGE} from '../../common/constants';
+import {ChatWordLists} from '../../common/lobby/LobbyChatModel';
+import {DEFAULT_CHAT_WORDS} from './chatWordDefaults';
 
-// Words the lobby chat masks with asterisks. The admin page edits the list (routes/ApiAdminChatWords.ts);
-// until it is saved there, the default set below applies. An entry matches at the start of a word in any
-// case, so "arsch" also catches "Arschloch", but not "Barsch". Entries that start ordinary words are left out
-// of the default set (e.g. "dick", German for thick).
-
-export const DEFAULT_CHAT_WORDS: ReadonlyArray<string> = [
-  // German
-  'arsch', 'arschgeige', 'arschloch', 'bastard', 'bitch', 'depp', 'drecksau', 'dreckskerl', 'fick', 'fotze', 'hackfresse',
-  'hurensohn', 'hure', 'idiot', 'missgeburt', 'nazi', 'neger', 'nutte', 'penner', 'pisser', 'scheiß',
-  'scheiss', 'scheisse', 'schlampe', 'schwanzlutscher', 'schwuchtel', 'spast', 'spasti', 'trottel', 'vollidiot', 'wichser',
-  // English
-  'asshole', 'bullshit', 'cocksucker', 'cunt', 'dickhead', 'dumbass', 'fag', 'faggot', 'fuck', 'motherfucker', 'nigga', 'nigger',
-  'piss', 'pussy', 'retard', 'shit', 'slut', 'twat', 'whore', 'wanker',
-];
+// Words the lobby chat masks with asterisks, one list per app language (defaults: chatWordDefaults.ts). The admin
+// page edits the lists (routes/ApiAdminChatWords.ts); until they are saved there, the defaults apply. Every list
+// applies to every message. An entry matches at the start of a word in any case, so "arsch" also catches
+// "Arschloch", but not "Barsch"; Chinese and Japanese entries match anywhere (no spaces between words there).
 
 export function chatWordsFile(): string {
   return process.env.CHAT_WORDS_FILE ?? path.resolve('db', 'chat-words.json');
@@ -24,14 +17,28 @@ function escapeForRegExp(word: string): string {
   return word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-/** Masks every word that starts with an entry of the list; letters of any script count as word characters */
+// Scripts written without spaces between words: an entry there cannot wait for a word start
+const WITHOUT_SPACES = /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}]/u;
+
+/**
+ * Masks every word that starts with an entry of the list; letters of any script count as word characters.
+ * Entries in Chinese or Japanese script are masked wherever they appear.
+ */
 export function maskWords(text: string, words: ReadonlyArray<string>): string {
   const entries = words.map((word) => word.trim()).filter((word) => word !== '');
-  if (entries.length === 0) {
+  const spaced = entries.filter((word) => !WITHOUT_SPACES.test(word));
+  const unspaced = entries.filter((word) => WITHOUT_SPACES.test(word));
+  const parts: Array<string> = [];
+  if (spaced.length > 0) {
+    parts.push(`(?<![\\p{L}\\p{N}])(?:${spaced.map(escapeForRegExp).join('|')})[\\p{L}\\p{N}]*`);
+  }
+  if (unspaced.length > 0) {
+    parts.push(`(?:${unspaced.map(escapeForRegExp).join('|')})`);
+  }
+  if (parts.length === 0) {
     return text;
   }
-  const pattern = new RegExp(`(?<![\\p{L}\\p{N}])(?:${entries.map(escapeForRegExp).join('|')})[\\p{L}\\p{N}]*`, 'giu');
-  return text.replace(pattern, (match) => '*'.repeat(Array.from(match).length));
+  return text.replace(new RegExp(parts.join('|'), 'giu'), (match) => '*'.repeat(Array.from(match).length));
 }
 
 /** Trimmed, lower case, without duplicates and empty lines, sorted */
@@ -40,23 +47,56 @@ export function normalizeChatWords(words: ReadonlyArray<unknown>): Array<string>
   return Array.from(new Set(clean)).sort((a, b) => a.localeCompare(b));
 }
 
+/** One normalized list per app language; unknown languages are dropped, missing ones are empty. */
+export function normalizeChatWordLists(lists: unknown): ChatWordLists {
+  const source = (typeof lists === 'object' && lists !== null && !Array.isArray(lists)) ? lists as Record<string, unknown> : {};
+  return Object.fromEntries(ALL_LANGUAGES.map((language) => {
+    const words = source[language];
+    return [language, Array.isArray(words) ? normalizeChatWords(words) : []];
+  })) as ChatWordLists;
+}
+
+export function defaultChatWordLists(): ChatWordLists {
+  return normalizeChatWordLists(DEFAULT_CHAT_WORDS);
+}
+
+/**
+ * The saved lists. Before the lists per language the file held one list: its words keep the language of the
+ * default list they appear in, own additions go to German (the admin's language then), and the new default
+ * words of every language join them.
+ */
+function loadChatWordLists(saved: unknown): ChatWordLists {
+  if (!Array.isArray(saved)) {
+    return saved === undefined ? defaultChatWordLists() : normalizeChatWordLists(saved);
+  }
+  const lists: Record<LANGUAGE, Array<string>> = {...defaultChatWordLists()};
+  const known = new Set(Object.values(lists).flat());
+  const additions = normalizeChatWords(saved).filter((word) => !known.has(word));
+  lists.de = normalizeChatWords([...lists.de, ...additions]);
+  return lists;
+}
+
 export class ChatWordList {
   public static readonly INSTANCE = new ChatWordList();
-  private words: Array<string> | undefined;
+  private lists: ChatWordLists | undefined;
 
   constructor(private readonly storage: LobbyStorage = fileStorage(chatWordsFile())) {}
 
-  public get(): Array<string> {
-    if (this.words === undefined) {
-      const saved = this.storage.load();
-      this.words = Array.isArray(saved) ? normalizeChatWords(saved) : normalizeChatWords([...DEFAULT_CHAT_WORDS]);
+  public get(): ChatWordLists {
+    if (this.lists === undefined) {
+      this.lists = loadChatWordLists(this.storage.load());
     }
-    return this.words;
+    return this.lists;
   }
 
-  public set(words: ReadonlyArray<unknown>): Array<string> {
-    this.words = normalizeChatWords(words);
-    this.storage.save(this.words);
-    return this.words;
+  /** Words of all languages: every list applies to every message */
+  public allWords(): Array<string> {
+    return Array.from(new Set(Object.values(this.get()).flat()));
+  }
+
+  public set(lists: unknown): ChatWordLists {
+    this.lists = normalizeChatWordLists(lists);
+    this.storage.save(this.lists);
+    return this.lists;
   }
 }

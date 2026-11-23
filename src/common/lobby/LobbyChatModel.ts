@@ -1,3 +1,4 @@
+import {LANGUAGE} from '../constants';
 import {Color} from '../Color';
 
 // Contract of the lobby chat between server (server/lobby/LobbyChat.ts, routes/ApiLobbyChat.ts) and client (LobbyChat.vue)
@@ -29,8 +30,11 @@ export type LobbyChatModel = {
 };
 
 /** Admin page: the words the chat masks (routes/ApiAdminChatWords.ts) */
+/** Words the lobby chat masks, one list per app language (every list applies to every message). */
+export type ChatWordLists = Record<LANGUAGE, Array<string>>;
+
 export type ChatWordsModel = {
-  words: Array<string>;
-  /** The default set, for "Reset to default" */
-  defaults: Array<string>;
+  words: ChatWordLists;
+  /** The default sets, for "Reset to default" */
+  defaults: ChatWordLists;
 };

@@ -1467,5 +1467,6 @@
   "Fallback to TypeScript after (ms)": "Перехід на TypeScript через (мс)",
   "Extra time on top of the thinking time. Without an answer of the Rust AI by then, the TypeScript AI makes this decision. Empty: 10000.": "Понад час на хід. Якщо AI на Rust до того часу не відповів, рішення ухвалює AI на TypeScript. Порожньо: 10000.",
   "AI program": "Програма AI",
-  "Strength of the Rust AI": "Сила AI на Rust"
+  "Strength of the Rust AI": "Сила AI на Rust",
+  "Every list applies to every message, players write in mixed languages.": "Кожен список діє для кожного повідомлення, бо гравці пишуть різними мовами впереміш."
 }

@@ -1308,5 +1308,6 @@
   "Fallback to TypeScript after (ms)": "Vaihto TypeScriptiin, kun kulunut (ms)",
   "Extra time on top of the thinking time. Without an answer of the Rust AI by then, the TypeScript AI makes this decision. Empty: 10000.": "Miettimisajan lisäksi. Jos Rust-AI ei vastaa siihen mennessä, TypeScript-AI tekee päätöksen. Tyhjä: 10000.",
   "AI program": "AI-ohjelma",
-  "Strength of the Rust AI": "Rust-AI:n vahvuus"
+  "Strength of the Rust AI": "Rust-AI:n vahvuus",
+  "Every list applies to every message, players write in mixed languages.": "Jokainen lista koskee jokaista viestiä, koska pelaajat kirjoittavat sekaisin eri kielillä."
 }

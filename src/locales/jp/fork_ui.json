@@ -1684,5 +1684,6 @@
   "Fallback to TypeScript after (ms)": "TypeScript への切り替えまで (ms)",
   "Extra time on top of the thinking time. Without an answer of the Rust AI by then, the TypeScript AI makes this decision. Empty: 10000.": "思考時間に加えて待つ時間。それまでに Rust AI が答えなければ TypeScript AI が決定します。空欄：10000。",
   "AI program": "AIプログラム",
-  "Strength of the Rust AI": "Rust AI の強さ"
+  "Strength of the Rust AI": "Rust AI の強さ",
+  "Every list applies to every message, players write in mixed languages.": "プレイヤーは複数の言語を混ぜて書くため、すべてのリストがすべてのメッセージに適用されます。"
 }
