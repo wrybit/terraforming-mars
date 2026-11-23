@@ -6,6 +6,7 @@ import {Request} from '../Request';
 import {Response} from '../Response';
 import {RouteError} from './RouteError';
 import {ImportedSnapshotsStore} from '../admin/ImportedSnapshotsStore';
+import {withAiThinking} from '../ai/aiThinking';
 
 export class ApiPlayer extends Handler {
   public static readonly INSTANCE = new ApiPlayer();
@@ -33,7 +34,7 @@ export class ApiPlayer extends Handler {
       }
 
       ctx.ipTracker.addParticipant(playerId, ctx.ip);
-      responses.writeJson(res, ctx, Server.getPlayerModel(player));
+      responses.writeJson(res, ctx, withAiThinking(game.id, Server.getPlayerModel(player)));
     } catch (err) {
       console.warn(`unable to find player ${playerId}`, err);
       throw RouteError.notFound();

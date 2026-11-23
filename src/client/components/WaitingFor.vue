@@ -61,7 +61,7 @@ import {spaceWithSkip} from '@/client/components/spaceWithSkip';
 import {ingestView} from '@/client/utils/changeTracker';
 import {describeFailure, failureFromResponse, RequestFailedError, RequestFailure} from '@/client/utils/requestFailure';
 import {describeGameLoadFailure} from '@/client/utils/gameLoadFailure';
-import {aiThinking} from '@/client/utils/aiThinking';
+import {aiThinking, takeAiThinking} from '@/client/utils/aiThinking';
 
 let ui_update_timeout_id: number | undefined;
 let otherPlayersTimer: number | undefined;
@@ -266,6 +266,8 @@ export default defineComponent({
       if (playerView !== undefined) {
         // Answer to the own input: becomes the new baseline, own changes don't blink
         ingestView(playerView, 'own');
+        // An AI that starts deciding because of this move shows at once, not only with the next poll
+        takeAiThinking(playerView);
       }
       root.playerView = playerView;
       root.screen = 'player-home';
@@ -336,6 +338,11 @@ export default defineComponent({
           if (response.ok) {
             const latest: PlayerViewModel = await response.json();
             playerView.players = latest.players;
+            // An AI that started deciding meanwhile shows in the log; while one does, its line is polled every second
+            takeAiThinking(latest);
+            if (aiThinkingTimer === undefined) {
+              this.watchAiThinking();
+            }
           } else {
             console.warn('Unable to update other players', response.status, response.statusText);
             // Client errors (e.g. the game no longer exists) won't recover, so stop polling.

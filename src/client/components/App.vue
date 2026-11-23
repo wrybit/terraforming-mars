@@ -126,6 +126,7 @@ import {serverUpdatePhase, startServerStatusPolling} from '@/client/utils/server
 import FanProjectNotice from '@/client/components/common/FanProjectNotice.vue';
 import {setDocumentTitle} from '../utils/documentTitle';
 import {ingestView} from '@/client/utils/changeTracker';
+import {takeAiThinking} from '@/client/utils/aiThinking';
 import {fetchOrFail} from '@/client/utils/requestFailure';
 import {describeGameLoadFailure} from '@/client/utils/gameLoadFailure';
 
@@ -315,6 +316,7 @@ export default defineComponent({
           ingestView(model, 'remote');
           if (path === paths.PLAYER) {
             app.playerView = model as PlayerViewModel;
+            takeAiThinking(app.playerView);
             setTranslationContext(app.playerView);
           } else if (path === paths.SPECTATOR) {
             app.spectator = model as SpectatorModel;

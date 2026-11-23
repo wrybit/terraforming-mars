@@ -2,6 +2,7 @@ import * as responses from '../server/responses';
 import prometheus from '@prometheus-io/client';
 import {IPlayer} from '../IPlayer';
 import {Server} from '../models/ServerModel';
+import {withAiThinking} from '../ai/aiThinking';
 import {Handler} from './Handler';
 import {Context} from './IHandler';
 import {OrOptions} from '../inputs/OrOptions';
@@ -93,7 +94,7 @@ export class PlayerInput extends Handler {
       const earlier = await this.loadSave(player.game.id, lastSaveId);
       if (revealsHiddenInformation(earlier, player.game.serialize())) {
         player.game.log('Undo is not possible: cards or other hidden information were revealed since then.', () => {}, {reservedFor: player});
-        responses.writeJson(res, ctx, Server.getPlayerModel(player));
+        responses.writeJson(res, ctx, withAiThinking(player.game.id, Server.getPlayerModel(player)));
         return;
       }
       const game = await ctx.gameLoader.restoreGameAt(player.game.id, lastSaveId);
@@ -106,7 +107,7 @@ export class PlayerInput extends Handler {
     } catch (err) {
       console.error(err);
     }
-    responses.writeJson(res, ctx, Server.getPlayerModel(player));
+    responses.writeJson(res, ctx, withAiThinking(player.game.id, Server.getPlayerModel(player)));
   }
 
   private async processInput(req: Request, res: Response, ctx: Context, player: IPlayer): Promise<void> {
@@ -135,7 +136,7 @@ export class PlayerInput extends Handler {
         const humanDecision = prepareHumanDecision(player, entity, responseInterval);
         player.process(entity);
         humanDecision?.();
-        responses.writeJson(res, ctx, Server.getPlayerModel(player));
+        responses.writeJson(res, ctx, withAiThinking(player.game.id, Server.getPlayerModel(player)));
       }
     } catch (e) {
       if (!(e instanceof AppError || e instanceof InputError)) {
