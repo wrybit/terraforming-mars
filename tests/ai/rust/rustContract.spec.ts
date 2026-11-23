@@ -17,4 +17,16 @@ describe('rustContract', () => {
     expect(response.payment.megacredits).eq(3);
     expect(response.payment.heat).eq(3);
   });
+
+  it('puts the wild resource of the alternative Venus board on the card the bot names', () => {
+    const wild = {type: 'or', title: 'Choose your wild resource bonus.', options: [
+      {type: 'card', title: 'Add resource to card'}, {type: 'and', title: 'Gain 1 resource(s) for your Venus track bonus.', options: []}]};
+    expect(responseFor(wild, [{kind: 'index', index: 0, cards: ['Birds']}])).deep.eq({type: 'or', index: 0, response: {type: 'card', cards: ['Birds']}});
+  });
+
+  it('answers parts the bot decides one after the other but TS asks together (Focused Organization)', () => {
+    const input = {type: 'and', title: '', options: [{type: 'resource', title: 'Gain'}, {type: 'card', title: 'Discard'}]};
+    const chain = [{kind: 'cards', cards: ['Pets']}, {kind: 'resource', resource: 'plants'}];
+    expect(responseFor(input, chain)).deep.eq({type: 'and', responses: [{type: 'resource', resource: 'plants'}, {type: 'card', cards: ['Pets']}]});
+  });
 });

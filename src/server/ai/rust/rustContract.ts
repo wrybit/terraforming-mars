@@ -94,12 +94,35 @@ export function responseFor(input: any, chain: Array<ContractChoice>, position =
   }
   case 'card':
     return {type: 'card', cards: choice.cards ?? []};
-  case 'and':
-    // resources of choice (Turmoil events, alternative Venus board): one amount per resource in TS order
+  case 'and': {
+    // resources of choice (Turmoil events, alternative Venus board, Stormcraft): one amount per resource in TS order
     if (choice.kind === 'amounts') {
       return {type: 'and', responses: input.options.map((_option: any, index: number) => ({type: 'amount', amount: choice.amounts[index] ?? 0}))};
     }
-    throw new Error(`input type and (${titleOf(input)}) not supported by the bridge, choice ${JSON.stringify(choice)}`);
+    // Parts the bot decides one after the other but TS asks together (Floating Trade Hub: amount + resource;
+    // Focused Organization: resource + card to discard): each part takes the next unused fitting choice of the chain.
+    // Unused, because a follow-up question of the same kind often comes next and would otherwise replace the part
+    const partKinds: Record<string, string> = {amount: 'amount', resource: 'resource', card: 'cards'};
+    if (input.options.every((part: any) => partKinds[part.type] !== undefined)) {
+      const rest = chain.slice(position);
+      const used = new Set<number>();
+      return {type: 'and', responses: input.options.map((part: any) => {
+        const index = rest.findIndex((item: any, itemIndex) => !used.has(itemIndex) && item.kind === partKinds[part.type]);
+        if (index < 0) {
+          throw new Error(`bot chain ${JSON.stringify(rest)} has no ${part.type} for ${titleOf(input)}`);
+        }
+        used.add(index);
+        const found: any = rest[index];
+        switch (part.type) {
+        case 'amount': return {type: 'amount', amount: found.amount};
+        case 'resource': return {type: 'resource', resource: found.resource};
+        default: return {type: 'card', cards: found.cards ?? []};
+        }
+      })};
+    }
+    // with the parts: an "and" input often has no title of its own
+    throw new Error(`bot choice ${JSON.stringify(choice)} does not fit ${titleOf(input)} [${input.options.map((part: any) => `${part.type}: ${titleOf(part)}`).join(' | ')}]; chain ${JSON.stringify(chain.slice(position))}`);
+  }
   case 'projectCard':
     return {type: 'projectCard', card: choice.card, payment: payment(choice.payment)};
   case 'space':
@@ -122,6 +145,9 @@ export function responseFor(input: any, chain: Array<ContractChoice>, position =
     return {type: 'resource', resource: choice.resource};
   case 'trade':
     return {type: 'trade', ...choice.trade};
+  // Philares: amounts per resource (TS SelectResources), the bot answers them split already
+  case 'resources':
+    return {type: 'resources', units: choice.units};
   default:
     throw new Error(`input type ${input.type} (${titleOf(input)}) not supported by the bridge, choice ${JSON.stringify(choice)}`);
   }
@@ -225,6 +251,10 @@ function innerResponse(option: any, choice: ContractChoice, chain: Array<Contrac
       // e.g. the greenery space inside "Convert plants": the next choice of the chain
       return responseFor(option, chain, position + 1);
     }
+  }
+  // a card named with the option (alternative Venus board: the wild resource on a card)
+  if (option.type === 'card' && Array.isArray(choice.cards)) {
+    return {type: 'card', cards: choice.cards};
   }
   return responseFor(option, chain, position + 1);
 }
