@@ -2,6 +2,8 @@
 // the closer the pointer, the more visible (up to 50 %, resize_handle.less); pressed they show at 90 %.
 // One shared pointer listener for all handles writes the closeness (0 … 1) as a CSS variable on each handle.
 
+import {markHotkeyIgnored} from '@/client/hotkeys/hotkeyIgnore';
+
 // Contract with resize_handle.less
 export const PROXIMITY_VARIABLE = '--handle-proximity';
 export const ACTIVE_CLASS = 'resize-handle--active';
@@ -9,6 +11,8 @@ export const ACTIVE_CLASS = 'resize-handle--active';
 export const PROXIMITY_RADIUS = 120;
 
 const handles = new Set<HTMLElement>();
+// Last value written per handle: an unchanged value is not written again
+const written = new WeakMap<HTMLElement, string>();
 let lastPointer: {x: number; y: number} | undefined;
 let frame: number | undefined;
 
@@ -26,9 +30,17 @@ export function proximity(distance: number): number {
 
 function update(): void {
   frame = undefined;
-  for (const handle of handles) {
+  // All positions first, then the writes: reading after each write forced a new layout per handle
+  const values = [...handles].map((handle) => {
     const value = lastPointer === undefined ? 0 : proximity(distanceToRect(lastPointer.x, lastPointer.y, handle.getBoundingClientRect()));
-    handle.style.setProperty(PROXIMITY_VARIABLE, value.toFixed(3));
+    return {handle, text: value.toFixed(3)};
+  });
+  for (const {handle, text} of values) {
+    // Handles far from the pointer stay at 0: without a write there is no restyle and no mutation for observers
+    if (written.get(handle) !== text) {
+      handle.style.setProperty(PROXIMITY_VARIABLE, text);
+      written.set(handle, text);
+    }
   }
 }
 
@@ -60,6 +72,7 @@ export function trackHandleProximity(handle: HTMLElement): void {
     document.addEventListener('pointermove', onPointerMove, {passive: true});
     document.addEventListener('pointerout', onPointerOut, {passive: true});
   }
+  markHotkeyIgnored(handle);
   handles.add(handle);
 }
 

@@ -2,6 +2,7 @@
 // mouse interaction (drag the thumb, click the track to page). Visibility timing: overlayScrollbars.ts.
 import {endInset, innerBox, frameOf, isScrollable, obstacleBoxes, scrollMetrics} from '@/client/utils/overlayScrollbarArea';
 import {avoidObstacles, Box, OVERLAY_SCROLLBAR_MIN_THUMB, railBox, ScrollAxis, scrollDeltaForDrag, snapToFrame, thumbGeometry} from '@/client/utils/overlayScrollbarGeometry';
+import {markHotkeyIgnored} from '@/client/hotkeys/hotkeyIgnore';
 
 // Share of a page the track click scrolls, so a bit of the previous view stays for orientation
 const PAGE_SHARE = 0.9;
@@ -32,6 +33,9 @@ export class OverlayScrollbarRail {
     this.thumb = document.createElement('div');
     this.thumb.className = 'overlay-scrollbar__thumb';
     this.element.appendChild(this.thumb);
+    // Placed and faded anew in every scroll frame
+    markHotkeyIgnored(this.element);
+    markHotkeyIgnored(this.thumb);
     document.body.appendChild(this.element);
     this.thumb.addEventListener('pointerdown', (event) => this.startDrag(event));
     this.element.addEventListener('pointerdown', (event) => this.pageTowards(event));

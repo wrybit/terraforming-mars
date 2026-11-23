@@ -40,7 +40,7 @@
       <!-- One continuous stream of all generations; the tabs above follow the scroll position -->
       <!-- The edge fade sits on this frame, not on the scrolling box: a mask on the scroll box itself leaves stale,
            overlapping rows in Chrome on Windows while scrolling -->
-      <div v-show="!showsMilestonesAwards" ref="scrollFrame" class="log-scroll-frame" data-hotkey-ignore-style>
+      <div v-show="!showsMilestonesAwards" ref="scrollFrame" class="log-scroll-frame" data-hotkey-ignore-attributes>
         <div id="logpanel-scrollable" ref="scrollBody" class="panel-body" @scroll="onScroll" @mouseenter="pointerEntered" @mousemove="pointerMoved" @mouseleave="pointerLeft">
           <!-- With an active filter, generations without a matching row are hidden -->
           <section v-for="section in sections" v-show="!filterActive || visibleRows(section).length > 0" :key="section.generation" class="log-generation" :data-generation="section.generation">
