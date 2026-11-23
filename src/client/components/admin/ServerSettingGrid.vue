@@ -14,13 +14,17 @@
         <span v-if="row.limitNote !== undefined" class="server-settings-grid-limit">{{ row.limitNote }}</span>
         <code class="server-settings-key">{{ row.keyPattern }}</code>
       </div>
-      <!-- Empty: the default stands grey in the field and applies -->
+      <!-- Fields always show the value that applies (the default when the .env has no line), a slider below changes it -->
       <label v-for="(cell, cellIndex) in row.cells" :key="cell.key" class="server-settings-grid-cell" :class="'server-settings-grid-cell--' + cell.column" :style="{'--grid-column': cellIndex + 2}">
         <span class="server-settings-grid-cell-name"><AiStrengthLabel :column="cell.column" /></span>
         <input class="server-settings-grid-input" :class="{'server-settings-grid-input--invalid': aboveLimit(cell, values[cell.key])}" type="number" inputmode="numeric"
-          :min="cell.minimum" :max="cell.maximum" :placeholder="cell.placeholder" :value="values[cell.key]"
+          :min="cell.minimum" :max="cell.maximum" :value="shown(cell)"
           :aria-label="$t(row.label) + ' · ' + $t(columnLabel(cell.column))" autocomplete="off"
-          @input="$emit('update', cell.key, ($event.target as HTMLInputElement).value)">
+          @input="change(cell, ($event.target as HTMLInputElement).value)">
+        <input v-if="cell.slider !== undefined" class="server-settings-grid-slider" type="range"
+          :min="cell.slider.minimum" :max="cell.slider.maximum" :step="cell.slider.step" :value="shown(cell)"
+          :aria-label="$t(row.label) + ' · ' + $t(columnLabel(cell.column))"
+          @input="change(cell, ($event.target as HTMLInputElement).value)">
       </label>
     </div>
   </div>
@@ -32,7 +36,7 @@ import {ServerSettingDefinition} from '@/common/admin/serverSettings';
 import AiStrengthLabel from '@/client/components/admin/AiStrengthLabel.vue';
 import {strengthColumnLabel} from '@/client/components/admin/aiStrengthColumns';
 
-type Cell = {key: string, column: string, minimum?: number, maximum?: number, placeholder?: string};
+type Cell = {key: string, column: string, minimum?: number, maximum?: number, placeholder?: string, slider?: {minimum: number, maximum: number, step: number}};
 type Row = {name: string, label: string, description: string, keyPattern: string, limitNote?: string, cells: Array<Cell>};
 
 /** A limit of the machine for all fields of a row, stricter than the setting's own maximum. */
@@ -71,12 +75,23 @@ export default defineComponent({
         const maximum = limit === undefined ? setting.maximum : Math.min(limit, setting.maximum ?? limit);
         // The default shown is the one that applies here: the server also cuts it down to the limit
         const placeholder = limit === undefined || setting.placeholder === undefined ? setting.placeholder : String(Math.min(limit, Number(setting.placeholder)));
-        row.cells.push({key: setting.key, column: grid.column, minimum: setting.minimum, maximum, placeholder});
+        // The slider ends at the machine's limit as well (threads: its cores)
+        const slider = setting.slider === undefined ? undefined : {...setting.slider, maximum: limit === undefined ? setting.slider.maximum : Math.min(limit, setting.slider.maximum)};
+        row.cells.push({key: setting.key, column: grid.column, minimum: setting.minimum, maximum, placeholder, slider});
       }
       return rows;
     },
   },
   methods: {
+    /** The value that applies: the one in the .env, otherwise the default */
+    shown(cell: Cell): string {
+      const value = this.values[cell.key];
+      return value === undefined || value === '' ? cell.placeholder ?? '' : value;
+    },
+    /** The default itself is stored as no line, so the field keeps following a changed default */
+    change(cell: Cell, value: string): void {
+      this.$emit('update', cell.key, value === cell.placeholder ? '' : value);
+    },
     aboveLimit(cell: Cell, value: string | undefined): boolean {
       return cell.maximum !== undefined && value !== undefined && value !== '' && Number(value) > cell.maximum;
     },

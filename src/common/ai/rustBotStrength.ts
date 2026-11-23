@@ -29,8 +29,18 @@ export const RUST_BOT_STRENGTH_LIMITS: Readonly<Record<RustBotStrengthField, {mi
   threads: {minimum: 1, maximum: 32},
   horizon: {minimum: 0},
   candidates: {minimum: 1},
-  timeLimit: {minimum: 100},
+  timeLimit: {minimum: 50},
   randomness: {minimum: 0, maximum: 100},
+};
+
+/** Range of the slider next to each admin field: a sensible span, the field itself accepts the full limits. */
+export const RUST_BOT_STRENGTH_SLIDERS: Readonly<Record<RustBotStrengthField, {minimum: number, maximum: number, step: number}>> = {
+  rollouts: {minimum: 1, maximum: 256, step: 1},
+  threads: {minimum: 1, maximum: 32, step: 1},
+  horizon: {minimum: 0, maximum: 10, step: 1},
+  candidates: {minimum: 1, maximum: 20, step: 1},
+  timeLimit: {minimum: 50, maximum: 5000, step: 50},
+  randomness: {minimum: 0, maximum: 100, step: 1},
 };
 
 const KEY_PARTS: Record<RustBotStrengthField, string> = {

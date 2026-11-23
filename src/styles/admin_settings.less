@@ -708,7 +708,17 @@
   font-size: 12px;
 }
 
-// Inputs like the single fields (.server-settings-input input); defaults stand grey as placeholder
+// Slider below the field, in the color of its strength
+.server-settings-grid-slider {
+  width: 100%;
+  margin: 0;
+  accent-color: #908fdb;
+}
+.server-settings-grid-cell--easy .server-settings-grid-slider { accent-color: @server-settings-ai-easy; }
+.server-settings-grid-cell--normal .server-settings-grid-slider { accent-color: @server-settings-ai-normal; }
+.server-settings-grid-cell--hard .server-settings-grid-slider { accent-color: @server-settings-ai-hard; }
+
+// Inputs like the single fields (.server-settings-input input); they always show the value that applies
 .server-settings-grid-input {
   width: 100%;
   min-width: 0;

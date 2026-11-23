@@ -4,7 +4,7 @@
 
 import {COMMON_EXTENSIONS} from '../../genfiles/extensionsCommon';
 import {AI_LEVELS} from '../ai/AiLevel';
-import {DEFAULT_RUST_BOT_STRENGTH, RUST_BOT_STRENGTH_LIMITS, RustBotStrengthField, rustBotStrengthKey} from '../ai/rustBotStrength';
+import {DEFAULT_RUST_BOT_STRENGTH, RUST_BOT_STRENGTH_LIMITS, RUST_BOT_STRENGTH_SLIDERS, RustBotStrengthField, rustBotStrengthKey} from '../ai/rustBotStrength';
 import {DEFAULT_FAVICON_COLOR, DEFAULT_FAVICON_ICON, FAVICON_COLORS, FAVICON_ICONS, FaviconOption, faviconImage} from './favicons';
 
 // image: an address (http… or an uploaded file, see ApiAdminServerLogo) with upload button and preview
@@ -31,8 +31,10 @@ export type ServerSettingDefinition = {
   minimum?: number,
   /** kind 'number': the largest allowed value (default none) */
   maximum?: number,
-  /** Shown in the empty field: the value that applies without a line in the .env */
+  /** The value that applies without a line in the .env; grid fields show it as their value */
   placeholder?: string,
+  /** kind 'number' in a grid: a slider next to the field over this range */
+  slider?: {minimum: number, maximum: number, step: number},
   /**
    * Part of a table instead of a row of its own: settings with the same row share one line, one field per column
    * (AI strength: a field for easy, normal and hard)
@@ -91,6 +93,7 @@ function aiStrengthSettings(fields: ReadonlyArray<RustBotStrengthField>, section
     minimum: RUST_BOT_STRENGTH_LIMITS[field].minimum,
     maximum: RUST_BOT_STRENGTH_LIMITS[field].maximum,
     placeholder: String(DEFAULT_RUST_BOT_STRENGTH[level][field]),
+    slider: RUST_BOT_STRENGTH_SLIDERS[field],
     grid: {row: field, column: level},
   })));
 }
