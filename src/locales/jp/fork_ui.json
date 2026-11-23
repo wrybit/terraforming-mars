@@ -1684,5 +1684,6 @@
   "Extra time on top of the thinking time. Without an answer of the Rust AI by then, the TypeScript AI makes this decision.": "思考時間に加えて待つ時間。それまでに Rust AI が答えなければ TypeScript AI が決定します。",
   "How long a login (admin and Discord) stays valid, e.g. 30d or 12h.": "ログイン（管理と Discord）の有効期間. 例：30d や 12h.",
   "Faster inputs of a player are refused (against bots). 0: no limit.": "プレイヤーのそれより速い入力は拒否されます（ボット対策）。0：制限なし。",
-  "How long browsers keep images and fonts without asking the server again. 0: they always ask.": "ブラウザがサーバーに再確認せずに画像とフォントを保持する時間。0：毎回確認します。"
+  "How long browsers keep images and fonts without asking the server again. 0: they always ask.": "ブラウザがサーバーに再確認せずに画像とフォントを保持する時間。0：毎回確認します。",
+  "Solo (player count)": "ソロ"
 }

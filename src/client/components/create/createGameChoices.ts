@@ -86,7 +86,8 @@ export const RANDOM_BOARD_OPTIONS: ReadonlyArray<SegmentOption> = [
 ];
 
 export const PLAYER_COUNT_OPTIONS: ReadonlyArray<SegmentOption> = [
-  {value: 1, label: 'Solo'},
+  // Own key: the general "Solo" is long in some languages (German upstream: "Einzelspiel") and burst the button
+  {value: 1, label: 'Solo (player count)'},
   {value: 2, label: '2'},
   {value: 3, label: '3'},
   {value: 4, label: '4'},

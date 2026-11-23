@@ -1562,5 +1562,6 @@
   "Extra time on top of the thinking time. Without an answer of the Rust AI by then, the TypeScript AI makes this decision.": "생각 시간에 더해지는 시간. 그때까지 Rust AI가 답하지 않으면 TypeScript AI가 결정합니다.",
   "How long a login (admin and Discord) stays valid, e.g. 30d or 12h.": "로그인(관리자 및 Discord) 유효 기간, 예: 30d 또는 12h.",
   "Faster inputs of a player are refused (against bots). 0: no limit.": "플레이어의 더 빠른 입력은 거부됩니다(봇 방지). 0: 제한 없음.",
-  "How long browsers keep images and fonts without asking the server again. 0: they always ask.": "브라우저가 서버에 다시 묻지 않고 이미지와 글꼴을 보관하는 시간. 0: 항상 묻습니다."
+  "How long browsers keep images and fonts without asking the server again. 0: they always ask.": "브라우저가 서버에 다시 묻지 않고 이미지와 글꼴을 보관하는 시간. 0: 항상 묻습니다.",
+  "Solo (player count)": "솔로"
 }

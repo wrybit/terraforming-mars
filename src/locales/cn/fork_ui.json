@@ -2294,5 +2294,6 @@
   "Extra time on top of the thinking time. Without an answer of the Rust AI by then, the TypeScript AI makes this decision.": "在思考时间之外额外等待。到时 Rust AI 仍未回答，则由 TypeScript AI 做此决定。",
   "How long a login (admin and Discord) stays valid, e.g. 30d or 12h.": "登录（管理员和 Discord）的有效期，例如 30d 或 12h。",
   "Faster inputs of a player are refused (against bots). 0: no limit.": "玩家更快的输入会被拒绝（防机器人）。0：不限制。",
-  "How long browsers keep images and fonts without asking the server again. 0: they always ask.": "浏览器在不再次询问服务器的情况下保留图片和字体的时长。0：每次都询问。"
+  "How long browsers keep images and fonts without asking the server again. 0: they always ask.": "浏览器在不再次询问服务器的情况下保留图片和字体的时长。0：每次都询问。",
+  "Solo (player count)": "单人"
 }

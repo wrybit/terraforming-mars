@@ -1308,5 +1308,6 @@
   "Extra time on top of the thinking time. Without an answer of the Rust AI by then, the TypeScript AI makes this decision.": "Miettimisajan lisäksi. Jos Rust-AI ei vastaa siihen mennessä, TypeScript-AI tekee päätöksen.",
   "How long a login (admin and Discord) stays valid, e.g. 30d or 12h.": "Kuinka kauan kirjautuminen (ylläpito ja Discord) on voimassa, esim. 30d tai 12h.",
   "Faster inputs of a player are refused (against bots). 0: no limit.": "Pelaajan nopeammat syötteet hylätään (botteja vastaan). 0: ei rajaa.",
-  "How long browsers keep images and fonts without asking the server again. 0: they always ask.": "Kuinka kauan selaimet säilyttävät kuvat ja fontit kysymättä palvelimelta uudelleen. 0: ne kysyvät aina."
+  "How long browsers keep images and fonts without asking the server again. 0: they always ask.": "Kuinka kauan selaimet säilyttävät kuvat ja fontit kysymättä palvelimelta uudelleen. 0: ne kysyvät aina.",
+  "Solo (player count)": "Yksin"
 }

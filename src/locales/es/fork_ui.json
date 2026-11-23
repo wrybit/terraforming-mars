@@ -2587,5 +2587,6 @@
   "Extra time on top of the thinking time. Without an answer of the Rust AI by then, the TypeScript AI makes this decision.": "Además del tiempo de reflexión. Si la AI de Rust no responde para entonces, la AI de TypeScript toma esta decisión.",
   "How long a login (admin and Discord) stays valid, e.g. 30d or 12h.": "Cuánto dura un inicio de sesión (admin y Discord), p. ej. 30d o 12h.",
   "Faster inputs of a player are refused (against bots). 0: no limit.": "Las entradas más rápidas de un jugador se rechazan (contra bots). 0: sin límite.",
-  "How long browsers keep images and fonts without asking the server again. 0: they always ask.": "Cuánto tiempo guardan los navegadores imágenes y fuentes sin volver a consultar al servidor. 0: siempre consultan."
+  "How long browsers keep images and fonts without asking the server again. 0: they always ask.": "Cuánto tiempo guardan los navegadores imágenes y fuentes sin volver a consultar al servidor. 0: siempre consultan.",
+  "Solo (player count)": "Solo"
 }

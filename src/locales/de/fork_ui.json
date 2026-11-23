@@ -1090,5 +1090,6 @@
   "How often a waiting player asks whether it is their turn again.": "Wie oft ein wartender Spieler fragt, ob er wieder dran ist.",
   "How long a login (admin and Discord) stays valid, e.g. 30d or 12h.": "Wie lange eine Anmeldung (Admin und Discord) gilt, z. B. 30d oder 12h.",
   "Faster inputs of a player are refused (against bots). 0: no limit.": "Schnellere Eingaben eines Spielers werden abgelehnt (gegen Bots). 0: keine Grenze.",
-  "How long browsers keep images and fonts without asking the server again. 0: they always ask.": "Wie lange Browser Bilder und Schriften behalten, ohne erneut beim Server nachzufragen. 0: Sie fragen immer."
+  "How long browsers keep images and fonts without asking the server again. 0: they always ask.": "Wie lange Browser Bilder und Schriften behalten, ohne erneut beim Server nachzufragen. 0: Sie fragen immer.",
+  "Solo (player count)": "Solo"
 }
