@@ -4,6 +4,7 @@
 import {watch} from 'vue';
 import {isTypingTarget} from '@/client/utils/typingTarget';
 import {hotkeysAvailable} from '@/client/hotkeys/hotkeyAvailability';
+import {isIgnoredAttributeChange} from '@/client/hotkeys/hotkeyIgnore';
 import {hotkeyState, actionForKeys} from '@/client/hotkeys/hotkeyStore';
 import {keysOfEvent} from '@/client/hotkeys/hotkeyEvents';
 import {activeHotkeyGroup, hotkeyItems, isVisible, refreshItemNumbers} from '@/client/hotkeys/hotkeyItems';
@@ -280,15 +281,6 @@ function scheduleNumbers(): void {
   });
 }
 
-// Elements that change their inline style in every scroll frame (e.g. the log's edge fade) carry this attribute:
-// those changes never show or hide an item, and refreshing the key caps per frame dropped frames while scrolling
-export const HOTKEY_IGNORE_STYLE_ATTRIBUTE = 'data-hotkey-ignore-style';
-
-function isIgnoredStyleChange(record: MutationRecord): boolean {
-  return record.type === 'attributes' && record.attributeName === 'style' &&
-    record.target instanceof Element && record.target.hasAttribute(HOTKEY_IGNORE_STYLE_ATTRIBUTE);
-}
-
 let installed = false;
 
 /** Called once by the app: key listener and the digits at the selectable items */
@@ -303,7 +295,7 @@ export function installHotkeys(): void {
   // Digits follow every change of the page (tab switched, cards filtered …); adding our own caps triggers one more
   // pass that changes nothing
   new MutationObserver((records) => {
-    if (!records.every(isIgnoredStyleChange)) {
+    if (!records.every(isIgnoredAttributeChange)) {
       scheduleNumbers();
     }
   }).observe(document.body, {
