@@ -123,8 +123,12 @@ export function responseFor(input: any, chain: Array<ContractChoice>, position =
     // with the parts: an "and" input often has no title of its own
     throw new Error(`bot choice ${JSON.stringify(choice)} does not fit ${titleOf(input)} [${input.options.map((part: any) => `${part.type}: ${titleOf(part)}`).join(' | ')}]; chain ${JSON.stringify(chain.slice(position))}`);
   }
-  case 'projectCard':
-    return {type: 'projectCard', card: choice.card, payment: payment(choice.payment)};
+  case 'projectCard': {
+    // standard projects: the bot names them "City:SP", TS SelectStandardProjectToPlay lists "City" (Established Methods)
+    const names: Array<string> = (input.cards ?? []).map((card: any) => card.name);
+    const card = names.includes(choice.card) ? choice.card : names.find((name) => `${name}:SP` === choice.card || name === `${choice.card}:SP`) ?? choice.card;
+    return {type: 'projectCard', card, payment: payment(choice.payment)};
+  }
   case 'space':
     return {type: 'space', spaceId: choice.space};
   case 'player':
