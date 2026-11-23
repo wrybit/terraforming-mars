@@ -42,8 +42,13 @@ export function rustBotStrengthKey(level: AiLevel, field: RustBotStrengthField):
   return `AI_${level.toUpperCase()}_${KEY_PARTS[field]}`;
 }
 
-/** Strength of a level: the admin's values where valid, the defaults elsewhere. */
-export function rustBotStrength(level: AiLevel, env: Readonly<Record<string, string | undefined>>): RustBotStrength {
+/**
+ * Strength of a level: the admin's values where valid, the defaults elsewhere.
+ *
+ * processorCores: the cores of the machine the bot runs on. More threads than cores only make the threads wait
+ * for each other, so the thread count never goes above it (the admin page shows the same limit).
+ */
+export function rustBotStrength(level: AiLevel, env: Readonly<Record<string, string | undefined>>, processorCores?: number): RustBotStrength {
   const strength: RustBotStrength = {...DEFAULT_RUST_BOT_STRENGTH[level]};
   for (const field of RUST_BOT_STRENGTH_FIELDS) {
     const raw = env[rustBotStrengthKey(level, field)];
@@ -55,6 +60,9 @@ export function rustBotStrength(level: AiLevel, env: Readonly<Record<string, str
     if (value >= minimum && (maximum === undefined || value <= maximum)) {
       strength[field] = value;
     }
+  }
+  if (processorCores !== undefined && processorCores >= 1) {
+    strength.threads = Math.min(strength.threads, processorCores);
   }
   return strength;
 }

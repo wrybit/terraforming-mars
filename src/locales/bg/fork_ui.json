@@ -2249,5 +2249,13 @@
   "0: always the best move. Higher: more often a slightly worse one, never nonsense. Needs a bot that supports it.": "0: винаги най-добрият ход. По-високо: по-често малко по-слаб, никога безсмислен. Нужен е бот, който го поддържа.",
   "What the AI can play": "Какво може ИИ",
   "No bot or no rust-ai-support.json in its folder: the Rust AI plays nothing.": "Няма бот или rust-ai-support.json в папката му: ИИ на Rust не може нищо.",
-  "Bot ${0}, file of ${1}": "Бот ${0}, файл от ${1}"
+  "Bot ${0}, file of ${1}": "Бот ${0}, файл от ${1}",
+  "Chat filter": "Филтър на чата",
+  "Server load, live": "Натоварване на сървъра, на живо",
+  "Now": "Сега",
+  "${0} · ${1} AI bots running": "${0} · работещи AI ботове: ${1}",
+  "Processor over the last ${0} seconds": "Процесор за последните ${0} секунди",
+  "${0} s ago": "преди ${0} с",
+  "The AI share is only measured on Linux servers.": "Делът на AI се измерва само на Linux сървъри.",
+  "This server has ${0} cores: at most ${0} threads.": "Този сървър има ${0} ядра: най-много ${0} нишки."
 }

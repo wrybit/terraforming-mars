@@ -56,7 +56,7 @@ function faviconChoices(options: ReadonlyArray<FaviconOption>, defaultId: string
   return options.map(({id, label}) => ({value: id === defaultId ? '' : id, label}));
 }
 
-const BASE_SETTING_GROUPS: ReadonlyArray<ServerSettingGroup> = ['Appearance', 'Games', 'Limits', 'AI opponents', 'AI strength', 'Access', 'Technical'];
+const BASE_SETTING_GROUPS: ReadonlyArray<ServerSettingGroup> = ['Appearance', 'Games', 'Limits', 'AI opponents', 'Access', 'Technical'];
 
 // One line per value of the Rust bot, one field per strength (common/ai/rustBotStrength.ts)
 const AI_STRENGTH_ROWS: Record<RustBotStrengthField, {label: string, description: string}> = {
@@ -70,7 +70,8 @@ const AI_STRENGTH_ROWS: Record<RustBotStrengthField, {label: string, description
 
 const AI_STRENGTH_SETTINGS: Array<ServerSettingDefinition> = RUST_BOT_STRENGTH_FIELDS.flatMap((field) => AI_LEVELS.map((level): ServerSettingDefinition => ({
   key: rustBotStrengthKey(level, field),
-  group: 'AI strength',
+  // In the AI tab next to the other AI settings, as a table (ServerSettingGrid.vue)
+  group: 'AI opponents',
   kind: 'number',
   live: true,
   label: AI_STRENGTH_ROWS[field].label,

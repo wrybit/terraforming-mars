@@ -1299,5 +1299,13 @@
   "0: always the best move. Higher: more often a slightly worse one, never nonsense. Needs a bot that supports it.": "0: aina paras siirto. Korkeampi: useammin hieman huonompi, ei koskaan järjetön. Vaatii botin, joka tukee tätä.",
   "What the AI can play": "Mitä tekoäly osaa",
   "No bot or no rust-ai-support.json in its folder: the Rust AI plays nothing.": "Ei bottia tai rust-ai-support.json puuttuu sen kansiosta: Rust-tekoäly ei osaa mitään.",
-  "Bot ${0}, file of ${1}": "Botti ${0}, tiedosto ${1}"
+  "Bot ${0}, file of ${1}": "Botti ${0}, tiedosto ${1}",
+  "Chat filter": "Chat-suodatin",
+  "Server load, live": "Palvelimen kuorma, livenä",
+  "Now": "Nyt",
+  "${0} · ${1} AI bots running": "${0} · ${1} AI-bottia käynnissä",
+  "Processor over the last ${0} seconds": "Suoritin viimeisten ${0} sekunnin aikana",
+  "${0} s ago": "${0} s sitten",
+  "The AI share is only measured on Linux servers.": "AI:n osuus mitataan vain Linux-palvelimilla.",
+  "This server has ${0} cores: at most ${0} threads.": "Tällä palvelimella on ${0} ydintä: enintään ${0} säiettä."
 }

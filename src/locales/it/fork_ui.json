@@ -2565,5 +2565,13 @@
   "0: always the best move. Higher: more often a slightly worse one, never nonsense. Needs a bot that supports it.": "0: sempre la mossa migliore. Più alto: più spesso una un po' peggiore, mai assurda. Serve un bot che lo supporti.",
   "What the AI can play": "Cosa sa giocare l'IA",
   "No bot or no rust-ai-support.json in its folder: the Rust AI plays nothing.": "Nessun bot o nessun rust-ai-support.json nella sua cartella: l'IA Rust non gioca nulla.",
-  "Bot ${0}, file of ${1}": "Bot ${0}, file del ${1}"
+  "Bot ${0}, file of ${1}": "Bot ${0}, file del ${1}",
+  "Chat filter": "Filtro chat",
+  "Server load, live": "Carico del server, in diretta",
+  "Now": "Adesso",
+  "${0} · ${1} AI bots running": "${0} · ${1} bot AI in esecuzione",
+  "Processor over the last ${0} seconds": "Processore negli ultimi ${0} secondi",
+  "${0} s ago": "${0} s fa",
+  "The AI share is only measured on Linux servers.": "La quota dell'AI si misura solo sui server Linux.",
+  "This server has ${0} cores: at most ${0} threads.": "Questo server ha ${0} core: al massimo ${0} thread."
 }

@@ -1,8 +1,8 @@
 <template>
-  <!-- Words the lobby chat masks (server/lobby/chatWords.ts): one per line; a save applies at once, no restart -->
-  <section class="games-overview-card chat-words-card">
-    <h2 v-i18n>Chat: blocked words</h2>
-    <p class="games-overview-note" v-i18n>One word per line. A word is also masked at the start of longer words ("arsch" also in "Arschloch", not in "Barsch"). Links to other websites are always blocked.</p>
+  <!-- Words the lobby chat masks (server/lobby/chatWords.ts): one per line; a save applies at once, no restart.
+       Content of the "Chat filter" tab of the settings, which names it -->
+  <section class="chat-words">
+    <p class="server-settings-description" v-i18n>One word per line. A word is also masked at the start of longer words ("arsch" also in "Arschloch", not in "Barsch"). Links to other websites are always blocked.</p>
     <p v-if="status === 'loading'" class="games-overview-note" v-i18n>Loading…</p>
     <template v-else>
       <textarea v-model="text" class="create-game-text-input chat-words-input" rows="12" spellcheck="false" :aria-label="$t('Chat: blocked words')"></textarea>

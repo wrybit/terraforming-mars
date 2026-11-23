@@ -4,7 +4,7 @@ import {globalConfig} from '../getLocalVue';
 import ServerSettingGrid from '@/client/components/admin/ServerSettingGrid.vue';
 import {SERVER_SETTINGS} from '@/common/admin/serverSettings';
 
-const STRENGTH = SERVER_SETTINGS.filter((setting) => setting.group === 'AI strength');
+const STRENGTH = SERVER_SETTINGS.filter((setting) => setting.grid !== undefined);
 
 describe('ServerSettingGrid', () => {
   it('shows a line per value with a field for easy, normal and hard, defaults as placeholder', () => {
@@ -24,4 +24,16 @@ describe('ServerSettingGrid', () => {
     await randomnessEasy!.setValue('25');
     expect(wrapper.emitted('update')?.[0]).deep.eq(['AI_EASY_RANDOMNESS', '25']);
   });
+
+  it('limits the threads to the cores of the server and marks a value above it', () => {
+    const wrapper = mount(ServerSettingGrid, {...globalConfig, props: {settings: STRENGTH, values: {AI_HARD_THREADS: '8'},
+      rowLimits: {threads: {maximum: 1, note: 'This server has 1 cores'}}}});
+    const threads = wrapper.findAll('.server-settings-row:not(.server-settings-grid-head)')[1];
+    expect(threads.find('.server-settings-grid-limit').text()).eq('This server has 1 cores');
+    const inputs = threads.findAll('input');
+    expect(inputs.map((input) => input.attributes('max'))).deep.eq(['1', '1', '1']);
+    expect(inputs.map((input) => input.attributes('placeholder'))).deep.eq(['1', '1', '1']);
+    expect(inputs[2].classes()).contains('server-settings-grid-input--invalid');
+  });
 });
+

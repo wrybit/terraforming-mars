@@ -3,6 +3,7 @@
 import {ChildProcessWithoutNullStreams, spawn} from 'child_process';
 import * as readline from 'readline';
 import {RustBotStrength} from '../../../common/ai/rustBotStrength';
+import {rustBotProcessIds} from './rustBotProcessIds';
 
 // A request the bot does not answer in this time counts as failed (the TS AI then moves instead)
 const REQUEST_TIMEOUT_MILLISECONDS = 60_000;
@@ -23,6 +24,12 @@ export class RustBotProcess {
   constructor(binary: string, data: string, settings: RustBotSettings) {
     this.child = spawn(binary, [data, String(settings.rollouts), String(settings.threads), String(settings.horizon), String(settings.candidates),
       'search', String(settings.timeLimit), ...(settings.randomness === undefined ? [] : [String(settings.randomness)])]);
+    // Known to the live load of the admin page, which shows how much of the machine the AI takes
+    const processId = this.child.pid;
+    if (processId !== undefined) {
+      rustBotProcessIds.add(processId);
+      this.child.on('exit', () => rustBotProcessIds.delete(processId));
+    }
     readline.createInterface({input: this.child.stdout}).on('line', (line) => {
       const next = this.waiting.shift();
       if (next === undefined) {

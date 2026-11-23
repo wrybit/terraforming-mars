@@ -1483,5 +1483,13 @@
   "0: always the best move. Higher: more often a slightly worse one, never nonsense. Needs a bot that supports it.": "0: mindig a legjobb lépés. Magasabb: gyakrabban egy kicsit rosszabb, sosem értelmetlen. Ehhez támogató bot kell.",
   "What the AI can play": "Amit az AI tud",
   "No bot or no rust-ai-support.json in its folder: the Rust AI plays nothing.": "Nincs bot, vagy nincs rust-ai-support.json a mappájában: a Rust AI semmit sem tud.",
-  "Bot ${0}, file of ${1}": "Bot ${0}, fájl: ${1}"
+  "Bot ${0}, file of ${1}": "Bot ${0}, fájl: ${1}",
+  "Chat filter": "Csevegőszűrő",
+  "Server load, live": "Szerverterhelés, élőben",
+  "Now": "Most",
+  "${0} · ${1} AI bots running": "${0} · ${1} AI-bot fut",
+  "Processor over the last ${0} seconds": "Processzor az utolsó ${0} másodpercben",
+  "${0} s ago": "${0} mp-e",
+  "The AI share is only measured on Linux servers.": "Az AI részarányát csak Linux-szerver méri.",
+  "This server has ${0} cores: at most ${0} threads.": "Ennek a szervernek ${0} magja van: legfeljebb ${0} szál."
 }

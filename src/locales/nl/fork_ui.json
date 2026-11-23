@@ -1926,5 +1926,13 @@
   "0: always the best move. Higher: more often a slightly worse one, never nonsense. Needs a bot that supports it.": "0: altijd de beste zet. Hoger: vaker een iets slechtere, nooit onzin. Vereist een bot die dit kan.",
   "What the AI can play": "Wat de AI kan spelen",
   "No bot or no rust-ai-support.json in its folder: the Rust AI plays nothing.": "Geen bot of geen rust-ai-support.json in de map: de Rust-AI speelt niets.",
-  "Bot ${0}, file of ${1}": "Bot ${0}, bestand van ${1}"
+  "Bot ${0}, file of ${1}": "Bot ${0}, bestand van ${1}",
+  "Chat filter": "Chatfilter",
+  "Server load, live": "Serverbelasting, live",
+  "Now": "Nu",
+  "${0} · ${1} AI bots running": "${0} · ${1} AI-bots actief",
+  "Processor over the last ${0} seconds": "Processor in de laatste ${0} seconden",
+  "${0} s ago": "${0} s geleden",
+  "The AI share is only measured on Linux servers.": "Het AI-aandeel wordt alleen op Linux-servers gemeten.",
+  "This server has ${0} cores: at most ${0} threads.": "Deze server heeft ${0} kernen: hoogstens ${0} threads."
 }

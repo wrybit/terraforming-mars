@@ -546,13 +546,9 @@
   justify-content: flex-end;
 }
 
-// Chat words (ChatWordsPanel.vue): below the settings, the list as one text field, actions like the settings
-.chat-words-card {
-  margin-top: 24px;
-
-  h2 {
-    margin: 0 0 6px;
-  }
+// Chat words (ChatWordsPanel.vue): content of the "Chat filter" tab, the list as one text field, its own actions
+.chat-words {
+  padding-top: 4px;
 }
 
 .chat-words-input.create-game-text-input {
@@ -710,4 +706,219 @@
   .ai-support-overview-columns {
     grid-template-columns: minmax(0, 1fr);
   }
+}
+
+// ---------- Two columns in a tab (AI opponents): the rows left, table and live load right ----------
+// The columns are further apart than the rows inside them (law of proximity); one column below desktop width
+.server-settings-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0 48px;
+  align-items: start;
+}
+
+@media (min-width: @bp-desktop) {
+  .server-settings-columns--two {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+// Narrow: the second column continues the first one, so it starts with a line like every other row
+@media (max-width: @max-below-desktop) {
+  .server-settings-columns--two .server-settings-column + .server-settings-column .server-settings-grid-head {
+    border-top: 1px solid @server-settings-line;
+    padding-top: @server-settings-row-gap;
+  }
+}
+
+// Limit of the machine below the description of a table row: information, so plain text, a shade brighter
+.server-settings-grid-limit {
+  color: rgba(238, 238, 238, 0.82);
+  font-size: 13px;
+}
+
+// A value above the limit of the machine: the field turns red until it fits again
+.server-settings-grid-input--invalid,
+.server-settings-grid-input--invalid:focus {
+  border-color: #ff8a80;
+  outline-color: fade(#ff8a80, 70%);
+}
+
+// ---------- Live load of the machine (AiLoadGraph.vue), below the AI strength ----------
+.ai-load {
+  --ai-load-tooltip-width: 170px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: @server-settings-row-gap 0;
+  border-top: 1px solid @server-settings-line;
+}
+
+.ai-load-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 10px;
+  margin-bottom: 6px;
+}
+
+.ai-load-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.ai-load-machine,
+.ai-load-note {
+  color: @server-settings-dim;
+  font-size: 12px;
+}
+
+.ai-load-note,
+.ai-load-failure {
+  margin: 0;
+}
+
+.ai-load-failure {
+  color: #ff8a80;
+  font-size: 13px;
+}
+
+// Label and current value of a chart, close above it; the charts themselves are further apart
+.ai-load-chart-head {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  font-size: 13px;
+}
+
+.ai-load-label {
+  color: @server-settings-dim;
+}
+
+.ai-load-value {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.ai-load-chart {
+  position: relative;
+  height: 140px;
+  padding-right: 44px;
+}
+
+.ai-load-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  overflow: visible;
+}
+
+.ai-load-grid {
+  stroke: @server-settings-line;
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+// The parts in the colors of the dashboard bars (admin_dashboard.less); a dark edge keeps neighbours apart
+.ai-load-area {
+  stroke: #1d1e24;
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+
+  &--ai { fill: #f25f8a; }
+  &--game { fill: #b07cf2; }
+  &--system { fill: #8a8f98; }
+}
+
+.ai-load-crosshair {
+  stroke: rgba(255, 255, 255, 0.7);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+// Axis on the right, where the newest values are
+.ai-load-axis {
+  position: absolute;
+  top: -7px;
+  right: 0;
+  bottom: -7px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: @server-settings-dim;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+.ai-load-tooltip {
+  position: absolute;
+  top: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: var(--ai-load-tooltip-width);
+  padding: 6px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 6px;
+  background: #25262e;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  font-size: 12px;
+  pointer-events: none;
+
+  .dashboard-split-swatch {
+    margin-right: 6px;
+  }
+}
+
+.ai-load-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  font-size: 12px;
+
+  .dashboard-split-swatch {
+    margin-right: 6px;
+  }
+}
+
+.ai-load-legend-value {
+  margin-left: 4px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+// One slim bar per core; full cores (90 %+) turn yellow like the warnings of the dashboard
+.ai-load-cores {
+  display: flex;
+  gap: 3px;
+  height: 36px;
+}
+
+.ai-load-core {
+  display: flex;
+  flex: 1;
+  align-items: flex-end;
+  max-width: 28px;
+  border-radius: 3px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.ai-load-core-fill {
+  width: 100%;
+  border-radius: 3px 3px 0 0;
+  background: #8a8f98;
+  transition: height 0.4s;
+
+  &--full {
+    background: #f4c20d;
+  }
+}
+
+.ai-load-memory {
+  margin-top: 10px;
 }

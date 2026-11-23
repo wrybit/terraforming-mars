@@ -1675,5 +1675,13 @@
   "0: always the best move. Higher: more often a slightly worse one, never nonsense. Needs a bot that supports it.": "0：常に最善手。高くすると少し劣る手をより頻繁に選ぶが、無茶な手は選ばない。対応するボットが必要。",
   "What the AI can play": "AIが遊べる内容",
   "No bot or no rust-ai-support.json in its folder: the Rust AI plays nothing.": "ボットがないか、フォルダーに rust-ai-support.json がありません：Rust AI は何も遊べません。",
-  "Bot ${0}, file of ${1}": "ボット ${0}、ファイル ${1}"
+  "Bot ${0}, file of ${1}": "ボット ${0}、ファイル ${1}",
+  "Chat filter": "チャットフィルター",
+  "Server load, live": "サーバー負荷（ライブ）",
+  "Now": "現在",
+  "${0} · ${1} AI bots running": "${0} · AIボット ${1} 個稼働中",
+  "Processor over the last ${0} seconds": "直近 ${0} 秒のプロセッサー",
+  "${0} s ago": "${0} 秒前",
+  "The AI share is only measured on Linux servers.": "AIの割合はLinuxサーバーでのみ計測されます。",
+  "This server has ${0} cores: at most ${0} threads.": "このサーバーのコアは ${0} 個：スレッドは最大 ${0}。"
 }
