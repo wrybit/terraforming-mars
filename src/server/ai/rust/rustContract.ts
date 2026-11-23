@@ -47,16 +47,15 @@ function menuIndex(options: Array<any>, option: string, choice: ContractChoice =
  */
 export function responseFor(input: any, chain: Array<ContractChoice>, position = 0): any {
   let choice = chain[position];
+  // A payment question takes the payment element of the chain: buying cards (TS asks cards and payment separately,
+  // the bot answers both with one chain). Without one the bot had no payment choice of its own (only M€ possible,
+  // St. Joseph of Cupertino Mission): the amount in M€ – otherwise it would pay nothing
+  if (input.type === 'payment' && choice?.kind !== 'payment') {
+    const paymentPosition = chain.findIndex((candidate, index) => index >= position && candidate.kind === 'payment');
+    choice = paymentPosition >= 0 ? chain[paymentPosition] : {kind: 'payment', payment: {megacredits: input.amount}};
+  }
   if (choice === undefined) {
     throw new Error(`no bot choice for ${titleOf(input)}`);
-  }
-  // Buying cards: TS asks for the cards and the payment separately, the bot answers both with the same chain
-  // (cards, then payment). The payment question takes the payment element, otherwise it would pay nothing.
-  if (input.type === 'payment' && choice.kind !== 'payment') {
-    const paymentPosition = chain.findIndex((candidate, index) => index > position && candidate.kind === 'payment');
-    if (paymentPosition >= 0) {
-      choice = chain[paymentPosition];
-    }
   }
   switch (input.type) {
   case 'initialCards': {
@@ -259,11 +258,6 @@ function innerResponse(option: any, choice: ContractChoice, chain: Array<Contrac
   // a card named with the option (alternative Venus board: the wild resource on a card)
   if (option.type === 'card' && Array.isArray(choice.cards)) {
     return {type: 'card', cards: choice.cards};
-  }
-  // a payment the bot does not ask as a choice of its own (only M€ possible, St. Joseph of Cupertino Mission: pay 2 M€
-  // to draw a card): the amount in M€
-  if (option.type === 'payment' && chain[position + 1] === undefined) {
-    return {type: 'payment', payment: payment({megacredits: option.amount})};
   }
   return responseFor(option, chain, position + 1);
 }
