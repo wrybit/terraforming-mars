@@ -31,7 +31,7 @@
             </li>
           </ul>
         </div>
-        <p class="ai-decision-dialog__hint" v-i18n>Value in M€ as estimated by the AI (higher is better).</p>
+        <p class="ai-decision-dialog__hint">{{ valueHint }}</p>
       </section>
 
       <!-- Ratings of the other players -->
@@ -116,7 +116,7 @@ import AiCardHover from './AiCardHover.vue';
 import {AI_FEEDBACK_EMOJI, AiFeedbackRating, canNameBetterOption, MAX_AI_FEEDBACK_TEXT} from '@/common/ai/AiFeedback';
 import {AiDecisionOption} from '@/common/ai/AiDecisionSummary';
 import {isPlayerId} from '@/common/Types';
-import {translateText} from '@/client/directives/i18n';
+import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 import {aiFeedbackState, closeAiDecision, openAiDecisionIndex, ratingsOf, saveAiFeedback, stepAiDecision} from './aiFeedbackState';
 import {DECISION_KIND_TITLES, formatValue, optionCard, optionGroups, optionLabel} from './aiDecisionOptions';
 import {AI_RATING_CHOICES} from './aiRatingChoices';
@@ -147,6 +147,15 @@ const showsCards = computed(() => {
   return decision !== undefined && CARD_KINDS.includes(decision.kind) && decision.options.some((option) => option.card !== undefined);
 });
 const groups = computed(() => dialog.value?.decision === undefined ? [] : optionGroups(dialog.value.decision));
+// What the values mean: M€ of position value (TS AI) or the point lead in the Rust AI's trial games
+const valueHint = computed(() => {
+  const decision = dialog.value?.decision;
+  if (decision?.valueUnit !== 'points') {
+    return translateText('Value in M€ as estimated by the AI (higher is better).');
+  }
+  const samples = Math.max(0, ...decision.options.map((option) => option.samples ?? 0));
+  return translateTextWithParams('Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).', [String(samples)]);
+});
 const kindTitle = computed(() => DECISION_KIND_TITLES[dialog.value?.decision?.kind ?? ''] ?? 'AI decision');
 const error = computed(() => aiFeedbackState.error);
 

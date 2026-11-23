@@ -10,8 +10,10 @@ export type AiDecisionOption = {
   card?: string,
   /** Group of the initial selection: corporation, prelude or project card. */
   group?: 'corporation' | 'prelude' | 'project',
-  /** Value the AI gave the option, in M€ of position value (higher = better). */
+  /** Value the AI gave the option (higher = better); unit: AiDecisionSummary.valueUnit. */
   value?: number,
+  /** Trial games the value rests on (Rust AI). */
+  samples?: number,
   chosen?: boolean,
 };
 
@@ -47,6 +49,8 @@ export type AiDecisionSummary = {
   /** Question the AI answered (player input title, English key). */
   title: string,
   options: Array<AiDecisionOption>,
+  /** Unit of the option values: M€ of position value (TS AI, default) or expected point lead from trial games (Rust AI). */
+  valueUnit?: 'megacredits' | 'points',
   /** Situation of the AI at the decision. */
   state?: AiDecisionState,
 };

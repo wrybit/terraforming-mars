@@ -9,7 +9,8 @@ import {isSimulating} from './simulationSandbox';
 import {registerAiHook} from './aiHook';
 import {isActionMenu} from './gameCopy';
 import {Phase} from '../../common/Phase';
-import {takeAiDecisionSummary} from './decisionTrace';
+import {snapshot, takeAiDecisionSummary} from './decisionTrace';
+import {rustDecisionSummary} from './rust/rustDecisionTrace';
 import {runWithAiDecision} from '../logs/aiDecisionContext';
 import {RustMirror} from './rust/RustMirror';
 import {startThinking, stopThinking} from './aiThinking';
@@ -84,9 +85,14 @@ type Choice = AiAnswer & {summary: ReturnType<typeof takeAiDecisionSummary>};
 async function choose(player: IPlayer, input: PlayerInput): Promise<Choice> {
   // Rust AI players: the Rust bot's answer; without one (not installed, lost the game) the TS AI moves
   if (player.aiEngine === 'rust') {
-    const answer = await RustMirror.of(player.game)?.decide(player, input, player.aiLevel ?? 'normal');
+    // Analysis games: the bot also returns the options it weighed (values, trial games); otherwise only its move
+    const analysisGame = player.game.gameOptions.aiAnalysis === true;
+    const state = analysisGame ? snapshot(player) : undefined;
+    const saveId = player.game.lastSaveId;
+    const answer = await RustMirror.of(player.game)?.decideTraced(player, input, player.aiLevel ?? 'normal', analysisGame);
     if (answer !== undefined) {
-      return {chosen: answer, fromRust: true, summary: undefined};
+      const summary = state === undefined ? undefined : rustDecisionSummary(player, input, answer.traces, state, saveId);
+      return {chosen: answer.response, fromRust: true, summary};
     }
   }
   let chosen: InputResponse | undefined;

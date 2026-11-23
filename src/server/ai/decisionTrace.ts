@@ -32,6 +32,8 @@ export type TracedOption = {
   card?: string,
   /** Initial selection: which part of the start the card belongs to. */
   group?: 'corporation' | 'prelude' | 'project',
+  /** Trial games the value rests on (Rust AI). */
+  samples?: number,
 };
 
 export type PlayerSnapshot = {
@@ -79,6 +81,10 @@ export type DecisionRecord = {
   input?: PlayerInputModel,
   /** The raw answer of the player. */
   response?: InputResponse,
+  /** AI that decided; absent: the TS AI. */
+  engine?: 'rust',
+  /** Rust AI: the bot's own decision records (bot/record.rs), one per step of the answer, with every searched option. */
+  rustTraces?: Array<unknown>,
 };
 
 type OpenDecision = {kind?: DecisionKind, options: Array<TracedOption>, details?: Record<string, number | string>};
@@ -110,7 +116,7 @@ export function takeAiDecisionSummary(): AiDecisionSummary | undefined {
 }
 
 function summaryOption(option: TracedOption): AiDecisionOption {
-  return {index: option.index, label: option.label, card: option.card, group: option.group, value: option.value, chosen: option.chosen};
+  return {index: option.index, label: option.label, card: option.card, group: option.group, value: option.value, samples: option.samples, chosen: option.chosen};
 }
 
 /**

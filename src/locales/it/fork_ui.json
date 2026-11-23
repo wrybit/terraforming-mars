@@ -2580,5 +2580,6 @@
   "The notification was handed to the system. If no notification appears, the system blocks it: allow notifications for this browser in the system settings and check Focus or Do Not Disturb.": "La notifica è stata passata al sistema. Se non appare nessuna notifica, la blocca il sistema: consenti le notifiche per questo browser nelle impostazioni di sistema e controlla Full immersion o Non disturbare.",
   "Not shown: this tab was in front. In the game that is intended; switch to another app or tab during the countdown.": "Non mostrata: questa scheda era in primo piano. Nel gioco è voluto; passa a un’altra app o scheda durante il conto alla rovescia.",
   "Notifications are not allowed for this site: allow them in the browser and test again.": "Le notifiche non sono consentite per questo sito: consentile nel browser e riprova.",
-  "The browser refused to show the notification: check the notification permission of this site.": "Il browser si è rifiutato di mostrare la notifica: controlla il permesso di notifica di questo sito."
+  "The browser refused to show the notification: check the notification permission of this site.": "Il browser si è rifiutato di mostrare la notifica: controlla il permesso di notifica di questo sito.",
+  "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "Valore: vantaggio medio in punti sul miglior avversario in fino a ${0} partite di prova per opzione (più alto è meglio)."
 }

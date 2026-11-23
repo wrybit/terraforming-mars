@@ -1498,5 +1498,6 @@
   "The notification was handed to the system. If no notification appears, the system blocks it: allow notifications for this browser in the system settings and check Focus or Do Not Disturb.": "Az értesítést átadtuk a rendszernek. Ha nem jelenik meg értesítés, a rendszer blokkolja: engedélyezd az értesítéseket ennek a böngészőnek a rendszerbeállításokban, és ellenőrizd a Fókusz vagy a Ne zavarjanak módot.",
   "Not shown: this tab was in front. In the game that is intended; switch to another app or tab during the countdown.": "Nem jelent meg: ez a lap elöl volt. A játékban ez a szándékos viselkedés; a visszaszámlálás alatt válts másik alkalmazásra vagy lapra.",
   "Notifications are not allowed for this site: allow them in the browser and test again.": "Ennél az oldalnál nincsenek engedélyezve az értesítések: engedélyezd őket a böngészőben, és teszteld újra.",
-  "The browser refused to show the notification: check the notification permission of this site.": "A böngésző nem volt hajlandó megjeleníteni az értesítést: ellenőrizd az oldal értesítési engedélyét."
+  "The browser refused to show the notification: check the notification permission of this site.": "A böngésző nem volt hajlandó megjeleníteni az értesítést: ellenőrizd az oldal értesítési engedélyét.",
+  "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "Érték: átlagos pontelőny a legjobb ellenféllel szemben opciónként legfeljebb ${0} próbajátszmában (a magasabb jobb)."
 }
