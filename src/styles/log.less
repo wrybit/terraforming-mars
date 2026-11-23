@@ -1,6 +1,10 @@
 // Font size of log entries; card, space and tile names in them (bold, uppercase) 1px smaller
 @log-font-size: 15px;
 @log-pill-font-size: @log-font-size - 1px;
+// Space between the box's inner edge and its content, the same on every side: above and beside the filter field,
+// beside the generation titles and inside the rows (their padding, so the hover background keeps its room) – the
+// texts line up with the field (on top of the box's own padding)
+@log-content-inset: 4px;
 
 .log-generations {
   display: flex;
@@ -95,7 +99,7 @@
     // (it only shows while scrolled back in the history)
     flex: 1 1 auto;
     min-height: 0;
-    padding-right: 8px;
+    padding: 0;
     scrollbar-gutter: stable;
   }
 
@@ -124,7 +128,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  margin: 4px 0 8px;
+  margin: 4px @log-content-inset 8px;
   padding-bottom: 8px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.18);
   font-size: 24px;
@@ -358,7 +362,7 @@ each(@players, {
   align-items: center;
   gap: 2px 10px;
   min-height: 30px;
-  padding: 3px 4px;
+  padding: 3px @log-content-inset;
   border-radius: 4px;
   font-size: 16px;
   line-height: 20px;
@@ -504,7 +508,7 @@ each(@players, {
 
 .log-phase-line {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  margin: 6px 0;
+  margin: 6px @log-content-inset;
 }
 
 // Player names in a lightened player colour, readable on the dark log
@@ -709,7 +713,7 @@ each(@log-parties, {
 // same size and spacing, player as coloured name, cards as names with a type stripe, rest of the text muted
 .log-panel li {
   min-height: 30px;
-  padding: 3px 4px;
+  padding: 3px @log-content-inset;
   font-size: 16px;
   line-height: 24px;
   color: #8a90a0;
@@ -821,7 +825,7 @@ each(@players, {
 // Within a group the gaps are small, between groups larger (proximity), so the groups read as units
 .log-filter {
   flex: none;
-  padding: 2px 4px 6px;
+  padding: @log-content-inset @log-content-inset 6px;
 }
 
 .log-filter-bar {
