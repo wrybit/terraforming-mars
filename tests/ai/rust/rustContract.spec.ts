@@ -41,4 +41,10 @@ describe('rustContract', () => {
     const input = {type: 'projectCard', title: 'Select your first standard project', cards: [{name: 'City'}, {name: 'Greenery'}]};
     expect(responseFor(input, [{kind: 'projectCard', card: 'City:SP', payment: {megacredits: 25}}]).card).eq('City');
   });
+
+  it('pays M€ when the chain goes on with other choices but has no payment (St. Joseph, several cathedral offers)', () => {
+    const offer = {type: 'or', title: 'Select one option', options: [{type: 'payment', title: 'Pay 2 M€ to draw a card', amount: 2}, {type: 'option', title: 'Do not buy a card'}]};
+    const response = responseFor(offer, [{kind: 'index', index: 0, color: 'blue'}, {kind: 'index', index: 0, color: 'blue'}]);
+    expect(response.response.payment.megacredits).eq(2);
+  });
 });
