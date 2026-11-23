@@ -66,10 +66,13 @@ import {aiThinking} from '@/client/utils/aiThinking';
 let ui_update_timeout_id: number | undefined;
 let otherPlayersTimer: number | undefined;
 let documentTitleTimer: number | undefined;
+let aiThinkingTimer: number | undefined;
 let animationFrame = 0;
 
 // How often to refresh other players' status during simultaneous phases.
 const OTHER_PLAYERS_INTERVAL = 3000;
+// Poll interval for the AI's thinking line while nothing else asks /api/waitingfor (own turn, drafting)
+const AI_THINKING_INTERVAL = 1000;
 // Phases where every player makes a choice at the same time.
 const SIMULTANEOUS_PHASES: ReadonlyArray<Phase> = [Phase.INITIALDRAFTING, Phase.DRAFTING, Phase.RESEARCH];
 
@@ -143,8 +146,12 @@ export default defineComponent({
       window.clearInterval(documentTitleTimer);
       if (this.waitingfor === undefined || this.waitingfor.optional) {
         this.waitForUpdate();
-      } else if (this.playerView.players.length > 1 && SIMULTANEOUS_PHASES.includes(this.playerView.game.phase)) {
-        this.watchOtherPlayers();
+      } else {
+        if (this.playerView.players.length > 1 && SIMULTANEOUS_PHASES.includes(this.playerView.game.phase)) {
+          this.watchOtherPlayers();
+        }
+        // The waiting poll rests now: without its own poll the last thinking line would stay until the player moves
+        this.watchAiThinking();
       }
       if (this.playerView.players.length > 1 && this.waitingfor !== undefined && !this.waitingfor.optional) {
         documentTitleTimer = window.setInterval(() => this.animateTitle(), 1000);
@@ -157,6 +164,8 @@ export default defineComponent({
       otherPlayersTimer = undefined;
       window.clearInterval(documentTitleTimer);
       documentTitleTimer = undefined;
+      window.clearTimeout(aiThinkingTimer);
+      aiThinkingTimer = undefined;
     },
     getPlayerName(color: Color): string {
       const player = this.playerView.players.find((p) => p.color === color);
@@ -343,6 +352,42 @@ export default defineComponent({
         }
       }, OTHER_PLAYERS_INTERVAL);
       otherPlayersTimer = timer;
+    },
+    /**
+     * Keeps the AI's thinking line current while this player is to move. Polls only while an AI is still thinking
+     * and reads only aiThinking from the answer (the turn change arrives with the answer to the player's own move).
+     */
+    watchAiThinking() {
+      window.clearTimeout(aiThinkingTimer);
+      if (aiThinking.value.length === 0) {
+        aiThinkingTimer = undefined;
+        return;
+      }
+      const game = this.playerView.game;
+      const url = paths.API_WAITING_FOR + window.location.search + '&gameAge=' + game.gameAge + '&undoCount=' + game.undoCount;
+      // The next poll starts after this one, so answers can't arrive out of order
+      const timer = window.setTimeout(async () => {
+        try {
+          const response = await fetch(url);
+          if (response.ok) {
+            const result: WaitingForModel = await response.json();
+            if (aiThinkingTimer === timer) {
+              aiThinking.value = result.aiThinking ?? [];
+            }
+          } else if (response.status < 500) {
+            // Client errors (e.g. the game is gone) won't recover: drop the line, stop polling
+            aiThinking.value = [];
+            return;
+          }
+        } catch (e) {
+          console.warn('Unable to update the AI thinking line', e);
+        }
+        // Stop if the component unmounted or another poll started meanwhile
+        if (aiThinkingTimer === timer) {
+          this.watchAiThinking();
+        }
+      }, AI_THINKING_INTERVAL);
+      aiThinkingTimer = timer;
     },
     notify() {
       if (getPreferences().enable_sounds) {
