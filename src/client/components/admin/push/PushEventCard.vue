@@ -44,10 +44,8 @@
         <strong class="push-notification-title"><template v-for="(part, index) in titleParts" :key="index"><mark v-if="part.isName">{{ part.text }}</mark><template v-else>{{ part.text }}</template></template></strong>
         <span class="push-notification-body">{{ previewText.body.replace('${0}', SAMPLE_NAME) }}</span>
       </div>
-      <template v-if="entry.channel === 'push'">
-        <button type="button" class="btn btn-sm btn-tone-quiet push-test" :disabled="testState === 'sending'" @click="sendTest" v-i18n>Send test to this browser</button>
-        <p v-if="testMessage !== ''" class="games-overview-note" :class="{'games-overview-note--error': testState === 'failed'}">{{ testMessage }}</p>
-      </template>
+      <button type="button" class="btn btn-sm btn-tone-quiet push-test" :disabled="testState === 'sending'" @click="sendTest" v-i18n>Send test to this browser</button>
+      <p v-if="testMessage !== ''" class="games-overview-note" :class="{'games-overview-note--error': testState === 'failed'}">{{ testMessage }}</p>
     </div>
   </section>
 </template>
@@ -63,6 +61,7 @@ import {describeFailure, failureOf, fetchOrFail} from '@/client/utils/requestFai
 import {lobbyParticipantId} from '@/client/components/lobby/lobbyProfile';
 import {PushCatalogEntry} from './pushCatalog';
 import {pushTestDelaySeconds} from './pushTestDelay';
+import {showTurnNotification, TurnNotificationResult} from '@/client/utils/turnNotification';
 
 // icon: the picture the messages carry (the server's favicon, AdminPushInfo)
 const props = defineProps<{entry: PushCatalogEntry, icon: string}>();
@@ -134,9 +133,27 @@ async function countdown(): Promise<void> {
   }
 }
 
+// "Am Zug" kommt nicht vom Server, sondern von der offenen Spielseite: der Test geht denselben Weg im Browser
+const TURN_RESULTS: Record<TurnNotificationResult, string> = {
+  'shown': 'The notification was handed to the system. If no notification appears, the system blocks it: allow notifications for this browser in the system settings and check Focus or Do Not Disturb.',
+  'page-in-front': 'Not shown: this tab was in front. In the game that is intended; switch to another app or tab during the countdown.',
+  'no-permission': 'Notifications are not allowed for this site: allow them in the browser and test again.',
+  'failed': 'The browser refused to show the notification: check the notification permission of this site.',
+};
+
+async function sendTurnTest(): Promise<void> {
+  const result = await showTurnNotification(props.icon);
+  testState.value = result === 'shown' ? 'idle' : 'failed';
+  testMessage.value = translateText(TURN_RESULTS[result]);
+}
+
 async function sendTest(): Promise<void> {
   testState.value = 'sending';
   await countdown();
+  if (props.entry.kind === 'turn') {
+    await sendTurnTest();
+    return;
+  }
   testMessage.value = translateText('Test sent: waiting for this browser…');
   const body: AdminPushTestRequest = {kind: props.entry.kind as LobbyPushKind, me: lobbyParticipantId()};
   try {

@@ -2108,5 +2108,10 @@
   "How long a login (admin and Discord) stays valid, e.g. 30d or 12h.": "Jak długo ważne jest logowanie (admin i Discord), np. 30d lub 12h.",
   "Faster inputs of a player are refused (against bots). 0: no limit.": "Szybsze akcje gracza są odrzucane (przeciw botom). 0: bez limitu.",
   "How long browsers keep images and fonts without asking the server again. 0: they always ask.": "Jak długo przeglądarki trzymają obrazy i czcionki bez ponownego pytania serwera. 0: zawsze pytają.",
-  "Solo (player count)": "Solo"
+  "Solo (player count)": "Solo",
+  "System notification, only while the tab is hidden or another window is in front.": "Powiadomienie systemowe, tylko gdy karta jest ukryta lub na wierzchu jest inne okno.",
+  "The notification was handed to the system. If no notification appears, the system blocks it: allow notifications for this browser in the system settings and check Focus or Do Not Disturb.": "Powiadomienie zostało przekazane systemowi. Jeśli nie widać powiadomienia, blokuje je system: zezwól na powiadomienia dla tej przeglądarki w ustawieniach systemu i sprawdź Skupienie lub Nie przeszkadzać.",
+  "Not shown: this tab was in front. In the game that is intended; switch to another app or tab during the countdown.": "Nie wyświetlono: ta karta była na wierzchu. W grze tak ma być; podczas odliczania przełącz się na inną aplikację lub kartę.",
+  "Notifications are not allowed for this site: allow them in the browser and test again.": "Powiadomienia są dla tej strony niedozwolone: zezwól na nie w przeglądarce i przetestuj ponownie.",
+  "The browser refused to show the notification: check the notification permission of this site.": "Przeglądarka odmówiła wyświetlenia powiadomienia: sprawdź zgodę na powiadomienia dla tej strony."
 }

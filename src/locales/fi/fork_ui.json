@@ -1309,5 +1309,10 @@
   "How long a login (admin and Discord) stays valid, e.g. 30d or 12h.": "Kuinka kauan kirjautuminen (ylläpito ja Discord) on voimassa, esim. 30d tai 12h.",
   "Faster inputs of a player are refused (against bots). 0: no limit.": "Pelaajan nopeammat syötteet hylätään (botteja vastaan). 0: ei rajaa.",
   "How long browsers keep images and fonts without asking the server again. 0: they always ask.": "Kuinka kauan selaimet säilyttävät kuvat ja fontit kysymättä palvelimelta uudelleen. 0: ne kysyvät aina.",
-  "Solo (player count)": "Yksin"
+  "Solo (player count)": "Yksin",
+  "System notification, only while the tab is hidden or another window is in front.": "Järjestelmäilmoitus vain, kun välilehti on piilossa tai jokin toinen ikkuna on edessä.",
+  "The notification was handed to the system. If no notification appears, the system blocks it: allow notifications for this browser in the system settings and check Focus or Do Not Disturb.": "Ilmoitus annettiin järjestelmälle. Jos ilmoitusta ei näy, järjestelmä estää sen: salli ilmoitukset tälle selaimelle järjestelmäasetuksissa ja tarkista keskittyminen tai Älä häiritse.",
+  "Not shown: this tab was in front. In the game that is intended; switch to another app or tab during the countdown.": "Ei näytetty: tämä välilehti oli edessä. Pelissä se on tarkoitus; vaihda laskennan aikana toiseen sovellukseen tai välilehteen.",
+  "Notifications are not allowed for this site: allow them in the browser and test again.": "Ilmoitukset eivät ole sallittuja tälle sivustolle: salli ne selaimessa ja testaa uudelleen.",
+  "The browser refused to show the notification: check the notification permission of this site.": "Selain kieltäytyi näyttämästä ilmoitusta: tarkista tämän sivuston ilmoituslupa."
 }

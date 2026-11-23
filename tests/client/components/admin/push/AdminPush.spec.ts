@@ -35,8 +35,8 @@ describe('AdminPush', () => {
       await new Promise((resolve) => setTimeout(resolve, 0));
     }
     expect(wrapper.findAll('.push-event').map((card) => card.attributes('data-kind'))).deep.eq(PUSH_CATALOG.map((entry) => entry.kind));
-    // The browser-only message offers no test
-    expect(wrapper.findAll('.push-test')).has.length(3);
+    // Every message offers a test, the browser-only one ("Am Zug") as well
+    expect(wrapper.findAll('.push-test')).has.length(PUSH_CATALOG.length);
     expect(wrapper.findAll('.push-fact')).has.length(5);
     expect(wrapper.find('.push-fact strong').text()).eq('4');
     expect(wrapper.findAll('.push-deliveries-table tbody tr')).has.length(1);

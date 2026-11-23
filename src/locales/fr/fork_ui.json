@@ -1363,5 +1363,10 @@
   "How long a login (admin and Discord) stays valid, e.g. 30d or 12h.": "Durée de validité d'une connexion (admin et Discord), p. ex. 30d ou 12h.",
   "Faster inputs of a player are refused (against bots). 0: no limit.": "Les saisies plus rapides d'un joueur sont refusées (contre les bots). 0 : aucune limite.",
   "How long browsers keep images and fonts without asking the server again. 0: they always ask.": "Durée pendant laquelle les navigateurs gardent images et polices sans redemander au serveur. 0 : ils redemandent toujours.",
-  "Solo (player count)": "Solo"
+  "Solo (player count)": "Solo",
+  "System notification, only while the tab is hidden or another window is in front.": "Notification système, seulement si l’onglet est masqué ou si une autre fenêtre est au premier plan.",
+  "The notification was handed to the system. If no notification appears, the system blocks it: allow notifications for this browser in the system settings and check Focus or Do Not Disturb.": "La notification a été transmise au système. Si aucune notification n’apparaît, le système la bloque : autorise les notifications pour ce navigateur dans les réglages du système et vérifie Concentration ou Ne pas déranger.",
+  "Not shown: this tab was in front. In the game that is intended; switch to another app or tab during the countdown.": "Non affichée : cet onglet était au premier plan. En jeu, c’est voulu ; passe à une autre app ou un autre onglet pendant le compte à rebours.",
+  "Notifications are not allowed for this site: allow them in the browser and test again.": "Les notifications ne sont pas autorisées pour ce site : autorise-les dans le navigateur et teste à nouveau.",
+  "The browser refused to show the notification: check the notification permission of this site.": "Le navigateur a refusé d’afficher la notification : vérifie l’autorisation de notifications de ce site."
 }
