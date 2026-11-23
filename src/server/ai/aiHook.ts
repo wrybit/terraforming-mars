@@ -8,7 +8,7 @@ import {InputResponse} from '../../common/inputs/InputResponse';
 let onAiPlayerWaiting: (player: IPlayer) => void = () => {};
 // Games with Rust AI players follow every answered input and every loaded game object (ai/rust/RustMirror.ts)
 let onInputProcessed: (player: IPlayer, input: PlayerInput, response: InputResponse, saveId: number) => void = () => {};
-let onGameLoaded: (game: IGame) => void = () => {};
+let onGameLoaded: (game: IGame, loadedSaveId: number) => void = () => {};
 
 export function registerAiHook(handler: (player: IPlayer) => void): void {
   onAiPlayerWaiting = handler;
@@ -18,7 +18,7 @@ export function registerProcessedHook(handler: typeof onInputProcessed): void {
   onInputProcessed = handler;
 }
 
-export function registerGameLoadedHook(handler: (game: IGame) => void): void {
+export function registerGameLoadedHook(handler: (game: IGame, loadedSaveId: number) => void): void {
   onGameLoaded = handler;
 }
 
@@ -30,6 +30,7 @@ export function notifyInputProcessed(player: IPlayer, input: PlayerInput, respon
   onInputProcessed(player, input, response, saveId);
 }
 
-export function notifyGameLoaded(game: IGame): void {
-  onGameLoaded(game);
+/** `loadedSaveId`: the save the game was loaded from (loading itself may save again before this call) */
+export function notifyGameLoaded(game: IGame, loadedSaveId: number): void {
+  onGameLoaded(game, loadedSaveId);
 }

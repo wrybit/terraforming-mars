@@ -1989,8 +1989,9 @@ export class Game implements IGame, Logger {
     if (game.phase === Phase.END) {
       GameLoader.getInstance().mark(game.id);
     }
-    // games with Rust AI players: their mirror follows the new object (ai/rust/RustMirror.ts)
-    notifyGameLoaded(game);
+    // games with Rust AI players: their mirror follows the new object (ai/rust/RustMirror.ts). The save it was loaded
+    // from, not game.lastSaveId: prompting the active player above may already have saved again
+    notifyGameLoaded(game, d.lastSaveId);
     return game;
   }
 

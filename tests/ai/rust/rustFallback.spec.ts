@@ -3,6 +3,7 @@ import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
 import {testGame} from '../../TestGame';
+import {Game} from '../../../src/server/Game';
 import {SelectOption} from '../../../src/server/inputs/SelectOption';
 import {RustMirror, rustDecisionTimeout} from '../../../src/server/ai/rust/RustMirror';
 import {RustBot, RustBotProcess} from '../../../src/server/ai/rust/RustBotProcess';
@@ -97,6 +98,20 @@ describe('Rust AI fallback', () => {
     expect(started).has.length(3);
     expect(log.summary().recent.map((entry) => entry.decision)).contains('rest of the game');
     mirror.close();
+  });
+
+  it('keeps the events of the loaded save, not of the save loading itself wrote (undo)', () => {
+    useFakeBot('dead');
+    const {game, player, mirror} = mirrorOf();
+    for (const saveId of [3, 4, 5]) {
+      mirror.processed(player, new SelectOption('Pass'), {type: 'option'}, saveId);
+    }
+    // loading save 4 prompts the active player, which saves again (save 5) before the mirror hears of the new object
+    const loaded = Game.deserialize(game.serialize());
+    RustMirror.loaded(loaded, 4);
+    const lines = fs.readFileSync(path.join(folder, `${game.id}.jsonl`), 'utf8').split('\n').filter((line) => line !== '');
+    expect(lines.slice(1).map((line) => JSON.parse(line).saveId)).deep.eq([3, 4]);
+    RustMirror.of(loaded)?.close();
   });
 
   it('keeps recording the game after giving it to the TypeScript AI, so a reload rebuilds it completely', async () => {

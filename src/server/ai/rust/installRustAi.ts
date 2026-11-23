@@ -22,9 +22,9 @@ export function installRustAi(): void {
       mirror?.close();
     }
   });
-  registerGameLoadedHook((game) => {
+  registerGameLoadedHook((game, loadedSaveId) => {
     if (!isSimulating() && hasRustPlayer(game) && game.phase !== Phase.END) {
-      RustMirror.loaded(game);
+      RustMirror.loaded(game, loadedSaveId);
     }
   });
 }

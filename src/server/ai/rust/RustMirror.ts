@@ -102,20 +102,23 @@ export class RustMirror {
     return mirror?.game === game ? mirror : undefined;
   }
 
-  /** A game object just loaded (server restart, undo, reload): its mirror follows it, rebuilt from the event file. */
-  public static loaded(game: IGame): void {
+  /**
+   * A game object just loaded (server restart, undo, reload) from save `loadedSaveId`: its mirror follows it, rebuilt
+   * from the event file.
+   */
+  public static loaded(game: IGame, loadedSaveId: number = game.lastSaveId): void {
     const mirror = RustMirror.mirrors.get(game.id);
     if (mirror === undefined) {
-      const created = RustMirror.load(game);
+      const created = RustMirror.load(game, loadedSaveId);
       if (created !== undefined) {
         RustMirror.mirrors.set(game.id, created);
       }
     } else if (mirror.game !== game) {
-      mirror.follow(game);
+      mirror.follow(game, loadedSaveId);
     }
   }
 
-  private static load(game: IGame): RustMirror | undefined {
+  private static load(game: IGame, loadedSaveId: number): RustMirror | undefined {
     let lines: Array<string>;
     try {
       lines = fs.readFileSync(RustMirror.file(game.id), 'utf8').split('\n').filter((line) => line !== '');
@@ -125,15 +128,18 @@ export class RustMirror {
     const setup = JSON.parse(lines[0]).setup;
     const events = lines.slice(1).map((line) => JSON.parse(line) as StoredEvent);
     const mirror = new RustMirror(game, setup, events);
-    mirror.follow(game);
+    mirror.follow(game, loadedSaveId);
     return mirror;
   }
 
-  /** A reloaded game object: events after the loaded save are gone (undo), the bot copy starts over. */
-  private follow(game: IGame): void {
+  /**
+   * A reloaded game object: events after the loaded save are gone (undo, or answers not saved before a restart), the
+   * bot copy starts over. An event's saveId is the save that holds its effect.
+   */
+  private follow(game: IGame, loadedSaveId: number): void {
     this.game = game;
     this.random = recordRandom(game.rng);
-    const kept = this.events.filter((stored) => stored.saveId <= game.lastSaveId);
+    const kept = this.events.filter((stored) => stored.saveId <= loadedSaveId);
     this.events.splice(0, this.events.length, ...kept);
     try {
       fs.writeFileSync(RustMirror.file(game.id), [{setup: this.setup}, ...kept].map((line) => JSON.stringify(line)).join('\n') + '\n');
