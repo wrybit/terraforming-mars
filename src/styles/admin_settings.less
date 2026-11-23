@@ -120,6 +120,7 @@
 
 .server-settings-input {
   display: flex;
+  align-items: center;
   gap: 6px;
 
   input {
@@ -1117,4 +1118,25 @@
   &--full {
     background: #f4c20d;
   }
+}
+
+// A field with a slider: the slider takes the width, the number stays readable beside it
+.server-settings-input--slider {
+  gap: 12px;
+
+  input:not(.server-settings-slider) {
+    flex: 0 0 96px;
+    text-align: right;
+  }
+}
+
+.server-settings-input .server-settings-slider {
+  flex: 1;
+  min-width: 0;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  accent-color: #908fdb;
 }

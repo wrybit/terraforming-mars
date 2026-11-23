@@ -51,14 +51,18 @@
                         <ServerSettingChoiceField v-else-if="setting.kind === 'choice'" :inputId="'server-setting-' + setting.key"
                           :value="values[setting.key] ?? ''" :choices="setting.choices ?? []"
                           :image="(choice: string) => setting.choiceImage?.(choice, values) ?? ''" @update="setValue(setting.key, $event)" />
-                        <div v-else class="server-settings-input">
+                        <!-- The field shows the value that applies (the default when the .env has no line), never a grey
+                         placeholder; settings with a sensible range get a slider beside it -->
+                        <div v-else class="server-settings-input" :class="{'server-settings-input--slider': setting.slider !== undefined}">
+                          <input v-if="setting.slider !== undefined" class="server-settings-slider" type="range"
+                            :min="setting.slider.minimum" :max="setting.slider.maximum" :step="setting.slider.step" :value="shown(setting)"
+                            :aria-label="$t(setting.label)" @input="change(setting, ($event.target as HTMLInputElement).value)">
                           <input :id="'server-setting-' + setting.key"
                             :type="inputType(setting)"
                             :inputmode="setting.kind === 'number' ? 'numeric' : undefined"
-                            :value="values[setting.key]"
-                            :placeholder="setting.placeholder"
+                            :value="shown(setting)"
                             autocomplete="off"
-                            @input="setValue(setting.key, ($event.target as HTMLInputElement).value)">
+                            @input="change(setting, ($event.target as HTMLInputElement).value)">
                           <button v-if="setting.kind === 'secret'" type="button" class="btn btn-sm btn-tone-quiet" @click="toggleReveal(setting.key)" v-i18n>{{ revealed[setting.key] ? 'Hide' : 'Show' }}</button>
                         </div>
                         <!-- Saved in the .env file but not yet in effect: the server reads it at its next start -->
@@ -230,6 +234,15 @@ export default defineComponent({
     },
     toggleReveal(key: string): void {
       this.revealed = {...this.revealed, [key]: this.revealed[key] !== true};
+    },
+    /** The value that applies: the one in the .env, otherwise the default */
+    shown(setting: ServerSettingDefinition): string {
+      const value = this.values[setting.key];
+      return value === undefined || value === '' ? setting.placeholder ?? '' : value;
+    },
+    /** The default itself is stored as no line, so the field keeps following a changed default */
+    change(setting: ServerSettingDefinition, value: string): void {
+      this.setValue(setting.key, value === setting.placeholder ? '' : value);
     },
     setValue(key: string, value: string): void {
       this.values = {...this.values, [key]: value};

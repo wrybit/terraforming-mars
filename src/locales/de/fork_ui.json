@@ -1081,8 +1081,14 @@
   "Thinking time (ms)": "Denkzeit (ms)",
   "Per move while humans play along: the AI takes this long, the Rust AI searches for this long. Without humans it plays at full speed.": "Pro Zug, solange Menschen mitspielen: So lange braucht die AI, so lange sucht die Rust-AI. Ohne Menschen spielt sie mit voller Geschwindigkeit.",
   "Fallback to TypeScript after (ms)": "Fallback auf TypeScript nach (ms)",
-  "Extra time on top of the thinking time. Without an answer of the Rust AI by then, the TypeScript AI makes this decision. Empty: 10000.": "Zusätzlich zur Denkzeit. Kommt bis dahin keine Antwort der Rust-AI, trifft die TypeScript-AI diese Entscheidung. Leer: 10000.",
   "AI program": "AI-Programm",
   "Strength of the Rust AI": "Stärke der Rust-AI",
-  "Every list applies to every message, players write in mixed languages.": "Jede Liste gilt für jede Nachricht, denn Spieler schreiben gemischt in mehreren Sprachen."
+  "Every list applies to every message, players write in mixed languages.": "Jede Liste gilt für jede Nachricht, denn Spieler schreiben gemischt in mehreren Sprachen.",
+  "Extra time on top of the thinking time. Without an answer of the Rust AI by then, the TypeScript AI makes this decision.": "Zusätzlich zur Denkzeit. Kommt bis dahin keine Antwort der Rust-AI, trifft die TypeScript-AI diese Entscheidung.",
+  "Browser tab of the start page.": "Browser-Tab der Startseite.",
+  "End of all other tab titles, e.g. \"Cards List | TM\".": "Ende aller anderen Tab-Titel, z. B. „Kartenliste | TM“.",
+  "How often a waiting player asks whether it is their turn again.": "Wie oft ein wartender Spieler fragt, ob er wieder dran ist.",
+  "How long a login (admin and Discord) stays valid, e.g. 30d or 12h.": "Wie lange eine Anmeldung (Admin und Discord) gilt, z. B. 30d oder 12h.",
+  "Faster inputs of a player are refused (against bots). 0: no limit.": "Schnellere Eingaben eines Spielers werden abgelehnt (gegen Bots). 0: keine Grenze.",
+  "How long browsers keep images and fonts without asking the server again. 0: they always ask.": "Wie lange Browser Bilder und Schriften behalten, ohne erneut beim Server nachzufragen. 0: Sie fragen immer."
 }
