@@ -3,6 +3,7 @@
 // game, so a reloaded game (server restart, undo) can rebuild the copy: events up to the loaded save are replayed.
 // Whenever the copy cannot follow, the game goes on with the TS AI for its Rust players.
 import * as fs from 'fs';
+import * as os from 'os';
 import * as path from 'path';
 import {IGame} from '../../IGame';
 import {IPlayer} from '../../IPlayer';
@@ -38,7 +39,8 @@ const DEFAULT_EXTRA_WAIT_MILLISECONDS = 10_000;
  * Randomness only goes to a bot that announced it in its support file; an older bot would refuse the extra value.
  */
 export function rustBotSettings(level: AiLevel, botFeatures: ReadonlyArray<BotFeature> = rustAiSupportFile.get().botFeatures): RustBotSettings {
-  const {randomness, ...search} = rustBotStrength(level, process.env);
+  // Threads never above the cores of this machine (rustBotStrength)
+  const {randomness, ...search} = rustBotStrength(level, process.env, os.availableParallelism());
   return botFeatures.includes('randomness') ? {...search, randomness} : search;
 }
 

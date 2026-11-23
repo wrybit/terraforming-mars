@@ -11,6 +11,7 @@ export const paths = {
   API_ADMIN_DELETE_GAME: 'api/admin/delete-game',
   API_ADMIN_GAMES: 'api/admin/games',
   API_ADMIN_IMPORT_GAME: 'api/admin/import-game',
+  API_ADMIN_LIVE_LOAD: 'api/admin/live-load',
   API_ADMIN_LOGOUT: 'api/admin/logout',
   API_ADMIN_MUSIC: 'api/admin/music',
   API_ADMIN_PLAYER_ALIASES: 'api/admin/player-aliases',

@@ -12,4 +12,10 @@ describe('rustBotStrength', () => {
     expect(strength).deep.eq({...DEFAULT_RUST_BOT_STRENGTH.normal, rollouts: 32, randomness: 15});
     expect(rustBotStrength('easy', {AI_EASY_RANDOMNESS: '101'}).randomness).eq(0);
   });
+
+  it('never gives more threads than the machine has cores', () => {
+    expect(rustBotStrength('hard', {AI_HARD_THREADS: '8'}, 4).threads).eq(4);
+    expect(rustBotStrength('hard', {AI_HARD_THREADS: '3'}, 4).threads).eq(3);
+    expect(rustBotStrength('hard', {}, 1).threads).eq(1);
+  });
 });

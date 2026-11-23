@@ -1,7 +1,7 @@
 import {expect} from 'chai';
 import {CHAT_KEEP_MESSAGES, CHAT_RATE_LIMIT, CHAT_RATE_WINDOW_MS, LobbyChat} from '../../src/server/lobby/LobbyChat';
 import {hasForeignLink} from '../../src/server/lobby/chatLinks';
-import {maskWords, normalizeChatWords} from '../../src/server/lobby/chatWords';
+import {ChatWordList, maskWords, normalizeChatWords} from '../../src/server/lobby/chatWords';
 import {memoryStorage} from '../../src/server/lobby/lobbyStorage';
 import {LobbyError} from '../../src/server/lobby/lobbyValidation';
 import {LOBBY_CHAT_EDIT_MS} from '../../src/common/lobby/LobbyChatModel';
@@ -117,5 +117,42 @@ describe('chat filters', () => {
   it('masks at the start of words only', () => {
     expect(maskWords('Barsch und Arschbombe', ['arsch'])).eq('Barsch und **********');
     expect(normalizeChatWords([' Fuck ', 'fuck', '', 3])).deep.eq(['fuck']);
+  });
+
+  it('masks Chinese and Japanese entries anywhere, those scripts have no spaces', () => {
+    expect(maskWords('你是傻逼吗', ['傻逼'])).eq('你是**吗');
+    expect(maskWords('お前死ねよ', ['死ね'])).eq('お前**よ');
+  });
+
+  it('keeps ordinary words of other languages unmasked by the default lists', () => {
+    const words = new ChatWordList({load: () => undefined, save: () => {}}).allWords();
+    for (const text of ['Pakistan', 'spicy', 'Faszination', 'homogen', 'Kutsche', 'жидкий', 'horen', 'kukka', 'cocktail', 'Dagobert',
+      'Barometer', 'spazio', 'Gogol', 'Ritalin', 'кончать', 'Херсон', 'mamut', 'injunction', 'pikku', 'kusić', '今日你好', 'カスタム', 'デブリ',
+      'dritte', 'Neukölln', 'sukat', 'Pinakothek', 'Figaro', 'szmatka', '低能力', 'かたわら', '妈妈的', '操作', '逼近', 'Kolonien', 'Grünfläche']) {
+      expect(maskWords(text, words)).eq(text);
+    }
+    expect(maskWords('Du Arschloch', words)).eq('Du *********');
+  });
+
+  it('keeps one list per language; an old single list moves into them', () => {
+    let saved: unknown = ['arsch', 'meinwort'];
+    const list = new ChatWordList({load: () => saved, save: (data) => saved = data});
+    expect(list.get().de).includes('arsch').and.includes('meinwort');
+    expect(list.get().fr).includes('salope');
+    list.set({de: ['Eins'], xx: ['ignored']});
+    expect((saved as {lists: object}).lists).deep.include({de: ['eins'], en: []});
+    expect(list.allWords()).deep.eq(['eins']);
+    // Saved with every default known: deleted defaults stay deleted after a restart
+    expect(new ChatWordList({load: () => saved, save: () => {}}).allWords()).deep.eq(['eins']);
+  });
+
+  it('adds default words that came after the save, keeps the ones the admin deleted', () => {
+    const saved = {lists: {de: ['arsch']}, knownDefaults: ['arsch', 'hure']};
+    const lists = new ChatWordList({load: () => saved, save: () => {}}).get();
+    expect(lists.de).includes('arsch').and.includes('hitler').and.not.includes('hure');
+  });
+
+  it('masks number codes only as a whole number', () => {
+    expect(maskWords('88 und 880 und x88', ['88'])).eq('** und 880 und x88');
   });
 });

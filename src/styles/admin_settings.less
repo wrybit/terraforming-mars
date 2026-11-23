@@ -120,6 +120,7 @@
 
 .server-settings-input {
   display: flex;
+  align-items: center;
   gap: 6px;
 
   input {
@@ -546,39 +547,179 @@
   justify-content: flex-end;
 }
 
-// Chat words (ChatWordsPanel.vue): below the settings, the list as one text field, actions like the settings
-.chat-words-card {
-  margin-top: 24px;
+// Chat words (ChatWordsPanel.vue): content of the "Chat filter" tab. One column per language, flag and name close
+// above its list; the columns share the height down to the window's bottom edge (set by the panel), their own
+// actions below
+.chat-words {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-height: 0;
+  padding-top: 4px;
 
-  h2 {
-    margin: 0 0 6px;
+  > .server-settings-description {
+    margin: 0;
   }
+}
+
+.chat-words-columns {
+  display: grid;
+  flex: 1;
+  // As many columns per row as the panel works out (ChatWordsPanel.vue: evenly spread rows); at least 120px each
+  grid-template-columns: repeat(var(--chat-words-columns, 2), minmax(0, 1fr));
+  grid-auto-rows: minmax(0, 1fr);
+  gap: 16px 10px;
+  min-height: 0;
+  margin-top: 12px;
+}
+
+.chat-words-column {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+}
+
+.chat-words-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+}
+
+.chat-words .chat-words-flag {
+  flex: none;
+  width: 22px;
+  height: 15px;
+  border-radius: 2px;
+  object-fit: cover;
+}
+
+.chat-words-language {
+  overflow: hidden;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// Number of words: information, plain and faint, at the right edge of the column
+.chat-words-count {
+  margin-left: auto;
+  color: @server-settings-dim;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
 }
 
 .chat-words-input.create-game-text-input {
   box-sizing: border-box;
+  flex: 1;
   width: 100%;
+  min-height: 120px;
   height: auto;
-  margin: 12px 0;
-  padding: 10px 12px;
+  margin: 0;
+  padding: 8px;
   font-family: monospace;
-  font-size: 13px;
-  resize: vertical;
+  font-size: 12px;
+  resize: none;
 }
 
 .chat-words-actions {
   position: static;
+  margin-top: 12px;
   background: none;
 }
 
-// ---------- Table settings (AI strength): a line per value, a field per strength ----------
-.server-settings-grid-fields {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 6px;
+// Phones: the page scrolls, every list keeps a readable height
+@media (max-width: @max-below-tablet) {
+  .chat-words-columns {
+    grid-auto-rows: 260px;
+  }
 }
 
-// Inputs like the single fields (.server-settings-input input); defaults stand grey as placeholder
+// ---------- Table settings (AI strength): a line per value, a column per strength ----------
+// One grid for the whole table. Each strength column is a band from its head to its last field, tinted in the color
+// of its strength (the AI accounts of the statistics: [AI-] yellow, [AI] orange, [AI+] red), so the three strengths
+// read as vertical groups; the lines between the values run only under the text, the bands stay whole.
+@server-settings-ai: #b3b2ff;
+@server-settings-ai-easy: #f4c20d;
+@server-settings-ai-normal: #f4a259;
+@server-settings-ai-hard: #ff6b6b;
+@server-settings-grid-column-width: 104px;
+
+.server-settings-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) repeat(3, @server-settings-grid-column-width);
+  column-gap: 8px;
+}
+
+.server-settings-grid-band {
+  --band-color: @server-settings-ai;
+
+  grid-column: var(--grid-column);
+  grid-row: 1 / span var(--grid-rows);
+  border: 1px solid color-mix(in srgb, var(--band-color) 45%, transparent);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--band-color) 10%, transparent);
+
+  &--easy { --band-color: @server-settings-ai-easy; }
+  &--normal { --band-color: @server-settings-ai-normal; }
+  &--hard { --band-color: @server-settings-ai-hard; }
+}
+
+.server-settings-grid-head {
+  grid-column: var(--grid-column);
+  grid-row: 1;
+  display: flex;
+  justify-content: center;
+  padding: 8px 6px 4px;
+  font-size: 13px;
+}
+
+// Rows place their cells straight into the table grid
+.server-settings-grid-row {
+  display: contents;
+
+  .server-settings-text {
+    grid-column: 1;
+    grid-row: var(--grid-row);
+    padding: @server-settings-row-gap 0;
+    border-top: 1px solid @server-settings-line;
+  }
+}
+
+.server-settings-grid-head + .server-settings-grid-head + .server-settings-grid-head + .server-settings-grid-row .server-settings-text {
+  border-top: none;
+}
+
+.server-settings-grid-cell {
+  grid-column: var(--grid-column);
+  grid-row: var(--grid-row);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  margin: 0;
+  padding: @server-settings-row-gap 8px;
+}
+
+.server-settings-grid-cell-name {
+  display: none;
+  font-size: 12px;
+}
+
+// Slider below the field, in the color of its strength
+.server-settings-grid-slider {
+  width: 100%;
+  margin: 0;
+  accent-color: #908fdb;
+}
+.server-settings-grid-cell--easy .server-settings-grid-slider { accent-color: @server-settings-ai-easy; }
+.server-settings-grid-cell--normal .server-settings-grid-slider { accent-color: @server-settings-ai-normal; }
+.server-settings-grid-cell--hard .server-settings-grid-slider { accent-color: @server-settings-ai-hard; }
+
+// Inputs like the single fields (.server-settings-input input); they always show the value that applies
 .server-settings-grid-input {
   width: 100%;
   min-width: 0;
@@ -600,51 +741,60 @@
   }
 }
 
-// Column heads: close above their fields, the first line of the table
-.server-settings-grid-head {
-  padding-bottom: 0;
+// A strength as in the game: robot and name, the marker of AI names a shade fainter
+.ai-strength-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+
+  .seat-icon {
+    flex: none;
+    color: @server-settings-ai;
+  }
 }
 
-.server-settings-grid-column {
-  color: rgba(238, 238, 238, 0.62);
-  font-size: 13px;
-  text-align: right;
-  padding-right: 10px;
+.ai-strength-label-marker {
+  color: rgba(238, 238, 238, 0.5);
 }
 
-// The head belongs to the fields below it: no line between them
-.server-settings-grid-head + .server-settings-row {
-  border-top: none;
-  padding-top: 4px;
-}
-
-.server-settings-grid-cell {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
-  margin: 0;
-}
-
-.server-settings-grid-cell-name {
-  display: none;
-  color: rgba(238, 238, 238, 0.62);
-  font-size: 12px;
-  text-align: right;
-  padding-right: 10px;
-}
-
+// Phones: no room for three columns beside the text; a block per value, its fields below, each one named
 @media (max-width: @max-below-tablet) {
+  .server-settings-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .server-settings-grid-band,
   .server-settings-grid-head {
     display: none;
   }
 
-  .server-settings-grid-head + .server-settings-row {
-    padding-top: 0;
+  .server-settings-grid-row {
+    .server-settings-text {
+      grid-column: 1 / -1;
+      grid-row: auto;
+      padding-bottom: 6px;
+    }
+  }
+
+  .server-settings-grid-cell {
+    grid-column: auto;
+    grid-row: auto;
+    padding: 0 0 @server-settings-row-gap;
   }
 
   .server-settings-grid-cell-name {
-    display: block;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  // Without the bands each field carries the color of its strength itself
+  .server-settings-grid-cell--easy .server-settings-grid-input { border-color: fade(@server-settings-ai-easy, 55%); }
+  .server-settings-grid-cell--normal .server-settings-grid-input { border-color: fade(@server-settings-ai-normal, 55%); }
+  .server-settings-grid-cell--hard .server-settings-grid-input { border-color: fade(@server-settings-ai-hard, 55%); }
+
+  .server-settings-grid-row:first-of-type .server-settings-text {
+    border-top: none;
   }
 }
 
@@ -710,4 +860,283 @@
   .ai-support-overview-columns {
     grid-template-columns: minmax(0, 1fr);
   }
+}
+
+// ---------- Two columns in a tab (AI opponents): the rows left, table and live load right ----------
+// The columns are further apart than the rows inside them (law of proximity); one column below desktop width
+.server-settings-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0 48px;
+  align-items: start;
+}
+
+@media (min-width: @bp-desktop) {
+  .server-settings-columns--two {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+// Blocks of a tab (AI tab: engine, waiting times, training data, strength): the heading close above its rows,
+// the blocks further apart than the rows inside them (law of proximity)
+.server-settings-section + .server-settings-section {
+  margin-top: 20px;
+}
+
+.server-settings-section-title {
+  margin: 0;
+  padding-bottom: 6px;
+  border-bottom: 1px solid @server-settings-line;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+// Below a heading the first row needs no line of its own (the heading carries it)
+.server-settings-section-title + .server-settings-row {
+  border-top: none;
+}
+
+// Narrow: the second column continues below the first one, with the same distance as between blocks
+@media (max-width: @max-below-desktop) {
+  .server-settings-column + .server-settings-column {
+    margin-top: 20px;
+  }
+}
+
+// Limit of the machine below the description of a table row: information, so plain text, a shade brighter
+.server-settings-grid-limit {
+  color: rgba(238, 238, 238, 0.82);
+  font-size: 13px;
+}
+
+// A value above the limit of the machine: the field turns red until it fits again
+.server-settings-grid-input--invalid,
+.server-settings-grid-input--invalid:focus {
+  border-color: #ff8a80;
+  outline-color: fade(#ff8a80, 70%);
+}
+
+// ---------- Live load of the machine (AiLoadGraph.vue), below the AI strength ----------
+.ai-load {
+  --ai-load-tooltip-width: 170px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 20px;
+  padding: 4px 0 @server-settings-row-gap;
+  border-bottom: 1px solid @server-settings-line;
+}
+
+// Processor (widest: it has the time axis), cores and memory; apart like blocks, close inside
+.ai-load-parts {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px 48px;
+  align-items: start;
+}
+
+.ai-load-part {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+@media (min-width: @bp-desktop) {
+  .ai-load-parts {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+.ai-load-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 10px;
+  margin-bottom: 6px;
+}
+
+.ai-load-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.ai-load-machine,
+.ai-load-note {
+  color: @server-settings-dim;
+  font-size: 12px;
+}
+
+.ai-load-note,
+.ai-load-failure {
+  margin: 0;
+}
+
+.ai-load-failure {
+  color: #ff8a80;
+  font-size: 13px;
+}
+
+// Label and current value of a chart, close above it; the charts themselves are further apart
+.ai-load-chart-head {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+}
+
+.ai-load-label {
+  color: @server-settings-dim;
+}
+
+.ai-load-value {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.ai-load-chart {
+  position: relative;
+  height: 140px;
+  padding-right: 44px;
+}
+
+.ai-load-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  overflow: visible;
+}
+
+.ai-load-grid {
+  stroke: @server-settings-line;
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+// The parts in the colors of the dashboard bars (admin_dashboard.less); a dark edge keeps neighbours apart
+.ai-load-area {
+  stroke: #1d1e24;
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+
+  &--ai { fill: #f25f8a; }
+  &--game { fill: #b07cf2; }
+  &--system { fill: #8a8f98; }
+}
+
+.ai-load-crosshair {
+  stroke: rgba(255, 255, 255, 0.7);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+// Axis on the right, where the newest values are
+.ai-load-axis {
+  position: absolute;
+  top: -7px;
+  right: 0;
+  bottom: -7px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: @server-settings-dim;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+.ai-load-tooltip {
+  position: absolute;
+  top: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: var(--ai-load-tooltip-width);
+  padding: 6px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 6px;
+  background: #25262e;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  font-size: 12px;
+  pointer-events: none;
+
+  .dashboard-split-swatch {
+    margin-right: 6px;
+  }
+}
+
+.ai-load-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  font-size: 12px;
+
+  .dashboard-split-swatch {
+    margin-right: 6px;
+  }
+}
+
+.ai-load-legend-value {
+  margin-left: 4px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+// One slim bar per core; full cores (90 %+) turn yellow like the warnings of the dashboard
+.ai-load-cores {
+  display: flex;
+  gap: 3px;
+  height: 36px;
+}
+
+.ai-load-core {
+  display: flex;
+  flex: 1;
+  align-items: flex-end;
+  max-width: 28px;
+  border-radius: 3px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.ai-load-core-fill {
+  width: 100%;
+  border-radius: 3px 3px 0 0;
+  background: #8a8f98;
+  transition: height 0.4s;
+
+  &--full {
+    background: #f4c20d;
+  }
+}
+
+// Swatches of the core legend: the same colors as the bars above
+.ai-load-core-swatch {
+  background: #8a8f98;
+
+  &--full {
+    background: #f4c20d;
+  }
+}
+
+// A field with a slider: the slider takes the width, the number stays readable beside it
+.server-settings-input--slider {
+  gap: 12px;
+
+  input:not(.server-settings-slider) {
+    flex: 0 0 96px;
+    text-align: right;
+  }
+}
+
+.server-settings-input .server-settings-slider {
+  flex: 1;
+  min-width: 0;
+  height: auto;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  accent-color: #908fdb;
 }

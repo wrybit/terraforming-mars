@@ -20,47 +20,69 @@
           </button>
         </div>
         <div v-docked-tab class="or-tab-panel or-tab-panel--view server-settings-group" role="tabpanel">
-          <ServerSettingGrid v-if="selectedGridSettings.length > 0" :settings="selectedGridSettings" :values="values" @update="setValue" />
-          <div v-for="setting in selectedSettings" :key="setting.key" class="server-settings-row">
-            <div class="server-settings-text">
-              <label :for="'server-setting-' + setting.key" class="server-settings-label" v-i18n>{{ setting.label }}</label>
-              <span class="server-settings-description" v-i18n>{{ setting.description }}</span>
-              <code class="server-settings-key">{{ setting.key }}</code>
+          <!-- Chat filter: its own list with its own save, applied at once (no .env, no restart) -->
+          <ChatWordsPanel v-if="selectedGroup === CHAT_TAB" />
+          <template v-else>
+            <!-- AI tab: the live load of the machine first, over the full width, so threads and rollouts below are set
+                 with the hardware in view -->
+            <AiLoadGraph v-if="selectedGroup === 'AI opponents'" @measured="processorCores = $event.cores" />
+            <!-- Blocks in the main column, side settings (strength of the Rust AI) next to them; one column when narrow -->
+            <div class="server-settings-columns" :class="{'server-settings-columns--two': columns[1].length > 0}">
+              <template v-for="(sections, columnIndex) in columns" :key="columnIndex">
+                <div v-if="sections.length > 0" class="server-settings-column">
+                  <!-- A block per section (e.g. all waiting times together), its heading above it -->
+                  <section v-for="section in sections" :key="section.title" class="server-settings-section">
+                    <h3 v-if="section.title !== ''" class="server-settings-section-title" v-i18n>{{ section.title }}</h3>
+                    <ServerSettingGrid v-if="section.grid.length > 0" :settings="section.grid" :values="values" :rowLimits="gridLimits" @update="setValue" />
+                    <div v-for="setting in section.rows" :key="setting.key" class="server-settings-row">
+                      <div class="server-settings-text">
+                        <label :for="'server-setting-' + setting.key" class="server-settings-label" v-i18n>{{ setting.label }}</label>
+                        <span class="server-settings-description" v-i18n>{{ setting.description }}</span>
+                        <code class="server-settings-key">{{ setting.key }}</code>
+                      </div>
+                      <div class="server-settings-field">
+                        <label v-if="setting.kind === 'toggle'" class="server-settings-toggle">
+                          <input :id="'server-setting-' + setting.key" type="checkbox" :checked="isToggleOn(setting, values[setting.key])" @change="setToggle(setting, ($event.target as HTMLInputElement).checked)">
+                        </label>
+                        <SegmentedControl v-else-if="setting.kind === 'segmented'" class="server-settings-segmented"
+                          :modelValue="values[setting.key] ?? ''" :options="segmentOptions(setting)" @update:modelValue="setValue(setting.key, String($event))" />
+                        <ServerSettingImageField v-else-if="setting.kind === 'image'" :inputId="'server-setting-' + setting.key"
+                          :value="values[setting.key] ?? ''" @update="setValue(setting.key, $event)" />
+                        <ServerSettingChoiceField v-else-if="setting.kind === 'choice'" :inputId="'server-setting-' + setting.key"
+                          :value="values[setting.key] ?? ''" :choices="setting.choices ?? []"
+                          :image="(choice: string) => setting.choiceImage?.(choice, values) ?? ''" @update="setValue(setting.key, $event)" />
+                        <!-- The field shows the value that applies (the default when the .env has no line), never a grey
+                         placeholder; settings with a sensible range get a slider beside it -->
+                        <div v-else class="server-settings-input" :class="{'server-settings-input--slider': setting.slider !== undefined}">
+                          <input v-if="setting.slider !== undefined" class="server-settings-slider" type="range"
+                            :min="setting.slider.minimum" :max="setting.slider.maximum" :step="setting.slider.step" :value="shown(setting)"
+                            :aria-label="$t(setting.label)" @input="change(setting, ($event.target as HTMLInputElement).value)">
+                          <input :id="'server-setting-' + setting.key"
+                            :type="inputType(setting)"
+                            :inputmode="setting.kind === 'number' ? 'numeric' : undefined"
+                            :value="shown(setting)"
+                            autocomplete="off"
+                            @input="change(setting, ($event.target as HTMLInputElement).value)">
+                          <button v-if="setting.kind === 'secret'" type="button" class="btn btn-sm btn-tone-quiet" @click="toggleReveal(setting.key)" v-i18n>{{ revealed[setting.key] ? 'Hide' : 'Show' }}</button>
+                        </div>
+                        <!-- Saved in the .env file but not yet in effect: the server reads it at its next start -->
+                        <span v-if="pendingRestart(setting.key)" class="server-settings-source">
+                          <strong class="server-settings-pending" v-i18n>Active after restart</strong>
+                        </span>
+                      </div>
+                    </div>
+                  </section>
+                </div>
+              </template>
             </div>
-            <div class="server-settings-field">
-              <label v-if="setting.kind === 'toggle'" class="server-settings-toggle">
-                <input :id="'server-setting-' + setting.key" type="checkbox" :checked="isToggleOn(setting, values[setting.key])" @change="setToggle(setting, ($event.target as HTMLInputElement).checked)">
-              </label>
-              <SegmentedControl v-else-if="setting.kind === 'segmented'" class="server-settings-segmented"
-                :modelValue="values[setting.key] ?? ''" :options="segmentOptions(setting)" @update:modelValue="setValue(setting.key, String($event))" />
-              <ServerSettingImageField v-else-if="setting.kind === 'image'" :inputId="'server-setting-' + setting.key"
-                :value="values[setting.key] ?? ''" @update="setValue(setting.key, $event)" />
-              <ServerSettingChoiceField v-else-if="setting.kind === 'choice'" :inputId="'server-setting-' + setting.key"
-                :value="values[setting.key] ?? ''" :choices="setting.choices ?? []"
-                :image="(choice: string) => setting.choiceImage?.(choice, values) ?? ''" @update="setValue(setting.key, $event)" />
-              <div v-else class="server-settings-input">
-                <input :id="'server-setting-' + setting.key"
-                  :type="inputType(setting)"
-                  :inputmode="setting.kind === 'number' ? 'numeric' : undefined"
-                  :value="values[setting.key]"
-                  :placeholder="setting.placeholder"
-                  autocomplete="off"
-                  @input="setValue(setting.key, ($event.target as HTMLInputElement).value)">
-                <button v-if="setting.kind === 'secret'" type="button" class="btn btn-sm btn-tone-quiet" @click="toggleReveal(setting.key)" v-i18n>{{ revealed[setting.key] ? 'Hide' : 'Show' }}</button>
-              </div>
-              <!-- Saved in the .env file but not yet in effect: the server reads it at its next start -->
-              <span v-if="pendingRestart(setting.key)" class="server-settings-source">
-                <strong class="server-settings-pending" v-i18n>Active after restart</strong>
-              </span>
-            </div>
-          </div>
-          <!-- Below the AI settings: what each AI program can play, so the engine is chosen knowingly -->
-          <AiSupportOverview v-if="selectedGroup === 'AI opponents'" />
+            <!-- Below the AI settings: what each AI program can play, so the engine is chosen knowingly -->
+            <AiSupportOverview v-if="selectedGroup === 'AI opponents'" />
+          </template>
         </div>
       </div>
 
       <!-- Save, then restart: changes only take effect in a new server process -->
-      <section class="games-overview-card server-settings-actions">
+      <section v-if="selectedGroup !== CHAT_TAB" class="games-overview-card server-settings-actions">
         <p class="server-settings-message" :class="{'server-settings-message--error': messageIsError}">{{ message }}</p>
         <button type="button" class="btn btn-tone-quiet" :disabled="!dirty || busy" @click="save" v-i18n>Save</button>
         <button type="button" class="btn btn-primary" :disabled="dirty || busy || !anyPending" @click="restart" v-i18n>Restart server</button>
@@ -82,8 +104,11 @@ import ServerSettingChoiceField from '@/client/components/admin/ServerSettingCho
 import SegmentedControl from '@/client/components/create/SegmentedControl.vue';
 import ServerSettingGrid from '@/client/components/admin/ServerSettingGrid.vue';
 import AiSupportOverview from '@/client/components/admin/AiSupportOverview.vue';
+import AiLoadGraph from '@/client/components/admin/AiLoadGraph.vue';
+import ChatWordsPanel from '@/client/components/admin/ChatWordsPanel.vue';
+import {GridRowLimit} from '@/client/components/admin/ServerSettingGrid.vue';
 import {SegmentOption} from '@/client/components/create/createGameChoices';
-import {translateText} from '@/client/directives/i18n';
+import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 import {
   SERVER_SETTING_GROUPS, SERVER_SETTINGS, ServerSettingDefinition, ServerSettingState, ServerSettingsModel, ServerSettingsUpdate,
 } from '@/common/admin/serverSettings';
@@ -98,7 +123,29 @@ type DataModel = {
   message: string,
   messageIsError: boolean,
   selectedGroup: string,
+  /** Cores of the server, from the live load (AI tab); the AI threads never go above them */
+  processorCores: number | undefined,
 };
+
+/** A block of settings under one heading ('' = none): a table first (settings with a grid position), then rows. */
+type SettingsSection = {title: string, grid: Array<ServerSettingDefinition>, rows: Array<ServerSettingDefinition>};
+
+function settingsSections(settings: ReadonlyArray<ServerSettingDefinition>): Array<SettingsSection> {
+  const sections: Array<SettingsSection> = [];
+  for (const setting of settings) {
+    const title = setting.section ?? '';
+    let section = sections.find((candidate) => candidate.title === title);
+    if (section === undefined) {
+      section = {title, grid: [], rows: []};
+      sections.push(section);
+    }
+    (setting.grid === undefined ? section.rows : section.grid).push(setting);
+  }
+  return sections;
+}
+
+// A tab of its own without .env settings: the words the lobby chat masks, after the limits (both keep players in check)
+const CHAT_TAB = 'Chat filter';
 
 // Boolean settings: the server reads any of these as "on" (stringToBoolean, Boolean())
 function isOnValue(value: string | undefined): boolean {
@@ -107,21 +154,32 @@ function isOnValue(value: string | undefined): boolean {
 
 export default defineComponent({
   name: 'ServerSettingsPanel',
-  components: {ServerSettingImageField, ServerSettingChoiceField, ServerSettingGrid, SegmentedControl, AiSupportOverview},
+  components: {ServerSettingImageField, ServerSettingChoiceField, ServerSettingGrid, SegmentedControl, AiSupportOverview, AiLoadGraph, ChatWordsPanel},
   directives: {dockedTab: vDockedTab},
   data(): DataModel {
-    return {status: 'loading', states: [], values: {}, revealed: {}, busy: false, message: '', messageIsError: false, selectedGroup: SERVER_SETTING_GROUPS[0]};
+    return {status: 'loading', states: [], values: {}, revealed: {}, busy: false, message: '', messageIsError: false, selectedGroup: SERVER_SETTING_GROUPS[0], processorCores: undefined};
   },
   computed: {
+    CHAT_TAB(): string {
+      return CHAT_TAB;
+    },
     groups(): Array<{name: string, settings: Array<ServerSettingDefinition>}> {
-      return SERVER_SETTING_GROUPS.map((name) => ({name, settings: SERVER_SETTINGS.filter((setting) => setting.group === name)}));
+      const groups = SERVER_SETTING_GROUPS.map((name) => ({name, settings: SERVER_SETTINGS.filter((setting) => setting.group === name)}));
+      groups.splice(groups.findIndex(({name}) => name === 'Limits') + 1, 0, {name: CHAT_TAB, settings: []});
+      return groups;
     },
-    // Settings with a row of their own; those of a table come in selectedGridSettings
-    selectedSettings(): Array<ServerSettingDefinition> {
-      return SERVER_SETTINGS.filter((setting) => setting.group === this.selectedGroup && setting.grid === undefined);
+    // More threads than cores only make them wait for each other: the field allows no more (the server cuts it too)
+    gridLimits(): Partial<Record<string, GridRowLimit>> {
+      const cores = this.processorCores;
+      if (cores === undefined) {
+        return {};
+      }
+      return {threads: {maximum: cores, note: translateTextWithParams('This server has ${0} cores: at most ${0} threads.', [String(cores)])}};
     },
-    selectedGridSettings(): Array<ServerSettingDefinition> {
-      return SERVER_SETTINGS.filter((setting) => setting.group === this.selectedGroup && setting.grid !== undefined);
+    // Main column and second column (side settings, e.g. the AI strength), each as blocks in the order of the list
+    columns(): [Array<SettingsSection>, Array<SettingsSection>] {
+      const settings = SERVER_SETTINGS.filter((setting) => setting.group === this.selectedGroup);
+      return [settingsSections(settings.filter((setting) => setting.side !== true)), settingsSections(settings.filter((setting) => setting.side === true))];
     },
     dirty(): boolean {
       return SERVER_SETTINGS.some(({key}) => this.values[key] !== this.configured(key));
@@ -134,6 +192,10 @@ export default defineComponent({
     void this.load();
   },
   methods: {
+    aboveMachineLimit(definition: ServerSettingDefinition, value: string | null): boolean {
+      const limit = definition.grid === undefined ? undefined : this.gridLimits[definition.grid.row]?.maximum;
+      return limit !== undefined && value !== null && value !== '' && Number(value) > limit;
+    },
     // 'changed': edited here but not saved; 'pending': saved, active after the restart
     groupMarker(settings: ReadonlyArray<ServerSettingDefinition>): 'changed' | 'pending' | undefined {
       if (settings.some(({key}) => this.values[key] !== this.configured(key))) {
@@ -173,6 +235,15 @@ export default defineComponent({
     toggleReveal(key: string): void {
       this.revealed = {...this.revealed, [key]: this.revealed[key] !== true};
     },
+    /** The value that applies: the one in the .env, otherwise the default */
+    shown(setting: ServerSettingDefinition): string {
+      const value = this.values[setting.key];
+      return value === undefined || value === '' ? setting.placeholder ?? '' : value;
+    },
+    /** The default itself is stored as no line, so the field keeps following a changed default */
+    change(setting: ServerSettingDefinition, value: string): void {
+      this.setValue(setting.key, value === setting.placeholder ? '' : value);
+    },
     setValue(key: string, value: string): void {
       this.values = {...this.values, [key]: value};
       this.message = '';
@@ -208,7 +279,8 @@ export default defineComponent({
         }
       }
       // Same check as the server: name the fields right away instead of a technical error after saving
-      const invalid = SERVER_SETTINGS.filter((definition) => definition.key in update && !isValidSettingValue(definition, update[definition.key]));
+      const invalid = SERVER_SETTINGS.filter((definition) => definition.key in update &&
+        (!isValidSettingValue(definition, update[definition.key]) || this.aboveMachineLimit(definition, update[definition.key])));
       if (invalid.length > 0) {
         this.showMessage(translateText('Invalid number:') + ' ' + invalid.map((definition) => translateText(definition.label)).join(', '), true);
         return;

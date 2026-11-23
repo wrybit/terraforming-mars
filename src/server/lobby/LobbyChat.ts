@@ -29,7 +29,7 @@ export class LobbyChat {
 
   constructor(
     private readonly clock: () => number = Date.now,
-    private readonly words: () => ReadonlyArray<string> = () => ChatWordList.INSTANCE.get(),
+    private readonly words: () => ReadonlyArray<string> = () => ChatWordList.INSTANCE.allWords(),
     private readonly storage: LobbyStorage = fileStorage(lobbyChatFile()),
   ) {}
 

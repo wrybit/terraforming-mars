@@ -4,7 +4,7 @@
 
 import {COMMON_EXTENSIONS} from '../../genfiles/extensionsCommon';
 import {AI_LEVELS} from '../ai/AiLevel';
-import {DEFAULT_RUST_BOT_STRENGTH, RUST_BOT_STRENGTH_FIELDS, RUST_BOT_STRENGTH_LIMITS, RustBotStrengthField, rustBotStrengthKey} from '../ai/rustBotStrength';
+import {DEFAULT_RUST_BOT_STRENGTH, RUST_BOT_STRENGTH_LIMITS, RUST_BOT_STRENGTH_SLIDERS, RustBotStrengthField, rustBotStrengthKey} from '../ai/rustBotStrength';
 import {DEFAULT_FAVICON_COLOR, DEFAULT_FAVICON_ICON, FAVICON_COLORS, FAVICON_ICONS, FaviconOption, faviconImage} from './favicons';
 
 // image: an address (http… or an uploaded file, see ApiAdminServerLogo) with upload button and preview
@@ -31,13 +31,22 @@ export type ServerSettingDefinition = {
   minimum?: number,
   /** kind 'number': the largest allowed value (default none) */
   maximum?: number,
-  /** Shown in the empty field: the value that applies without a line in the .env */
+  /** The value that applies without a line in the .env; the field shows it as its value (never a grey placeholder) */
   placeholder?: string,
+  /** kind 'number': a slider next to the field over this range (the field itself accepts minimum to maximum) */
+  slider?: {minimum: number, maximum: number, step: number},
   /**
    * Part of a table instead of a row of its own: settings with the same row share one line, one field per column
    * (AI strength: a field for easy, normal and hard)
    */
   grid?: {row: string, column: string},
+  /**
+   * Heading of a block of related settings within the tab (e.g. all waiting times together); settings of one
+   * section follow each other in this list. Translated.
+   */
+  section?: string,
+  /** In the second column on wide screens (AI tab: the strength table next to the general settings) */
+  side?: boolean,
   /** kind 'choice' or 'segmented': the allowed values */
   choices?: ReadonlyArray<ServerSettingChoice>,
   /**
@@ -56,7 +65,7 @@ function faviconChoices(options: ReadonlyArray<FaviconOption>, defaultId: string
   return options.map(({id, label}) => ({value: id === defaultId ? '' : id, label}));
 }
 
-const BASE_SETTING_GROUPS: ReadonlyArray<ServerSettingGroup> = ['Appearance', 'Games', 'Limits', 'AI opponents', 'AI strength', 'Access', 'Technical'];
+const BASE_SETTING_GROUPS: ReadonlyArray<ServerSettingGroup> = ['Appearance', 'Games', 'Limits', 'AI opponents', 'Access', 'Technical'];
 
 // One line per value of the Rust bot, one field per strength (common/ai/rustBotStrength.ts)
 const AI_STRENGTH_ROWS: Record<RustBotStrengthField, {label: string, description: string}> = {
@@ -64,22 +73,30 @@ const AI_STRENGTH_ROWS: Record<RustBotStrengthField, {label: string, description
   threads: {label: 'Threads', description: 'Processor cores per decision. More is faster, not stronger.'},
   horizon: {label: 'Lookahead (moves)', description: 'How far each rollout looks ahead. 0: to the end of the game.'},
   candidates: {label: 'Candidates', description: 'Moves the AI considers at all. Fewer: it overlooks good moves.'},
-  timeLimit: {label: 'Max. thinking time (ms)', description: 'The search stops here. Only a limit, so the AI is equally strong on fast and slow servers.'},
+  timeLimit: {label: 'Thinking time (ms)',
+    description: 'Per move while humans play along: the AI takes this long, the Rust AI searches for this long. Without humans it plays at full speed.'},
   randomness: {label: 'Randomness (%)', description: '0: always the best move. Higher: more often a slightly worse one, never nonsense. Needs a bot that supports it.'},
 };
 
-const AI_STRENGTH_SETTINGS: Array<ServerSettingDefinition> = RUST_BOT_STRENGTH_FIELDS.flatMap((field) => AI_LEVELS.map((level): ServerSettingDefinition => ({
-  key: rustBotStrengthKey(level, field),
-  group: 'AI strength',
-  kind: 'number',
-  live: true,
-  label: AI_STRENGTH_ROWS[field].label,
-  description: AI_STRENGTH_ROWS[field].description,
-  minimum: RUST_BOT_STRENGTH_LIMITS[field].minimum,
-  maximum: RUST_BOT_STRENGTH_LIMITS[field].maximum,
-  placeholder: String(DEFAULT_RUST_BOT_STRENGTH[level][field]),
-  grid: {row: field, column: level},
-})));
+// The strength table: one row per value, one field per strength
+function aiStrengthSettings(fields: ReadonlyArray<RustBotStrengthField>, section: string, side: boolean): Array<ServerSettingDefinition> {
+  return fields.flatMap((field) => AI_LEVELS.map((level): ServerSettingDefinition => ({
+    key: rustBotStrengthKey(level, field),
+    // In the AI tab next to the other AI settings, as a table (ServerSettingGrid.vue)
+    group: 'AI opponents',
+    section,
+    side,
+    kind: 'number',
+    live: true,
+    label: AI_STRENGTH_ROWS[field].label,
+    description: AI_STRENGTH_ROWS[field].description,
+    minimum: RUST_BOT_STRENGTH_LIMITS[field].minimum,
+    maximum: RUST_BOT_STRENGTH_LIMITS[field].maximum,
+    placeholder: String(DEFAULT_RUST_BOT_STRENGTH[level][field]),
+    slider: RUST_BOT_STRENGTH_SLIDERS[field],
+    grid: {row: field, column: level},
+  })));
+}
 
 const BASE_SETTINGS: ReadonlyArray<ServerSettingDefinition> = [
   {key: 'SERVER_NAME', group: 'Appearance', kind: 'text', label: 'Server name',
@@ -88,10 +105,10 @@ const BASE_SETTINGS: ReadonlyArray<ServerSettingDefinition> = [
     description: 'Shown large next to the logo on the admin dashboard. Empty: the server name, otherwise the host name.'},
   {key: 'SERVER_LOGO_IMAGE', group: 'Appearance', kind: 'image', label: 'Logo image',
     description: 'Upload an image or enter its web address (PNG, JPEG, WebP; ideally with a transparent background). Empty: no image.'},
-  {key: 'TITLE_LONG', group: 'Appearance', kind: 'text', label: 'Long tab title',
-    description: 'Browser tab of the start page. Empty: Terraforming Mars.'},
-  {key: 'TITLE_SHORT', group: 'Appearance', kind: 'text', label: 'Short tab title',
-    description: 'End of all other tab titles, e.g. "Cards List | TM". Empty: TM.'},
+  {key: 'TITLE_LONG', group: 'Appearance', kind: 'text', label: 'Long tab title', placeholder: 'Terraforming Mars',
+    description: 'Browser tab of the start page.'},
+  {key: 'TITLE_SHORT', group: 'Appearance', kind: 'text', label: 'Short tab title', placeholder: 'TM',
+    description: 'End of all other tab titles, e.g. "Cards List | TM".'},
   {key: 'FAVICON_ICON', group: 'Appearance', kind: 'choice', label: 'Tab icon',
     description: 'Picture in the browser tab. Empty: Mars.',
     choices: faviconChoices(FAVICON_ICONS, DEFAULT_FAVICON_ICON),
@@ -105,33 +122,34 @@ const BASE_SETTINGS: ReadonlyArray<ServerSettingDefinition> = [
     description: 'Unfinished games created more than this many days ago are deleted (checked every hour). Finished games are never deleted. Empty: never (with PostgreSQL: 10 days).'},
   {key: 'COMPRESS_COMPLETED_GAMES_DAYS', group: 'Games', kind: 'number', minimum: 1, label: 'Shrink finished games after (days)',
     description: 'Finished games keep only their final state after this many days (about 18 MB → 0.1 MB); the states of the single moves are lost. Empty: never.'},
-  {key: 'WAITING_FOR_TIMEOUT', group: 'Games', kind: 'number', label: 'Waiting check interval (ms)',
-    description: 'How often a waiting player asks whether it is their turn again. Empty: 5000.'},
+  {key: 'WAITING_FOR_TIMEOUT', group: 'Games', kind: 'number', label: 'Waiting check interval (ms)', placeholder: '1000',
+    slider: {minimum: 500, maximum: 10000, step: 250},
+    description: 'How often a waiting player asks whether it is their turn again.'},
   {key: 'GAME_CACHE', group: 'Games', kind: 'text', label: 'Game memory',
     description: 'When games are removed from memory, e.g. sweep=auto;eviction_age=15m;idle_age=1h;sweep_freq=5m. Empty: never.'},
 
   {key: 'GAME_QUOTA', group: 'Limits', kind: 'text', label: 'New games per address',
     description: 'How many games one address may create, e.g. {"limit":3,"per":"10m"} or a list of such limits. Empty: unlimited.'},
-  {key: 'MIN_RESPONSE_INTERVAL_MS', group: 'Limits', kind: 'number', label: 'Minimum time between inputs (ms)',
-    description: 'Faster inputs of a player are refused (against bots). Empty or 0: no limit.'},
+  {key: 'MIN_RESPONSE_INTERVAL_MS', group: 'Limits', kind: 'number', label: 'Minimum time between inputs (ms)', placeholder: '0',
+    slider: {minimum: 0, maximum: 2000, step: 50},
+    description: 'Faster inputs of a player are refused (against bots). 0: no limit.'},
   {key: 'IP_BLOCKLIST', group: 'Limits', kind: 'text', label: 'Blocked addresses',
     description: 'IP addresses separated by spaces that get no answer.'},
 
-  {key: 'AI_MOVE_DELAY_MS', group: 'AI opponents', kind: 'number', label: 'Pause before follow-up questions (ms)',
-    description: 'Where to place a tile, how to pay … Empty: 1000.'},
-  {key: 'AI_ACTION_DELAY_MS', group: 'AI opponents', kind: 'number', label: 'Pause before a new action (ms)',
-    description: 'Thinking time of a hard AI (normal: two thirds, easy: one third). Empty: 3000.'},
-  {key: 'AI_ENGINE', group: 'AI opponents', kind: 'segmented', live: true, label: 'AI engine',
+  {key: 'AI_ENGINE', group: 'AI opponents', section: 'AI program', kind: 'segmented', live: true, label: 'AI engine',
     choices: [{value: '', label: 'TypeScript'}, {value: 'rust', label: 'Rust'}],
     description: 'Program that plays the AI seats of new games. Running games keep theirs. Takes effect at once.'},
-  {key: 'AI_TYPESCRIPT_FALLBACK', group: 'AI opponents', kind: 'toggle', defaultOn: true, live: true, label: 'TypeScript as a stand-in',
+  {key: 'AI_TYPESCRIPT_FALLBACK', group: 'AI opponents', section: 'AI program', kind: 'toggle', defaultOn: true, live: true, label: 'TypeScript as a stand-in',
     description: 'On: settings the Rust AI cannot play get the TypeScript AI. Off: they count as not compatible with the AI.'},
-  {key: 'AI_RUST_EXTRA_WAIT_MS', group: 'AI opponents', kind: 'number', live: true, label: 'Extra waiting time for the Rust AI (ms)',
-    description: 'On top of its thinking time. Without an answer by then the TypeScript AI makes this decision. Empty: 10000.'},
-  ...AI_STRENGTH_SETTINGS,
-  {key: 'AI_DECISION_LOG_DIR', group: 'AI opponents', kind: 'text', label: 'Folder for decision logs',
+  {key: 'AI_RUST_EXTRA_WAIT_MS', group: 'AI opponents', section: 'AI program', kind: 'number', live: true, label: 'Fallback to TypeScript after (ms)',
+    placeholder: '10000', slider: {minimum: 3000, maximum: 25000, step: 500},
+    description: 'Extra time on top of the thinking time. Without an answer of the Rust AI by then, the TypeScript AI makes this decision.'},
+  // Per strength: the thinking time first (it also paces the TypeScript AI), then how much the Rust AI searches,
+  // the hardware (threads) last
+  ...aiStrengthSettings(['timeLimit', 'rollouts', 'candidates', 'horizon', 'randomness', 'threads'], 'Strength of the Rust AI', true),
+  {key: 'AI_DECISION_LOG_DIR', group: 'AI opponents', section: 'Training data', kind: 'text', label: 'Folder for decision logs',
     description: 'The AI writes every decision there (for training). Empty: no logs.'},
-  {key: 'AI_TRAINING_FEED', group: 'AI opponents', kind: 'text', label: 'AI test runs in the lobby',
+  {key: 'AI_TRAINING_FEED', group: 'AI opponents', section: 'Training data', kind: 'text', label: 'AI test runs in the lobby',
     description: 'Address of the AI test run feed with the name of this computer, e.g. http://…/api/lobby-feed?instance=ak1. The lobby shows its running games and the last finished ones. Empty: none.'},
 
   {key: 'SERVER_ID', group: 'Access', kind: 'secret', label: 'Admin passphrase (serverId)',
@@ -142,12 +160,12 @@ const BASE_SETTINGS: ReadonlyArray<ServerSettingDefinition> = [
     description: 'Login with Discord (experimental).'},
   {key: 'DISCORD_ADMIN_USER_IDS', group: 'Access', kind: 'text', label: 'Discord admins',
     description: 'Discord IDs separated by semicolons that may use the admin pages without the passphrase.'},
-  {key: 'SESSION_DURATION', group: 'Access', kind: 'text', label: 'Login duration',
-    description: 'How long a login (admin and Discord) stays valid, e.g. 30d or 12h. Empty: 30d.'},
+  {key: 'SESSION_DURATION', group: 'Access', kind: 'text', label: 'Login duration', placeholder: '30d',
+    description: 'How long a login (admin and Discord) stays valid, e.g. 30d or 12h.'},
   {key: 'URL_ROOT', group: 'Access', kind: 'text', label: 'Public address',
     description: 'Root address of this server, used for login redirects.'},
 
-  {key: 'PORT', group: 'Technical', kind: 'number', label: 'Port',
+  {key: 'PORT', group: 'Technical', kind: 'number', label: 'Port', placeholder: '8080',
     description: 'Port the server listens on. In Docker it must stay 8080.'},
   {key: 'HOST', group: 'Technical', kind: 'text', label: 'Host',
     description: 'Network interface to listen on. Empty: all.'},
@@ -159,12 +177,12 @@ const BASE_SETTINGS: ReadonlyArray<ServerSettingDefinition> = [
     description: 'When set, games are saved as JSON files instead of the database. Switching loses access to the games of the other storage.'},
   {key: 'POSTGRES_HOST', group: 'Technical', kind: 'secret', label: 'PostgreSQL connection',
     description: 'Connection string of a PostgreSQL database. Empty: SQLite file. Switching loses access to the games of the other storage.'},
-  {key: 'POSTGRES_TRIM_COUNT', group: 'Technical', kind: 'number', label: 'PostgreSQL rows to trim',
-    description: 'Only with PostgreSQL. Empty: 10.'},
+  {key: 'POSTGRES_TRIM_COUNT', group: 'Technical', kind: 'number', label: 'PostgreSQL rows to trim', placeholder: '10',
+    description: 'Only with PostgreSQL.'},
   {key: 'DB_COMPRESS_ON_WRITE', group: 'Technical', kind: 'toggle', label: 'Compress when saving',
     description: 'Only with PostgreSQL.'},
-  {key: 'ASSET_CACHE_MAX_AGE', group: 'Technical', kind: 'number', label: 'Browser cache for images and fonts (s)',
-    description: 'Empty: 0.'},
+  {key: 'ASSET_CACHE_MAX_AGE', group: 'Technical', kind: 'number', label: 'Browser cache for images and fonts (s)', placeholder: '0',
+    description: 'How long browsers keep images and fonts without asking the server again. 0: they always ask.'},
   {key: 'THROW_STATE_ERRORS', group: 'Technical', kind: 'toggle', label: 'Stop on state errors',
     description: 'For development: inconsistent game states raise an error instead of a log line.'},
 ];
