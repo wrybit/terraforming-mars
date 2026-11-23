@@ -50,6 +50,12 @@ export function stopThinking(player: IPlayer, input: PlayerInput): void {
   }
 }
 
+/** The model with the game's AI players deciding right now, if any (GET /api/waitingfor, /api/player, moves) */
+export function withAiThinking<T extends object>(gameId: string, model: T): T & {aiThinking?: Array<AiThinkingModel>} {
+  const thinking = thinkingIn(gameId);
+  return thinking.length === 0 ? model : {...model, aiThinking: thinking};
+}
+
 /** The AI players of a game deciding right now (empty: none). */
 export function thinkingIn(gameId: string): Array<AiThinkingModel> {
   const now = Date.now();

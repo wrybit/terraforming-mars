@@ -1,10 +1,12 @@
 // Font size of log entries; card, space and tile names in them (bold, uppercase) 1px smaller
 @log-font-size: 15px;
 @log-pill-font-size: @log-font-size - 1px;
-// Space between the box's inner edge and its content, the same on every side: above and beside the filter field,
-// beside the generation titles and inside the rows (their padding, so the hover background keeps its room) – the
-// texts line up with the field (on top of the box's own padding)
-@log-content-inset: 4px;
+// Distance from the box's edge to its content, the same on every side (Jens, 23 Nov 2026): around the filter field
+// (also below it, to the stream), beside the generation titles and row texts, below the stream
+@log-box-inset: 8px;
+@log-panel-padding: 5px;
+// What the content adds to the box's padding; inside the rows it is their padding, so the hover background keeps its room
+@log-content-inset: @log-box-inset - @log-panel-padding;
 
 .log-generations {
   display: flex;
@@ -78,7 +80,7 @@
   height: 240px;
   max-height: 240px;
   font-size: @log-font-size;
-  padding: 5px;
+  padding: @log-panel-padding;
   max-width: 860px;
   position: relative;
 
@@ -99,7 +101,7 @@
     // (it only shows while scrolled back in the history)
     flex: 1 1 auto;
     min-height: 0;
-    padding: 0;
+    padding: 0 0 @log-content-inset;
     scrollbar-gutter: stable;
   }
 
@@ -835,7 +837,7 @@ each(@players, {
 // Within a group the gaps are small, between groups larger (proximity), so the groups read as units
 .log-filter {
   flex: none;
-  padding: @log-content-inset @log-content-inset 6px;
+  padding: @log-content-inset @log-content-inset @log-box-inset;
 }
 
 .log-filter-bar {

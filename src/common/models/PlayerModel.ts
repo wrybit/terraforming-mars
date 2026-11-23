@@ -8,6 +8,7 @@ import {PlayerId, ParticipantId} from '../Types';
 import {CardName} from '../cards/CardName';
 import {Resource} from '../Resource';
 import {PartyName} from '../turmoil/PartyName';
+import {AiThinkingModel} from '../ai/AiThinking';
 import {Agenda} from '../turmoil/Types';
 import {Tag} from '../cards/Tag';
 import {UnderworldPlayerData} from '../underworld/UnderworldPlayerData';
@@ -116,4 +117,7 @@ export interface PlayerViewModel extends ViewModel {
   requestId: string | undefined;
   thisPlayer: PublicPlayerModel;
   waitingFor: PlayerInputModel | undefined;
+  // AI players deciding right now (server aiThinking.ts). Sent with every view, not only with the 1 s poll: a follow-up
+  // decision takes about 1 s, so the poll often came after the move and the log never showed the thinking line.
+  aiThinking?: Array<AiThinkingModel>;
 }
