@@ -2264,5 +2264,6 @@
   "The notification was handed to the system. If no notification appears, the system blocks it: allow notifications for this browser in the system settings and check Focus or Do Not Disturb.": "Известието беше предадено на системата. Ако не се появи известие, системата го блокира: разреши известията за този браузър в системните настройки и провери режим Фокус или Не безпокойте.",
   "Not shown: this tab was in front. In the game that is intended; switch to another app or tab during the countdown.": "Не е показано: този раздел беше отпред. В играта това е нарочно; по време на обратното броене премини към друго приложение или раздел.",
   "Notifications are not allowed for this site: allow them in the browser and test again.": "Известията не са разрешени за този сайт: разреши ги в браузъра и тествай отново.",
-  "The browser refused to show the notification: check the notification permission of this site.": "Браузърът отказа да покаже известието: провери разрешението за известия на този сайт."
+  "The browser refused to show the notification: check the notification permission of this site.": "Браузърът отказа да покаже известието: провери разрешението за известия на този сайт.",
+  "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "Стойност: средна преднина в точки пред най-добрия противник в до ${0} пробни игри на вариант (по-високата е по-добра)."
 }

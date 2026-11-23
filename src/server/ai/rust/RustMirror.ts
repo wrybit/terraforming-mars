@@ -18,6 +18,7 @@ import {RustFallbackLog, decisionLabel, rustFallbackLog} from './rustFallbackLog
 import {RandomRecord, recordRandom, takeRandom} from './rustRandom';
 import {steps} from './rustSteps';
 import {responseFor} from './rustContract';
+import {RustDecisionRecord} from './rustDecisionTrace';
 import {RUST_BOT_BINARY, RUST_BOT_DATA, RUST_BOT_EVENTS} from './rustBotPaths';
 
 const BINARY = RUST_BOT_BINARY;
@@ -26,6 +27,9 @@ const EVENT_DIRECTORY = RUST_BOT_EVENTS;
 
 
 type StoredEvent = {saveId: number, event: Record<string, unknown>};
+
+/** A Rust move; `traces` only when asked for (analysis games): the bot's decision records (RustDecisionRecord). */
+export type RustDecision = {response: InputResponse, traces?: Array<RustDecisionRecord>};
 
 // A bot that keeps dying while it is rebuilt will not recover in this game
 const MAX_REBUILD_FAILURES = 3;
@@ -192,14 +196,24 @@ export class RustMirror {
    * decision, rebuilt from the event file; every such fallback is recorded (rustFallbackLog).
    */
   public async decide(player: IPlayer, input: PlayerInput, level: AiLevel): Promise<InputResponse | undefined> {
+    return (await this.decideTraced(player, input, level, false))?.response;
+  }
+
+  /**
+   * Like `decide`; with `trace` (analysis games) the bot also returns every option it weighed with its search values,
+   * one record per step of the chain (bot/record.rs). The move is the same either way: `decide` in Rust is the traced
+   * search without its trace.
+   */
+  public async decideTraced(player: IPlayer, input: PlayerInput, level: AiLevel, trace: boolean): Promise<RustDecision | undefined> {
     if (this.broken !== undefined || !RustMirror.installed()) {
       return undefined;
     }
     const seat = this.game.players.indexOf(player);
     try {
       const bot = await this.botFor(level);
-      const answer = await this.enqueue(() => bot.request({decide: {player: seat}}, rustDecisionTimeout(level)));
-      return responseFor(input, answer.chain);
+      const request = trace ? {decide: {player: seat, trace: true}} : {decide: {player: seat}};
+      const answer = await this.enqueue(() => bot.request(request, rustDecisionTimeout(level)));
+      return {response: responseFor(input, answer.chain), traces: Array.isArray(answer.traces) ? answer.traces : undefined};
     } catch (error) {
       this.recordFallback(input, (error as Error).message);
       return undefined;

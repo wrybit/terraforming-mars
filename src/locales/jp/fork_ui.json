@@ -1690,5 +1690,6 @@
   "The notification was handed to the system. If no notification appears, the system blocks it: allow notifications for this browser in the system settings and check Focus or Do Not Disturb.": "通知はシステムに渡されました。通知が出ない場合はシステムがブロックしています：システム設定でこのブラウザの通知を許可し、集中モードやおやすみモードを確認してください。",
   "Not shown: this tab was in front. In the game that is intended; switch to another app or tab during the countdown.": "表示されませんでした：このタブが前面にありました。ゲームでは意図した動作です。カウントダウン中に別のアプリやタブに切り替えてください。",
   "Notifications are not allowed for this site: allow them in the browser and test again.": "このサイトでは通知が許可されていません：ブラウザで許可してからもう一度テストしてください。",
-  "The browser refused to show the notification: check the notification permission of this site.": "ブラウザが通知の表示を拒否しました：このサイトの通知許可を確認してください。"
+  "The browser refused to show the notification: check the notification permission of this site.": "ブラウザが通知の表示を拒否しました：このサイトの通知許可を確認してください。",
+  "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "値：選択肢ごとに最大 ${0} 回の試行ゲームでの、最強の相手に対する平均得点差（高いほど良い）。"
 }
