@@ -1492,5 +1492,6 @@
   "Extra time on top of the thinking time. Without an answer of the Rust AI by then, the TypeScript AI makes this decision.": "A gondolkodási időn felül. Ha addig nem válaszol a Rust-AI, a TypeScript-AI dönt.",
   "How long a login (admin and Discord) stays valid, e.g. 30d or 12h.": "Meddig érvényes egy bejelentkezés (admin és Discord), pl. 30d vagy 12h.",
   "Faster inputs of a player are refused (against bots). 0: no limit.": "A játékos gyorsabb bevitelei elutasításra kerülnek (botok ellen). 0: nincs korlát.",
-  "How long browsers keep images and fonts without asking the server again. 0: they always ask.": "Mennyi ideig tartják meg a böngészők a képeket és betűtípusokat a szerver újbóli megkérdezése nélkül. 0: mindig kérdeznek."
+  "How long browsers keep images and fonts without asking the server again. 0: they always ask.": "Mennyi ideig tartják meg a böngészők a képeket és betűtípusokat a szerver újbóli megkérdezése nélkül. 0: mindig kérdeznek.",
+  "Solo (player count)": "Szóló"
 }
