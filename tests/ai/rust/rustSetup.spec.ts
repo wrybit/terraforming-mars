@@ -2,7 +2,9 @@ import {expect} from 'chai';
 import {DEFAULT_GAME_OPTIONS, GameOptions} from '../../../src/server/game/GameOptions';
 import {BoardName} from '../../../src/common/boards/BoardName';
 import {RandomMAOptionType} from '../../../src/common/ma/RandomMAOptionType';
-import {rustOptionsText} from '../../../src/server/ai/rust/rustSetup';
+import {rustOptionsText, setupOf} from '../../../src/server/ai/rust/rustSetup';
+import {Game} from '../../../src/server/Game';
+import {TestPlayer} from '../../TestPlayer';
 
 function options(changes: Partial<GameOptions>): GameOptions {
   return {...DEFAULT_GAME_OPTIONS, preludeExtension: true, draftVariant: true, ...changes};
@@ -28,5 +30,13 @@ describe('rustOptionsText', () => {
     expect(rustOptionsText(options({aresExtension: true}), 2)).deep.eq({unsupported: 'aresExtension'});
     expect(rustOptionsText(options({moonExpansion: true}), 2)).deep.eq({unsupported: 'moonExpansion'});
     expect(rustOptionsText(options({bannedCards: ['Algae' as any]}), 2)).deep.eq({unsupported: 'custom card or milestone lists'});
+  });
+});
+
+describe('setupOf', () => {
+  it('names the first player TS drew, so the Rust game starts with the same seat', () => {
+    const players = [TestPlayer.BLUE.newPlayer(), TestPlayer.ORANGE.newPlayer()];
+    const game = Game.newInstance('game-first-player', players, players[1], 'spectator-first-player');
+    expect(setupOf(game, '', []).firstPlayer).eq(1);
   });
 });

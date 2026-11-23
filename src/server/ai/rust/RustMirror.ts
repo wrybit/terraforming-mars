@@ -73,6 +73,8 @@ export class RustMirror {
   // Requests run one after the other: events must reach the bot in game order
   private queue: Promise<unknown> = Promise.resolve();
   private broken: string | undefined = undefined;
+  // the event file cannot be written: nothing more is recorded
+  private fileBroken = false;
   // Bots in a row that died while being rebuilt; at MAX_REBUILD_FAILURES the TypeScript AI plays the rest of the game
   private rebuildFailures = 0;
   private readonly events: Array<StoredEvent>;
@@ -137,6 +139,7 @@ export class RustMirror {
       fs.writeFileSync(RustMirror.file(game.id), [{setup: this.setup}, ...kept].map((line) => JSON.stringify(line)).join('\n') + '\n');
     } catch (error) {
       this.broken = `event file: ${(error as Error).message}`;
+      this.fileBroken = true;
     }
     for (const bot of this.bots.values()) {
       bot.close();
@@ -146,7 +149,8 @@ export class RustMirror {
 
   /** An answered input of any player: kept and passed on to the running bots. */
   public processed(player: IPlayer, input: PlayerInput, response: InputResponse, saveId: number): void {
-    if (this.broken !== undefined) {
+    // A game given to the TypeScript AI keeps its event file complete: after a reload its mirror is rebuilt from it
+    if (this.fileBroken) {
       return;
     }
     const event = {player: this.game.players.indexOf(player), steps: steps(input, response), ...takeRandom(this.random)};
@@ -156,6 +160,10 @@ export class RustMirror {
       fs.appendFileSync(RustMirror.file(this.game.id), JSON.stringify(stored) + '\n');
     } catch (error) {
       this.broken = `event file: ${(error as Error).message}`;
+      this.fileBroken = true;
+      return;
+    }
+    if (this.broken !== undefined) {
       return;
     }
     for (const [level, bot] of this.bots) {

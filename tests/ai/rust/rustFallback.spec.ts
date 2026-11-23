@@ -99,6 +99,18 @@ describe('Rust AI fallback', () => {
     mirror.close();
   });
 
+  it('keeps recording the game after giving it to the TypeScript AI, so a reload rebuilds it completely', async () => {
+    useFakeBot('dead');
+    const {game, player, mirror} = mirrorOf();
+    for (let decision = 0; decision < 3; decision++) {
+      await mirror.decide(player, new SelectOption('Pass'), 'easy');
+    }
+    mirror.processed(player, new SelectOption('Pass'), {type: 'option'}, game.lastSaveId);
+    const lines = fs.readFileSync(path.join(folder, `${game.id}.jsonl`), 'utf8').split('\n').filter((line) => line !== '');
+    expect(lines).has.length(2);
+    mirror.close();
+  });
+
   it('plays the TypeScript AI\'s decision when the game refuses the Rust answer, and records it', () => {
     const input = new SelectOption('Pass');
     const processed: Array<InputResponse> = [];
