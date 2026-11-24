@@ -33,6 +33,8 @@ export type CubeType = 'white' | 'black' | 'credit';
 
 export type DifficultyLevel = 'easy' | 'normal' | 'hard' | 'brutal';
 
+// Upstream turned this into a const array with its MarsBot rework (#8761); keep the enum until that sync.
+// eslint-disable-next-line no-restricted-syntax
 export enum BonusCardId {
   // Base game (B01-B08)
   B01_METEOR_SHOWER = 'B01',
