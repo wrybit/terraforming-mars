@@ -65,4 +65,17 @@ describe('TradeColony', () => {
     expect(receipt).contains('+10');
     expect(receipt).contains('Track +2 before trading');
   });
+
+  it('does not preview a track raise for colonies the player cannot trade with', () => {
+    const playerView = fakePlayerViewModel({
+      game: fakeGameModel({colonies: [luna, io]}),
+      thisPlayer: fakePublicPlayerModel({megacredits: 20, energy: 4, colonyTradeOffset: 2}),
+    });
+    const wrapper = mount(TradeColony, {...globalConfig, props: {playerView, playerinput: tradeModel(), onsave: () => {}, showsave: true}});
+
+    // Io is visited, so it is not offered and keeps its plain track value
+    const offer = wrapper.find('[data-test="trade-offer-Io"]');
+    expect(offer.text()).not.contains('Track +');
+    expect(wrapper.find('[data-test="trade-offer-Luna"]').text()).contains('Track +2 before trading');
+  });
 });
