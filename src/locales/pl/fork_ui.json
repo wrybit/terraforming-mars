@@ -2065,7 +2065,7 @@
   "AI engine": "Silnik AI",
   "Program that plays the AI seats of new games. Running games keep theirs. Takes effect at once.": "Program grający na miejscach AI w nowych partiach. Trwające partie zachowują swój. Działa od razu.",
   "TypeScript as a stand-in": "TypeScript jako zastępstwo",
-  "On: settings the Rust AI cannot play get the TypeScript AI. Off: they count as not compatible with the AI.": "Wł.: ustawienia, których AI Rust nie umie, dostają AI TypeScript. Wył.: uznaje się je za niezgodne z AI.",
+  "On: settings the Rust AI cannot play get the TypeScript AI, and it decides when the Rust AI drops out mid-game. Off: such settings count as not compatible with the AI; mid-game a standard move decides.": "Wł.: ustawienia, których AI Rust nie umie, dostają AI TypeScript, a ona decyduje, gdy AI Rust zawiedzie w trakcie gry. Wył.: takie ustawienia uznaje się za niezgodne z AI; w trakcie gry decyduje ruch standardowy.",
   "Rust AI fallbacks": "Zastępstwa AI Rust",
   "Last 24 hours": "Ostatnie 24 godziny",
   "Decision": "Decyzja",

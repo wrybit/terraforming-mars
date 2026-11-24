@@ -1520,7 +1520,7 @@
   "AI engine": "AI 엔진",
   "Program that plays the AI seats of new games. Running games keep theirs. Takes effect at once.": "새 게임의 AI 자리를 플레이하는 프로그램. 진행 중인 게임은 기존 것을 유지합니다. 즉시 적용.",
   "TypeScript as a stand-in": "TypeScript 대체",
-  "On: settings the Rust AI cannot play get the TypeScript AI. Off: they count as not compatible with the AI.": "켜기: Rust AI가 못 하는 설정은 TypeScript AI가 맡습니다. 끄기: AI와 호환되지 않는 것으로 봅니다.",
+  "On: settings the Rust AI cannot play get the TypeScript AI, and it decides when the Rust AI drops out mid-game. Off: such settings count as not compatible with the AI; mid-game a standard move decides.": "켜기: Rust AI가 못 하는 설정은 TypeScript AI가 맡고, 게임 도중 Rust AI가 멈추면 TypeScript AI가 결정합니다. 끄기: 그런 설정은 AI와 호환되지 않는 것으로 보고, 게임 도중에는 기본 수가 결정합니다.",
   "Rust AI fallbacks": "Rust AI 대체",
   "Last 24 hours": "최근 24시간",
   "Decision": "결정",

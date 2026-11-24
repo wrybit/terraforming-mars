@@ -2252,7 +2252,7 @@
   "AI engine": "AI 引擎",
   "Program that plays the AI seats of new games. Running games keep theirs. Takes effect at once.": "为新对局的 AI 席位下棋的程序。进行中的对局保留原程序。立即生效。",
   "TypeScript as a stand-in": "TypeScript 作为替补",
-  "On: settings the Rust AI cannot play get the TypeScript AI. Off: they count as not compatible with the AI.": "开：Rust AI 不支持的设置改用 TypeScript AI。关：这些设置视为与 AI 不兼容。",
+  "On: settings the Rust AI cannot play get the TypeScript AI, and it decides when the Rust AI drops out mid-game. Off: such settings count as not compatible with the AI; mid-game a standard move decides.": "开：Rust AI 不支持的设置改用 TypeScript AI，Rust AI 在对局中途失效时也由它决定。关：这些设置视为与 AI 不兼容；对局中途由标准走法决定。",
   "Rust AI fallbacks": "Rust AI 回退",
   "Last 24 hours": "最近 24 小时",
   "Decision": "决定",

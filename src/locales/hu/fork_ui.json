@@ -1450,7 +1450,7 @@
   "AI engine": "AI-motor",
   "Program that plays the AI seats of new games. Running games keep theirs. Takes effect at once.": "Az új játszmák AI-helyein játszó program. A futó játszmák megtartják a sajátjukat. Azonnal érvényes.",
   "TypeScript as a stand-in": "TypeScript helyettesként",
-  "On: settings the Rust AI cannot play get the TypeScript AI. Off: they count as not compatible with the AI.": "Be: a Rust AI által nem ismert beállítások a TypeScript AI-t kapják. Ki: ezek nem kompatibilisek az AI-val.",
+  "On: settings the Rust AI cannot play get the TypeScript AI, and it decides when the Rust AI drops out mid-game. Off: such settings count as not compatible with the AI; mid-game a standard move decides.": "Be: a Rust AI által nem ismert beállítások a TypeScript AI-t kapják, és az dönt, ha a Rust AI játék közben kiesik. Ki: ezek a beállítások nem kompatibilisek az AI-val; játék közben egy alaplépés dönt.",
   "Rust AI fallbacks": "Rust AI-visszaesések",
   "Last 24 hours": "Elmúlt 24 óra",
   "Decision": "Döntés",

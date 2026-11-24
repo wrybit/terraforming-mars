@@ -144,7 +144,7 @@ describe('Rust AI fallback', () => {
     } as any;
     const reasons: Array<string> = [];
     const typescript = {type: 'option'} as InputResponse;
-    processWithFallback(player, input, {chosen: {type: 'bad'} as unknown as InputResponse, fromRust: true}, () => typescript, (reason) => reasons.push(reason));
+    processWithFallback(player, input, {chosen: {type: 'bad'} as unknown as InputResponse, fromRust: true}, [{name: 'typescript', answer: () => typescript}], (reason) => reasons.push(reason));
     expect(processed).deep.eq([typescript]);
     expect(reasons).deep.eq(['the game refused its answer: not an option']);
   });
