@@ -7,7 +7,13 @@ services:
       - "8080:8080"
     security_opt:
       - no-new-privileges:true
+    environment:
+      # Optional Rust AI: unpack its release into ./db/rust-ai on the host (same folder as without Docker).
+      # Missing or empty folder -> the built-in AI plays.
+      RUST_BOT_BINARY: /opt/rust-ai/bot
+      RUST_BOT_DATA: /opt/rust-ai/data
     volumes:
       - tm-db:/usr/src/app/db
+      - ./db/rust-ai:/opt/rust-ai:ro
 volumes:
   tm-db:
