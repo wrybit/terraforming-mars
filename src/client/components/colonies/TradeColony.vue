@@ -224,8 +224,9 @@ export default defineComponent({
       }
       return parts.join(' · ');
     },
+    // Only colonies this player can trade with rise; inactive or visited ones keep their plain track value
     preview(colony: ColonyView): TradePreview {
-      return tradePreview(colony, this.tradeOffset);
+      return tradePreview(colony, this.isTradeable(colony) ? this.tradeOffset : 0);
     },
     // Explains why the preview is higher than the value under the track marker
     tradeBonusText(preview: TradePreview): string {
