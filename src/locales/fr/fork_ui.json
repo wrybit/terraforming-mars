@@ -1369,5 +1369,7 @@
   "Not shown: this tab was in front. In the game that is intended; switch to another app or tab during the countdown.": "Non affichée : cet onglet était au premier plan. En jeu, c’est voulu ; passe à une autre app ou un autre onglet pendant le compte à rebours.",
   "Notifications are not allowed for this site: allow them in the browser and test again.": "Les notifications ne sont pas autorisées pour ce site : autorise-les dans le navigateur et teste à nouveau.",
   "The browser refused to show the notification: check the notification permission of this site.": "Le navigateur a refusé d’afficher la notification : vérifie l’autorisation de notifications de ce site.",
-  "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "Valeur : avance moyenne en points sur le meilleur adversaire sur jusqu'à ${0} parties d'essai par option (plus c'est haut, mieux c'est)."
+  "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "Valeur : avance moyenne en points sur le meilleur adversaire sur jusqu'à ${0} parties d'essai par option (plus c'est haut, mieux c'est).",
+  "Track +${0} before trading": "Piste +${0} avant de commercer",
+  "optional": "facultatif"
 }

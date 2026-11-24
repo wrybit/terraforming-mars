@@ -1474,5 +1474,7 @@
   "Not shown: this tab was in front. In the game that is intended; switch to another app or tab during the countdown.": "Не показано: ця вкладка була на передньому плані. У грі так і задумано; під час зворотного відліку перейдіть до іншої програми чи вкладки.",
   "Notifications are not allowed for this site: allow them in the browser and test again.": "Сповіщення для цього сайту не дозволені: дозвольте їх у браузері й перевірте знову.",
   "The browser refused to show the notification: check the notification permission of this site.": "Браузер відмовився показати сповіщення: перевірте дозвіл сповіщень для цього сайту.",
-  "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "Значення: середня перевага в очках над найкращим суперником у до ${0} пробних партіях на варіант (що вище, то краще)."
+  "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "Значення: середня перевага в очках над найкращим суперником у до ${0} пробних партіях на варіант (що вище, то краще).",
+  "Track +${0} before trading": "Трек +${0} перед торгівлею",
+  "optional": "необов'язково"
 }

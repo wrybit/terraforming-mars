@@ -1499,5 +1499,7 @@
   "Not shown: this tab was in front. In the game that is intended; switch to another app or tab during the countdown.": "Nem jelent meg: ez a lap elöl volt. A játékban ez a szándékos viselkedés; a visszaszámlálás alatt válts másik alkalmazásra vagy lapra.",
   "Notifications are not allowed for this site: allow them in the browser and test again.": "Ennél az oldalnál nincsenek engedélyezve az értesítések: engedélyezd őket a böngészőben, és teszteld újra.",
   "The browser refused to show the notification: check the notification permission of this site.": "A böngésző nem volt hajlandó megjeleníteni az értesítést: ellenőrizd az oldal értesítési engedélyét.",
-  "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "Érték: átlagos pontelőny a legjobb ellenféllel szemben opciónként legfeljebb ${0} próbajátszmában (a magasabb jobb)."
+  "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "Érték: átlagos pontelőny a legjobb ellenféllel szemben opciónként legfeljebb ${0} próbajátszmában (a magasabb jobb).",
+  "Track +${0} before trading": "Sáv +${0} kereskedés előtt",
+  "optional": "nem kötelező"
 }

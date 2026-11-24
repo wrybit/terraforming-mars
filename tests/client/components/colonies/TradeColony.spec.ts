@@ -47,4 +47,22 @@ describe('TradeColony', () => {
     (wrapper.vm as any).saveData();
     expect(saved).deep.eq({type: 'and', responses: [{type: 'or', index: 1, response: {type: 'option'}}, {type: 'colony', colonyName: 'Luna'}]});
   });
+
+  it('previews the track raise from the player\'s trade offset', async () => {
+    const playerView = fakePlayerViewModel({
+      game: fakeGameModel({colonies: [luna]}),
+      thisPlayer: fakePublicPlayerModel({megacredits: 20, energy: 4, colonyTradeOffset: 2}),
+    });
+    const wrapper = mount(TradeColony, {...globalConfig, props: {playerView, playerinput: tradeModel(), onsave: () => {}, showsave: true}});
+
+    // Luna at track 2 gives 4 M€, two steps higher it gives 10 M€
+    const offer = wrapper.find('[data-test="trade-offer-Luna"]');
+    expect(offer.text()).contains('+10');
+    expect(offer.text()).contains('Track +2 before trading');
+
+    await offer.trigger('click');
+    const receipt = wrapper.find('.trade-colony__receipt').text();
+    expect(receipt).contains('+10');
+    expect(receipt).contains('Track +2 before trading');
+  });
 });

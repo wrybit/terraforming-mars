@@ -2114,5 +2114,7 @@
   "Not shown: this tab was in front. In the game that is intended; switch to another app or tab during the countdown.": "Nie wyświetlono: ta karta była na wierzchu. W grze tak ma być; podczas odliczania przełącz się na inną aplikację lub kartę.",
   "Notifications are not allowed for this site: allow them in the browser and test again.": "Powiadomienia są dla tej strony niedozwolone: zezwól na nie w przeglądarce i przetestuj ponownie.",
   "The browser refused to show the notification: check the notification permission of this site.": "Przeglądarka odmówiła wyświetlenia powiadomienia: sprawdź zgodę na powiadomienia dla tej strony.",
-  "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "Wartość: średnia przewaga punktowa nad najlepszym przeciwnikiem w maks. ${0} partiach próbnych na opcję (wyżej znaczy lepiej)."
+  "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "Wartość: średnia przewaga punktowa nad najlepszym przeciwnikiem w maks. ${0} partiach próbnych na opcję (wyżej znaczy lepiej).",
+  "Track +${0} before trading": "Tor +${0} przed handlem",
+  "optional": "opcjonalnie"
 }
