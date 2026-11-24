@@ -1571,5 +1571,5 @@
   "The browser refused to show the notification: check the notification permission of this site.": "브라우저가 알림 표시를 거부했습니다: 이 사이트의 알림 권한을 확인하세요.",
   "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "값: 선택지당 최대 ${0}번의 시험 게임에서 가장 강한 상대보다 앞선 평균 점수 (높을수록 좋음).",
   "Track +${0} before trading": "교역 전 트랙 +${0}",
-  "optional": "선택 사항"
+  "Track +${0} before trading (optional)": "교역 전 트랙 +${0} (선택 사항)"
 }

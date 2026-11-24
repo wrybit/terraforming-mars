@@ -1683,5 +1683,5 @@
   "The browser refused to show the notification: check the notification permission of this site.": "Nettleseren nektet å vise varselet: sjekk varseltillatelsen for dette nettstedet.",
   "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "Verdi: gjennomsnittlig poengforsprang på beste motstander i opptil ${0} prøvepartier per valg (høyere er bedre).",
   "Track +${0} before trading": "Sporet +${0} før handel",
-  "optional": "valgfritt"
+  "Track +${0} before trading (optional)": "Sporet +${0} før handel (valgfritt)"
 }

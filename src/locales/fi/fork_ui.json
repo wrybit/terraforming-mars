@@ -1317,5 +1317,5 @@
   "The browser refused to show the notification: check the notification permission of this site.": "Selain kieltäytyi näyttämästä ilmoitusta: tarkista tämän sivuston ilmoituslupa.",
   "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "Arvo: keskimääräinen pistejohto parhaaseen vastustajaan enintään ${0} koepelissä vaihtoehtoa kohden (suurempi on parempi).",
   "Track +${0} before trading": "Ura +${0} ennen kaupankäyntiä",
-  "optional": "valinnainen"
+  "Track +${0} before trading (optional)": "Ura +${0} ennen kaupankäyntiä (valinnainen)"
 }

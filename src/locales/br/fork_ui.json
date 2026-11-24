@@ -2477,5 +2477,5 @@
   "The browser refused to show the notification: check the notification permission of this site.": "O navegador se recusou a exibir a notificação: verifique a permissão de notificações deste site.",
   "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "Valor: vantagem média em pontos sobre o melhor oponente em até ${0} partidas de teste por opção (maior é melhor).",
   "Track +${0} before trading": "Trilha +${0} antes de negociar",
-  "optional": "opcional"
+  "Track +${0} before trading (optional)": "Trilha +${0} antes de negociar (opcional)"
 }
