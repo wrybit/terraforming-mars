@@ -1266,7 +1266,6 @@
   "AI engine": "AI-moottori",
   "Program that plays the AI seats of new games. Running games keep theirs. Takes effect at once.": "Ohjelma, joka pelaa uusien pelien AI-paikat. Käynnissä olevat pelit pitävät omansa. Voimaan heti.",
   "TypeScript as a stand-in": "TypeScript varalla",
-  "On: settings the Rust AI cannot play get the TypeScript AI. Off: they count as not compatible with the AI.": "Päällä: asetukset, joita Rust-AI ei osaa, saavat TypeScript-AI:n. Pois: ne katsotaan AI:n kanssa yhteensopimattomiksi.",
   "Rust AI fallbacks": "Rust-AI:n varatoimet",
   "Last 24 hours": "Viimeiset 24 tuntia",
   "Decision": "Päätös",
@@ -1315,5 +1314,8 @@
   "Not shown: this tab was in front. In the game that is intended; switch to another app or tab during the countdown.": "Ei näytetty: tämä välilehti oli edessä. Pelissä se on tarkoitus; vaihda laskennan aikana toiseen sovellukseen tai välilehteen.",
   "Notifications are not allowed for this site: allow them in the browser and test again.": "Ilmoitukset eivät ole sallittuja tälle sivustolle: salli ne selaimessa ja testaa uudelleen.",
   "The browser refused to show the notification: check the notification permission of this site.": "Selain kieltäytyi näyttämästä ilmoitusta: tarkista tämän sivuston ilmoituslupa.",
-  "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "Arvo: keskimääräinen pistejohto parhaaseen vastustajaan enintään ${0} koepelissä vaihtoehtoa kohden (suurempi on parempi)."
+  "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "Arvo: keskimääräinen pistejohto parhaaseen vastustajaan enintään ${0} koepelissä vaihtoehtoa kohden (suurempi on parempi).",
+  "On: settings the Rust AI cannot play get the TypeScript AI, and it decides when the Rust AI drops out mid-game. Off: such settings count as not compatible with the AI; mid-game a standard move decides.": "Päällä: asetukset, joita Rust-AI ei osaa, saavat TypeScript-AI:n, ja se päättää, jos Rust-AI putoaa pois kesken pelin. Pois: tällaiset asetukset katsotaan AI:n kanssa yhteensopimattomiksi; kesken pelin päättää perussiirto.",
+  "Track +${0} before trading": "Ura +${0} ennen kaupankäyntiä",
+  "optional": "valinnainen"
 }

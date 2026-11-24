@@ -2532,7 +2532,6 @@
   "AI engine": "Motore dell'AI",
   "Program that plays the AI seats of new games. Running games keep theirs. Takes effect at once.": "Programma che gioca i posti AI delle nuove partite. Le partite in corso tengono il loro. Effetto immediato.",
   "TypeScript as a stand-in": "TypeScript come sostituto",
-  "On: settings the Rust AI cannot play get the TypeScript AI. Off: they count as not compatible with the AI.": "Attivo: le impostazioni che l'AI Rust non sa giocare ricevono l'AI TypeScript. Spento: valgono come incompatibili con l'AI.",
   "Rust AI fallbacks": "Ripieghi dell'AI Rust",
   "Last 24 hours": "Ultime 24 ore",
   "Decision": "Decisione",
@@ -2581,5 +2580,8 @@
   "Not shown: this tab was in front. In the game that is intended; switch to another app or tab during the countdown.": "Non mostrata: questa scheda era in primo piano. Nel gioco è voluto; passa a un’altra app o scheda durante il conto alla rovescia.",
   "Notifications are not allowed for this site: allow them in the browser and test again.": "Le notifiche non sono consentite per questo sito: consentile nel browser e riprova.",
   "The browser refused to show the notification: check the notification permission of this site.": "Il browser si è rifiutato di mostrare la notifica: controlla il permesso di notifica di questo sito.",
-  "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "Valore: vantaggio medio in punti sul miglior avversario in fino a ${0} partite di prova per opzione (più alto è meglio)."
+  "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "Valore: vantaggio medio in punti sul miglior avversario in fino a ${0} partite di prova per opzione (più alto è meglio).",
+  "On: settings the Rust AI cannot play get the TypeScript AI, and it decides when the Rust AI drops out mid-game. Off: such settings count as not compatible with the AI; mid-game a standard move decides.": "Attivo: le impostazioni che l'AI Rust non sa giocare ricevono l'AI TypeScript, che decide anche se l'AI Rust cede a metà partita. Spento: tali impostazioni valgono come incompatibili con l'AI; a metà partita decide una mossa standard.",
+  "Track +${0} before trading": "Tracciato +${0} prima di commerciare",
+  "optional": "facoltativo"
 }

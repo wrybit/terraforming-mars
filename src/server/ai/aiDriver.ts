@@ -3,7 +3,6 @@ import {PlayerInput} from '../PlayerInput';
 import {InputResponse} from '../../common/inputs/InputResponse';
 import {GameLoader} from '../database/GameLoader';
 import {chooseResponse} from './chooseResponse';
-import {quickResponse} from './quickResponse';
 import {randomResponse} from './randomResponse';
 import {isSimulating} from './simulationSandbox';
 import {registerAiHook} from './aiHook';
@@ -15,6 +14,8 @@ import {runWithAiDecision} from '../logs/aiDecisionContext';
 import {RustMirror} from './rust/RustMirror';
 import {startThinking, stopThinking} from './aiThinking';
 import {rustBotStrength} from '../../common/ai/rustBotStrength';
+import {AiStandIn, aiStandIns} from './aiStandIns';
+import {aiAdminSettings} from './aiEngineChoice';
 
 // Plays the moves of AI players on the server. Player.setWaitingFor reports every new input of
 // an AI player; the move is made a little later so humans can follow the game.
@@ -30,11 +31,12 @@ const RANDOM_ATTEMPTS = 50;
 export type AiAnswer = {chosen: InputResponse | undefined, fromRust: boolean};
 
 /**
- * Plays the first answer the game accepts: the chosen one; for a refused Rust answer the TypeScript AI's decision
- * (recorded as a fallback); then a quick and finally random answers, so the game never stops.
+ * Plays the first answer the game accepts: the chosen one; then the stand-ins in order (aiStandIns.ts: for a refused
+ * Rust answer the TypeScript AI, recorded as a fallback; then a quick answer) and finally random answers, so the game
+ * never stops.
  */
 export function processWithFallback(player: Pick<IPlayer, 'process' | 'getWaitingFor' | 'name' | 'game'>, input: PlayerInput, answer: AiAnswer,
-  typescriptChoice: () => InputResponse | undefined, onRustRefused: (reason: string) => void): void {
+  standIns: ReadonlyArray<AiStandIn>, onRustRefused: (reason: string) => void): void {
   const {chosen, fromRust} = answer;
   if (chosen !== undefined) {
     try {
@@ -49,19 +51,13 @@ export function processWithFallback(player: Pick<IPlayer, 'process' | 'getWaitin
       }
     }
   }
-  const attempts: Array<() => void> = [
-    ...(fromRust ? [() => {
-      const typescript = typescriptChoice();
-      if (typescript === undefined) {
-        throw new Error('no TypeScript answer');
-      }
-      player.process(typescript);
-    }] : []),
-    () => player.process(quickResponse(input, player as IPlayer)),
-  ];
-  for (const attempt of attempts) {
+  for (const standIn of standIns) {
     try {
-      attempt();
+      const response = standIn.answer();
+      if (response === undefined) {
+        throw new Error(`no ${standIn.name} answer`);
+      }
+      player.process(response);
       return;
     } catch (error) {
       if (player.getWaitingFor() !== input) {
@@ -83,7 +79,8 @@ export function processWithFallback(player: Pick<IPlayer, 'process' | 'getWaitin
 type Choice = AiAnswer & {summary: ReturnType<typeof takeAiDecisionSummary>};
 
 async function choose(player: IPlayer, input: PlayerInput): Promise<Choice> {
-  // Rust AI players: the Rust bot's answer; without one (not installed, lost the game) the TS AI moves
+  // Rust AI players: the Rust bot's answer; without one (not installed, lost the game) the TS AI moves, unless the
+  // admin turned the TypeScript stand-in off (then the stand-ins of aiStandIns.ts answer)
   if (player.aiEngine === 'rust') {
     // Analysis games: the bot also returns the options it weighed (values, trial games); otherwise only its move
     const analysisGame = player.game.gameOptions.aiAnalysis === true;
@@ -93,6 +90,9 @@ async function choose(player: IPlayer, input: PlayerInput): Promise<Choice> {
     if (answer !== undefined) {
       const summary = state === undefined ? undefined : rustDecisionSummary(player, input, answer.traces, state, saveId);
       return {chosen: answer.response, fromRust: true, summary};
+    }
+    if (!aiAdminSettings().typescriptFallback) {
+      return {chosen: undefined, fromRust: false, summary: undefined};
     }
   }
   let chosen: InputResponse | undefined;
@@ -147,10 +147,11 @@ async function decideAndMove(player: IPlayer, input: PlayerInput, minimumMillise
     await new Promise((resolve) => setTimeout(resolve, rest));
   }
   if (isCurrent(player, input)) {
-    // A refused Rust answer: the TypeScript AI decides (typescriptChoice) and the fallback is recorded
-    const typescriptChoice = () => chooseResponse(input, player, player.aiLevel ?? 'normal');
+    // A refused Rust answer: the stand-ins decide (the TypeScript AI first, if allowed) and the fallback is recorded.
+    // Without a Rust answer the TypeScript AI already chose; it does not stand in for itself.
+    const standIns = aiStandIns(player, input, aiAdminSettings()).filter((standIn) => fromRust || standIn.name !== 'typescript');
     const onRustRefused = (reason: string) => RustMirror.of(player.game)?.recordFallback(input, reason);
-    runWithAiDecision(player, summary, () => processWithFallback(player, input, {chosen, fromRust}, typescriptChoice, onRustRefused));
+    runWithAiDecision(player, summary, () => processWithFallback(player, input, {chosen, fromRust}, standIns, onRustRefused));
   }
 }
 

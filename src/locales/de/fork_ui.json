@@ -1050,7 +1050,7 @@
   "AI engine": "AI-Engine",
   "Program that plays the AI seats of new games. Running games keep theirs. Takes effect at once.": "Programm, das die AI-Plätze neuer Partien spielt. Laufende Partien behalten ihres. Wirkt sofort.",
   "TypeScript as a stand-in": "TypeScript als Ersatz",
-  "On: settings the Rust AI cannot play get the TypeScript AI. Off: they count as not compatible with the AI.": "An: Einstellungen, die die Rust-AI nicht kann, bekommen die TypeScript-AI. Aus: Sie gelten als nicht kompatibel mit der AI.",
+  "On: settings the Rust AI cannot play get the TypeScript AI, and it decides when the Rust AI drops out mid-game. Off: such settings count as not compatible with the AI; mid-game a standard move decides.": "An: Einstellungen, die die Rust-AI nicht kann, bekommen die TypeScript-AI, und sie entscheidet, wenn die Rust-AI mitten in der Partie ausfällt. Aus: Solche Einstellungen gelten als nicht kompatibel mit der AI; mitten in der Partie entscheidet ein Standardzug.",
   "Rust AI fallbacks": "Rust-AI-Rückfälle",
   "Last 24 hours": "Letzte 24 Stunden",
   "Decision": "Entscheidung",
@@ -1097,5 +1097,6 @@
   "Not shown: this tab was in front. In the game that is intended; switch to another app or tab during the countdown.": "Nicht angezeigt: Dieser Tab war vorne. Im Spiel ist das gewollt; wechsle während des Countdowns in eine andere App oder einen anderen Tab.",
   "Notifications are not allowed for this site: allow them in the browser and test again.": "Benachrichtigungen sind für diese Seite nicht erlaubt: Erlaube sie im Browser und teste erneut.",
   "The browser refused to show the notification: check the notification permission of this site.": "Der Browser hat die Anzeige verweigert: Prüfe die Benachrichtigungs-Erlaubnis dieser Seite.",
-  "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "Wert: durchschnittlicher Punktevorsprung vor dem besten Gegner in bis zu ${0} Probepartien je Option (höher ist besser)."
+  "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "Wert: durchschnittlicher Punktevorsprung vor dem besten Gegner in bis zu ${0} Probepartien je Option (höher ist besser).",
+  "Track +${0} before trading": "Leiste +${0} vor dem Handel"
 }

@@ -140,7 +140,7 @@ const BASE_SETTINGS: ReadonlyArray<ServerSettingDefinition> = [
     choices: [{value: '', label: 'TypeScript'}, {value: 'rust', label: 'Rust'}],
     description: 'Program that plays the AI seats of new games. Running games keep theirs. Takes effect at once.'},
   {key: 'AI_TYPESCRIPT_FALLBACK', group: 'AI opponents', section: 'AI program', kind: 'toggle', defaultOn: true, live: true, label: 'TypeScript as a stand-in',
-    description: 'On: settings the Rust AI cannot play get the TypeScript AI. Off: they count as not compatible with the AI.'},
+    description: 'On: settings the Rust AI cannot play get the TypeScript AI, and it decides when the Rust AI drops out mid-game. Off: such settings count as not compatible with the AI; mid-game a standard move decides.'},
   {key: 'AI_RUST_EXTRA_WAIT_MS', group: 'AI opponents', section: 'AI program', kind: 'number', live: true, label: 'Fallback to TypeScript after (ms)',
     placeholder: '10000', slider: {minimum: 3000, maximum: 25000, step: 500},
     description: 'Extra time on top of the thinking time. Without an answer of the Rust AI by then, the TypeScript AI makes this decision.'},

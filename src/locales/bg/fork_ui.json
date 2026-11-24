@@ -2216,7 +2216,6 @@
   "AI engine": "Двигател на AI",
   "Program that plays the AI seats of new games. Running games keep theirs. Takes effect at once.": "Програма, която играе AI местата в новите игри. Текущите игри запазват своята. Действа веднага.",
   "TypeScript as a stand-in": "TypeScript като заместник",
-  "On: settings the Rust AI cannot play get the TypeScript AI. Off: they count as not compatible with the AI.": "Вкл.: настройките, които AI Rust не може, получават AI TypeScript. Изкл.: те се смятат за несъвместими с AI.",
   "Rust AI fallbacks": "Замествания на AI Rust",
   "Last 24 hours": "Последните 24 часа",
   "Decision": "Решение",
@@ -2265,5 +2264,8 @@
   "Not shown: this tab was in front. In the game that is intended; switch to another app or tab during the countdown.": "Не е показано: този раздел беше отпред. В играта това е нарочно; по време на обратното броене премини към друго приложение или раздел.",
   "Notifications are not allowed for this site: allow them in the browser and test again.": "Известията не са разрешени за този сайт: разреши ги в браузъра и тествай отново.",
   "The browser refused to show the notification: check the notification permission of this site.": "Браузърът отказа да покаже известието: провери разрешението за известия на този сайт.",
-  "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "Стойност: средна преднина в точки пред най-добрия противник в до ${0} пробни игри на вариант (по-високата е по-добра)."
+  "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "Стойност: средна преднина в точки пред най-добрия противник в до ${0} пробни игри на вариант (по-високата е по-добра).",
+  "On: settings the Rust AI cannot play get the TypeScript AI, and it decides when the Rust AI drops out mid-game. Off: such settings count as not compatible with the AI; mid-game a standard move decides.": "Вкл.: настройките, които AI Rust не може, получават AI TypeScript, и той решава, ако AI Rust откаже по средата на играта. Изкл.: такива настройки се смятат за несъвместими с AI; по средата на играта решава стандартен ход.",
+  "Track +${0} before trading": "Писта +${0} преди търговия",
+  "optional": "по избор"
 }
