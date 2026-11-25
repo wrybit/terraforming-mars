@@ -2478,5 +2478,11 @@
   "Track +${0} before trading": "Trilha +${0} antes de negociar",
   "Track +${0} before trading (optional)": "Trilha +${0} antes de negociar (opcional)",
   "Version ${0} · bot ${1} · file of ${2}": "Versão ${0} · Bot ${1} · arquivo de ${2}",
-  "Not loaded (${0}). Next attempt in 30 seconds.": "Não carregado (${0}). Nova tentativa em 30 segundos."
+  "Not loaded (${0}). Next attempt in 30 seconds.": "Não carregado (${0}). Nova tentativa em 30 segundos.",
+  "${0} gained 1:r:steel: and 1:r:plants: from ${1}": "${0} ganhou 1:r:steel: e 1:r:plants: de ${1}",
+  "Random Official": "Aleatório (oficiais)",
+  "Random All": "Aleatório (todos)",
+  "amazonis planitia": "Amazonis Planitia",
+  "Remember": "Lembrar",
+  "Spacefarer": "Astronauta"
 }

@@ -2191,5 +2191,11 @@
   "Track +${0} before trading": "Трек +${0} перед торговлей",
   "Track +${0} before trading (optional)": "Трек +${0} перед торговлей (необязательно)",
   "Version ${0} · bot ${1} · file of ${2}": "Версия ${0} · Бот ${1} · файл от ${2}",
-  "Not loaded (${0}). Next attempt in 30 seconds.": "Не загружено (${0}). Следующая попытка через 30 секунд."
+  "Not loaded (${0}). Next attempt in 30 seconds.": "Не загружено (${0}). Следующая попытка через 30 секунд.",
+  "${0} gained 1:r:steel: and 1:r:plants: from ${1}": "${0} получил 1:r:steel: и 1:r:plants: от ${1}",
+  "Random Official": "Случайная (официальные)",
+  "Random All": "Случайная (все)",
+  "amazonis planitia": "Равнина Амазония",
+  "Remember": "Запомнить",
+  "Spacefarer": "Космонавт"
 }

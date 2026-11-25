@@ -1502,5 +1502,11 @@
   "Track +${0} before trading": "Sáv +${0} kereskedés előtt",
   "Track +${0} before trading (optional)": "Sáv +${0} kereskedés előtt (nem kötelező)",
   "Version ${0} · bot ${1} · file of ${2}": "Verzió ${0} · Bot ${1} · fájl: ${2}",
-  "Not loaded (${0}). Next attempt in 30 seconds.": "Nem töltődött be (${0}). Újrapróbálás 30 másodperc múlva."
+  "Not loaded (${0}). Next attempt in 30 seconds.": "Nem töltődött be (${0}). Újrapróbálás 30 másodperc múlva.",
+  "${0} gained 1:r:steel: and 1:r:plants: from ${1}": "${0} kapott 1:r:steel:-t és 1:r:plants:-t ${1} által",
+  "Random Official": "Véletlenszerű (hivatalos)",
+  "Random All": "Véletlenszerű (mind)",
+  "amazonis planitia": "Amazonis Planitia",
+  "Remember": "Megjegyzés",
+  "Spacefarer": "Űrutazó"
 }

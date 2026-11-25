@@ -1684,5 +1684,11 @@
   "Track +${0} before trading": "Sporet +${0} før handel",
   "Track +${0} before trading (optional)": "Sporet +${0} før handel (valgfritt)",
   "Version ${0} · bot ${1} · file of ${2}": "Versjon ${0} · Bot ${1} · fil fra ${2}",
-  "Not loaded (${0}). Next attempt in 30 seconds.": "Ikke lastet (${0}). Nytt forsøk om 30 sekunder."
+  "Not loaded (${0}). Next attempt in 30 seconds.": "Ikke lastet (${0}). Nytt forsøk om 30 sekunder.",
+  "${0} gained 1:r:steel: and 1:r:plants: from ${1}": "${0} fikk 1:r:steel: og 1:r:plants: fra ${1}",
+  "Random Official": "Tilfeldig (offisielle)",
+  "Random All": "Tilfeldig (alle)",
+  "amazonis planitia": "Amazonis Planitia",
+  "Remember": "Husk",
+  "Spacefarer": "Romfarer"
 }

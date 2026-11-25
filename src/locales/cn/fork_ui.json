@@ -2304,5 +2304,11 @@
   "Track +${0} before trading": "贸易前轨道 +${0}",
   "Track +${0} before trading (optional)": "贸易前轨道 +${0} (可选)",
   "Version ${0} · bot ${1} · file of ${2}": "版本 ${0} · 机器人 ${1} · 文件日期 ${2}",
-  "Not loaded (${0}). Next attempt in 30 seconds.": "未加载（${0}）。30 秒后重试。"
+  "Not loaded (${0}). Next attempt in 30 seconds.": "未加载（${0}）。30 秒后重试。",
+  "${0} gained 1:r:steel: and 1:r:plants: from ${1}": "${0} 从 ${1} 获得 1:r:steel: 和 1:r:plants:",
+  "Random Official": "随机（官方）",
+  "Random All": "随机（全部）",
+  "amazonis planitia": "亚马逊平原",
+  "Remember": "记住",
+  "Spacefarer": "太空航行者"
 }

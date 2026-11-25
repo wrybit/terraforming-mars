@@ -1694,5 +1694,11 @@
   "Track +${0} before trading": "交易前にトラック +${0}",
   "Track +${0} before trading (optional)": "交易前にトラック +${0} (任意)",
   "Version ${0} · bot ${1} · file of ${2}": "バージョン ${0} · ボット ${1} · ファイル ${2}",
-  "Not loaded (${0}). Next attempt in 30 seconds.": "読み込めませんでした（${0}）。30 秒後に再試行します。"
+  "Not loaded (${0}). Next attempt in 30 seconds.": "読み込めませんでした（${0}）。30 秒後に再試行します。",
+  "${0} gained 1:r:steel: and 1:r:plants: from ${1}": "${0}は${1}によって1:r:steel:と1:r:plants:獲得",
+  "Random Official": "ランダム（公式）",
+  "Random All": "ランダム（全て）",
+  "amazonis planitia": "アマゾニス平原",
+  "Remember": "記憶",
+  "Spacefarer": "宇宙旅行者"
 }

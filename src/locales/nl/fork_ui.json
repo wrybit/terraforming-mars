@@ -1945,5 +1945,11 @@
   "Track +${0} before trading": "Spoor +${0} voor de handel",
   "Track +${0} before trading (optional)": "Spoor +${0} voor de handel (optioneel)",
   "Version ${0} · bot ${1} · file of ${2}": "Versie ${0} · Bot ${1} · bestand van ${2}",
-  "Not loaded (${0}). Next attempt in 30 seconds.": "Niet geladen (${0}). Volgende poging over 30 seconden."
+  "Not loaded (${0}). Next attempt in 30 seconds.": "Niet geladen (${0}). Volgende poging over 30 seconden.",
+  "${0} gained 1:r:steel: and 1:r:plants: from ${1}": "${0} kreeg 1:r:steel: en 1:r:plants: van ${1}",
+  "Random Official": "Willekeurig (officieel)",
+  "Random All": "Willekeurig (alle)",
+  "amazonis planitia": "Amazonis Planitia",
+  "Remember": "Onthouden",
+  "Spacefarer": "Ruimtevaarder"
 }

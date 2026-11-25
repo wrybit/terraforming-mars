@@ -2584,5 +2584,11 @@
   "Track +${0} before trading": "Tracciato +${0} prima di commerciare",
   "Track +${0} before trading (optional)": "Tracciato +${0} prima di commerciare (facoltativo)",
   "Version ${0} · bot ${1} · file of ${2}": "Versione ${0} · Bot ${1} · file del ${2}",
-  "Not loaded (${0}). Next attempt in 30 seconds.": "Non caricato (${0}). Nuovo tentativo tra 30 secondi."
+  "Not loaded (${0}). Next attempt in 30 seconds.": "Non caricato (${0}). Nuovo tentativo tra 30 secondi.",
+  "${0} gained 1:r:steel: and 1:r:plants: from ${1}": "${0} ha ottenuto 1:r:steel: e 1:r:plants: da ${1}",
+  "Random Official": "Casuale (ufficiali)",
+  "Random All": "Casuale (tutti)",
+  "amazonis planitia": "Amazonis Planitia",
+  "Remember": "Ricorda",
+  "Spacefarer": "Astronauta"
 }

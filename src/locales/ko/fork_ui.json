@@ -1572,5 +1572,11 @@
   "Track +${0} before trading": "교역 전 트랙 +${0}",
   "Track +${0} before trading (optional)": "교역 전 트랙 +${0} (선택 사항)",
   "Version ${0} · bot ${1} · file of ${2}": "버전 ${0} · 봇 ${1} · 파일 ${2}",
-  "Not loaded (${0}). Next attempt in 30 seconds.": "불러오지 못함 (${0}). 30초 후 다시 시도합니다."
+  "Not loaded (${0}). Next attempt in 30 seconds.": "불러오지 못함 (${0}). 30초 후 다시 시도합니다.",
+  "${0} gained 1:r:steel: and 1:r:plants: from ${1}": "${0}이(가) ${1}에서 1:r:steel:와 1:r:plants:를 얻었습니다",
+  "Random Official": "무작위 (공식)",
+  "Random All": "무작위 (전체)",
+  "amazonis planitia": "아마조니스 평원",
+  "Remember": "기억",
+  "Spacefarer": "우주 비행사"
 }

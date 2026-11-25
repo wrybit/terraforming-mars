@@ -1318,5 +1318,11 @@
   "Track +${0} before trading": "Ura +${0} ennen kaupankäyntiä",
   "Track +${0} before trading (optional)": "Ura +${0} ennen kaupankäyntiä (valinnainen)",
   "Version ${0} · bot ${1} · file of ${2}": "Versio ${0} · Botti ${1} · tiedosto ${2}",
-  "Not loaded (${0}). Next attempt in 30 seconds.": "Ei ladattu (${0}). Uusi yritys 30 sekunnin kuluttua."
+  "Not loaded (${0}). Next attempt in 30 seconds.": "Ei ladattu (${0}). Uusi yritys 30 sekunnin kuluttua.",
+  "${0} gained 1:r:steel: and 1:r:plants: from ${1}": "${0} sai 1:r:steel: ja 1:r:plants: lähteestä ${1}",
+  "Random Official": "Satunnainen (viralliset)",
+  "Random All": "Satunnainen (kaikki)",
+  "amazonis planitia": "Amazonis Planitia",
+  "Remember": "Muista",
+  "Spacefarer": "Avaruusmatkaaja"
 }
