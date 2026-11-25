@@ -1944,5 +1944,5 @@
   "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "Waarde: gemiddelde puntenvoorsprong op de beste tegenstander in maximaal ${0} proefpartijen per optie (hoger is beter).",
   "On: settings the Rust AI cannot play get the TypeScript AI, and it decides when the Rust AI drops out mid-game. Off: such settings count as not compatible with the AI; mid-game a standard move decides.": "Aan: instellingen die de Rust-AI niet kan, krijgen de TypeScript-AI, en die beslist als de Rust-AI midden in het spel uitvalt. Uit: zulke instellingen gelden als niet compatibel met de AI; midden in het spel beslist een standaardzet.",
   "Track +${0} before trading": "Spoor +${0} voor de handel",
-  "optional": "optioneel"
+  "Track +${0} before trading (optional)": "Spoor +${0} voor de handel (optioneel)"
 }

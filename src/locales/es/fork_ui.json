@@ -2596,5 +2596,5 @@
   "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "Valor: ventaja media en puntos sobre el mejor rival en hasta ${0} partidas de prueba por opción (más alto es mejor).",
   "On: settings the Rust AI cannot play get the TypeScript AI, and it decides when the Rust AI drops out mid-game. Off: such settings count as not compatible with the AI; mid-game a standard move decides.": "Activado: los ajustes que la AI Rust no sabe jugar reciben la AI TypeScript, que también decide si la AI Rust falla a mitad de partida. Desactivado: esos ajustes cuentan como incompatibles con la AI; a mitad de partida decide una jugada estándar.",
   "Track +${0} before trading": "Nivel +${0} antes de comerciar",
-  "optional": "opcional"
+  "Track +${0} before trading (optional)": "Nivel +${0} antes de comerciar (opcional)"
 }

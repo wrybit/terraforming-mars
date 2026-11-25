@@ -1,13 +1,16 @@
 // Blinking "your turn" markers: red border around the whole viewport while it's your own turn
 // (class player-home--acting is set by PlayerHome.vue, isPlayerActing), and the "active" status in the player bar.
-// All blink in sync: syncActiveBlinkAnimations.ts sets their animations to the same start time;
-// the keyframe names (prefix active-player-) are the contract with this file.
+// The blink is finite: three beats when the turn starts, then the marker stays visible. An endless blink
+// repainted the page every frame in Firefox (40-60 % CPU with the mouse idle).
+// Keyframe names (prefix active-player-) are the contract with this file.
 
 @active-player-outline-width: 8px;
 // Inner glow so the border blends softly into the page
 @active-player-outline-glow: 24px;
 @active-player-outline-color: #e53935;
 @active-player-outline-period: 1.4s;
+// Beats per turn: enough to catch the eye, then the marker rests in its visible state
+@active-player-outline-blinks: 3;
 // "Active" status in the player bar (PlayerStatus.vue)
 @active-player-status-outline-width: 2px;
 // Corner radius of the status box (players_overview.less, players_table.less): the border runs around it outside
@@ -24,7 +27,7 @@
   box-shadow: inset 0 0 @active-player-outline-glow fade(@active-player-outline-color, 70%);
   // Border must not catch clicks
   pointer-events: none;
-  animation: active-player-outline-blink @active-player-outline-period ease-in-out infinite;
+  animation: active-player-outline-blink @active-player-outline-period ease-in-out @active-player-outline-blinks;
 }
 
 @keyframes active-player-outline-blink {
@@ -51,7 +54,7 @@
     border: @active-player-status-outline-width solid @active-player-outline-color;
     border-radius: @active-player-status-radius + @active-player-status-outline-width;
     pointer-events: none;
-    animation: active-player-outline-blink @active-player-outline-period ease-in-out infinite;
+    animation: active-player-outline-blink @active-player-outline-period ease-in-out @active-player-outline-blinks;
   }
 
   .player-status-timer {
@@ -68,7 +71,7 @@
       border-radius: 50%;
       background: @active-player-outline-color;
       box-shadow: 0 0 @active-player-status-dot-glow @active-player-outline-color;
-      animation: active-player-outline-blink @active-player-outline-period ease-in-out infinite;
+      animation: active-player-outline-blink @active-player-outline-period ease-in-out @active-player-outline-blinks;
     }
   }
 }
@@ -88,7 +91,7 @@
   border-radius: 50%;
   background: @active-player-outline-color;
   box-shadow: 0 0 @active-player-status-dot-glow @active-player-outline-color;
-  animation: active-player-outline-blink @active-player-outline-period ease-in-out infinite;
+  animation: active-player-outline-blink @active-player-outline-period ease-in-out @active-player-outline-blinks;
 }
 
 // Anyone who enabled "reduce motion" in the system gets static markers

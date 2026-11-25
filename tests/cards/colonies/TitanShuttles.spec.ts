@@ -76,7 +76,8 @@ describe('TitanShuttles', () => {
     expect(card2.resourceCount).to.eq(2);
   });
 
-  it('Spending floaters logs a single message', () => {
+  // Upstream #8710: the action line names the card, so spending floaters adds no line of its own
+  it('Spending floaters logs no extra message', () => {
     const card2 = new TitanFloatingLaunchPad();
     player.playedCards.push(card2);
     player.addResourceTo(card, 5);
@@ -87,7 +88,6 @@ describe('TitanShuttles', () => {
 
     expect(card.resourceCount).to.eq(2);
     expect(player.titanium).to.eq(3);
-    expect(game.gameLog).has.length(1);
-    expect(game.gameLog[0].message).to.eq('${0} removed ${1}:cr:floater: to gain ${2}:r:titanium:');
+    expect(game.gameLog).has.length(0);
   });
 });

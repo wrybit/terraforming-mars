@@ -129,8 +129,7 @@
     "Replay",
     "${0} s",
     "Rollouts",
-    "Threads",
-    "optional"
+    "Threads"
   ],
   "es": [
     "${0} AI",

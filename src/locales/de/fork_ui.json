@@ -1098,5 +1098,6 @@
   "Notifications are not allowed for this site: allow them in the browser and test again.": "Benachrichtigungen sind für diese Seite nicht erlaubt: Erlaube sie im Browser und teste erneut.",
   "The browser refused to show the notification: check the notification permission of this site.": "Der Browser hat die Anzeige verweigert: Prüfe die Benachrichtigungs-Erlaubnis dieser Seite.",
   "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "Wert: durchschnittlicher Punktevorsprung vor dem besten Gegner in bis zu ${0} Probepartien je Option (höher ist besser).",
-  "Track +${0} before trading": "Leiste +${0} vor dem Handel"
+  "Track +${0} before trading": "Leiste +${0} vor dem Handel",
+  "Track +${0} before trading (optional)": "Leiste +${0} vor dem Handel (optional)"
 }

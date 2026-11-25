@@ -94,7 +94,9 @@ describe('MarsBotDraftResolver', () => {
       ]) {
         expect(resolver().pickCard(run.hand, run.priority)).to.eq(spaceCard);
       }
-      expect(resolver().discardAfterDraft([spaceCard, earthCard], eventPriority).discarded).to.deep.eq([earthCard]);
+      const {discarded} = resolver().discardAfterDraft([spaceCard, earthCard], eventPriority);
+
+      expect(discarded).to.deep.eq([earthCard]);
     });
 
     it('treats a hand with no match as one tie across every card', () => {
@@ -136,7 +138,8 @@ describe('MarsBotDraftResolver', () => {
       for (let i = 1; i < marsBotBoard.tracks.length; i++) {
         marsBotBoard.tracks[i].advance();
       }
-      expect(marsBotBoard.definitions[marsBotBoard.getLeastAdvancedTrackIndex()].tags).to.include(Tag.BUILDING);
+      const leastAdvanced = marsBotBoard.definitions[marsBotBoard.getLeastAdvancedTrackIndex()];
+      expect(leastAdvanced.tags).to.include(Tag.BUILDING);
 
       const picked = new MarsBotDraftResolver(marsBotBoard, keepOrder)
         .pickCard([earthCard, buildingCard, plantCard], priority);
@@ -160,13 +163,13 @@ describe('MarsBotDraftResolver', () => {
       expect(marsBotBoard.definitions[marsBotBoard.getLeastAdvancedTrackIndex()].tags).deep.eq([Tag.POWER, Tag.JOVIAN]);
 
       for (const run of [
-        {shuffler: keepOrder, hand: [jovianCard, powerCard], picked: jovianCard},
-        {shuffler: reverseOrder, hand: [jovianCard, powerCard], picked: powerCard},
-        {shuffler: keepOrder, hand: [powerCard, twoJovianCard], picked: twoJovianCard},
+        {shuffler: keepOrder, hand: [jovianCard, powerCard], expected: jovianCard},
+        {shuffler: reverseOrder, hand: [jovianCard, powerCard], expected: powerCard},
+        {shuffler: keepOrder, hand: [powerCard, twoJovianCard], expected: twoJovianCard},
       ]) {
         const picked = new MarsBotDraftResolver(marsBotBoard, run.shuffler).pickCard(run.hand, priority);
 
-        expect(picked).to.eq(run.picked);
+        expect(picked).to.eq(run.expected);
       }
     });
   });

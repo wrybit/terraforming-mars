@@ -62,6 +62,9 @@ COPY --from=builder /usr/src/app/build ./build
 
 COPY --from=builder /usr/src/app/assets ./assets
 
+# The one-command installer is served by the server itself (/install, routes/InstallScript.ts)
+COPY --from=builder /usr/src/app/scripts/install ./scripts/install
+
 # Run command.
 
 EXPOSE 8080

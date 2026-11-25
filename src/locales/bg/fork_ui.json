@@ -2267,5 +2267,5 @@
   "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "Стойност: средна преднина в точки пред най-добрия противник в до ${0} пробни игри на вариант (по-високата е по-добра).",
   "On: settings the Rust AI cannot play get the TypeScript AI, and it decides when the Rust AI drops out mid-game. Off: such settings count as not compatible with the AI; mid-game a standard move decides.": "Вкл.: настройките, които AI Rust не може, получават AI TypeScript, и той решава, ако AI Rust откаже по средата на играта. Изкл.: такива настройки се смятат за несъвместими с AI; по средата на играта решава стандартен ход.",
   "Track +${0} before trading": "Писта +${0} преди търговия",
-  "optional": "по избор"
+  "Track +${0} before trading (optional)": "Писта +${0} преди търговия (по избор)"
 }

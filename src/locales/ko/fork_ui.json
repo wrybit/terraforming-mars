@@ -1571,5 +1571,5 @@
   "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "값: 선택지당 최대 ${0}번의 시험 게임에서 가장 강한 상대보다 앞선 평균 점수 (높을수록 좋음).",
   "On: settings the Rust AI cannot play get the TypeScript AI, and it decides when the Rust AI drops out mid-game. Off: such settings count as not compatible with the AI; mid-game a standard move decides.": "켜기: Rust AI가 못 하는 설정은 TypeScript AI가 맡고, 게임 도중 Rust AI가 멈추면 TypeScript AI가 결정합니다. 끄기: 그런 설정은 AI와 호환되지 않는 것으로 보고, 게임 도중에는 기본 수가 결정합니다.",
   "Track +${0} before trading": "교역 전 트랙 +${0}",
-  "optional": "선택 사항"
+  "Track +${0} before trading (optional)": "교역 전 트랙 +${0} (선택 사항)"
 }

@@ -699,7 +699,8 @@ each(@players, {
 }
 
 .blink-animation {
-  animation:smoth-fade-animation 2000ms infinite;
+  // Three beats, not forever: the log is visible for the whole game and an endless fade repainted it every frame
+  animation:smoth-fade-animation 2000ms 3;
 }
 
 .top-bar-container {

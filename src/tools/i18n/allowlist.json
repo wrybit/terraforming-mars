@@ -129,5 +129,6 @@
   "src/client/components/lobby/LobbyRoomDialog.vue: AI",
   "Rust",
   "Dune expansion",
-  "TypeScript"
+  "TypeScript",
+  "src/client/components/lobby/LobbyGameRow.vue: AI"
 ]

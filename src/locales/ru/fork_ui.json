@@ -2190,5 +2190,5 @@
   "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "Значение: средний перевес в очках над лучшим соперником в ${0} пробных партиях на вариант максимум (чем выше, тем лучше).",
   "On: settings the Rust AI cannot play get the TypeScript AI, and it decides when the Rust AI drops out mid-game. Off: such settings count as not compatible with the AI; mid-game a standard move decides.": "Вкл.: настройки, которые AI Rust не умеет, получают AI TypeScript, и он решает, если AI Rust отказал посреди партии. Выкл.: такие настройки считаются несовместимыми с AI; посреди партии решает стандартный ход.",
   "Track +${0} before trading": "Трек +${0} перед торговлей",
-  "optional": "необязательно"
+  "Track +${0} before trading (optional)": "Трек +${0} перед торговлей (необязательно)"
 }

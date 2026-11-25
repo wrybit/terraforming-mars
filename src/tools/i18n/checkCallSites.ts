@@ -12,7 +12,8 @@ const CALL_SITE = new RegExp(
   'g');
 
 // Server parts no player sees: database, tools, server start-up and HTTP routes
-const SKIPPED_DIRECTORIES = ['database', 'tools', 'server', 'routes'].map((directory) => path.join('src', 'server', directory) + path.sep);
+// automa: MarsBot cannot be chosen in a game yet (no game option); translate its texts when it becomes playable
+const SKIPPED_DIRECTORIES = ['database', 'tools', 'server', 'routes', 'automa'].map((directory) => path.join('src', 'server', directory) + path.sep);
 
 function sourceFiles(dir: string, into: Array<string>): Array<string> {
   for (const entry of fs.readdirSync(dir, {withFileTypes: true})) {
@@ -36,6 +37,7 @@ export function checkCallSites(params: {srcDir: string, rootDir: string, knownKe
       if (SKIPPED_DIRECTORIES.some((skipped) => relative.startsWith(skipped))) {
         continue;
       }
+      const displayPath = relative.split(/[\\/]/).join('/');
       const lines = fs.readFileSync(file, 'utf8').split('\n');
       lines.forEach((line, index) => {
         // Comments only describe texts
@@ -57,7 +59,7 @@ export function checkCallSites(params: {srcDir: string, rootDir: string, knownKe
             continue;
           }
           if (!params.knownKeys.has(text) && !params.allowlist.has(text)) {
-            problems.push(`${relative}:${index + 1}: no language translates "${text}"`);
+            problems.push(`${displayPath}:${index + 1}: no language translates "${text}"`);
           }
         }
       });

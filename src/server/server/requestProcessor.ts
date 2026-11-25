@@ -24,6 +24,7 @@ import {ApiAdminServerLogo} from '../routes/ApiAdminServerLogo';
 import {ApiAdminSettings} from '../routes/ApiAdminSettings';
 import {ApiAdminImportGame} from '../routes/ApiAdminImportGame';
 import {ImportedScreenshot} from '../routes/ImportedScreenshot';
+import {InstallScript} from '../routes/InstallScript';
 import {ApiGames} from '../routes/ApiGames';
 import {ApiHeapSnapshot} from '../routes/ApiHeapSnapshot';
 import {ApiIPs} from '../routes/ApiIPs';
@@ -183,6 +184,10 @@ const handlers: Map<string, IHandler> = new Map(
     [paths.GAMES_OVERVIEW, ServeApp.INSTANCE],
     [paths.HELP, ServeApp.INSTANCE],
     [paths.IMPORTED_SCREENSHOT, ImportedScreenshot.INSTANCE],
+    // One-command installer: curl https://<server>/install | sh, irm https://<server>/install | iex
+    [paths.INSTALL, InstallScript.INSTANCE],
+    [paths.INSTALL_SH, InstallScript.INSTANCE],
+    [paths.INSTALL_PS1, InstallScript.INSTANCE],
     [paths.LOAD, ServeApp.INSTANCE],
     [paths.LOBBY, LobbySubPage.LOBBY],
     [paths.LOAD_GAME, LoadGame.INSTANCE],

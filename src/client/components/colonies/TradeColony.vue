@@ -230,8 +230,9 @@ export default defineComponent({
     },
     // Explains why the preview is higher than the value under the track marker
     tradeBonusText(preview: TradePreview): string {
-      const text = translateTextWithParams('Track +${0} before trading', [String(preview.raised)]);
-      return preview.optional ? text + ' (' + translateText('optional') + ')' : text;
+      // One phrase per case: the feedback extension already translates a bare 'optional'
+      const phrase = preview.optional ? 'Track +${0} before trading (optional)' : 'Track +${0} before trading';
+      return translateTextWithParams(phrase, [String(preview.raised)]);
     },
     choose(colony: ColonyView) {
       this.pick = colony.model.name;
