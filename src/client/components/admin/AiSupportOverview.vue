@@ -7,7 +7,7 @@
       <span v-if="rustNote !== undefined">{{ rustNote }}</span>
     </p>
     <p v-if="rustEmpty" class="ai-support-overview-note" v-i18n>No bot or no rust-ai-support.json in its folder: the Rust AI plays nothing.</p>
-    <!-- One table per block, the blocks in two columns of about equal length: a gap shows as "–" in its row -->
+    <!-- One table per block, the blocks in two columns of about equal length: a gap shows as a red-orange "✗" in a yellow row -->
     <div class="ai-support-overview-columns">
       <div v-for="(column, index) in columns" :key="index" class="ai-support-overview-stack">
         <table v-for="group in column" :key="group.title" class="ai-support-overview-table">
@@ -30,7 +30,7 @@
                 </span>
               </td>
               <td v-for="engine in engines" :key="engine.engine" class="ai-support-overview-mark" :class="{'ai-support-overview-mark--yes': row[engine.engine]}"
-                :aria-label="$t(row[engine.engine] ? 'Plays it' : 'Does not play it')">{{ row[engine.engine] ? '✓' : '–' }}</td>
+                :aria-label="$t(row[engine.engine] ? 'Plays it' : 'Does not play it')">{{ row[engine.engine] ? '✓' : '✗' }}</td>
             </tr>
           </tbody>
         </table>

@@ -6,7 +6,7 @@ import {aiSupportInfo, resetAiSupport} from '@/client/utils/aiSupportState';
 import {EMPTY_AI_SUPPORT} from '@/common/ai/aiSupportContract';
 import {BoardName} from '@/common/boards/BoardName';
 
-// Marks of a row as "TS Rust", e.g. "✓–"
+// Marks of a row as "TS Rust", e.g. "✓✗"
 function marksOf(wrapper: ReturnType<typeof mount>, label: string): string {
   const row = wrapper.findAll('.ai-support-overview-row').find((candidate) => candidate.find('.ai-support-overview-setting').text() === label);
   return row === undefined ? 'missing' : row.findAll('.ai-support-overview-mark').map((mark) => mark.text()).join('');
@@ -24,7 +24,7 @@ describe('AiSupportOverview', () => {
     expect(wrapper.find('.ai-support-overview-engine--active').text()).eq('Rust');
     expect(marksOf(wrapper, 'Base game')).eq('✓✓');
     expect(marksOf(wrapper, 'Venus Next')).eq('✓✓');
-    expect(marksOf(wrapper, 'Prelude 2')).eq('✓–');
+    expect(marksOf(wrapper, 'Prelude 2')).eq('✓✗');
     expect(marksOf(wrapper, 'tharsis')).eq('✓✓');
     expect(wrapper.findAll('.ai-support-overview-stack')).has.length(2);
   });
@@ -34,6 +34,6 @@ describe('AiSupportOverview', () => {
     aiSupportInfo.value = {engine: 'typescript', typescriptFallback: true, rust: EMPTY_AI_SUPPORT};
     await wrapper.vm.$nextTick();
     expect(wrapper.text()).contains('rust-ai-support.json');
-    expect(marksOf(wrapper, 'Base game')).eq('✓–');
+    expect(marksOf(wrapper, 'Base game')).eq('✓✗');
   });
 });
