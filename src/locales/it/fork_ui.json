@@ -2583,5 +2583,6 @@
   "On: settings the Rust AI cannot play get the TypeScript AI, and it decides when the Rust AI drops out mid-game. Off: such settings count as not compatible with the AI; mid-game a standard move decides.": "Attivo: le impostazioni che l'AI Rust non sa giocare ricevono l'AI TypeScript, che decide anche se l'AI Rust cede a metà partita. Spento: tali impostazioni valgono come incompatibili con l'AI; a metà partita decide una mossa standard.",
   "Track +${0} before trading": "Tracciato +${0} prima di commerciare",
   "Track +${0} before trading (optional)": "Tracciato +${0} prima di commerciare (facoltativo)",
-  "Version ${0} · bot ${1} · file of ${2}": "Versione ${0} · Bot ${1} · file del ${2}"
+  "Version ${0} · bot ${1} · file of ${2}": "Versione ${0} · Bot ${1} · file del ${2}",
+  "Not loaded (${0}). Next attempt in 30 seconds.": "Non caricato (${0}). Nuovo tentativo tra 30 secondi."
 }

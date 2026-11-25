@@ -3,7 +3,8 @@
   <section class="games-overview-card admin-players-aliases">
     <h2 v-i18n>Merged</h2>
     <p class="games-overview-note" v-i18n>Permanent merges also apply to new games under the old name; one-time merges only to the games so far.</p>
-    <ul v-if="aliases.length > 0" class="admin-players-alias-list">
+    <LoadingSpinner v-if="loading" />
+    <ul v-else-if="aliases.length > 0" class="admin-players-alias-list">
       <li v-for="alias in aliases" :key="alias.id" class="admin-players-alias">
         <span class="admin-players-pair">
           <s class="admin-players-pill">{{ alias.from }}</s>
@@ -23,11 +24,13 @@
 </template>
 
 <script setup lang="ts">
+import LoadingSpinner from '@/client/components/common/LoadingSpinner.vue';
 import {PlayerAlias} from '@/common/admin/PlayerAliases';
 import {formatDate} from '@/client/components/stats/statsLabels';
 
 defineProps<{
   aliases: ReadonlyArray<PlayerAlias>,
+  loading?: boolean,
   busy: boolean,
 }>();
 

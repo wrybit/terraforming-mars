@@ -8,7 +8,7 @@ const commit = (hash: string) => ({hash, time: '2026-10-13T12:00:00+02:00', titl
 
 function dashboardWith(head: string, upstream?: Array<string>): ServerDashboard {
   return {
-    games: {running: 0, finished: 0, playersOnline: 2},
+    playersOnline: 2,
     build: {head, builtAt: 'n/a'},
     commits: [commit('bbbbbbbbb')],
     upstream: upstream === undefined ? undefined : {measuredAtMs: 0, branch: 'main', commits: upstream.map(commit)},

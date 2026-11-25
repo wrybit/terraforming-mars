@@ -1317,5 +1317,6 @@
   "On: settings the Rust AI cannot play get the TypeScript AI, and it decides when the Rust AI drops out mid-game. Off: such settings count as not compatible with the AI; mid-game a standard move decides.": "Päällä: asetukset, joita Rust-AI ei osaa, saavat TypeScript-AI:n, ja se päättää, jos Rust-AI putoaa pois kesken pelin. Pois: tällaiset asetukset katsotaan AI:n kanssa yhteensopimattomiksi; kesken pelin päättää perussiirto.",
   "Track +${0} before trading": "Ura +${0} ennen kaupankäyntiä",
   "Track +${0} before trading (optional)": "Ura +${0} ennen kaupankäyntiä (valinnainen)",
-  "Version ${0} · bot ${1} · file of ${2}": "Versio ${0} · Botti ${1} · tiedosto ${2}"
+  "Version ${0} · bot ${1} · file of ${2}": "Versio ${0} · Botti ${1} · tiedosto ${2}",
+  "Not loaded (${0}). Next attempt in 30 seconds.": "Ei ladattu (${0}). Uusi yritys 30 sekunnin kuluttua."
 }

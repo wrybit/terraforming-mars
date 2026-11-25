@@ -1683,5 +1683,6 @@
   "On: settings the Rust AI cannot play get the TypeScript AI, and it decides when the Rust AI drops out mid-game. Off: such settings count as not compatible with the AI; mid-game a standard move decides.": "På: innstillinger Rust-AI-en ikke kan, får TypeScript-AI-en, og den avgjør når Rust-AI-en faller ut midt i spillet. Av: slike innstillinger regnes som ikke kompatible med AI-en; midt i spillet avgjør et standardtrekk.",
   "Track +${0} before trading": "Sporet +${0} før handel",
   "Track +${0} before trading (optional)": "Sporet +${0} før handel (valgfritt)",
-  "Version ${0} · bot ${1} · file of ${2}": "Versjon ${0} · Bot ${1} · fil fra ${2}"
+  "Version ${0} · bot ${1} · file of ${2}": "Versjon ${0} · Bot ${1} · fil fra ${2}",
+  "Not loaded (${0}). Next attempt in 30 seconds.": "Ikke lastet (${0}). Nytt forsøk om 30 sekunder."
 }

@@ -2116,5 +2116,6 @@
   "On: settings the Rust AI cannot play get the TypeScript AI, and it decides when the Rust AI drops out mid-game. Off: such settings count as not compatible with the AI; mid-game a standard move decides.": "Wł.: ustawienia, których AI Rust nie umie, dostają AI TypeScript, a ona decyduje, gdy AI Rust zawiedzie w trakcie gry. Wył.: takie ustawienia uznaje się za niezgodne z AI; w trakcie gry decyduje ruch standardowy.",
   "Track +${0} before trading": "Tor +${0} przed handlem",
   "Track +${0} before trading (optional)": "Tor +${0} przed handlem (opcjonalnie)",
-  "Version ${0} · bot ${1} · file of ${2}": "Wersja ${0} · Bot ${1} · plik z ${2}"
+  "Version ${0} · bot ${1} · file of ${2}": "Wersja ${0} · Bot ${1} · plik z ${2}",
+  "Not loaded (${0}). Next attempt in 30 seconds.": "Nie wczytano (${0}). Kolejna próba za 30 sekund."
 }

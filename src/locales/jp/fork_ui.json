@@ -1693,5 +1693,6 @@
   "On: settings the Rust AI cannot play get the TypeScript AI, and it decides when the Rust AI drops out mid-game. Off: such settings count as not compatible with the AI; mid-game a standard move decides.": "オン：Rust AI が扱えない設定は TypeScript AI が担当し、対局中に Rust AI が止まったときも TypeScript AI が決めます。オフ：その設定は AI 非対応として扱い、対局中は標準の手が決めます。",
   "Track +${0} before trading": "交易前にトラック +${0}",
   "Track +${0} before trading (optional)": "交易前にトラック +${0} (任意)",
-  "Version ${0} · bot ${1} · file of ${2}": "バージョン ${0} · ボット ${1} · ファイル ${2}"
+  "Version ${0} · bot ${1} · file of ${2}": "バージョン ${0} · ボット ${1} · ファイル ${2}",
+  "Not loaded (${0}). Next attempt in 30 seconds.": "読み込めませんでした（${0}）。30 秒後に再試行します。"
 }

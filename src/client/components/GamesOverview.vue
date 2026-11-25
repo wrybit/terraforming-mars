@@ -35,7 +35,7 @@
       </details>
 
       <section v-if="status !== 'done' || summaries.length === 0" class="games-overview-card">
-        <p v-if="status === 'loading'" class="games-overview-note" v-i18n>Loading…</p>
+        <LoadingSpinner v-if="status === 'loading'" page />
         <template v-else-if="status === 'error'">
           <p class="games-overview-note"><span v-i18n>The game list could not be loaded.</span> {{ loadFailureText }}</p>
           <div class="server-settings-retry"><button type="button" class="btn btn-tone-quiet" @click="loadGames" v-i18n>Try again</button></div>
@@ -60,6 +60,7 @@
 </template>
 
 <script lang="ts">
+import LoadingSpinner from '@/client/components/common/LoadingSpinner.vue';
 import {defineComponent} from 'vue';
 import {describeFailure, failureOf, fetchOrFail} from '@/client/utils/requestFailure';
 import * as constants from '@/common/constants';
@@ -89,6 +90,7 @@ export default defineComponent({
   name: 'GamesOverview',
   components: {
     AdminGate,
+    LoadingSpinner,
     GamesTableCard,
     DeleteGameButton,
     LoadGameForm,

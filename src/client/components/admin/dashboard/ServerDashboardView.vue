@@ -1,76 +1,69 @@
 <template>
-  <!-- Values of one dashboard answer: small cards first, then charts, then commits -->
+  <!-- Small cards first, then charts, then commits; every card fills in as soon as its parts have arrived -->
   <div class="server-dashboard-view">
     <div class="server-dashboard-grid">
-      <section class="games-overview-card">
-        <h2 v-i18n>Server</h2>
+      <DashboardCard title="Server" size="server" :ready="has('machine', 'reachability', 'deploy')" :error="errorOf('machine', 'reachability', 'deploy')">
         <DashboardServerLogo :identity="dashboard.identity" />
         <DashboardFacts :facts="serverFacts" />
-      </section>
-      <section class="games-overview-card">
-        <h2 v-i18n>Processor</h2>
+      </DashboardCard>
+      <DashboardCard title="Processor" size="processor" :ready="has('machine')" :error="errorOf('machine')">
         <DashboardSplitBar v-if="dashboard.machineUsage !== undefined" label="Processor load" :segments="cpuParts" :total="100" unit="percent"
           :measuredAtMs="dashboard.machineUsage.measuredAtMs" />
         <DashboardMeter v-else label="Processor load" :used="dashboard.cpu.usagePercent" :total="100" unit="percent" />
         <DashboardFacts :facts="processorFacts" />
-      </section>
-      <section class="games-overview-card">
-        <h2 v-i18n>Memory</h2>
+      </DashboardCard>
+      <DashboardCard title="Memory" size="memory" :ready="has('machine')" :error="errorOf('machine')">
         <DashboardSplitBar label="Memory" :segments="memoryParts" :total="dashboard.memory.totalBytes" :measuredAtMs="dashboard.machineUsage?.measuredAtMs" />
         <DashboardMeter v-if="dashboard.memory.swapTotalBytes > 0" label="Swap" :used="dashboard.memory.swapTotalBytes - dashboard.memory.swapFreeBytes" :total="dashboard.memory.swapTotalBytes" />
-      </section>
-      <section class="games-overview-card">
-        <h2 v-i18n>Disk</h2>
+      </DashboardCard>
+      <DashboardCard title="Disk" size="disk" :ready="has('machine')" :error="errorOf('machine')">
         <DashboardSplitBar v-if="dashboard.disk !== undefined" label="Disk" :segments="diskParts" :total="dashboard.disk.totalBytes"
           :measuredAtMs="dashboard.disk.usage?.docker === undefined ? undefined : dashboard.disk.usage.measuredAtMs" />
-      </section>
-      <section class="games-overview-card">
-        <h2 v-i18n>Games</h2>
-        <DashboardOnlineCount :count="dashboard.games.playersOnline" />
+      </DashboardCard>
+      <DashboardCard title="Games" size="games" :ready="has('games', 'deploy')" :error="errorOf('games', 'deploy')">
+        <DashboardOnlineCount :count="dashboard.playersOnline" />
         <DashboardFacts :facts="gameFacts" />
         <DashboardUpdateButton :dashboard="dashboard" @changed="$emit('changed')" />
-      </section>
-      <section class="games-overview-card">
-        <h2 v-i18n>Graphics</h2>
+      </DashboardCard>
+      <DashboardCard title="Graphics" size="graphics" :ready="has('machine')" :error="errorOf('machine')">
         <DashboardGraphics :gpus="dashboard.gpus" :mainMemoryBytes="dashboard.memory.totalBytes" />
-      </section>
+      </DashboardCard>
     </div>
 
     <div class="server-dashboard-grid server-dashboard-grid--wide">
-      <section class="games-overview-card">
-        <h2 v-i18n>Players per day</h2>
+      <DashboardCard title="Players per day" size="players" :ready="has('games')" :error="errorOf('games')">
         <StatsBarChart :bars="dayBars" axisLabel="Distinct human players with a move that day" />
-      </section>
-      <section class="games-overview-card">
-        <h2 v-i18n>Players per week</h2>
+      </DashboardCard>
+      <DashboardCard title="Players per week" size="players" :ready="has('games')" :error="errorOf('games')">
         <StatsBarChart :bars="weekBars" axisLabel="Distinct human players with a move in that calendar week" />
-      </section>
-      <section class="games-overview-card">
-        <h2 v-i18n>Availability</h2>
+      </DashboardCard>
+      <DashboardCard title="Availability" size="availability" :ready="has('history')" :error="errorOf('history')">
         <StatsBarChart v-if="availabilityBars.length > 0" :bars="availabilityBars" axisLabel="Share of the day the server was running (%)" />
         <p v-else class="games-overview-note" v-i18n>First values after one minute of running</p>
         <h3 v-if="dashboard.serverStarts.length > 0" class="server-dashboard-subheading" v-i18n>Last server starts</h3>
         <ul class="server-dashboard-list">
           <li v-for="start in dashboard.serverStarts.slice(0, 8)" :key="start">{{ formatDateTime(start) }}</li>
         </ul>
-      </section>
+      </DashboardCard>
     </div>
 
-    <section class="games-overview-card">
-      <h2 v-i18n>Players online by time of day</h2>
+    <DashboardCard title="Players online by time of day" size="day" :ready="has('history')" :error="errorOf('history')">
       <DashboardDayOverlay v-if="dashboard.presence.length > 0" :profiles="dashboard.presence" />
       <p v-else class="games-overview-note" v-i18n>First values after one minute of running</p>
-    </section>
+    </DashboardCard>
 
     <DashboardRustFallbacks v-if="dashboard.rustFallbacks !== undefined" :fallbacks="dashboard.rustFallbacks" />
 
-    <DashboardCommits :dashboard="dashboard" @changed="$emit('changed')" />
+    <DashboardCommits v-if="has('deploy')" :dashboard="dashboard" @changed="$emit('changed')" />
+    <DashboardCard v-else title="Recent commits" size="commits" :ready="false" :error="errorOf('deploy')" />
   </div>
 </template>
 
 <script lang="ts">
 import {defineComponent, PropType} from 'vue';
 import {ServerDashboard} from '@/common/admin/ServerDashboard';
+import {DashboardSection, DashboardSectionData} from '@/common/admin/dashboardSections';
+import DashboardCard from '@/client/components/admin/dashboard/DashboardCard.vue';
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 import StatsBarChart from '@/client/components/stats/StatsBarChart.vue';
 import {StatsBar} from '@/client/components/stats/statsTypes';
@@ -90,12 +83,18 @@ import {formatDateTime, formatDuration, periodBars} from '@/client/components/ad
 
 export default defineComponent({
   name: 'ServerDashboardView',
-  components: {DashboardCommits, DashboardDayOverlay, DashboardFacts, DashboardGraphics, DashboardOnlineCount, DashboardMeter, DashboardRustFallbacks, DashboardServerLogo, DashboardSplitBar, DashboardUpdateButton, StatsBarChart},
+  components: {DashboardCard, DashboardCommits, DashboardDayOverlay, DashboardFacts, DashboardGraphics, DashboardOnlineCount, DashboardMeter, DashboardRustFallbacks, DashboardServerLogo, DashboardSplitBar, DashboardUpdateButton, StatsBarChart},
   props: {
-    dashboard: {type: Object as PropType<ServerDashboard>, required: true},
+    // The parts that have arrived so far; a card waits for the ones it shows
+    parts: {type: Object as PropType<Partial<DashboardSectionData>>, required: true},
+    errors: {type: Object as PropType<Partial<Record<DashboardSection, string>>>, default: () => ({})},
   },
   emits: ['changed'],
   computed: {
+    // Read only inside a card whose parts are there (has()), so every value read is present
+    dashboard(): ServerDashboard {
+      return Object.assign({}, ...Object.values(this.parts)) as ServerDashboard;
+    },
     serverFacts(): Array<DashboardFact> {
       const dashboard = this.dashboard;
       const reachability = dashboard.reachability;
@@ -153,6 +152,13 @@ export default defineComponent({
     },
   },
   methods: {
+    has(...sections: Array<DashboardSection>): boolean {
+      return sections.every((section) => this.parts[section] !== undefined);
+    },
+    // Only a card without values shows why: one with older values keeps them on screen
+    errorOf(...sections: Array<DashboardSection>): string | undefined {
+      return sections.map((section) => this.parts[section] === undefined ? this.errors[section] : undefined).find((error) => error !== undefined);
+    },
     formatDateTime,
   },
 });

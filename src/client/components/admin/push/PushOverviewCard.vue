@@ -8,7 +8,8 @@
       </div>
       <PushTestDelay />
     </div>
-    <div class="push-facts">
+    <LoadingSpinner v-if="loading" />
+    <div v-else class="push-facts">
       <div v-for="fact in facts" :key="fact.label" class="push-fact" :class="{'push-fact--empty': !fact.value}">
         <strong>{{ fact.value ?? '–' }}</strong>
         <span v-i18n>{{ fact.label }}</span>
@@ -18,12 +19,14 @@
 </template>
 
 <script setup lang="ts">
+import LoadingSpinner from '@/client/components/common/LoadingSpinner.vue';
 import {computed} from 'vue';
 import {AdminPushDelivery} from '@/common/admin/AdminPushModel';
 import {PUSH_CATALOG} from './pushCatalog';
 import PushTestDelay from './PushTestDelay.vue';
 
 const props = defineProps<{
+  loading?: boolean,
   subscribers: number | undefined,
   maxAgeDays: number | undefined,
   deliveries: ReadonlyArray<AdminPushDelivery> | undefined,

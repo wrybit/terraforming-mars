@@ -17,6 +17,7 @@ import {ApiReplay} from '../routes/ApiReplay';
 import {ApiAdminDeleteGame} from '../routes/ApiAdminDeleteGame';
 import {ApiAdminGames} from '../routes/ApiAdminGames';
 import {ApiAdminDashboard} from '../routes/ApiAdminDashboard';
+import {DASHBOARD_SECTIONS, dashboardSectionPath} from '../../common/admin/dashboardSections';
 import {ApiAdminLiveLoad} from '../routes/ApiAdminLiveLoad';
 import {ApiAdminRestart} from '../routes/ApiAdminRestart';
 import {ApiAdminUpdate} from '../routes/ApiAdminUpdate';
@@ -137,7 +138,7 @@ const handlers: Map<string, IHandler> = new Map(
     [paths.ADMIN_SETTINGS, ServeApp.INSTANCE],
     [paths.API_ADMIN_DELETE_GAME, ApiAdminDeleteGame.INSTANCE],
     [paths.API_ADMIN_GAMES, ApiAdminGames.INSTANCE],
-    [paths.API_ADMIN_DASHBOARD, ApiAdminDashboard.INSTANCE],
+    ...DASHBOARD_SECTIONS.map((section) => [dashboardSectionPath(section), ApiAdminDashboard.forSection(section)] as const),
     [paths.API_ADMIN_IMPORT_GAME, ApiAdminImportGame.INSTANCE],
     [paths.API_ADMIN_LIVE_LOAD, ApiAdminLiveLoad.INSTANCE],
     [paths.API_ADMIN_LOGOUT, ApiAdminLogout.INSTANCE],

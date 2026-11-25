@@ -1,7 +1,7 @@
 <template>
   <!-- The .env file of the server, editable here: one tab per group, save and restart at the bottom -->
   <div class="server-settings">
-    <p v-if="status === 'loading'" class="games-overview-note" v-i18n>Loading…</p>
+    <LoadingSpinner v-if="status === 'loading'" page />
     <div v-else-if="status === 'unreachable'" class="games-overview-card server-settings-group">
       <p class="games-overview-note" v-i18n>The server is not answering right now – probably it is just restarting.</p>
       <div class="server-settings-retry"><button type="button" class="btn btn-tone-quiet" @click="load" v-i18n>Try again</button></div>
@@ -92,6 +92,7 @@
 </template>
 
 <script lang="ts">
+import LoadingSpinner from '@/client/components/common/LoadingSpinner.vue';
 import {defineComponent} from 'vue';
 import {isValidSettingValue} from '@/common/admin/isValidSettingValue';
 import {paths} from '@/common/app/paths';
@@ -154,7 +155,7 @@ function isOnValue(value: string | undefined): boolean {
 
 export default defineComponent({
   name: 'ServerSettingsPanel',
-  components: {ServerSettingImageField, ServerSettingChoiceField, ServerSettingGrid, SegmentedControl, AiSupportOverview, AiLoadGraph, ChatWordsPanel},
+  components: {LoadingSpinner, ServerSettingImageField, ServerSettingChoiceField, ServerSettingGrid, SegmentedControl, AiSupportOverview, AiLoadGraph, ChatWordsPanel},
   directives: {dockedTab: vDockedTab},
   data(): DataModel {
     return {status: 'loading', states: [], values: {}, revealed: {}, busy: false, message: '', messageIsError: false, selectedGroup: SERVER_SETTING_GROUPS[0], processorCores: undefined};

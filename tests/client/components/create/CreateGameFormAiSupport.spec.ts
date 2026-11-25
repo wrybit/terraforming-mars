@@ -59,10 +59,10 @@ describe('CreateGameForm and the AI support', () => {
     expect(vm.aiCan('option', 'twoCorpsVariant')).is.false;
   });
 
-  it('marks what either AI plays while the TypeScript AI stands in for the Rust AI, only Rust without it', async () => {
+  it('marks only what the Rust AI plays while the admin chose it, with or without the stand-in', async () => {
     serverAnswers('rust', true);
     const {vm} = await formWithAiSeat();
-    expect(vm.aiCan('expansion', 'venus')).is.true;
+    expect(vm.aiCan('expansion', 'venus')).is.false;
     serverAnswers('rust', false);
     await nextTick();
     expect(vm.aiCan('expansion', 'venus')).is.false;

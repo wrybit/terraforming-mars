@@ -2303,5 +2303,6 @@
   "On: settings the Rust AI cannot play get the TypeScript AI, and it decides when the Rust AI drops out mid-game. Off: such settings count as not compatible with the AI; mid-game a standard move decides.": "开：Rust AI 不支持的设置改用 TypeScript AI，Rust AI 在对局中途失效时也由它决定。关：这些设置视为与 AI 不兼容；对局中途由标准走法决定。",
   "Track +${0} before trading": "贸易前轨道 +${0}",
   "Track +${0} before trading (optional)": "贸易前轨道 +${0} (可选)",
-  "Version ${0} · bot ${1} · file of ${2}": "版本 ${0} · 机器人 ${1} · 文件日期 ${2}"
+  "Version ${0} · bot ${1} · file of ${2}": "版本 ${0} · 机器人 ${1} · 文件日期 ${2}",
+  "Not loaded (${0}). Next attempt in 30 seconds.": "未加载（${0}）。30 秒后重试。"
 }

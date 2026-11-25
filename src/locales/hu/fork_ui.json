@@ -1501,5 +1501,6 @@
   "On: settings the Rust AI cannot play get the TypeScript AI, and it decides when the Rust AI drops out mid-game. Off: such settings count as not compatible with the AI; mid-game a standard move decides.": "Be: a Rust AI által nem ismert beállítások a TypeScript AI-t kapják, és az dönt, ha a Rust AI játék közben kiesik. Ki: ezek a beállítások nem kompatibilisek az AI-val; játék közben egy alaplépés dönt.",
   "Track +${0} before trading": "Sáv +${0} kereskedés előtt",
   "Track +${0} before trading (optional)": "Sáv +${0} kereskedés előtt (nem kötelező)",
-  "Version ${0} · bot ${1} · file of ${2}": "Verzió ${0} · Bot ${1} · fájl: ${2}"
+  "Version ${0} · bot ${1} · file of ${2}": "Verzió ${0} · Bot ${1} · fájl: ${2}",
+  "Not loaded (${0}). Next attempt in 30 seconds.": "Nem töltődött be (${0}). Újrapróbálás 30 másodperc múlva."
 }

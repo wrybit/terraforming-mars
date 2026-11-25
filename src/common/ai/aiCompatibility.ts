@@ -120,7 +120,8 @@ export type AiEngineDecision = {engine: AiEngineChoice | 'none', reasons: Array<
  * Decides which AI plays a game with these settings. The create form and the server use it alike; the server's
  * decision when creating the game is binding.
  *
- * `reasons` names what the Rust AI cannot play when the TypeScript AI stands in, so it can be logged.
+ * `reasons` always names what the admin's AI cannot play: the create form shows exactly that AI's support, so the
+ * warning names the settings without a robot. With the Rust AI and the stand-in, the reasons are logged.
  */
 export function aiEngineFor(settings: AiSettings, supports: {rust: AiSupport, typescript: AiSupport}, admin: AiAdminSettings): AiEngineDecision {
   const typescript = isAiCompatible(settings, supports.typescript);
@@ -134,35 +135,15 @@ export function aiEngineFor(settings: AiSettings, supports: {rust: AiSupport, ty
   if (admin.typescriptFallback && typescript.ok) {
     return {engine: 'typescript', reasons: rust.reasons};
   }
-  return {engine: 'none', reasons: admin.typescriptFallback ? typescript.reasons : rust.reasons};
+  return {engine: 'none', reasons: rust.reasons};
+}
+
+/** What the admin's AI plays; the create form marks exactly these settings, never the stand-in's. */
+export function adminAiSupport(supports: {rust: AiSupport, typescript: AiSupport}, admin: AiAdminSettings): AiSupport {
+  return admin.engine === 'rust' ? supports.rust : supports.typescript;
 }
 
 /** Text of one reason for logs and error messages, e.g. "expansion venus". */
 export function aiBlockerText(blocker: AiBlocker): string {
   return blocker.kind + ' ' + blocker.id;
-}
-
-function union<T>(first: ReadonlyArray<T>, second: ReadonlyArray<T>): Array<T> {
-  return [...first, ...second.filter((entry) => !first.includes(entry))];
-}
-
-/**
- * What an AI plays on this server under the admin settings: the TypeScript AI's support, the Rust AI's, or with the
- * stand-in both together (each setting gets one of them). The create form marks these settings.
- */
-export function playableAiSupport(supports: {rust: AiSupport, typescript: AiSupport}, admin: AiAdminSettings): AiSupport {
-  if (admin.engine === 'typescript') {
-    return supports.typescript;
-  }
-  if (!admin.typescriptFallback) {
-    return supports.rust;
-  }
-  const {rust, typescript} = supports;
-  return {
-    ...rust,
-    expansions: union(rust.expansions, typescript.expansions),
-    boards: union(rust.boards, typescript.boards),
-    options: union(rust.options, typescript.options),
-    duneModules: union(rust.duneModules, typescript.duneModules),
-  };
 }

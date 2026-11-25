@@ -1,7 +1,7 @@
 import {expect} from 'chai';
 import {BoardName} from '../../../src/common/boards/BoardName';
 import {EMPTY_AI_SUPPORT, AiSupport} from '../../../src/common/ai/aiSupportContract';
-import {AiSettings, aiEngineFor, isAiCompatible, aiSettingsOf, playableAiSupport} from '../../../src/common/ai/aiCompatibility';
+import {AiSettings, adminAiSupport, aiEngineFor, isAiCompatible, aiSettingsOf} from '../../../src/common/ai/aiCompatibility';
 import {NewGameConfig} from '../../../src/common/game/NewGameConfig';
 import {RandomMAOptionType} from '../../../src/common/ma/RandomMAOptionType';
 
@@ -99,7 +99,15 @@ describe('aiEngineFor', () => {
       .deep.eq({engine: 'none', reasons: [{kind: 'expansion', id: 'venus'}]});
     const both: AiSettings = {...base, expansions: {corpera: true, venus: true, colonies: true}};
     expect(aiEngineFor(both, supports, {engine: 'rust', typescriptFallback: true}))
-      .deep.eq({engine: 'none', reasons: [{kind: 'expansion', id: 'colonies'}]});
+      .deep.eq({engine: 'none', reasons: [{kind: 'expansion', id: 'venus'}]});
+  });
+
+  it('names what the admin\'s AI cannot play where no AI can play', () => {
+    // Rust lacks only the board, the TypeScript AI lacks colonies: the Rust AI's gap is named
+    const typescriptAllBoards: AiSupport = {...typescript, boards: [BoardName.THARSIS, BoardName.HELLAS]};
+    const settings: AiSettings = {...colonies, boardName: BoardName.HELLAS};
+    expect(aiEngineFor(settings, {rust, typescript: typescriptAllBoards}, {engine: 'rust', typescriptFallback: true}))
+      .deep.eq({engine: 'none', reasons: [{kind: 'board', id: BoardName.HELLAS}]});
   });
 
   it('plays nothing with Rust without a support file and without the stand-in', () => {
@@ -108,13 +116,13 @@ describe('aiEngineFor', () => {
   });
 });
 
-describe('playableAiSupport', () => {
+describe('adminAiSupport', () => {
   const typescript: AiSupport = {...EMPTY_AI_SUPPORT, expansions: ['corpera', 'venus']};
   const rust: AiSupport = {...EMPTY_AI_SUPPORT, expansions: ['corpera', 'colonies']};
 
-  it('is the support of the AI that plays, both together with the stand-in', () => {
-    expect(playableAiSupport({rust, typescript}, {engine: 'typescript', typescriptFallback: true}).expansions).deep.eq(['corpera', 'venus']);
-    expect(playableAiSupport({rust, typescript}, {engine: 'rust', typescriptFallback: false}).expansions).deep.eq(['corpera', 'colonies']);
-    expect(playableAiSupport({rust, typescript}, {engine: 'rust', typescriptFallback: true}).expansions).deep.eq(['corpera', 'colonies', 'venus']);
+  it('is only the support of the admin\'s AI, also with the stand-in', () => {
+    expect(adminAiSupport({rust, typescript}, {engine: 'typescript', typescriptFallback: true}).expansions).deep.eq(['corpera', 'venus']);
+    expect(adminAiSupport({rust, typescript}, {engine: 'rust', typescriptFallback: false}).expansions).deep.eq(['corpera', 'colonies']);
+    expect(adminAiSupport({rust, typescript}, {engine: 'rust', typescriptFallback: true}).expansions).deep.eq(['corpera', 'colonies']);
   });
 });

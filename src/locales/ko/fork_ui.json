@@ -1571,5 +1571,6 @@
   "On: settings the Rust AI cannot play get the TypeScript AI, and it decides when the Rust AI drops out mid-game. Off: such settings count as not compatible with the AI; mid-game a standard move decides.": "켜기: Rust AI가 못 하는 설정은 TypeScript AI가 맡고, 게임 도중 Rust AI가 멈추면 TypeScript AI가 결정합니다. 끄기: 그런 설정은 AI와 호환되지 않는 것으로 보고, 게임 도중에는 기본 수가 결정합니다.",
   "Track +${0} before trading": "교역 전 트랙 +${0}",
   "Track +${0} before trading (optional)": "교역 전 트랙 +${0} (선택 사항)",
-  "Version ${0} · bot ${1} · file of ${2}": "버전 ${0} · 봇 ${1} · 파일 ${2}"
+  "Version ${0} · bot ${1} · file of ${2}": "버전 ${0} · 봇 ${1} · 파일 ${2}",
+  "Not loaded (${0}). Next attempt in 30 seconds.": "불러오지 못함 (${0}). 30초 후 다시 시도합니다."
 }
