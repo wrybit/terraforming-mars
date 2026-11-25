@@ -42,8 +42,8 @@ describe('GameOverview', () => {
 
   it('one cell per column, empty where the player did not play', () => {
     const cells = mountRow().findAll('td').map((cell) => cell.text());
-    // Theme, status, game, generation, last activity, spectators/result, players 1–6, AI 1–5, delete
-    expect(cells.slice(6, 17)).deep.eq(['Jens🏆76 VP', 'Daniel66 VP', '', '', '', '', '', '', '', '', '']);
+    // Theme, status, game, generation, last activity, AI program, spectators/result, players 1–6, AI 1–5, delete
+    expect(cells.slice(7, 18)).deep.eq(['Jens🏆76 VP', 'Daniel66 VP', '', '', '', '', '', '', '', '', '']);
   });
 
   it('finished: shows the result instead of watching; running: watch as spectator', () => {
@@ -102,5 +102,15 @@ describe('GameOverview', () => {
     expect(local.find('td.games-overview-activity').text()).eq('3 hr. ago');
     expect(local.find('td.games-overview-activity').attributes('title')).is.not.undefined;
     expect(mountRow().find('td.games-overview-activity').text()).eq('–');
+  });
+
+  it('AI column: Rust AI with its version, TypeScript without, a dash for games without AI', () => {
+    const aiCell = (extra: Partial<AdminGameSummary>) => mount(GameOverview, {
+      ...globalConfig, attachTo: document.createElement('tbody'), props: {summary: {...summary, ...extra}, columns: PLAYER_COLUMNS},
+    }).find('td.games-overview-ai').text();
+    expect(aiCell({aiEngine: 'rust', aiVersion: '1.4'})).eq('Rust 1.4');
+    expect(aiCell({aiEngine: 'rust'})).eq('Rust');
+    expect(aiCell({aiEngine: 'typescript'})).eq('TypeScript');
+    expect(aiCell({})).eq('–');
   });
 });

@@ -33,7 +33,7 @@ export type AiOption = typeof AI_OPTIONS[number];
  * What the new AI (Rust bot) can play: the contract of the file rust-ai-support.json next to the bot program.
  *
  * The file is built in the lab repository and shipped with every bot deploy, never edited in this repository.
- * Format: {"version": 1, "generated": ISO time, "botVersion": build id, "expansions": [...], "boards": [...],
+ * Format: {"version": 1, "generated": ISO time, "botVersion": build id, "aiVersion": release name, "expansions": [...], "boards": [...],
  * "options": [...], "duneModules": [...], "botFeatures": [...]}. Everything listed is supported, everything else is not; the base game
  * always is. IDs are the code's IDs: expansion IDs (GameModule.ts), board names (BoardName.ts, also written as
  * slug, e.g. "arrakis-61"), GameOptions keys (AI_OPTIONS) and Dune module IDs.
@@ -42,6 +42,8 @@ export type AiSupport = {
   version: number;
   generated: string | undefined;
   botVersion: string | undefined;
+  /** Short release number of the bot shown to admins, e.g. "1.4" (one step up per release) */
+  aiVersion?: string;
   expansions: ReadonlyArray<Expansion>;
   boards: ReadonlyArray<BoardName>;
   options: ReadonlyArray<AiOption>;
@@ -121,6 +123,8 @@ export function parseAiSupport(raw: unknown): ParsedAiSupport {
       version: AI_SUPPORT_VERSION,
       generated: typeof data.generated === 'string' ? data.generated : undefined,
       botVersion: typeof data.botVersion === 'string' ? data.botVersion : undefined,
+      // only set when the file names one (EMPTY_AI_SUPPORT has none)
+      ...(typeof data.aiVersion === 'string' && data.aiVersion !== '' ? {aiVersion: data.aiVersion} : {}),
       expansions,
       boards,
       options,

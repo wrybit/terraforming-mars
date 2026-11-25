@@ -22,6 +22,7 @@ import {isAiOnlyGame} from '../aiTraining/aiOnlyGames';
 import {checkReachability, publicStatusUrl} from '../admin/dashboard/reachability';
 import raw_settings from '../../genfiles/settings.json';
 import recentCommits from '../../genfiles/recentCommits.json';
+import {rustAiSupport} from '../ai/aiEngineChoice';
 import {rustFallbackLog} from '../ai/rust/rustFallbackLog';
 
 // Values the server runs with (like every setting: a change applies after the restart)
@@ -81,7 +82,17 @@ export class ApiAdminDashboard extends Handler {
       // Also written every 5 minutes; a build takes a few minutes, so half an hour old means the script died
       deployRun: readOperatorFile<DashboardDeployRun>(dataFolder, DEPLOY_STATE_FILE, 30 * 60 * 1000, nowMs),
       rustFallbacks: rustFallbackLog.summary(),
+      rustAi: rustAiInfo(),
     };
     responses.writeJson(res, ctx, dashboard);
   }
+}
+
+/** Version of the installed Rust AI for the server card; undefined when this server has none. */
+function rustAiInfo(): ServerDashboard['rustAi'] {
+  const support = rustAiSupport();
+  if (support.botVersion === undefined && support.aiVersion === undefined) {
+    return undefined;
+  }
+  return {version: support.aiVersion, commit: support.botVersion, generated: support.generated};
 }

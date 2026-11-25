@@ -56,6 +56,7 @@ export interface SerializedPlayer extends DeprecatedFields{
   handicap: number;
   aiLevel?: AiLevel;
   aiEngine?: AiEngine;
+  aiVersion?: string;
   hasIncreasedTerraformRatingThisGeneration: boolean;
   hasTurmoilScienceTagBonus: boolean;
   heat: number;

@@ -105,6 +105,8 @@ export class Player implements IPlayer {
   /** Set for computer-controlled players: their strength. */
   public aiLevel: AiLevel | undefined = undefined;
   public aiEngine: AiEngine | undefined = undefined;
+  /** Version of the Rust AI that plays this seat, fixed when the game starts (shown to admins) */
+  public aiVersion: string | undefined = undefined;
   protected waitingFor?: PlayerInput;
   protected waitingForCb?: () => void;
   // Action menu currently offered (takeAction): rebuilt from current values when the DevTools change them
@@ -1985,6 +1987,7 @@ export class Player implements IPlayer {
       handicap: this.handicap,
       aiLevel: this.aiLevel,
       aiEngine: this.aiEngine,
+      aiVersion: this.aiVersion,
       timer: this.timer.serialize(),
       // Stats
       actionsTakenThisGame: this.actionsTakenThisGame,
@@ -2009,6 +2012,7 @@ export class Player implements IPlayer {
     const player = new Player(d.name, d.color, d.beginner, Number(d.handicap), d.id);
     player.aiLevel = isAiLevel(d.aiLevel) ? d.aiLevel : undefined;
     player.aiEngine = isAiEngine(d.aiEngine) ? d.aiEngine : undefined;
+    player.aiVersion = typeof d.aiVersion === 'string' ? d.aiVersion : undefined;
 
     player.actionsTakenThisGame = d.actionsTakenThisGame;
     player.actionsThisGeneration = new Set(d.actionsThisGeneration);

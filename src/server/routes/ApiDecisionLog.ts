@@ -5,7 +5,7 @@ import {Request} from '../Request';
 import {Response} from '../Response';
 import {RouteError} from './RouteError';
 import {SelfplayArchive} from '../aiTraining/selfplayArchive';
-import {aiEngineOfGame} from '../../common/ai/AiEngine';
+import {aiEngineOfGame, aiVersionOfGame} from '../../common/ai/AiEngine';
 
 /**
  * Decision log of a self-play game of the new AI, admins only.
@@ -21,8 +21,9 @@ export class ApiDecisionLog extends Handler {
     const game = await ctx.gameLoader.getGame(ctx.urlParams.participantId('id'));
     const ref = game === undefined ? undefined : this.archive().refOf(game.id);
     if (ctx.url.searchParams.has('check')) {
-      // The AI program of the game rides along: the result page shows it to admins
-      responses.writeJson(res, ctx, {available: ref !== undefined, aiEngine: game === undefined ? undefined : aiEngineOfGame(game.players)});
+      // The AI program and its version ride along: the result page shows them to admins
+      responses.writeJson(res, ctx, {available: ref !== undefined, aiEngine: game === undefined ? undefined : aiEngineOfGame(game.players),
+        aiVersion: game === undefined ? undefined : aiVersionOfGame(game.players)});
       return;
     }
     if (ref === undefined) {

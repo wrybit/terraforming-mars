@@ -6,7 +6,7 @@ import {paths} from '../../common/app/paths';
 import {isActiveParticipant} from '../server/activeParticipants';
 import {participantLanguage} from '../server/participantLanguages';
 import {isIProjectCard} from '../cards/IProjectCard';
-import {aiEngineOfGame} from '../../common/ai/AiEngine';
+import {aiEngineOfGame, aiVersionOfGame} from '../../common/ai/AiEngine';
 
 /** Summarizes a game played on this server for the admin overview. */
 export function localGameSummary(game: IGame): AdminGameSummary {
@@ -37,5 +37,6 @@ export function localGameSummary(game: IGame): AdminGameSummary {
     theme: game.gameOptions.theme,
     players: toAdminPlayerSummaries(scores, isFinished, game.isSoloModeWin()),
     aiEngine: aiEngineOfGame(game.players),
+    aiVersion: aiVersionOfGame(game.players),
   };
 }

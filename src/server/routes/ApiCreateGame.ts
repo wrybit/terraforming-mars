@@ -295,7 +295,10 @@ export class ApiCreateGame extends Handler {
     }
     // a cloned game cannot be mirrored by the Rust AI (its setup lies in the past): TS AI
     if (gameOptions.clonedGamedId !== undefined && !gameOptions.clonedGamedId.startsWith('#')) {
-      players.forEach((player) => player.aiEngine = undefined);
+      players.forEach((player) => {
+        player.aiEngine = undefined;
+        player.aiVersion = undefined;
+      });
     }
     ctx.gameLoader.add(game);
     // Only games that are actually created count against the quota.

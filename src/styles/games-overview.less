@@ -258,11 +258,14 @@ td.games-overview-activity {
   font-size: 12px;
 }
 
-// AI program of the game, as quiet as the date below which it stands
-.games-overview-engine {
-  display: block;
+// AI program of the game with the Rust AI's version, as quiet as the last activity next to it
+.games-overview-table .games-overview-ai {
+  width: 84px;
+  white-space: nowrap;
+}
+
+td.games-overview-ai {
   color: @games-overview-dim;
-  font-size: 12px;
 }
 
 .games-overview-chip {

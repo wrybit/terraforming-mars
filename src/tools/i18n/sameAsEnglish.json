@@ -7,7 +7,8 @@
     "AltGr",
     "CHOAM",
     "Ctrl",
-    "Node.js"
+    "Node.js",
+    "Rust AI"
   ],
   "br": [
     "${0} AI",
@@ -52,7 +53,8 @@
     "Venus Next",
     "Virtual",
     "[ solo",
-    "normal ${0}"
+    "normal ${0}",
+    "Rust AI"
   ],
   "cn": [
     "${0} AI",
@@ -64,7 +66,8 @@
     "Ctrl",
     "Delta Project (2VP)",
     "Delta Project (5VP)",
-    "Node.js"
+    "Node.js",
+    "Rust AI"
   ],
   "de": [
     "${0} AI",
@@ -129,7 +132,8 @@
     "Replay",
     "${0} s",
     "Rollouts",
-    "Threads"
+    "Threads",
+    "Rust AI"
   ],
   "es": [
     "${0} AI",
@@ -171,7 +175,8 @@
     "Underworld 2",
     "Venus Next",
     "Virtual",
-    "normal ${0}"
+    "normal ${0}",
+    "Rust AI"
   ],
   "fi": [
     "${0} AI",
@@ -199,7 +204,8 @@
     "Node.js",
     "Pavonis Mons",
     "Shai-Hulud",
-    "Tharsis Tholus"
+    "Tharsis Tholus",
+    "Rust AI"
   ],
   "fr": [
     "${0} (Turmoil ${1})",
@@ -267,7 +273,8 @@
     "terra cimmeria nova",
     "utopia planitia",
     "vastitas borealis",
-    "vastitas borealis nova"
+    "vastitas borealis nova",
+    "Rust AI"
   ],
   "hu": [
     "${0} AI",
@@ -296,7 +303,8 @@
     "amazonis p.",
     "arabia terra",
     "vastitas borealis",
-    "vastitas borealis nova"
+    "vastitas borealis nova",
+    "Rust AI"
   ],
   "it": [
     "${0} (Turmoil ${1})",
@@ -358,7 +366,8 @@
     "terra cimmeria nova",
     "utopia planitia",
     "vastitas borealis",
-    "vastitas borealis nova"
+    "vastitas borealis nova",
+    "Rust AI"
   ],
   "jp": [
     "${0} AI",
@@ -370,7 +379,8 @@
     "Ctrl",
     "Delta Project (2VP)",
     "Delta Project (5VP)",
-    "Node.js"
+    "Node.js",
+    "Rust AI"
   ],
   "ko": [
     "${0} AI",
@@ -382,7 +392,8 @@
     "Ctrl",
     "Delta Project (2VP)",
     "Delta Project (5VP)",
-    "Node.js"
+    "Node.js",
+    "Rust AI"
   ],
   "nb": [
     "${0} AI",
@@ -437,7 +448,8 @@
     "terra cimmeria nova",
     "utopia planitia",
     "vastitas borealis",
-    "vastitas borealis nova"
+    "vastitas borealis nova",
+    "Rust AI"
   ],
   "nl": [
     "${0} (Turmoil ${1})",
@@ -513,7 +525,8 @@
     "worm",
     "Websites",
     "${0} s",
-    "Threads"
+    "Threads",
+    "Rust AI"
   ],
   "pl": [
     "${0} AI",
@@ -549,7 +562,8 @@
     "[ solo",
     "terra cimmeria nova",
     "utopia planitia",
-    "vastitas borealis nova"
+    "vastitas borealis nova",
+    "Rust AI"
   ],
   "ru": [
     "${0} AI",
@@ -561,7 +575,8 @@
     "CHOAM",
     "Ctrl",
     "Node.js",
-    "PolderTECH"
+    "PolderTECH",
+    "Rust AI"
   ],
   "ua": [
     "${0} AI",
@@ -572,6 +587,7 @@
     "CHOAM",
     "Ctrl",
     "Node.js",
-    "PolderTECH"
+    "PolderTECH",
+    "Rust AI"
   ]
 }

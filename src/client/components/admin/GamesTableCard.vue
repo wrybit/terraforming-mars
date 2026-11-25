@@ -18,6 +18,7 @@
             <th class="games-overview-game" v-i18n>Game</th>
             <th class="games-overview-generation" v-i18n>Gen</th>
             <th class="games-overview-activity" v-i18n>Last activity</th>
+            <th class="games-overview-ai">AI</th>
             <!-- Finished games can no longer be watched, only their result shown -->
             <th>{{ spectatorLabel }}</th>
             <th v-for="column in shownColumns" :key="column.kind + column.seat">{{ columnLabel(column) }}</th>
@@ -141,7 +142,7 @@ export default defineComponent({
       if (table === null || table === undefined || head === null || head === undefined || scroll.clientWidth === 0) {
         return;
       }
-      const fixedWidth = ['theme', 'status', 'game', 'generation', 'activity', 'actions']
+      const fixedWidth = ['theme', 'status', 'game', 'generation', 'activity', 'ai', 'actions']
         .map((name) => head.querySelector<HTMLElement>('.games-overview-' + name)?.offsetWidth ?? 0)
         .reduce((sum, width) => sum + width, 0);
       // Labels of all columns, also the dropped ones, measured as text in the font of the head
