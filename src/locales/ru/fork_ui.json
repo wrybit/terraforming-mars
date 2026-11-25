@@ -2197,5 +2197,8 @@
   "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "Значение: средний перевес в очках над лучшим соперником в ${0} пробных партиях на вариант максимум (чем выше, тем лучше).",
   "Track +${0} before trading": "Трек +${0} перед торговлей",
   "Track +${0} before trading (optional)": "Трек +${0} перед торговлей (необязательно)",
-  "Not loaded (${0}). Next attempt in 30 seconds.": "Не загружено (${0}). Следующая попытка через 30 секунд."
+  "Not loaded (${0}). Next attempt in 30 seconds.": "Не загружено (${0}). Следующая попытка через 30 секунд.",
+  "${0}/${1} in both": "${0}/${1} у обеих",
+  "Plays it": "Играет",
+  "Does not play it": "Не играет"
 }

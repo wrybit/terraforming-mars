@@ -1100,5 +1100,8 @@
   "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "Wert: durchschnittlicher Punktevorsprung vor dem besten Gegner in bis zu ${0} Probepartien je Option (höher ist besser).",
   "Track +${0} before trading": "Leiste +${0} vor dem Handel",
   "Track +${0} before trading (optional)": "Leiste +${0} vor dem Handel (optional)",
-  "Not loaded (${0}). Next attempt in 30 seconds.": "Nicht geladen (${0}). Nächster Versuch in 30 Sekunden."
+  "Not loaded (${0}). Next attempt in 30 seconds.": "Nicht geladen (${0}). Nächster Versuch in 30 Sekunden.",
+  "${0}/${1} in both": "${0}/${1} bei beiden",
+  "Plays it": "Spielt es",
+  "Does not play it": "Spielt es nicht"
 }

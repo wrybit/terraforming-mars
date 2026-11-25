@@ -1951,5 +1951,8 @@
   "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "Waarde: gemiddelde puntenvoorsprong op de beste tegenstander in maximaal ${0} proefpartijen per optie (hoger is beter).",
   "Track +${0} before trading": "Spoor +${0} voor de handel",
   "Track +${0} before trading (optional)": "Spoor +${0} voor de handel (optioneel)",
-  "Not loaded (${0}). Next attempt in 30 seconds.": "Niet geladen (${0}). Volgende poging over 30 seconden."
+  "Not loaded (${0}). Next attempt in 30 seconds.": "Niet geladen (${0}). Volgende poging over 30 seconden.",
+  "${0}/${1} in both": "${0}/${1} bij beide",
+  "Plays it": "Speelt het",
+  "Does not play it": "Speelt het niet"
 }

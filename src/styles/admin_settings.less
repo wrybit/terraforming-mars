@@ -798,62 +798,118 @@
   }
 }
 
-// Overview "What the AI can play": one card per AI program, groups inside closer together than the cards
+// Overview "What the AI can play": one comparison table per block, the blocks in two columns.
+// Rows close together, blocks further apart, columns furthest (law of proximity)
 .ai-support-overview {
   padding: @server-settings-row-gap 0 0;
   border-top: 1px solid @server-settings-line;
 }
 
 .ai-support-overview-title {
-  margin: 0 0 12px;
+  margin: 0 0 4px;
   font-size: 15px;
+}
+
+.ai-support-overview-note {
+  margin: 0 0 12px;
+  color: @server-settings-dim;
+  font-size: 12px;
 }
 
 .ai-support-overview-columns {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   align-items: start;
-  gap: 20px;
+  // Stacked on the phone the blocks keep the gap they have inside a column
+  gap: 12px 20px;
 }
 
-.ai-support-overview-column {
+.ai-support-overview-stack {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding: 12px 14px;
+}
+
+.ai-support-overview-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.04);
+  font-size: 13px;
+
+  th,
+  td {
+    padding: 5px 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
 }
 
-.ai-support-overview-engine {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-  margin: 0;
+.ai-support-overview-group-head {
+  text-align: left;
   font-size: 14px;
+  font-weight: 600;
 }
 
-.ai-support-overview-active {
+.ai-support-overview-count {
+  margin-left: 6px;
   color: @server-settings-dim;
   font-size: 12px;
   font-weight: normal;
 }
 
-.ai-support-overview-note {
-  margin: -8px 0 0;
+// Narrow mark columns, the setting gets the rest of the width
+.ai-support-overview-engine {
+  width: 52px;
   color: @server-settings-dim;
   font-size: 12px;
+  font-weight: normal;
+  text-align: center;
 }
 
-.ai-support-overview-group {
+.ai-support-overview-engine--active {
+  color: inherit;
+  font-weight: 600;
+}
+
+.ai-support-overview-setting {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  align-items: center;
+  gap: 8px;
 }
 
-.ai-support-overview-group-title {
+// Icons of tiles and boards at row size; a fixed box keeps the labels in one line
+.ai-support-overview-icon {
+  display: inline-flex;
+  flex: none;
+  justify-content: center;
+  width: 18px;
+
+  .create-game-expansion-icon {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    background-size: 18px 18px;
+  }
+}
+
+// A setting only one program plays: dimmer, so the gaps stand out
+.ai-support-overview-row--gap .ai-support-overview-setting {
   color: @server-settings-dim;
-  font-size: 12px;
+}
+
+.ai-support-overview-mark {
+  color: @server-settings-dim;
+  text-align: center;
+}
+
+.ai-support-overview-mark--yes {
+  color: @button-success-hover;
+  font-weight: 600;
 }
 
 @media (max-width: @max-below-tablet) {

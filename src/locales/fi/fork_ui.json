@@ -1324,5 +1324,8 @@
   "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "Arvo: keskimääräinen pistejohto parhaaseen vastustajaan enintään ${0} koepelissä vaihtoehtoa kohden (suurempi on parempi).",
   "Track +${0} before trading": "Ura +${0} ennen kaupankäyntiä",
   "Track +${0} before trading (optional)": "Ura +${0} ennen kaupankäyntiä (valinnainen)",
-  "Not loaded (${0}). Next attempt in 30 seconds.": "Ei ladattu (${0}). Uusi yritys 30 sekunnin kuluttua."
+  "Not loaded (${0}). Next attempt in 30 seconds.": "Ei ladattu (${0}). Uusi yritys 30 sekunnin kuluttua.",
+  "${0}/${1} in both": "${0}/${1} molemmissa",
+  "Plays it": "Pelaa sitä",
+  "Does not play it": "Ei pelaa sitä"
 }

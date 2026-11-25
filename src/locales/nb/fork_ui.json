@@ -1690,5 +1690,8 @@
   "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "Verdi: gjennomsnittlig poengforsprang på beste motstander i opptil ${0} prøvepartier per valg (høyere er bedre).",
   "Track +${0} before trading": "Sporet +${0} før handel",
   "Track +${0} before trading (optional)": "Sporet +${0} før handel (valgfritt)",
-  "Not loaded (${0}). Next attempt in 30 seconds.": "Ikke lastet (${0}). Nytt forsøk om 30 sekunder."
+  "Not loaded (${0}). Next attempt in 30 seconds.": "Ikke lastet (${0}). Nytt forsøk om 30 sekunder.",
+  "${0}/${1} in both": "${0}/${1} i begge",
+  "Plays it": "Spiller det",
+  "Does not play it": "Spiller det ikke"
 }

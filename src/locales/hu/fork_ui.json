@@ -1508,5 +1508,8 @@
   "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "Érték: átlagos pontelőny a legjobb ellenféllel szemben opciónként legfeljebb ${0} próbajátszmában (a magasabb jobb).",
   "Track +${0} before trading": "Sáv +${0} kereskedés előtt",
   "Track +${0} before trading (optional)": "Sáv +${0} kereskedés előtt (nem kötelező)",
-  "Not loaded (${0}). Next attempt in 30 seconds.": "Nem töltődött be (${0}). Újrapróbálás 30 másodperc múlva."
+  "Not loaded (${0}). Next attempt in 30 seconds.": "Nem töltődött be (${0}). Újrapróbálás 30 másodperc múlva.",
+  "${0}/${1} in both": "${0}/${1} mindkettőben",
+  "Plays it": "Játssza",
+  "Does not play it": "Nem játssza"
 }

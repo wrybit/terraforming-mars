@@ -6,8 +6,10 @@ import {aiSupportInfo, resetAiSupport} from '@/client/utils/aiSupportState';
 import {EMPTY_AI_SUPPORT} from '@/common/ai/aiSupportContract';
 import {BoardName} from '@/common/boards/BoardName';
 
-function columnTexts(wrapper: ReturnType<typeof mount>): Array<string> {
-  return wrapper.findAll('.ai-support-overview-column').map((column) => column.text());
+// Marks of a row as "TS Rust", e.g. "✓–"
+function marksOf(wrapper: ReturnType<typeof mount>, label: string): string {
+  const row = wrapper.findAll('.ai-support-overview-row').find((candidate) => candidate.find('.ai-support-overview-setting').text() === label);
+  return row === undefined ? 'missing' : row.findAll('.ai-support-overview-mark').map((mark) => mark.text()).join('');
 }
 
 describe('AiSupportOverview', () => {
@@ -18,16 +20,20 @@ describe('AiSupportOverview', () => {
     aiSupportInfo.value = {engine: 'rust', typescriptFallback: true,
       rust: {...EMPTY_AI_SUPPORT, botVersion: 'abc123', aiVersion: '1.9', generated: '2026-11-20T10:00:00Z', expansions: ['venus'], boards: [BoardName.THARSIS]}};
     await wrapper.vm.$nextTick();
-    const [typescript, rust] = columnTexts(wrapper);
-    expect(typescript).contains('TypeScript').contains('Base game').contains('Prelude 2').not.contains('active');
-    expect(rust).contains('active').contains('Version 1.9').contains('abc123').contains('Venus Next').contains('tharsis').not.contains('Prelude');
+    expect(wrapper.find('.ai-support-overview-note').text()).contains('Rust').contains('active').contains('Version 1.9').contains('abc123');
+    expect(wrapper.find('.ai-support-overview-engine--active').text()).eq('Rust');
+    expect(marksOf(wrapper, 'Base game')).eq('✓✓');
+    expect(marksOf(wrapper, 'Venus Next')).eq('✓✓');
+    expect(marksOf(wrapper, 'Prelude 2')).eq('✓–');
+    expect(marksOf(wrapper, 'tharsis')).eq('✓✓');
+    expect(wrapper.findAll('.ai-support-overview-stack')).has.length(2);
   });
 
   it('says the Rust AI plays nothing without a support file', async () => {
     const wrapper = mount(AiSupportOverview, {...globalConfig});
     aiSupportInfo.value = {engine: 'typescript', typescriptFallback: true, rust: EMPTY_AI_SUPPORT};
     await wrapper.vm.$nextTick();
-    expect(columnTexts(wrapper)[1]).contains('rust-ai-support.json');
-    expect(wrapper.findAll('.ai-support-overview-column')[1].findAll('.create-game-summary-chip')).has.length(0);
+    expect(wrapper.text()).contains('rust-ai-support.json');
+    expect(marksOf(wrapper, 'Base game')).eq('✓–');
   });
 });

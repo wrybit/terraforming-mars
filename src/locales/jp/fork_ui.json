@@ -1700,5 +1700,8 @@
   "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "値：選択肢ごとに最大 ${0} 回の試行ゲームでの、最強の相手に対する平均得点差（高いほど良い）。",
   "Track +${0} before trading": "交易前にトラック +${0}",
   "Track +${0} before trading (optional)": "交易前にトラック +${0} (任意)",
-  "Not loaded (${0}). Next attempt in 30 seconds.": "読み込めませんでした（${0}）。30 秒後に再試行します。"
+  "Not loaded (${0}). Next attempt in 30 seconds.": "読み込めませんでした（${0}）。30 秒後に再試行します。",
+  "${0}/${1} in both": "両方 ${0}/${1}",
+  "Plays it": "対応",
+  "Does not play it": "非対応"
 }

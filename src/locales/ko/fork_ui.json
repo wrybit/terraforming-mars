@@ -1578,5 +1578,8 @@
   "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "값: 선택지당 최대 ${0}번의 시험 게임에서 가장 강한 상대보다 앞선 평균 점수 (높을수록 좋음).",
   "Track +${0} before trading": "교역 전 트랙 +${0}",
   "Track +${0} before trading (optional)": "교역 전 트랙 +${0} (선택 사항)",
-  "Not loaded (${0}). Next attempt in 30 seconds.": "불러오지 못함 (${0}). 30초 후 다시 시도합니다."
+  "Not loaded (${0}). Next attempt in 30 seconds.": "불러오지 못함 (${0}). 30초 후 다시 시도합니다.",
+  "${0}/${1} in both": "둘 다 ${0}/${1}",
+  "Plays it": "플레이 가능",
+  "Does not play it": "플레이 불가"
 }
