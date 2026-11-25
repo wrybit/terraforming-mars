@@ -6,10 +6,10 @@ import {aiSupportInfo, resetAiSupport} from '@/client/utils/aiSupportState';
 import {EMPTY_AI_SUPPORT} from '@/common/ai/aiSupportContract';
 import {BoardName} from '@/common/boards/BoardName';
 
-// Marks of a row as "TS Rust", e.g. "✓✗"
+// Marks of a row as "TS Rust", e.g. "✓✗" (green or red logo)
 function marksOf(wrapper: ReturnType<typeof mount>, label: string): string {
   const row = wrapper.findAll('.ai-support-overview-row').find((candidate) => candidate.find('.ai-support-overview-setting').text() === label);
-  return row === undefined ? 'missing' : row.findAll('.ai-support-overview-mark').map((mark) => mark.text()).join('');
+  return row === undefined ? 'missing' : row.findAll('.ai-support-overview-logo').map((logo) => logo.classes('ai-support-overview-logo--yes') ? '✓' : '✗').join('');
 }
 
 describe('AiSupportOverview', () => {

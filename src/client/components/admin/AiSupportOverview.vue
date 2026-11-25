@@ -7,7 +7,7 @@
       <span v-if="rustNote !== undefined">{{ rustNote }}</span>
     </p>
     <p v-if="rustEmpty" class="ai-support-overview-note" v-i18n>No bot or no rust-ai-support.json in its folder: the Rust AI plays nothing.</p>
-    <!-- One table per block, the blocks in two columns of about equal length: a gap shows as a red-orange "✗" in a yellow row -->
+    <!-- One table per block, the blocks in two columns of about equal length: each program's logo green or red, a gap row in yellow -->
     <div class="ai-support-overview-columns">
       <div v-for="(column, index) in columns" :key="index" class="ai-support-overview-stack">
         <table v-for="group in column" :key="group.title" class="ai-support-overview-table">
@@ -29,8 +29,10 @@
                   <span :class="{capitalized: row.chip.capitalized}" v-i18n>{{ row.chip.label }}</span>
                 </span>
               </td>
-              <td v-for="engine in engines" :key="engine.engine" class="ai-support-overview-mark" :class="{'ai-support-overview-mark--yes': row[engine.engine]}"
-                :aria-label="$t(row[engine.engine] ? 'Plays it' : 'Does not play it')">{{ row[engine.engine] ? '✓' : '✗' }}</td>
+              <td v-for="engine in engines" :key="engine.engine" class="ai-support-overview-mark">
+                <span class="ai-support-overview-logo" :class="['ai-support-overview-logo--' + engine.engine, row[engine.engine] ? 'ai-support-overview-logo--yes' : 'ai-support-overview-logo--no']"
+                  role="img" :aria-label="$t(row[engine.engine] ? 'Plays it' : 'Does not play it')"></span>
+              </td>
             </tr>
           </tbody>
         </table>
