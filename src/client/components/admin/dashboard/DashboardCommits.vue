@@ -28,7 +28,7 @@
 
 <script lang="ts">
 import {defineComponent, PropType} from 'vue';
-import {ServerDashboard} from '@/common/admin/ServerDashboard';
+import {DashboardSectionData} from '@/common/admin/dashboardSections';
 import {translateText} from '@/client/directives/i18n';
 import {formatDateTime} from '@/client/components/admin/dashboard/dashboardFormat';
 import {deployState, DeployState, deployStatusText} from '@/client/components/admin/dashboard/deployState';
@@ -47,7 +47,7 @@ type DataModel = {
 export default defineComponent({
   name: 'DashboardCommits',
   props: {
-    dashboard: {type: Object as PropType<ServerDashboard>, required: true},
+    dashboard: {type: Object as PropType<DashboardSectionData['deploy']>, required: true},
   },
   emits: ['changed'],
   data(): DataModel {
@@ -61,7 +61,7 @@ export default defineComponent({
       return deployStatusText(this.dashboard);
     },
     playersOnlineText(): string {
-      return `${translateText('Players online now')}: ${this.dashboard.games.playersOnline}`;
+      return `${translateText('Players online now')}: ${this.dashboard.playersOnline}`;
     },
   },
   methods: {

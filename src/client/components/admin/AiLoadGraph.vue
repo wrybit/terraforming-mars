@@ -57,11 +57,12 @@
         <DashboardSplitBar label="Memory" :segments="memorySegments" :total="latest.memory.totalBytes" />
       </div>
     </div>
-    <p v-else-if="failure === ''" class="ai-load-note" v-i18n>Loading…</p>
+    <LoadingSpinner v-else-if="failure === ''" />
   </section>
 </template>
 
 <script lang="ts">
+import LoadingSpinner from '@/client/components/common/LoadingSpinner.vue';
 import {defineComponent} from 'vue';
 import {paths} from '@/common/app/paths';
 import {LiveLoadSample} from '@/common/admin/LiveLoad';
@@ -88,7 +89,7 @@ type DataModel = {
 
 export default defineComponent({
   name: 'AiLoadGraph',
-  components: {DashboardSplitBar},
+  components: {LoadingSpinner, DashboardSplitBar},
   emits: ['measured'],
   data(): DataModel {
     return {samples: [], failure: '', hoverIndex: undefined, timer: undefined, stopped: false};

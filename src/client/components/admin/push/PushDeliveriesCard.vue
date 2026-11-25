@@ -2,7 +2,8 @@
   <!-- The latest messages the server tried to send (server/lobby/LobbyPush.ts keeps them), newest first -->
   <section class="games-overview-card push-deliveries">
     <h2 v-i18n>Recent deliveries</h2>
-    <p v-if="deliveries.length === 0" class="games-overview-note" v-i18n>No messages sent yet.</p>
+    <LoadingSpinner v-if="loading" />
+    <p v-else-if="deliveries.length === 0" class="games-overview-note" v-i18n>No messages sent yet.</p>
     <div v-else class="games-overview-scroll">
       <table class="push-deliveries-table">
         <thead>
@@ -23,11 +24,12 @@
 </template>
 
 <script setup lang="ts">
+import LoadingSpinner from '@/client/components/common/LoadingSpinner.vue';
 import {AdminPushDelivery} from '@/common/admin/AdminPushModel';
 import {LobbyPushResult} from '@/common/lobby/LobbyPushModel';
 import {shortDateTime} from '@/client/utils/shortDateTime';
 
-defineProps<{deliveries: ReadonlyArray<AdminPushDelivery>}>();
+defineProps<{deliveries: ReadonlyArray<AdminPushDelivery>, loading?: boolean}>();
 
 const RESULT_LABELS: Record<LobbyPushResult, string> = {
   sent: 'sent',

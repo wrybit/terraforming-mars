@@ -10,13 +10,14 @@
       </div>
     </header>
     <p v-if="kind === 'download'" class="games-overview-note" v-i18n>Not shown here because the file is very large.</p>
-    <p v-else-if="status === 'loading'" class="games-overview-note" v-i18n>Loading…</p>
+    <LoadingSpinner v-else-if="status === 'loading'" />
     <p v-else-if="status === 'error'" class="games-overview-note games-overview-note--error">{{ errorText }}</p>
     <pre v-else class="raw-data-content">{{ content }}</pre>
   </section>
 </template>
 
 <script lang="ts">
+import LoadingSpinner from '@/client/components/common/LoadingSpinner.vue';
 import {defineComponent, PropType} from 'vue';
 import {describeFailure, failureOf, fetchOrFail} from '@/client/utils/requestFailure';
 import {formatRawData, RawDataKind} from '@/client/components/admin/rawData';
@@ -28,6 +29,7 @@ type DataModel = {
 };
 
 export default defineComponent({
+  components: {LoadingSpinner},
   name: 'RawDataCard',
   props: {
     label: {type: String, required: true},

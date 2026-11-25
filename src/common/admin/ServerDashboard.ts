@@ -132,9 +132,8 @@ export type DashboardReachability = {
   error?: string,
 };
 
-/** Answer of GET api/admin/dashboard: everything the admin dashboard shows. */
+/** Everything the admin dashboard shows; the server sends it in parts (dashboardSections.ts). */
 export type ServerDashboard = {
-  generatedAtMs: number,
   /** Decisions the TypeScript AI made for the Rust AI (crash, no answer in time, refused answer) */
   rustFallbacks?: RustFallbackSummary,
   /** Installed Rust AI: short version (e.g. "1.4"), commit and time of its support file; absent without Rust AI */
@@ -182,8 +181,9 @@ export type ServerDashboard = {
   games: {
     running: number,
     finished: number,
-    playersOnline: number,
   },
+  /** Players in a game right now: cheap to count, so it comes with the fast parts, not with the saved games */
+  playersOnline: number,
   /** Distinct human players per day (last 14 days) and per week (last 12 weeks), oldest first */
   activity: {
     days: Array<DashboardPeriodCount>,

@@ -6,14 +6,17 @@
         <section class="games-overview-card admin-players-names">
           <div class="admin-players-head">
             <h2 v-i18n>Players in the statistics</h2>
-            <span class="games-overview-note">{{ players.length }} <span v-i18n>names</span></span>
+            <span v-if="!loading" class="games-overview-note">{{ players.length }} <span v-i18n>names</span></span>
           </div>
           <p class="games-overview-note" v-i18n>Drag a name onto another one to merge them. On a phone: tap the name that goes, then the name that stays.</p>
           <p v-if="errorText !== ''" class="games-overview-note games-overview-note--error">{{ errorText }}</p>
-          <PlayerMergeSuggestions :suggestions="suggestions" @merge="ask" />
-          <PlayerNameList :players="players" :defaultNames="defaultNames" @merge="ask" @appearance="setAppearance" />
+          <LoadingSpinner v-if="loading" />
+          <template v-else>
+            <PlayerMergeSuggestions :suggestions="suggestions" @merge="ask" />
+            <PlayerNameList :players="players" :defaultNames="defaultNames" @merge="ask" @appearance="setAppearance" />
+          </template>
         </section>
-        <PlayerAliasesCard :aliases="aliases" :busy="busy" @unmerge="unmerge" />
+        <PlayerAliasesCard :loading="loading" :aliases="aliases" :busy="busy" @unmerge="unmerge" />
       </div>
       <PlayerMergeDialog v-if="pending !== undefined" :key="pending.from.name + '→' + pending.to.name"
         v-model:permanent="pending.permanent" :isDefaultName="defaultNames.includes(pending.from.name)"
@@ -24,6 +27,7 @@
 </template>
 
 <script setup lang="ts">
+import LoadingSpinner from '@/client/components/common/LoadingSpinner.vue';
 import {computed, ref} from 'vue';
 import {paths} from '@/common/app/paths';
 import {StatsGame} from '@/common/stats/StatsGame';
@@ -47,6 +51,8 @@ const appearances = ref<ReadonlyArray<PlayerAppearance>>([]);
 const pending = ref<PendingMerge | undefined>(undefined);
 const busy = ref(false);
 const errorText = ref('');
+// Until the first answer (or its failure) both cards show a spinner
+const loading = ref(true);
 
 const players = computed(() => playerNameStats(games.value, aliases.value, appearances.value));
 const suggestions = computed(() => similarPlayerNames(players.value, defaultNames.value));
@@ -64,6 +70,7 @@ async function load(): Promise<void> {
   } catch (error) {
     errorText.value = describeFailure(failureOf(error));
   }
+  loading.value = false;
 }
 
 function ask(pair: {from: string, to: string}): void {

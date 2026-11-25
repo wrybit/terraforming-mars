@@ -2,13 +2,13 @@
   <div id="admin-push" class="games-overview-container admin-home">
     <AdminGate active="push" @ready="load">
       <!-- Overview, every message (also the one without push), then what was sent lately -->
-      <PushOverviewCard :subscribers="info?.subscribers" :maxAgeDays="info?.subscriptionMaxAgeDays" :deliveries="info?.deliveries" />
+      <PushOverviewCard :loading="loading" :subscribers="info?.subscribers" :maxAgeDays="info?.subscriptionMaxAgeDays" :deliveries="info?.deliveries" />
       <!-- Up to three messages next to each other, as far as the width allows -->
       <div class="push-events">
         <PushEventCard v-for="entry in PUSH_CATALOG" :key="entry.kind" :entry="entry" :icon="info?.icon ?? 'favicon.ico'" />
       </div>
       <p v-if="errorText !== ''" class="games-overview-note games-overview-note--error">{{ errorText }}</p>
-      <PushDeliveriesCard v-else :deliveries="info?.deliveries ?? []" />
+      <PushDeliveriesCard v-else :loading="loading" :deliveries="info?.deliveries ?? []" />
     </AdminGate>
   </div>
 </template>
@@ -26,6 +26,8 @@ import {PUSH_CATALOG} from '@/client/components/admin/push/pushCatalog';
 
 const info = ref<AdminPushInfo | undefined>(undefined);
 const errorText = ref('');
+// Until the first answer (or its failure) the cards with server values show a spinner
+const loading = ref(true);
 
 async function load(): Promise<void> {
   try {
@@ -34,5 +36,6 @@ async function load(): Promise<void> {
   } catch (error) {
     errorText.value = describeFailure(failureOf(error));
   }
+  loading.value = false;
 }
 </script>

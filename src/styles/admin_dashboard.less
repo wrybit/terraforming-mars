@@ -488,3 +488,73 @@
 .dashboard-rust-fallbacks-game {
   font-family: monospace;
 }
+
+// Card still waiting for its values (DashboardCard.vue): about the height it has when filled (measured with typical
+// values), so the page does not jump; three columns: the cards of a row share the height of the row's tallest card
+.dashboard-card--loading {
+  display: flex;
+  flex-direction: column;
+
+  &.dashboard-card--server,
+  &.dashboard-card--processor,
+  &.dashboard-card--memory {
+    min-height: 420px;
+  }
+
+  &.dashboard-card--disk,
+  &.dashboard-card--games,
+  &.dashboard-card--graphics {
+    min-height: 310px;
+  }
+
+  &.dashboard-card--players,
+  &.dashboard-card--availability {
+    min-height: 440px;
+  }
+
+  // The chart keeps its proportions: its height follows the width of the page
+  &.dashboard-card--day {
+    min-height: clamp(186px, 36vw, 600px);
+  }
+
+  // Up to 25 commits (recentCommits.json)
+  &.dashboard-card--commits {
+    min-height: 480px;
+  }
+
+  // One column: every card its own height, the commit titles wrap
+  @media (max-width: @max-below-tablet) {
+    &.dashboard-card--server {
+      min-height: 380px;
+    }
+
+    &.dashboard-card--processor,
+    &.dashboard-card--memory {
+      min-height: 420px;
+    }
+
+    &.dashboard-card--disk {
+      min-height: 315px;
+    }
+
+    &.dashboard-card--games {
+      min-height: 280px;
+    }
+
+    &.dashboard-card--graphics {
+      min-height: 235px;
+    }
+
+    &.dashboard-card--players {
+      min-height: 185px;
+    }
+
+    &.dashboard-card--availability {
+      min-height: 345px;
+    }
+
+    &.dashboard-card--commits {
+      min-height: 700px;
+    }
+  }
+}

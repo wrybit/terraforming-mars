@@ -1,4 +1,8 @@
-import {DashboardCommit, ServerDashboard} from '@/common/admin/ServerDashboard';
+import {DashboardCommit} from '@/common/admin/ServerDashboard';
+import {DashboardSectionData} from '@/common/admin/dashboardSections';
+
+// Everything below needs only the deployment part of the dashboard
+type DeployInfo = DashboardSectionData['deploy'];
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 
 export type CommitRow = {
@@ -27,7 +31,7 @@ function sameCommit(hash: string, head: string): boolean {
  * is on the deploy branch counts. Without that the dashboard showed "25+ commits behind" and the update found
  * nothing to do.
  */
-function liveHash(dashboard: ServerDashboard, commits: ReadonlyArray<DashboardCommit>): string {
+function liveHash(dashboard: DeployInfo, commits: ReadonlyArray<DashboardCommit>): string {
   const head = dashboard.build.head;
   if (commits.some((commit) => sameCommit(commit.hash, head))) {
     return head;
@@ -37,7 +41,7 @@ function liveHash(dashboard: ServerDashboard, commits: ReadonlyArray<DashboardCo
 }
 
 /** Commits to list and how far the running build is behind the deploy branch. */
-export function deployState(dashboard: ServerDashboard): DeployState {
+export function deployState(dashboard: DeployInfo): DeployState {
   const commits = dashboard.upstream?.commits ?? dashboard.commits;
   const live = liveHash(dashboard, commits);
   const rows = commits.map((commit) => ({commit, live: sameCommit(commit.hash, live)}));
@@ -49,13 +53,13 @@ export function deployState(dashboard: ServerDashboard): DeployState {
 }
 
 /** The update script works right now: a request waits for it, it checks the new commits or it builds. */
-export function updateInProgress(dashboard: ServerDashboard): boolean {
+export function updateInProgress(dashboard: DeployInfo): boolean {
   const outcome = dashboard.deployRun?.outcome;
   return dashboard.updateRequest !== undefined || outcome === 'checking' || outcome === 'building';
 }
 
 /** An update can be asked for: the server is behind the deploy branch and the script is not busy with one. */
-export function canRequestUpdate(dashboard: ServerDashboard): boolean {
+export function canRequestUpdate(dashboard: DeployInfo): boolean {
   return (deployState(dashboard).behind ?? 0) > 0 && !updateInProgress(dashboard);
 }
 
@@ -71,7 +75,7 @@ export type DeployProblem = {
  * Why the server is still behind after the last run of the update script; undefined if it is current, busy or no
  * script reports. Before, a refused update just fell back to "behind" and looked like a click that did nothing.
  */
-export function deployProblem(dashboard: ServerDashboard): DeployProblem | undefined {
+export function deployProblem(dashboard: DeployInfo): DeployProblem | undefined {
   const run = dashboard.deployRun;
   if (run === undefined || updateInProgress(dashboard) || (deployState(dashboard).behind ?? 0) === 0) {
     return undefined;
@@ -93,7 +97,7 @@ export function deployProblem(dashboard: ServerDashboard): DeployProblem | undef
 }
 
 /** How far the server is behind, as shown on the games and the commits card; empty if unknown. */
-export function deployStatusText(dashboard: ServerDashboard): string {
+export function deployStatusText(dashboard: DeployInfo): string {
   if (dashboard.updateRequest !== undefined) {
     return translateText('Update requested – starting now');
   }
@@ -116,7 +120,7 @@ export function deployStatusText(dashboard: ServerDashboard): string {
 }
 
 /** Commit time of the running build; undefined if neither the deploy branch nor the build lists it. */
-export function liveCommitTime(dashboard: ServerDashboard): string | undefined {
+export function liveCommitTime(dashboard: DeployInfo): string | undefined {
   // Build list as fallback: an old build has dropped out of the deploy branch list
   const commits = [...(dashboard.upstream?.commits ?? []), ...dashboard.commits];
   const live = liveHash(dashboard, commits);

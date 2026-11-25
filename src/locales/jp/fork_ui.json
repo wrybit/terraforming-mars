@@ -1693,5 +1693,6 @@
   "The browser refused to show the notification: check the notification permission of this site.": "ブラウザが通知の表示を拒否しました：このサイトの通知許可を確認してください。",
   "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "値：選択肢ごとに最大 ${0} 回の試行ゲームでの、最強の相手に対する平均得点差（高いほど良い）。",
   "Track +${0} before trading": "交易前にトラック +${0}",
-  "Track +${0} before trading (optional)": "交易前にトラック +${0} (任意)"
+  "Track +${0} before trading (optional)": "交易前にトラック +${0} (任意)",
+  "Not loaded (${0}). Next attempt in 30 seconds.": "読み込めませんでした（${0}）。30 秒後に再試行します。"
 }

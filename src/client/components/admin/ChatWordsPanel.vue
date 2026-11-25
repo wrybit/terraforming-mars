@@ -5,7 +5,7 @@
   <section ref="root" class="chat-words" :style="height === undefined ? undefined : {height: height + 'px'}">
     <p class="server-settings-description" v-i18n>One word per line. A word is also masked at the start of longer words ("arsch" also in "Arschloch", not in "Barsch"). Links to other websites are always blocked.</p>
     <p class="server-settings-description" v-i18n>Every list applies to every message, players write in mixed languages.</p>
-    <p v-if="status === 'loading'" class="games-overview-note" v-i18n>Loading…</p>
+    <LoadingSpinner v-if="status === 'loading'" />
     <template v-else>
       <div ref="grid" class="chat-words-columns" :style="{'--chat-words-columns': columnsPerRow}">
         <label v-for="language in languages" :key="language" class="chat-words-column">
@@ -28,6 +28,7 @@
 </template>
 
 <script setup lang="ts">
+import LoadingSpinner from '@/client/components/common/LoadingSpinner.vue';
 import {computed, nextTick, onBeforeUnmount, onMounted, ref} from 'vue';
 import {paths} from '@/common/app/paths';
 import {ALL_LANGUAGES, LANGUAGE, LANGUAGES} from '@/common/constants';

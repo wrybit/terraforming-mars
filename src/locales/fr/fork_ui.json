@@ -1371,5 +1371,6 @@
   "The browser refused to show the notification: check the notification permission of this site.": "Le navigateur a refusé d’afficher la notification : vérifie l’autorisation de notifications de ce site.",
   "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "Valeur : avance moyenne en points sur le meilleur adversaire sur jusqu'à ${0} parties d'essai par option (plus c'est haut, mieux c'est).",
   "Track +${0} before trading": "Piste +${0} avant de commercer",
-  "Track +${0} before trading (optional)": "Piste +${0} avant de commercer (facultatif)"
+  "Track +${0} before trading (optional)": "Piste +${0} avant de commercer (facultatif)",
+  "Not loaded (${0}). Next attempt in 30 seconds.": "Non chargé (${0}). Nouvel essai dans 30 secondes."
 }

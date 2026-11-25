@@ -6,7 +6,7 @@
   </template>
   <!-- Not logged in: only the login, alone in the middle of the screen like a real login page -->
   <div v-else class="admin-login">
-    <p v-if="state === 'loading'" class="games-overview-note" v-i18n>Loading…</p>
+    <LoadingSpinner v-if="state === 'loading'" page />
     <ServerIdPrompt v-else-if="state === 'guest'" @opened="open" />
     <div v-else class="games-overview-card admin-login-card">
       <p class="admin-login-text" v-i18n>The server is not answering right now – probably it is just restarting.</p>
@@ -16,6 +16,7 @@
 </template>
 
 <script lang="ts">
+import LoadingSpinner from '@/client/components/common/LoadingSpinner.vue';
 import {defineComponent, PropType} from 'vue';
 import AdminNav, {AdminPage} from '@/client/components/admin/AdminNav.vue';
 import ServerIdPrompt from '@/client/components/admin/ServerIdPrompt.vue';
@@ -27,7 +28,7 @@ type DataModel = {
 
 export default defineComponent({
   name: 'AdminGate',
-  components: {AdminNav, ServerIdPrompt},
+  components: {LoadingSpinner, AdminNav, ServerIdPrompt},
   props: {
     active: {type: String as PropType<AdminPage>, required: true},
   },

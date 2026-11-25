@@ -8,7 +8,7 @@ const commit = (hash: string) => ({hash, time: '2026-10-13T12:00:00+02:00', titl
 
 function dashboardWith(head: string, requested = false, deployRun?: DashboardDeployRun): ServerDashboard {
   return {
-    games: {running: 1, finished: 0, playersOnline: 1},
+    playersOnline: 1,
     build: {head, builtAt: 'n/a'},
     commits: [commit('bbbbbbbbb')],
     upstream: {measuredAtMs: 0, branch: 'main', commits: [commit('aaaaaaaaa'), commit('bbbbbbbbb')]},

@@ -28,7 +28,7 @@
 
 <script lang="ts">
 import {defineComponent, PropType} from 'vue';
-import {ServerDashboard} from '@/common/admin/ServerDashboard';
+import {DashboardSectionData} from '@/common/admin/dashboardSections';
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 import {canRequestUpdate, deployProblem, DeployProblem, deployStatusText, liveCommitTime, updateInProgress} from '@/client/components/admin/dashboard/deployState';
 import LoadingBar from '@/client/components/common/LoadingBar.vue';
@@ -45,7 +45,7 @@ export default defineComponent({
   name: 'DashboardUpdateButton',
   components: {LoadingBar},
   props: {
-    dashboard: {type: Object as PropType<ServerDashboard>, required: true},
+    dashboard: {type: Object as PropType<DashboardSectionData['deploy']>, required: true},
   },
   emits: ['changed'],
   data(): DataModel {
@@ -70,7 +70,7 @@ export default defineComponent({
       return time === undefined ? '' : translateTextWithParams('Running commit from ${0}', [formatDateTime(time)]);
     },
     playersOnlineText(): string {
-      return `${translateText('Players online now')}: ${this.dashboard.games.playersOnline}`;
+      return `${translateText('Players online now')}: ${this.dashboard.playersOnline}`;
     },
   },
   methods: {

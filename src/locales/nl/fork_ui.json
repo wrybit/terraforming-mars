@@ -1944,5 +1944,6 @@
   "The browser refused to show the notification: check the notification permission of this site.": "De browser weigerde de melding te tonen: controleer de meldingstoestemming van deze site.",
   "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "Waarde: gemiddelde puntenvoorsprong op de beste tegenstander in maximaal ${0} proefpartijen per optie (hoger is beter).",
   "Track +${0} before trading": "Spoor +${0} voor de handel",
-  "Track +${0} before trading (optional)": "Spoor +${0} voor de handel (optioneel)"
+  "Track +${0} before trading (optional)": "Spoor +${0} voor de handel (optioneel)",
+  "Not loaded (${0}). Next attempt in 30 seconds.": "Niet geladen (${0}). Volgende poging over 30 seconden."
 }

@@ -1501,5 +1501,6 @@
   "The browser refused to show the notification: check the notification permission of this site.": "A böngésző nem volt hajlandó megjeleníteni az értesítést: ellenőrizd az oldal értesítési engedélyét.",
   "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "Érték: átlagos pontelőny a legjobb ellenféllel szemben opciónként legfeljebb ${0} próbajátszmában (a magasabb jobb).",
   "Track +${0} before trading": "Sáv +${0} kereskedés előtt",
-  "Track +${0} before trading (optional)": "Sáv +${0} kereskedés előtt (nem kötelező)"
+  "Track +${0} before trading (optional)": "Sáv +${0} kereskedés előtt (nem kötelező)",
+  "Not loaded (${0}). Next attempt in 30 seconds.": "Nem töltődött be (${0}). Újrapróbálás 30 másodperc múlva."
 }

@@ -1,0 +1,39 @@
+// LoadingSpinner.vue: ring and "Loading…" centred in the space they fill; the ring like the lobby spinner (lobby.less)
+
+.loading-spinner {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 96px;
+  color: rgba(238, 238, 238, 0.62);
+  font-size: 13px;
+}
+
+// A page without its content: the middle of the visible height below the navigation
+.loading-spinner--page {
+  min-height: 60vh;
+}
+
+.loading-spinner-ring {
+  display: block;
+  box-sizing: border-box;
+  width: 28px;
+  height: 28px;
+  border: 3px solid rgba(255, 255, 255, 0.18);
+  border-top-color: rgba(255, 255, 255, 0.85);
+  border-radius: 50%;
+  animation: loading-spinner-turn 0.9s linear infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation-duration: 3s;
+  }
+}
+
+@keyframes loading-spinner-turn {
+  to {
+    transform: rotate(360deg);
+  }
+}

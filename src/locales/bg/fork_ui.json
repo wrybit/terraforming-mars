@@ -2267,5 +2267,6 @@
   "The browser refused to show the notification: check the notification permission of this site.": "Браузърът отказа да покаже известието: провери разрешението за известия на този сайт.",
   "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "Стойност: средна преднина в точки пред най-добрия противник в до ${0} пробни игри на вариант (по-високата е по-добра).",
   "Track +${0} before trading": "Писта +${0} преди търговия",
-  "Track +${0} before trading (optional)": "Писта +${0} преди търговия (по избор)"
+  "Track +${0} before trading (optional)": "Писта +${0} преди търговия (по избор)",
+  "Not loaded (${0}). Next attempt in 30 seconds.": "Не е заредено (${0}). Нов опит след 30 секунди."
 }
