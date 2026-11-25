@@ -12,7 +12,8 @@ const CALL_SITE = new RegExp(
   'g');
 
 // Server parts no player sees: database, tools, server start-up and HTTP routes
-const SKIPPED_DIRECTORIES = ['database', 'tools', 'server', 'routes'].map((directory) => path.join('src', 'server', directory) + path.sep);
+// automa: MarsBot cannot be chosen in a game yet (no game option); translate its texts when it becomes playable
+const SKIPPED_DIRECTORIES = ['database', 'tools', 'server', 'routes', 'automa'].map((directory) => path.join('src', 'server', directory) + path.sep);
 
 function sourceFiles(dir: string, into: Array<string>): Array<string> {
   for (const entry of fs.readdirSync(dir, {withFileTypes: true})) {

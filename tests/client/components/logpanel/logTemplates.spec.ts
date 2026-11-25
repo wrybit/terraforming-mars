@@ -15,9 +15,12 @@ function sourceFiles(directory: string): Array<string> {
   });
 }
 
+// MarsBot cannot be chosen in a game yet: its log lines get their grouping when it becomes playable
+const SKIPPED = join('src', 'server', 'automa');
+
 function logTemplates(): Map<string, string> {
   const templates = new Map<string, string>();
-  for (const path of sourceFiles('src/server')) {
+  for (const path of sourceFiles('src/server').filter((file) => !file.startsWith(SKIPPED))) {
     for (const match of readFileSync(path, 'utf8').matchAll(/\blog\(\s*'((?:[^'\\]|\\.)*)'/g)) {
       templates.set(match[1], path);
     }
