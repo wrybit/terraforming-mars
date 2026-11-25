@@ -130,8 +130,8 @@ export class PlanetGlobeRenderer implements PlanetRenderer {
 
   public draw(request: PlanetDrawRequest): void {
     const {target} = request;
-    // Decorative canvases: device pixel ratio 2 quadrupled the pixels to draw and copy for no visible gain
-    const pixelRatio = 1;
+    // Sharp on HiDPI screens (fork design); the 30 fps cap and the ImageBitmap hand-over keep the cost down
+    const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
     const cssWidth = target.clientWidth;
     const cssHeight = target.clientHeight;
     if (cssWidth === 0 || cssHeight === 0) {
