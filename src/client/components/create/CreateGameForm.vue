@@ -437,7 +437,7 @@ import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 import {describeFailure, failureFromResponse, failureOf, RequestFailedError} from '@/client/utils/requestFailure';
 import {aiSupportInfo, loadAiSupport} from '@/client/utils/aiSupportState';
 import {AiOption, AiSupport, EMPTY_AI_SUPPORT} from '@/common/ai/aiSupportContract';
-import {AiBlocker, AiEngineDecision, aiEngineFor, aiSettingsOf, playableAiSupport} from '@/common/ai/aiCompatibility';
+import {AiAdminSettings, AiBlocker, AiEngineDecision, AiSettings, adminAiSupport, aiEngineFor, aiSettingsOf} from '@/common/ai/aiCompatibility';
 import {TYPESCRIPT_AI_SUPPORT} from '@/common/ai/typescript/typescriptAiSupport';
 import {AiBlockerChip, aiBlockerChip} from './aiBlockerChip';
 import AiSettingChips from './AiSettingChips.vue';
@@ -935,11 +935,21 @@ export default defineComponent({
         return {value: count, label: String(count)};
       });
     },
-    // Same decision as the server (common/ai/aiCompatibility.ts); before its answer the TypeScript AI's rules
+    // Settings of this game the AI has to know
+    aiSettings(): AiSettings {
+      return aiSettingsOf(this.newGameConfig, this.summaryBoard);
+    },
+    // Both AIs' support; before the server's answer the Rust AI knows nothing
+    aiSupports(): {rust: AiSupport, typescript: AiSupport} {
+      return {rust: aiSupportInfo.value?.rust ?? EMPTY_AI_SUPPORT, typescript: TYPESCRIPT_AI_SUPPORT};
+    },
+    // Admin choice; before the server's answer the TypeScript AI's rules
+    aiAdmin(): AiAdminSettings {
+      return aiSupportInfo.value ?? {engine: 'typescript', typescriptFallback: true};
+    },
+    // Same decision as the server (common/ai/aiCompatibility.ts)
     aiDecision(): AiEngineDecision {
-      const info = aiSupportInfo.value;
-      const admin = info ?? {engine: 'typescript' as const, typescriptFallback: true};
-      return aiEngineFor(aiSettingsOf(this.newGameConfig, this.summaryBoard), {rust: info?.rust ?? EMPTY_AI_SUPPORT, typescript: TYPESCRIPT_AI_SUPPORT}, admin);
+      return aiEngineFor(this.aiSettings, this.aiSupports, this.aiAdmin);
     },
     // Settings no AI can play here; a stand-in TypeScript AI is invisible to players
     aiBlockers(): Array<AiBlocker> {
@@ -951,11 +961,6 @@ export default defineComponent({
     // Robots once the server's answer is there, for whichever AI plays new games here (admin choice)
     aiMarksShown(): boolean {
       return aiSupportInfo.value !== undefined;
-    },
-    // What an AI plays under the admin settings; undefined before the server's answer
-    markedAiSupport(): AiSupport | undefined {
-      const info = aiSupportInfo.value;
-      return info === undefined ? undefined : playableAiSupport({rust: info.rust, typescript: TYPESCRIPT_AI_SUPPORT}, info);
     },
     humanPlayersCount: {
       get(): number {
@@ -1075,12 +1080,12 @@ export default defineComponent({
       const firstPosition = arranged.indexOf(firstPlayer);
       this.firstIndex = firstPosition >= 0 && firstPosition < total ? firstPosition + 1 : 1;
     },
-    /** True: the AI can play this setting (robot behind its name). */
+    /** True: the AI chosen in the admin plays this setting (robot behind its name); never the stand-in's support. */
     aiCan(kind: 'expansion' | 'board' | 'option', id: string): boolean {
-      const support = this.markedAiSupport;
-      if (support === undefined) {
+      if (!this.aiMarksShown) {
         return false;
       }
+      const support = adminAiSupport(this.aiSupports, this.aiAdmin);
       switch (kind) {
       case 'expansion': return (support.expansions as ReadonlyArray<string>).includes(id);
       case 'board': return (support.boards as ReadonlyArray<string>).includes(id);
