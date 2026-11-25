@@ -3,6 +3,8 @@ import {expect} from 'chai';
 import {globalConfig} from '../getLocalVue';
 import SegmentedControl from '@/client/components/create/SegmentedControl.vue';
 import {PLAYER_COUNT_OPTIONS} from '@/client/components/create/createGameChoices';
+import {setTranslationsForTest} from '@/client/directives/i18n';
+import {PreferencesManager} from '@/client/utils/PreferencesManager';
 
 describe('SegmentedControl', () => {
   it('marks the current value and emits the chosen one', async () => {
@@ -32,5 +34,21 @@ describe('SegmentedControl', () => {
     expect(blocked.attributes('title')).eq('The new AI is not available on this server');
     await blocked.trigger('click');
     expect(wrapper.emitted('update:modelValue')).is.undefined;
+  });
+  it('keeps the short solo label after updates instead of translating the translation again', async () => {
+    try {
+      PreferencesManager.INSTANCE.set('lang', 'de');
+      // German: the short key gives "Solo", which is also the key of the long upstream word
+      setTranslationsForTest({'Solo (player count)': 'Solo', 'Solo': 'Einzelspiel'});
+      const wrapper = mount(SegmentedControl, {...globalConfig, props: {options: PLAYER_COUNT_OPTIONS, modelValue: 1}});
+      expect(wrapper.findAll('button')[0].text()).eq('Solo');
+      await wrapper.setProps({modelValue: 3});
+      await wrapper.setProps({modelValue: 1});
+      expect(wrapper.findAll('button')[0].text()).eq('Solo');
+    } finally {
+      localStorage.removeItem('lang');
+      PreferencesManager.resetForTest();
+      setTranslationsForTest(undefined);
+    }
   });
 });

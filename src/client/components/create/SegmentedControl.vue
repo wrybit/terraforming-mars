@@ -15,7 +15,8 @@
       <!-- With a symbol the label only names the button for screen readers -->
       <SeatIcon v-if="option.icon !== undefined" :kind="option.icon" :size="20" />
       <span v-else-if="option.raw">{{ option.label }}</span>
-      <span v-else v-i18n>{{ option.label }}</span>
+      <!-- $t from the key instead of v-i18n: v-i18n translates the DOM text again on every update, so the short "Solo" became the general "Solo" key ("Einzelspiel") -->
+      <span v-else>{{ $t(option.label) }}</span>
     </button>
   </div>
 </template>
