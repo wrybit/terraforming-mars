@@ -2310,5 +2310,10 @@
   "Random All": "随机（全部）",
   "amazonis planitia": "亚马逊平原",
   "Remember": "记住",
-  "Spacefarer": "太空航行者"
+  "Spacefarer": "太空航行者",
+  "${0}/${1} in both": "两者均支持 ${0}/${1}",
+  "Plays it": "支持",
+  "Does not play it": "不支持",
+  "Without Corporate Era": "无公司时代",
+  "Manual Milestones & Awards": "手动里程碑和奖项"
 }

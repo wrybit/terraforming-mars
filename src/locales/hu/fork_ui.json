@@ -1508,5 +1508,10 @@
   "Random All": "Véletlenszerű (mind)",
   "amazonis planitia": "Amazonis Planitia",
   "Remember": "Megjegyzés",
-  "Spacefarer": "Űrutazó"
+  "Spacefarer": "Űrutazó",
+  "${0}/${1} in both": "${0}/${1} mindkettőben",
+  "Plays it": "Játssza",
+  "Does not play it": "Nem játssza",
+  "Without Corporate Era": "Cégek korszaka nélkül",
+  "Manual Milestones & Awards": "Kézi mérföldkövek és díjak"
 }

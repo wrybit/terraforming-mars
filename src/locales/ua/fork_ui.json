@@ -1483,5 +1483,10 @@
   "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "Значення: середня перевага в очках над найкращим суперником у до ${0} пробних партіях на варіант (що вище, то краще).",
   "Track +${0} before trading": "Трек +${0} перед торгівлею",
   "Track +${0} before trading (optional)": "Трек +${0} перед торгівлею (необов'язково)",
-  "Not loaded (${0}). Next attempt in 30 seconds.": "Не завантажено (${0}). Наступна спроба через 30 секунд."
+  "Not loaded (${0}). Next attempt in 30 seconds.": "Не завантажено (${0}). Наступна спроба через 30 секунд.",
+  "${0}/${1} in both": "${0}/${1} в обох",
+  "Plays it": "Грає",
+  "Does not play it": "Не грає",
+  "Without Corporate Era": "Без Корпоративної ери",
+  "Manual Milestones & Awards": "Віхи та нагороди вручну"
 }

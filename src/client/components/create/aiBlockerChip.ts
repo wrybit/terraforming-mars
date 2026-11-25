@@ -1,6 +1,7 @@
 import {AiBlocker} from '@/common/ai/aiCompatibility';
 import {FAN_EXPANSIONS, OFFICIAL_EXPANSIONS} from './createGameChoices';
 import {AI_OPTION_LABELS} from './aiOptionLabels';
+import {AI_SETUP_LABELS} from './aiSetupLabels';
 import {boardColorClass} from './boardColorClass';
 import {DuneModule} from '@/common/dune/DuneModule';
 import {DUNE_MODULE_ICON, DUNE_MODULE_LABEL} from './duneModuleFields';
@@ -27,6 +28,10 @@ export function aiBlockerChip(blocker: AiBlocker): AiBlockerChip {
     const module = blocker.id as DuneModule;
     const icon = DUNE_MODULE_ICON[module];
     return {key, label: DUNE_MODULE_LABEL[module] ?? module, picture: icon === undefined ? undefined : duneGraphic(icon)};
+  }
+  case 'setup': {
+    const setup = AI_SETUP_LABELS[blocker.id];
+    return {key, label: setup.label, iconClass: setup.iconClass === undefined ? undefined : 'create-game-expansion-icon ' + setup.iconClass};
   }
   }
 }

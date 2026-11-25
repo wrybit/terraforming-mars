@@ -1690,5 +1690,10 @@
   "Random All": "Tilfeldig (alle)",
   "amazonis planitia": "Amazonis Planitia",
   "Remember": "Husk",
-  "Spacefarer": "Romfarer"
+  "Spacefarer": "Romfarer",
+  "${0}/${1} in both": "${0}/${1} i begge",
+  "Plays it": "Spiller det",
+  "Does not play it": "Spiller det ikke",
+  "Without Corporate Era": "Uten Konsernenes tidsalder",
+  "Manual Milestones & Awards": "Manuelle milepæler og utmerkelser"
 }

@@ -2603,5 +2603,10 @@
   "Random All": "Aleatorio (todos)",
   "amazonis planitia": "Amazonis Planitia",
   "Remember": "Recordar",
-  "Spacefarer": "Astronauta"
+  "Spacefarer": "Astronauta",
+  "${0}/${1} in both": "${0}/${1} en ambas",
+  "Plays it": "Lo juega",
+  "Does not play it": "No lo juega",
+  "Without Corporate Era": "Sin Era corporativa",
+  "Manual Milestones & Awards": "Hitos y recompensas manuales"
 }

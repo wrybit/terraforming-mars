@@ -1324,5 +1324,10 @@
   "Random All": "Satunnainen (kaikki)",
   "amazonis planitia": "Amazonis Planitia",
   "Remember": "Muista",
-  "Spacefarer": "Avaruusmatkaaja"
+  "Spacefarer": "Avaruusmatkaaja",
+  "${0}/${1} in both": "${0}/${1} molemmissa",
+  "Plays it": "Pelaa sitä",
+  "Does not play it": "Ei pelaa sitä",
+  "Without Corporate Era": "Ilman Yhtiöiden aikakautta",
+  "Manual Milestones & Awards": "Manuaaliset saavutukset & palkinnot"
 }

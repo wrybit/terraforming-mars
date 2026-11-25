@@ -2197,5 +2197,10 @@
   "Random All": "Случайная (все)",
   "amazonis planitia": "Равнина Амазония",
   "Remember": "Запомнить",
-  "Spacefarer": "Космонавт"
+  "Spacefarer": "Космонавт",
+  "${0}/${1} in both": "${0}/${1} у обеих",
+  "Plays it": "Играет",
+  "Does not play it": "Не играет",
+  "Without Corporate Era": "Без Эпохи корпораций",
+  "Manual Milestones & Awards": "Достижения и награды вручную"
 }

@@ -32,6 +32,7 @@ import {RandomMAOptionType} from '../../common/ma/RandomMAOptionType';
 import {validateCustomMAExpansions} from '../ma/MilestoneAwardSelector';
 import {AiEngineDecision, aiBlockerText} from '../../common/ai/aiCompatibility';
 import {decideAiEngine as decideServerAiEngine} from '../ai/aiEngineChoice';
+import {rustOptionsText} from '../ai/rust/rustSetup';
 
 import {isObject} from '@/common/utils/utils';
 
@@ -269,6 +270,11 @@ export class ApiCreateGame extends Handler {
       }
       if (decision.reasons.length > 0) {
         console.log(`Rust AI cannot play ${decision.reasons.map(aiBlockerText).join(', ')}; the TypeScript AI plays instead`);
+      }
+      // The setup check of the Rust mirror is the last word: what it refuses gets no AI, never a silent TypeScript AI
+      const mirror = decision.engine === 'rust' ? rustOptionsText(gameOptions, players.length) : undefined;
+      if (mirror !== undefined && 'unsupported' in mirror) {
+        throw RouteError.badRequest(`AI players are not available with: ${mirror.unsupported}`);
       }
       aiPlayers.forEach((player) => player.aiEngine = decision.engine === 'rust' ? 'rust' : undefined);
     }
