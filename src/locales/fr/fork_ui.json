@@ -1381,5 +1381,7 @@
   "Not loaded (${0}). Next attempt in 30 seconds.": "Non chargé (${0}). Nouvel essai dans 30 secondes.",
   "${0}/${1} in both": "${0}/${1} chez les deux",
   "Plays it": "La joue",
-  "Does not play it": "Ne la joue pas"
+  "Does not play it": "Ne la joue pas",
+  "Without Corporate Era": "Sans Ères des Corporations",
+  "Manual Milestones & Awards": "Objectifs & Récompenses manuels"
 }

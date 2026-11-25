@@ -18,6 +18,8 @@ function idsOf(support: AiSupport, kind: Kind): ReadonlyArray<string> {
   case 'board': return support.boards;
   case 'option': return support.options;
   case 'duneModule': return support.duneModules;
+  // Setups beyond the support file (aiSetupLimits.ts) are no rows of the overview
+  case 'setup': return [];
   }
 }
 

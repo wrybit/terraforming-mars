@@ -315,6 +315,13 @@ describe('ApiCreateGame', () => {
     expect(res.content).contains('AI players are not available with: expansion colonies');
   });
 
+  it('refuses AI players the Rust mirror cannot play instead of handing them to the TypeScript AI', async () => {
+    apiCreateGame = new ApiCreateGame([{limit: 99999, perMs: 1}], () => ({engine: 'rust', reasons: []}));
+    await postConfig({...withAi(), bannedCards: [CardName.ALGAE]});
+    expect(res.statusCode).eq(statusCode.badRequest);
+    expect(res.content).contains('AI players are not available with: custom card or milestone lists');
+  });
+
   it('stores the TypeScript AI when it stands in for the Rust AI, ignoring what the request asks for', async () => {
     apiCreateGame = new ApiCreateGame([{limit: 99999, perMs: 1}], () => ({engine: 'typescript', reasons: [{kind: 'expansion', id: 'venus'}]}));
     const log = console.log;

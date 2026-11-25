@@ -3,6 +3,7 @@ import {BoardName} from '../boards/BoardName';
 import {NewGameConfig} from '../game/NewGameConfig';
 import {RandomMAOptionType} from '../ma/RandomMAOptionType';
 import {AI_OPTIONS, AiOption, AiSupport} from './aiSupportContract';
+import {AiSetupLimit, aiSetupLimitsOf} from './aiSetupLimits';
 
 /** Settings of a new game the new AI has to play; options hold only those that take effect in this game. */
 export type AiSettings = {
@@ -11,6 +12,8 @@ export type AiSettings = {
   boardName: BoardName | undefined;
   options: Partial<Record<AiOption, boolean>>;
   duneModules?: ReadonlyArray<string>;
+  /** Card lists and other setups only the TypeScript AI could play (aiSetupLimits.ts); the Rust AI cannot */
+  setup?: ReadonlyArray<AiSetupLimit>;
 };
 
 /** One setting the new AI cannot play. */
@@ -18,7 +21,8 @@ export type AiBlocker =
   {kind: 'expansion', id: Expansion} |
   {kind: 'board', id: BoardName} |
   {kind: 'option', id: AiOption} |
-  {kind: 'duneModule', id: string};
+  {kind: 'duneModule', id: string} |
+  {kind: 'setup', id: AiSetupLimit};
 
 /** Result of the check; `reasons` is empty exactly when `ok`. */
 export type AiCompatibility = {ok: boolean, reasons: Array<AiBlocker>};
@@ -99,7 +103,7 @@ export function aiSettingsOf(config: NewGameConfig, boardName: BoardName | undef
   for (const option of AI_OPTIONS) {
     options[option] = inEffect[option] && values[option] === true;
   }
-  return {expansions, boardName, options};
+  return {expansions, boardName, options, setup: aiSetupLimitsOf(config)};
 }
 
 /** AI program of the admin settings. */
@@ -109,7 +113,7 @@ export type AiEngineChoice = typeof AI_ENGINE_CHOICES[number];
 /** Admin settings that decide which AI plays (AI_ENGINE, AI_TYPESCRIPT_FALLBACK in the server's .env). */
 export type AiAdminSettings = {
   engine: AiEngineChoice;
-  /** True: settings the Rust AI cannot play get the TypeScript AI instead of no AI. */
+  /** True: settings the Rust AI cannot play get the TypeScript AI instead of no AI. Off unless set (AI_TYPESCRIPT_FALLBACK=true). */
   typescriptFallback: boolean;
 };
 
@@ -128,7 +132,7 @@ export function aiEngineFor(settings: AiSettings, supports: {rust: AiSupport, ty
   if (admin.engine === 'typescript') {
     return typescript.ok ? {engine: 'typescript', reasons: []} : {engine: 'none', reasons: typescript.reasons};
   }
-  const rust = isAiCompatible(settings, supports.rust);
+  const rust = rustCompatibility(settings, supports.rust);
   if (rust.ok) {
     return {engine: 'rust', reasons: []};
   }
@@ -136,6 +140,12 @@ export function aiEngineFor(settings: AiSettings, supports: {rust: AiSupport, ty
     return {engine: 'typescript', reasons: rust.reasons};
   }
   return {engine: 'none', reasons: rust.reasons};
+}
+
+/** The Rust AI's check: its support file plus the setups it cannot mirror at all (no TypeScript AI stands in). */
+function rustCompatibility(settings: AiSettings, support: AiSupport): AiCompatibility {
+  const reasons = [...isAiCompatible(settings, support).reasons, ...(settings.setup ?? []).map((id): AiBlocker => ({kind: 'setup', id}))];
+  return {ok: reasons.length === 0, reasons};
 }
 
 /** What the admin's AI plays; the create form marks exactly these settings, never the stand-in's. */

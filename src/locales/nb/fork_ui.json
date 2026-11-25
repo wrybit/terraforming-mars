@@ -1693,5 +1693,7 @@
   "Not loaded (${0}). Next attempt in 30 seconds.": "Ikke lastet (${0}). Nytt forsøk om 30 sekunder.",
   "${0}/${1} in both": "${0}/${1} i begge",
   "Plays it": "Spiller det",
-  "Does not play it": "Spiller det ikke"
+  "Does not play it": "Spiller det ikke",
+  "Without Corporate Era": "Uten Konsernenes tidsalder",
+  "Manual Milestones & Awards": "Manuelle milepæler og utmerkelser"
 }

@@ -10,7 +10,8 @@ import {rustAiSupportFile} from './rust/rustAiSupportFile';
 export function aiAdminSettings(): AiAdminSettings {
   return {
     engine: process.env.AI_ENGINE === 'rust' ? 'rust' : 'typescript',
-    typescriptFallback: process.env.AI_TYPESCRIPT_FALLBACK !== 'false',
+    // Only the Rust AI plays: the TypeScript AI stands in only when an admin asks for it explicitly
+    typescriptFallback: process.env.AI_TYPESCRIPT_FALLBACK === 'true',
   };
 }
 

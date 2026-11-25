@@ -1511,5 +1511,7 @@
   "Not loaded (${0}). Next attempt in 30 seconds.": "Nem töltődött be (${0}). Újrapróbálás 30 másodperc múlva.",
   "${0}/${1} in both": "${0}/${1} mindkettőben",
   "Plays it": "Játssza",
-  "Does not play it": "Nem játssza"
+  "Does not play it": "Nem játssza",
+  "Without Corporate Era": "Cégek korszaka nélkül",
+  "Manual Milestones & Awards": "Kézi mérföldkövek és díjak"
 }

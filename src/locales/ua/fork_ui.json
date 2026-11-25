@@ -1486,5 +1486,7 @@
   "Not loaded (${0}). Next attempt in 30 seconds.": "Не завантажено (${0}). Наступна спроба через 30 секунд.",
   "${0}/${1} in both": "${0}/${1} в обох",
   "Plays it": "Грає",
-  "Does not play it": "Не грає"
+  "Does not play it": "Не грає",
+  "Without Corporate Era": "Без Корпоративної ери",
+  "Manual Milestones & Awards": "Віхи та нагороди вручну"
 }

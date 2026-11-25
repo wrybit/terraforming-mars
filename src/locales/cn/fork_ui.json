@@ -2313,5 +2313,7 @@
   "Not loaded (${0}). Next attempt in 30 seconds.": "未加载（${0}）。30 秒后重试。",
   "${0}/${1} in both": "两者均支持 ${0}/${1}",
   "Plays it": "支持",
-  "Does not play it": "不支持"
+  "Does not play it": "不支持",
+  "Without Corporate Era": "无公司时代",
+  "Manual Milestones & Awards": "手动里程碑和奖项"
 }

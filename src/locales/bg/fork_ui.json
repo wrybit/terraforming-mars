@@ -2277,5 +2277,7 @@
   "Not loaded (${0}). Next attempt in 30 seconds.": "Не е заредено (${0}). Нов опит след 30 секунди.",
   "${0}/${1} in both": "${0}/${1} и при двете",
   "Plays it": "Играе го",
-  "Does not play it": "Не го играе"
+  "Does not play it": "Не го играе",
+  "Without Corporate Era": "Без Ера на корпорациите",
+  "Manual Milestones & Awards": "Ръчни постижения и награди"
 }

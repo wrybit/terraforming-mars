@@ -2200,5 +2200,7 @@
   "Not loaded (${0}). Next attempt in 30 seconds.": "Не загружено (${0}). Следующая попытка через 30 секунд.",
   "${0}/${1} in both": "${0}/${1} у обеих",
   "Plays it": "Играет",
-  "Does not play it": "Не играет"
+  "Does not play it": "Не играет",
+  "Without Corporate Era": "Без Эпохи корпораций",
+  "Manual Milestones & Awards": "Достижения и награды вручную"
 }

@@ -1327,5 +1327,7 @@
   "Not loaded (${0}). Next attempt in 30 seconds.": "Ei ladattu (${0}). Uusi yritys 30 sekunnin kuluttua.",
   "${0}/${1} in both": "${0}/${1} molemmissa",
   "Plays it": "Pelaa sitä",
-  "Does not play it": "Ei pelaa sitä"
+  "Does not play it": "Ei pelaa sitä",
+  "Without Corporate Era": "Ilman Yhtiöiden aikakautta",
+  "Manual Milestones & Awards": "Manuaaliset saavutukset & palkinnot"
 }

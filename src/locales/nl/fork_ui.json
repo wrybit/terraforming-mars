@@ -1954,5 +1954,7 @@
   "Not loaded (${0}). Next attempt in 30 seconds.": "Niet geladen (${0}). Volgende poging over 30 seconden.",
   "${0}/${1} in both": "${0}/${1} bij beide",
   "Plays it": "Speelt het",
-  "Does not play it": "Speelt het niet"
+  "Does not play it": "Speelt het niet",
+  "Without Corporate Era": "Zonder Corporatietijdperk",
+  "Manual Milestones & Awards": "Handmatige mijlpalen & onderscheidingen"
 }

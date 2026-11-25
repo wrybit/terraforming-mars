@@ -1703,5 +1703,7 @@
   "Not loaded (${0}). Next attempt in 30 seconds.": "読み込めませんでした（${0}）。30 秒後に再試行します。",
   "${0}/${1} in both": "両方 ${0}/${1}",
   "Plays it": "対応",
-  "Does not play it": "非対応"
+  "Does not play it": "非対応",
+  "Without Corporate Era": "企業時代なし",
+  "Manual Milestones & Awards": "手動の称号と褒賞"
 }

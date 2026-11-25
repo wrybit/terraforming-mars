@@ -2126,5 +2126,7 @@
   "Not loaded (${0}). Next attempt in 30 seconds.": "Nie wczytano (${0}). Kolejna próba za 30 sekund.",
   "${0}/${1} in both": "${0}/${1} w obu",
   "Plays it": "Gra w to",
-  "Does not play it": "Nie gra w to"
+  "Does not play it": "Nie gra w to",
+  "Without Corporate Era": "Bez Ery Korporacyjnej",
+  "Manual Milestones & Awards": "Ręczne tytuły i nagrody"
 }

@@ -1581,5 +1581,7 @@
   "Not loaded (${0}). Next attempt in 30 seconds.": "불러오지 못함 (${0}). 30초 후 다시 시도합니다.",
   "${0}/${1} in both": "둘 다 ${0}/${1}",
   "Plays it": "플레이 가능",
-  "Does not play it": "플레이 불가"
+  "Does not play it": "플레이 불가",
+  "Without Corporate Era": "대기업시대 없음",
+  "Manual Milestones & Awards": "수동 업적과 기업상"
 }

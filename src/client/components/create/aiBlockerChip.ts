@@ -1,6 +1,7 @@
 import {AiBlocker} from '@/common/ai/aiCompatibility';
 import {FAN_EXPANSIONS, OFFICIAL_EXPANSIONS} from './createGameChoices';
 import {AI_OPTION_LABELS} from './aiOptionLabels';
+import {AI_SETUP_LABELS} from './aiSetupLabels';
 import {boardColorClass} from './boardColorClass';
 
 /** Chip of a setting no AI can play: its name (English, translated on display) and the icon of its tile or row. */
@@ -22,5 +23,9 @@ export function aiBlockerChip(blocker: AiBlocker): AiBlockerChip {
   }
   case 'duneModule':
     return {key, label: blocker.id};
+  case 'setup': {
+    const setup = AI_SETUP_LABELS[blocker.id];
+    return {key, label: setup.label, iconClass: setup.iconClass === undefined ? undefined : 'create-game-expansion-icon ' + setup.iconClass};
+  }
   }
 }

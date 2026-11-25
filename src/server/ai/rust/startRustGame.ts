@@ -1,5 +1,6 @@
-// Creates a game; with Rust AI players its setup goes to their mirror (RustMirror.ts). When this server has no
-// Rust AI or the Rust AI does not know the setup, those players are TS AI players.
+// Creates a game; with Rust AI players its setup goes to their mirror (RustMirror.ts). The create route and the lobby
+// refuse AI seats the Rust AI cannot play beforehand; should one slip through, the game is not created at all
+// rather than handing its AI players to the TypeScript AI without anyone noticing.
 import {IGame} from '../../IGame';
 import {IPlayer} from '../../IPlayer';
 import {RustMirror, rustAiInstalled} from './RustMirror';
@@ -16,9 +17,7 @@ export function startGame(players: ReadonlyArray<IPlayer>, create: () => IGame):
   const options = rustOptionsText(game.gameOptions, game.players.length);
   if (!rustAiInstalled() || 'unsupported' in options) {
     const reason = 'unsupported' in options ? options.unsupported : 'not installed';
-    console.warn(`Rust AI in game ${game.id}: ${reason}; its players are TS AI players`);
-    rustPlayers.forEach((player) => player.aiEngine = undefined);
-    return game;
+    throw new Error(`Rust AI cannot play game ${game.id}: ${reason}`);
   }
   // the version that plays this game, so admins can tell games of different releases apart
   const support = rustAiSupportFile.get();
