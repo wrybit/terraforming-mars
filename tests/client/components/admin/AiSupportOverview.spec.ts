@@ -16,11 +16,11 @@ describe('AiSupportOverview', () => {
   it('lists what both programs play and marks the active one', async () => {
     const wrapper = mount(AiSupportOverview, {...globalConfig});
     aiSupportInfo.value = {engine: 'rust', typescriptFallback: true,
-      rust: {...EMPTY_AI_SUPPORT, botVersion: 'abc123', generated: '2026-11-20T10:00:00Z', expansions: ['venus'], boards: [BoardName.THARSIS]}};
+      rust: {...EMPTY_AI_SUPPORT, botVersion: 'abc123', aiVersion: '1.9', generated: '2026-11-20T10:00:00Z', expansions: ['venus'], boards: [BoardName.THARSIS]}};
     await wrapper.vm.$nextTick();
     const [typescript, rust] = columnTexts(wrapper);
     expect(typescript).contains('TypeScript').contains('Base game').contains('Prelude 2').not.contains('active');
-    expect(rust).contains('active').contains('abc123').contains('Venus Next').contains('tharsis').not.contains('Prelude');
+    expect(rust).contains('active').contains('Version 1.9').contains('abc123').contains('Venus Next').contains('tharsis').not.contains('Prelude');
   });
 
   it('says the Rust AI plays nothing without a support file', async () => {

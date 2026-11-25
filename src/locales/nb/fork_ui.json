@@ -1649,7 +1649,6 @@
   "0: always the best move. Higher: more often a slightly worse one, never nonsense. Needs a bot that supports it.": "0: alltid det beste trekket. Høyere: oftere et litt dårligere, aldri tull. Krever en bot som støtter det.",
   "What the AI can play": "Hva AI-en kan spille",
   "No bot or no rust-ai-support.json in its folder: the Rust AI plays nothing.": "Ingen bot eller ingen rust-ai-support.json i mappen: Rust-AI-en spiller ingenting.",
-  "Bot ${0}, file of ${1}": "Bot ${0}, fil fra ${1}",
   "Chat filter": "Chatfilter",
   "Server load, live": "Serverlast, direkte",
   "Now": "Nå",
@@ -1683,5 +1682,6 @@
   "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "Verdi: gjennomsnittlig poengforsprang på beste motstander i opptil ${0} prøvepartier per valg (høyere er bedre).",
   "On: settings the Rust AI cannot play get the TypeScript AI, and it decides when the Rust AI drops out mid-game. Off: such settings count as not compatible with the AI; mid-game a standard move decides.": "På: innstillinger Rust-AI-en ikke kan, får TypeScript-AI-en, og den avgjør når Rust-AI-en faller ut midt i spillet. Av: slike innstillinger regnes som ikke kompatible med AI-en; midt i spillet avgjør et standardtrekk.",
   "Track +${0} before trading": "Sporet +${0} før handel",
-  "Track +${0} before trading (optional)": "Sporet +${0} før handel (valgfritt)"
+  "Track +${0} before trading (optional)": "Sporet +${0} før handel (valgfritt)",
+  "Version ${0} · bot ${1} · file of ${2}": "Versjon ${0} · Bot ${1} · fil fra ${2}"
 }

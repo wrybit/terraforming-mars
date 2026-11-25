@@ -65,7 +65,7 @@ export default defineComponent({
       const info = aiSupportInfo.value;
       const rust = info?.rust;
       const rustNote = rust?.botVersion === undefined ? undefined :
-        translateTextWithParams('Bot ${0}, file of ${1}', [rust.botVersion, rust.generated === undefined ? '–' : new Date(rust.generated).toLocaleString()]);
+        translateTextWithParams('Version ${0} · bot ${1} · file of ${2}', [rust.aiVersion ?? '–', rust.botVersion, rust.generated === undefined ? '–' : new Date(rust.generated).toLocaleString()]);
       return [
         {engine: 'typescript', name: 'TypeScript', active: info?.engine === 'typescript', empty: false, groups: groupsOf(TYPESCRIPT_AI_SUPPORT)},
         {engine: 'rust', name: 'Rust', active: info?.engine === 'rust', empty: rust === undefined || isEmpty(rust),

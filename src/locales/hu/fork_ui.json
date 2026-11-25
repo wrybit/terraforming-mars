@@ -1467,7 +1467,6 @@
   "0: always the best move. Higher: more often a slightly worse one, never nonsense. Needs a bot that supports it.": "0: mindig a legjobb lépés. Magasabb: gyakrabban egy kicsit rosszabb, sosem értelmetlen. Ehhez támogató bot kell.",
   "What the AI can play": "Amit az AI tud",
   "No bot or no rust-ai-support.json in its folder: the Rust AI plays nothing.": "Nincs bot, vagy nincs rust-ai-support.json a mappájában: a Rust AI semmit sem tud.",
-  "Bot ${0}, file of ${1}": "Bot ${0}, fájl: ${1}",
   "Chat filter": "Csevegőszűrő",
   "Server load, live": "Szerverterhelés, élőben",
   "Now": "Most",
@@ -1501,5 +1500,6 @@
   "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "Érték: átlagos pontelőny a legjobb ellenféllel szemben opciónként legfeljebb ${0} próbajátszmában (a magasabb jobb).",
   "On: settings the Rust AI cannot play get the TypeScript AI, and it decides when the Rust AI drops out mid-game. Off: such settings count as not compatible with the AI; mid-game a standard move decides.": "Be: a Rust AI által nem ismert beállítások a TypeScript AI-t kapják, és az dönt, ha a Rust AI játék közben kiesik. Ki: ezek a beállítások nem kompatibilisek az AI-val; játék közben egy alaplépés dönt.",
   "Track +${0} before trading": "Sáv +${0} kereskedés előtt",
-  "Track +${0} before trading (optional)": "Sáv +${0} kereskedés előtt (nem kötelező)"
+  "Track +${0} before trading (optional)": "Sáv +${0} kereskedés előtt (nem kötelező)",
+  "Version ${0} · bot ${1} · file of ${2}": "Verzió ${0} · Bot ${1} · fájl: ${2}"
 }

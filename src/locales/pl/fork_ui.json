@@ -2082,7 +2082,6 @@
   "0: always the best move. Higher: more often a slightly worse one, never nonsense. Needs a bot that supports it.": "0: zawsze najlepszy ruch. Więcej: częściej nieco gorszy, nigdy bezsensowny. Wymaga bota, który to obsługuje.",
   "What the AI can play": "Co potrafi AI",
   "No bot or no rust-ai-support.json in its folder: the Rust AI plays nothing.": "Brak bota lub pliku rust-ai-support.json w jego folderze: AI Rust nic nie potrafi.",
-  "Bot ${0}, file of ${1}": "Bot ${0}, plik z ${1}",
   "Chat filter": "Filtr czatu",
   "Server load, live": "Obciążenie serwera na żywo",
   "Now": "Teraz",
@@ -2116,5 +2115,6 @@
   "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "Wartość: średnia przewaga punktowa nad najlepszym przeciwnikiem w maks. ${0} partiach próbnych na opcję (wyżej znaczy lepiej).",
   "On: settings the Rust AI cannot play get the TypeScript AI, and it decides when the Rust AI drops out mid-game. Off: such settings count as not compatible with the AI; mid-game a standard move decides.": "Wł.: ustawienia, których AI Rust nie umie, dostają AI TypeScript, a ona decyduje, gdy AI Rust zawiedzie w trakcie gry. Wył.: takie ustawienia uznaje się za niezgodne z AI; w trakcie gry decyduje ruch standardowy.",
   "Track +${0} before trading": "Tor +${0} przed handlem",
-  "Track +${0} before trading (optional)": "Tor +${0} przed handlem (opcjonalnie)"
+  "Track +${0} before trading (optional)": "Tor +${0} przed handlem (opcjonalnie)",
+  "Version ${0} · bot ${1} · file of ${2}": "Wersja ${0} · Bot ${1} · plik z ${2}"
 }

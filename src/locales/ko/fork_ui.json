@@ -1537,7 +1537,6 @@
   "0: always the best move. Higher: more often a slightly worse one, never nonsense. Needs a bot that supports it.": "0: 항상 최선의 수. 높을수록 조금 못한 수를 더 자주 두지만 엉뚱한 수는 두지 않습니다. 이를 지원하는 봇이 필요합니다.",
   "What the AI can play": "AI가 플레이할 수 있는 것",
   "No bot or no rust-ai-support.json in its folder: the Rust AI plays nothing.": "봇이 없거나 폴더에 rust-ai-support.json이 없습니다: Rust AI는 아무것도 플레이하지 않습니다.",
-  "Bot ${0}, file of ${1}": "봇 ${0}, 파일 ${1}",
   "Chat filter": "채팅 필터",
   "Server load, live": "서버 부하, 실시간",
   "Now": "지금",
@@ -1571,5 +1570,6 @@
   "Value: average point lead over the best opponent in up to ${0} trial games per option (higher is better).": "값: 선택지당 최대 ${0}번의 시험 게임에서 가장 강한 상대보다 앞선 평균 점수 (높을수록 좋음).",
   "On: settings the Rust AI cannot play get the TypeScript AI, and it decides when the Rust AI drops out mid-game. Off: such settings count as not compatible with the AI; mid-game a standard move decides.": "켜기: Rust AI가 못 하는 설정은 TypeScript AI가 맡고, 게임 도중 Rust AI가 멈추면 TypeScript AI가 결정합니다. 끄기: 그런 설정은 AI와 호환되지 않는 것으로 보고, 게임 도중에는 기본 수가 결정합니다.",
   "Track +${0} before trading": "교역 전 트랙 +${0}",
-  "Track +${0} before trading (optional)": "교역 전 트랙 +${0} (선택 사항)"
+  "Track +${0} before trading (optional)": "교역 전 트랙 +${0} (선택 사항)",
+  "Version ${0} · bot ${1} · file of ${2}": "버전 ${0} · 봇 ${1} · 파일 ${2}"
 }
