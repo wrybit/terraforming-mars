@@ -1,4 +1,10 @@
 {
+  "${0} gained 1:r:steel: and 1:r:plants: from ${1}": "${0}이(가) ${1}에서 1:r:steel:와 1:r:plants:를 얻었습니다",
+  "Random Official": "무작위 (공식)",
+  "Random All": "무작위 (전체)",
+  "amazonis planitia": "아마조니스 평원",
+  "Remember": "기억",
+  "Spacefarer": "우주 비행사",
   "Community chat": "채팅",
   "Game lobby": "로비",
   "Start a game": "시작",

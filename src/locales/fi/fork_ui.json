@@ -1,4 +1,10 @@
 {
+  "${0} gained 1:r:steel: and 1:r:plants: from ${1}": "${0} sai 1:r:steel: ja 1:r:plants: lähteestä ${1}",
+  "Random Official": "Satunnainen (viralliset)",
+  "Random All": "Satunnainen (kaikki)",
+  "amazonis planitia": "Amazonis Planitia",
+  "Remember": "Muista",
+  "Spacefarer": "Avaruusmatkaaja",
   "Community chat": "Chat",
   "Game lobby": "Aula",
   "Start a game": "Aloita",

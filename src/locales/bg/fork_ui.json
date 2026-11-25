@@ -1,4 +1,10 @@
 {
+  "${0} gained 1:r:steel: and 1:r:plants: from ${1}": "${0} получи 1:r:steel: и 1:r:plants: от ${1}",
+  "Random Official": "Случайна (официални)",
+  "Random All": "Случайна (всички)",
+  "amazonis planitia": "Амазонис Планиция",
+  "Remember": "Запомни",
+  "Spacefarer": "Космонавт",
   "Community chat": "Чат",
   "Game lobby": "Лоби",
   "Start a game": "Старт",

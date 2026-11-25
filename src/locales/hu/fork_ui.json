@@ -1,4 +1,10 @@
 {
+  "${0} gained 1:r:steel: and 1:r:plants: from ${1}": "${0} kapott 1:r:steel:-t és 1:r:plants:-t ${1} által",
+  "Random Official": "Véletlenszerű (hivatalos)",
+  "Random All": "Véletlenszerű (mind)",
+  "amazonis planitia": "Amazonis Planitia",
+  "Remember": "Megjegyzés",
+  "Spacefarer": "Űrutazó",
   "Community chat": "Chat",
   "Game lobby": "Lobbi",
   "Start a game": "Indítás",

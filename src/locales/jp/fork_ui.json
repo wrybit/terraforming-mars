@@ -1,4 +1,10 @@
 {
+  "${0} gained 1:r:steel: and 1:r:plants: from ${1}": "${0}は${1}によって1:r:steel:と1:r:plants:獲得",
+  "Random Official": "ランダム（公式）",
+  "Random All": "ランダム（全て）",
+  "amazonis planitia": "アマゾニス平原",
+  "Remember": "記憶",
+  "Spacefarer": "宇宙旅行者",
   "Community chat": "雑談",
   "Game lobby": "ロビー",
   "Start a game": "スタート",

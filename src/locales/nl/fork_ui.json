@@ -1,4 +1,10 @@
 {
+  "${0} gained 1:r:steel: and 1:r:plants: from ${1}": "${0} kreeg 1:r:steel: en 1:r:plants: van ${1}",
+  "Random Official": "Willekeurig (officieel)",
+  "Random All": "Willekeurig (alle)",
+  "amazonis planitia": "Amazonis Planitia",
+  "Remember": "Onthouden",
+  "Spacefarer": "Ruimtevaarder",
   "Community chat": "Chat",
   "Game lobby": "Hal",
   "Start a game": "Start",

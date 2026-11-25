@@ -1,4 +1,10 @@
 {
+  "${0} gained 1:r:steel: and 1:r:plants: from ${1}": "${0} 从 ${1} 获得 1:r:steel: 和 1:r:plants:",
+  "Random Official": "随机（官方）",
+  "Random All": "随机（全部）",
+  "amazonis planitia": "亚马逊平原",
+  "Remember": "记住",
+  "Spacefarer": "太空航行者",
   "Community chat": "聊天",
   "Game lobby": "游戏大厅",
   "Start a game": "开始",

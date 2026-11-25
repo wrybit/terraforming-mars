@@ -1,4 +1,10 @@
 {
+  "${0} gained 1:r:steel: and 1:r:plants: from ${1}": "${0} ha ganado 1:r:steel: y 1:r:plants: de ${1}",
+  "Random Official": "Aleatorio (oficiales)",
+  "Random All": "Aleatorio (todos)",
+  "amazonis planitia": "Amazonis Planitia",
+  "Remember": "Recordar",
+  "Spacefarer": "Astronauta",
   "Community chat": "Chat",
   "Game lobby": "Lobby",
   "Start a game": "Jugar",
