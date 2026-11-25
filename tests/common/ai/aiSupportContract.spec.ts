@@ -26,6 +26,12 @@ describe('AiSupport', () => {
     expect(unknownIds).deep.eq(['expansions: chess', 'boards: atlantis', 'options: showTimers']);
   });
 
+  it('reads the short AI version, missing or empty means none', () => {
+    expect(parseAiSupport({version: 1, aiVersion: '1.4'}).support.aiVersion).eq('1.4');
+    expect(parseAiSupport({version: 1}).support.aiVersion).is.undefined;
+    expect(parseAiSupport({version: 1, aiVersion: ''}).support.aiVersion).is.undefined;
+  });
+
   it('accepts board slugs', () => {
     expect(parseAiSupport({version: 1, boards: ['utopia-planitia']}).support.boards).deep.eq([BoardName.UTOPIA_PLANITIA]);
   });

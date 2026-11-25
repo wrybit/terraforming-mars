@@ -75,6 +75,7 @@ export interface IPlayer {
   aiLevel: AiLevel | undefined;
   /** Program behind an AI player (undefined = TS AI) */
   aiEngine: AiEngine | undefined;
+  aiVersion: string | undefined;
 
   readonly game: IGame;
   /** True for the player MarsBot plays as. */

@@ -11,13 +11,13 @@
       <a v-else-if="summary.importedParticipantId !== undefined" :href="importedResultUrl" target="_blank" class="games-overview-source" v-i18n :title="$t('Result page saved on this server')">Imported</a>
       <span v-else class="games-overview-id">{{ summary.id }}</span>
       <span class="games-overview-date">{{ dateText }}</span>
-      <!-- Which AI program played: fixed when the game was created -->
-      <span v-if="aiEngineText !== undefined" class="games-overview-engine">{{ aiEngineText }}</span>
     </td>
     <!-- 0 = unknown (e.g. screenshot without generation info) -->
     <td class="games-overview-generation">{{ summary.generation > 0 ? summary.generation : '–' }}</td>
     <!-- Time since the last human move, exact time in the tooltip; imports have none -->
     <td class="games-overview-activity" :title="activityTitle">{{ activityText }}</td>
+    <!-- Which AI program played, with the Rust AI's version: fixed when the game was created -->
+    <td class="games-overview-ai">{{ aiEngineText ?? '–' }}</td>
     <td>
       <!-- Finished: only the result is left to look at; running: watch as a spectator -->
       <a v-if="summary.isFinished && resultUrl !== undefined" :href="resultUrl" target="_blank" class="games-overview-chip games-overview-chip--spectator" v-i18n>Show</a>
@@ -57,7 +57,7 @@ import {relativeTimeText} from '@/client/utils/relativeTime';
 import {gameLocaleToIntlLocale} from '@/client/utils/LocaleUtils';
 import {getPreferences} from '@/client/utils/PreferencesManager';
 import {shortDateTime} from '@/client/utils/shortDateTime';
-import {aiEngineLabel} from './aiEngineLabel';
+import {aiEngineName} from './aiEngineLabel';
 
 export default defineComponent({
   name: 'GameOverview',
@@ -94,7 +94,7 @@ export default defineComponent({
         (this.summary.importedParticipantId === undefined ? undefined : this.importedResultUrl);
     },
     aiEngineText(): string | undefined {
-      return aiEngineLabel(this.summary.aiEngine);
+      return aiEngineName(this.summary.aiEngine, this.summary.aiVersion);
     },
     dateText(): string {
       return shortDateTime(this.summary.createdTimeMs);

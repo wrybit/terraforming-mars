@@ -9,7 +9,7 @@ import {PlayerColumn, playersInColumn} from '@/client/components/admin/playerCol
 export type ColumnFitMeasure = {
   /** Space the card offers the table */
   available: number,
-  /** Status, game, generation and delete column together */
+  /** Status, game, generation, last activity, AI and delete column together */
   fixedWidth: number,
   /** What one shared column (spectator, players) needs so its content does not overlap */
   columnWidth: number,
@@ -30,8 +30,8 @@ export function emptyColumnsInDropOrder(columns: ReadonlyArray<PlayerColumn>, ga
     .reverse();
 }
 
-// Status, game, generation, last activity, delete (their widths come in measure.fixedWidth)
-const FIXED_COLUMN_COUNT = 5;
+// Status, game, generation, last activity, AI, delete (their widths come in measure.fixedWidth)
+const FIXED_COLUMN_COUNT = 6;
 
 // Fixed columns plus spectator and the player columns, with the spacing around every cell
 function requiredWidth(playerColumnCount: number, measure: ColumnFitMeasure): number {

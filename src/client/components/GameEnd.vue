@@ -517,7 +517,7 @@ export default defineComponent({
         return;
       }
       const answer = await fetch(`${paths.API_DECISION_LOG}?id=${encodeURIComponent(id)}&check`).then((response) => response.ok ? response.json() : undefined).catch(() => undefined);
-      this.aiEngineText = aiEngineLabel(answer?.aiEngine);
+      this.aiEngineText = aiEngineLabel(answer?.aiEngine, answer?.aiVersion);
       if (answer?.available === true) {
         this.decisionLogLink = `${paths.DECISION_LOG}?id=${encodeURIComponent(id)}`;
       }

@@ -5,6 +5,7 @@ import {IPlayer} from '../../IPlayer';
 import {RustMirror, rustAiInstalled} from './RustMirror';
 import {recordSetup} from './rustRandom';
 import {rustOptionsText, setupOf} from './rustSetup';
+import {rustAiSupportFile} from './rustAiSupportFile';
 
 export function startGame(players: ReadonlyArray<IPlayer>, create: () => IGame): IGame {
   const rustPlayers = players.filter((player) => player.aiEngine === 'rust');
@@ -19,6 +20,9 @@ export function startGame(players: ReadonlyArray<IPlayer>, create: () => IGame):
     rustPlayers.forEach((player) => player.aiEngine = undefined);
     return game;
   }
+  // the version that plays this game, so admins can tell games of different releases apart
+  const support = rustAiSupportFile.get();
+  rustPlayers.forEach((player) => player.aiVersion = support.aiVersion ?? support.botVersion);
   RustMirror.start(game, setupOf(game, options.text, duneDraws));
   return game;
 }

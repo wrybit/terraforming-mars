@@ -238,6 +238,15 @@ describe('Player', () => {
     const json = player.serialize();
     expect(json.pickedCorporationCard).eq('Saturn Systems');
   });
+  it('keeps the Rust AI version of a seat when saved and loaded', () => {
+    const player = new Player('blue', 'blue', false, 0, 'p-blue');
+    player.aiEngine = 'rust';
+    player.aiVersion = '1.4';
+    expect(Player.deserialize(player.serialize()).aiVersion).eq('1.4');
+    const older = player.serialize();
+    delete older.aiVersion;
+    expect(Player.deserialize(older).aiVersion).is.undefined;
+  });
   it('enables the timer when loading an older saved player who has a corporation', () => {
     const player = new Player('blue', 'blue', false, 0, 'p-blue');
     player.pickedCorporationCard = new SaturnSystems();

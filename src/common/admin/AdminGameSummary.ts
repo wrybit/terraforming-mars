@@ -45,6 +45,8 @@ export type AdminGameSummary = {
   players: Array<AdminPlayerSummary>;
   /** AI program of a local game with AI players (shown small to admins) */
   aiEngine?: 'rust' | 'typescript';
+  /** Version of the Rust AI of that game (aiVersionOfGame) */
+  aiVersion?: string;
 };
 
 export type AdminDeleteGameRequest = {

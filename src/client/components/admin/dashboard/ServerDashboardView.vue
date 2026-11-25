@@ -107,6 +107,10 @@ export default defineComponent({
         {label: 'Game server running for', value: formatDuration(dashboard.host.serverUptimeSeconds)},
         {label: 'Machine running for', value: formatDuration(dashboard.host.systemUptimeSeconds)},
         {label: 'Version', value: `${dashboard.build.head} · ${formatDateTime(dashboard.build.builtAt)}`},
+        // Installed Rust AI: short version and the time of its release, commit in the tooltip
+        ...(dashboard.rustAi === undefined ? [] : [{label: 'Rust AI', value: [dashboard.rustAi.version ?? dashboard.rustAi.commit ?? '–',
+          dashboard.rustAi.generated === undefined ? undefined : formatDateTime(dashboard.rustAi.generated)].filter((part) => part !== undefined).join(' · '),
+        title: dashboard.rustAi.commit}]),
         reachability.ok ?
           {label: 'Public address', value: translateTextWithParams('Reachable (${0} ms)', [String(reachability.latencyMs)]), tone: 'good', title: reachability.url} :
           {label: 'Public address', value: translateText('Not reachable'), tone: 'critical',
