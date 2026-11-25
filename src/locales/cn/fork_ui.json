@@ -2270,7 +2270,7 @@
   "0: always the best move. Higher: more often a slightly worse one, never nonsense. Needs a bot that supports it.": "0：总是最佳步。更高：更常选稍差的一步，但绝不胡来。需要支持此功能的机器人。",
   "What the AI can play": "AI 能玩的内容",
   "No bot or no rust-ai-support.json in its folder: the Rust AI plays nothing.": "没有机器人，或其文件夹中没有 rust-ai-support.json：Rust AI 什么都不能玩。",
-  "Bot ${0}, file of ${1}": "机器人 ${0}，文件日期 ${1}",
+  "Version ${0} · bot ${1} · file of ${2}": "版本 ${0} · 机器人 ${1} · 文件日期 ${2}",
   "Chat filter": "聊天过滤",
   "Server load, live": "服务器负载（实时）",
   "Now": "现在",

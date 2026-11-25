@@ -2083,7 +2083,7 @@
   "0: always the best move. Higher: more often a slightly worse one, never nonsense. Needs a bot that supports it.": "0: zawsze najlepszy ruch. Więcej: częściej nieco gorszy, nigdy bezsensowny. Wymaga bota, który to obsługuje.",
   "What the AI can play": "Co potrafi AI",
   "No bot or no rust-ai-support.json in its folder: the Rust AI plays nothing.": "Brak bota lub pliku rust-ai-support.json w jego folderze: AI Rust nic nie potrafi.",
-  "Bot ${0}, file of ${1}": "Bot ${0}, plik z ${1}",
+  "Version ${0} · bot ${1} · file of ${2}": "Wersja ${0} · Bot ${1} · plik z ${2}",
   "Chat filter": "Filtr czatu",
   "Server load, live": "Obciążenie serwera na żywo",
   "Now": "Teraz",

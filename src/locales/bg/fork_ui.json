@@ -2234,7 +2234,7 @@
   "0: always the best move. Higher: more often a slightly worse one, never nonsense. Needs a bot that supports it.": "0: винаги най-добрият ход. По-високо: по-често малко по-слаб, никога безсмислен. Нужен е бот, който го поддържа.",
   "What the AI can play": "Какво може ИИ",
   "No bot or no rust-ai-support.json in its folder: the Rust AI plays nothing.": "Няма бот или rust-ai-support.json в папката му: ИИ на Rust не може нищо.",
-  "Bot ${0}, file of ${1}": "Бот ${0}, файл от ${1}",
+  "Version ${0} · bot ${1} · file of ${2}": "Версия ${0} · Бот ${1} · файл от ${2}",
   "Chat filter": "Филтър на чата",
   "Server load, live": "Натоварване на сървъра, на живо",
   "Now": "Сега",

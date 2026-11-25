@@ -1284,7 +1284,7 @@
   "0: always the best move. Higher: more often a slightly worse one, never nonsense. Needs a bot that supports it.": "0: aina paras siirto. Korkeampi: useammin hieman huonompi, ei koskaan järjetön. Vaatii botin, joka tukee tätä.",
   "What the AI can play": "Mitä tekoäly osaa",
   "No bot or no rust-ai-support.json in its folder: the Rust AI plays nothing.": "Ei bottia tai rust-ai-support.json puuttuu sen kansiosta: Rust-tekoäly ei osaa mitään.",
-  "Bot ${0}, file of ${1}": "Botti ${0}, tiedosto ${1}",
+  "Version ${0} · bot ${1} · file of ${2}": "Versio ${0} · Botti ${1} · tiedosto ${2}",
   "Chat filter": "Chat-suodatin",
   "Server load, live": "Palvelimen kuorma, livenä",
   "Now": "Nyt",

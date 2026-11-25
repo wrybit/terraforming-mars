@@ -1911,7 +1911,7 @@
   "0: always the best move. Higher: more often a slightly worse one, never nonsense. Needs a bot that supports it.": "0: altijd de beste zet. Hoger: vaker een iets slechtere, nooit onzin. Vereist een bot die dit kan.",
   "What the AI can play": "Wat de AI kan spelen",
   "No bot or no rust-ai-support.json in its folder: the Rust AI plays nothing.": "Geen bot of geen rust-ai-support.json in de map: de Rust-AI speelt niets.",
-  "Bot ${0}, file of ${1}": "Bot ${0}, bestand van ${1}",
+  "Version ${0} · bot ${1} · file of ${2}": "Versie ${0} · Bot ${1} · bestand van ${2}",
   "Chat filter": "Chatfilter",
   "Server load, live": "Serverbelasting, live",
   "Now": "Nu",
