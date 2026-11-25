@@ -92,14 +92,14 @@ export default defineComponent({
         {engine: 'rust', shortName: 'Rust', active: engine === 'rust'},
       ];
     },
-    // Left the short blocks (expansions, boards, Dune), right the long one (options): both columns about equally long
+    // Left expansions and boards, right options and Dune: both columns about equally long
     columns(): Array<Array<AiSupportMatrixGroup>> {
       const matrix = aiSupportMatrix(TYPESCRIPT_AI_SUPPORT, this.rustEmpty ? undefined : aiSupportInfo.value?.rust);
-      const left = [matrix.expansions, matrix.boards];
+      const right = [matrix.options];
       if (matrix.duneModules !== undefined) {
-        left.push(matrix.duneModules);
+        right.push(matrix.duneModules);
       }
-      return [left, [matrix.options]];
+      return [[matrix.expansions, matrix.boards], right];
     },
   },
 });
