@@ -1009,7 +1009,8 @@ export default defineComponent({
     },
     // Settings of this game the AI has to know
     aiSettings(): AiSettings {
-      return aiSettingsOf(this.newGameConfig, this.summaryBoard);
+      // Card lists count by the expansions of their cards, like on the server (cardModuleOf.ts)
+      return aiSettingsOf(this.newGameConfig, this.summaryBoard, (card) => getCard(card)?.module);
     },
     // Both AIs' support; before the server's answer the Rust AI knows nothing
     aiSupports(): {rust: AiSupport, typescript: AiSupport} {

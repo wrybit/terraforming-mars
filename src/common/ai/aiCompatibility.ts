@@ -3,7 +3,7 @@ import {BoardName} from '../boards/BoardName';
 import {NewGameConfig} from '../game/NewGameConfig';
 import {RandomMAOptionType} from '../ma/RandomMAOptionType';
 import {AI_OPTIONS, AiOption, AiSupport} from './aiSupportContract';
-import {AiSetupLimit, aiSetupLimitsOf} from './aiSetupLimits';
+import {AiCardListModules, AiSetupLimit, CardModuleLookup, aiCardListLimits, aiCardListModules, aiSetupLimitsOf} from './aiSetupLimits';
 
 /** Settings of a new game the new AI has to play; options hold only those that take effect in this game. */
 export type AiSettings = {
@@ -14,6 +14,8 @@ export type AiSettings = {
   duneModules?: ReadonlyArray<string>;
   /** Card lists and other setups only the TypeScript AI could play (aiSetupLimits.ts); the Rust AI cannot */
   setup?: ReadonlyArray<AiSetupLimit>;
+  /** Expansions of the cards in the card lists; a list with a card the AI does not know blocks it */
+  cardLists?: AiCardListModules;
 };
 
 /** One setting the new AI cannot play. */
@@ -57,10 +59,11 @@ export function isAiCompatible(settings: AiSettings, support: AiSupport): AiComp
  * An option only counts where it takes effect, like the create form shows it: draft options with several players,
  * the 63 TR mode solo, expansion options with their expansion.
  */
-export function aiSettingsOf(config: NewGameConfig, boardName: BoardName | undefined): AiSettings {
+export function aiSettingsOf(config: NewGameConfig, boardName: BoardName | undefined, moduleOf: CardModuleLookup = () => undefined): AiSettings {
   return {
     expansions: config.expansions, boardName, options: aiOptionsInEffect(config),
     duneModules: config.theme === 'dune' ? config.duneModules ?? [] : [], setup: aiSetupLimitsOf(config),
+    cardLists: aiCardListModules(config, moduleOf),
   };
 }
 
@@ -158,7 +161,8 @@ export function aiEngineFor(settings: AiSettings, supports: {rust: AiSupport, ty
 function rustCompatibility(settings: AiSettings, support: AiSupport): AiCompatibility {
   // Ohne Corporate Era spielt der Bot, sobald er es meldet; ältere Bots kennen das Flag nicht
   const setup = (settings.setup ?? []).filter((id) => id !== 'noCorporateEra' || !support.botFeatures.includes('noCorporateEra'));
-  const reasons = [...isAiCompatible(settings, support).reasons, ...setup.map((id): AiBlocker => ({kind: 'setup', id}))];
+  const cardLists = settings.cardLists === undefined ? [] : aiCardListLimits(settings.cardLists, support.expansions);
+  const reasons = [...isAiCompatible(settings, support).reasons, ...[...setup, ...cardLists].map((id): AiBlocker => ({kind: 'setup', id}))];
   return {ok: reasons.length === 0, reasons};
 }
 

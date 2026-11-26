@@ -252,9 +252,9 @@ describe('ApiCreateGame', () => {
 
   it('refuses AI players the Rust mirror cannot play instead of handing them to the TypeScript AI', async () => {
     apiCreateGame = new ApiCreateGame([{limit: 99999, perMs: 1}], () => ({engine: 'rust', reasons: []}));
-    await postConfig({...withAi(), bannedCards: [CardName.ALGAE]});
+    await postConfig({...withAi(), customCorporationsList: [CardName.APHRODITE]});
     expect(res.statusCode).eq(statusCode.badRequest);
-    expect(res.content).contains('AI players are not available with: custom card or milestone lists');
+    expect(res.content).contains('AI players are not available with: cards the AI does not know in customCorporations');
   });
 
   it('ignores the CEO draft switch without the CEO expansion, so it never blocks AI players', async () => {
