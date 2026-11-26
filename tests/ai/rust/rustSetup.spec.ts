@@ -34,7 +34,10 @@ describe('rustOptionsText', () => {
   it('refuses expansions the Rust AI does not know', () => {
     expect(rustOptionsText(options({aresExtension: true}), 2)).deep.eq({unsupported: 'aresExtension'});
     expect(rustOptionsText(options({moonExpansion: true}), 2)).deep.eq({unsupported: 'moonExpansion'});
-    expect(rustOptionsText(options({bannedCards: ['Algae' as any]}), 2)).deep.eq({unsupported: 'custom card or milestone lists'});
+    expect(rustOptionsText(options({bannedCards: ['Algae' as any]}), 2, [], ['corpera'])).deep.eq({text: ''});
+    expect(rustOptionsText(options({customCorporationsList: ['CrediCor' as any]}), 2, [], ['corpera'])).deep.eq({text: ''});
+    expect(rustOptionsText(options({customCorporationsList: ['Aphrodite' as any]}), 2, [], ['corpera']))
+      .deep.eq({unsupported: 'cards the AI does not know in customCorporations'});
   });
 });
 

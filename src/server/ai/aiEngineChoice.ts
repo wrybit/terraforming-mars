@@ -5,6 +5,7 @@ import {BoardName} from '../../common/boards/BoardName';
 import {NewGameConfig} from '../../common/game/NewGameConfig';
 import {rustAiInstalled} from './rust/RustMirror';
 import {rustAiSupportFile} from './rust/rustAiSupportFile';
+import {cardModuleOf} from '../cards/cardModuleOf';
 
 /**
  * Only the Rust AI plays new games, on every server and without any setting that could change it: settings it cannot
@@ -33,5 +34,5 @@ export function setRustAiSupportForTest(support: AiSupport | undefined): void {
 
 /** Which AI plays a new game with these settings on this server. */
 export function decideAiEngine(config: NewGameConfig, boardName: BoardName | undefined): AiEngineDecision {
-  return aiEngineFor(aiSettingsOf(config, boardName), {rust: rustAiSupport(), typescript: TYPESCRIPT_AI_SUPPORT}, aiAdminSettings());
+  return aiEngineFor(aiSettingsOf(config, boardName, cardModuleOf), {rust: rustAiSupport(), typescript: TYPESCRIPT_AI_SUPPORT}, aiAdminSettings());
 }

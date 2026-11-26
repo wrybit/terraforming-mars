@@ -4,8 +4,11 @@ import {IGame} from '../../IGame';
 import {GameOptions} from '../../game/GameOptions';
 import {BoardName} from '../../../common/boards/BoardName';
 import {RandomMAOptionType} from '../../../common/ma/RandomMAOptionType';
+import {CardName} from '../../../common/cards/CardName';
 import {BotFeature} from '../../../common/ai/aiSupportContract';
 import {rustAiSupportFile} from './rustAiSupportFile';
+import {aiCardListLimits} from '../../../common/ai/aiSetupLimits';
+import {cardModuleOf} from '../../cards/cardModuleOf';
 
 // Rust board names (its data/board-<name>.json) by TS board name
 const BOARDS: Partial<Record<string, string>> = {
@@ -31,7 +34,7 @@ const NEUTRAL = new Set<string>([
   'boardName', 'bannedCards', 'includedCards', 'clonedGamedId', 'corporateEra', 'draftVariant', 'preludeExtension',
   'expansions', 'fastModeOption', 'showOtherPlayersVP', 'showTimers', 'aiAnalysis', 'undoOption', 'randomMA',
   'politicalAgendasExtension', 'startingCorporations', 'startingPreludes', 'startingCeos', 'aresHazards', 'name',
-  'theme', 'duneModules', 'customMA',
+  'theme', 'duneModules', 'customMA', 'customCorporationsList', 'customPreludes',
   ...SWITCHES.map(([option]) => option),
 ]);
 
@@ -40,7 +43,8 @@ const NEUTRAL = new Set<string>([
  * not know). The caller keeps the TS AI for such games.
  */
 export function rustOptionsText(options: GameOptions, playerCount: number,
-  botFeatures: ReadonlyArray<BotFeature> = rustAiSupportFile.get().botFeatures): {text: string} | {unsupported: string} {
+  botFeatures: ReadonlyArray<BotFeature> = rustAiSupportFile.get().botFeatures,
+  expansions: ReadonlyArray<string> = rustAiSupportFile.get().expansions): {text: string} | {unsupported: string} {
   const board = BOARDS[options.boardName];
   if (board === undefined) {
     return {unsupported: `board ${options.boardName}`};
@@ -51,8 +55,15 @@ export function rustOptionsText(options: GameOptions, playerCount: number,
   if (options.corporateEra !== true && !botFeatures.includes('noCorporateEra')) {
     return {unsupported: 'without corporate era'};
   }
-  if (options.bannedCards.length > 0 || options.includedCards.length > 0 || options.customMA !== undefined) {
-    return {unsupported: 'custom card or milestone lists'};
+  if (options.customMA !== undefined) {
+    return {unsupported: 'custom milestone lists'};
+  }
+  // Card lists only shape the piles the bot gets dealt; it has to know every listed card (same rule as the form)
+  const modulesOf = (list: ReadonlyArray<CardName>) => list.map(cardModuleOf);
+  const cardLists = aiCardListLimits({customCorporations: modulesOf(options.customCorporationsList),
+    customPreludes: modulesOf(options.customPreludes), includedCards: modulesOf(options.includedCards)}, expansions);
+  if (cardLists.length > 0) {
+    return {unsupported: `cards the AI does not know in ${cardLists.join(', ')}`};
   }
   const record = options as unknown as Record<string, unknown>;
   for (const [option, value] of Object.entries(record)) {

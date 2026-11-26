@@ -1,6 +1,7 @@
 import {expect} from 'chai';
 import {BoardName} from '../../../src/common/boards/BoardName';
-import {AI_SETUP_LIMITS, AiSetupLimit, aiSetupLimitsOf} from '../../../src/common/ai/aiSetupLimits';
+import {AI_CARD_LISTS, AI_SETUP_LIMITS, AiSetupLimit, aiSetupLimitsOf} from '../../../src/common/ai/aiSetupLimits';
+import {cardModuleOf} from '../../../src/server/cards/cardModuleOf';
 import {aiEngineFor, aiSettingsOf} from '../../../src/common/ai/aiCompatibility';
 import {EMPTY_AI_SUPPORT, AiSupport} from '../../../src/common/ai/aiSupportContract';
 import {NewGameConfig} from '../../../src/common/game/NewGameConfig';
@@ -32,12 +33,12 @@ function config(changes: Partial<NewGameConfig> = {}): NewGameConfig {
 // One request per limit, as the create form sends it
 const CHANGES: Record<AiSetupLimit, Partial<NewGameConfig>> = {
   noCorporateEra: {expansions: {...config().expansions, corpera: false}},
-  customCorporations: {customCorporationsList: [CardName.CREDICOR]},
-  customPreludes: {customPreludes: [CardName.DONATION]},
+  customCorporations: {customCorporationsList: [CardName.CREDICOR, CardName.APHRODITE]},
+  customPreludes: {customPreludes: [CardName.DONATION, CardName.CO_LEADERSHIP]},
   customCeos: {customCeos: [CardName.FLOYD]},
   customColonies: {customColoniesList: [ColonyName.EUROPA]},
-  bannedCards: {bannedCards: [CardName.ALGAE]},
-  includedCards: {includedCards: [CardName.ALGAE]},
+  // Card lists block only with a card of an expansion the AI does not play (here: Venus Next, Pathfinders)
+  includedCards: {includedCards: [CardName.APHRODITE]},
   manualMilestones: {randomMA: RandomMAOptionType.MANUAL},
   escapeVelocity: {escapeVelocity: {thresholdMinutes: 30, bonusSectionsPerAction: 1, penaltyPeriodMinutes: 2, penaltyVPPerPeriod: 1}},
   predefinedGame: {clonedGamedId: 'g123456789ab' as GameId},
@@ -49,8 +50,14 @@ describe('aiSetupLimitsOf', () => {
   });
 
   it('names each limit of its own request', () => {
-    for (const limit of AI_SETUP_LIMITS) {
+    for (const limit of AI_SETUP_LIMITS.filter((limit) => !(AI_CARD_LISTS as ReadonlyArray<string>).includes(limit))) {
       expect(aiSetupLimitsOf(config(CHANGES[limit])), limit).deep.eq([limit]);
+    }
+  });
+
+  it('leaves card lists to the check of their cards', () => {
+    for (const limit of AI_CARD_LISTS) {
+      expect(aiSetupLimitsOf(config(CHANGES[limit])), limit).deep.eq([]);
     }
   });
 
@@ -59,7 +66,7 @@ describe('aiSetupLimitsOf', () => {
     // A copied game never reaches the mirror: the create route builds it from the old game (ApiCreateGame.ts)
     for (const limit of AI_SETUP_LIMITS.filter((limit) => limit !== 'predefinedGame')) {
       const options = ApiCreateGame.gameOptions(config(CHANGES[limit]), BoardName.THARSIS);
-      expect(rustOptionsText(options, 2), limit).has.property('unsupported');
+      expect(rustOptionsText(options, 2, [], ['corpera', 'prelude']), limit).has.property('unsupported');
     }
   });
 });
@@ -69,9 +76,24 @@ describe('aiEngineFor with setup limits', () => {
   const supports = {rust: support, typescript: support};
 
   it('gives no AI where the Rust AI cannot mirror the setup, and names why', () => {
-    const settings = aiSettingsOf(config({bannedCards: [CardName.ALGAE]}), BoardName.THARSIS);
+    const settings = aiSettingsOf(config({customColoniesList: [ColonyName.EUROPA]}), BoardName.THARSIS, cardModuleOf);
     expect(aiEngineFor(settings, supports, {engine: 'rust', typescriptFallback: false}))
-      .deep.eq({engine: 'none', reasons: [{kind: 'setup', id: 'bannedCards'}]});
+      .deep.eq({engine: 'none', reasons: [{kind: 'setup', id: 'customColonies'}]});
+  });
+
+  it('plays card lists whose cards all come from its expansions, and excluded cards always', () => {
+    const play = (changes: Partial<NewGameConfig>) =>
+      aiEngineFor(aiSettingsOf(config(changes), BoardName.THARSIS, cardModuleOf), supports, {engine: 'rust', typescriptFallback: false});
+    expect(play({customCorporationsList: [CardName.CREDICOR, CardName.ECOLINE]}).engine).eq('rust');
+    expect(play({bannedCards: [CardName.ALGAE, CardName.APHRODITE]}).engine).eq('rust');
+    expect(play({includedCards: [CardName.ALGAE]}).engine).eq('rust');
+    expect(play({customCorporationsList: [CardName.CREDICOR, CardName.APHRODITE]}))
+      .deep.eq({engine: 'none', reasons: [{kind: 'setup', id: 'customCorporations'}]});
+  });
+
+  it('counts a card list as unknown when the form cannot look its cards up', () => {
+    const settings = aiSettingsOf(config({customPreludes: [CardName.DONATION]}), BoardName.THARSIS);
+    expect(aiEngineFor(settings, supports, {engine: 'rust', typescriptFallback: false}).engine).eq('none');
   });
 
   it('plays the Rust AI without such settings', () => {

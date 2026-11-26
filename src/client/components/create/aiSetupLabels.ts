@@ -10,7 +10,6 @@ export const AI_SETUP_LABELS: Record<AiSetupLimit, AiSetupLabel> = {
   customPreludes: {label: 'Custom Preludes list', iconClass: 'expansion-icon-prelude'},
   customCeos: {label: 'Custom CEOs list', iconClass: 'expansion-icon-ceo'},
   customColonies: {label: 'Custom Colonies list', iconClass: 'expansion-icon-colony'},
-  bannedCards: {label: 'Exclude some cards'},
   includedCards: {label: 'Include some cards'},
   manualMilestones: {label: 'Manual Milestones & Awards'},
   escapeVelocity: {label: 'Escape Velocity', iconClass: 'expansion-icon-escape-velocity'},
