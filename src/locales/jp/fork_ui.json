@@ -1715,5 +1715,6 @@
   "Update failed: ${0}": "更新に失敗しました：${0}",
   "The bot folder is read-only, so the AI cannot update itself. Docker: mount it without \":ro\".": "ボットのフォルダーが読み取り専用のため、Rust AI は自分で更新できません。Docker：\":ro\" なしでマウントしてください。",
   "No package of version ${0} for this system yet": "このシステム用のバージョン ${0} のパッケージはまだありません",
-  "Last check: ${0}": "最終確認：${0}"
+  "Last check: ${0}": "最終確認：${0}",
+  "Rust AI ${0} is available": "Rust AI ${0} が利用可能です"
 }

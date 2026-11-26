@@ -14,8 +14,8 @@
 
 <script lang="ts">
 import {defineComponent} from 'vue';
-import {paths} from '@/common/app/paths';
 import {RustAiUpdateStatus} from '@/common/ai/rustAiUpdate';
+import {checkRustAiUpdate, loadRustAiUpdate} from '@/client/components/admin/rustAiUpdateRequests';
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 import {reloadAiSupport} from '@/client/utils/aiSupportState';
 
@@ -57,34 +57,21 @@ export default defineComponent({
   },
   methods: {
     async load(): Promise<void> {
-      try {
-        const response = await fetch(paths.API_ADMIN_RUST_AI_UPDATE);
-        if (response.ok) {
-          this.status = await response.json() as RustAiUpdateStatus;
-        }
-      } catch {
-        // No answer: the line stays hidden
-      }
+      // No answer: the line stays hidden
+      this.status = await loadRustAiUpdate();
     },
     async check(install: boolean): Promise<void> {
       this.busy = true;
       if (this.status !== undefined) {
         this.status = {...this.status, state: install ? 'installing' : 'checking'};
       }
-      try {
-        const response = await fetch(paths.API_ADMIN_RUST_AI_UPDATE, {method: 'POST', body: JSON.stringify({install})});
-        if (response.ok) {
-          this.status = await response.json() as RustAiUpdateStatus;
-          // The version line and the table above show the new bot only after fetching them again
-          if (this.status.state === 'updated') {
-            void reloadAiSupport();
-          }
-        }
-      } catch {
-        await this.load();
-      } finally {
-        this.busy = false;
+      const status = await checkRustAiUpdate(install);
+      this.status = status ?? await loadRustAiUpdate();
+      // The version line and the table above show the new bot only after fetching them again
+      if (status?.state === 'updated') {
+        void reloadAiSupport();
       }
+      this.busy = false;
     },
   },
 });

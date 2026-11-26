@@ -24,6 +24,7 @@
         <DashboardOnlineCount :count="dashboard.playersOnline" />
         <DashboardFacts :facts="gameFacts" />
         <DashboardUpdateButton :dashboard="dashboard" @changed="$emit('changed')" />
+        <DashboardRustAiUpdate />
       </DashboardCard>
       <DashboardCard title="Graphics" size="graphics" :ready="has('machine')" :error="errorOf('machine')">
         <DashboardGraphics :gpus="dashboard.gpus" :mainMemoryBytes="dashboard.memory.totalBytes" />
@@ -74,6 +75,7 @@ import DashboardMeter from '@/client/components/admin/dashboard/DashboardMeter.v
 import DashboardCommits from '@/client/components/admin/dashboard/DashboardCommits.vue';
 import DashboardGraphics from '@/client/components/admin/dashboard/DashboardGraphics.vue';
 import DashboardUpdateButton from '@/client/components/admin/dashboard/DashboardUpdateButton.vue';
+import DashboardRustAiUpdate from '@/client/components/admin/dashboard/DashboardRustAiUpdate.vue';
 import DashboardOnlineCount from '@/client/components/admin/dashboard/DashboardOnlineCount.vue';
 import DashboardDayOverlay from '@/client/components/admin/dashboard/DashboardDayOverlay.vue';
 import DashboardSplitBar from '@/client/components/admin/dashboard/DashboardSplitBar.vue';
@@ -83,7 +85,7 @@ import {formatDateTime, formatDuration, periodBars} from '@/client/components/ad
 
 export default defineComponent({
   name: 'ServerDashboardView',
-  components: {DashboardCard, DashboardCommits, DashboardDayOverlay, DashboardFacts, DashboardGraphics, DashboardOnlineCount, DashboardMeter, DashboardRustFallbacks, DashboardServerLogo, DashboardSplitBar, DashboardUpdateButton, StatsBarChart},
+  components: {DashboardCard, DashboardCommits, DashboardDayOverlay, DashboardFacts, DashboardGraphics, DashboardOnlineCount, DashboardMeter, DashboardRustFallbacks, DashboardServerLogo, DashboardSplitBar, DashboardUpdateButton, DashboardRustAiUpdate, StatsBarChart},
   props: {
     // The parts that have arrived so far; a card waits for the ones it shows
     parts: {type: Object as PropType<Partial<DashboardSectionData>>, required: true},

@@ -1966,5 +1966,6 @@
   "Update failed: ${0}": "Bijwerken mislukt: ${0}",
   "The bot folder is read-only, so the AI cannot update itself. Docker: mount it without \":ro\".": "De botmap is alleen-lezen, de Rust AI kan zichzelf niet bijwerken. Docker: koppel hem zonder \":ro\".",
   "No package of version ${0} for this system yet": "Nog geen pakket van versie ${0} voor dit systeem",
-  "Last check: ${0}": "Laatste controle: ${0}"
+  "Last check: ${0}": "Laatste controle: ${0}",
+  "Rust AI ${0} is available": "Rust AI ${0} is beschikbaar"
 }

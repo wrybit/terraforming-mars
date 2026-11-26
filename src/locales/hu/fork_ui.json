@@ -1523,5 +1523,6 @@
   "Update failed: ${0}": "A frissítés nem sikerült: ${0}",
   "The bot folder is read-only, so the AI cannot update itself. Docker: mount it without \":ro\".": "A bot mappája csak olvasható, a Rust AI nem tudja frissíteni magát. Docker: \":ro\" nélkül csatold.",
   "No package of version ${0} for this system yet": "Még nincs ${0} verziójú csomag ehhez a rendszerhez",
-  "Last check: ${0}": "Utolsó ellenőrzés: ${0}"
+  "Last check: ${0}": "Utolsó ellenőrzés: ${0}",
+  "Rust AI ${0} is available": "Elérhető a Rust AI ${0}"
 }

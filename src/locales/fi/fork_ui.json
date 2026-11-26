@@ -1339,5 +1339,6 @@
   "Update failed: ${0}": "Päivitys epäonnistui: ${0}",
   "The bot folder is read-only, so the AI cannot update itself. Docker: mount it without \":ro\".": "Botin kansio on vain luku -tilassa, joten Rust AI ei voi päivittää itseään. Docker: liitä se ilman \":ro\".",
   "No package of version ${0} for this system yet": "Versiolle ${0} ei ole vielä pakettia tälle järjestelmälle",
-  "Last check: ${0}": "Viimeksi tarkistettu: ${0}"
+  "Last check: ${0}": "Viimeksi tarkistettu: ${0}",
+  "Rust AI ${0} is available": "Rust AI ${0} on saatavilla"
 }

@@ -1393,5 +1393,6 @@
   "Update failed: ${0}": "Échec de la mise à jour : ${0}",
   "The bot folder is read-only, so the AI cannot update itself. Docker: mount it without \":ro\".": "Le dossier du bot est en lecture seule, la Rust AI ne peut pas se mettre à jour. Docker : montez-le sans \":ro\".",
   "No package of version ${0} for this system yet": "Pas encore de paquet de la version ${0} pour ce système",
-  "Last check: ${0}": "Dernière vérification : ${0}"
+  "Last check: ${0}": "Dernière vérification : ${0}",
+  "Rust AI ${0} is available": "Rust AI ${0} disponible"
 }
