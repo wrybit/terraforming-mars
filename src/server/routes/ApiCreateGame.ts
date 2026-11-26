@@ -104,7 +104,8 @@ export class ApiCreateGame extends Handler {
       coloniesExtension: gameReq.expansions.colonies,
       communityCardsOption: gameReq.expansions.community,
       expansions: gameReq.expansions,
-      ceosDraftVariant: gameReq.ceosDraftVariant,
+      // Nur mit CEO-Erweiterung wirksam: das Formular setzt den Schalter beim Initial-Draft auch ohne CEOs auf an
+      ceosDraftVariant: gameReq.expansions.ceo === true && gameReq.ceosDraftVariant === true,
       corporateEra: gameReq.expansions.corpera,
       customCeos: gameReq.customCeos,
       customColoniesList: gameReq.customColoniesList,

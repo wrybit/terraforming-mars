@@ -322,6 +322,13 @@ describe('ApiCreateGame', () => {
     expect(res.content).contains('AI players are not available with: custom card or milestone lists');
   });
 
+  it('ignores the CEO draft switch without the CEO expansion, so it never blocks AI players', async () => {
+    // Das Formular setzt den Schalter beim Initial-Draft auch ohne CEO-Erweiterung auf an
+    apiCreateGame = new ApiCreateGame([{limit: 99999, perMs: 1}], () => ({engine: 'rust', reasons: []}));
+    await postConfig({...withAi(), initialDraft: true, ceosDraftVariant: true});
+    expect(res.content).not.contains('ceosDraftVariant');
+  });
+
   it('never seats the TypeScript AI, even when a decision names it', async () => {
     apiCreateGame = new ApiCreateGame([{limit: 99999, perMs: 1}], () => ({engine: 'typescript', reasons: [{kind: 'expansion', id: 'venus'}]}));
     await postConfig(withAi());
