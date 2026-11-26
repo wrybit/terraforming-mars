@@ -10,10 +10,10 @@ export const aiSupportInfo = ref<AiSupportModel | undefined>(undefined);
 let loading: Promise<void> | undefined;
 
 /** Fetches the answer once per page; later calls reuse it. */
-export function loadAiSupport(): Promise<void> {
+export function loadAiSupport(cache: 'default' | 'reload' = 'default'): Promise<void> {
   loading ??= (async () => {
     try {
-      const response = await fetch(paths.API_AI_SUPPORT);
+      const response = await fetch(paths.API_AI_SUPPORT, {cache});
       if (response.ok) {
         const model = await response.json() as AiSupportModel;
         aiSupportInfo.value = {
@@ -27,6 +27,12 @@ export function loadAiSupport(): Promise<void> {
     }
   })();
   return loading;
+}
+
+/** Fetches again past the browser cache (the answer may be a minute old), e.g. after the Rust AI updated itself. */
+export function reloadAiSupport(): Promise<void> {
+  loading = undefined;
+  return loadAiSupport('reload');
 }
 
 /** for testing */

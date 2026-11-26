@@ -17,6 +17,7 @@ import {defineComponent} from 'vue';
 import {paths} from '@/common/app/paths';
 import {RustAiUpdateStatus} from '@/common/ai/rustAiUpdate';
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
+import {reloadAiSupport} from '@/client/utils/aiSupportState';
 
 type DataModel = {status: RustAiUpdateStatus | undefined, busy: boolean};
 
@@ -74,6 +75,10 @@ export default defineComponent({
         const response = await fetch(paths.API_ADMIN_RUST_AI_UPDATE, {method: 'POST', body: JSON.stringify({install})});
         if (response.ok) {
           this.status = await response.json() as RustAiUpdateStatus;
+          // The version line and the table above show the new bot only after fetching them again
+          if (this.status.state === 'updated') {
+            void reloadAiSupport();
+          }
         }
       } catch {
         await this.load();
