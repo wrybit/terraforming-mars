@@ -820,6 +820,36 @@
   font-size: 12px;
 }
 
+// Update line under the version: state and time of the check close together, the buttons as their own group
+.rust-ai-update {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 16px;
+  margin: -4px 0 12px;
+  font-size: 12px;
+  color: @server-settings-dim;
+}
+
+.rust-ai-update-state {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0 6px;
+}
+
+.rust-ai-update-checked {
+  opacity: 0.75;
+}
+
+.rust-ai-update-text--problem {
+  color: #f0a040;
+}
+
+.rust-ai-update-buttons {
+  display: inline-flex;
+  gap: 6px;
+}
+
 .ai-support-overview-columns {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

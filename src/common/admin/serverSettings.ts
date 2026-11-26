@@ -144,6 +144,8 @@ const BASE_SETTINGS: ReadonlyArray<ServerSettingDefinition> = [
   {key: 'AI_RUST_EXTRA_WAIT_MS', group: 'AI opponents', section: 'AI program', kind: 'number', live: true, label: 'Fallback to TypeScript after (ms)',
     placeholder: '10000', slider: {minimum: 3000, maximum: 25000, step: 500},
     description: 'Extra time on top of the thinking time. Without an answer of the Rust AI by then, the TypeScript AI makes this decision.'},
+  {key: 'RUST_AI_AUTO_UPDATE', group: 'AI opponents', section: 'AI program', kind: 'toggle', defaultOn: true, live: true, label: 'Update the Rust AI automatically',
+    description: 'Checks GitHub every 6 hours for a newer Rust AI, tests it and swaps it in. Running games keep their AI. Off: only with the button under "What the AI can play".'},
   // Per strength: the thinking time first (it also paces the TypeScript AI), then how much the Rust AI searches,
   // the hardware (threads) last
   ...aiStrengthSettings(['timeLimit', 'rollouts', 'candidates', 'horizon', 'randomness', 'threads'], 'Strength of the Rust AI', true),

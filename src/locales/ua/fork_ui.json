@@ -1488,5 +1488,17 @@
   "Plays it": "Грає",
   "Does not play it": "Не грає",
   "Without Corporate Era": "Без Корпоративної ери",
-  "Manual Milestones & Awards": "Віхи та нагороди вручну"
+  "Manual Milestones & Awards": "Віхи та нагороди вручну",
+  "Check now": "Перевірити",
+  "Install now": "Встановити",
+  "Checking for a new version…": "Пошук нової версії…",
+  "Installing version ${0}…": "Встановлення версії ${0}…",
+  "Version ${0} is available": "Доступна версія ${0}",
+  "Updated to version ${0}": "Оновлено до версії ${0}",
+  "Update failed: ${0}": "Помилка оновлення: ${0}",
+  "The bot folder is read-only, so the AI cannot update itself. Docker: mount it without \":ro\".": "Тека бота лише для читання, Rust AI не може оновитися сама. Docker: підключіть її без \":ro\".",
+  "No package of version ${0} for this system yet": "Ще немає пакета версії ${0} для цієї системи",
+  "Last check: ${0}": "Остання перевірка: ${0}",
+  "Update the Rust AI automatically": "Оновлювати Rust AI автоматично",
+  "Checks GitHub every 6 hours for a newer Rust AI, tests it and swaps it in. Running games keep their AI. Off: only with the button under \"What the AI can play\".": "Кожні 6 годин перевіряє на GitHub нову версію Rust AI, тестує її та встановлює. Поточні партії зберігають свою AI. Вимк.: лише кнопкою в «Що вміє ШІ»."
 }

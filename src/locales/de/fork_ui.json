@@ -1105,5 +1105,17 @@
   "Plays it": "Spielt es",
   "Does not play it": "Spielt es nicht",
   "Without Corporate Era": "Ohne Zeitalter der Konzerne",
-  "Manual Milestones & Awards": "Manuelle Meilensteine & Auszeichnungen"
+  "Manual Milestones & Awards": "Manuelle Meilensteine & Auszeichnungen",
+  "Check now": "Jetzt prüfen",
+  "Install now": "Jetzt installieren",
+  "Checking for a new version…": "Suche nach neuer Version…",
+  "Installing version ${0}…": "Installiere Version ${0}…",
+  "Version ${0} is available": "Version ${0} ist verfügbar",
+  "Updated to version ${0}": "Auf Version ${0} aktualisiert",
+  "Update failed: ${0}": "Update fehlgeschlagen: ${0}",
+  "The bot folder is read-only, so the AI cannot update itself. Docker: mount it without \":ro\".": "Der Bot-Ordner ist schreibgeschützt, die Rust AI kann sich nicht selbst aktualisieren. Docker: ohne \":ro\" einbinden.",
+  "No package of version ${0} for this system yet": "Noch kein Paket von Version ${0} für dieses System",
+  "Last check: ${0}": "Zuletzt geprüft: ${0}",
+  "Update the Rust AI automatically": "Rust AI automatisch aktualisieren",
+  "Checks GitHub every 6 hours for a newer Rust AI, tests it and swaps it in. Running games keep their AI. Off: only with the button under \"What the AI can play\".": "Prüft alle 6 Stunden auf GitHub, ob es eine neuere Rust AI gibt, testet sie und setzt sie ein. Laufende Partien behalten ihre AI. Aus: nur per Knopf unter „Was die AI kann“."
 }

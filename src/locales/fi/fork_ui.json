@@ -1329,5 +1329,17 @@
   "Plays it": "Pelaa sitä",
   "Does not play it": "Ei pelaa sitä",
   "Without Corporate Era": "Ilman Yhtiöiden aikakautta",
-  "Manual Milestones & Awards": "Manuaaliset saavutukset & palkinnot"
+  "Manual Milestones & Awards": "Manuaaliset saavutukset & palkinnot",
+  "Check now": "Tarkista nyt",
+  "Install now": "Asenna nyt",
+  "Checking for a new version…": "Etsitään uutta versiota…",
+  "Installing version ${0}…": "Asennetaan versiota ${0}…",
+  "Version ${0} is available": "Versio ${0} on saatavilla",
+  "Updated to version ${0}": "Päivitetty versioon ${0}",
+  "Update failed: ${0}": "Päivitys epäonnistui: ${0}",
+  "The bot folder is read-only, so the AI cannot update itself. Docker: mount it without \":ro\".": "Botin kansio on vain luku -tilassa, joten Rust AI ei voi päivittää itseään. Docker: liitä se ilman \":ro\".",
+  "No package of version ${0} for this system yet": "Versiolle ${0} ei ole vielä pakettia tälle järjestelmälle",
+  "Last check: ${0}": "Viimeksi tarkistettu: ${0}",
+  "Update the Rust AI automatically": "Päivitä Rust AI automaattisesti",
+  "Checks GitHub every 6 hours for a newer Rust AI, tests it and swaps it in. Running games keep their AI. Off: only with the button under \"What the AI can play\".": "Tarkistaa GitHubista 6 tunnin välein, onko uudempaa Rust AI:ta, testaa sen ja vaihtaa sen käyttöön. Käynnissä olevat pelit pitävät AI:nsa. Pois: vain painikkeella kohdassa ”Mitä tekoäly osaa”."
 }

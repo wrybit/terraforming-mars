@@ -7,6 +7,7 @@
       <span v-if="rustNote !== undefined">{{ rustNote }}</span>
     </p>
     <p v-if="rustEmpty" class="ai-support-overview-note" v-i18n>No bot or no rust-ai-support.json in its folder: the Rust AI plays nothing.</p>
+    <RustAiUpdate />
     <!-- One table per block, the blocks in two columns of about equal length: each program's logo green or red, a gap row in yellow -->
     <div class="ai-support-overview-columns">
       <div v-for="(column, index) in columns" :key="index" class="ai-support-overview-stack">
@@ -44,6 +45,7 @@
 <script lang="ts">
 import {defineComponent} from 'vue';
 import AiSettingIcon from '@/client/components/create/AiSettingIcon.vue';
+import RustAiUpdate from '@/client/components/admin/RustAiUpdate.vue';
 import {AiSupport} from '@/common/ai/aiSupportContract';
 import {AiEngineChoice} from '@/common/ai/aiCompatibility';
 import {TYPESCRIPT_AI_SUPPORT} from '@/common/ai/typescript/typescriptAiSupport';
@@ -61,7 +63,7 @@ function isEmpty(support: AiSupport): boolean {
 // Admin overview of the AI programs: which expansions, options, boards and Dune modules each can play (api/ai-support), as one comparison table per block
 export default defineComponent({
   name: 'AiSupportOverview',
-  components: {AiSettingIcon},
+  components: {AiSettingIcon, RustAiUpdate},
   mounted() {
     void loadAiSupport();
   },

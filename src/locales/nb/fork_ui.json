@@ -1695,5 +1695,17 @@
   "Plays it": "Spiller det",
   "Does not play it": "Spiller det ikke",
   "Without Corporate Era": "Uten Konsernenes tidsalder",
-  "Manual Milestones & Awards": "Manuelle milepæler og utmerkelser"
+  "Manual Milestones & Awards": "Manuelle milepæler og utmerkelser",
+  "Check now": "Sjekk nå",
+  "Install now": "Installer nå",
+  "Checking for a new version…": "Ser etter ny versjon…",
+  "Installing version ${0}…": "Installerer versjon ${0}…",
+  "Version ${0} is available": "Versjon ${0} er tilgjengelig",
+  "Updated to version ${0}": "Oppdatert til versjon ${0}",
+  "Update failed: ${0}": "Oppdatering mislyktes: ${0}",
+  "The bot folder is read-only, so the AI cannot update itself. Docker: mount it without \":ro\".": "Bot-mappen er skrivebeskyttet, så Rust AI kan ikke oppdatere seg selv. Docker: monter den uten \":ro\".",
+  "No package of version ${0} for this system yet": "Ingen pakke av versjon ${0} for dette systemet ennå",
+  "Last check: ${0}": "Sist sjekket: ${0}",
+  "Update the Rust AI automatically": "Oppdater Rust AI automatisk",
+  "Checks GitHub every 6 hours for a newer Rust AI, tests it and swaps it in. Running games keep their AI. Off: only with the button under \"What the AI can play\".": "Sjekker GitHub hver 6. time etter en nyere Rust AI, tester den og bytter den inn. Pågående spill beholder sin AI. Av: bare med knappen under «Hva AI-en kan spille»."
 }
