@@ -24,8 +24,6 @@ export type RustAiUpdaterOptions = {
   binaryName: string,
   /** aiVersion of the installed bot, undefined if there is none */
   installedVersion: () => string | undefined,
-  /** Setting RUST_AI_AUTO_UPDATE */
-  autoUpdate: () => boolean,
   system?: string | undefined,
   fetch?: typeof fetch,
   /** Unpacks a .tar.gz into a folder */
@@ -45,9 +43,10 @@ async function versionOfProgram(program: string): Promise<string> {
 }
 
 /**
- * Keeps an installed Rust AI up to date with the GitHub releases (rust-ai-<version>, published by the AI's release
- * tool together with every deploy). Checks every 6 hours; a newer release is downloaded, its checksum checked, its
- * program asked for its version, and only then swapped in (rustAiFolderSwap.ts). Never installs the Rust AI where
+ * Tells the admin about newer Rust AI releases (rust-ai-<version>, published by the AI's release tool with every
+ * deploy) and installs one only when the admin presses the button: servers of other people never change their AI
+ * on their own. Checks every 6 hours; installing downloads the package, checks its checksum, asks its program for
+ * its version, and only then swaps it in (rustAiFolderSwap.ts). Never installs the Rust AI where
  * there is none, and never goes back to an older version (servers that get newer bots deployed directly stay as they are).
  */
 export class RustAiUpdater {
@@ -65,30 +64,30 @@ export class RustAiUpdater {
     this.programVersion = options.programVersion ?? versionOfProgram;
     this.now = options.now ?? (() => new Date());
     this.system = 'system' in options ? options.system : rustAiPackageSystem();
-    this.status = {state: 'idle', autoUpdate: options.autoUpdate()};
+    this.status = {state: 'idle'};
   }
 
-  /** Last result, with the current setting and installed version */
+  /** Last result, with the installed version */
   public getStatus(): RustAiUpdateStatus {
-    return {...this.status, autoUpdate: this.options.autoUpdate(), installed: this.options.installedVersion()};
+    return {...this.status, installed: this.options.installedVersion()};
   }
 
-  /** Checks for a newer release; installs it when automatic updates are on or install is true (button on the admin page). */
+  /** Checks for a newer release; installs it only with install = true (button on the admin page). */
   public check(install = false): Promise<RustAiUpdateStatus> {
-    this.running ??= this.run(install || this.options.autoUpdate()).finally(() => {
+    this.running ??= this.run(install).finally(() => {
       this.running = undefined;
     });
     return this.running;
   }
 
-  /** Regular checks while the server runs */
+  /** Regular checks while the server runs; they only report, they never install */
   public start(): void {
     setTimeout(() => void this.check(), FIRST_CHECK_MS).unref();
     setInterval(() => void this.check(), CHECK_INTERVAL_MS).unref();
   }
 
-  private set(status: Omit<RustAiUpdateStatus, 'autoUpdate'>): RustAiUpdateStatus {
-    this.status = {...status, autoUpdate: this.options.autoUpdate()};
+  private set(status: RustAiUpdateStatus): RustAiUpdateStatus {
+    this.status = status;
     return this.getStatus();
   }
 
@@ -192,5 +191,4 @@ export const rustAiUpdater = new RustAiUpdater({
   binaryName: path.basename(RUST_BOT_BINARY),
   // A bot without a version in its support file counts as the oldest, so it gets the next release
   installedVersion: () => fs.existsSync(RUST_BOT_BINARY) ? rustAiSupportFile.get().aiVersion ?? '0' : undefined,
-  autoUpdate: () => process.env.RUST_AI_AUTO_UPDATE !== 'false',
 });

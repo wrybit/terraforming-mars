@@ -14,8 +14,8 @@ describe('RustAiUpdate', () => {
 
   it('shows a newer version with an install button, which installs it', async () => {
     const fetchMock = vi.fn()
-      .mockReturnValueOnce(answer({state: 'available', autoUpdate: false, installed: '1.10', available: '1.11', checkedAt: '2026-11-26T08:00:00Z'}))
-      .mockReturnValueOnce(answer({state: 'updated', autoUpdate: false, installed: '1.11', available: '1.11', checkedAt: '2026-11-26T08:01:00Z'}));
+      .mockReturnValueOnce(answer({state: 'available', installed: '1.10', available: '1.11', checkedAt: '2026-11-26T08:00:00Z'}))
+      .mockReturnValueOnce(answer({state: 'updated', installed: '1.11', available: '1.11', checkedAt: '2026-11-26T08:01:00Z'}));
     vi.stubGlobal('fetch', fetchMock);
     const wrapper = mount(RustAiUpdate, {...globalConfig});
     await flushPromises();
@@ -30,14 +30,14 @@ describe('RustAiUpdate', () => {
   });
 
   it('stays hidden without an installed Rust AI', async () => {
-    vi.stubGlobal('fetch', vi.fn().mockReturnValue(answer({state: 'not-installed', autoUpdate: true})));
+    vi.stubGlobal('fetch', vi.fn().mockReturnValue(answer({state: 'not-installed'})));
     const wrapper = mount(RustAiUpdate, {...globalConfig});
     await flushPromises();
     expect(wrapper.find('.rust-ai-update').exists()).is.false;
   });
 
   it('marks a read-only bot folder as a problem', async () => {
-    vi.stubGlobal('fetch', vi.fn().mockReturnValue(answer({state: 'read-only', autoUpdate: true, installed: '1.10', available: '1.11'})));
+    vi.stubGlobal('fetch', vi.fn().mockReturnValue(answer({state: 'read-only', installed: '1.10', available: '1.11'})));
     const wrapper = mount(RustAiUpdate, {...globalConfig});
     await flushPromises();
     expect(wrapper.find('.rust-ai-update-text--problem').text()).contains('read-only');

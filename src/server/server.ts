@@ -171,7 +171,7 @@ async function start() {
   startUptimeRecording();
   // Who is online when (5-minute slots), for the time-of-day chart of the admin dashboard
   startPresenceRecording();
-  // An installed Rust AI follows the GitHub releases (RustAiUpdater.ts; admin setting RUST_AI_AUTO_UPDATE)
+  // Looks for newer Rust AI releases for the admin page; installing needs the admin's button (RustAiUpdater.ts)
   rustAiUpdater.start();
   // Maintenance otherwise runs only at startup. A server with a purge window (MAX_GAME_DAYS, e.g. the
   // public test server) restarts rarely, so it repeats hourly; without the variable nothing changes.

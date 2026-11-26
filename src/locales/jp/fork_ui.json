@@ -1715,7 +1715,5 @@
   "Update failed: ${0}": "更新に失敗しました：${0}",
   "The bot folder is read-only, so the AI cannot update itself. Docker: mount it without \":ro\".": "ボットのフォルダーが読み取り専用のため、Rust AI は自分で更新できません。Docker：\":ro\" なしでマウントしてください。",
   "No package of version ${0} for this system yet": "このシステム用のバージョン ${0} のパッケージはまだありません",
-  "Last check: ${0}": "最終確認：${0}",
-  "Update the Rust AI automatically": "Rust AI を自動更新",
-  "Checks GitHub every 6 hours for a newer Rust AI, tests it and swaps it in. Running games keep their AI. Off: only with the button under \"What the AI can play\".": "6時間ごとに GitHub で新しい Rust AI を確認し、テストしてから入れ替えます。進行中のゲームは元の AI のままです。オフ：「AIが遊べる内容」の下のボタンでのみ更新。"
+  "Last check: ${0}": "最終確認：${0}"
 }

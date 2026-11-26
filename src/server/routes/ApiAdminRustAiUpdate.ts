@@ -7,8 +7,8 @@ import {readBody} from './readBody';
 import {rustAiUpdater} from '../ai/rust/RustAiUpdater';
 
 /**
- * Self-update of the Rust AI (admin settings, AI tab): GET the state of the last check, POST checks now;
- * {"install": true} also installs a newer release when automatic updates are off.
+ * Update of the Rust AI (admin settings, AI tab): GET the state of the last check, POST checks now;
+ * {"install": true} also installs a newer release – the only way a release gets installed.
  */
 export class ApiAdminRustAiUpdate extends Handler {
   public static readonly INSTANCE = new ApiAdminRustAiUpdate();

@@ -1,4 +1,4 @@
-// Self-update of the Rust AI from the GitHub releases (server: ai/rust/RustAiUpdater.ts, admin page: RustAiUpdate.vue).
+// Update of the Rust AI from the GitHub releases, installed only by the admin's button (server: ai/rust/RustAiUpdater.ts, admin page: RustAiUpdate.vue).
 
 export type RustAiUpdateState =
   /** Nothing checked yet since the server started */
@@ -7,7 +7,7 @@ export type RustAiUpdateState =
   | 'installing'
   /** The installed version is the newest release (or newer, e.g. a server that gets its bot deployed directly) */
   | 'up-to-date'
-  /** A newer release is out; installed when automatic updates are on or the admin presses the button */
+  /** A newer release is out; installed when the admin presses the button */
   | 'available'
   | 'updated'
   | 'failed'
@@ -20,8 +20,6 @@ export type RustAiUpdateState =
 
 export type RustAiUpdateStatus = {
   state: RustAiUpdateState,
-  /** Setting RUST_AI_AUTO_UPDATE (on unless 'false') */
-  autoUpdate: boolean,
   /** aiVersion of the installed bot (rust-ai-support.json) */
   installed?: string,
   /** Version of the newest release */

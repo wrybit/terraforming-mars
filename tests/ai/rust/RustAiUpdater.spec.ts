@@ -33,7 +33,6 @@ describe('RustAiUpdater', () => {
       folder,
       binaryName: 'bot',
       installedVersion: () => installed,
-      autoUpdate: () => true,
       system: 'linux-x64',
       fetch: fakeGitHub(),
       // Stand-in for tar: the "package" holds a new program and support file
@@ -57,8 +56,8 @@ describe('RustAiUpdater', () => {
 
   afterEach(() => fs.rmSync(folder, {recursive: true, force: true}));
 
-  it('swaps in a newer release and keeps the old version (with its data folder) aside', async () => {
-    const status = await updater().check();
+  it('installs a newer release with the button and keeps the old version (with its data folder) aside', async () => {
+    const status = await updater().check(true);
     expect(status.state).eq('updated');
     expect(status.available).eq('1.11');
     expect(status.checkedAt).eq('2026-11-26T08:00:00.000Z');
@@ -69,26 +68,27 @@ describe('RustAiUpdater', () => {
     expect(fs.existsSync(path.join(folder, '.update'))).is.false;
   });
 
-  it('only reports a newer release while automatic updates are off, the button installs it', async () => {
-    const subject = updater({autoUpdate: () => false});
+  it('only reports a newer release when it checks on its own, never installs it', async () => {
+    const subject = updater();
     expect((await subject.check()).state).eq('available');
     expect(fs.readFileSync(path.join(folder, 'bot'), 'utf8')).eq('old bot');
-    expect((await subject.check(true)).state).eq('updated');
+    expect((await subject.check()).state).eq('available');
+    expect(fs.readFileSync(path.join(folder, 'bot'), 'utf8')).eq('old bot');
   });
 
   it('never goes back to an older release', async () => {
     installed = '1.12';
-    expect((await updater().check()).state).eq('up-to-date');
+    expect((await updater().check(true)).state).eq('up-to-date');
     expect(fs.readFileSync(path.join(folder, 'bot'), 'utf8')).eq('old bot');
   });
 
   it('does not install the Rust AI where there is none', async () => {
     installed = undefined;
-    expect((await updater().check()).state).eq('not-installed');
+    expect((await updater().check(true)).state).eq('not-installed');
   });
 
   it('keeps the old version when the checksum does not match', async () => {
-    const status = await updater({fetch: fakeGitHub('0'.repeat(64))}).check();
+    const status = await updater({fetch: fakeGitHub('0'.repeat(64))}).check(true);
     expect(status.state).eq('failed');
     expect(status.error).contains('checksum');
     expect(fs.readFileSync(path.join(folder, 'bot'), 'utf8')).eq('old bot');
@@ -97,7 +97,7 @@ describe('RustAiUpdater', () => {
   it('keeps the old version when the new program does not start', async () => {
     const status = await updater({programVersion: async () => {
       throw new Error('spawn ENOEXEC');
-    }}).check();
+    }}).check(true);
     expect(status.state).eq('failed');
     expect(fs.readFileSync(path.join(folder, 'bot'), 'utf8')).eq('old bot');
     expect(fs.existsSync(path.join(folder, '.update'))).is.false;

@@ -2618,7 +2618,5 @@
   "Update failed: ${0}": "Error al actualizar: ${0}",
   "The bot folder is read-only, so the AI cannot update itself. Docker: mount it without \":ro\".": "La carpeta del bot es de solo lectura, la Rust AI no puede actualizarse. Docker: móntala sin \":ro\".",
   "No package of version ${0} for this system yet": "Aún no hay paquete de la versión ${0} para este sistema",
-  "Last check: ${0}": "Última comprobación: ${0}",
-  "Update the Rust AI automatically": "Actualizar la Rust AI automáticamente",
-  "Checks GitHub every 6 hours for a newer Rust AI, tests it and swaps it in. Running games keep their AI. Off: only with the button under \"What the AI can play\".": "Cada 6 horas busca en GitHub una Rust AI más reciente, la prueba y la instala. Las partidas en curso mantienen su AI. Desactivado: solo con el botón bajo «Lo que sabe jugar la IA»."
+  "Last check: ${0}": "Última comprobación: ${0}"
 }
