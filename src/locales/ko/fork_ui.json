@@ -1591,8 +1591,8 @@
   "Version ${0} is available": "버전 ${0} 사용 가능",
   "Updated to version ${0}": "버전 ${0}(으)로 업데이트됨",
   "Update failed: ${0}": "업데이트 실패: ${0}",
-  "The bot folder is read-only, so the AI cannot update itself. Docker: mount it without \":ro\".": "봇 폴더가 읽기 전용이라 Rust AI가 스스로 업데이트할 수 없습니다. Docker: \":ro\" 없이 마운트하세요.",
   "No package of version ${0} for this system yet": "이 시스템용 버전 ${0} 패키지가 아직 없습니다",
   "Last check: ${0}": "마지막 확인: ${0}",
-  "Rust AI ${0} is available": "Rust AI ${0} 사용 가능"
+  "Rust AI ${0} is available": "Rust AI ${0} 사용 가능",
+  "The game server may not write to the bot folder, so it cannot install the update. Give its user write access to the folder.": "게임 서버가 봇 폴더에 쓸 수 없어 업데이트를 설치할 수 없습니다. 서버 사용자에게 이 폴더의 쓰기 권한을 주세요."
 }

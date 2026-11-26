@@ -13,7 +13,9 @@ export type RustAiUpdateState =
   | 'failed'
   /** No Rust AI in the bot folder: updates only replace an installed one, they never install it */
   | 'not-installed'
-  /** The bot folder cannot be written (e.g. Docker mount with :ro) */
+  /** A bot whose support file names no version (deployed directly): never offered a release, it may be newer */
+  | 'unversioned'
+  /** The game server cannot write the bot folder (owner or permissions of the folder, or a read-only mount) */
   | 'read-only'
   /** The newest release has no package for this system and CPU */
   | 'no-package';

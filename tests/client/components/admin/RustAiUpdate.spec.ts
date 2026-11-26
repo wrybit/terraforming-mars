@@ -36,10 +36,17 @@ describe('RustAiUpdate', () => {
     expect(wrapper.find('.rust-ai-update').exists()).is.false;
   });
 
+  it('stays hidden for a bot without a version', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockReturnValue(answer({state: 'unversioned'})));
+    const wrapper = mount(RustAiUpdate, {...globalConfig});
+    await flushPromises();
+    expect(wrapper.find('.rust-ai-update').exists()).is.false;
+  });
+
   it('marks a read-only bot folder as a problem', async () => {
     vi.stubGlobal('fetch', vi.fn().mockReturnValue(answer({state: 'read-only', installed: '1.10', available: '1.11'})));
     const wrapper = mount(RustAiUpdate, {...globalConfig});
     await flushPromises();
-    expect(wrapper.find('.rust-ai-update-text--problem').text()).contains('read-only');
+    expect(wrapper.find('.rust-ai-update-text--problem').text()).contains('write access');
   });
 });
