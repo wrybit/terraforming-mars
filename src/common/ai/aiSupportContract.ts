@@ -65,7 +65,8 @@ export const EMPTY_AI_SUPPORT: AiSupport = {
 };
 
 /** Start parameters a bot may announce: randomness = share of moves that are not the best (common/ai/rustBotStrength.ts). */
-export const BOT_FEATURES = ['randomness'] as const;
+// noCorporateEra: der Bot kennt das Grundspiel ohne Corporate Era (Flag nocorpera)
+export const BOT_FEATURES = ['randomness', 'noCorporateEra'] as const;
 export type BotFeature = typeof BOT_FEATURES[number];
 
 /** Contract version this code reads. */
