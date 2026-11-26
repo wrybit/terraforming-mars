@@ -129,6 +129,7 @@ const handlers: Map<string, IHandler> = new Map(
     [paths.ADMIN_RAW, ServeApp.INSTANCE],
     [paths.ADMIN_PUSH, ServeApp.INSTANCE],
     [paths.ADMIN_PLAYERS, ServeApp.INSTANCE],
+    [paths.ADMIN_AI, ServeApp.INSTANCE],
     [paths.ADMIN_DASHBOARD, ServeApp.INSTANCE],
     [paths.ADMIN_SETTINGS, ServeApp.INSTANCE],
     [paths.API_ADMIN_DELETE_GAME, ApiAdminDeleteGame.INSTANCE],

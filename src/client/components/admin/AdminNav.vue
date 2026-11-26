@@ -21,7 +21,7 @@ import PageTitle from '@/client/components/common/PageTitle.vue';
 import {shortDocumentTitle} from '@/client/utils/documentTitle';
 import {translateText} from '@/client/directives/i18n';
 
-export type AdminPage = 'dashboard' | 'games' | 'players' | 'push' | 'settings' | 'raw';
+export type AdminPage = 'dashboard' | 'games' | 'players' | 'ai' | 'settings' | 'raw';
 
 export default defineComponent({
   name: 'AdminNav',
@@ -36,7 +36,7 @@ export default defineComponent({
         {page: 'dashboard', label: 'Dashboard', path: paths.ADMIN},
         {page: 'games', label: 'Games', path: paths.GAMES_OVERVIEW},
         {page: 'players', label: 'Players', path: paths.ADMIN_PLAYERS},
-        {page: 'push', label: 'Push', path: paths.ADMIN_PUSH},
+        {page: 'ai', label: 'AI opponents', path: paths.ADMIN_AI},
         {page: 'settings', label: 'Settings', path: paths.ADMIN_SETTINGS},
         {page: 'raw', label: 'Raw data', path: paths.ADMIN_RAW},
       ],
