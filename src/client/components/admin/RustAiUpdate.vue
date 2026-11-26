@@ -1,6 +1,6 @@
 <template>
   <!-- Self-update of the Rust AI (api/admin/rust-ai-update): state of the last check and buttons to check or install now -->
-  <div v-if="status !== undefined && status.state !== 'not-installed'" class="rust-ai-update">
+  <div v-if="status !== undefined && status.state !== 'not-installed' && status.state !== 'unversioned'" class="rust-ai-update">
     <span class="rust-ai-update-state">
       <span class="rust-ai-update-text" :class="{'rust-ai-update-text--problem': problem}">{{ stateText }}</span>
       <span v-if="checkedText !== ''" class="rust-ai-update-checked">{{ checkedText }}</span>
@@ -45,7 +45,7 @@ export default defineComponent({
       case 'available': return translateTextWithParams('Version ${0} is available', [version]);
       case 'updated': return translateTextWithParams('Updated to version ${0}', [version]);
       case 'failed': return translateTextWithParams('Update failed: ${0}', [status.error ?? '']);
-      case 'read-only': return translateText('The bot folder is read-only, so the AI cannot update itself. Docker: mount it without ":ro".');
+      case 'read-only': return translateText('The game server may not write to the bot folder, so it cannot install the update. Give its user write access to the folder.');
       case 'no-package': return translateTextWithParams('No package of version ${0} for this system yet', [version]);
       default: return '';
       }

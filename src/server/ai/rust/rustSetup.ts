@@ -4,6 +4,8 @@ import {IGame} from '../../IGame';
 import {GameOptions} from '../../game/GameOptions';
 import {BoardName} from '../../../common/boards/BoardName';
 import {RandomMAOptionType} from '../../../common/ma/RandomMAOptionType';
+import {BotFeature} from '../../../common/ai/aiSupportContract';
+import {rustAiSupportFile} from './rustAiSupportFile';
 
 // Rust board names (its data/board-<name>.json) by TS board name
 const BOARDS: Partial<Record<string, string>> = {
@@ -37,7 +39,8 @@ const NEUTRAL = new Set<string>([
  * The setup in the Rust text form, or a reason why the Rust bot cannot play it (an expansion or variant it does
  * not know). The caller keeps the TS AI for such games.
  */
-export function rustOptionsText(options: GameOptions, playerCount: number): {text: string} | {unsupported: string} {
+export function rustOptionsText(options: GameOptions, playerCount: number,
+  botFeatures: ReadonlyArray<BotFeature> = rustAiSupportFile.get().botFeatures): {text: string} | {unsupported: string} {
   const board = BOARDS[options.boardName];
   if (board === undefined) {
     return {unsupported: `board ${options.boardName}`};
@@ -45,7 +48,7 @@ export function rustOptionsText(options: GameOptions, playerCount: number): {tex
   if (playerCount < 2 || playerCount > 6) {
     return {unsupported: `${playerCount} players`};
   }
-  if (options.corporateEra !== true) {
+  if (options.corporateEra !== true && !botFeatures.includes('noCorporateEra')) {
     return {unsupported: 'without corporate era'};
   }
   if (options.bannedCards.length > 0 || options.includedCards.length > 0 || options.customMA !== undefined) {
@@ -76,6 +79,9 @@ export function rustOptionsText(options: GameOptions, playerCount: number): {tex
   }
   if (!options.preludeExtension) {
     flags.push('noprelude');
+  }
+  if (options.corporateEra !== true) {
+    flags.push('nocorpera');
   }
   for (const [option, flag] of SWITCHES) {
     if (options[option] === true) {

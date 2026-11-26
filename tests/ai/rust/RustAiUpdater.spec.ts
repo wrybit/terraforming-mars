@@ -32,7 +32,7 @@ describe('RustAiUpdater', () => {
     return new RustAiUpdater({
       folder,
       binaryName: 'bot',
-      installedVersion: () => installed,
+      installedBot: () => installed === undefined ? undefined : {version: installed === 'none' ? undefined : installed},
       system: 'linux-x64',
       fetch: fakeGitHub(),
       // Stand-in for tar: the "package" holds a new program and support file
@@ -101,6 +101,12 @@ describe('RustAiUpdater', () => {
     expect(status.state).eq('failed');
     expect(fs.readFileSync(path.join(folder, 'bot'), 'utf8')).eq('old bot');
     expect(fs.existsSync(path.join(folder, '.update'))).is.false;
+  });
+
+  it('never offers a release to a bot without a version, it may be newer than every release', async () => {
+    installed = 'none';
+    expect((await updater().check(true)).state).eq('unversioned');
+    expect(fs.readFileSync(path.join(folder, 'bot'), 'utf8')).eq('old bot');
   });
 
   it('says so when this system has no package', async () => {

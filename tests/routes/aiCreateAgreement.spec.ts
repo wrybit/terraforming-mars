@@ -1,7 +1,8 @@
 import {expect} from 'chai';
 import {ApiCreateGame} from '../../src/server/routes/ApiCreateGame';
 import {rustOptionsText} from '../../src/server/ai/rust/rustSetup';
-import {aiSettingsOf, isAiCompatible} from '../../src/common/ai/aiCompatibility';
+import {aiEngineFor, aiSettingsOf} from '../../src/common/ai/aiCompatibility';
+import {RUST_ONLY} from '../../src/server/ai/aiEngineChoice';
 import {AI_OPTIONS, AiSupport, EMPTY_AI_SUPPORT} from '../../src/common/ai/aiSupportContract';
 import {Expansion} from '../../src/common/cards/GameModule';
 import {BoardName} from '../../src/common/boards/BoardName';
@@ -14,6 +15,7 @@ const MIRROR_SUPPORT: AiSupport = {
   ...EMPTY_AI_SUPPORT,
   expansions: MIRROR_EXPANSIONS,
   boards: [BoardName.THARSIS],
+  botFeatures: ['noCorporateEra'],
   options: AI_OPTIONS.filter((option) => !['ceosDraftVariant', 'soloTR', 'modularMA', 'requiresMoonTrackCompletion',
     'moonStandardProjectVariant', 'moonStandardProjectVariant1', 'aresExtremeVariant'].includes(option)),
 };
@@ -34,16 +36,19 @@ const SWITCHES = Object.entries(withAi())
 function variants(): Array<{label: string, config: NewGameConfig}> {
   const result: Array<{label: string, config: NewGameConfig}> = [];
   for (const initialDraft of [false, true]) {
-    for (const expansion of [undefined, ...MIRROR_EXPANSIONS.filter((id) => id !== 'corpera')]) {
+    // 'corpera' steht hier für: ohne Corporate Era
+    for (const expansion of [undefined, ...MIRROR_EXPANSIONS]) {
       for (const option of SWITCHES) {
         const config = withAi();
         config.draftVariant = true;
         config.initialDraft = initialDraft;
-        if (expansion !== undefined) {
+        if (expansion === 'corpera') {
+          config.expansions = {...config.expansions, corpera: false};
+        } else if (expansion !== undefined) {
           config.expansions = {...config.expansions, [expansion]: true};
         }
         (config as unknown as Record<string, unknown>)[option] = true;
-        result.push({label: `${option}, initialDraft ${initialDraft}, expansion ${expansion ?? 'none'}`, config});
+        result.push({label: `${option}, initialDraft ${initialDraft}, ${expansion === 'corpera' ? 'without Corporate Era' : `expansion ${expansion ?? 'none'}`}`, config});
       }
     }
   }
@@ -57,11 +62,11 @@ function variants(): Array<{label: string, config: NewGameConfig}> {
 describe('AI create agreement: form check and Rust mirror', () => {
   for (const {label, config} of variants()) {
     it(`what the form allows, the server starts (${label})`, () => {
-      const formCheck = isAiCompatible(aiSettingsOf(config, BoardName.THARSIS), MIRROR_SUPPORT);
-      if (!formCheck.ok) {
+      const formCheck = aiEngineFor(aiSettingsOf(config, BoardName.THARSIS), {rust: MIRROR_SUPPORT, typescript: EMPTY_AI_SUPPORT}, RUST_ONLY);
+      if (formCheck.engine !== 'rust') {
         return;
       }
-      const mirror = rustOptionsText(ApiCreateGame.gameOptions(config, BoardName.THARSIS), config.players.length);
+      const mirror = rustOptionsText(ApiCreateGame.gameOptions(config, BoardName.THARSIS), config.players.length, MIRROR_SUPPORT.botFeatures);
       expect(mirror, 'form says AI is fine, server refuses').not.to.have.property('unsupported');
     });
   }

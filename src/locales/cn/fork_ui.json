@@ -2323,8 +2323,8 @@
   "Version ${0} is available": "版本 ${0} 可用",
   "Updated to version ${0}": "已更新到版本 ${0}",
   "Update failed: ${0}": "更新失败：${0}",
-  "The bot folder is read-only, so the AI cannot update itself. Docker: mount it without \":ro\".": "机器人文件夹为只读，Rust AI 无法自行更新。Docker：挂载时不要加 \":ro\"。",
   "No package of version ${0} for this system yet": "暂无适用于此系统的版本 ${0} 安装包",
   "Last check: ${0}": "上次检查：${0}",
-  "Rust AI ${0} is available": "Rust AI ${0} 可用"
+  "Rust AI ${0} is available": "Rust AI ${0} 可用",
+  "The game server may not write to the bot folder, so it cannot install the update. Give its user write access to the folder.": "游戏服务器无权写入机器人文件夹，因此无法安装更新。请给它的用户授予该文件夹的写入权限。"
 }

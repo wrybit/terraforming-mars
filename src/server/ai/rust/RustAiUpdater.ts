@@ -22,8 +22,8 @@ export type RustAiUpdaterOptions = {
   folder: string,
   /** File name of the program in the folder and in the package (bot, bot.exe) */
   binaryName: string,
-  /** aiVersion of the installed bot, undefined if there is none */
-  installedVersion: () => string | undefined,
+  /** The installed bot: undefined if there is none, version undefined if its support file names no aiVersion */
+  installedBot: () => {version: string | undefined} | undefined,
   system?: string | undefined,
   fetch?: typeof fetch,
   /** Unpacks a .tar.gz into a folder */
@@ -69,7 +69,7 @@ export class RustAiUpdater {
 
   /** Last result, with the installed version */
   public getStatus(): RustAiUpdateStatus {
-    return {...this.status, installed: this.options.installedVersion()};
+    return {...this.status, installed: this.options.installedBot()?.version};
   }
 
   /** Checks for a newer release; installs it only with install = true (button on the admin page). */
@@ -92,9 +92,15 @@ export class RustAiUpdater {
   }
 
   private async run(install: boolean): Promise<RustAiUpdateStatus> {
-    const installed = this.options.installedVersion();
-    if (installed === undefined) {
+    const bot = this.options.installedBot();
+    if (bot === undefined) {
       return this.set({state: 'not-installed'});
+    }
+    // Without a version nothing tells whether a release is newer: a bot deployed directly may well be newer than
+    // every release, and replacing it would go back (AK1, 26 Nov 2026)
+    const installed = bot.version;
+    if (installed === undefined) {
+      return this.set({state: 'unversioned'});
     }
     this.set({...this.status, state: 'checking', error: undefined});
     const checkedAt = this.now().toISOString();
@@ -189,6 +195,5 @@ export class RustAiUpdater {
 export const rustAiUpdater = new RustAiUpdater({
   folder: path.dirname(RUST_BOT_BINARY),
   binaryName: path.basename(RUST_BOT_BINARY),
-  // A bot without a version in its support file counts as the oldest, so it gets the next release
-  installedVersion: () => fs.existsSync(RUST_BOT_BINARY) ? rustAiSupportFile.get().aiVersion ?? '0' : undefined,
+  installedBot: () => fs.existsSync(RUST_BOT_BINARY) ? {version: rustAiSupportFile.get().aiVersion} : undefined,
 });

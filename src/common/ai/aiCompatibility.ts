@@ -156,7 +156,9 @@ export function aiEngineFor(settings: AiSettings, supports: {rust: AiSupport, ty
 
 /** The Rust AI's check: its support file plus the setups it cannot mirror at all (no TypeScript AI stands in). */
 function rustCompatibility(settings: AiSettings, support: AiSupport): AiCompatibility {
-  const reasons = [...isAiCompatible(settings, support).reasons, ...(settings.setup ?? []).map((id): AiBlocker => ({kind: 'setup', id}))];
+  // Ohne Corporate Era spielt der Bot, sobald er es meldet; ältere Bots kennen das Flag nicht
+  const setup = (settings.setup ?? []).filter((id) => id !== 'noCorporateEra' || !support.botFeatures.includes('noCorporateEra'));
+  const reasons = [...isAiCompatible(settings, support).reasons, ...setup.map((id): AiBlocker => ({kind: 'setup', id}))];
   return {ok: reasons.length === 0, reasons};
 }
 

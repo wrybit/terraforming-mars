@@ -17,6 +17,13 @@
   font-size: 13px;
 }
 
+// Overview, message cards and deliveries stacked with the same gap as the message cards among themselves
+.push-panel {
+  display: flex;
+  flex-direction: column;
+  gap: @push-events-gap;
+}
+
 .push-overview,
 .push-deliveries {
   display: flex;

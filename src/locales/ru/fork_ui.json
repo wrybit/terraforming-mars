@@ -2210,8 +2210,8 @@
   "Version ${0} is available": "Доступна версия ${0}",
   "Updated to version ${0}": "Обновлено до версии ${0}",
   "Update failed: ${0}": "Ошибка обновления: ${0}",
-  "The bot folder is read-only, so the AI cannot update itself. Docker: mount it without \":ro\".": "Папка бота только для чтения, Rust AI не может обновиться сама. Docker: подключите её без \":ro\".",
   "No package of version ${0} for this system yet": "Пока нет пакета версии ${0} для этой системы",
   "Last check: ${0}": "Последняя проверка: ${0}",
-  "Rust AI ${0} is available": "Доступна Rust AI ${0}"
+  "Rust AI ${0} is available": "Доступна Rust AI ${0}",
+  "The game server may not write to the bot folder, so it cannot install the update. Give its user write access to the folder.": "Игровой сервер не может писать в папку бота, поэтому не может установить обновление. Дайте его пользователю право записи в эту папку."
 }

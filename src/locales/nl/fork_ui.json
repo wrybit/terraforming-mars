@@ -1964,8 +1964,8 @@
   "Version ${0} is available": "Versie ${0} is beschikbaar",
   "Updated to version ${0}": "Bijgewerkt naar versie ${0}",
   "Update failed: ${0}": "Bijwerken mislukt: ${0}",
-  "The bot folder is read-only, so the AI cannot update itself. Docker: mount it without \":ro\".": "De botmap is alleen-lezen, de Rust AI kan zichzelf niet bijwerken. Docker: koppel hem zonder \":ro\".",
   "No package of version ${0} for this system yet": "Nog geen pakket van versie ${0} voor dit systeem",
   "Last check: ${0}": "Laatste controle: ${0}",
-  "Rust AI ${0} is available": "Rust AI ${0} is beschikbaar"
+  "Rust AI ${0} is available": "Rust AI ${0} is beschikbaar",
+  "The game server may not write to the bot folder, so it cannot install the update. Give its user write access to the folder.": "De gameserver mag niet in de botmap schrijven en kan de update daarom niet installeren. Geef zijn gebruiker schrijfrechten op de map."
 }

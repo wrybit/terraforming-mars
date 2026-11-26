@@ -21,6 +21,11 @@ describe('rustOptionsText', () => {
     expect(result).deep.eq({text: 'board=hellas,players=3,nodraft,venus,wgt,colonies,turmoil,randomma'});
   });
 
+  it('plays the base game without Corporate Era once the bot reports it (nocorpera), refuses it otherwise', () => {
+    expect(rustOptionsText(options({corporateEra: false}), 2, ['noCorporateEra'])).deep.eq({text: 'nocorpera'});
+    expect(rustOptionsText(options({corporateEra: false}), 2, [])).deep.eq({unsupported: 'without corporate era'});
+  });
+
   it('names the TS board names of the Rust board files', () => {
     expect(rustOptionsText(options({boardName: BoardName.AMAZONIS}), 2)).deep.eq({text: 'board=amazonis-p'});
     expect(rustOptionsText(options({boardName: BoardName.AMAZONIS_PLANITIA}), 2)).deep.eq({text: 'board=amazonis-planitia'});

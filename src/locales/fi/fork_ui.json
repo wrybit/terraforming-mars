@@ -1337,8 +1337,8 @@
   "Version ${0} is available": "Versio ${0} on saatavilla",
   "Updated to version ${0}": "Päivitetty versioon ${0}",
   "Update failed: ${0}": "Päivitys epäonnistui: ${0}",
-  "The bot folder is read-only, so the AI cannot update itself. Docker: mount it without \":ro\".": "Botin kansio on vain luku -tilassa, joten Rust AI ei voi päivittää itseään. Docker: liitä se ilman \":ro\".",
   "No package of version ${0} for this system yet": "Versiolle ${0} ei ole vielä pakettia tälle järjestelmälle",
   "Last check: ${0}": "Viimeksi tarkistettu: ${0}",
-  "Rust AI ${0} is available": "Rust AI ${0} on saatavilla"
+  "Rust AI ${0} is available": "Rust AI ${0} on saatavilla",
+  "The game server may not write to the bot folder, so it cannot install the update. Give its user write access to the folder.": "Pelipalvelin ei saa kirjoittaa botin kansioon, joten se ei voi asentaa päivitystä. Anna sen käyttäjälle kirjoitusoikeus kansioon."
 }
