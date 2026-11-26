@@ -248,5 +248,7 @@ export interface IActionCard {
 }
 
 export function isIActionCard(object: unknown): object is IActionCard {
-  return isObject(object) && 'canAct' in object && 'action' in object;
+  return isObject(object) &&
+    'canAct' in object && typeof object.canAct === 'function' &&
+    'action' in object && typeof object.action === 'function';
 }

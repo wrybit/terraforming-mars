@@ -50,8 +50,7 @@ export class Cloner {
     if (!isObject(obj)) {
       return;
     }
-    const keys = Object.entries(obj);
-    keys.forEach(([key, val]) => {
+    for (const [key, val] of Object.entries(obj)) {
       if (isPlayerId(val)) {
         const idx = oldPlayerIds.indexOf(val);
         if (idx > -1) {
@@ -60,7 +59,7 @@ export class Cloner {
       } else if (typeof val === 'object') {
         Cloner.replacePlayerIds(val, oldPlayerIds, newPlayerIds);
       }
-    });
+    }
   }
 
   private static updatePlayer(from: IPlayer, to: SerializedPlayer) {

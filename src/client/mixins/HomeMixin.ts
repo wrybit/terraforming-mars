@@ -2,7 +2,6 @@
 // the keyboard shortcuts dialog ('?'), tile view cycling,
 // and setting the document title on mount.
 import {defineComponent} from 'vue';
-import {GameModel} from '@/common/models/GameModel';
 import {SpaceId} from '@/common/Types';
 import {hotkeysAvailable} from '@/client/hotkeys/hotkeyAvailability';
 import {hotkeyHelpOpen} from '@/client/hotkeys/hotkeyHelpState';
@@ -31,11 +30,6 @@ export const HomeMixin = defineComponent({
         hotkeyHelpOpen.value = open;
       },
     },
-    // Consumers must define `game`.
-    // eslint-disable-next-line vue/return-in-computed-property
-    game(): GameModel {
-      throw new Error('HomeMixin consumers must override the `game` computed property.');
-    },
   },
   methods: {
     navigatePage(event: KeyboardEvent) {
@@ -60,8 +54,12 @@ export const HomeMixin = defineComponent({
   },
   mounted() {
     // Children (WaitingFor) are mounted before the parent; so set the same full title here.
+    // Every consumer has one of these props, so the mixin needs no `game` of its own
     const props = this.$props as {playerView?: TitleView, spectator?: TitleView};
-    document.title = gameDocumentTitle(props.playerView ?? props.spectator ?? {game: this.game});
+    const view = props.playerView ?? props.spectator;
+    if (view !== undefined) {
+      document.title = gameDocumentTitle(view);
+    }
     window.addEventListener('keydown', this.navigatePage);
   },
   unmounted() {

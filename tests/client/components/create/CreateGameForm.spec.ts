@@ -10,7 +10,7 @@ import {boardOptions} from '@/common/boards/randomBoardOptions';
 import {DEFAULT_EXPANSIONS} from '@/common/cards/GameModule';
 import {JSONObject} from '@/common/Types';
 import {defineComponent, nextTick} from 'vue';
-import {NewGameConfig, NewPlayerModel} from '@/common/game/NewGameConfig';
+import {NewGameConfig} from '@/common/game/NewGameConfig';
 import {CardName} from '@/common/cards/CardName';
 import {CreateGameModel} from '@/client/components/create/CreateGameModel';
 import {ValidationErrors} from '@/common/game/validateNewGameConfig';
@@ -21,7 +21,7 @@ import {defaultCreateGameModel} from '@/client/components/create/defaultCreateGa
 import {readSettingsFromHash, settingsHash} from '@/client/components/create/settingsLink/settingsLinkHash';
 
 // Minimal serialized Create Game payload used by settings restore tests.
-function createNewGameConfig(overrides: JSONObject = {}):  NewGameConfig {
+function createNewGameConfig(overrides: JSONObject = {}): NewGameConfig & JSONObject {
   // Not ideal but is fine for the tests.
   const config: Partial<NewGameConfig> = {
     players: [
@@ -34,7 +34,7 @@ function createNewGameConfig(overrides: JSONObject = {}):  NewGameConfig {
     solarPhaseOption: true,
     ...overrides,
   };
-  return config as NewGameConfig;
+  return config as NewGameConfig & JSONObject;
 }
 
 /*
@@ -361,7 +361,7 @@ describe('CreateGameForm', () => {
 
     const config = await wrapper.vm.serializeSettings();
 
-    expect(config?.players.map((player: NewPlayerModel) => player.first)).deep.eq([false, true, false]);
+    expect(config?.players.map((player) => player.first)).deep.eq([false, true, false]);
   });
 
   it('restores the last saved game settings on load', async () => {
@@ -456,6 +456,14 @@ describe('CreateGameForm', () => {
     });
     const wrapper = mount(Root, {
       ...globalConfig,
+      global: {
+        ...globalConfig.global,
+        mocks: {
+          showAlert(title: string, message: string) {
+            alerts.push({title, message});
+          },
+        },
+      },
     });
     const form = wrapper.findComponent(CreateGameForm);
     (form.vm.$root as any).showAlert = (title: string, message: string | {text: string}) => {
@@ -499,7 +507,7 @@ describe('CreateGameForm', () => {
       ...globalConfig,
     });
 
-    expect(() => (wrapper.vm as any).applySettings(createNewGameConfig({
+    expect(() => wrapper.vm.applySettings(createNewGameConfig({
       players: [
         {name: 'Alice', color: 'red', beginner: false, handicap: 0},
         {name: 'Bob', color: 'red', beginner: false, handicap: 0},

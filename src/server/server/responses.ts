@@ -98,10 +98,10 @@ export function unprocessableEntity(req: Request, res: Response, msg: string = '
 }
 
 
-export function writeJson(res: Response, ctx: Context, json: any, space?: string | number | undefined) {
+export function writeJson(res: Response, ctx: Context, json: object, space?: string | number | undefined) {
   res.setHeader('Content-Type', 'application/json');
   if (ctx.user) {
-    json._user = {userid: ctx.user.global_name};
+    Object.assign(json, {_user: {userid: ctx.user.global_name}});
   }
   const s = JSON.stringify(json, undefined, space);
   res.setHeader('Content-Length', Buffer.byteLength(s));

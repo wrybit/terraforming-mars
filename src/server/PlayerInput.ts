@@ -32,7 +32,7 @@ export interface PlayerInput {
      */
     sourceCard?: CardName;
 
-    cb(...item: any): PlayerInput | undefined;
+    cb(...item: Array<unknown>): PlayerInput | undefined;
 
     /**
      * Converts this PlayerInput to the model received by the UI.
