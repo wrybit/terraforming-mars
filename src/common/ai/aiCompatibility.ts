@@ -58,6 +58,15 @@ export function isAiCompatible(settings: AiSettings, support: AiSupport): AiComp
  * the 63 TR mode solo, expansion options with their expansion.
  */
 export function aiSettingsOf(config: NewGameConfig, boardName: BoardName | undefined): AiSettings {
+  return {expansions: config.expansions, boardName, options: aiOptionsInEffect(config), setup: aiSetupLimitsOf(config)};
+}
+
+/**
+ * Die KI-relevanten Optionen, die in diesem Spiel wirklich gelten: ein Schalter zählt nur dort, wo er wirkt.
+ * Der Server legt das Spiel mit genau diesen Werten an, damit Formular-Prüfung und Rust-Spiegelung nie auseinanderlaufen
+ * (26.11.2026: ein ausgeblendeter, aber gesetzter CEO-Draft-Schalter blockierte jedes KI-Spiel).
+ */
+export function aiOptionsInEffect(config: NewGameConfig): Record<AiOption, boolean> {
   const expansions = config.expansions;
   const several = config.players.length > 1;
   const randomGoals = several && config.randomMA !== RandomMAOptionType.NONE;
@@ -99,11 +108,11 @@ export function aiSettingsOf(config: NewGameConfig, boardName: BoardName | undef
     moonStandardProjectVariant1: config.moonStandardProjectVariant1,
     aresExtremeVariant: config.aresExtremeVariant,
   };
-  const options: Partial<Record<AiOption, boolean>> = {};
+  const options = {} as Record<AiOption, boolean>;
   for (const option of AI_OPTIONS) {
     options[option] = inEffect[option] && values[option] === true;
   }
-  return {expansions, boardName, options, setup: aiSetupLimitsOf(config)};
+  return options;
 }
 
 /** AI program of the admin settings. */
