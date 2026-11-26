@@ -136,14 +136,9 @@ const BASE_SETTINGS: ReadonlyArray<ServerSettingDefinition> = [
   {key: 'IP_BLOCKLIST', group: 'Limits', kind: 'text', label: 'Blocked addresses',
     description: 'IP addresses separated by spaces that get no answer.'},
 
-  {key: 'AI_ENGINE', group: 'AI opponents', section: 'AI program', kind: 'segmented', live: true, label: 'AI engine',
-    choices: [{value: '', label: 'TypeScript'}, {value: 'rust', label: 'Rust'}],
-    description: 'Program that plays the AI seats of new games. Running games keep theirs. Takes effect at once.'},
-  {key: 'AI_TYPESCRIPT_FALLBACK', group: 'AI opponents', section: 'AI program', kind: 'toggle', defaultOn: true, live: true, label: 'TypeScript as a stand-in',
-    description: 'On: settings the Rust AI cannot play get the TypeScript AI, and it decides when the Rust AI drops out mid-game. Off: such settings count as not compatible with the AI; mid-game a standard move decides.'},
-  {key: 'AI_RUST_EXTRA_WAIT_MS', group: 'AI opponents', section: 'AI program', kind: 'number', live: true, label: 'Fallback to TypeScript after (ms)',
+  {key: 'AI_RUST_EXTRA_WAIT_MS', group: 'AI opponents', section: 'AI program', kind: 'number', live: true, label: 'Standard move after (ms)',
     placeholder: '10000', slider: {minimum: 3000, maximum: 25000, step: 500},
-    description: 'Extra time on top of the thinking time. Without an answer of the Rust AI by then, the TypeScript AI makes this decision.'},
+    description: 'Extra time on top of the thinking time. Without an answer of the Rust AI by then, a standard move decides.'},
   // Per strength: the thinking time first (it also paces the TypeScript AI), then how much the Rust AI searches,
   // the hardware (threads) last
   ...aiStrengthSettings(['timeLimit', 'rollouts', 'candidates', 'horizon', 'randomness', 'threads'], 'Strength of the Rust AI', true),

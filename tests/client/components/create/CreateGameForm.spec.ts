@@ -19,6 +19,8 @@ import {PreferencesManager} from '@/client/utils/PreferencesManager';
 import {RandomMAOptionType} from '@/common/ma/RandomMAOptionType';
 import {defaultCreateGameModel} from '@/client/components/create/defaultCreateGameModel';
 import {readSettingsFromHash, settingsHash} from '@/client/components/create/settingsLink/settingsLinkHash';
+import {aiSupportInfo, resetAiSupport} from '@/client/utils/aiSupportState';
+import {TYPESCRIPT_AI_SUPPORT} from '@/common/ai/typescript/typescriptAiSupport';
 
 // Minimal serialized Create Game payload used by settings restore tests.
 function createNewGameConfig(overrides: JSONObject = {}): NewGameConfig & JSONObject {
@@ -60,6 +62,12 @@ function validateTwoPlayerGame(setup: (model: CreateGameModel) => void): Validat
 }
 
 describe('CreateGameForm', () => {
+  // Only the Rust AI plays; here it plays what the old AI could, so the AI seats of the form stay usable
+  beforeEach(() => {
+    aiSupportInfo.value = {engine: 'rust', typescriptFallback: false, rust: TYPESCRIPT_AI_SUPPORT};
+  });
+  afterEach(() => resetAiSupport());
+
   useFakeLocalStorage();
 
   beforeEach(() => {

@@ -48,22 +48,22 @@ describe('serverSettingsFile', () => {
   });
 
   it('applies live settings at once, others only after a restart', () => {
-    const previousOff = process.env.AI_ENGINE;
+    const previousWait = process.env.AI_RUST_EXTRA_WAIT_MS;
     const previousName = process.env.SERVER_NAME;
     try {
-      delete process.env.AI_ENGINE;
-      writeServerSettings({AI_ENGINE: 'rust', SERVER_NAME: 'Live probe'});
-      expect(process.env.AI_ENGINE).eq('rust');
+      delete process.env.AI_RUST_EXTRA_WAIT_MS;
+      writeServerSettings({AI_RUST_EXTRA_WAIT_MS: '5000', SERVER_NAME: 'Live probe'});
+      expect(process.env.AI_RUST_EXTRA_WAIT_MS).eq('5000');
       expect(process.env.SERVER_NAME).eq(previousName);
-      const state = readServerSettings().settings.find((setting) => setting.key === 'AI_ENGINE');
-      expect(state?.running).eq('rust');
-      writeServerSettings({AI_ENGINE: ''});
-      expect(process.env.AI_ENGINE).is.undefined;
+      const state = readServerSettings().settings.find((setting) => setting.key === 'AI_RUST_EXTRA_WAIT_MS');
+      expect(state?.running).eq('5000');
+      writeServerSettings({AI_RUST_EXTRA_WAIT_MS: ''});
+      expect(process.env.AI_RUST_EXTRA_WAIT_MS).is.undefined;
     } finally {
-      if (previousOff === undefined) {
-        delete process.env.AI_ENGINE;
+      if (previousWait === undefined) {
+        delete process.env.AI_RUST_EXTRA_WAIT_MS;
       } else {
-        process.env.AI_ENGINE = previousOff;
+        process.env.AI_RUST_EXTRA_WAIT_MS = previousWait;
       }
     }
   });

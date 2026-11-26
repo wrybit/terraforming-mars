@@ -4,7 +4,7 @@ import {AiSupportModel} from '@/common/models/AiSupportModel';
 import {parseAiSupport} from '@/common/ai/aiSupportContract';
 
 // Which AI plays new games on this server and what the Rust AI can play (GET api/ai-support). Undefined until the
-// answer is there: the create form then shows no marks and checks with the TypeScript AI; the server decides.
+// answer is there: the create form then shows no marks (the Rust AI counts as knowing nothing); the server decides.
 export const aiSupportInfo = ref<AiSupportModel | undefined>(undefined);
 
 let loading: Promise<void> | undefined;
@@ -17,8 +17,9 @@ export function loadAiSupport(cache: 'default' | 'reload' = 'default'): Promise<
       if (response.ok) {
         const model = await response.json() as AiSupportModel;
         aiSupportInfo.value = {
-          engine: model.engine === 'rust' ? 'rust' : 'typescript',
-          typescriptFallback: model.typescriptFallback !== false,
+          // Only the Rust AI plays, whatever an older server answers
+          engine: 'rust',
+          typescriptFallback: false,
           rust: parseAiSupport(model.rust).support,
         };
       }

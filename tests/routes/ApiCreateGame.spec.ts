@@ -322,20 +322,11 @@ describe('ApiCreateGame', () => {
     expect(res.content).contains('AI players are not available with: custom card or milestone lists');
   });
 
-  it('stores the TypeScript AI when it stands in for the Rust AI, ignoring what the request asks for', async () => {
+  it('never seats the TypeScript AI, even when a decision names it', async () => {
     apiCreateGame = new ApiCreateGame([{limit: 99999, perMs: 1}], () => ({engine: 'typescript', reasons: [{kind: 'expansion', id: 'venus'}]}));
-    const log = console.log;
-    console.log = () => {};
-    try {
-      const config = withAi();
-      (config.players[1] as Record<string, unknown>).aiEngine = 'rust';
-      await postConfig(config);
-    } finally {
-      console.log = log;
-    }
-    expect(res.statusCode).eq(statusCode.ok);
-    const game = await scaffolding.ctx.gameLoader.getGame((JSON.parse(res.content) as SimpleGameModel).id);
-    expect(game!.players[1].aiEngine).is.undefined;
+    await postConfig(withAi());
+    expect(res.statusCode).eq(statusCode.badRequest);
+    expect(res.content).contains('AI players are not available with: expansion venus');
   });
 
   // Issues one create-game POST against `handler`, using fresh request/response objects,

@@ -248,18 +248,19 @@ export class ApiCreateGame extends Handler {
     const aiPlayers = players.filter((player) => player.aiLevel !== undefined);
     if (aiPlayers.length > 0) {
       const decision = this.decideAiEngine(gameReq, gameOptions.boardName);
-      if (decision.engine === 'none') {
-        throw RouteError.badRequest(`AI players are not available with: ${decision.reasons.map(aiBlockerText).join(', ')}`);
-      }
-      if (decision.reasons.length > 0) {
-        console.log(`Rust AI cannot play ${decision.reasons.map(aiBlockerText).join(', ')}; the TypeScript AI plays instead`);
+      // Only the Rust AI plays: any other decision gets no AI seats at all
+      if (decision.engine !== 'rust') {
+        throw RouteError.badRequest(`AI players are not available with: ${decision.reasons.map(aiBlockerText).join(', ') || 'this server (no Rust AI installed)'}`);
       }
       // The setup check of the Rust mirror is the last word: what it refuses gets no AI, never a silent TypeScript AI
       const mirror = decision.engine === 'rust' ? rustOptionsText(gameOptions, players.length) : undefined;
       if (mirror !== undefined && 'unsupported' in mirror) {
         throw RouteError.badRequest(`AI players are not available with: ${mirror.unsupported}`);
       }
-      aiPlayers.forEach((player) => player.aiEngine = decision.engine === 'rust' ? 'rust' : undefined);
+      if (gameOptions.clonedGamedId !== undefined && !gameOptions.clonedGamedId.startsWith('#')) {
+        throw RouteError.badRequest('AI players are not available with: a copied game');
+      }
+      aiPlayers.forEach((player) => player.aiEngine = 'rust');
     }
 
     try {
