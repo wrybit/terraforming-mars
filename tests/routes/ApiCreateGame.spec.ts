@@ -14,72 +14,7 @@ import {CardName} from '../../src/common/cards/CardName';
 import {ApiBoardPreview} from '../../src/server/routes/ApiBoardPreview';
 import {boardSpaceModels} from '../../src/server/boards/boardSpaceModels';
 
-// A complete create-game request for a one-player game.
-function newGameConfigForTest(): NewGameConfig {
-  return {
-    players: [{
-      name: 'Robot',
-      color: 'blue',
-      beginner: false,
-      handicap: 0,
-      first: true,
-    }],
-    expansions: {
-      corpera: true,
-      promo: false,
-      venus: false,
-      colonies: false,
-      prelude: false,
-      prelude2: false,
-      turmoil: false,
-      community: false,
-      ares: false,
-      moon: false,
-      pathfinders: false,
-      ceo: false,
-      starwars: false,
-      underworld: false,
-      deltaProject: false,
-    },
-    boards: [BoardName.THARSIS],
-    seed: 0,
-    randomFirstPlayer: false,
-    clonedGamedId: undefined,
-    undoOption: false,
-    showTimers: false,
-    fastModeOption: false,
-    showOtherPlayersVP: false,
-    aresExtremeVariant: false,
-    politicalAgendasExtension: 'Standard',
-    solarPhaseOption: false,
-    removeNegativeGlobalEventsOption: false,
-    modularMA: false,
-    draftVariant: false,
-    initialDraft: false,
-    preludeDraftVariant: false,
-    ceosDraftVariant: false,
-    startingCorporations: 0,
-    shuffleMapOption: false,
-    randomMA: RandomMAOptionType.NONE,
-    includeFanMA: false,
-    soloTR: false,
-    customCorporationsList: [],
-    bannedCards: [],
-    includedCards: [],
-    customColoniesList: [],
-    customPreludes: [],
-    requiresMoonTrackCompletion: false,
-    requiresVenusTrackCompletion: false,
-    moonStandardProjectVariant: false,
-    moonStandardProjectVariant1: false,
-    altVenusBoard: false,
-    escapeVelocity: undefined,
-    twoCorpsVariant: false,
-    customCeos: [],
-    startingCeos: 0,
-    startingPreludes: 0,
-  };
-}
+import {newGameConfigForTest} from './newGameConfigForTest';
 
 describe('ApiCreateGame', () => {
   let scaffolding: RouteTestScaffolding;
@@ -320,6 +255,13 @@ describe('ApiCreateGame', () => {
     await postConfig({...withAi(), bannedCards: [CardName.ALGAE]});
     expect(res.statusCode).eq(statusCode.badRequest);
     expect(res.content).contains('AI players are not available with: custom card or milestone lists');
+  });
+
+  it('ignores the CEO draft switch without the CEO expansion, so it never blocks AI players', async () => {
+    // Das Formular setzt den Schalter beim Initial-Draft auch ohne CEO-Erweiterung auf an
+    apiCreateGame = new ApiCreateGame([{limit: 99999, perMs: 1}], () => ({engine: 'rust', reasons: []}));
+    await postConfig({...withAi(), initialDraft: true, ceosDraftVariant: true});
+    expect(res.content).not.contains('ceosDraftVariant');
   });
 
   it('never seats the TypeScript AI, even when a decision names it', async () => {

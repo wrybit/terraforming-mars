@@ -30,7 +30,7 @@ import {GAME_NAME_MAX_LENGTH} from '../../common/game/GameName';
 import {validateCustomMA} from '../../common/ma/CustomMA';
 import {RandomMAOptionType} from '../../common/ma/RandomMAOptionType';
 import {validateCustomMAExpansions} from '../ma/MilestoneAwardSelector';
-import {AiEngineDecision, aiBlockerText} from '../../common/ai/aiCompatibility';
+import {AiEngineDecision, aiBlockerText, aiOptionsInEffect} from '../../common/ai/aiCompatibility';
 import {decideAiEngine as decideServerAiEngine} from '../ai/aiEngineChoice';
 import {rustOptionsText} from '../ai/rust/rustSetup';
 
@@ -94,7 +94,7 @@ export class ApiCreateGame extends Handler {
 
   /** Game options of a request whose board is already drawn (also used by the board preview). */
   public static gameOptions(gameReq: NewGameConfig, boardName: BoardName): GameOptions {
-    return {
+    const options: GameOptions = {
       altVenusBoard: gameReq.altVenusBoard,
       aresExtension: gameReq.expansions.ares,
       aresHazards: true, // Not a runtime option.
@@ -154,6 +154,9 @@ export class ApiCreateGame extends Handler {
       undoOption: gameReq.undoOption,
       venusNextExtension: gameReq.expansions.venus,
     };
+    // KI-relevante Schalter gelten nur dort, wo sie wirken – dieselbe Regel wie die Prüfung im Formular
+    // (aiOptionsInEffect). Ein ausgeblendeter, aber gesetzter Schalter darf ein KI-Spiel nie blockieren.
+    return {...options, ...aiOptionsInEffect(gameReq)};
   }
 
   /**
