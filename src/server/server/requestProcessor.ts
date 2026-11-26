@@ -20,6 +20,7 @@ import {ApiAdminDashboard} from '../routes/ApiAdminDashboard';
 import {DASHBOARD_SECTIONS, dashboardSectionPath} from '../../common/admin/dashboardSections';
 import {ApiAdminLiveLoad} from '../routes/ApiAdminLiveLoad';
 import {ApiAdminRestart} from '../routes/ApiAdminRestart';
+import {ApiAdminRustAiUpdate} from '../routes/ApiAdminRustAiUpdate';
 import {ApiAdminUpdate} from '../routes/ApiAdminUpdate';
 import {ApiAdminServerLogo} from '../routes/ApiAdminServerLogo';
 import {ApiAdminSettings} from '../routes/ApiAdminSettings';
@@ -146,6 +147,7 @@ const handlers: Map<string, IHandler> = new Map(
     [paths.API_ADMIN_PLAYER_ALIASES, ApiAdminPlayerAliases.INSTANCE],
     [paths.API_ADMIN_PUSH, ApiAdminPush.INSTANCE],
     [paths.API_ADMIN_RESTART, ApiAdminRestart.INSTANCE],
+    [paths.API_ADMIN_RUST_AI_UPDATE, ApiAdminRustAiUpdate.INSTANCE],
     [paths.API_ADMIN_SERVER_LOGO, ApiAdminServerLogo.INSTANCE],
     [paths.API_ADMIN_SESSION, ApiAdminSession.INSTANCE],
     [paths.API_ADMIN_SETTINGS, ApiAdminSettings.INSTANCE],

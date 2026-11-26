@@ -1956,5 +1956,16 @@
   "Plays it": "Speelt het",
   "Does not play it": "Speelt het niet",
   "Without Corporate Era": "Zonder Corporatietijdperk",
-  "Manual Milestones & Awards": "Handmatige mijlpalen & onderscheidingen"
+  "Manual Milestones & Awards": "Handmatige mijlpalen & onderscheidingen",
+  "Check now": "Nu controleren",
+  "Install now": "Nu installeren",
+  "Checking for a new version…": "Zoeken naar een nieuwe versie…",
+  "Installing version ${0}…": "Versie ${0} installeren…",
+  "Version ${0} is available": "Versie ${0} is beschikbaar",
+  "Updated to version ${0}": "Bijgewerkt naar versie ${0}",
+  "Update failed: ${0}": "Bijwerken mislukt: ${0}",
+  "The bot folder is read-only, so the AI cannot update itself. Docker: mount it without \":ro\".": "De botmap is alleen-lezen, de Rust AI kan zichzelf niet bijwerken. Docker: koppel hem zonder \":ro\".",
+  "No package of version ${0} for this system yet": "Nog geen pakket van versie ${0} voor dit systeem",
+  "Last check: ${0}": "Laatste controle: ${0}",
+  "Rust AI ${0} is available": "Rust AI ${0} is beschikbaar"
 }

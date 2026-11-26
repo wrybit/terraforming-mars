@@ -1015,9 +1015,9 @@ export default defineComponent({
     aiSupports(): {rust: AiSupport, typescript: AiSupport} {
       return {rust: aiSupportInfo.value?.rust ?? EMPTY_AI_SUPPORT, typescript: TYPESCRIPT_AI_SUPPORT};
     },
-    // Admin choice; before the server's answer the TypeScript AI's rules
+    // Only the Rust AI plays; before the server's answer it counts as knowing nothing
     aiAdmin(): AiAdminSettings {
-      return aiSupportInfo.value ?? {engine: 'typescript', typescriptFallback: true};
+      return aiSupportInfo.value ?? {engine: 'rust', typescriptFallback: false};
     },
     // Same decision as the server (common/ai/aiCompatibility.ts)
     aiDecision(): AiEngineDecision {

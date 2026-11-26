@@ -17,6 +17,7 @@ export const paths = {
   API_ADMIN_PLAYER_ALIASES: 'api/admin/player-aliases',
   API_ADMIN_PUSH: 'api/admin/push',
   API_ADMIN_RESTART: 'api/admin/restart',
+  API_ADMIN_RUST_AI_UPDATE: 'api/admin/rust-ai-update',
   API_ADMIN_SERVER_LOGO: 'api/admin/server-logo',
   API_ADMIN_SESSION: 'api/admin/session',
   API_ADMIN_SETTINGS: 'api/admin/settings',

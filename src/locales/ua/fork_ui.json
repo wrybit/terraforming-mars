@@ -1488,5 +1488,16 @@
   "Plays it": "Грає",
   "Does not play it": "Не грає",
   "Without Corporate Era": "Без Корпоративної ери",
-  "Manual Milestones & Awards": "Віхи та нагороди вручну"
+  "Manual Milestones & Awards": "Віхи та нагороди вручну",
+  "Check now": "Перевірити",
+  "Install now": "Встановити",
+  "Checking for a new version…": "Пошук нової версії…",
+  "Installing version ${0}…": "Встановлення версії ${0}…",
+  "Version ${0} is available": "Доступна версія ${0}",
+  "Updated to version ${0}": "Оновлено до версії ${0}",
+  "Update failed: ${0}": "Помилка оновлення: ${0}",
+  "The bot folder is read-only, so the AI cannot update itself. Docker: mount it without \":ro\".": "Тека бота лише для читання, Rust AI не може оновитися сама. Docker: підключіть її без \":ro\".",
+  "No package of version ${0} for this system yet": "Ще немає пакета версії ${0} для цієї системи",
+  "Last check: ${0}": "Остання перевірка: ${0}",
+  "Rust AI ${0} is available": "Доступна Rust AI ${0}"
 }

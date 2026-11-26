@@ -1705,5 +1705,16 @@
   "Plays it": "対応",
   "Does not play it": "非対応",
   "Without Corporate Era": "企業時代なし",
-  "Manual Milestones & Awards": "手動の称号と褒賞"
+  "Manual Milestones & Awards": "手動の称号と褒賞",
+  "Check now": "今すぐ確認",
+  "Install now": "今すぐインストール",
+  "Checking for a new version…": "新しいバージョンを確認中…",
+  "Installing version ${0}…": "バージョン ${0} をインストール中…",
+  "Version ${0} is available": "バージョン ${0} が利用可能です",
+  "Updated to version ${0}": "バージョン ${0} に更新しました",
+  "Update failed: ${0}": "更新に失敗しました：${0}",
+  "The bot folder is read-only, so the AI cannot update itself. Docker: mount it without \":ro\".": "ボットのフォルダーが読み取り専用のため、Rust AI は自分で更新できません。Docker：\":ro\" なしでマウントしてください。",
+  "No package of version ${0} for this system yet": "このシステム用のバージョン ${0} のパッケージはまだありません",
+  "Last check: ${0}": "最終確認：${0}",
+  "Rust AI ${0} is available": "Rust AI ${0} が利用可能です"
 }

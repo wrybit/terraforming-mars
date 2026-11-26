@@ -1383,5 +1383,16 @@
   "Plays it": "La joue",
   "Does not play it": "Ne la joue pas",
   "Without Corporate Era": "Sans Ères des Corporations",
-  "Manual Milestones & Awards": "Objectifs & Récompenses manuels"
+  "Manual Milestones & Awards": "Objectifs & Récompenses manuels",
+  "Check now": "Vérifier",
+  "Install now": "Installer",
+  "Checking for a new version…": "Recherche d'une nouvelle version…",
+  "Installing version ${0}…": "Installation de la version ${0}…",
+  "Version ${0} is available": "Version ${0} disponible",
+  "Updated to version ${0}": "Mis à jour vers la version ${0}",
+  "Update failed: ${0}": "Échec de la mise à jour : ${0}",
+  "The bot folder is read-only, so the AI cannot update itself. Docker: mount it without \":ro\".": "Le dossier du bot est en lecture seule, la Rust AI ne peut pas se mettre à jour. Docker : montez-le sans \":ro\".",
+  "No package of version ${0} for this system yet": "Pas encore de paquet de la version ${0} pour ce système",
+  "Last check: ${0}": "Dernière vérification : ${0}",
+  "Rust AI ${0} is available": "Rust AI ${0} disponible"
 }

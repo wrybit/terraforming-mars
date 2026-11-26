@@ -1,6 +1,6 @@
 import {expect} from 'chai';
 import {isValidSettingValue} from '../../../src/common/admin/isValidSettingValue';
-import {serverSettingDefinition} from '../../../src/common/admin/serverSettings';
+import {ServerSettingDefinition, serverSettingDefinition} from '../../../src/common/admin/serverSettings';
 import {isUsableDaysSetting} from '../../../src/server/database/utils';
 
 describe('isValidSettingValue', () => {
@@ -33,7 +33,8 @@ describe('isValidSettingValue', () => {
   });
 
   it('takes only the listed values of a segmented setting', () => {
-    const engine = serverSettingDefinition('AI_ENGINE')!;
+    const engine: ServerSettingDefinition = {key: 'PROBE', group: 'Probe', kind: 'segmented', label: 'Probe', description: '',
+      choices: [{value: '', label: 'A'}, {value: 'rust', label: 'B'}]};
     expect(isValidSettingValue(engine, 'rust')).is.true;
     expect(isValidSettingValue(engine, '')).is.true;
     expect(isValidSettingValue(engine, 'python')).is.false;

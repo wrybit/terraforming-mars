@@ -1,4 +1,6 @@
 import {expect} from 'chai';
+import {setRustAiSupportForTest} from '../../src/server/ai/aiEngineChoice';
+import {TYPESCRIPT_AI_SUPPORT} from '../../src/common/ai/typescript/typescriptAiSupport';
 import {ABANDONED_AFTER_MS, GameProbe, GameStarter, Lobby, PARTICIPANT_TIMEOUT_MS, REACHABLE_TIMEOUT_MS, StartedGame} from '../../src/server/lobby/Lobby';
 import {LobbyError} from '../../src/server/lobby/lobbyValidation';
 import {NewGameConfig} from '../../src/common/game/NewGameConfig';
@@ -26,6 +28,10 @@ function config(seats: Array<'human' | 'ai'>): NewGameConfig {
 }
 
 describe('Lobby', () => {
+  // Only the Rust AI plays; the tests have no Rust program, so it gets a support list of its own
+  before(() => setRustAiSupportForTest(TYPESCRIPT_AI_SUPPORT));
+  after(() => setRustAiSupportForTest(undefined));
+
   let now: number;
   let lobby: Lobby;
   let started: Array<NewGameConfig>;

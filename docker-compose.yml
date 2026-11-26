@@ -14,6 +14,7 @@ services:
       RUST_BOT_DATA: /opt/rust-ai/data
     volumes:
       - tm-db:/usr/src/app/db
-      - ./db/rust-ai:/opt/rust-ai:ro
+      # writable, so the Rust AI can update itself (admin setting "Update the Rust AI automatically")
+      - ./db/rust-ai:/opt/rust-ai
 volumes:
   tm-db:
