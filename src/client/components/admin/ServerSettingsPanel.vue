@@ -1,5 +1,6 @@
 <template>
-  <!-- The .env file of the server, editable here: one tab per group, save and restart at the bottom -->
+  <!-- The .env file of the server, editable here: one tab per group, save and restart at the bottom.
+       With "only" a single group as a page of its own (AI opponents), without the tab bar -->
   <div class="server-settings">
     <LoadingSpinner v-if="status === 'loading'" page />
     <div v-else-if="status === 'unreachable'" class="games-overview-card server-settings-group">
@@ -9,7 +10,7 @@
     <template v-else>
       <!-- One tab per group, like the tabs in the game (or_options_tabs.less): no long scrolling -->
       <div>
-        <div class="or-tabs server-settings-tabs" role="tablist">
+        <div v-if="only === undefined" class="or-tabs server-settings-tabs" role="tablist">
           <button v-for="group in groups" :key="group.name" type="button" role="tab"
             :aria-selected="group.name === selectedGroup"
             :class="['or-tab', 'or-tab--view', {'or-tab--active': group.name === selectedGroup}]"
@@ -19,13 +20,15 @@
             <span v-if="groupMarker(group.settings) !== undefined" class="server-settings-tab-marker" :class="'server-settings-tab-marker--' + groupMarker(group.settings)" aria-hidden="true"></span>
           </button>
         </div>
-        <div v-docked-tab class="or-tab-panel or-tab-panel--view server-settings-group" role="tabpanel">
+        <div v-docked-tab :class="['server-settings-group', only === undefined ? 'or-tab-panel or-tab-panel--view' : 'games-overview-card']" :role="only === undefined ? 'tabpanel' : undefined">
           <!-- Chat filter: its own list with its own save, applied at once (no .env, no restart) -->
           <ChatWordsPanel v-if="selectedGroup === CHAT_TAB" />
+          <!-- Push: every message of the server with a test, and what was sent lately (no .env) -->
+          <PushPanel v-else-if="selectedGroup === PUSH_TAB" />
           <template v-else>
             <!-- AI tab: the live load of the machine first, over the full width, so threads and rollouts below are set
                  with the hardware in view -->
-            <AiLoadGraph v-if="selectedGroup === 'AI opponents'" @measured="processorCores = $event.cores" />
+            <AiLoadGraph v-if="selectedGroup === AI_GROUP" @measured="processorCores = $event.cores" />
             <!-- Blocks in the main column, side settings (strength of the Rust AI) next to them; one column when narrow -->
             <div class="server-settings-columns" :class="{'server-settings-columns--two': columns[1].length > 0}">
               <template v-for="(sections, columnIndex) in columns" :key="columnIndex">
@@ -76,13 +79,13 @@
               </template>
             </div>
             <!-- Below the AI settings: what each AI program can play, so the engine is chosen knowingly -->
-            <AiSupportOverview v-if="selectedGroup === 'AI opponents'" />
+            <AiSupportOverview v-if="selectedGroup === AI_GROUP" />
           </template>
         </div>
       </div>
 
       <!-- Save, then restart: changes only take effect in a new server process -->
-      <section v-if="selectedGroup !== CHAT_TAB" class="games-overview-card server-settings-actions">
+      <section v-if="!OWN_SAVE_TABS.includes(selectedGroup)" class="games-overview-card server-settings-actions">
         <p class="server-settings-message" :class="{'server-settings-message--error': messageIsError}">{{ message }}</p>
         <button type="button" class="btn btn-tone-quiet" :disabled="!dirty || busy" @click="save" v-i18n>Save</button>
         <button type="button" class="btn btn-primary" :disabled="dirty || busy || !anyPending" @click="restart" v-i18n>Restart server</button>
@@ -107,6 +110,7 @@ import ServerSettingGrid from '@/client/components/admin/ServerSettingGrid.vue';
 import AiSupportOverview from '@/client/components/admin/AiSupportOverview.vue';
 import AiLoadGraph from '@/client/components/admin/AiLoadGraph.vue';
 import ChatWordsPanel from '@/client/components/admin/ChatWordsPanel.vue';
+import PushPanel from '@/client/components/admin/push/PushPanel.vue';
 import {GridRowLimit} from '@/client/components/admin/ServerSettingGrid.vue';
 import {SegmentOption} from '@/client/components/create/createGameChoices';
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
@@ -147,6 +151,12 @@ function settingsSections(settings: ReadonlyArray<ServerSettingDefinition>): Arr
 
 // A tab of its own without .env settings: the words the lobby chat masks, after the limits (both keep players in check)
 const CHAT_TAB = 'Chat filter';
+// A tab of its own without .env settings: the push messages, before the technical settings
+const PUSH_TAB = 'Push';
+// Tabs with their own save (or none): no save and restart below them
+const OWN_SAVE_TABS: ReadonlyArray<string> = [CHAT_TAB, PUSH_TAB];
+// Has a page of its own in the admin menu (AdminAi.vue), so no tab here
+export const AI_GROUP = 'AI opponents';
 
 // Boolean settings: the server reads any of these as "on" (stringToBoolean, Boolean())
 function isOnValue(value: string | undefined): boolean {
@@ -155,18 +165,39 @@ function isOnValue(value: string | undefined): boolean {
 
 export default defineComponent({
   name: 'ServerSettingsPanel',
-  components: {LoadingSpinner, ServerSettingImageField, ServerSettingChoiceField, ServerSettingGrid, SegmentedControl, AiSupportOverview, AiLoadGraph, ChatWordsPanel},
+  components: {LoadingSpinner, ServerSettingImageField, ServerSettingChoiceField, ServerSettingGrid, SegmentedControl, AiSupportOverview, AiLoadGraph, ChatWordsPanel, PushPanel},
   directives: {dockedTab: vDockedTab},
+  props: {
+    /** Show only this group, as a page of its own without tabs */
+    only: {type: String, default: undefined},
+    /** Tab that is open first (e.g. "Push" for the old address /admin-push) */
+    initialTab: {type: String, default: undefined},
+  },
   data(): DataModel {
-    return {status: 'loading', states: [], values: {}, revealed: {}, busy: false, message: '', messageIsError: false, selectedGroup: SERVER_SETTING_GROUPS[0], processorCores: undefined};
+    return {status: 'loading', states: [], values: {}, revealed: {}, busy: false, message: '', messageIsError: false,
+      selectedGroup: this.only ?? this.initialTab ?? SERVER_SETTING_GROUPS[0], processorCores: undefined};
   },
   computed: {
     CHAT_TAB(): string {
       return CHAT_TAB;
     },
+    PUSH_TAB(): string {
+      return PUSH_TAB;
+    },
+    AI_GROUP(): string {
+      return AI_GROUP;
+    },
+    OWN_SAVE_TABS(): ReadonlyArray<string> {
+      return OWN_SAVE_TABS;
+    },
     groups(): Array<{name: string, settings: Array<ServerSettingDefinition>}> {
-      const groups = SERVER_SETTING_GROUPS.map((name) => ({name, settings: SERVER_SETTINGS.filter((setting) => setting.group === name)}));
+      const groupOf = (name: string) => ({name, settings: SERVER_SETTINGS.filter((setting) => setting.group === name)});
+      if (this.only !== undefined) {
+        return [groupOf(this.only)];
+      }
+      const groups = SERVER_SETTING_GROUPS.filter((name) => name !== AI_GROUP).map(groupOf);
       groups.splice(groups.findIndex(({name}) => name === 'Limits') + 1, 0, {name: CHAT_TAB, settings: []});
+      groups.splice(groups.findIndex(({name}) => name === 'Technical'), 0, {name: PUSH_TAB, settings: []});
       return groups;
     },
     // More threads than cores only make them wait for each other: the field allows no more (the server cuts it too)

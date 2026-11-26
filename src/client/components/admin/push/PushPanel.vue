@@ -1,24 +1,21 @@
 <template>
-  <div id="admin-push" class="games-overview-container admin-home">
-    <AdminGate active="push" @ready="load">
-      <!-- Overview, every message (also the one without push), then what was sent lately -->
-      <PushOverviewCard :loading="loading" :subscribers="info?.subscribers" :maxAgeDays="info?.subscriptionMaxAgeDays" :deliveries="info?.deliveries" />
-      <!-- Up to three messages next to each other, as far as the width allows -->
-      <div class="push-events">
-        <PushEventCard v-for="entry in PUSH_CATALOG" :key="entry.kind" :entry="entry" :icon="info?.icon ?? 'favicon.ico'" />
-      </div>
-      <p v-if="errorText !== ''" class="games-overview-note games-overview-note--error">{{ errorText }}</p>
-      <PushDeliveriesCard v-else :loading="loading" :deliveries="info?.deliveries ?? []" />
-    </AdminGate>
+  <!-- Content of the settings tab "Push": overview, every message (also the one without push), then what was sent lately -->
+  <div id="admin-push" class="push-panel">
+    <PushOverviewCard :loading="loading" :subscribers="info?.subscribers" :maxAgeDays="info?.subscriptionMaxAgeDays" :deliveries="info?.deliveries" />
+    <!-- Up to three messages next to each other, as far as the width allows -->
+    <div class="push-events">
+      <PushEventCard v-for="entry in PUSH_CATALOG" :key="entry.kind" :entry="entry" :icon="info?.icon ?? 'favicon.ico'" />
+    </div>
+    <p v-if="errorText !== ''" class="games-overview-note games-overview-note--error">{{ errorText }}</p>
+    <PushDeliveriesCard v-else :loading="loading" :deliveries="info?.deliveries ?? []" />
   </div>
 </template>
 
 <script setup lang="ts">
-import {ref} from 'vue';
+import {onMounted, ref} from 'vue';
 import {paths} from '@/common/app/paths';
 import {AdminPushInfo} from '@/common/admin/AdminPushModel';
 import {describeFailure, failureOf, fetchOrFail} from '@/client/utils/requestFailure';
-import AdminGate from '@/client/components/admin/AdminGate.vue';
 import PushOverviewCard from '@/client/components/admin/push/PushOverviewCard.vue';
 import PushEventCard from '@/client/components/admin/push/PushEventCard.vue';
 import PushDeliveriesCard from '@/client/components/admin/push/PushDeliveriesCard.vue';
@@ -38,4 +35,7 @@ async function load(): Promise<void> {
   }
   loading.value = false;
 }
+
+// The tab only exists after the admin login (AdminGate around the settings)
+onMounted(() => void load());
 </script>

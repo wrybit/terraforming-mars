@@ -6,6 +6,7 @@ export const paths = {
   ADMIN_MUSIC: 'admin-music',
   ADMIN_PUSH: 'admin-push',
   ADMIN_PLAYERS: 'admin-players',
+  ADMIN_AI: 'admin-ai',
   API_ADMIN_CHAT_WORDS: 'api/admin/chat-words',
   API_ADMIN_DASHBOARD: 'api/admin/dashboard',
   API_ADMIN_DELETE_GAME: 'api/admin/delete-game',

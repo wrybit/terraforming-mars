@@ -1,8 +1,8 @@
 <template>
   <div id="games-overview" class="games-overview-container admin-home">
     <AdminGate active="settings">
-      <!-- Settings of the .env file, changeable here (serverSettings.ts); the chat filter is one of its tabs -->
-      <ServerSettingsPanel />
+      <!-- Settings of the .env file, changeable here (serverSettings.ts); chat filter and push are tabs of it -->
+      <ServerSettingsPanel :initialTab="initialTab" />
     </AdminGate>
   </div>
 </template>
@@ -17,6 +17,9 @@ export default defineComponent({
   components: {
     AdminGate,
     ServerSettingsPanel,
+  },
+  props: {
+    initialTab: {type: String, default: undefined},
   },
 });
 </script>

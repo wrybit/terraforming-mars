@@ -2,11 +2,11 @@ import {mount} from '@vue/test-utils';
 import {expect} from 'chai';
 import {vi} from 'vitest';
 import {globalConfig} from '../../getLocalVue';
-import AdminPush from '@/client/components/admin/AdminPush.vue';
+import PushPanel from '@/client/components/admin/push/PushPanel.vue';
 import {AdminPushInfo} from '@/common/admin/AdminPushModel';
 import {PUSH_CATALOG} from '@/client/components/admin/push/pushCatalog';
 
-describe('AdminPush', () => {
+describe('PushPanel', () => {
   let originalFetch: typeof global.fetch;
   const info: AdminPushInfo = {
     subscribers: 4,
@@ -17,7 +17,6 @@ describe('AdminPush', () => {
 
   beforeEach(() => {
     originalFetch = global.fetch;
-    // Logged in (api/admin/session), then the push info
     global.fetch = (url) => Promise.resolve({
       ok: true,
       status: 200,
@@ -30,7 +29,7 @@ describe('AdminPush', () => {
   });
 
   it('shows every message of the catalog and the latest deliveries', async () => {
-    const wrapper = mount(AdminPush, {...globalConfig});
+    const wrapper = mount(PushPanel, {...globalConfig});
     for (let i = 0; i < 4; i++) {
       await new Promise((resolve) => setTimeout(resolve, 0));
     }
@@ -43,7 +42,7 @@ describe('AdminPush', () => {
   });
 
   it('marks the name parameter in the preview', async () => {
-    const wrapper = mount(AdminPush, {...globalConfig});
+    const wrapper = mount(PushPanel, {...globalConfig});
     for (let i = 0; i < 4; i++) {
       await new Promise((resolve) => setTimeout(resolve, 0));
     }
@@ -58,7 +57,7 @@ describe('AdminPush', () => {
       status: 200,
       json: () => Promise.resolve(init?.method === 'POST' ? {result: 'sent'} : String(url) === 'api/admin/push' ? info : {admin: true}),
     } as Response);
-    const wrapper = mount(AdminPush, {...globalConfig});
+    const wrapper = mount(PushPanel, {...globalConfig});
     for (let i = 0; i < 4; i++) {
       await new Promise((resolve) => setTimeout(resolve, 0));
     }
