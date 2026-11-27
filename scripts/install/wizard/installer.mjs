@@ -7,7 +7,7 @@ import {fileURLToPath} from 'node:url';
 import {flagName, helpText, parseArguments} from './arguments.mjs';
 import {capture, run} from './commands.mjs';
 import {askDemoScenario} from './demo/scenario.mjs';
-import {simulateRequirements, simulatedSteps} from './demo/simulation.mjs';
+import {demoInstalledState, simulateRequirements, simulatedSteps, simulatedUpdateSteps} from './demo/simulation.mjs';
 import {checkoutAroundWizard, detectPlatform} from './platform.mjs';
 import {buildConnection} from './postgresConnection.mjs';
 import {confirm, input, select} from './prompts.mjs';
@@ -18,6 +18,10 @@ import {writeEnvironment} from './steps/environment.mjs';
 import {waitForServer} from './steps/healthCheck.mjs';
 import {installRustAi} from './steps/rustAi.mjs';
 import {checkTargetFolder, fetchSource, isExistingInstallation} from './steps/source.mjs';
+import {writeInstallRecord} from './steps/installRecord.mjs';
+import {hasUpdate, readInstalledState} from './steps/installedState.mjs';
+import {askUpdateChoice, prepareUpdate, updatedLines, updateScreenLines, updateSteps} from './update.mjs';
+import fs from 'node:fs';
 import {clearScreen, isInteractive, writeLine, writeLines} from './terminal.mjs';
 import {bannerLines} from './ui/banner.mjs';
 import {box} from './ui/box.mjs';
@@ -105,15 +109,15 @@ function finishedLines(answers, service) {
   if (service.logHint) {
     pairs.push(['Log', style.white(service.logHint)]);
   }
-  const notes = [`  ${style.gray('Update: run the installer again – settings are kept')}`];
+  const notes = [`  ${style.gray('Update: run the installer again in this folder')}`];
   if (service.id === 'none') {
     notes.unshift(`  ${style.gray(`Start: cd ${shortenMiddle(homeRelative(answers.installDirectory), 30)} && npm run start`)}`);
   }
   return box({title, titleStyle: style.orange, width: BOX_WIDTH, indent: BOX_INDENT, sections: [['', ...rows(pairs), '', ...notes, '']]});
 }
 
-function failedLines(error, logFile) {
-  return box({title: '✖ Installation stopped', titleStyle: style.red, width: BOX_WIDTH, indent: BOX_INDENT, sections: [[
+function failedLines(error, logFile, title = '✖ Installation stopped') {
+  return box({title, titleStyle: style.red, width: BOX_WIDTH, indent: BOX_INDENT, sections: [[
     '',
     `  ${style.white(shortenMiddle(error.message, BOX_WIDTH - 4))}`,
     '',
@@ -126,14 +130,17 @@ function failedLines(error, logFile) {
 function realSteps({answers, service, platform, target}) {
   const steps = [
     {title: answers.isUpdate ? 'Update code' : 'Download code', run: () => fetchSource(target)},
-    {title: 'Write settings', run: () => writeEnvironment(target, {
+    {title: 'Write settings', run: () => {
+      writeInstallRecord(target.directory, {runMode: answers.runMode});
+      return writeEnvironment(target, {
       SERVER_NAME: answers.serverName,
       PORT: answers.port,
       SERVER_ID: answers.adminPassphrase,
       POSTGRES_HOST: answers.database === 'postgres' ? buildConnection({host: answers.postgresHost, port: answers.postgresPort, database: answers.postgresDatabase, user: answers.postgresUser, password: answers.postgresPassword}) : undefined,
       URL_ROOT: answers.publicUrl,
       AI_ENGINE: answers.aiEngine,
-    })},
+      });
+    }},
   ];
   if (service.needsLocalBuild !== false) {
     steps.push({title: 'Install dependencies', run: () => installDependencies(target)});
@@ -147,6 +154,86 @@ function realSteps({answers, service, platform, target}) {
     steps.push({title: 'Check server', run: () => waitForServer(answers.port)});
   }
   return steps;
+}
+
+/**
+ * Folder the installer was started in: an installation there is updated right away. The demo plays it in a temp
+ * folder (the fake installation for the update case, an empty one otherwise), never in the real working folder.
+ */
+function currentFolder(scenario) {
+  if (scenario) {
+    return scenario.existingDirectory ?? path.join(os.tmpdir(), 'tm-installer-demo-fresh');
+  }
+  return checkoutAroundWizard(wizardDirectory) ?? process.cwd();
+}
+
+/** Suggestion for a new installation: the current folder if it is empty, otherwise a folder of its own inside it. */
+function defaultFolder(currentDirectory) {
+  if (isExistingInstallation(currentDirectory) || !fs.existsSync(currentDirectory) || fs.readdirSync(currentDirectory).length === 0) {
+    return currentDirectory;
+  }
+  return path.join(currentDirectory, 'terraforming-mars');
+}
+
+/**
+ * The only question before an update: the folder, and only if the current one holds no installation.
+ * The answer counts for the wizard too, so it is never asked twice.
+ */
+async function installationFolder(options, context, currentDirectory) {
+  const question = QUESTIONS.find((candidate) => candidate.id === 'installDirectory');
+  let directory;
+  if (options.answers.installDirectory !== undefined) {
+    directory = question.normalize(String(options.answers.installDirectory));
+  } else if (isExistingInstallation(currentDirectory)) {
+    directory = currentDirectory;
+  } else if (options.useDefaults || !isInteractive()) {
+    directory = question.normalize(question.initial({}, context));
+  } else {
+    directory = question.normalize(await ask(question, {}, context, `1 / ${applicableQuestions({}).length}`));
+  }
+  options.answers.installDirectory = directory;
+  return directory;
+}
+
+/** Update screen and run; 'settings' hands over to the full wizard. */
+async function runUpdate(directory, {options, platform, scenario}) {
+  const state = scenario ? demoInstalledState(directory) : readInstalledState(directory, platform);
+  writeLines(updateScreenLines(state));
+  writeLine();
+  let choice;
+  if (options.update) {
+    choice = 'update';
+  } else if (options.useDefaults) {
+    choice = hasUpdate(state) ? 'update' : 'cancel';
+  } else if (isInteractive()) {
+    choice = await askUpdateChoice(state);
+  } else {
+    writeLine(`${LIST_INDENT}${style.gray('No terminal for questions: add --update to update, or --settings for the installation questions.')}\n`);
+    return 'done';
+  }
+  if (choice === 'settings') {
+    return 'settings';
+  }
+  if (choice === 'cancel' || !hasUpdate(state)) {
+    writeLine(`\n${LIST_INDENT}${style.gray('Nothing changed.')}\n`);
+    return 'done';
+  }
+  if (!scenario) {
+    await prepareUpdate(state);
+  }
+  const logFile = path.join(os.tmpdir(), `terraforming-mars-update-${Date.now()}.log`);
+  try {
+    await runSteps(scenario ? simulatedUpdateSteps(scenario.failure, logFile) : updateSteps(state, {log: logFile}), {logFile});
+  } catch (error) {
+    writeLine();
+    writeLines(failedLines(error, logFile, '✖ Update stopped'));
+    writeLine();
+    process.exit(1);
+  }
+  writeLine();
+  writeLines(updatedLines(state));
+  writeLine();
+  return 'done';
 }
 
 function gitVersion() {
@@ -180,10 +267,16 @@ async function main() {
     note: `${SYSTEM_NAMES[platform.system]} ${platform.arch}${scenario ? ' · demo' : ''}`,
   }));
 
-  const context = {
-    platform,
-    defaultDirectory: scenario?.existingDirectory ?? (scenario ? undefined : checkoutAroundWizard(wizardDirectory)) ?? path.join(platform.homeDirectory, 'terraforming-mars'),
-  };
+  const currentDirectory = currentFolder(scenario);
+  const context = {platform, defaultDirectory: defaultFolder(currentDirectory)};
+  const directory = await installationFolder(options, context, currentDirectory);
+  // An installation is there: show what is new and update it, without the installation questions
+  if (isExistingInstallation(directory) && !options.settings) {
+    const outcome = await runUpdate(directory, {options, platform, scenario});
+    if (outcome !== 'settings') {
+      return;
+    }
+  }
   const answers = await collectAnswers(options, context);
   const service = serviceById(answers.runMode);
   if (!scenario) {

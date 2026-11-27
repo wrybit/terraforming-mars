@@ -45,5 +45,10 @@ export const windowsTaskService = {
     const encoded = Buffer.from(registerScript(scriptPath), 'utf16le').toString('base64');
     await run('powershell.exe', ['-NoProfile', '-EncodedCommand', encoded], {log: context.log});
   },
+  // Update: the task stays, it is only stopped and started again with the new build
+  async restart(context) {
+    const script = `Stop-ScheduledTask -TaskName ${quote(TASK_NAME)} -ErrorAction SilentlyContinue\nStart-ScheduledTask -TaskName ${quote(TASK_NAME)}`;
+    await run('powershell.exe', ['-NoProfile', '-EncodedCommand', Buffer.from(script, 'utf16le').toString('base64')], {log: context.log});
+  },
   logHint: 'Get-Content db\\server.log -Wait',
 };

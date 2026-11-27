@@ -55,5 +55,9 @@ export const launchdService = {
     await run('launchctl', ['bootout', `${domain}/${LABEL}`], {log: context.log}).catch(() => undefined);
     await run('launchctl', ['bootstrap', domain, plistPath()], {log: context.log});
   },
+  // Update: kickstart -k stops the running server and starts the new build
+  async restart(context) {
+    await run('launchctl', ['kickstart', '-k', `gui/${os.userInfo().uid}/${LABEL}`], {log: context.log});
+  },
   logHint: 'tail -f db/server.log',
 };

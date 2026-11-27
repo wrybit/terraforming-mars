@@ -7,7 +7,7 @@ function camelCase(text) {
 }
 
 export function parseArguments(argv) {
-  const options = {answers: {}, useDefaults: false, skipConfirm: false, help: false, demo: false};
+  const options = {answers: {}, useDefaults: false, skipConfirm: false, help: false, demo: false, update: false, settings: false};
   for (const argument of argv) {
     const [rawKey, ...rest] = argument.replace(/^--/, '').split('=');
     const value = rest.join('=');
@@ -20,6 +20,10 @@ export function parseArguments(argv) {
       options.useDefaults = true;
     } else if (key === 'yes' || key === 'y') {
       options.skipConfirm = true;
+    } else if (key === 'update') {
+      options.update = true;
+    } else if (key === 'settings') {
+      options.settings = true;
     } else if (key === 'answers') {
       Object.assign(options.answers, JSON.parse(fs.readFileSync(value, 'utf8')));
     } else if (QUESTIONS.some((question) => question.id === key)) {
@@ -43,11 +47,14 @@ export function helpText() {
   });
   return `Terraforming Mars installer
 
-Without options it asks every question (arrow keys + Enter).
+Without options it asks every question (arrow keys + Enter). Started in a folder with an
+installation, it shows what is new and offers the update instead.
 
 Answer questions up front (for scripts and AI agents):
 ${lines.join('\n')}
   --answers=FILE.json        All answers as JSON, keys as above in camelCase
+  --update                   Existing installation: update it without asking
+  --settings                 Existing installation: ask the installation questions instead of updating
   --defaults                 Use the suggested value for every unanswered question
   --yes                      Do not ask for the final confirmation
   --demo                     Try every screen without installing anything
