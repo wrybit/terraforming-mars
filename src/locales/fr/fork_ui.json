@@ -1470,13 +1470,17 @@
   "yes": "oui",
   "Feedback function": "Fonction de retour",
   "Testers send feedback with a screenshot and markers (key O, menu or shaking the phone). It opens a prefilled issue on GitHub (wrybit/terraforming-mars), sent with their own GitHub account.": "Les testeurs envoient un retour avec capture et marqueurs (touche O, menu ou en secouant le téléphone). Cela ouvre un ticket prérempli sur GitHub (wrybit/terraforming-mars), envoyé avec leur propre compte GitHub.",
-  "The screenshot is in your clipboard. Open GitHub, paste it into the issue and submit it.": "La capture est dans ton presse-papiers. Ouvre GitHub, colle-la dans le ticket et envoie-le.",
-  "Copy the screenshot, open GitHub, paste it into the issue and submit it.": "Copie la capture, ouvre GitHub, colle-la dans le ticket et envoie-le.",
   "Open GitHub": "Ouvrir GitHub",
   "Becomes a public issue on GitHub, submitted with your GitHub account.": "Devient un ticket public sur GitHub, envoyé avec ton compte GitHub.",
   "optional": "facultatif",
   "Feedback": "Retour",
   "System": "Système",
   "Touch": "Tactile",
-  "Viewport": "Zone d'affichage"
+  "Viewport": "Zone d'affichage",
+  "Almost done: paste the screenshot into the issue": "Presque fini : colle la capture dans le ticket",
+  "✓ In your clipboard": "✓ Dans ton presse-papiers",
+  "Not in your clipboard yet": "Pas encore dans le presse-papiers",
+  "Touch and hold the text field, then choose Paste": "Maintiens le doigt sur le champ de texte, puis choisis Coller",
+  "Click into the text field and press": "Clique dans le champ de texte et appuie sur",
+  "Submit the issue on GitHub": "Envoie le ticket sur GitHub"
 }

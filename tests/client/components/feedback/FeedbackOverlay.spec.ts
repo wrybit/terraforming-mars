@@ -65,7 +65,9 @@ describe('FeedbackOverlay', () => {
     expect(link.href).to.match(/^https:\/\/github\.com\/wrybit\/terraforming-mars\/issues\/new\?title=Feedback/);
     expect(decodeURIComponent(link.href.replace(/\+/g, ' '))).to.include('> Cards are too small');
     // No clipboard in the test browser: the tester is asked to copy it with the button
-    expect(document.querySelector('.feedback-issue')?.textContent).to.include('Copy the screenshot');
+    expect(document.querySelector('.feedback-issue__state')?.textContent).to.include('Not in your clipboard yet');
+    expect(document.querySelector('.feedback-issue__copy')).is.not.null;
+    expect(document.getElementById('feedback-general')).is.null;
     expect(fetchMock.mock.calls).has.length(0);
     expect(feedbackOpen.value).is.true;
     wrapper.unmount();

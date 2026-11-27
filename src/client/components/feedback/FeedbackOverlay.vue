@@ -16,7 +16,7 @@
             @add="addMarker" @move="moveMarker" @update:crop="crop = $event" @focus="focusMarker" @hover="hot = $event" />
 
           <aside class="feedback-side">
-            <form id="feedback-form" class="feedback-form" novalidate @submit.prevent="send">
+            <form v-if="issueUrl === undefined" id="feedback-form" class="feedback-form" novalidate @submit.prevent="send">
               <section v-if="feedbackConfig.serverDelivery" class="feedback-section">
                 <h2 class="feedback-section__title"><span v-i18n>Contact</span><small v-i18n>optional</small></h2>
                 <div class="feedback-contact">
@@ -98,18 +98,38 @@
               </details>
             </form>
 
-            <!-- GitHub issue prepared: the tester submits it with their account and pastes the screenshot (an address
-                 cannot carry a picture) -->
-            <div v-if="issueUrl !== undefined" class="feedback-issue" role="status">
-              <p v-if="copied" class="feedback-issue__text" v-i18n>The screenshot is in your clipboard. Open GitHub, paste it into the issue and submit it.</p>
-              <p v-else class="feedback-issue__text" v-i18n>Copy the screenshot, open GitHub, paste it into the issue and submit it.</p>
-              <div class="feedback-issue__actions">
-                <a class="btn btn-primary" :href="issueUrl" target="_blank" rel="noopener" v-i18n>Open GitHub</a>
-                <button v-if="copied" type="button" class="btn btn-tone-quiet" @click="copyAgain" v-i18n>Copy screenshot again</button>
-                <button v-else type="button" class="btn btn-tone-quiet" @click="copyAgain" v-i18n>Copy screenshot</button>
-              </div>
-            </div>
-            <div v-else class="feedback-footer">
+            <!-- GitHub issue prepared: takes the place of the form, so the one step left cannot be missed – the
+                 screenshot does not travel with the address, the tester has to paste it on GitHub -->
+            <section v-else class="feedback-issue" role="status" aria-labelledby="feedback-issue-title">
+              <h2 id="feedback-issue-title" class="feedback-issue__title" v-i18n>Almost done: paste the screenshot into the issue</h2>
+              <figure class="feedback-issue__shot">
+                <img v-if="sentScreenshot !== ''" :src="sentScreenshot" alt="">
+                <figcaption v-if="copied" class="feedback-issue__state feedback-issue__state--ok" v-i18n>✓ In your clipboard</figcaption>
+                <figcaption v-else class="feedback-issue__state" v-i18n>Not in your clipboard yet</figcaption>
+              </figure>
+              <button v-if="!copied" type="button" class="btn btn-primary feedback-issue__copy" @click="copyAgain" v-i18n>Copy screenshot</button>
+              <ol class="feedback-issue__steps">
+                <li>
+                  <span class="feedback-issue__number">1</span>
+                  <a class="btn btn-primary" :href="issueUrl" target="_blank" rel="noopener" v-i18n>Open GitHub</a>
+                </li>
+                <!-- The step people miss: highlighted -->
+                <li class="feedback-issue__key-step">
+                  <span class="feedback-issue__number">2</span>
+                  <span v-if="touchDevice" v-i18n>Touch and hold the text field, then choose Paste</span>
+                  <span v-else class="feedback-issue__paste">
+                    <span v-i18n>Click into the text field and press</span>
+                    <span class="feedback-issue__keys"><kbd>{{ pasteModifier }}</kbd><kbd>V</kbd></span>
+                  </span>
+                </li>
+                <li>
+                  <span class="feedback-issue__number">3</span>
+                  <span v-i18n>Submit the issue on GitHub</span>
+                </li>
+              </ol>
+              <button v-if="copied" type="button" class="btn btn-tone-quiet feedback-issue__again" @click="copyAgain" v-i18n>Copy screenshot again</button>
+            </section>
+            <div v-if="issueUrl === undefined" class="feedback-footer">
               <p v-if="error" class="feedback-footer__error" role="alert">{{ translateText(error) }}</p>
               <p v-else-if="feedbackConfig.serverDelivery" class="feedback-footer__note" v-i18n>Screenshot, game and technical details are sent along.</p>
               <p v-else class="feedback-footer__note" v-i18n>Becomes a public issue on GitHub, submitted with your GitHub account.</p>
@@ -131,6 +151,7 @@ import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 import {FEEDBACK_PATHS} from '@/common/feedback/feedbackPaths';
 import {feedbackIssueUrl} from '@/common/feedback/feedbackIssue';
 import {feedbackConfig} from './feedbackAvailability';
+import {isMac} from '@/client/hotkeys/hotkeyEvents';
 import {ViewModel} from '@/common/models/PlayerModel';
 import {FEEDBACK_LIMITS, FeedbackDiagnostic, FeedbackReport, FeedbackResult} from '@/common/feedback/FeedbackReport';
 import FeedbackMarkerIcon from './FeedbackMarkerIcon.vue';
@@ -172,7 +193,10 @@ const state = ref<SendState>('idle');
 // Public issue of the last report and whether its screenshot reached the clipboard
 const issueUrl = ref<string>();
 const copied = ref(false);
-let sentScreenshot = '';
+const sentScreenshot = ref('');
+// How to paste on this device: keys on a computer, a long touch on phones and tablets
+const pasteModifier = isMac() ? '⌘' : 'Ctrl';
+const touchDevice = typeof window !== 'undefined' && window.matchMedia?.('(hover: none) and (pointer: coarse)').matches === true;
 const error = ref<string>();
 const imageUrl = ref('');
 const imageWidth = ref(0);
@@ -236,7 +260,7 @@ function releaseImage(): void {
 }
 
 async function copyAgain(): Promise<void> {
-  copied.value = await copyScreenshot(sentScreenshot);
+  copied.value = await copyScreenshot(sentScreenshot.value);
 }
 
 // Every opening shows the page as it is now; the text drafts stay until they are sent
@@ -340,9 +364,11 @@ async function send(): Promise<void> {
  */
 async function prepareIssue(): Promise<void> {
   const body = report();
-  sentScreenshot = body.screenshot;
+  sentScreenshot.value = body.screenshot;
   const copying = copyScreenshot(body.screenshot);
   issueUrl.value = feedbackIssueUrl(body);
+  // Stacked on phones the steps would sit below the screenshot, out of sight
+  void nextTick(() => document.querySelector('.feedback-issue')?.scrollIntoView?.({block: 'start'}));
   copied.value = await copying;
 }
 

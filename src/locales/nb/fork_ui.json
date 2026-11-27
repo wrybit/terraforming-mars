@@ -1785,12 +1785,16 @@
   "yes": "ja",
   "Feedback function": "Tilbakemeldingsfunksjon",
   "Testers send feedback with a screenshot and markers (key O, menu or shaking the phone). It opens a prefilled issue on GitHub (wrybit/terraforming-mars), sent with their own GitHub account.": "Testere sender tilbakemelding med skjermbilde og markeringer (tast O, meny eller rist telefonen). Det åpner en forhåndsutfylt issue på GitHub (wrybit/terraforming-mars), som de sender med sin egen GitHub-konto.",
-  "The screenshot is in your clipboard. Open GitHub, paste it into the issue and submit it.": "Skjermbildet ligger på utklippstavlen. Åpne GitHub, lim det inn i issuen og send den.",
-  "Copy the screenshot, open GitHub, paste it into the issue and submit it.": "Kopier skjermbildet, åpne GitHub, lim det inn i issuen og send den.",
   "Open GitHub": "Åpne GitHub",
   "Becomes a public issue on GitHub, submitted with your GitHub account.": "Blir en offentlig issue på GitHub, sendt med din GitHub-konto.",
   "optional": "valgfritt",
   "Feedback": "Tilbakemelding",
   "Touch": "Berøring",
-  "Viewport": "Visningsområde"
+  "Viewport": "Visningsområde",
+  "Almost done: paste the screenshot into the issue": "Nesten ferdig: lim skjermbildet inn i issuen",
+  "✓ In your clipboard": "✓ På utklippstavlen",
+  "Not in your clipboard yet": "Ikke på utklippstavlen ennå",
+  "Touch and hold the text field, then choose Paste": "Hold inne tekstfeltet og velg Lim inn",
+  "Click into the text field and press": "Klikk i tekstfeltet og trykk",
+  "Submit the issue on GitHub": "Send issuen på GitHub"
 }

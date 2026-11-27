@@ -1673,13 +1673,17 @@
   "yes": "예",
   "Feedback function": "피드백 기능",
   "Testers send feedback with a screenshot and markers (key O, menu or shaking the phone). It opens a prefilled issue on GitHub (wrybit/terraforming-mars), sent with their own GitHub account.": "테스터가 스크린샷과 표시를 넣어 피드백을 보냅니다(O 키, 메뉴 또는 휴대폰 흔들기). GitHub(wrybit/terraforming-mars)에 미리 채워진 이슈가 열리고, 자신의 GitHub 계정으로 제출합니다.",
-  "The screenshot is in your clipboard. Open GitHub, paste it into the issue and submit it.": "스크린샷이 클립보드에 있습니다. GitHub를 열어 이슈에 붙여 넣고 제출하세요.",
-  "Copy the screenshot, open GitHub, paste it into the issue and submit it.": "스크린샷을 복사하고 GitHub를 열어 이슈에 붙여 넣은 뒤 제출하세요.",
   "Open GitHub": "GitHub 열기",
   "Becomes a public issue on GitHub, submitted with your GitHub account.": "GitHub의 공개 이슈가 되며, 당신의 GitHub 계정으로 제출됩니다.",
   "optional": "선택",
   "Feedback": "피드백",
   "System": "시스템",
   "Touch": "터치",
-  "Viewport": "뷰포트"
+  "Viewport": "뷰포트",
+  "Almost done: paste the screenshot into the issue": "거의 끝났습니다: 스크린샷을 이슈에 붙여 넣으세요",
+  "✓ In your clipboard": "✓ 클립보드에 있음",
+  "Not in your clipboard yet": "아직 클립보드에 없음",
+  "Touch and hold the text field, then choose Paste": "텍스트 필드를 길게 누른 뒤 붙여넣기를 선택하세요",
+  "Click into the text field and press": "텍스트 필드를 클릭하고 누르세요",
+  "Submit the issue on GitHub": "GitHub에서 이슈를 제출하세요"
 }
