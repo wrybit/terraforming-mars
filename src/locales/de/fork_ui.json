@@ -1184,8 +1184,12 @@
   "yes": "ja",
   "Feedback function": "Feedback-Funktion",
   "Testers send feedback with a screenshot and markers (key O, menu or shaking the phone). It opens a prefilled issue on GitHub (wrybit/terraforming-mars), sent with their own GitHub account.": "Tester schicken Feedback mit Screenshot und Markierungen (Taste O, Menü oder Handy schütteln). Es öffnet ein vorausgefülltes Issue auf GitHub (wrybit/terraforming-mars), das sie mit ihrem eigenen GitHub-Konto absenden.",
-  "The screenshot is in your clipboard. Open GitHub, paste it into the issue and submit it.": "Der Screenshot liegt in deiner Zwischenablage. Öffne GitHub, füge ihn ins Issue ein und sende es ab.",
-  "Copy the screenshot, open GitHub, paste it into the issue and submit it.": "Kopiere den Screenshot, öffne GitHub, füge ihn ins Issue ein und sende es ab.",
+  "Almost done: paste the screenshot into the issue": "Fast fertig: Füge den Screenshot ins Issue ein",
+  "✓ In your clipboard": "✓ In der Zwischenablage",
+  "Not in your clipboard yet": "Noch nicht in der Zwischenablage",
+  "Touch and hold the text field, then choose Paste": "Halte das Textfeld gedrückt und wähle „Einfügen“",
+  "Click into the text field and press": "Klicke ins Textfeld und drücke",
+  "Submit the issue on GitHub": "Sende das Issue auf GitHub ab",
   "Open GitHub": "GitHub öffnen",
   "Becomes a public issue on GitHub, submitted with your GitHub account.": "Wird ein öffentliches Issue auf GitHub, abgeschickt mit deinem GitHub-Konto."
 }

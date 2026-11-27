@@ -9,7 +9,7 @@ const TITLE_EXCERPT_LENGTH = 70;
 // Browsers and GitHub take long addresses, but not endless ones: the details are shortened first
 const MAX_BODY_LENGTH = 6000;
 // Where the tester pastes the screenshot: the issue text says so in plain words
-export const SCREENSHOT_PLACEHOLDER = '(Paste the screenshot here: Ctrl+V or ⌘V)';
+export const SCREENSHOT_PLACEHOLDER = '**👉 Paste the screenshot here: click into this line and press Ctrl+V or ⌘V. It is already in your clipboard.**';
 
 /** Player ids are the keys to a seat: never in public, spectator ids (watch only) may stay */
 function withoutPlayerIds(text: string): string {
