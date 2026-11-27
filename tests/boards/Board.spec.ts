@@ -322,7 +322,7 @@ describe('Board', () => {
 
     const board = new TestBoard(Board.deserialize(boardJson, []).spaces);
 
-    expect(board.getSpaceOrThrow('03').bonus).deep.eq([SpaceBonus.TEMPERATURE_4MC, SpaceBonus.STEEL]);
+    expect(board.getSpaceOrThrow('03').bonus).deep.eq([SpaceBonus.TEMPERATURE, SpaceBonus.STEEL]);
   });
 
   it('serialize cubes', () => {

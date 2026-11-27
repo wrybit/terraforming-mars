@@ -387,8 +387,8 @@ export abstract class Board {
       id: serialized.id,
       spaceType: serialized.spaceType,
       // TODO(kberg): Remove after 2026-12-01
-      // _TEMPERATURE_3MC was merged into TEMPERATURE_4MC.
-      bonus: serialized.bonus.map((b) => b === SpaceBonus._TEMPERATURE_3MC ? SpaceBonus.TEMPERATURE_4MC : b),
+      // _TEMPERATURE_3MC was merged into TEMPERATURE.
+      bonus: serialized.bonus.map((b) => b === SpaceBonus._TEMPERATURE_3MC ? SpaceBonus.TEMPERATURE : b),
       edge: serialized.edge ?? false,
       x: serialized.x,
       y: serialized.y,
