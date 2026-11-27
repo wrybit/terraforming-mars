@@ -9,7 +9,7 @@ export type GameShareState = 'available' | 'busy' | 'shared';
  * sharing is off. With "automatic" a button is still useful for games that ended before it was switched on.
  */
 export function gameShareState(summary: AdminGameSummary, status: TrainingShareStatus | undefined, busyIds: ReadonlyArray<string>): GameShareState | undefined {
-  if (status === undefined || status.mode === '' || !summary.isFinished || summary.source !== 'local') {
+  if (status === undefined || status.mode === 'off' || !summary.isFinished || summary.source !== 'local') {
     return undefined;
   }
   if (status.sharedGameIds.includes(summary.id)) {

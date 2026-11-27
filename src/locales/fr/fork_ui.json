@@ -1396,7 +1396,6 @@
   "Share games for the AI training": "Partager les parties pour l’entraînement de l’AI",
   "Button per game": "Bouton par partie",
   "Every finished game": "Chaque partie terminée",
-  "Finished games with at least one human go to the AI training of this fork: every move, the decisions and the ratings of AI moves. Button per game: \"Share\" in the list of finished games. Takes effect after a restart.": "Les parties terminées avec au moins un humain vont à l’entraînement de l’AI de ce fork : chaque coup, les décisions et les évaluations des coups de l’AI. Bouton par partie : « Partager » dans la liste des parties terminées. Effectif après un redémarrage.",
   "Anonymous": "Anonyme",
   "Player names become \"Player 1\", \"Player 2\" …, the game name and the texts of ratings are left out. Game and player ids are always replaced, IP addresses and the address of this server are never part of it.": "Les noms des joueurs deviennent « Joueur 1 », « Joueur 2 » …, le nom de la partie et les textes des évaluations sont retirés. Les identifiants de partie et de joueur sont toujours remplacés, les adresses IP et l’adresse de ce serveur n’en font jamais partie.",
   "Receiver": "Destinataire",
@@ -1411,5 +1410,6 @@
   "Key of this server": "Clé de ce serveur",
   "Last problem (${0}, ${1}):": "Dernier problème (${0}, ${1}) :",
   "Standard move after (ms)": "Coup standard après (ms)",
-  "Extra time on top of the thinking time. Without an answer of the Rust AI by then, a standard move decides.": "Temps en plus du temps de réflexion. Sans réponse de la Rust AI d’ici là, un coup standard décide."
+  "Extra time on top of the thinking time. Without an answer of the Rust AI by then, a standard move decides.": "Temps en plus du temps de réflexion. Sans réponse de la Rust AI d’ici là, un coup standard décide.",
+  "Finished games with at least one human go to the AI training of this fork: every move, the decisions and the ratings of AI moves. Button per game: \"Share\" in the list of finished games. Default: every finished game. Takes effect after a restart.": "Les parties terminées avec au moins un humain vont à l’entraînement de l’AI de ce fork : chaque coup, les décisions et les évaluations des coups de l’AI. Bouton par partie : « Partager » dans la liste des parties terminées. Par défaut : chaque partie terminée. Effectif après un redémarrage."
 }

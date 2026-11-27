@@ -1,12 +1,11 @@
 import contract from './trainingExportContract.json';
 
 /**
- * Sharing finished games for the AI training (admin settings, tab "Export").
- * '' = off, 'manual' = a button per finished game, 'auto' = every finished game right after its end.
+ * Sharing finished games for the AI training (admin settings, tab "Export"): 'off', 'manual' = a button per
+ * finished game, 'auto' = every finished game right after its end. 'auto' is the default (no line in the .env):
+ * a server whose admin never looks at the setting still helps the AI, anonymously.
  */
-export type TrainingShareMode = '' | 'manual' | 'auto';
-
-export const TRAINING_SHARE_MODES: ReadonlyArray<TrainingShareMode> = ['', 'manual', 'auto'];
+export type TrainingShareMode = 'off' | 'manual' | 'auto';
 
 /** Receiver of the shared games: a container of its own on the public test server, next to the game. */
 export const TRAINING_SHARE_DEFAULT_URL = 'https://terraforming-mars.baiz.org/api/training-upload';

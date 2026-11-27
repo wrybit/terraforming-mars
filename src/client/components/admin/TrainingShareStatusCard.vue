@@ -1,6 +1,6 @@
 <template>
   <!-- Export tab: what was shared so far, as plain information under the settings; problems in red -->
-  <section v-if="status !== undefined && status.mode !== ''" class="training-share-status">
+  <section v-if="status !== undefined && status.mode !== 'off'" class="training-share-status">
     <h3 class="ai-support-overview-title" v-i18n>Shared so far</h3>
     <dl class="training-share-facts">
       <dt v-i18n>Games shared</dt>

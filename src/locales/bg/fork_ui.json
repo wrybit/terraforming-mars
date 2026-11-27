@@ -2292,7 +2292,6 @@
   "Share games for the AI training": "Споделяне на игри за обучението на AI",
   "Button per game": "Бутон за всяка игра",
   "Every finished game": "Всяка завършена игра",
-  "Finished games with at least one human go to the AI training of this fork: every move, the decisions and the ratings of AI moves. Button per game: \"Share\" in the list of finished games. Takes effect after a restart.": "Завършените игри с поне един човек отиват в обучението на AI на този форк: всеки ход, решенията и оценките на ходовете на AI. Бутон за всяка игра: „Сподели“ в списъка със завършени игри. Действа след рестарт.",
   "Anonymous": "Анонимно",
   "Player names become \"Player 1\", \"Player 2\" …, the game name and the texts of ratings are left out. Game and player ids are always replaced, IP addresses and the address of this server are never part of it.": "Имената на играчите стават „Играч 1“, „Играч 2“ …, името на играта и текстовете на оценките отпадат. ID на играта и на играчите винаги се заменят, IP адресите и адресът на този сървър никога не се включват.",
   "Receiver": "Получател",
@@ -2307,5 +2306,6 @@
   "Key of this server": "Ключ на този сървър",
   "Last problem (${0}, ${1}):": "Последен проблем (${0}, ${1}):",
   "Standard move after (ms)": "Стандартен ход след (ms)",
-  "Extra time on top of the thinking time. Without an answer of the Rust AI by then, a standard move decides.": "Допълнително време към времето за мислене. Ако дотогава Rust AI не отговори, решава стандартен ход."
+  "Extra time on top of the thinking time. Without an answer of the Rust AI by then, a standard move decides.": "Допълнително време към времето за мислене. Ако дотогава Rust AI не отговори, решава стандартен ход.",
+  "Finished games with at least one human go to the AI training of this fork: every move, the decisions and the ratings of AI moves. Button per game: \"Share\" in the list of finished games. Default: every finished game. Takes effect after a restart.": "Завършените игри с поне един човек отиват в обучението на AI на този форк: всеки ход, решенията и оценките на ходовете на AI. Бутон за всяка игра: „Сподели“ в списъка със завършени игри. По подразбиране: всяка завършена игра. Действа след рестарт."
 }

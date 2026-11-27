@@ -2502,7 +2502,6 @@
   "Share games for the AI training": "Compartilhar partidas para o treinamento da AI",
   "Button per game": "Botão por partida",
   "Every finished game": "Cada partida terminada",
-  "Finished games with at least one human go to the AI training of this fork: every move, the decisions and the ratings of AI moves. Button per game: \"Share\" in the list of finished games. Takes effect after a restart.": "Partidas terminadas com pelo menos um humano vão para o treinamento da AI deste fork: cada jogada, as decisões e as avaliações das jogadas da AI. Botão por partida: \"Compartilhar\" na lista de partidas terminadas. Vale após reiniciar.",
   "Anonymous": "Anônimo",
   "Player names become \"Player 1\", \"Player 2\" …, the game name and the texts of ratings are left out. Game and player ids are always replaced, IP addresses and the address of this server are never part of it.": "Os nomes dos jogadores viram \"Jogador 1\", \"Jogador 2\" …, o nome da partida e os textos das avaliações ficam de fora. IDs de partida e de jogador são sempre substituídos, endereços IP e o endereço deste servidor nunca fazem parte.",
   "Receiver": "Destinatário",
@@ -2517,5 +2516,6 @@
   "Key of this server": "Chave deste servidor",
   "Last problem (${0}, ${1}):": "Último problema (${0}, ${1}):",
   "Standard move after (ms)": "Jogada padrão após (ms)",
-  "Extra time on top of the thinking time. Without an answer of the Rust AI by then, a standard move decides.": "Tempo extra além do tempo de reflexão. Sem resposta da Rust AI até lá, uma jogada padrão decide."
+  "Extra time on top of the thinking time. Without an answer of the Rust AI by then, a standard move decides.": "Tempo extra além do tempo de reflexão. Sem resposta da Rust AI até lá, uma jogada padrão decide.",
+  "Finished games with at least one human go to the AI training of this fork: every move, the decisions and the ratings of AI moves. Button per game: \"Share\" in the list of finished games. Default: every finished game. Takes effect after a restart.": "Partidas terminadas com pelo menos um humano vão para o treinamento da AI deste fork: cada jogada, as decisões e as avaliações das jogadas da AI. Botão por partida: \"Compartilhar\" na lista de partidas terminadas. Padrão: cada partida terminada. Vale após reiniciar."
 }

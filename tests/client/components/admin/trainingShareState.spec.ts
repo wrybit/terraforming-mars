@@ -9,7 +9,7 @@ const on: TrainingShareStatus = {mode: 'manual', anonymous: true, serverKeyStart
 describe('gameShareState', () => {
   it('offers sharing only for finished games of this server while it is on', () => {
     expect(gameShareState(finished, on, [])).eq('available');
-    expect(gameShareState(finished, {...on, mode: ''}, [])).is.undefined;
+    expect(gameShareState(finished, {...on, mode: 'off'}, [])).is.undefined;
     expect(gameShareState(finished, undefined, [])).is.undefined;
     expect(gameShareState({...finished, isFinished: false}, on, [])).is.undefined;
     expect(gameShareState({...finished, source: 'imported'}, on, [])).is.undefined;

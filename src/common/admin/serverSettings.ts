@@ -162,8 +162,9 @@ const BASE_SETTINGS: ReadonlyArray<ServerSettingDefinition> = [
     description: 'Root address of this server, used for login redirects.'},
 
   {key: 'TRAINING_SHARE', group: 'Export', kind: 'segmented', label: 'Share games for the AI training',
-    choices: [{value: '', label: 'Off'}, {value: 'manual', label: 'Button per game'}, {value: 'auto', label: 'Every finished game'}],
-    description: 'Finished games with at least one human go to the AI training of this fork: every move, the decisions and the ratings of AI moves. Button per game: "Share" in the list of finished games. Takes effect after a restart.'},
+    // The default (no line in the .env) is 'auto', so it is the empty value here
+    choices: [{value: 'off', label: 'Off'}, {value: 'manual', label: 'Button per game'}, {value: '', label: 'Every finished game'}],
+    description: 'Finished games with at least one human go to the AI training of this fork: every move, the decisions and the ratings of AI moves. Button per game: "Share" in the list of finished games. Default: every finished game. Takes effect after a restart.'},
   {key: 'TRAINING_SHARE_ANONYMOUS', group: 'Export', kind: 'toggle', defaultOn: true, live: true, label: 'Anonymous',
     description: 'Player names become "Player 1", "Player 2" …, the game name and the texts of ratings are left out. Game and player ids are always replaced, IP addresses and the address of this server are never part of it.'},
   {key: 'TRAINING_SHARE_URL', group: 'Export', kind: 'text', label: 'Receiver', placeholder: TRAINING_SHARE_DEFAULT_URL,

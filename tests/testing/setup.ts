@@ -9,6 +9,9 @@ import * as os from 'os';
 import * as path from 'path';
 import {seededRandomHooks} from './seededRandom';
 
+// Sharing for the AI training is on by default; tests finishing games must never upload anything
+process.env.TRAINING_SHARE = process.env.TRAINING_SHARE ?? 'off';
+
 const FAKE_DATABASE: IDatabase = {
   markFinished: () => Promise.resolve(),
   deleteGameNbrSaves: () => Promise.resolve(),

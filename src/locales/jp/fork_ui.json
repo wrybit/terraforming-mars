@@ -1718,7 +1718,6 @@
   "Share games for the AI training": "AIの学習用にゲームを共有",
   "Button per game": "ゲームごとのボタン",
   "Every finished game": "終了したすべてのゲーム",
-  "Finished games with at least one human go to the AI training of this fork: every move, the decisions and the ratings of AI moves. Button per game: \"Share\" in the list of finished games. Takes effect after a restart.": "人間が1人以上いる終了したゲームは、このフォークのAI学習に使われます：すべての手、判断、AIの手への評価。ゲームごとのボタン：終了したゲームの一覧の「共有」。再起動後に有効になります。",
   "Anonymous": "匿名",
   "Player names become \"Player 1\", \"Player 2\" …, the game name and the texts of ratings are left out. Game and player ids are always replaced, IP addresses and the address of this server are never part of it.": "プレイヤー名は「プレイヤー1」「プレイヤー2」…になり、ゲーム名と評価のテキストは含まれません。ゲームとプレイヤーのIDは常に置き換えられ、IPアドレスとこのサーバーのアドレスは決して含まれません。",
   "Receiver": "送信先",
@@ -1733,5 +1732,6 @@
   "Key of this server": "このサーバーのキー",
   "Last problem (${0}, ${1}):": "最後の問題（${0}、${1}）：",
   "Standard move after (ms)": "標準の手までの時間（ミリ秒）",
-  "Extra time on top of the thinking time. Without an answer of the Rust AI by then, a standard move decides.": "思考時間に加える時間。それまでにRust AIの応答がなければ、標準の手で決めます。"
+  "Extra time on top of the thinking time. Without an answer of the Rust AI by then, a standard move decides.": "思考時間に加える時間。それまでにRust AIの応答がなければ、標準の手で決めます。",
+  "Finished games with at least one human go to the AI training of this fork: every move, the decisions and the ratings of AI moves. Button per game: \"Share\" in the list of finished games. Default: every finished game. Takes effect after a restart.": "人間が1人以上いる終了したゲームは、このフォークのAI学習に使われます：すべての手、判断、AIの手への評価。ゲームごとのボタン：終了したゲームの一覧の「共有」。既定：終了したすべてのゲーム。再起動後に有効になります。"
 }
