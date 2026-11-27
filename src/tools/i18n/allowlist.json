@@ -103,5 +103,6 @@
   "Rust",
   "Dune expansion",
   "TypeScript",
-  "src/client/components/lobby/LobbyGameRow.vue: AI"
+  "src/client/components/lobby/LobbyGameRow.vue: AI",
+  "src/client/components/feedback/FeedbackOverlay.vue: Discord"
 ]

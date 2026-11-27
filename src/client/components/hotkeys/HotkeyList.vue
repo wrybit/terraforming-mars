@@ -18,7 +18,7 @@
 <script setup lang="ts">
 import {computed} from 'vue';
 import {HOTKEY_ACTIONS, HotkeyAction, HotkeyGroup, isActionShown} from '@/client/hotkeys/hotkeyActions';
-import {CLIENT_EXTENSIONS} from '@/genfiles/extensionsClient';
+import {extraShortcuts} from '@/client/hotkeys/extraShortcuts';
 import HotkeyRow from '@/client/components/hotkeys/HotkeyRow.vue';
 
 const props = withDefaults(defineProps<{
@@ -41,14 +41,14 @@ defineEmits<{
   (event: 'hover', id: string | undefined): void;
 }>();
 
-// Keys of installed extensions (e.g. O for feedback) are listed as fixed general shortcuts
-const extensionRows = computed<Array<HotkeyAction>>(() => CLIENT_EXTENSIONS.flatMap((extension) => (extension.shortcuts ?? []).map((shortcut) => ({
-  id: 'extension-' + extension.name + '-' + shortcut.key,
+// Feedback (O, when switched on) and keys of installed extensions are listed as fixed general shortcuts
+const extensionRows = computed<Array<HotkeyAction>>(() => extraShortcuts().map((shortcut) => ({
+  id: shortcut.id,
   group: 'general' as HotkeyGroup,
   label: shortcut.label,
   keys: [shortcut.key],
   locked: true,
-}))));
+})));
 
 function rowsOf(group: HotkeyGroup): Array<HotkeyAction> {
   return HOTKEY_ACTIONS.filter((action) => action.group === group && isActionShown(action, props.expansions));

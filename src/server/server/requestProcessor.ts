@@ -22,6 +22,9 @@ import {ApiAdminLiveLoad} from '../routes/ApiAdminLiveLoad';
 import {ApiAdminRestart} from '../routes/ApiAdminRestart';
 import {ApiAdminRustAiUpdate} from '../routes/ApiAdminRustAiUpdate';
 import {ApiAdminTrainingShare} from '../routes/ApiAdminTrainingShare';
+import {ApiFeedback} from '../feedback/ApiFeedback';
+import {ApiFeedbackConfig} from '../feedback/ApiFeedbackConfig';
+import {FEEDBACK_PATHS} from '../../common/feedback/feedbackPaths';
 import {ApiAdminUpdate} from '../routes/ApiAdminUpdate';
 import {ApiAdminServerLogo} from '../routes/ApiAdminServerLogo';
 import {ApiAdminSettings} from '../routes/ApiAdminSettings';
@@ -144,6 +147,8 @@ const handlers: Map<string, IHandler> = new Map(
     [paths.API_ADMIN_RESTART, ApiAdminRestart.INSTANCE],
     [paths.API_ADMIN_RUST_AI_UPDATE, ApiAdminRustAiUpdate.INSTANCE],
     [paths.API_ADMIN_TRAINING_SHARE, ApiAdminTrainingShare.INSTANCE],
+    [FEEDBACK_PATHS.send, ApiFeedback.INSTANCE],
+    [FEEDBACK_PATHS.config, ApiFeedbackConfig.INSTANCE],
     [paths.API_ADMIN_SERVER_LOGO, ApiAdminServerLogo.INSTANCE],
     [paths.API_ADMIN_SESSION, ApiAdminSession.INSTANCE],
     [paths.API_ADMIN_SETTINGS, ApiAdminSettings.INSTANCE],

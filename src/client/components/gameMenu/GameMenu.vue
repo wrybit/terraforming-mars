@@ -74,6 +74,11 @@
                 <span class="game-menu-item-icon"><i class="sidebar_icon sidebar_icon--settings"></i></span>
                 <span v-i18n>Player Settings</span>
               </button>
+              <!-- Feedback with screenshot (Admin → Settings → Feedback) -->
+              <button v-if="feedbackConfig.enabled" type="button" role="menuitem" class="game-menu-item" @click="selectFeedback">
+                <span class="game-menu-item-icon"><FeedbackMenuIcon /></span>
+                <span v-i18n>Feedback</span>
+              </button>
               <!-- Entries of the optional extensions (src/extensions/) -->
               <button v-for="item in extensionMenuItems" :key="item.label" type="button" role="menuitem" class="game-menu-item" @click="selectExtensionItem(item)">
                 <span class="game-menu-item-icon"><component :is="item.icon" /></span>
@@ -144,6 +149,9 @@ import {ADMIN_LINK, ADMIN_PAGES, SITE_LINKS, START_PAGE_LINK} from '@/client/com
 import {checkAdminLoginOnce, isAdmin} from '@/client/components/admin/adminSession';
 import {GAME_MENU_CONTEXT} from '@/client/components/gameMenu/gameMenuContext';
 import {CLIENT_EXTENSIONS} from '@/genfiles/extensionsClient';
+import FeedbackMenuIcon from '@/client/components/feedback/FeedbackMenuIcon.vue';
+import {feedbackConfig} from '@/client/components/feedback/feedbackAvailability';
+import {openFeedback} from '@/client/components/feedback/feedbackState';
 import {ExtensionMenuItem} from '@/client/extensions/ClientExtension';
 
 const props = withDefaults(defineProps<{
@@ -279,6 +287,11 @@ watch(requestedMenuDialog, (which) => {
 });
 
 const extensionMenuItems: ReadonlyArray<ExtensionMenuItem> = CLIENT_EXTENSIONS.flatMap((extension) => extension.menuItems ?? []);
+
+function selectFeedback() {
+  closeMenu();
+  openFeedback();
+}
 
 function selectExtensionItem(item: ExtensionMenuItem) {
   closeMenu();

@@ -65,7 +65,7 @@ function faviconChoices(options: ReadonlyArray<FaviconOption>, defaultId: string
   return options.map(({id, label}) => ({value: id === defaultId ? '' : id, label}));
 }
 
-const BASE_SETTING_GROUPS: ReadonlyArray<ServerSettingGroup> = ['Appearance', 'Games', 'Limits', 'AI opponents', 'Access', 'Export', 'Technical'];
+const BASE_SETTING_GROUPS: ReadonlyArray<ServerSettingGroup> = ['Appearance', 'Games', 'Limits', 'AI opponents', 'Access', 'Export', 'Feedback', 'Technical'];
 
 // One line per value of the Rust bot, one field per strength (common/ai/rustBotStrength.ts)
 const AI_STRENGTH_ROWS: Record<RustBotStrengthField, {label: string, description: string}> = {
@@ -167,6 +167,10 @@ const BASE_SETTINGS: ReadonlyArray<ServerSettingDefinition> = [
     description: 'Finished games with at least one human go to the AI training of this fork: every move, the decisions and the ratings of AI moves. Button per game: "Share" in the list of finished games. Default: every finished game. Takes effect after a restart.'},
   {key: 'TRAINING_SHARE_ANONYMOUS', group: 'Export', kind: 'toggle', defaultOn: true, live: true, label: 'Anonymous',
     description: 'Player names become "Player 1", "Player 2" …, the game name and the texts of ratings are left out. Game and player ids are always replaced, IP addresses and the address of this server are never part of it.'},
+
+  // Feedback overlay (client/components/feedback): off by default; an extension may deliver it on the server
+  {key: 'FEEDBACK', group: 'Feedback', kind: 'toggle', live: true, label: 'Feedback function',
+    description: 'Testers send feedback with a screenshot and markers (key O, menu or shaking the phone). It opens a prefilled issue on GitHub (wrybit/terraforming-mars), sent with their own GitHub account.'},
 
   {key: 'PORT', group: 'Technical', kind: 'number', label: 'Port', placeholder: '8080',
     description: 'Port the server listens on. In Docker it must stay 8080.'},

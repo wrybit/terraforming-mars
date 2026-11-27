@@ -4,7 +4,7 @@ import {FIXED_HOTKEYS, HOTKEY_ACTIONS, HotkeyGroup, PICK_CODES, isActionShown} f
 import {codeLabel} from '@/client/hotkeys/hotkeyKeyLabels';
 import {KeyboardKey} from '@/client/hotkeys/hotkeyKeyboardLayouts';
 import {keysOf} from '@/client/hotkeys/hotkeyStore';
-import {CLIENT_EXTENSIONS} from '@/genfiles/extensionsClient';
+import {extraShortcuts} from '@/client/hotkeys/extraShortcuts';
 
 export type KeyUse = {
   id: string;
@@ -17,7 +17,7 @@ export type KeyUse = {
 };
 
 /**
- * Every shortcut with its keys (without 'Mod'), including the fixed ones and those of extensions; expansions limit
+ * Every shortcut with its keys (without 'Mod'), including the fixed ones, feedback and extensions; expansions limit
  * the tabs to those of the game
  */
 export function allKeyUses(expansions?: ReadonlyArray<string>): Array<KeyUse & {keys: ReadonlyArray<string>}> {
@@ -32,10 +32,8 @@ export function allKeyUses(expansions?: ReadonlyArray<string>): Array<KeyUse & {
       keys: keys.filter((key) => key !== 'Mod'),
     };
   });
-  for (const extension of CLIENT_EXTENSIONS) {
-    for (const shortcut of extension.shortcuts ?? []) {
-      uses.push({id: 'extension-' + extension.name + '-' + shortcut.key, group: 'general', color: 'general', short: shortcut.short ?? shortcut.label, usesMod: false, keys: [shortcut.key]});
-    }
+  for (const shortcut of extraShortcuts()) {
+    uses.push({id: shortcut.id, group: 'general', color: 'general', short: shortcut.short, usesMod: false, keys: [shortcut.key]});
   }
   uses.push({id: 'help', group: 'general', color: 'general', short: 'Help', usesMod: false, keys: FIXED_HOTKEYS.help});
   return uses;

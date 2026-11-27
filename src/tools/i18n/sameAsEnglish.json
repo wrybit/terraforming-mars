@@ -7,7 +7,9 @@
     "Alt",
     "AltGr",
     "Ctrl",
-    "Node.js"
+    "Node.js",
+    "URL",
+    "WebGL"
   ],
   "br": [
     "${0} AI",
@@ -42,7 +44,12 @@
     "Underworld 2",
     "Venus Next",
     "Virtual",
-    "[ solo"
+    "[ solo",
+    "Commit",
+    "Feedback",
+    "URL",
+    "WebGL",
+    "desktop"
   ],
   "cn": [
     "${0} AI",
@@ -54,7 +61,9 @@
     "Ctrl",
     "Delta Project (2VP)",
     "Delta Project (5VP)",
-    "Node.js"
+    "Node.js",
+    "URL",
+    "WebGL"
   ],
   "de": [
     "${0} AI",
@@ -105,7 +114,14 @@
     "Training",
     "Updates",
     "Version",
-    "Websites"
+    "Websites",
+    "Feedback",
+    "System",
+    "Touch",
+    "URL",
+    "Viewport",
+    "WebGL",
+    "optional"
   ],
   "es": [
     "${0} AI",
@@ -136,7 +152,12 @@
     "Terraforming Mars",
     "Underworld 2",
     "Venus Next",
-    "Virtual"
+    "Virtual",
+    "Commit",
+    "General",
+    "URL",
+    "WebGL",
+    "no"
   ],
   "fi": [
     "${0} AI",
@@ -157,7 +178,10 @@
     "Emoji",
     "Info",
     "Mars",
-    "Node.js"
+    "Node.js",
+    "Commit",
+    "URL",
+    "WebGL"
   ],
   "fr": [
     "${0} (Turmoil ${1})",
@@ -211,7 +235,14 @@
     "terra cimmeria nova",
     "utopia planitia",
     "vastitas borealis",
-    "vastitas borealis nova"
+    "vastitas borealis nova",
+    "Commit",
+    "Contact",
+    "Page",
+    "Point ${0}",
+    "URL",
+    "WebGL",
+    "mobile"
   ],
   "hu": [
     "${0} AI",
@@ -234,7 +265,10 @@
     "amazonis p.",
     "arabia terra",
     "vastitas borealis",
-    "vastitas borealis nova"
+    "vastitas borealis nova",
+    "Commit",
+    "URL",
+    "WebGL"
   ],
   "it": [
     "${0} (Turmoil ${1})",
@@ -284,7 +318,16 @@
     "terra cimmeria nova",
     "utopia planitia",
     "vastitas borealis",
-    "vastitas borealis nova"
+    "vastitas borealis nova",
+    "Area ${0}",
+    "Commit",
+    "Feedback",
+    "Touch",
+    "URL",
+    "WebGL",
+    "desktop",
+    "mobile",
+    "no"
   ],
   "jp": [
     "${0} AI",
@@ -296,7 +339,9 @@
     "Ctrl",
     "Delta Project (2VP)",
     "Delta Project (5VP)",
-    "Node.js"
+    "Node.js",
+    "URL",
+    "WebGL"
   ],
   "ko": [
     "${0} AI",
@@ -308,7 +353,9 @@
     "Ctrl",
     "Delta Project (2VP)",
     "Delta Project (5VP)",
-    "Node.js"
+    "Node.js",
+    "URL",
+    "WebGL"
   ],
   "nb": [
     "${0} AI",
@@ -353,7 +400,11 @@
     "terra cimmeria nova",
     "utopia planitia",
     "vastitas borealis",
-    "vastitas borealis nova"
+    "vastitas borealis nova",
+    "Commit",
+    "System",
+    "URL",
+    "WebGL"
   ],
   "nl": [
     "${0} (Turmoil ${1})",
@@ -411,7 +462,14 @@
     "terra cimmeria nova",
     "utopia planitia",
     "vastitas borealis",
-    "vastitas borealis nova"
+    "vastitas borealis nova",
+    "Commit",
+    "Contact",
+    "Feedback",
+    "URL",
+    "Viewport",
+    "WebGL",
+    "desktop"
   ],
   "pl": [
     "${0} AI",
@@ -439,7 +497,11 @@
     "[ solo",
     "terra cimmeria nova",
     "utopia planitia",
-    "vastitas borealis nova"
+    "vastitas borealis nova",
+    "Commit",
+    "System",
+    "URL",
+    "WebGL"
   ],
   "ru": [
     "${0} AI",
@@ -451,7 +513,9 @@
     "AltGr",
     "Ctrl",
     "Node.js",
-    "PolderTECH"
+    "PolderTECH",
+    "URL",
+    "WebGL"
   ],
   "ua": [
     "${0} AI",
@@ -462,6 +526,8 @@
     "AltGr",
     "Ctrl",
     "Node.js",
-    "PolderTECH"
+    "PolderTECH",
+    "URL",
+    "WebGL"
   ]
 }
