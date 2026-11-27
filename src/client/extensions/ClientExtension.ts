@@ -19,6 +19,12 @@ export type ExtensionShortcut = {
   short?: string,
 };
 
+export type ExtensionAdminPanel = {
+  /** Tab of Admin → Settings it appears in, below the settings of that tab (e.g. 'Export') */
+  group: string,
+  component: Component,
+};
+
 export type ClientExtension = {
   name: string,
   /** Mounted once at the root of the app (App.vue), with the current game view if there is one */
@@ -27,4 +33,6 @@ export type ClientExtension = {
   menuItems?: ReadonlyArray<ExtensionMenuItem>,
   /** Keys listed in the help (HelpKeyboardShortcuts.vue) */
   shortcuts?: ReadonlyArray<ExtensionShortcut>,
+  /** Cards in a tab of Admin → Settings (ServerSettingsPanel.vue), e.g. what a server received */
+  adminPanels?: ReadonlyArray<ExtensionAdminPanel>,
 };

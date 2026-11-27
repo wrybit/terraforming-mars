@@ -85,6 +85,8 @@
               <TrainingShareReceiverRow />
               <TrainingShareStatusCard />
             </template>
+            <!-- Cards of optional extensions (src/extensions/) for this tab -->
+            <component v-for="(panel, index) in extensionPanels" :key="index" :is="panel.component" />
           </template>
         </div>
       </div>
@@ -116,6 +118,8 @@ import AiSupportOverview from '@/client/components/admin/AiSupportOverview.vue';
 import AiLoadGraph from '@/client/components/admin/AiLoadGraph.vue';
 import TrainingShareStatusCard from '@/client/components/admin/TrainingShareStatusCard.vue';
 import TrainingShareReceiverRow from '@/client/components/admin/TrainingShareReceiverRow.vue';
+import {CLIENT_EXTENSIONS} from '@/genfiles/extensionsClient';
+import {ExtensionAdminPanel} from '@/client/extensions/ClientExtension';
 import ChatWordsPanel from '@/client/components/admin/ChatWordsPanel.vue';
 import PushPanel from '@/client/components/admin/push/PushPanel.vue';
 import {GridRowLimit} from '@/client/components/admin/ServerSettingGrid.vue';
@@ -185,6 +189,9 @@ export default defineComponent({
       selectedGroup: this.only ?? this.initialTab ?? SERVER_SETTING_GROUPS[0], processorCores: undefined};
   },
   computed: {
+    extensionPanels(): ReadonlyArray<ExtensionAdminPanel> {
+      return CLIENT_EXTENSIONS.flatMap((extension) => extension.adminPanels ?? []).filter((panel) => panel.group === this.selectedGroup);
+    },
     CHAT_TAB(): string {
       return CHAT_TAB;
     },

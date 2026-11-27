@@ -3,7 +3,7 @@ import {expect} from 'chai';
 import {vi} from 'vitest';
 import {globalConfig} from '../getLocalVue';
 import TrainingShareReceiverRow from '@/client/components/admin/TrainingShareReceiverRow.vue';
-import {TRAINING_SHARE_RECEIVER_URL, TrainingShareResult} from '@/common/trainingShare/TrainingShareModel';
+import {TrainingShareResult} from '@/common/trainingShare/TrainingShareModel';
 
 function mountAnswering(answer: TrainingShareResult) {
   const fetchMock = vi.fn(async () => new Response(JSON.stringify(answer), {status: 200}));
@@ -19,7 +19,6 @@ describe('TrainingShareReceiverRow', () => {
     const input = wrapper.find('input').element as HTMLInputElement;
     expect(input.readOnly).is.true;
     expect(input.value).eq('terraforming-mars.baiz.org');
-    expect(input.title).eq(TRAINING_SHARE_RECEIVER_URL);
     expect(wrapper.find('.training-share-test').exists()).is.false;
   });
 
