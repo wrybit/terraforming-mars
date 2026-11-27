@@ -2691,5 +2691,14 @@
   "Not in your clipboard yet": "Non ancora negli appunti",
   "Touch and hold the text field, then choose Paste": "Tieni premuto il campo di testo e scegli Incolla",
   "Click into the text field and press": "Fai clic nel campo di testo e premi",
-  "Submit the issue on GitHub": "Invia la issue su GitHub"
+  "Submit the issue on GitHub": "Invia la issue su GitHub",
+  "this card": "questa carta",
+  "opponents": "avversari",
+  "on Mars": "su Marte",
+  "off Mars": "fuori da Marte",
+  "in play": "in gioco",
+  "ever played": "giocati in totale",
+  "Bonus at": "Bonus a",
+  "max. ${0}": "massimo ${0}",
+  "protected": "protetto"
 }

@@ -1615,5 +1615,14 @@
   "Not in your clipboard yet": "Még nincs a vágólapon",
   "Touch and hold the text field, then choose Paste": "Tartsd lenyomva a szövegmezőt, majd válaszd a Beillesztést",
   "Click into the text field and press": "Kattints a szövegmezőbe, és nyomd meg:",
-  "Submit the issue on GitHub": "Küldd el az issue-t a GitHubon"
+  "Submit the issue on GitHub": "Küldd el az issue-t a GitHubon",
+  "this card": "ez a kártya",
+  "opponents": "ellenfelek",
+  "on Mars": "a Marson",
+  "off Mars": "a Marson kívül",
+  "in play": "játékban",
+  "ever played": "összesen kijátszva",
+  "Bonus at": "Bónusz itt:",
+  "max. ${0}": "legfeljebb ${0}",
+  "protected": "védett"
 }

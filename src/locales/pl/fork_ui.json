@@ -2229,5 +2229,14 @@
   "Not in your clipboard yet": "Jeszcze nie w schowku",
   "Touch and hold the text field, then choose Paste": "Przytrzymaj pole tekstowe i wybierz Wklej",
   "Click into the text field and press": "Kliknij w pole tekstowe i naciśnij",
-  "Submit the issue on GitHub": "Wyślij zgłoszenie na GitHubie"
+  "Submit the issue on GitHub": "Wyślij zgłoszenie na GitHubie",
+  "this card": "ta karta",
+  "opponents": "przeciwnicy",
+  "on Mars": "na Marsie",
+  "off Mars": "poza Marsem",
+  "in play": "w grze",
+  "ever played": "zagrane łącznie",
+  "Bonus at": "Premia przy",
+  "max. ${0}": "maks. ${0}",
+  "protected": "chronione"
 }

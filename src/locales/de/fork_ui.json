@@ -1191,5 +1191,14 @@
   "Click into the text field and press": "Klicke ins Textfeld und drücke",
   "Submit the issue on GitHub": "Sende das Issue auf GitHub ab",
   "Open GitHub": "GitHub öffnen",
-  "Becomes a public issue on GitHub, submitted with your GitHub account.": "Wird ein öffentliches Issue auf GitHub, abgeschickt mit deinem GitHub-Konto."
+  "Becomes a public issue on GitHub, submitted with your GitHub account.": "Wird ein öffentliches Issue auf GitHub, abgeschickt mit deinem GitHub-Konto.",
+  "this card": "diese Karte",
+  "opponents": "Gegner",
+  "on Mars": "auf dem Mars",
+  "off Mars": "außerhalb des Mars",
+  "in play": "im Spiel",
+  "ever played": "insgesamt gespielt",
+  "Bonus at": "Bonus bei",
+  "max. ${0}": "höchstens ${0}",
+  "protected": "geschützt"
 }

@@ -2708,5 +2708,14 @@
   "Not in your clipboard yet": "Aún no está en el portapapeles",
   "Touch and hold the text field, then choose Paste": "Mantén pulsado el campo de texto y elige Pegar",
   "Click into the text field and press": "Haz clic en el campo de texto y pulsa",
-  "Submit the issue on GitHub": "Envía el issue en GitHub"
+  "Submit the issue on GitHub": "Envía el issue en GitHub",
+  "this card": "esta carta",
+  "opponents": "rivales",
+  "on Mars": "en Marte",
+  "off Mars": "fuera de Marte",
+  "in play": "en juego",
+  "ever played": "jugados en total",
+  "Bonus at": "Bonificación en",
+  "max. ${0}": "máx. ${0}",
+  "protected": "protegido"
 }

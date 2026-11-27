@@ -4,6 +4,7 @@ import {Resource} from '../Resource';
 import {AdditionalProjectCosts, CardDiscount, StandardProjectCanPayWith} from '../cards/Types';
 import {Tag} from '../cards/Tag';
 import {Warning} from '../cards/Warning';
+import {CardImpactLine} from './CardImpact';
 
 export interface CardModel {
     name: CardName;
@@ -19,4 +20,5 @@ export interface CardModel {
     cloneTag?: Tag; // Used with Pathfinders
     foundLifeVariant?: number; // Search For Life after a find: which microbe picture lies on the card (foundLife.ts)
     standardProjectCanPayWith?: StandardProjectCanPayWith; // Set for standard projects; undefined for regular project cards
+    impact?: ReadonlyArray<CardImpactLine>; // What playing the card changes beyond its printed effects (models/cardImpact.ts)
 }

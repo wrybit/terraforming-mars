@@ -1,0 +1,161 @@
+// What playing the selected card changes beyond its printed effects (CardImpactPanel.vue):
+// a block at the top of the tab footer, above the payment area. Mobile adjustments in mobile.less.
+@card-impact-text: #ece9e2;
+@card-impact-muted: #a4a9b6;
+
+.or-tab-footer > .card-impact {
+  order: -1;
+  flex: 1 0 100%;
+  margin: 0;
+}
+
+.card-impact {
+  display: grid;
+  // Desktop: two columns; the gap between the columns is clearly larger than within a line (law of proximity)
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px 56px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+@container tab-footer (max-width: 640px) {
+  .card-impact {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.card-impact-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 22px;
+}
+
+.card-impact-basis {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow: hidden;
+  color: @card-impact-muted;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.card-impact-result {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.card-impact-muted {
+  color: @card-impact-muted;
+}
+
+.card-impact-player,
+.card-impact-card {
+  color: @card-impact-text;
+  font-weight: bold;
+}
+
+// Tag icons in the size of the log's effect icons
+.card-impact-tag {
+  display: inline-block;
+  flex: none;
+  width: 18px;
+  height: 18px;
+  background-position: 0;
+  background-size: 18px;
+  background-repeat: no-repeat;
+}
+
+.card-impact-vp {
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 3px;
+  background: #3b2f12;
+  color: #f5c542;
+  font-size: 15px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.card-impact-opponent .log-effect--loss b {
+  color: #fff;
+}
+
+.card-impact-met {
+  color: #6fd38a;
+  font-weight: bold;
+}
+
+.card-impact-unmet {
+  color: #ff9a8a;
+  font-weight: bold;
+}
+
+.card-impact-icon--tr {
+  background-image: url("./assets/resources/tr.png");
+}
+
+.card-impact-icon--temperature {
+  background-image: url("./assets/global-parameters/temperature.png");
+}
+
+.card-impact-icon--oxygen {
+  background-image: url("./assets/global-parameters/oxygen.png");
+}
+
+.card-impact-icon--venus {
+  background-image: url("./assets/global-parameters/venus.png");
+}
+
+.card-impact-icon--colony {
+  background-image: url("./assets/tiles/colony.png");
+}
+
+// Attack targets: one chip per opponent in their player color, the amount they would lose
+.card-impact-target {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  height: 22px;
+  padding: 0 6px;
+  border-radius: 4px;
+  box-sizing: border-box;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+  color: #fff;
+  font-size: 15px;
+  font-weight: bold;
+  font-variant-numeric: tabular-nums;
+  // Readable on light player colors (yellow, white) as well
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+// Opponent with nothing of the resource: keeps its column, stays invisible
+.card-impact-target--empty {
+  visibility: hidden;
+}
+
+.card-impact-shield {
+  width: 14px;
+  height: 14px;
+  fill: #7be08b;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.8));
+}
+
+// Text only for screen readers (the tooltip carries the player name)
+.card-impact-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

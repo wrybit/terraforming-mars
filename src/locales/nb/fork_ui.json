@@ -1796,5 +1796,14 @@
   "Not in your clipboard yet": "Ikke på utklippstavlen ennå",
   "Touch and hold the text field, then choose Paste": "Hold inne tekstfeltet og velg Lim inn",
   "Click into the text field and press": "Klikk i tekstfeltet og trykk",
-  "Submit the issue on GitHub": "Send issuen på GitHub"
+  "Submit the issue on GitHub": "Send issuen på GitHub",
+  "this card": "dette kortet",
+  "opponents": "motstandere",
+  "on Mars": "på Mars",
+  "off Mars": "utenfor Mars",
+  "in play": "i spill",
+  "ever played": "spilt totalt",
+  "Bonus at": "Bonus ved",
+  "max. ${0}": "maks. ${0}",
+  "protected": "beskyttet"
 }

@@ -1685,5 +1685,14 @@
   "Not in your clipboard yet": "아직 클립보드에 없음",
   "Touch and hold the text field, then choose Paste": "텍스트 필드를 길게 누른 뒤 붙여넣기를 선택하세요",
   "Click into the text field and press": "텍스트 필드를 클릭하고 누르세요",
-  "Submit the issue on GitHub": "GitHub에서 이슈를 제출하세요"
+  "Submit the issue on GitHub": "GitHub에서 이슈를 제출하세요",
+  "this card": "이 카드",
+  "opponents": "상대",
+  "on Mars": "화성 위",
+  "off Mars": "화성 밖",
+  "in play": "게임 중",
+  "ever played": "총 사용",
+  "Bonus at": "보너스 지점",
+  "max. ${0}": "최대 ${0}",
+  "protected": "보호됨"
 }

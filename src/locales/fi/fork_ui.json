@@ -1431,5 +1431,14 @@
   "Not in your clipboard yet": "Ei vielä leikepöydällä",
   "Touch and hold the text field, then choose Paste": "Paina tekstikenttää pitkään ja valitse Liitä",
   "Click into the text field and press": "Napsauta tekstikenttää ja paina",
-  "Submit the issue on GitHub": "Lähetä issue GitHubissa"
+  "Submit the issue on GitHub": "Lähetä issue GitHubissa",
+  "this card": "tämä kortti",
+  "opponents": "vastustajat",
+  "on Mars": "Marsissa",
+  "off Mars": "Marsin ulkopuolella",
+  "in play": "pelissä",
+  "ever played": "pelattu yhteensä",
+  "Bonus at": "Bonus kohdassa",
+  "max. ${0}": "enint. ${0}",
+  "protected": "suojattu"
 }

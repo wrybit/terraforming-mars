@@ -2381,5 +2381,14 @@
   "Not in your clipboard yet": "Още не е в клипборда",
   "Touch and hold the text field, then choose Paste": "Задръж текстовото поле и избери „Постави“",
   "Click into the text field and press": "Щракни в текстовото поле и натисни",
-  "Submit the issue on GitHub": "Изпрати issue в GitHub"
+  "Submit the issue on GitHub": "Изпрати issue в GitHub",
+  "this card": "тази карта",
+  "opponents": "противници",
+  "on Mars": "на Марс",
+  "off Mars": "извън Марс",
+  "in play": "в игра",
+  "ever played": "изиграни общо",
+  "Bonus at": "Бонус при",
+  "max. ${0}": "макс. ${0}",
+  "protected": "защитено"
 }

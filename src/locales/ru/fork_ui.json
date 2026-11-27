@@ -2304,5 +2304,14 @@
   "Not in your clipboard yet": "Ещё не в буфере обмена",
   "Touch and hold the text field, then choose Paste": "Удерживай текстовое поле и выбери «Вставить»",
   "Click into the text field and press": "Щёлкни в текстовое поле и нажми",
-  "Submit the issue on GitHub": "Отправь issue на GitHub"
+  "Submit the issue on GitHub": "Отправь issue на GitHub",
+  "this card": "эта карта",
+  "opponents": "соперники",
+  "on Mars": "на Марсе",
+  "off Mars": "вне Марса",
+  "in play": "в игре",
+  "ever played": "сыграно всего",
+  "Bonus at": "Бонус при",
+  "max. ${0}": "макс. ${0}",
+  "protected": "защищено"
 }

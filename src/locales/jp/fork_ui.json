@@ -1807,5 +1807,14 @@
   "Not in your clipboard yet": "まだクリップボードにありません",
   "Touch and hold the text field, then choose Paste": "テキスト欄を長押しして「ペースト」を選んでください",
   "Click into the text field and press": "テキスト欄をクリックして押してください：",
-  "Submit the issue on GitHub": "GitHubでissueを送信してください"
+  "Submit the issue on GitHub": "GitHubでissueを送信してください",
+  "this card": "このカード",
+  "opponents": "対戦相手",
+  "on Mars": "火星上",
+  "off Mars": "火星外",
+  "in play": "場に",
+  "ever played": "累計プレイ",
+  "Bonus at": "ボーナス地点",
+  "max. ${0}": "最大 ${0}",
+  "protected": "保護"
 }

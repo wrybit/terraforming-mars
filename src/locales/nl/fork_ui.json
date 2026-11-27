@@ -2054,5 +2054,14 @@
   "Not in your clipboard yet": "Nog niet op je klembord",
   "Touch and hold the text field, then choose Paste": "Houd het tekstveld ingedrukt en kies Plakken",
   "Click into the text field and press": "Klik in het tekstveld en druk op",
-  "Submit the issue on GitHub": "Verstuur het issue op GitHub"
+  "Submit the issue on GitHub": "Verstuur het issue op GitHub",
+  "this card": "deze kaart",
+  "opponents": "tegenstanders",
+  "on Mars": "op Mars",
+  "off Mars": "buiten Mars",
+  "in play": "in het spel",
+  "ever played": "in totaal gespeeld",
+  "Bonus at": "Bonus bij",
+  "max. ${0}": "maximaal ${0}",
+  "protected": "beschermd"
 }

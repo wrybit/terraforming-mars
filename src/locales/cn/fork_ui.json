@@ -2417,5 +2417,14 @@
   "Not in your clipboard yet": "尚未复制到剪贴板",
   "Touch and hold the text field, then choose Paste": "长按文本框，然后选择“粘贴”",
   "Click into the text field and press": "点击文本框并按",
-  "Submit the issue on GitHub": "在 GitHub 上提交 issue"
+  "Submit the issue on GitHub": "在 GitHub 上提交 issue",
+  "this card": "此卡",
+  "opponents": "对手",
+  "on Mars": "火星上",
+  "off Mars": "火星外",
+  "in play": "场上",
+  "ever played": "累计打出",
+  "Bonus at": "奖励于",
+  "max. ${0}": "最多 ${0}",
+  "protected": "受保护"
 }

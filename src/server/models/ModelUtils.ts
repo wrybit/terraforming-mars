@@ -13,6 +13,7 @@ import {Tag} from '../../common/cards/Tag';
 import {asArray} from '../../common/utils/utils';
 import {isIStandardProjectCard} from '../cards/IStandardProjectCard';
 import {foundLifeVariant, hasFoundLife} from '../../common/cards/foundLife';
+import {computeCardImpact} from './cardImpact';
 
 export function cardsToModel(
   player: IPlayer,
@@ -22,6 +23,7 @@ export function cardsToModel(
     showCalculatedCost?: boolean,
     extras?: Map<CardName, PlayCardMetadata>,
     enabled?: ReadonlyArray<boolean>, // If provided, then the cards with false in `enabled` are not selectable and grayed out
+    showImpact?: boolean, // Card about to be played: add what it changes beyond its printed effects (cardImpact.ts)
   } = {},
 ): ReadonlyArray<CardModel> {
   return cards.map((card, index) => {
@@ -80,6 +82,12 @@ export function cardsToModel(
     }
     if (card.warnings.size > 0) {
       model.warnings = Array.from(card.warnings);
+    }
+    if (options.showImpact && isIProjectCard(card) && !isIStandardProjectCard(card)) {
+      const impact = computeCardImpact(player, card);
+      if (impact !== undefined) {
+        model.impact = impact;
+      }
     }
     return model;
   });

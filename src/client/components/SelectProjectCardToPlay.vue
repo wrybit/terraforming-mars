@@ -46,6 +46,10 @@
       </label>
     </template>
 
+    <!-- What the selected card changes beyond its printed effects, in the footer above the payment area -->
+    <TabPanelFooterSlot v-if="showPaymentSection && card?.impact !== undefined">
+      <CardImpactPanel :impact="card.impact" />
+    </TabPanelFooterSlot>
     <PaymentForm
       v-if="showPaymentSection"
       ref="paymentForm"
@@ -77,6 +81,8 @@ import {CardName} from '@/common/cards/CardName';
 import {SelectProjectCardToPlayResponse} from '@/common/inputs/InputResponse';
 import WarningsComponent from '@/client/components/WarningsComponent.vue';
 import PaymentForm from '@/client/components/PaymentForm.vue';
+import TabPanelFooterSlot from '@/client/components/TabPanelFooterSlot.vue';
+import CardImpactPanel from '@/client/components/cardImpact/CardImpactPanel.vue';
 import {Ledger} from '@/client/components/PaymentLedger';
 import {choiceBlockClass, choiceBlockStyle} from '@/client/components/choiceBlock';
 import HandSortControl from '@/client/components/HandSortControl.vue';
@@ -245,6 +251,8 @@ export default defineComponent({
     TabPanelIntroSlot,
     Card,
     PaymentForm,
+    TabPanelFooterSlot,
+    CardImpactPanel,
     WarningsComponent,
     HandSortControl,
     CardFilterBar,
