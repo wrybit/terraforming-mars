@@ -146,14 +146,22 @@ export const QUESTIONS = [
     id: 'aiEngine',
     kind: 'select',
     message: 'AI opponent',
-    initial: (answers) => existing(answers, 'AI_ENGINE') ?? 'typescript',
+    // Only the Rust AI plays AI seats on the server, so it is the default; without a package for this system only "no AI" is left.
+    // An old .env with AI_ENGINE=typescript (built-in AI, no longer played) counts as Rust.
+    initial: (answers, {platform}) => {
+      if (!rustAiPackageFor(answers, platform)) {
+        return 'none';
+      }
+      return existing(answers, 'AI_ENGINE') === 'none' ? 'none' : 'rust';
+    },
     choices: (answers, {platform}) => {
       const rustPackage = rustAiPackageFor(answers, platform);
-      const rustUnavailable = rustPackage ? undefined : 'not released yet';
       return [
-        {label: 'Built-in AI', value: 'typescript', hint: 'works right away'},
-        {label: 'Rust AI', value: 'rust', hint: 'stronger engine', disabled: rustUnavailable},
+        {label: 'Rust AI', value: 'rust', hint: 'plays the AI seats', disabled: rustPackage ? undefined : 'no package for this system yet'},
+        {label: 'No AI', value: 'none', hint: 'only human players'},
       ];
     },
+    // Scripts that still pass --ai-engine=typescript get the AI that actually plays
+    normalize: (value) => (value === 'typescript' ? 'rust' : value),
   },
 ];

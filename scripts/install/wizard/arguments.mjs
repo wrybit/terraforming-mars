@@ -56,6 +56,6 @@ ${lines.join('\n')}
 Values for select questions:
   --database=sqlite|postgres
   --run-mode=systemd|launchd|windows-task|docker|foreground|none
-  --ai-engine=typescript|rust
+  --ai-engine=rust|none
 `;
 }
