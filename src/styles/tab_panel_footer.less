@@ -201,12 +201,13 @@ html.tm-mobile .or-tab-footer > .or-tab-footer-hint {
 }
 
 // Chips and button form one group at the right edge: only the chips push away from the left (margin auto),
-// every button group (own save button or teleported ones like Sell/Trade/Send delegate) follows them directly
+// every button group (own save button or teleported ones like Sell/Trade/Send delegate) follows them directly;
+// the card impact block stays at the top (card_impact.less)
 .or-tab-footer > .action-step-chips {
   margin: 0 4px 0 auto;
 }
 
-.or-tab-footer:has(> .action-step-chips) > :not(.payments_form):not(.action-step-chips):not(.cancel-action-button):not(.or-tab-footer-hint) {
+.or-tab-footer:has(> .action-step-chips) > :not(.payments_form):not(.action-step-chips):not(.cancel-action-button):not(.or-tab-footer-hint):not(.card-impact) {
   order: 99;
   margin-left: 0;
 }
