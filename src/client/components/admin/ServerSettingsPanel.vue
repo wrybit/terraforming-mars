@@ -44,9 +44,8 @@
                         <code class="server-settings-key">{{ setting.key }}</code>
                       </div>
                       <div class="server-settings-field">
-                        <label v-if="setting.kind === 'toggle'" class="server-settings-toggle">
-                          <input :id="'server-setting-' + setting.key" type="checkbox" :checked="isToggleOn(setting, values[setting.key])" @change="setToggle(setting, ($event.target as HTMLInputElement).checked)">
-                        </label>
+                        <ToggleSwitch v-if="setting.kind === 'toggle'" :inputId="'server-setting-' + setting.key" size="large"
+                          :modelValue="isToggleOn(setting, values[setting.key])" @update:modelValue="setToggle(setting, $event)" />
                         <SegmentedControl v-else-if="setting.kind === 'segmented'" class="server-settings-segmented"
                           :modelValue="values[setting.key] ?? ''" :options="segmentOptions(setting)" @update:modelValue="setValue(setting.key, String($event))" />
                         <ServerSettingImageField v-else-if="setting.kind === 'image'" :inputId="'server-setting-' + setting.key"
@@ -115,6 +114,7 @@ import {vDockedTab} from '@/client/directives/DockedTab';
 import ServerSettingImageField from '@/client/components/admin/ServerSettingImageField.vue';
 import ServerSettingChoiceField from '@/client/components/admin/ServerSettingChoiceField.vue';
 import ServerSettingQuotaField from '@/client/components/admin/ServerSettingQuotaField.vue';
+import ToggleSwitch from '@/client/components/common/ToggleSwitch.vue';
 import SegmentedControl from '@/client/components/create/SegmentedControl.vue';
 import ServerSettingGrid from '@/client/components/admin/ServerSettingGrid.vue';
 import AiSupportOverview from '@/client/components/admin/AiSupportOverview.vue';
@@ -179,7 +179,7 @@ function isOnValue(value: string | undefined): boolean {
 
 export default defineComponent({
   name: 'ServerSettingsPanel',
-  components: {TrainingShareStatusCard, TrainingShareReceiverRow, LoadingSpinner, ServerSettingImageField, ServerSettingChoiceField, ServerSettingQuotaField, ServerSettingGrid, SegmentedControl, AiSupportOverview, AiLoadGraph, ChatWordsPanel, PushPanel},
+  components: {TrainingShareStatusCard, TrainingShareReceiverRow, LoadingSpinner, ServerSettingImageField, ServerSettingChoiceField, ServerSettingQuotaField, ToggleSwitch, ServerSettingGrid, SegmentedControl, AiSupportOverview, AiLoadGraph, ChatWordsPanel, PushPanel},
   directives: {dockedTab: vDockedTab},
   props: {
     /** Show only this group, as a page of its own without tabs */
