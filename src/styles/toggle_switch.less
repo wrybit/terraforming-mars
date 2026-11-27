@@ -66,3 +66,22 @@
   outline: 2px solid #fff;
   outline-offset: 2px;
 }
+
+// Large: next to the fields of a settings row (admin page), as tall as a text field's line
+.toggle-switch--large {
+  .toggle-switch-track {
+    width: 40px;
+    height: 22px;
+    border-radius: 11px;
+  }
+
+  .toggle-switch-thumb {
+    left: 2px;
+    width: 15px;
+    height: 15px;
+  }
+
+  .toggle-switch-input:checked + .toggle-switch-track .toggle-switch-thumb {
+    transform: translateX(18px);
+  }
+}

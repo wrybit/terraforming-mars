@@ -15,4 +15,16 @@ describe('ToggleSwitch', () => {
     await input.setValue(false);
     expect(wrapper.emitted('update:modelValue')?.[0]).to.deep.eq([false]);
   });
+
+  it('works without a visible label, for a label elsewhere, and comes in a large size', async () => {
+    const wrapper = mount(ToggleSwitch, {
+      ...globalConfig,
+      props: {modelValue: false, inputId: 'setting-x', size: 'large'},
+    });
+    expect(wrapper.find('.toggle-switch-label').exists()).is.false;
+    expect(wrapper.find('input').attributes('id')).eq('setting-x');
+    expect(wrapper.find('.toggle-switch--large').exists()).is.true;
+    await wrapper.find('input').setValue(true);
+    expect(wrapper.emitted('update:modelValue')?.[0]).to.deep.eq([true]);
+  });
 });
