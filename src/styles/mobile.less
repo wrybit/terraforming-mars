@@ -48,6 +48,12 @@
 @mb-card-zoom-slide-width: min(86%, 310px);
 // The task footer starts right of the back arrow (12 px margin + 56 px button + 8 px gap)
 @mb-footer-left: 76px;
+// Quick-peek group in the task bar (two buttons) and the room the input's footer leaves for it incl. gap and edge
+@mb-peek-width: 100px;
+@mb-peek-space: @mb-peek-width + 22px;
+// Quick-peek sheet: starts below the top bar plus a strip of the task, so it is clear the task is still there
+@mb-peek-top: @mb-top-height + 40px;
+@mb-peek-head-height: 62px;
 // Currency icon in the input field when paying
 @mb-payment-icon: 28px;
 // Height of the game-end notice above the planet (center of the board in the Mars screen)
@@ -2172,6 +2178,187 @@ html.tm-mobile {
     margin: 0 !important;
   }
 
+  // ---------- Quick peek from a task (Mars, players, log as a sheet over the task) ----------
+  // Buttons right of the confirm button; the input's footer (or-tab-footer) leaves room for them on the right
+  .mb-peek-buttons {
+    margin-left: auto;
+    flex-shrink: 0;
+    width: @mb-peek-width;
+    height: 48px;
+    box-sizing: border-box;
+    padding: 2px;
+    display: flex;
+    gap: 2px;
+    border-radius: 10px;
+    border: 1px solid #3a4152;
+    background: @mb-surface-raised;
+    // The bar can be click-through (two stacked buttons, see above): the group stays tappable
+    pointer-events: auto;
+  }
+
+  .mb-peek-button {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: @mb-text;
+
+    .mb-glyph {
+      --mb-glyph-cut: @mb-surface-raised;
+    }
+
+    &:active {
+      background: fade(@mb-action, 25%);
+    }
+  }
+
+  .mb-home--turn.mb-home--peekable .mb-screen--turn .or-tab-footer {
+    padding-right: @mb-peek-space !important;
+    // Only the footer's own parts take taps, the free space on the right belongs to the buttons below it
+    pointer-events: none;
+
+    > * {
+      pointer-events: auto;
+    }
+
+    .payments_form {
+      margin-right: -@mb-peek-space !important;
+    }
+
+    .payments_form:has(> .payments_save) .payments_save {
+      flex-basis: calc(100% - @mb-footer-left - @mb-peek-space);
+      margin-right: @mb-peek-space;
+    }
+  }
+
+  // Sheet: the regular screen (already mounted, v-show) moves into a fixed frame below its head
+  .mb-peek-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 30;
+    // Like the turn sheet: no blur, only slightly darkened, the task behind stays recognizable
+    background: rgba(5, 6, 10, 0.35);
+  }
+
+  .mb-peek-head,
+  .mb-screen.mb-screen--peek {
+    position: fixed;
+    left: 0;
+    right: 0;
+    max-width: @mb-sheet-max-width;
+    margin: 0 auto;
+    box-sizing: border-box;
+    background: #161a23;
+  }
+
+  .mb-peek-head {
+    top: @mb-peek-top;
+    z-index: 32;
+    height: @mb-peek-head-height;
+    padding: 10px 12px;
+    display: flex;
+    gap: 10px;
+    border-radius: 20px 20px 0 0;
+    border-bottom: 1px solid @mb-line;
+    box-shadow: @mb-sheet-shadow;
+  }
+
+  .mb-screen.mb-screen--peek {
+    top: @mb-peek-top + @mb-peek-head-height;
+    bottom: 0;
+    z-index: 31;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-bottom: calc(24px + env(safe-area-inset-bottom));
+  }
+
+  .mb-peek-segments {
+    flex: 1;
+    display: flex;
+    gap: 2px;
+    padding: 3px;
+    border-radius: 12px;
+    background: @mb-nav-background;
+  }
+
+  .mb-peek-segment {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 0 6px;
+    border: 0;
+    border-radius: 9px;
+    background: transparent;
+    color: @mb-nav-inactive;
+    font: inherit;
+    font-size: 14px;
+    font-weight: bold;
+    white-space: nowrap;
+
+    .mb-glyph {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+    }
+
+    span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .mb-peek-segment--active {
+    background: @mb-action;
+    color: #fff;
+
+    .mb-glyph {
+      --mb-glyph-cut: @mb-action;
+    }
+  }
+
+  .mb-peek-close {
+    flex-shrink: 0;
+    width: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border-radius: 10px;
+    border: 1px solid #3a4152;
+    background: transparent;
+    color: @mb-text;
+  }
+
+  // Slides in and out like the turn sheet; head and content move together
+  .mb-home--peek-entering {
+    .mb-peek-backdrop {
+      animation: mb-peek-fade @mb-sheet-duration ease;
+    }
+
+    .mb-peek-head,
+    .mb-screen--peek {
+      animation: mb-peek-slide @mb-sheet-duration cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+  }
+
+  .mb-home--peek-leaving {
+    .mb-peek-backdrop {
+      animation: mb-peek-fade @mb-sheet-duration ease reverse forwards;
+    }
+
+    .mb-peek-head,
+    .mb-screen--peek {
+      animation: mb-peek-slide @mb-sheet-duration cubic-bezier(0.5, 0, 0.8, 0.4) reverse forwards;
+    }
+  }
+
   // Big Mars (BoardZoomModal) as in the mockup: planet without ring, zoomable via pinch/double tap/bar, pannable by swiping
   .board-zoom-backdrop {
     display: block;
@@ -2563,5 +2750,25 @@ html.tm-mobile #game-end {
         }
       }
     }
+  }
+}
+
+@keyframes mb-peek-slide {
+  from {
+    transform: translateY(100vh);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes mb-peek-fade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
   }
 }
