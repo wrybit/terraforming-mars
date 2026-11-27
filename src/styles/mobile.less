@@ -2216,13 +2216,15 @@ html.tm-mobile {
     }
   }
 
+  // The footer ends left of the buttons: lying over them, its blurred surface would hide them.
+  // With two stacked buttons the footer carries its own surface across the full width and the task bar lies above it
+  // (see above): then it keeps its width and only leaves room on the inside
   .mb-home--turn.mb-home--peekable .mb-screen--turn .or-tab-footer {
-    padding-right: @mb-peek-space !important;
-    // Only the footer's own parts take taps, the free space on the right belongs to the buttons below it
-    pointer-events: none;
+    right: @mb-peek-space - 12px;
 
-    > * {
-      pointer-events: auto;
+    &:has(.select-card-actions .btn + .btn) {
+      right: 0;
+      padding-right: @mb-peek-space !important;
     }
 
     .payments_form {
