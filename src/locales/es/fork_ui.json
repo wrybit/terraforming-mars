@@ -2624,7 +2624,6 @@
   "Anonymous": "Anónimo",
   "Player names become \"Player 1\", \"Player 2\" …, the game name and the texts of ratings are left out. Game and player ids are always replaced, IP addresses and the address of this server are never part of it.": "Los nombres de los jugadores pasan a «Jugador 1», «Jugador 2» …, el nombre de la partida y los textos de las valoraciones se omiten. Los ID de partida y de jugador siempre se sustituyen, las direcciones IP y la dirección de este servidor nunca se incluyen.",
   "Receiver": "Receptor",
-  "Address the games are sent to. Empty: the receiver of this fork.": "Dirección a la que se envían las partidas. Vacío: el receptor de este fork.",
   "Shared": "Compartida",
   "Sharing…": "Compartiendo…",
   "Could not share ${0}": "No se pudo compartir ${0}",
@@ -2636,5 +2635,9 @@
   "Last problem (${0}, ${1}):": "Último problema (${0}, ${1}):",
   "Standard move after (ms)": "Jugada estándar tras (ms)",
   "Extra time on top of the thinking time. Without an answer of the Rust AI by then, a standard move decides.": "Tiempo extra además del tiempo de reflexión. Si la Rust AI no responde para entonces, decide una jugada estándar.",
-  "Finished games with at least one human go to the AI training of this fork: every move, the decisions and the ratings of AI moves. Button per game: \"Share\" in the list of finished games. Default: every finished game. Takes effect after a restart.": "Las partidas terminadas con al menos un humano van al entrenamiento de la AI de este fork: cada jugada, las decisiones y las valoraciones de las jugadas de la AI. Botón por partida: «Compartir» en la lista de partidas terminadas. Por defecto: cada partida terminada. Se aplica tras reiniciar."
+  "Finished games with at least one human go to the AI training of this fork: every move, the decisions and the ratings of AI moves. Button per game: \"Share\" in the list of finished games. Default: every finished game. Takes effect after a restart.": "Las partidas terminadas con al menos un humano van al entrenamiento de la AI de este fork: cada jugada, las decisiones y las valoraciones de las jugadas de la AI. Botón por partida: «Compartir» en la lista de partidas terminadas. Por defecto: cada partida terminada. Se aplica tras reiniciar.",
+  "Address the games are sent to, the same for every server. The test checks that this server gets through to it (firewall, proxy).": "Dirección a la que se envían las partidas, la misma para todos los servidores. La prueba comprueba que este servidor llega a ella (cortafuegos, proxy).",
+  "Test connection": "Probar conexión",
+  "The receiver can be reached.": "El receptor es accesible.",
+  "Not reachable:": "No accesible:"
 }

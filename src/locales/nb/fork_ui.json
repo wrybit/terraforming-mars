@@ -1711,7 +1711,6 @@
   "Anonymous": "Anonym",
   "Player names become \"Player 1\", \"Player 2\" …, the game name and the texts of ratings are left out. Game and player ids are always replaced, IP addresses and the address of this server are never part of it.": "Spillernavn blir «Spiller 1», «Spiller 2» …, spillnavnet og tekstene i vurderinger utelates. Spill- og spiller-ID-er byttes alltid ut, IP-adresser og adressen til denne serveren er aldri med.",
   "Receiver": "Mottaker",
-  "Address the games are sent to. Empty: the receiver of this fork.": "Adressen spillene sendes til. Tom: mottakeren for denne forken.",
   "Shared": "Delt",
   "Sharing…": "Deler…",
   "Could not share ${0}": "Kunne ikke dele ${0}",
@@ -1723,5 +1722,9 @@
   "Last problem (${0}, ${1}):": "Siste problem (${0}, ${1}):",
   "Standard move after (ms)": "Standardtrekk etter (ms)",
   "Extra time on top of the thinking time. Without an answer of the Rust AI by then, a standard move decides.": "Ekstra tid i tillegg til betenkningstiden. Uten svar fra Rust AI innen da avgjør et standardtrekk.",
-  "Finished games with at least one human go to the AI training of this fork: every move, the decisions and the ratings of AI moves. Button per game: \"Share\" in the list of finished games. Default: every finished game. Takes effect after a restart.": "Ferdige spill med minst ett menneske går til AI-treningen i denne forken: hvert trekk, avgjørelsene og vurderingene av AI-trekk. Knapp per spill: «Del» i listen over ferdige spill. Standard: hvert ferdige spill. Gjelder etter omstart."
+  "Finished games with at least one human go to the AI training of this fork: every move, the decisions and the ratings of AI moves. Button per game: \"Share\" in the list of finished games. Default: every finished game. Takes effect after a restart.": "Ferdige spill med minst ett menneske går til AI-treningen i denne forken: hvert trekk, avgjørelsene og vurderingene av AI-trekk. Knapp per spill: «Del» i listen over ferdige spill. Standard: hvert ferdige spill. Gjelder etter omstart.",
+  "Address the games are sent to, the same for every server. The test checks that this server gets through to it (firewall, proxy).": "Adressen spillene sendes til, den samme for alle servere. Testen sjekker at denne serveren når fram (brannmur, proxy).",
+  "Test connection": "Test tilkoblingen",
+  "The receiver can be reached.": "Mottakeren kan nås.",
+  "Not reachable:": "Kan ikke nås:"
 }

@@ -8,7 +8,8 @@ import contract from './trainingExportContract.json';
 export type TrainingShareMode = 'off' | 'manual' | 'auto';
 
 /** Receiver of the shared games: a container of its own on the public test server, next to the game. */
-export const TRAINING_SHARE_DEFAULT_URL = 'https://terraforming-mars.baiz.org/api/training-upload';
+/** Fixed for every server: the games of all servers belong to the training of this fork */
+export const TRAINING_SHARE_RECEIVER_URL = 'https://terraforming-mars.baiz.org/api/training-upload';
 
 /** File format and limits, shared with the receiver (it reads the same JSON file). */
 export const TRAINING_EXPORT_CONTRACT = contract;
@@ -61,5 +62,7 @@ export type TrainingShareStatus = {
 
 /** POST api/admin/training-share: share one finished game now. */
 export type TrainingShareRequest = {gameId: string};
+/** Only tests the connection to the receiver; nothing of a game is sent */
+export type TrainingShareTestRequest = {test: true};
 
 export type TrainingShareResult = {ok: true} | {ok: false, message: string};

@@ -1293,3 +1293,27 @@
   color: #ff8a80;
   font-size: 13px;
 }
+
+// Receiver of the Export tab: fixed, so the field looks read-only; the test result right below it
+.training-share-receiver {
+  margin-top: 20px;
+
+  input[readonly] {
+    background: transparent;
+    color: @server-settings-dim;
+  }
+}
+
+.training-share-test {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+}
+
+.training-share-test--ok {
+  color: #9ccc65;
+}
+
+.training-share-test--failed {
+  color: #ff8a80;
+}

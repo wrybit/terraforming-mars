@@ -37,7 +37,6 @@ describe('TrainingShare', () => {
     uploads = [];
     failUpload = undefined;
     failBuild = undefined;
-    delete process.env.TRAINING_SHARE_URL;
     delete process.env.TRAINING_SHARE_ANONYMOUS;
   });
 
@@ -103,5 +102,21 @@ describe('TrainingShare', () => {
     share().onGameFinished(other, true);
     await new Promise((resolve) => setTimeout(resolve, 10));
     expect(share().status().pendingGameIds).is.empty;
+  });
+
+  it('tests the connection to the receiver without sending a game, also while sharing is off', async () => {
+    process.env.TRAINING_SHARE = 'off';
+    const probed: Array<string> = [];
+    const reachable = new TrainingShare(store, undefined, undefined, 'v', async (url) => {
+      probed.push(url);
+    });
+    expect(await reachable.testReceiver()).deep.eq({ok: true});
+    expect(probed).deep.eq(['https://terraforming-mars.baiz.org/api/training-upload']);
+    const blocked = new TrainingShare(store, undefined, undefined, 'v', async () => {
+      throw new Error('terraforming-mars.baiz.org cannot be reached (ECONNREFUSED).');
+    });
+    expect(await blocked.testReceiver()).deep.eq({ok: false, message: 'terraforming-mars.baiz.org cannot be reached (ECONNREFUSED).'});
+    expect(uploads).is.empty;
+    expect(store.exists()).is.false;
   });
 });

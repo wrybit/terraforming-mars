@@ -1529,7 +1529,6 @@
   "Anonymous": "Névtelen",
   "Player names become \"Player 1\", \"Player 2\" …, the game name and the texts of ratings are left out. Game and player ids are always replaced, IP addresses and the address of this server are never part of it.": "A játékosnevek „1. játékos”, „2. játékos” … lesznek, a játszma neve és az értékelések szövege kimarad. A játszma- és játékosazonosítók mindig cserélődnek, IP-címek és ennek a szervernek a címe soha nem kerülnek bele.",
   "Receiver": "Fogadó",
-  "Address the games are sent to. Empty: the receiver of this fork.": "A cím, ahová a játszmák mennek. Üres: ennek a forknak a fogadója.",
   "Shared": "Megosztva",
   "Sharing…": "Megosztás…",
   "Could not share ${0}": "${0} nem osztható meg",
@@ -1541,5 +1540,9 @@
   "Last problem (${0}, ${1}):": "Utolsó probléma (${0}, ${1}):",
   "Standard move after (ms)": "Alaplépés ennyi idő után (ms)",
   "Extra time on top of the thinking time. Without an answer of the Rust AI by then, a standard move decides.": "Többletidő a gondolkodási időn felül. Ha a Rust AI addig nem válaszol, egy alaplépés dönt.",
-  "Finished games with at least one human go to the AI training of this fork: every move, the decisions and the ratings of AI moves. Button per game: \"Share\" in the list of finished games. Default: every finished game. Takes effect after a restart.": "A legalább egy emberrel befejezett játszmák ennek a forknak az AI-tanításába kerülnek: minden lépés, a döntések és az AI-lépések értékelései. Gomb játszmánként: „Megosztás” a befejezett játszmák listájában. Alapértelmezés: minden befejezett játszma. Újraindítás után érvényes."
+  "Finished games with at least one human go to the AI training of this fork: every move, the decisions and the ratings of AI moves. Button per game: \"Share\" in the list of finished games. Default: every finished game. Takes effect after a restart.": "A legalább egy emberrel befejezett játszmák ennek a forknak az AI-tanításába kerülnek: minden lépés, a döntések és az AI-lépések értékelései. Gomb játszmánként: „Megosztás” a befejezett játszmák listájában. Alapértelmezés: minden befejezett játszma. Újraindítás után érvényes.",
+  "Address the games are sent to, the same for every server. The test checks that this server gets through to it (firewall, proxy).": "A cím, ahová a játszmák mennek, minden szerveren ugyanaz. A teszt ellenőrzi, hogy ez a szerver eléri-e (tűzfal, proxy).",
+  "Test connection": "Kapcsolat tesztelése",
+  "The receiver can be reached.": "A fogadó elérhető.",
+  "Not reachable:": "Nem elérhető:"
 }

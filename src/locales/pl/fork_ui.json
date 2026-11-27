@@ -2144,7 +2144,6 @@
   "Anonymous": "Anonimowo",
   "Player names become \"Player 1\", \"Player 2\" …, the game name and the texts of ratings are left out. Game and player ids are always replaced, IP addresses and the address of this server are never part of it.": "Nazwy graczy zmieniają się na „Gracz 1”, „Gracz 2” …, nazwa gry i teksty ocen są pomijane. ID gry i graczy są zawsze zastępowane, adresy IP i adres tego serwera nigdy nie są dołączane.",
   "Receiver": "Odbiorca",
-  "Address the games are sent to. Empty: the receiver of this fork.": "Adres, na który wysyłane są partie. Puste: odbiorca tego forka.",
   "Shared": "Udostępniono",
   "Sharing…": "Udostępnianie…",
   "Could not share ${0}": "Nie udało się udostępnić ${0}",
@@ -2156,5 +2155,9 @@
   "Last problem (${0}, ${1}):": "Ostatni problem (${0}, ${1}):",
   "Standard move after (ms)": "Ruch standardowy po (ms)",
   "Extra time on top of the thinking time. Without an answer of the Rust AI by then, a standard move decides.": "Czas ponad czas do namysłu. Jeśli Rust AI do tego czasu nie odpowie, decyduje ruch standardowy.",
-  "Finished games with at least one human go to the AI training of this fork: every move, the decisions and the ratings of AI moves. Button per game: \"Share\" in the list of finished games. Default: every finished game. Takes effect after a restart.": "Zakończone partie z co najmniej jednym człowiekiem trafiają do treningu AI tego forka: każdy ruch, decyzje i oceny ruchów AI. Przycisk przy każdej partii: „Udostępnij” na liście zakończonych partii. Domyślnie: każda zakończona partia. Działa po restarcie."
+  "Finished games with at least one human go to the AI training of this fork: every move, the decisions and the ratings of AI moves. Button per game: \"Share\" in the list of finished games. Default: every finished game. Takes effect after a restart.": "Zakończone partie z co najmniej jednym człowiekiem trafiają do treningu AI tego forka: każdy ruch, decyzje i oceny ruchów AI. Przycisk przy każdej partii: „Udostępnij” na liście zakończonych partii. Domyślnie: każda zakończona partia. Działa po restarcie.",
+  "Address the games are sent to, the same for every server. The test checks that this server gets through to it (firewall, proxy).": "Adres, na który wysyłane są gry, ten sam dla każdego serwera. Test sprawdza, czy ten serwer się z nim łączy (zapora, proxy).",
+  "Test connection": "Testuj połączenie",
+  "The receiver can be reached.": "Odbiorca jest osiągalny.",
+  "Not reachable:": "Nieosiągalny:"
 }

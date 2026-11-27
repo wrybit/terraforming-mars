@@ -1972,7 +1972,6 @@
   "Anonymous": "Anoniem",
   "Player names become \"Player 1\", \"Player 2\" …, the game name and the texts of ratings are left out. Game and player ids are always replaced, IP addresses and the address of this server are never part of it.": "Spelersnamen worden \"Speler 1\", \"Speler 2\" …, de naam van de partij en de teksten van beoordelingen worden weggelaten. Partij- en speler-ID’s worden altijd vervangen, IP-adressen en het adres van deze server zitten er nooit in.",
   "Receiver": "Ontvanger",
-  "Address the games are sent to. Empty: the receiver of this fork.": "Adres waar de partijen naartoe gaan. Leeg: de ontvanger van deze fork.",
   "Shared": "Gedeeld",
   "Sharing…": "Bezig met delen…",
   "Could not share ${0}": "Kon ${0} niet delen",
@@ -1984,5 +1983,9 @@
   "Last problem (${0}, ${1}):": "Laatste probleem (${0}, ${1}):",
   "Standard move after (ms)": "Standaardzet na (ms)",
   "Extra time on top of the thinking time. Without an answer of the Rust AI by then, a standard move decides.": "Extra tijd bovenop de denktijd. Zonder antwoord van de Rust AI tegen die tijd beslist een standaardzet.",
-  "Finished games with at least one human go to the AI training of this fork: every move, the decisions and the ratings of AI moves. Button per game: \"Share\" in the list of finished games. Default: every finished game. Takes effect after a restart.": "Afgelopen partijen met minstens één mens gaan naar de AI-training van deze fork: elke zet, de beslissingen en de beoordelingen van AI-zetten. Knop per partij: \"Delen\" in de lijst van afgelopen partijen. Standaard: elke afgelopen partij. Werkt na een herstart."
+  "Finished games with at least one human go to the AI training of this fork: every move, the decisions and the ratings of AI moves. Button per game: \"Share\" in the list of finished games. Default: every finished game. Takes effect after a restart.": "Afgelopen partijen met minstens één mens gaan naar de AI-training van deze fork: elke zet, de beslissingen en de beoordelingen van AI-zetten. Knop per partij: \"Delen\" in de lijst van afgelopen partijen. Standaard: elke afgelopen partij. Werkt na een herstart.",
+  "Address the games are sent to, the same for every server. The test checks that this server gets through to it (firewall, proxy).": "Adres waarheen de spellen gaan, voor elke server hetzelfde. De test controleert of deze server het bereikt (firewall, proxy).",
+  "Test connection": "Verbinding testen",
+  "The receiver can be reached.": "De ontvanger is bereikbaar.",
+  "Not reachable:": "Niet bereikbaar:"
 }

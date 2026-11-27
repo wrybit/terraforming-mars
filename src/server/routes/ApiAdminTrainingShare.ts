@@ -9,7 +9,7 @@ import {isGameId} from '../../common/Types';
 
 /**
  * Sharing finished games for the AI training (admins only): GET the state for the Export tab and the games list,
- * POST {"gameId": "g…"} shares one finished game now.
+ * POST {"gameId": "g…"} shares one finished game now, POST {"test": true} only tests the connection to the receiver.
  */
 export class ApiAdminTrainingShare extends Handler {
   public static readonly INSTANCE = new ApiAdminTrainingShare();
@@ -23,14 +23,19 @@ export class ApiAdminTrainingShare extends Handler {
   }
 
   public override async post(req: Request, res: Response, ctx: Context): Promise<void> {
-    let gameId: unknown;
+    let body: {gameId?: unknown, test?: unknown} = {};
     try {
-      gameId = JSON.parse(await readBody(req) || '{}').gameId;
+      body = JSON.parse(await readBody(req) || '{}') ?? {};
     } catch {
-      gameId = undefined;
+      body = {};
     }
+    if (body.test === true) {
+      responses.writeJson(res, ctx, await TrainingShare.getInstance().testReceiver());
+      return;
+    }
+    const gameId = body.gameId;
     if (!isGameId(gameId)) {
-      responses.badRequest(req, res, 'Send {"gameId": "g…"} with the id of a finished game.');
+      responses.badRequest(req, res, 'Send {"gameId": "g…"} with the id of a finished game, or {"test": true}.');
       return;
     }
     responses.writeJson(res, ctx, await TrainingShare.getInstance().share(gameId));

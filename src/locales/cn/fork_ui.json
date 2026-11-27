@@ -2331,7 +2331,6 @@
   "Anonymous": "匿名",
   "Player names become \"Player 1\", \"Player 2\" …, the game name and the texts of ratings are left out. Game and player ids are always replaced, IP addresses and the address of this server are never part of it.": "玩家名称变为“玩家1”“玩家2”……，对局名称和评价文字不会包含在内。对局和玩家ID总会被替换，IP地址和本服务器地址绝不包含在内。",
   "Receiver": "接收方",
-  "Address the games are sent to. Empty: the receiver of this fork.": "对局发送到的地址。留空：此分支的接收方。",
   "Shared": "已分享",
   "Sharing…": "正在分享…",
   "Could not share ${0}": "无法分享${0}",
@@ -2343,5 +2342,9 @@
   "Last problem (${0}, ${1}):": "最近的问题（${0}，${1}）：",
   "Standard move after (ms)": "标准行动等待时间（毫秒）",
   "Extra time on top of the thinking time. Without an answer of the Rust AI by then, a standard move decides.": "在思考时间之外额外等待的时间。若Rust AI届时仍未回答，则由标准行动决定。",
-  "Finished games with at least one human go to the AI training of this fork: every move, the decisions and the ratings of AI moves. Button per game: \"Share\" in the list of finished games. Default: every finished game. Takes effect after a restart.": "至少有一名真人玩家的已结束对局会用于此分支的AI训练：每一步、所有决策以及对AI行动的评价。每局一个按钮：在已结束对局列表中点击“分享”。默认：每局结束后。重启后生效。"
+  "Finished games with at least one human go to the AI training of this fork: every move, the decisions and the ratings of AI moves. Button per game: \"Share\" in the list of finished games. Default: every finished game. Takes effect after a restart.": "至少有一名真人玩家的已结束对局会用于此分支的AI训练：每一步、所有决策以及对AI行动的评价。每局一个按钮：在已结束对局列表中点击“分享”。默认：每局结束后。重启后生效。",
+  "Address the games are sent to, the same for every server. The test checks that this server gets through to it (firewall, proxy).": "对局发送到的地址，所有服务器相同。测试会检查本服务器能否连通（防火墙、代理）。",
+  "Test connection": "测试连接",
+  "The receiver can be reached.": "接收端可以连通。",
+  "Not reachable:": "无法连通："
 }
