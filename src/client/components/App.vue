@@ -9,6 +9,8 @@
     <AiDecisionDialog />
     <!-- Analysis game: introduction to rating, once per browser at the end of the first generation -->
     <AiAnalysisWelcome v-if="screen === 'player-home'" :player-view="playerView" />
+    <!-- Feedback with screenshot, when switched on (Admin → Settings → Feedback) -->
+    <FeedbackRoot :view="participant" />
     <!-- Optional extensions (src/extensions/): each may bring one root component -->
     <component :is="extension.component" v-for="extension in componentExtensions" :key="extension.name" :view="participant" />
     <section>
@@ -136,6 +138,7 @@ import PushToast from '@/client/components/common/PushToast.vue';
 import RenderErrorBanner from '@/client/components/common/RenderErrorBanner.vue';
 import AiDecisionDialog from '@/client/components/logpanel/aiAnalysis/AiDecisionDialog.vue';
 import AiAnalysisWelcome from '@/client/components/logpanel/aiAnalysis/AiAnalysisWelcome.vue';
+import FeedbackRoot from '@/client/components/feedback/FeedbackRoot.vue';
 import {CLIENT_EXTENSIONS} from '@/genfiles/extensionsClient';
 import {ClientExtension} from '@/client/extensions/ClientExtension';
 import {serverUpdatePhase, startServerStatusPolling} from '@/client/utils/serverStatus';
@@ -224,6 +227,7 @@ export default defineComponent({
     };
   },
   components: {
+    FeedbackRoot,
     FanProjectNotice,
     RotateHint,
     AppBackground,

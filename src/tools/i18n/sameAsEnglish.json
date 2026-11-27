@@ -8,7 +8,9 @@
     "CHOAM",
     "Ctrl",
     "Node.js",
-    "Rust AI"
+    "Rust AI",
+    "URL",
+    "WebGL"
   ],
   "br": [
     "${0} AI",
@@ -54,7 +56,12 @@
     "Virtual",
     "[ solo",
     "normal ${0}",
-    "Rust AI"
+    "Rust AI",
+    "Commit",
+    "Feedback",
+    "URL",
+    "WebGL",
+    "desktop"
   ],
   "cn": [
     "${0} AI",
@@ -67,7 +74,9 @@
     "Delta Project (2VP)",
     "Delta Project (5VP)",
     "Node.js",
-    "Rust AI"
+    "Rust AI",
+    "URL",
+    "WebGL"
   ],
   "de": [
     "${0} AI",
@@ -133,7 +142,14 @@
     "${0} s",
     "Rollouts",
     "Threads",
-    "Rust AI"
+    "Rust AI",
+    "Feedback",
+    "System",
+    "Touch",
+    "URL",
+    "Viewport",
+    "WebGL",
+    "optional"
   ],
   "es": [
     "${0} AI",
@@ -176,7 +192,12 @@
     "Venus Next",
     "Virtual",
     "normal ${0}",
-    "Rust AI"
+    "Rust AI",
+    "Commit",
+    "General",
+    "URL",
+    "WebGL",
+    "no"
   ],
   "fi": [
     "${0} AI",
@@ -205,7 +226,10 @@
     "Pavonis Mons",
     "Shai-Hulud",
     "Tharsis Tholus",
-    "Rust AI"
+    "Rust AI",
+    "Commit",
+    "URL",
+    "WebGL"
   ],
   "fr": [
     "${0} (Turmoil ${1})",
@@ -274,7 +298,14 @@
     "utopia planitia",
     "vastitas borealis",
     "vastitas borealis nova",
-    "Rust AI"
+    "Rust AI",
+    "Commit",
+    "Contact",
+    "Page",
+    "Point ${0}",
+    "URL",
+    "WebGL",
+    "mobile"
   ],
   "hu": [
     "${0} AI",
@@ -304,7 +335,10 @@
     "arabia terra",
     "vastitas borealis",
     "vastitas borealis nova",
-    "Rust AI"
+    "Rust AI",
+    "Commit",
+    "URL",
+    "WebGL"
   ],
   "it": [
     "${0} (Turmoil ${1})",
@@ -367,7 +401,16 @@
     "utopia planitia",
     "vastitas borealis",
     "vastitas borealis nova",
-    "Rust AI"
+    "Rust AI",
+    "Area ${0}",
+    "Commit",
+    "Feedback",
+    "Touch",
+    "URL",
+    "WebGL",
+    "desktop",
+    "mobile",
+    "no"
   ],
   "jp": [
     "${0} AI",
@@ -380,7 +423,9 @@
     "Delta Project (2VP)",
     "Delta Project (5VP)",
     "Node.js",
-    "Rust AI"
+    "Rust AI",
+    "URL",
+    "WebGL"
   ],
   "ko": [
     "${0} AI",
@@ -393,7 +438,9 @@
     "Delta Project (2VP)",
     "Delta Project (5VP)",
     "Node.js",
-    "Rust AI"
+    "Rust AI",
+    "URL",
+    "WebGL"
   ],
   "nb": [
     "${0} AI",
@@ -449,7 +496,11 @@
     "utopia planitia",
     "vastitas borealis",
     "vastitas borealis nova",
-    "Rust AI"
+    "Rust AI",
+    "Commit",
+    "System",
+    "URL",
+    "WebGL"
   ],
   "nl": [
     "${0} (Turmoil ${1})",
@@ -526,7 +577,14 @@
     "Websites",
     "${0} s",
     "Threads",
-    "Rust AI"
+    "Rust AI",
+    "Commit",
+    "Contact",
+    "Feedback",
+    "URL",
+    "Viewport",
+    "WebGL",
+    "desktop"
   ],
   "pl": [
     "${0} AI",
@@ -563,7 +621,11 @@
     "terra cimmeria nova",
     "utopia planitia",
     "vastitas borealis nova",
-    "Rust AI"
+    "Rust AI",
+    "Commit",
+    "System",
+    "URL",
+    "WebGL"
   ],
   "ru": [
     "${0} AI",
@@ -576,7 +638,9 @@
     "Ctrl",
     "Node.js",
     "PolderTECH",
-    "Rust AI"
+    "Rust AI",
+    "URL",
+    "WebGL"
   ],
   "ua": [
     "${0} AI",
@@ -588,6 +652,8 @@
     "Ctrl",
     "Node.js",
     "PolderTECH",
-    "Rust AI"
+    "Rust AI",
+    "URL",
+    "WebGL"
   ]
 }
