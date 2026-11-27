@@ -2215,7 +2215,6 @@
   "Share games for the AI training": "Делиться партиями для обучения AI",
   "Button per game": "Кнопка для каждой партии",
   "Every finished game": "Каждая завершённая партия",
-  "Finished games with at least one human go to the AI training of this fork: every move, the decisions and the ratings of AI moves. Button per game: \"Share\" in the list of finished games. Takes effect after a restart.": "Завершённые партии хотя бы с одним человеком идут на обучение AI этого форка: каждый ход, решения и оценки ходов AI. Кнопка для каждой партии: «Поделиться» в списке завершённых партий. Действует после перезапуска.",
   "Anonymous": "Анонимно",
   "Player names become \"Player 1\", \"Player 2\" …, the game name and the texts of ratings are left out. Game and player ids are always replaced, IP addresses and the address of this server are never part of it.": "Имена игроков становятся «Игрок 1», «Игрок 2» …, название партии и тексты оценок не передаются. ID партии и игроков всегда заменяются, IP-адреса и адрес этого сервера никогда не входят.",
   "Receiver": "Получатель",
@@ -2230,5 +2229,6 @@
   "Key of this server": "Ключ этого сервера",
   "Last problem (${0}, ${1}):": "Последняя проблема (${0}, ${1}):",
   "Standard move after (ms)": "Стандартный ход через (мс)",
-  "Extra time on top of the thinking time. Without an answer of the Rust AI by then, a standard move decides.": "Время сверх времени на раздумье. Если Rust AI к этому моменту не ответил, решает стандартный ход."
+  "Extra time on top of the thinking time. Without an answer of the Rust AI by then, a standard move decides.": "Время сверх времени на раздумье. Если Rust AI к этому моменту не ответил, решает стандартный ход.",
+  "Finished games with at least one human go to the AI training of this fork: every move, the decisions and the ratings of AI moves. Button per game: \"Share\" in the list of finished games. Default: every finished game. Takes effect after a restart.": "Завершённые партии хотя бы с одним человеком идут на обучение AI этого форка: каждый ход, решения и оценки ходов AI. Кнопка для каждой партии: «Поделиться» в списке завершённых партий. По умолчанию: каждая завершённая партия. Действует после перезапуска."
 }

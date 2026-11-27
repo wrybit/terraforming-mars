@@ -34,7 +34,7 @@ describe('TrainingShareStatusCard', () => {
   });
 
   it('stays hidden while sharing is off', async () => {
-    const wrapper = await mountWith(status({mode: ''}));
+    const wrapper = await mountWith(status({mode: 'off'}));
     expect(wrapper.find('.training-share-status').exists()).is.false;
   });
 });

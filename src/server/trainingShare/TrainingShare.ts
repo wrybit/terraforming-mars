@@ -98,7 +98,7 @@ export class TrainingShare {
 
   /** Packs and uploads one finished game; the answer says why not if it fails. */
   public async share(gameId: GameId): Promise<TrainingShareResult> {
-    if (trainingShareMode() === '') {
+    if (trainingShareMode() === 'off') {
       return {ok: false, message: 'Sharing is switched off (Admin → Settings → Export).'};
     }
     if (this.running.has(gameId)) {

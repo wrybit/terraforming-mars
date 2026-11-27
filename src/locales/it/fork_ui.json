@@ -2608,7 +2608,6 @@
   "Share games for the AI training": "Condividi le partite per l’addestramento dell’AI",
   "Button per game": "Pulsante per partita",
   "Every finished game": "Ogni partita conclusa",
-  "Finished games with at least one human go to the AI training of this fork: every move, the decisions and the ratings of AI moves. Button per game: \"Share\" in the list of finished games. Takes effect after a restart.": "Le partite concluse con almeno un umano vanno all’addestramento dell’AI di questo fork: ogni mossa, le decisioni e le valutazioni delle mosse dell’AI. Pulsante per partita: «Condividi» nell’elenco delle partite concluse. Attivo dopo un riavvio.",
   "Anonymous": "Anonimo",
   "Player names become \"Player 1\", \"Player 2\" …, the game name and the texts of ratings are left out. Game and player ids are always replaced, IP addresses and the address of this server are never part of it.": "I nomi dei giocatori diventano «Giocatore 1», «Giocatore 2» …, il nome della partita e i testi delle valutazioni vengono omessi. Gli ID di partita e giocatori vengono sempre sostituiti, gli indirizzi IP e l’indirizzo di questo server non ne fanno mai parte.",
   "Receiver": "Destinatario",
@@ -2623,5 +2622,6 @@
   "Key of this server": "Chiave di questo server",
   "Last problem (${0}, ${1}):": "Ultimo problema (${0}, ${1}):",
   "Standard move after (ms)": "Mossa standard dopo (ms)",
-  "Extra time on top of the thinking time. Without an answer of the Rust AI by then, a standard move decides.": "Tempo in più oltre al tempo di riflessione. Se la Rust AI non risponde entro allora, decide una mossa standard."
+  "Extra time on top of the thinking time. Without an answer of the Rust AI by then, a standard move decides.": "Tempo in più oltre al tempo di riflessione. Se la Rust AI non risponde entro allora, decide una mossa standard.",
+  "Finished games with at least one human go to the AI training of this fork: every move, the decisions and the ratings of AI moves. Button per game: \"Share\" in the list of finished games. Default: every finished game. Takes effect after a restart.": "Le partite concluse con almeno un umano vanno all’addestramento dell’AI di questo fork: ogni mossa, le decisioni e le valutazioni delle mosse dell’AI. Pulsante per partita: «Condividi» nell’elenco delle partite concluse. Predefinito: ogni partita conclusa. Attivo dopo un riavvio."
 }

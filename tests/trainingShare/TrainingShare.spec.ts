@@ -46,8 +46,8 @@ describe('TrainingShare', () => {
     fs.rmSync(folder, {recursive: true, force: true});
   });
 
-  it('sends nothing while sharing is off and creates no key', async () => {
-    delete process.env.TRAINING_SHARE;
+  it('sends nothing while sharing is switched off and creates no key', async () => {
+    process.env.TRAINING_SHARE = 'off';
     const result = await share().share(GAME);
     expect(result.ok).is.false;
     expect(uploads).is.empty;
@@ -74,6 +74,14 @@ describe('TrainingShare', () => {
     const result = await share().share(GAME);
     expect(result).deep.eq({ok: false, message: 'The receiver refused the game (HTTP 413).'});
     expect(share().status().lastError?.gameId).to.eq(GAME);
+  });
+
+  it('shares automatically when nothing is set: the default', async () => {
+    delete process.env.TRAINING_SHARE;
+    share().onGameFinished(GAME, true);
+    await new Promise((resolve) => setTimeout(resolve, 10));
+    expect(uploads).has.length(1);
+    expect(share().status().mode).eq('auto');
   });
 
   it('automatic: queues finished games with a human, retries failed uploads, drops games that cannot be packed', async () => {

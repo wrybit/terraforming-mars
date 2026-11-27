@@ -2328,7 +2328,6 @@
   "Share games for the AI training": "分享对局用于AI训练",
   "Button per game": "每局一个按钮",
   "Every finished game": "每局结束后",
-  "Finished games with at least one human go to the AI training of this fork: every move, the decisions and the ratings of AI moves. Button per game: \"Share\" in the list of finished games. Takes effect after a restart.": "至少有一名真人玩家的已结束对局会用于此分支的AI训练：每一步、所有决策以及对AI行动的评价。每局一个按钮：在已结束对局列表中点击“分享”。重启后生效。",
   "Anonymous": "匿名",
   "Player names become \"Player 1\", \"Player 2\" …, the game name and the texts of ratings are left out. Game and player ids are always replaced, IP addresses and the address of this server are never part of it.": "玩家名称变为“玩家1”“玩家2”……，对局名称和评价文字不会包含在内。对局和玩家ID总会被替换，IP地址和本服务器地址绝不包含在内。",
   "Receiver": "接收方",
@@ -2343,5 +2342,6 @@
   "Key of this server": "本服务器的密钥",
   "Last problem (${0}, ${1}):": "最近的问题（${0}，${1}）：",
   "Standard move after (ms)": "标准行动等待时间（毫秒）",
-  "Extra time on top of the thinking time. Without an answer of the Rust AI by then, a standard move decides.": "在思考时间之外额外等待的时间。若Rust AI届时仍未回答，则由标准行动决定。"
+  "Extra time on top of the thinking time. Without an answer of the Rust AI by then, a standard move decides.": "在思考时间之外额外等待的时间。若Rust AI届时仍未回答，则由标准行动决定。",
+  "Finished games with at least one human go to the AI training of this fork: every move, the decisions and the ratings of AI moves. Button per game: \"Share\" in the list of finished games. Default: every finished game. Takes effect after a restart.": "至少有一名真人玩家的已结束对局会用于此分支的AI训练：每一步、所有决策以及对AI行动的评价。每局一个按钮：在已结束对局列表中点击“分享”。默认：每局结束后。重启后生效。"
 }

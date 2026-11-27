@@ -2621,7 +2621,6 @@
   "Share games for the AI training": "Compartir partidas para el entrenamiento de la AI",
   "Button per game": "Botón por partida",
   "Every finished game": "Cada partida terminada",
-  "Finished games with at least one human go to the AI training of this fork: every move, the decisions and the ratings of AI moves. Button per game: \"Share\" in the list of finished games. Takes effect after a restart.": "Las partidas terminadas con al menos un humano van al entrenamiento de la AI de este fork: cada jugada, las decisiones y las valoraciones de las jugadas de la AI. Botón por partida: «Compartir» en la lista de partidas terminadas. Se aplica tras reiniciar.",
   "Anonymous": "Anónimo",
   "Player names become \"Player 1\", \"Player 2\" …, the game name and the texts of ratings are left out. Game and player ids are always replaced, IP addresses and the address of this server are never part of it.": "Los nombres de los jugadores pasan a «Jugador 1», «Jugador 2» …, el nombre de la partida y los textos de las valoraciones se omiten. Los ID de partida y de jugador siempre se sustituyen, las direcciones IP y la dirección de este servidor nunca se incluyen.",
   "Receiver": "Receptor",
@@ -2636,5 +2635,6 @@
   "Key of this server": "Clave de este servidor",
   "Last problem (${0}, ${1}):": "Último problema (${0}, ${1}):",
   "Standard move after (ms)": "Jugada estándar tras (ms)",
-  "Extra time on top of the thinking time. Without an answer of the Rust AI by then, a standard move decides.": "Tiempo extra además del tiempo de reflexión. Si la Rust AI no responde para entonces, decide una jugada estándar."
+  "Extra time on top of the thinking time. Without an answer of the Rust AI by then, a standard move decides.": "Tiempo extra además del tiempo de reflexión. Si la Rust AI no responde para entonces, decide una jugada estándar.",
+  "Finished games with at least one human go to the AI training of this fork: every move, the decisions and the ratings of AI moves. Button per game: \"Share\" in the list of finished games. Default: every finished game. Takes effect after a restart.": "Las partidas terminadas con al menos un humano van al entrenamiento de la AI de este fork: cada jugada, las decisiones y las valoraciones de las jugadas de la AI. Botón por partida: «Compartir» en la lista de partidas terminadas. Por defecto: cada partida terminada. Se aplica tras reiniciar."
 }

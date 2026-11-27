@@ -3,9 +3,10 @@ import {TRAINING_SHARE_DEFAULT_URL, TrainingShareMode} from '../../common/traini
 
 // The .env settings of the Export tab (common/admin/serverSettings.ts); read at every use, they take effect at once
 
+/** Automatic unless switched off or to the button: the default shares, so the AI gets the games of every server */
 export function trainingShareMode(): TrainingShareMode {
   const mode = process.env.TRAINING_SHARE;
-  return mode === 'manual' || mode === 'auto' ? mode : '';
+  return mode === 'off' || mode === 'manual' ? mode : 'auto';
 }
 
 /** Anonymous unless switched off: the safe choice is the default */
@@ -26,5 +27,5 @@ export function decisionLogDirectory(): string | undefined {
   if (process.env.AI_DECISION_LOG_DIR) {
     return process.env.AI_DECISION_LOG_DIR;
   }
-  return trainingShareMode() === '' ? undefined : path.resolve(process.cwd(), 'db', 'decisions');
+  return trainingShareMode() === 'off' ? undefined : path.resolve(process.cwd(), 'db', 'decisions');
 }

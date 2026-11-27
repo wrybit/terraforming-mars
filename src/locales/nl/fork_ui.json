@@ -1969,7 +1969,6 @@
   "Share games for the AI training": "Partijen delen voor de AI-training",
   "Button per game": "Knop per partij",
   "Every finished game": "Elke afgelopen partij",
-  "Finished games with at least one human go to the AI training of this fork: every move, the decisions and the ratings of AI moves. Button per game: \"Share\" in the list of finished games. Takes effect after a restart.": "Afgelopen partijen met minstens één mens gaan naar de AI-training van deze fork: elke zet, de beslissingen en de beoordelingen van AI-zetten. Knop per partij: \"Delen\" in de lijst van afgelopen partijen. Werkt na een herstart.",
   "Anonymous": "Anoniem",
   "Player names become \"Player 1\", \"Player 2\" …, the game name and the texts of ratings are left out. Game and player ids are always replaced, IP addresses and the address of this server are never part of it.": "Spelersnamen worden \"Speler 1\", \"Speler 2\" …, de naam van de partij en de teksten van beoordelingen worden weggelaten. Partij- en speler-ID’s worden altijd vervangen, IP-adressen en het adres van deze server zitten er nooit in.",
   "Receiver": "Ontvanger",
@@ -1984,5 +1983,6 @@
   "Key of this server": "Sleutel van deze server",
   "Last problem (${0}, ${1}):": "Laatste probleem (${0}, ${1}):",
   "Standard move after (ms)": "Standaardzet na (ms)",
-  "Extra time on top of the thinking time. Without an answer of the Rust AI by then, a standard move decides.": "Extra tijd bovenop de denktijd. Zonder antwoord van de Rust AI tegen die tijd beslist een standaardzet."
+  "Extra time on top of the thinking time. Without an answer of the Rust AI by then, a standard move decides.": "Extra tijd bovenop de denktijd. Zonder antwoord van de Rust AI tegen die tijd beslist een standaardzet.",
+  "Finished games with at least one human go to the AI training of this fork: every move, the decisions and the ratings of AI moves. Button per game: \"Share\" in the list of finished games. Default: every finished game. Takes effect after a restart.": "Afgelopen partijen met minstens één mens gaan naar de AI-training van deze fork: elke zet, de beslissingen en de beoordelingen van AI-zetten. Knop per partij: \"Delen\" in de lijst van afgelopen partijen. Standaard: elke afgelopen partij. Werkt na een herstart."
 }
