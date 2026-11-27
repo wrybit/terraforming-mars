@@ -457,3 +457,23 @@ td.games-overview-ai {
     padding: 16px;
   }
 }
+
+// Share and Delete side by side in the sticky column, right-aligned; the width of the widest row sets the column
+.games-overview-actions-row {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: @games-overview-actions-gap;
+}
+
+// Already shared: information, not a control – plain text without background
+.games-overview-shared {
+  min-width: 120px;
+  color: #7ccf8a;
+  font-size: 13px;
+  text-align: center;
+}
+
+.games-overview-shared::before {
+  content: '✓ ';
+}

@@ -1,4 +1,5 @@
 import prometheus from '@prometheus-io/client';
+import {TrainingShare} from '../trainingShare/TrainingShare';
 import {Database} from './Database';
 import {Game} from '../Game';
 import {IGame} from '../IGame';
@@ -267,6 +268,7 @@ export class GameLoader implements IGameLoader {
     try {
       this.mark(game.id);
       await database.markFinished(game.id);
+      TrainingShare.getInstance().onGameFinished(game.id, game.players.some((player) => player.aiLevel === undefined));
       notifyGameGone(game.id);
       metrics.gamesFinished.inc({players: String(game.players.length)});
       await this.maintenance();

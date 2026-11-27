@@ -30,6 +30,8 @@ import {removeAiOnlyGames} from './aiTraining/aiOnlyGames';
 import {globalInitialize} from '@/server/globalInitialize';
 import {SessionManager} from '@/server/server/auth/SessionManager';
 import {installDecisionLogFile} from '@/server/ai/decisionLogFile';
+import {TrainingShare} from '@/server/trainingShare/TrainingShare';
+import {decisionLogDirectory as trainingDecisionDirectory} from '@/server/trainingShare/trainingShareSettings';
 import {clearServerUpdateFlag} from '@/server/server/serverUpdate';
 import {startUptimeRecording} from '@/server/admin/dashboard/uptimeRecord';
 import {startPresenceRecording} from '@/server/admin/dashboard/presenceRecord';
@@ -184,10 +186,12 @@ async function start() {
     .catch((err) => console.error(err));
   removeAiOnly();
   setInterval(removeAiOnly, 60 * 60 * 1000).unref();
-  const decisionLogDirectory = process.env.AI_DECISION_LOG_DIR;
+  // AI_DECISION_LOG_DIR, or db/decisions while games are shared for the AI training (tab "Export")
+  const decisionLogDirectory = trainingDecisionDirectory();
   if (decisionLogDirectory) {
     installDecisionLogFile(decisionLogDirectory);
   }
+  TrainingShare.start(raw_settings.head);
 
   console.log(`Starting ${raw_settings.head}, built at ${raw_settings.builtAt}`);
 

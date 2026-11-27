@@ -39,7 +39,13 @@
       </component>
     </td>
     <td class="games-overview-actions">
-      <DeleteGameButton :isDeleting="isDeleting" @delete="$emit('delete', summary.id)" />
+      <!-- Share (AI training, tab Export) before Delete: buttons right-aligned in one row; a shared game shows it as plain text -->
+      <span class="games-overview-actions-row">
+        <span v-if="shareState === 'shared'" class="games-overview-shared" v-i18n>Shared</span>
+        <button v-else-if="shareState !== undefined" type="button" class="btn btn-tone-quiet games-overview-share"
+          :disabled="shareState === 'busy'" @click="$emit('share', summary.id)" v-i18n>{{ shareState === 'busy' ? 'Sharing…' : 'Share' }}</button>
+        <DeleteGameButton :isDeleting="isDeleting" @delete="$emit('delete', summary.id)" />
+      </span>
     </td>
   </tr>
 </template>
@@ -61,6 +67,7 @@ import {gameLocaleToIntlLocale} from '@/client/utils/LocaleUtils';
 import {getPreferences} from '@/client/utils/PreferencesManager';
 import {shortDateTime} from '@/client/utils/shortDateTime';
 import {aiEngineName} from './aiEngineLabel';
+import {GameShareState} from './trainingShareState';
 
 export default defineComponent({
   name: 'GameOverview',
@@ -69,7 +76,7 @@ export default defineComponent({
     LanguageFlag,
     ThemePlanetBadge,
   },
-  emits: ['delete'],
+  emits: ['delete', 'share'],
   props: {
     summary: {
       type: Object as () => AdminGameSummary,
@@ -82,6 +89,11 @@ export default defineComponent({
     isDeleting: {
       type: Boolean,
       default: false,
+    },
+    // Sharing for the AI training: undefined = not offered (off, unfinished or imported game)
+    shareState: {
+      type: String as () => GameShareState | undefined,
+      default: undefined,
     },
     // Passed in by the table, which advances it every minute: the relative times stay current
     nowMs: {

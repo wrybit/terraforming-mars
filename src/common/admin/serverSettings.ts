@@ -5,6 +5,7 @@
 import {COMMON_EXTENSIONS} from '../../genfiles/extensionsCommon';
 import {AI_LEVELS} from '../ai/AiLevel';
 import {DEFAULT_RUST_BOT_STRENGTH, RUST_BOT_STRENGTH_LIMITS, RUST_BOT_STRENGTH_SLIDERS, RustBotStrengthField, rustBotStrengthKey} from '../ai/rustBotStrength';
+import {TRAINING_SHARE_DEFAULT_URL} from '../trainingShare/TrainingShareModel';
 import {DEFAULT_FAVICON_COLOR, DEFAULT_FAVICON_ICON, FAVICON_COLORS, FAVICON_ICONS, FaviconOption, faviconImage} from './favicons';
 
 // image: an address (http… or an uploaded file, see ApiAdminServerLogo) with upload button and preview
@@ -65,7 +66,7 @@ function faviconChoices(options: ReadonlyArray<FaviconOption>, defaultId: string
   return options.map(({id, label}) => ({value: id === defaultId ? '' : id, label}));
 }
 
-const BASE_SETTING_GROUPS: ReadonlyArray<ServerSettingGroup> = ['Appearance', 'Games', 'Limits', 'AI opponents', 'Access', 'Technical'];
+const BASE_SETTING_GROUPS: ReadonlyArray<ServerSettingGroup> = ['Appearance', 'Games', 'Limits', 'AI opponents', 'Access', 'Export', 'Technical'];
 
 // One line per value of the Rust bot, one field per strength (common/ai/rustBotStrength.ts)
 const AI_STRENGTH_ROWS: Record<RustBotStrengthField, {label: string, description: string}> = {
@@ -159,6 +160,14 @@ const BASE_SETTINGS: ReadonlyArray<ServerSettingDefinition> = [
     description: 'How long a login (admin and Discord) stays valid, e.g. 30d or 12h.'},
   {key: 'URL_ROOT', group: 'Access', kind: 'text', label: 'Public address',
     description: 'Root address of this server, used for login redirects.'},
+
+  {key: 'TRAINING_SHARE', group: 'Export', kind: 'segmented', label: 'Share games for the AI training',
+    choices: [{value: '', label: 'Off'}, {value: 'manual', label: 'Button per game'}, {value: 'auto', label: 'Every finished game'}],
+    description: 'Finished games with at least one human go to the AI training of this fork: every move, the decisions and the ratings of AI moves. Button per game: "Share" in the list of finished games. Takes effect after a restart.'},
+  {key: 'TRAINING_SHARE_ANONYMOUS', group: 'Export', kind: 'toggle', defaultOn: true, live: true, label: 'Anonymous',
+    description: 'Player names become "Player 1", "Player 2" …, the game name and the texts of ratings are left out. Game and player ids are always replaced, IP addresses and the address of this server are never part of it.'},
+  {key: 'TRAINING_SHARE_URL', group: 'Export', kind: 'text', label: 'Receiver', placeholder: TRAINING_SHARE_DEFAULT_URL,
+    description: 'Address the games are sent to. Empty: the receiver of this fork.'},
 
   {key: 'PORT', group: 'Technical', kind: 'number', label: 'Port', placeholder: '8080',
     description: 'Port the server listens on. In Docker it must stay 8080.'},
