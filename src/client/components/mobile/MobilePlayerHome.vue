@@ -1,6 +1,7 @@
 <template>
   <div id="player-home" :ref="trackRoot"
-    :class="['mb-home', 'mb-home--' + screen, 'mb-setup-step-' + setupStep, {'mb-setup-last': setupStep >= setupSteps.length - 1,'mb-home--acting': acting, 'mb-home--placing': placing, 'mb-home--setup': isSetupPhase, 'mb-home--peekable': peekable, 'mb-home--peek-entering': peekEntering, 'mb-home--peek-leaving': peekLeaving}]">
+    :class="['mb-home', 'mb-home--' + screen, 'mb-setup-step-' + setupStep, {'mb-setup-last': setupStep >= setupSteps.length - 1,'mb-home--acting': acting, 'mb-home--placing': placing, 'mb-home--setup': isSetupPhase, 'mb-home--peekable': peekable, 'mb-home--peek-entering': peekEntering, 'mb-home--peek-leaving': peekLeaving, 'mb-home--peek-dragging': peekDrag !== 0}]"
+    :style="peekDrag !== 0 ? {'--mb-peek-drag': peekDrag + 'px'} : undefined">
     <!-- Mobile player view (phone, tablet portrait and landscape): always just one screen, footer bar at the bottom.
          "Turn" opens the action menu as a sheet; inside a task the footer bar becomes the task bar
          (Cancel + Confirm/Pay for the input). -->
@@ -124,7 +125,7 @@
     <!-- The peeked screen is the regular, already mounted screen (v-show above), shown as a sheet: nothing is rendered twice -->
     <template v-if="peek !== undefined">
       <div class="mb-peek-backdrop" @click="closePeek"></div>
-      <MobilePeekHead :items="peekScreens" :active="peek" @select="peek = $event" @close="closePeek" />
+      <MobilePeekHead :items="peekScreens" :active="peek" @select="peek = $event" @close="closePeek" @drag="peekDrag = $event" />
     </template>
 
     <MobileCardZoom v-if="zoomedCard !== undefined" :count="zoomedCardList.length" :index="zoomedCardIndex" :origin="zoomedCardOrigin"
@@ -231,6 +232,8 @@ type DataModel = {
   // Slide-in/slide-out of the sheet; only on opening and closing, not when switching screens inside it
   peekEntering: boolean;
   peekLeaving: boolean;
+  // Drag distance of the grab strip in px; the sheet follows the finger
+  peekDrag: number;
 };
 
 type SetupStep = {title: string, badge: string, done: boolean};
@@ -313,6 +316,7 @@ export default defineComponent({
       peek: undefined,
       peekEntering: false,
       peekLeaving: false,
+      peekDrag: 0,
     };
   },
   components: {
@@ -684,6 +688,7 @@ export default defineComponent({
       this.peek = undefined;
       this.peekEntering = false;
       this.peekLeaving = false;
+      this.peekDrag = 0;
     },
     onPeekKeydown(event: KeyboardEvent) {
       if (event.key === 'Escape' && this.peek !== undefined) {

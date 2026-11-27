@@ -53,7 +53,7 @@
 @mb-peek-space: @mb-peek-width + 22px;
 // Quick-peek sheet: starts below the top bar plus a strip of the task, so it is clear the task is still there
 @mb-peek-top: @mb-top-height + 40px;
-@mb-peek-head-height: 62px;
+@mb-peek-head-height: 74px;
 // Currency icon in the input field when paying
 @mb-payment-icon: 28px;
 // Height of the game-end notice above the planet (center of the board in the Mars screen)
@@ -2288,7 +2288,7 @@ html.tm-mobile {
     top: @mb-peek-top;
     z-index: 32;
     height: @mb-peek-head-height;
-    padding: 10px 12px;
+    padding: 22px 12px 10px;
     display: flex;
     gap: 10px;
     border-radius: 20px 20px 0 0;
@@ -2303,6 +2303,42 @@ html.tm-mobile {
     overflow-y: auto;
     overscroll-behavior: contain;
     padding-bottom: calc(24px + env(safe-area-inset-bottom));
+  }
+
+  // Grab strip over the whole head width (large touch area), the visible bar sits at the top centre
+  .mb-peek-grab {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 22px;
+    display: flex;
+    justify-content: center;
+    padding-top: 8px;
+    box-sizing: border-box;
+    cursor: grab;
+    touch-action: none;
+
+    span {
+      width: 40px;
+      height: 5px;
+      border-radius: 3px;
+      background: #4a5068;
+    }
+  }
+
+  // While dragging the sheet follows the finger; released, it springs back (or closes, MobilePeekHead.vue)
+  .mb-peek-head,
+  .mb-screen.mb-screen--peek {
+    transform: translateY(var(--mb-peek-drag, 0px));
+    transition: transform 0.2s ease;
+  }
+
+  .mb-home--peek-dragging {
+    .mb-peek-head,
+    .mb-screen.mb-screen--peek {
+      transition: none;
+    }
   }
 
   .mb-peek-segments {
