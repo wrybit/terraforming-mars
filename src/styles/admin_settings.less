@@ -1254,3 +1254,42 @@
   background: none;
   accent-color: #908fdb;
 }
+
+// Export tab: what was shared so far – same card as "What the AI can play", facts as label and value in two columns
+.training-share-status {
+  margin-top: @server-settings-row-gap;
+  padding: 16px 18px 18px;
+  border: 1px solid @server-settings-line;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.training-share-facts {
+  display: grid;
+  grid-template-columns: max-content max-content;
+  gap: 4px 24px;
+  margin: 8px 0 0;
+  font-size: 13px;
+
+  dt {
+    color: @server-settings-dim;
+  }
+
+  dd {
+    margin: 0;
+  }
+
+  // The key start is information, not a highlighted code sample
+  code {
+    padding: 0;
+    background: none;
+    color: inherit;
+    font-size: 12px;
+  }
+}
+
+.training-share-problem {
+  margin: 12px 0 0;
+  color: #ff8a80;
+  font-size: 13px;
+}

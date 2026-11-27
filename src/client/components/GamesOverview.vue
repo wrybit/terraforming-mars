@@ -43,10 +43,11 @@
         <p v-else class="games-overview-note" v-i18n>No games yet.</p>
       </section>
       <p v-if="deleteError !== ''" class="games-overview-card games-overview-note games-overview-note--error">{{ deleteError }}</p>
+      <p v-if="shareError !== ''" class="games-overview-card games-overview-note games-overview-note--error">{{ shareError }}</p>
       <!-- Live, open and finished games each in a card of their own (gameGroups.ts) -->
       <template v-if="status === 'done'">
         <GamesTableCard v-for="group in groups" :key="group.key" :groupKey="group.key" :title="group.title" :games="group.games"
-          :columns="columns" :deletingIds="deletingIds" @delete="deleteGame">
+          :columns="columns" :deletingIds="deletingIds" :shareStateOf="shareStateOf" @delete="deleteGame" @share="shareGame">
           <!-- Bulk delete only where no one is online (bulkDelete.ts) -->
           <template v-if="group.key === 'open'" #actions>
             <DeleteGameButton v-for="key in bulkDeleteKeys" :key="key" :label="bulkDeleteLabels[key]"
@@ -76,6 +77,8 @@ import {PLAYER_COLUMNS, PlayerColumn} from '@/client/components/admin/playerColu
 import {LineupWinCounts, winCountsByLineup} from '@/client/components/admin/winCounts';
 import DeleteGameButton from '@/client/components/admin/DeleteGameButton.vue';
 import {BULK_DELETE_LABELS, BulkDeleteKey, bulkDeleteIds} from '@/client/components/admin/bulkDelete';
+import {GameShareState, gameShareState} from '@/client/components/admin/trainingShareState';
+import {TrainingShareRequest, TrainingShareResult, TrainingShareStatus} from '@/common/trainingShare/TrainingShareModel';
 
 type DataModel = {
   summaries: Array<AdminGameSummary>;
@@ -84,6 +87,10 @@ type DataModel = {
   bulkDeleting: BulkDeleteKey | undefined;
   deleteError: string;
   loadFailureText: string;
+  /** Sharing for the AI training (tab Export): undefined until loaded or if it fails, then no game offers it */
+  shareStatus: TrainingShareStatus | undefined;
+  sharingIds: Array<string>;
+  shareError: string;
 };
 
 export default defineComponent({
@@ -104,6 +111,9 @@ export default defineComponent({
       bulkDeleting: undefined,
       deleteError: '',
       loadFailureText: '',
+      shareStatus: undefined,
+      sharingIds: [],
+      shareError: '',
     };
   },
   computed: {
@@ -146,7 +156,35 @@ export default defineComponent({
     percentText(wins: number, games: number): string {
       return `${Math.round(wins / games * 100)} %`;
     },
+    shareStateOf(summary: AdminGameSummary): GameShareState | undefined {
+      return gameShareState(summary, this.shareStatus, this.sharingIds);
+    },
+    async loadShareStatus() {
+      try {
+        this.shareStatus = await (await fetchOrFail(paths.API_ADMIN_TRAINING_SHARE)).json();
+      } catch {
+        // Without the state the list simply offers no sharing; the Export tab names the problem
+        this.shareStatus = undefined;
+      }
+    },
+    async shareGame(id: string) {
+      this.sharingIds.push(id);
+      this.shareError = '';
+      try {
+        const body: TrainingShareRequest = {gameId: id};
+        const result: TrainingShareResult = await (await fetchOrFail(paths.API_ADMIN_TRAINING_SHARE, {method: 'POST', body: JSON.stringify(body)})).json();
+        if (!result.ok) {
+          this.shareError = `${translateTextWithParams('Could not share ${0}', [id])}: ${result.message}`;
+        }
+      } catch (error) {
+        this.shareError = `${translateTextWithParams('Could not share ${0}', [id])}: ${describeFailure(failureOf(error))}`;
+      } finally {
+        this.sharingIds = this.sharingIds.filter((sharingId) => sharingId !== id);
+        await this.loadShareStatus();
+      }
+    },
     async loadGames() {
+      void this.loadShareStatus();
       try {
         const response = await fetchOrFail(paths.API_ADMIN_GAMES);
         this.summaries = await response.json();

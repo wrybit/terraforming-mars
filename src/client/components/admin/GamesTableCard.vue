@@ -25,7 +25,8 @@
           </tr>
         </thead>
         <tbody>
-          <GameOverview v-for="summary in games" :key="summary.id" :summary="summary" :columns="shownColumns" :isDeleting="deletingIds.includes(summary.id)" :nowMs="nowMs" @delete="$emit('delete', $event)" />
+          <GameOverview v-for="summary in games" :key="summary.id" :summary="summary" :columns="shownColumns" :isDeleting="deletingIds.includes(summary.id)" :nowMs="nowMs"
+            :shareState="shareStateOf(summary)" @delete="$emit('delete', $event)" @share="$emit('share', $event)" />
         </tbody>
       </table>
     </div>
@@ -40,6 +41,7 @@ import {PlayerColumn} from '@/client/components/admin/playerColumns';
 import {GameGroupKey} from '@/client/components/admin/gameGroups';
 import {translateText, translateTextWithParams} from '@/client/directives/i18n';
 import {ColumnFit, ColumnFitMeasure, fitColumns} from '@/client/components/admin/columnFit';
+import {GameShareState} from '@/client/components/admin/trainingShareState';
 
 // Space between a column's widest content and its neighbour, so chips and labels never touch
 const columnBreathingRoom = 8;
@@ -53,8 +55,10 @@ export default defineComponent({
     games: {type: Array as PropType<ReadonlyArray<AdminGameSummary>>, required: true},
     columns: {type: Array as PropType<ReadonlyArray<PlayerColumn>>, required: true},
     deletingIds: {type: Array as PropType<ReadonlyArray<string>>, required: true},
+    // Sharing for the AI training (trainingShareState.ts); without it no game offers "Share"
+    shareStateOf: {type: Function as PropType<(summary: AdminGameSummary) => GameShareState | undefined>, default: () => undefined},
   },
-  emits: ['delete'],
+  emits: ['delete', 'share'],
   data() {
     return {
       isCovered: false,
@@ -127,9 +131,11 @@ export default defineComponent({
       // One pixel tolerance: browsers round scroll positions on zoomed or HiDPI screens
       const hiddenRight = scroll.scrollWidth - scroll.clientWidth - scroll.scrollLeft;
       this.isCovered = hiddenRight > 1;
-      const button = scroll.querySelector<HTMLElement>('.games-overview-delete');
-      if (button !== null && button.offsetWidth > 0) {
-        this.actionsWidth = button.offsetWidth;
+      // The widest row of buttons (Share and Delete, or Delete alone) sets the width of the sticky column
+      const rows = [...scroll.querySelectorAll<HTMLElement>('.games-overview-actions-row')].map((row) => row.offsetWidth);
+      const widest = Math.max(0, ...rows);
+      if (widest > 0) {
+        this.actionsWidth = widest;
       }
       this.measureColumns(scroll);
     },

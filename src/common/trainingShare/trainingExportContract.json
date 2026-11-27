@@ -1,0 +1,29 @@
+{
+  "format": "tm-training-export",
+  "version": 1,
+  "uploadHeader": "x-tm-share-key",
+  "fields": {
+    "format": "string",
+    "version": "number",
+    "gameId": "string",
+    "exportedAt": "string",
+    "anonymous": "boolean",
+    "meta": "object",
+    "saves": "array",
+    "decisions": "array",
+    "feedback": "array"
+  },
+  "saveFields": {
+    "saveId": "number",
+    "game": "object"
+  },
+  "idPattern": "^[gps][0-9a-f]{12}$",
+  "shareKeyPattern": "^[0-9a-f]{64}$",
+  "limits": {
+    "compressedBytes": 31457280,
+    "jsonBytes": 314572800,
+    "saves": 5000,
+    "decisions": 200000,
+    "feedback": 5000
+  }
+}

@@ -1,0 +1,30 @@
+import * as path from 'path';
+import {TRAINING_SHARE_DEFAULT_URL, TrainingShareMode} from '../../common/trainingShare/TrainingShareModel';
+
+// The .env settings of the Export tab (common/admin/serverSettings.ts); read at every use, they take effect at once
+
+export function trainingShareMode(): TrainingShareMode {
+  const mode = process.env.TRAINING_SHARE;
+  return mode === 'manual' || mode === 'auto' ? mode : '';
+}
+
+/** Anonymous unless switched off: the safe choice is the default */
+export function trainingShareAnonymous(): boolean {
+  const value = (process.env.TRAINING_SHARE_ANONYMOUS ?? '').toLowerCase();
+  return value !== 'false' && value !== '0';
+}
+
+export function trainingShareUrl(): string {
+  return process.env.TRAINING_SHARE_URL || TRAINING_SHARE_DEFAULT_URL;
+}
+
+/**
+ * Folder of the decision logs: the AI setting if set, otherwise db/decisions while sharing is on, so that shared
+ * games carry the decisions too. Undefined: nothing is recorded.
+ */
+export function decisionLogDirectory(): string | undefined {
+  if (process.env.AI_DECISION_LOG_DIR) {
+    return process.env.AI_DECISION_LOG_DIR;
+  }
+  return trainingShareMode() === '' ? undefined : path.resolve(process.cwd(), 'db', 'decisions');
+}
