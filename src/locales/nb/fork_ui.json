@@ -820,7 +820,6 @@
   "Folder for decision logs": "Mappe for beslutningslogger",
   "For development: inconsistent game states raise an error instead of a log line.": "For utvikling: inkonsistente spilltilstander gir en feil i stedet for en loggrad.",
   "Game memory": "Spill i minnet",
-  "How many games one address may create, e.g. {\"limit\":3,\"per\":\"10m\"} or a list of such limits. Empty: unlimited.": "Hvor mange spill én adresse kan opprette, f.eks. {\"limit\":3,\"per\":\"10m\"} eller en liste med slike grenser. Tom: ubegrenset.",
   "IP addresses separated by spaces that get no answer.": "IP-adresser, skilt med mellomrom, som ikke får svar.",
   "It is the value of SERVER_ID in the .env file of the server.": "Det er verdien av SERVER_ID i .env-filen på serveren.",
   "List of games": "Spilliste",
@@ -1726,5 +1725,17 @@
   "Address the games are sent to, the same for every server. The test checks that this server gets through to it (firewall, proxy).": "Adressen spillene sendes til, den samme for alle servere. Testen sjekker at denne serveren når fram (brannmur, proxy).",
   "Test connection": "Test tilkoblingen",
   "The receiver can be reached.": "Mottakeren kan nås.",
-  "Not reachable:": "Kan ikke nås:"
+  "Not reachable:": "Kan ikke nås:",
+  "How many games one address may create. Every limit applies; without a limit there is no restriction.": "Hvor mange spill én adresse kan opprette. Alle grenser gjelder; uten grense er det ingen begrensning.",
+  "games per": "spill per",
+  "minutes": "minutter",
+  "hours": "timer",
+  "days": "dager",
+  "Add limit": "Legg til grense",
+  "Remove limit": "Fjern grense",
+  "Unlimited": "Ubegrenset",
+  "Number of games": "Antall spill",
+  "Time span": "Tidsrom",
+  "Unit": "Enhet",
+  "The saved value could not be read; saving replaces it.": "Den lagrede verdien kan ikke leses; lagring erstatter den."
 }

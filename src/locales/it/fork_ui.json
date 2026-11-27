@@ -1674,7 +1674,6 @@
   "Folder for decision logs": "Cartella per i log delle decisioni",
   "For development: inconsistent game states raise an error instead of a log line.": "Per lo sviluppo: gli stati di gioco incoerenti generano un errore invece di una riga di log.",
   "Game memory": "Partite in memoria",
-  "How many games one address may create, e.g. {\"limit\":3,\"per\":\"10m\"} or a list of such limits. Empty: unlimited.": "Quante partite può creare un indirizzo, ad es. {\"limit\":3,\"per\":\"10m\"} o un elenco di tali limiti. Vuoto: illimitato.",
   "IP addresses separated by spaces that get no answer.": "Indirizzi IP separati da spazi che non ricevono risposta.",
   "It is the value of SERVER_ID in the .env file of the server.": "È il valore di SERVER_ID nel file .env del server.",
   "List of games": "Elenco delle partite",
@@ -2626,5 +2625,17 @@
   "Address the games are sent to, the same for every server. The test checks that this server gets through to it (firewall, proxy).": "Indirizzo a cui vengono inviate le partite, lo stesso per ogni server. Il test verifica che questo server lo raggiunga (firewall, proxy).",
   "Test connection": "Prova connessione",
   "The receiver can be reached.": "Il ricevitore è raggiungibile.",
-  "Not reachable:": "Non raggiungibile:"
+  "Not reachable:": "Non raggiungibile:",
+  "How many games one address may create. Every limit applies; without a limit there is no restriction.": "Quante partite può creare un indirizzo. Vale ogni limite; senza limiti non c'è restrizione.",
+  "games per": "partite ogni",
+  "minutes": "minuti",
+  "hours": "ore",
+  "days": "giorni",
+  "Add limit": "Aggiungi limite",
+  "Remove limit": "Rimuovi limite",
+  "Unlimited": "Illimitato",
+  "Number of games": "Numero di partite",
+  "Time span": "Periodo",
+  "Unit": "Unità",
+  "The saved value could not be read; saving replaces it.": "Il valore salvato non è leggibile; salvando verrà sostituito."
 }

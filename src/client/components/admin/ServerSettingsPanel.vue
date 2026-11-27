@@ -51,6 +51,8 @@
                           :modelValue="values[setting.key] ?? ''" :options="segmentOptions(setting)" @update:modelValue="setValue(setting.key, String($event))" />
                         <ServerSettingImageField v-else-if="setting.kind === 'image'" :inputId="'server-setting-' + setting.key"
                           :value="values[setting.key] ?? ''" @update="setValue(setting.key, $event)" />
+                        <ServerSettingQuotaField v-else-if="setting.kind === 'quota'" :inputId="'server-setting-' + setting.key"
+                          :value="values[setting.key] ?? ''" @update="setValue(setting.key, $event)" />
                         <ServerSettingChoiceField v-else-if="setting.kind === 'choice'" :inputId="'server-setting-' + setting.key"
                           :value="values[setting.key] ?? ''" :choices="setting.choices ?? []"
                           :image="(choice: string) => setting.choiceImage?.(choice, values) ?? ''" @update="setValue(setting.key, $event)" />
@@ -112,6 +114,7 @@ import {restartServer} from '@/client/components/admin/adminActions';
 import {vDockedTab} from '@/client/directives/DockedTab';
 import ServerSettingImageField from '@/client/components/admin/ServerSettingImageField.vue';
 import ServerSettingChoiceField from '@/client/components/admin/ServerSettingChoiceField.vue';
+import ServerSettingQuotaField from '@/client/components/admin/ServerSettingQuotaField.vue';
 import SegmentedControl from '@/client/components/create/SegmentedControl.vue';
 import ServerSettingGrid from '@/client/components/admin/ServerSettingGrid.vue';
 import AiSupportOverview from '@/client/components/admin/AiSupportOverview.vue';
@@ -176,7 +179,7 @@ function isOnValue(value: string | undefined): boolean {
 
 export default defineComponent({
   name: 'ServerSettingsPanel',
-  components: {TrainingShareStatusCard, TrainingShareReceiverRow, LoadingSpinner, ServerSettingImageField, ServerSettingChoiceField, ServerSettingGrid, SegmentedControl, AiSupportOverview, AiLoadGraph, ChatWordsPanel, PushPanel},
+  components: {TrainingShareStatusCard, TrainingShareReceiverRow, LoadingSpinner, ServerSettingImageField, ServerSettingChoiceField, ServerSettingQuotaField, ServerSettingGrid, SegmentedControl, AiSupportOverview, AiLoadGraph, ChatWordsPanel, PushPanel},
   directives: {dockedTab: vDockedTab},
   props: {
     /** Show only this group, as a page of its own without tabs */

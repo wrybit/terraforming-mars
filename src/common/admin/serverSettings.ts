@@ -9,7 +9,7 @@ import {DEFAULT_FAVICON_COLOR, DEFAULT_FAVICON_ICON, FAVICON_COLORS, FAVICON_ICO
 
 // image: an address (http… or an uploaded file, see ApiAdminServerLogo) with upload button and preview
 // choice: one of fixed values, a drop-down with a picture per value (choices, choiceImage)
-export type ServerSettingKind = 'text' | 'number' | 'secret' | 'toggle' | 'image' | 'choice' | 'segmented';
+export type ServerSettingKind = 'text' | 'number' | 'secret' | 'toggle' | 'image' | 'choice' | 'segmented' | 'quota';
 
 export type ServerSettingChoice = {
   /** Value in the .env file; '' = the default (the line is removed) */
@@ -128,8 +128,9 @@ const BASE_SETTINGS: ReadonlyArray<ServerSettingDefinition> = [
   {key: 'GAME_CACHE', group: 'Games', kind: 'text', label: 'Game memory',
     description: 'When games are removed from memory, e.g. sweep=auto;eviction_age=15m;idle_age=1h;sweep_freq=5m. Empty: never.'},
 
-  {key: 'GAME_QUOTA', group: 'Limits', kind: 'text', label: 'New games per address',
-    description: 'How many games one address may create, e.g. {"limit":3,"per":"10m"} or a list of such limits. Empty: unlimited.'},
+  // Rows "5 games per 10 minutes" on the page, JSON in the .env (common/admin/gameQuota.ts)
+  {key: 'GAME_QUOTA', group: 'Limits', kind: 'quota', label: 'New games per address',
+    description: 'How many games one address may create. Every limit applies; without a limit there is no restriction.'},
   {key: 'MIN_RESPONSE_INTERVAL_MS', group: 'Limits', kind: 'number', label: 'Minimum time between inputs (ms)', placeholder: '0',
     slider: {minimum: 0, maximum: 2000, step: 50},
     description: 'Faster inputs of a player are refused (against bots). 0: no limit.'},

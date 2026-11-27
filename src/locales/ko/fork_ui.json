@@ -685,7 +685,6 @@
   "For development: inconsistent game states raise an error instead of a log line.": "개발용: 게임 상태가 맞지 않으면 로그 대신 오류를 발생시킵니다.",
   "Game memory": "게임 메모리",
   "Hollandia": "홀란디아",
-  "How many games one address may create, e.g. {\"limit\":3,\"per\":\"10m\"} or a list of such limits. Empty: unlimited.": "한 주소에서 만들 수 있는 게임 수. 예: {\"limit\":3,\"per\":\"10m\"} 또는 이런 제한의 목록. 비우면: 무제한.",
   "IP addresses separated by spaces that get no answer.": "응답하지 않을 IP 주소, 공백으로 구분.",
   "It is the value of SERVER_ID in the .env file of the server.": "서버 .env 파일의 SERVER_ID 값입니다.",
   "Kelvin": "켈빈",
@@ -1614,5 +1613,17 @@
   "Address the games are sent to, the same for every server. The test checks that this server gets through to it (firewall, proxy).": "게임이 전송되는 주소로, 모든 서버에서 같습니다. 테스트는 이 서버가 연결할 수 있는지 확인합니다(방화벽, 프록시).",
   "Test connection": "연결 테스트",
   "The receiver can be reached.": "수신 서버에 연결할 수 있습니다.",
-  "Not reachable:": "연결 불가:"
+  "Not reachable:": "연결 불가:",
+  "How many games one address may create. Every limit applies; without a limit there is no restriction.": "한 주소가 만들 수 있는 게임 수입니다. 모든 제한이 적용되며, 제한이 없으면 무제한입니다.",
+  "games per": "게임 /",
+  "minutes": "분",
+  "hours": "시간",
+  "days": "일",
+  "Add limit": "제한 추가",
+  "Remove limit": "제한 삭제",
+  "Unlimited": "무제한",
+  "Number of games": "게임 수",
+  "Time span": "기간",
+  "Unit": "단위",
+  "The saved value could not be read; saving replaces it.": "저장된 값을 읽을 수 없습니다. 저장하면 대체됩니다."
 }

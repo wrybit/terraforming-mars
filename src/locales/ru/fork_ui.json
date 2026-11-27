@@ -1254,7 +1254,6 @@
   "Game memory": "Память партий",
   "Head Start": "Фора",
   "Hollandia": "Голландия",
-  "How many games one address may create, e.g. {\"limit\":3,\"per\":\"10m\"} or a list of such limits. Empty: unlimited.": "Сколько партий может создать один адрес, напр. {\"limit\":3,\"per\":\"10m\"} или список таких ограничений. Пусто: без ограничений.",
   "IP addresses separated by spaces that get no answer.": "IP-адреса через пробел, которым сервер не отвечает.",
   "It is the value of SERVER_ID in the .env file of the server.": "Это значение SERVER_ID в файле .env на сервере.",
   "Kingdom of": "Королевство",
@@ -2233,5 +2232,17 @@
   "Address the games are sent to, the same for every server. The test checks that this server gets through to it (firewall, proxy).": "Адрес, на который отправляются партии, одинаковый для всех серверов. Тест проверяет, доступен ли он с этого сервера (брандмауэр, прокси).",
   "Test connection": "Проверить связь",
   "The receiver can be reached.": "Получатель доступен.",
-  "Not reachable:": "Недоступен:"
+  "Not reachable:": "Недоступен:",
+  "How many games one address may create. Every limit applies; without a limit there is no restriction.": "Сколько партий может создать один адрес. Действуют все ограничения; без ограничений — без лимита.",
+  "games per": "партий за",
+  "minutes": "минут",
+  "hours": "часов",
+  "days": "дней",
+  "Add limit": "Добавить ограничение",
+  "Remove limit": "Удалить ограничение",
+  "Unlimited": "Без ограничений",
+  "Number of games": "Число партий",
+  "Time span": "Период",
+  "Unit": "Единица",
+  "The saved value could not be read; saving replaces it.": "Сохранённое значение не читается; при сохранении оно будет заменено."
 }

@@ -1,4 +1,5 @@
 import {ServerSettingDefinition} from './serverSettings';
+import {isValidGameQuotaLimit, parseGameQuota} from './gameQuota';
 
 /**
  * Whether a value may be saved for the setting. Number settings take whole numbers only, at least their minimum:
@@ -11,6 +12,9 @@ export function isValidSettingValue(definition: ServerSettingDefinition, value: 
   }
   if (definition.kind === 'choice' || definition.kind === 'segmented') {
     return (definition.choices ?? []).some((choice) => choice.value === value);
+  }
+  if (definition.kind === 'quota') {
+    return parseGameQuota(value)?.every(isValidGameQuotaLimit) === true;
   }
   if (definition.kind !== 'number') {
     return true;

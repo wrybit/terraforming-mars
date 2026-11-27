@@ -633,7 +633,6 @@
   "Folder for decision logs": "Mappa a döntésnaplókhoz",
   "For development: inconsistent game states raise an error instead of a log line.": "Fejlesztéshez: inkonzisztens játékállapot naplósor helyett hibát vált ki.",
   "Game memory": "Játszmák a memóriában",
-  "How many games one address may create, e.g. {\"limit\":3,\"per\":\"10m\"} or a list of such limits. Empty: unlimited.": "Hány játszmát hozhat létre egy cím, pl. {\"limit\":3,\"per\":\"10m\"} vagy ilyen korlátok listája. Üres: korlátlan.",
   "IP addresses separated by spaces that get no answer.": "Szóközzel elválasztott IP-címek, amelyek nem kapnak választ.",
   "It is the value of SERVER_ID in the .env file of the server.": "Ez a SERVER_ID értéke a szerver .env fájljában.",
   "Kingdom of": "Királyság:",
@@ -1544,5 +1543,17 @@
   "Address the games are sent to, the same for every server. The test checks that this server gets through to it (firewall, proxy).": "A cím, ahová a játszmák mennek, minden szerveren ugyanaz. A teszt ellenőrzi, hogy ez a szerver eléri-e (tűzfal, proxy).",
   "Test connection": "Kapcsolat tesztelése",
   "The receiver can be reached.": "A fogadó elérhető.",
-  "Not reachable:": "Nem elérhető:"
+  "Not reachable:": "Nem elérhető:",
+  "How many games one address may create. Every limit applies; without a limit there is no restriction.": "Hány játszmát hozhat létre egy cím. Minden korlát érvényes; korlát nélkül nincs megkötés.",
+  "games per": "játszma /",
+  "minutes": "perc",
+  "hours": "óra",
+  "days": "nap",
+  "Add limit": "Korlát hozzáadása",
+  "Remove limit": "Korlát törlése",
+  "Unlimited": "Korlátlan",
+  "Number of games": "Játszmák száma",
+  "Time span": "Időtartam",
+  "Unit": "Egység",
+  "The saved value could not be read; saving replaces it.": "A mentett érték nem olvasható; a mentés felülírja."
 }
