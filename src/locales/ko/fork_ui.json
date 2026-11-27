@@ -1685,5 +1685,14 @@
   "Feedback": "피드백",
   "System": "시스템",
   "Touch": "터치",
-  "Viewport": "뷰포트"
+  "Viewport": "뷰포트",
+  "this card": "이 카드",
+  "opponents": "상대",
+  "on Mars": "화성 위",
+  "off Mars": "화성 밖",
+  "in play": "게임 중",
+  "ever played": "총 사용",
+  "Bonus at": "보너스 지점",
+  "max. ${0}": "최대 ${0}",
+  "protected": "보호됨"
 }

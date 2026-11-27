@@ -1615,5 +1615,14 @@
   "Feedback": "Visszajelzés",
   "System": "Rendszer",
   "Touch": "Érintés",
-  "Viewport": "Nézetablak"
+  "Viewport": "Nézetablak",
+  "this card": "ez a kártya",
+  "opponents": "ellenfelek",
+  "on Mars": "a Marson",
+  "off Mars": "a Marson kívül",
+  "in play": "játékban",
+  "ever played": "összesen kijátszva",
+  "Bonus at": "Bónusz itt:",
+  "max. ${0}": "legfeljebb ${0}",
+  "protected": "védett"
 }

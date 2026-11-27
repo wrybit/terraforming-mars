@@ -1482,5 +1482,14 @@
   "Feedback": "Retour",
   "System": "Système",
   "Touch": "Tactile",
-  "Viewport": "Zone d'affichage"
+  "Viewport": "Zone d'affichage",
+  "this card": "cette carte",
+  "opponents": "adversaires",
+  "on Mars": "sur Mars",
+  "off Mars": "hors de Mars",
+  "in play": "en jeu",
+  "ever played": "jouées au total",
+  "Bonus at": "Bonus à",
+  "max. ${0}": "au plus ${0}",
+  "protected": "protégé"
 }

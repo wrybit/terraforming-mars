@@ -59,7 +59,7 @@ export abstract class SelectCardToPlay<T extends IProjectCard | IStandardProject
       title: this.title,
       buttonLabel: this.buttonLabel,
       type: 'projectCard',
-      cards: cardsToModel(player, this.cards, {showCalculatedCost: true, extras: this.extras, enabled: this.config?.enabled}),
+      cards: cardsToModel(player, this.cards, {showCalculatedCost: true, extras: this.extras, enabled: this.config?.enabled, showImpact: true}),
       microbes: player.getSpendable('microbes'),
       floaters: player.getSpendable('floaters'),
       paymentOptions: {

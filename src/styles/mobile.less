@@ -1828,6 +1828,16 @@ html.tm-mobile {
       margin: 0 !important;
     }
 
+    // Effect preview (card_impact.less) like the payment area: edge to edge, one column, its own surface
+    .card-impact {
+      grid-template-columns: minmax(0, 1fr);
+      margin: 0 -12px 0 -@mb-footer-left !important;
+      padding: 10px 12px 8px;
+      border-top: 1px solid @mb-line;
+      border-bottom: 0;
+      background: @mb-surface;
+    }
+
     // Payment area edge to edge across the full width (footer starts right of "Back")
     .payments_form {
       margin: 0 -12px 0 -@mb-footer-left !important;
@@ -2227,7 +2237,8 @@ html.tm-mobile {
       padding-right: @mb-peek-space !important;
     }
 
-    .payments_form {
+    .payments_form,
+    .card-impact {
       margin-right: -@mb-peek-space !important;
     }
 
@@ -2255,6 +2266,9 @@ html.tm-mobile {
     margin: 0 auto;
     box-sizing: border-box;
     background: #161a23;
+    // While dragging the sheet follows the finger; released, it springs back (or closes, MobilePeekHead.vue)
+    transform: translateY(var(--mb-peek-drag, 0px));
+    transition: transform 0.2s ease;
   }
 
   .mb-peek-head {
@@ -2300,13 +2314,7 @@ html.tm-mobile {
     }
   }
 
-  // While dragging the sheet follows the finger; released, it springs back (or closes, MobilePeekHead.vue)
-  .mb-peek-head,
-  .mb-screen.mb-screen--peek {
-    transform: translateY(var(--mb-peek-drag, 0px));
-    transition: transform 0.2s ease;
-  }
-
+  // While dragging: no transition, the sheet sticks to the finger
   .mb-home--peek-dragging {
     .mb-peek-head,
     .mb-screen.mb-screen--peek {

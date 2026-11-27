@@ -2417,5 +2417,14 @@
   "Feedback": "反馈",
   "System": "系统",
   "Touch": "触屏",
-  "Viewport": "视口"
+  "Viewport": "视口",
+  "this card": "此卡",
+  "opponents": "对手",
+  "on Mars": "火星上",
+  "off Mars": "火星外",
+  "in play": "场上",
+  "ever played": "累计打出",
+  "Bonus at": "奖励于",
+  "max. ${0}": "最多 ${0}",
+  "protected": "受保护"
 }

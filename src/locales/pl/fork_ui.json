@@ -2229,5 +2229,14 @@
   "optional": "opcjonalnie",
   "Feedback": "Opinia",
   "Touch": "Dotyk",
-  "Viewport": "Obszar widoku"
+  "Viewport": "Obszar widoku",
+  "this card": "ta karta",
+  "opponents": "przeciwnicy",
+  "on Mars": "na Marsie",
+  "off Mars": "poza Marsem",
+  "in play": "w grze",
+  "ever played": "zagrane łącznie",
+  "Bonus at": "Premia przy",
+  "max. ${0}": "maks. ${0}",
+  "protected": "chronione"
 }

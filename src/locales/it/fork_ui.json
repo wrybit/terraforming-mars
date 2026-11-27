@@ -2691,5 +2691,14 @@
   "Becomes a public issue on GitHub, submitted with your GitHub account.": "Diventa una issue pubblica su GitHub, inviata con il tuo account GitHub.",
   "optional": "facoltativo",
   "System": "Sistema",
-  "Viewport": "Area visibile"
+  "Viewport": "Area visibile",
+  "this card": "questa carta",
+  "opponents": "avversari",
+  "on Mars": "su Marte",
+  "off Mars": "fuori da Marte",
+  "in play": "in gioco",
+  "ever played": "giocati in totale",
+  "Bonus at": "Bonus a",
+  "max. ${0}": "massimo ${0}",
+  "protected": "protetto"
 }

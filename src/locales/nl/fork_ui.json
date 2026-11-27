@@ -2054,5 +2054,14 @@
   "Becomes a public issue on GitHub, submitted with your GitHub account.": "Wordt een openbaar issue op GitHub, verstuurd met je GitHub-account.",
   "optional": "optioneel",
   "System": "Systeem",
-  "Touch": "Aanraking"
+  "Touch": "Aanraking",
+  "this card": "deze kaart",
+  "opponents": "tegenstanders",
+  "on Mars": "op Mars",
+  "off Mars": "buiten Mars",
+  "in play": "in het spel",
+  "ever played": "in totaal gespeeld",
+  "Bonus at": "Bonus bij",
+  "max. ${0}": "maximaal ${0}",
+  "protected": "beschermd"
 }

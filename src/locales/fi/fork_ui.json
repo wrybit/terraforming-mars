@@ -1431,5 +1431,14 @@
   "Feedback": "Palaute",
   "System": "Järjestelmä",
   "Touch": "Kosketus",
-  "Viewport": "Näkymä"
+  "Viewport": "Näkymä",
+  "this card": "tämä kortti",
+  "opponents": "vastustajat",
+  "on Mars": "Marsissa",
+  "off Mars": "Marsin ulkopuolella",
+  "in play": "pelissä",
+  "ever played": "pelattu yhteensä",
+  "Bonus at": "Bonus kohdassa",
+  "max. ${0}": "enint. ${0}",
+  "protected": "suojattu"
 }

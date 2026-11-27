@@ -2708,5 +2708,14 @@
   "Feedback": "Comentarios",
   "System": "Sistema",
   "Touch": "Táctil",
-  "Viewport": "Área visible"
+  "Viewport": "Área visible",
+  "this card": "esta carta",
+  "opponents": "rivales",
+  "on Mars": "en Marte",
+  "off Mars": "fuera de Marte",
+  "in play": "en juego",
+  "ever played": "jugados en total",
+  "Bonus at": "Bonificación en",
+  "max. ${0}": "máx. ${0}",
+  "protected": "protegido"
 }
