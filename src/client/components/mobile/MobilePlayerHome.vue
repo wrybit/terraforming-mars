@@ -1,6 +1,6 @@
 <template>
   <div id="player-home" :ref="trackRoot"
-    :class="['mb-home', 'mb-home--' + screen, 'mb-setup-step-' + setupStep, {'mb-setup-last': setupStep >= setupSteps.length - 1,'mb-home--acting': acting, 'mb-home--placing': placing, 'mb-home--setup': isSetupPhase}]">
+    :class="['mb-home', 'mb-home--' + screen, 'mb-setup-step-' + setupStep, {'mb-setup-last': setupStep >= setupSteps.length - 1,'mb-home--acting': acting, 'mb-home--placing': placing, 'mb-home--setup': isSetupPhase, 'mb-home--peekable': peekable, 'mb-home--peek-entering': peekEntering, 'mb-home--peek-leaving': peekLeaving}]">
     <!-- Mobile player view (phone, tablet portrait and landscape): always just one screen, footer bar at the bottom.
          "Turn" opens the action menu as a sheet; inside a task the footer bar becomes the task bar
          (Cancel + Confirm/Pay for the input). -->
@@ -14,7 +14,7 @@
     </MobileHeader>
 
     <main class="mb-main">
-      <MobileMarsScreen v-show="screen === 'mars'" ref="gameBoardView"
+      <MobileMarsScreen v-show="screen === 'mars' || peek === 'mars'" ref="gameBoardView" :class="{'mb-screen--peek': peek === 'mars'}"
         :game="game" :players="playerView.players" :participantId="playerView.id" :tileView="tileView"
         :acting="acting" :bannerTitle="bannerTitle" :viewerColor="thisPlayer.color"
         @toggleTileView="cycleTileView()" @showMilestones="showMilestones">
@@ -49,13 +49,13 @@
       </section>
 
       <!-- From three players on, the tables scroll horizontally beneath sticky icon columns (mobile.less) -->
-      <section v-show="screen === 'players'" :class="['mb-screen', 'mb-screen--players', {'mb-screen--players-scroll': playerView.players.length > 2}]"
+      <section v-show="screen === 'players' || peek === 'players'" :class="['mb-screen', 'mb-screen--players', {'mb-screen--players-scroll': playerView.players.length > 2, 'mb-screen--peek': peek === 'players'}]"
         @click.capture="zoomCard" @scroll.capture="markHorizontalScroll">
         <SetupTurnOrder v-if="isSetupPhase" :players="playerView.players" />
         <MobilePlayersPanel v-else :viewModel="playerView" :viewerColor="thisPlayer.color" v-model:segment="playersSegment" />
       </section>
 
-      <section v-show="screen === 'log'" class="mb-screen mb-screen--log">
+      <section v-show="screen === 'log' || peek === 'log'" :class="['mb-screen', 'mb-screen--log', {'mb-screen--peek': peek === 'log'}]">
         <LogPanel v-if="!isSetupPhase" :viewModel="playerView" zoomCarousel @spaceClicked="showSpace" @drawnCards="showDrawnCards" @drawnCardsClosed="drawnCardsClosed" />
       </section>
 
@@ -106,7 +106,19 @@
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5" /><path d="M15.5 15.5L21 21M10.5 7.5v6M7.5 10.5h6" /></svg>
         </button>
       </template>
+      <!-- Quick peek right of the confirm button: Mars and players without leaving the task (the input stays as it is) -->
+      <div v-if="peekable" class="mb-peek-buttons">
+        <button v-for="item in peekButtons" :key="item.screen" type="button" :class="['mb-peek-button', 'mb-peek-button--' + item.screen]"
+          :aria-label="$t(item.label)" @click="openPeek(item.screen)">
+          <MobileGlyph :name="item.icon" />
+        </button>
+      </div>
     </div>
+    <!-- The peeked screen is the regular, already mounted screen (v-show above), shown as a sheet: nothing is rendered twice -->
+    <template v-if="peek !== undefined">
+      <div class="mb-peek-backdrop" @click="closePeek"></div>
+      <MobilePeekHead :items="peekScreens" :active="peek" @select="peek = $event" @close="closePeek" />
+    </template>
     <MobileNav v-else :items="navItems" :active="screen" :handCount="cardsInHandCount" @navigate="navigate">
       <template #turn>
         <!-- While the turn sheet is open (incl. sliding in/out), its own button moves with it; this one stays invisible -->
@@ -171,9 +183,16 @@ import {showCardInGrid} from '@/client/components/mobile/cardGrid';
 import MobileTaskHead from '@/client/components/mobile/MobileTaskHead.vue';
 import {actionTabRequest, requestedTabIndex} from '@/client/components/actionTabRequest';
 import {displayedOptionIndices} from '@/client/components/orOptionsDisplayed';
+import MobileGlyph from '@/client/components/mobile/MobileGlyph.vue';
+import MobilePeekHead from '@/client/components/mobile/MobilePeekHead.vue';
 
 // Root observers per instance (utils/instanceCleanup.ts), so a view built anew keeps its own
 const ROOT_OBSERVER = 'root';
+
+// Screens that can be peeked at from a task, and the slide duration of the sheet (@mb-sheet-duration in mobile.less)
+const PEEK_SCREENS: ReadonlyArray<MobileScreen> = ['mars', 'players', 'log'];
+const PEEK_DURATION = 320;
+let peekTimer = 0;
 
 // Visible footer area of the input (Confirm, Pay); fixed at the bottom, the content needs that much space below it
 const FOOTER_SELECTOR = '.mb-screen--turn .or-tab-footer, .mb-screen--turn .setup-summary';
@@ -207,6 +226,11 @@ type DataModel = {
   // Steps of the initial selection (read from the columns of SelectInitialCards) and the visible one
   setupSteps: Array<SetupStep>;
   setupStep: number;
+  // Screen shown as a quick-peek sheet over the task; undefined = no sheet
+  peek: MobileScreen | undefined;
+  // Slide-in/slide-out of the sheet; only on opening and closing, not when switching screens inside it
+  peekEntering: boolean;
+  peekLeaving: boolean;
 };
 
 type SetupStep = {title: string, badge: string, done: boolean};
@@ -286,6 +310,9 @@ export default defineComponent({
       zoomedCardScreen: undefined,
       setupSteps: [],
       setupStep: 0,
+      peek: undefined,
+      peekEntering: false,
+      peekLeaving: false,
     };
   },
   components: {
@@ -307,6 +334,8 @@ export default defineComponent({
     MobileCardZoom,
     MobileTurnButton,
     MobileTaskHead,
+    MobileGlyph,
+    MobilePeekHead,
     PlayerTimer,
   },
   computed: {
@@ -321,6 +350,17 @@ export default defineComponent({
     },
     navItems(): ReadonlyArray<MobileNavItem> {
       return MOBILE_NAV;
+    },
+    // Quick peek only inside a task of the turn screen; the initial selection has its own footer
+    peekable(): boolean {
+      return this.screen === 'turn' && !this.isSetupPhase && !this.placing && this.game.phase !== Phase.END;
+    },
+    peekScreens(): ReadonlyArray<MobileNavItem> {
+      return MOBILE_NAV.filter((item) => PEEK_SCREENS.includes(item.screen));
+    },
+    // In the task bar only Mars and players (space is short); the log is one tap away inside the sheet
+    peekButtons(): ReadonlyArray<MobileNavItem> {
+      return this.peekScreens.filter((item) => item.screen !== 'log');
     },
     // All cards that can be tapped: own hand, draft, played cards of all players
     knownCards(): Array<CardModel> {
@@ -424,13 +464,22 @@ export default defineComponent({
       this.inputTitle = undefined;
       this.$nextTick(() => this.refreshInputTitle());
     },
+    // Task left (done, cancelled, space selection, server update): the sheet belongs to the task and goes with it
+    peekable(peekable: boolean): void {
+      if (!peekable) {
+        this.resetPeek();
+      }
+    },
   },
   mounted() {
     // Read the title of an already rendered input (task header outside the action menu)
     this.$nextTick(() => this.refreshInputTitle());
+    document.addEventListener('keydown', this.onPeekKeydown);
   },
   beforeUnmount() {
     replaceCleanup(this, ROOT_OBSERVER);
+    document.removeEventListener('keydown', this.onPeekKeydown);
+    window.clearTimeout(peekTimer);
   },
   methods: {
     closeDevTools(): void {
@@ -598,11 +647,49 @@ export default defineComponent({
     },
     showMilestones() {
       this.playersSegment = 'ma';
-      this.go('players');
+      this.show('players');
     },
     showSpace(spaceId: SpaceId) {
-      this.go('mars');
+      this.show('mars');
       this.onSpaceClicked(spaceId);
+    },
+    // Jump to another screen from inside a screen (log → Mars, Mars → milestones): inside the sheet it stays a peek
+    show(screen: MobileScreen) {
+      if (this.peek !== undefined && PEEK_SCREENS.includes(screen)) {
+        this.peek = screen;
+      } else {
+        this.go(screen);
+      }
+    },
+    openPeek(screen: MobileScreen) {
+      window.clearTimeout(peekTimer);
+      this.peekLeaving = false;
+      this.peek = screen;
+      this.peekEntering = true;
+      peekTimer = window.setTimeout(() => {
+        this.peekEntering = false;
+      }, PEEK_DURATION);
+    },
+    closePeek() {
+      if (this.peek === undefined || this.peekLeaving) {
+        return;
+      }
+      window.clearTimeout(peekTimer);
+      this.peekEntering = false;
+      this.peekLeaving = true;
+      peekTimer = window.setTimeout(() => this.resetPeek(), PEEK_DURATION);
+    },
+    resetPeek() {
+      window.clearTimeout(peekTimer);
+      this.peek = undefined;
+      this.peekEntering = false;
+      this.peekLeaving = false;
+    },
+    onPeekKeydown(event: KeyboardEvent) {
+      if (event.key === 'Escape' && this.peek !== undefined) {
+        event.stopPropagation();
+        this.closePeek();
+      }
     },
     // Detect space selection (SelectSpace): then go straight to the large Mars; the input stays mounted in the background
     updatePlacing(root: HTMLElement) {
