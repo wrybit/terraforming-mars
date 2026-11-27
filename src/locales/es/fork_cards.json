@@ -1373,5 +1373,9 @@
   "Requires 2 corruption. Decrease <opp>any</opp> M€ production 2 steps. Increase your M€ production 1 step for every unit of corruption you have.": "Requiere 2 de corrupción. Reduce <opp>cualquier</opp> producción de M€ en 2. Aumenta tu producción de M€ en 1 por cada unidad de corrupción que tengas.",
   "Requires 1 corruption. Remove up to 2 resources <opp>from any card</opp>": "Requiere 1 de corrupción. Quita hasta 2 recursos <opp>de cualquier carta</opp>",
   "Remove up to 1 corruption <opp>from another player</opp>. Reveal 2 cards from the deck until you reveal 2 event cards. Take them into hand and discard the rest.": "Quita hasta 1 de corrupción <opp>a otro jugador</opp>. Revela cartas del mazo hasta revelar 2 cartas de evento. Añádelas a tu mano y descarta el resto.",
-  "Steal up to 4 M€, plus 1 extra M€ for each corruption resource you have, <opp>from any player</opp>.": "Roba hasta 4 M€, más 1 M€ adicional por cada recurso de corrupción que tengas, <opp>a cualquier jugador</opp>."
+  "Steal up to 4 M€, plus 1 extra M€ for each corruption resource you have, <opp>from any player</opp>.": "Roba hasta 4 M€, más 1 M€ adicional por cada recurso de corrupción que tengas, <opp>a cualquier jugador</opp>.",
+  "Place the ocean first": "Colocar primero el océano",
+  "Place the greenery first": "Colocar primero la vegetación",
+  "${0} could not place a greenery next to the ocean": "${0} no pudo colocar una vegetación junto al océano",
+  "This ocean adds erosion tiles, which may leave no space for the greenery. Placing the greenery first gives up its bonus for being next to the new ocean": "Este océano añade losetas de erosión, que pueden no dejar espacio para la vegetación. Colocar primero la vegetación renuncia a su bonificación por estar junto al nuevo océano"
 }

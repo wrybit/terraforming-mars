@@ -473,5 +473,9 @@
   "Requires 2 corruption. Decrease <opp>any</opp> M€ production 2 steps. Increase your M€ production 1 step for every unit of corruption you have.": "Benötigt 2 Korruption. Reduziere <opp>eine beliebige</opp> M€-Produktion um 2. Erhöhe deine M€-Produktion um 1 für jede Korruptionressource, die du hast.",
   "Requires 1 corruption. Remove up to 2 resources <opp>from any card</opp>": "Benötigt 1 Korruption. Entferne bis zu 2 Ressourcen <opp>von einer beliebigen karte</opp>",
   "Remove up to 1 corruption <opp>from another player</opp>. Reveal 2 cards from the deck until you reveal 2 event cards. Take them into hand and discard the rest.": "Entferne bis zu 1 Korruption <opp>von einem anderen Spieler</opp>. Ziehe 2 Karten, bis du 2 Ereigniskarten aufdeckst. Nimm sie auf die Hand und wirf den Rest ab.",
-  "Steal up to 4 M€, plus 1 extra M€ for each corruption resource you have, <opp>from any player</opp>.": "Klaue bis zu 4 M€, plus 1 zusätzliche M€ für jede Korruptionsressource, die du hast, <opp>von einem beliebigen Spieler</opp>."
+  "Steal up to 4 M€, plus 1 extra M€ for each corruption resource you have, <opp>from any player</opp>.": "Klaue bis zu 4 M€, plus 1 zusätzliche M€ für jede Korruptionsressource, die du hast, <opp>von einem beliebigen Spieler</opp>.",
+  "Place the ocean first": "Zuerst den Ozean platzieren",
+  "Place the greenery first": "Zuerst die Grünfläche platzieren",
+  "${0} could not place a greenery next to the ocean": "${0} konnte keine Grünfläche neben dem Ozean platzieren",
+  "This ocean adds erosion tiles, which may leave no space for the greenery. Placing the greenery first gives up its bonus for being next to the new ocean": "Dieser Ozean erzeugt Erosionsplättchen, die keinen Platz für die Grünfläche lassen könnten. Wer die Grünfläche zuerst platziert, verzichtet auf ihren Bonus neben dem neuen Ozean"
 }

@@ -1198,5 +1198,9 @@
   "Requires 2 corruption. Decrease <opp>any</opp> M€ production 2 steps. Increase your M€ production 1 step for every unit of corruption you have.": "需要 2 腐败。降低<opp>任意玩家</opp>的 M€ 产量 2 级。你每有 1 单位腐败，提升你的 M€ 产量 1 级。",
   "Requires 1 corruption. Remove up to 2 resources <opp>from any card</opp>": "需要 1 腐败。<opp>从任意卡牌上</opp>移除最多 2 个资源",
   "Remove up to 1 corruption <opp>from another player</opp>. Reveal 2 cards from the deck until you reveal 2 event cards. Take them into hand and discard the rest.": "移除<opp>另一名玩家</opp>最多 1 腐败。从牌库展示卡牌直到展示出 2 张事件卡。将它们收入手牌，弃掉其余。",
-  "Steal up to 4 M€, plus 1 extra M€ for each corruption resource you have, <opp>from any player</opp>.": "<opp>从任意玩家</opp>偷取最多 4 M€，你每有 1 个腐败资源额外偷取 1 M€。"
+  "Steal up to 4 M€, plus 1 extra M€ for each corruption resource you have, <opp>from any player</opp>.": "<opp>从任意玩家</opp>偷取最多 4 M€，你每有 1 个腐败资源额外偷取 1 M€。",
+  "Place the ocean first": "先放置海洋",
+  "Place the greenery first": "先放置森林",
+  "${0} could not place a greenery next to the ocean": "${0} 无法在海洋旁放置森林",
+  "This ocean adds erosion tiles, which may leave no space for the greenery. Placing the greenery first gives up its bonus for being next to the new ocean": "此海洋会添加腐蚀板块，可能导致没有空间放置森林。先放置森林则会失去其与新海洋相邻的奖励"
 }

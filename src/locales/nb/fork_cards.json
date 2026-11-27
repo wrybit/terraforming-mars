@@ -959,5 +959,9 @@
   "Requires 2 corruption. Decrease <opp>any</opp> M€ production 2 steps. Increase your M€ production 1 step for every unit of corruption you have.": "Krever 2 korrupsjon. Reduser <opp>en spillers</opp> M€-produksjon 2 steg. Øk din M€-produksjon 1 steg for hver enhet korrupsjon du har.",
   "Requires 1 corruption. Remove up to 2 resources <opp>from any card</opp>": "Krever 1 korrupsjon. Fjern opptil 2 ressurser <opp>fra et hvilket som helst kort</opp>",
   "Remove up to 1 corruption <opp>from another player</opp>. Reveal 2 cards from the deck until you reveal 2 event cards. Take them into hand and discard the rest.": "Fjern opptil 1 korrupsjon <opp>fra en annen spiller</opp>. Avslør kort fra kortstokken til du har avslørt 2 hendelseskort. Ta dem på hånden og kast resten.",
-  "Steal up to 4 M€, plus 1 extra M€ for each corruption resource you have, <opp>from any player</opp>.": "Stjel opptil 4 M€, pluss 1 ekstra M€ for hver korrupsjonsressurs du har, <opp>fra en spiller</opp>."
+  "Steal up to 4 M€, plus 1 extra M€ for each corruption resource you have, <opp>from any player</opp>.": "Stjel opptil 4 M€, pluss 1 ekstra M€ for hver korrupsjonsressurs du har, <opp>fra en spiller</opp>.",
+  "Place the ocean first": "Plasser havet først",
+  "Place the greenery first": "Plasser skogområdet først",
+  "${0} could not place a greenery next to the ocean": "${0} kunne ikke plassere et skogområde ved siden av havet",
+  "This ocean adds erosion tiles, which may leave no space for the greenery. Placing the greenery first gives up its bonus for being next to the new ocean": "Dette havet legger til erosjon-brikker, som kan gjøre at det ikke er plass til skogområdet. Plasserer du skogområdet først, mister du bonusen for å ligge ved siden av det nye havet"
 }

@@ -1417,5 +1417,9 @@
   "Requires 2 corruption. Decrease <opp>any</opp> M€ production 2 steps. Increase your M€ production 1 step for every unit of corruption you have.": "Необходимо 2 коррупции. Снизьте <opp>любой</opp> доход на 2. Повысьте свой доход на 1 за каждую вашу коррупцию.",
   "Requires 1 corruption. Remove up to 2 resources <opp>from any card</opp>": "Необходима 1 коррупция. Уберите до 2 ресурсов <opp>с любой карты</opp>",
   "Remove up to 1 corruption <opp>from another player</opp>. Reveal 2 cards from the deck until you reveal 2 event cards. Take them into hand and discard the rest.": "Уберите до 1 коррупции <opp>у другого игрока</opp>. Открывайте карты из колоды, пока не откроете 2 карты событий. Возьмите их в руку, остальные сбросьте.",
-  "Steal up to 4 M€, plus 1 extra M€ for each corruption resource you have, <opp>from any player</opp>.": "Украдите <opp>у любого игрока</opp> до 4 M€ плюс 1 M€ за каждую вашу коррупцию."
+  "Steal up to 4 M€, plus 1 extra M€ for each corruption resource you have, <opp>from any player</opp>.": "Украдите <opp>у любого игрока</opp> до 4 M€ плюс 1 M€ за каждую вашу коррупцию.",
+  "Place the ocean first": "Сначала выложить океан",
+  "Place the greenery first": "Сначала выложить озеленение",
+  "${0} could not place a greenery next to the ocean": "${0} не удалось выложить озеленение рядом с океаном",
+  "This ocean adds erosion tiles, which may leave no space for the greenery. Placing the greenery first gives up its bonus for being next to the new ocean": "Этот океан добавляет тайлы эрозии, из-за которых может не остаться места для озеленения. Если сначала выложить озеленение, бонус за соседство с новым океаном теряется"
 }
