@@ -36,6 +36,8 @@ function choicesOf(question, answers, context) {
 /** Checks an answer given up front (option/file) with the same rule as the menu. */
 function checkPreset(question, value, answers, context) {
   if (question.kind === 'select') {
+    // Old option values (e.g. --ai-engine=typescript) are mapped before the check, as later for the answer
+    value = question.normalize ? question.normalize(value) : value;
     const choice = choicesOf(question, answers, context).find((candidate) => candidate.value === value);
     if (!choice) {
       throw new Error(`${flagName(question.id)}: "${value}" is not possible here`);

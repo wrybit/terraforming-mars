@@ -16,7 +16,7 @@ function fakeExistingInstallation() {
   const directory = path.join(os.tmpdir(), 'tm-installer-demo');
   fs.mkdirSync(path.join(directory, '.git'), {recursive: true});
   fs.writeFileSync(path.join(directory, 'package.json'), '{}\n');
-  fs.writeFileSync(path.join(directory, '.env'), 'SERVER_NAME=Friday game night\nPORT=9090\nSERVER_ID=demo-password-123\nAI_ENGINE=typescript\n');
+  fs.writeFileSync(path.join(directory, '.env'), 'SERVER_NAME=Friday game night\nPORT=9090\nSERVER_ID=demo-password-123\nAI_ENGINE=rust\n');
   return directory;
 }
 

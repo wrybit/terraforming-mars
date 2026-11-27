@@ -25,9 +25,8 @@ export type AiSetupCase = {
 };
 
 // Known bugs of the bot, by case label
-const KNOWN_ISSUES: Record<string, string> = {
-  '1 human, 5 AI, everything': 'project cards out of sync after the deck ran out in a long 6-player game (generation 17, 26.11.2026)',
-};
+// (26.11.: the 6-player deck-out desync went away with the bot fix for ocean placements asked of another seat)
+const KNOWN_ISSUES: Record<string, string> = {};
 
 // Pairs are many; their clashes show in the setup and the first generations (Merger with the prelude draft: generation 1)
 const PAIR_GENERATIONS = 3;
