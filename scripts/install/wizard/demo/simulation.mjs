@@ -72,3 +72,52 @@ export function simulatedSteps({answers, service, failure, logFile}) {
   }
   return steps;
 }
+
+/** Date a number of days back, as git shows it (YYYY-MM-DD) */
+function isoDay(daysBack) {
+  return new Date(Date.now() - daysBack * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+}
+
+/** Update case of the demo: an installation a few days behind, with an older Rust AI. */
+export function demoInstalledState(directory) {
+  return {
+    directory,
+    port: 9090,
+    runMode: 'systemd',
+    game: {
+      commit: '9b7d3f1', date: isoDay(3), latestCommit: 'e41c09a', latestDate: isoDay(0), behind: 7, offline: false,
+      // Relative to now, so the demo always shows a few days
+      dateMs: Date.now() - 3 * 24 * 60 * 60 * 1000, lastUpdateMs: Date.now() - 3 * 24 * 60 * 60 * 1000 - 60 * 60 * 1000,
+      newTitles: [
+        'Lobby: show how long ago the last move was',
+        'Mobile: bottom sheet for all actions',
+        'AI: plan card order over the next generation',
+        'Admin: AI opponents get a page of their own',
+        'Create game: board preview shows shuffled bonuses',
+      ],
+    },
+    rustAi: {installed: '1.10', available: '1.12', package: {tag: 'rust-ai-1.12'}, hasUpdate: true},
+  };
+}
+
+/** Same checklist as a real update (update.mjs), with waiting instead of work. */
+export function simulatedUpdateSteps(failure, logFile) {
+  return [
+    {title: 'Update code', run: () => wait(1000)},
+    {title: 'Install dependencies', run: (handle) => progressFor(handle, 2000)},
+    {title: 'Build game', run: (handle) => {
+      if (failure === 'build') {
+        fakeLog(logFile, ['> terraforming-mars@1.0.0 build:server', 'npm ERR! code 2']);
+      }
+      return progressFor(handle, 3000, failure === 'build' ? 0.6 : undefined, '"npm run build" failed with exit code 2 (demo)');
+    }},
+    {title: 'Update Rust AI', run: (handle) => progressFor(handle, 1500)},
+    {title: 'Restart server', run: () => wait(800)},
+    {title: 'Check server', run: async () => {
+      await wait(1200);
+      if (failure === 'check') {
+        throw new Error('The server does not answer on http://localhost:9090/ (demo)');
+      }
+    }},
+  ];
+}

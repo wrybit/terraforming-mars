@@ -40,5 +40,9 @@ export const systemdService = {
     await run('sudo', ['systemctl', 'enable', SERVICE_NAME], {log: context.log});
     await run('sudo', ['systemctl', 'restart', SERVICE_NAME], {log: context.log});
   },
+  // Update: the unit stays, only the new build is started
+  async restart(context) {
+    await run('sudo', ['systemctl', 'restart', SERVICE_NAME], {log: context.log});
+  },
   logHint: `journalctl -u ${SERVICE_NAME} -f`,
 };

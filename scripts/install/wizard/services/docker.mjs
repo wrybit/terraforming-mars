@@ -27,5 +27,9 @@ export const dockerService = {
     fs.writeFileSync(path.join(context.directory, 'docker-compose.override.yml'), overrideFile(context));
     await run('docker', ['compose', 'up', '-d', '--build'], {cwd: context.directory, log: context.log});
   },
+  // Update: the image is built anew from the updated code and the container replaced; the volume keeps the games
+  async restart(context) {
+    await run('docker', ['compose', 'up', '-d', '--build'], {cwd: context.directory, log: context.log});
+  },
   logHint: 'docker compose logs -f',
 };
