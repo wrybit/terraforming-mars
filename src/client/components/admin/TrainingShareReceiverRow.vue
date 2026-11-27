@@ -9,8 +9,8 @@
       </div>
       <div class="server-settings-field">
         <div class="server-settings-input">
-          <!-- The host is what firewall and proxy care about; the whole address does not fit the field -->
-          <input id="training-share-receiver" type="text" readonly :value="receiverHost" :title="TRAINING_SHARE_RECEIVER_URL">
+          <!-- The host is what firewall and proxy care about; the whole address does not fit the field (it is in the wiki) -->
+          <input id="training-share-receiver" type="text" readonly :value="receiverHost">
           <button type="button" class="btn btn-sm btn-tone-quiet" :disabled="testing" :aria-busy="testing" @click="test" v-i18n>Test connection</button>
         </div>
         <span v-if="result !== undefined" class="training-share-test" :class="result.ok ? 'training-share-test--ok' : 'training-share-test--failed'">{{ resultText }}</span>
