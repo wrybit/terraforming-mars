@@ -72,4 +72,24 @@ describe('MobilePlayerHome', () => {
     // The menu opens as a sheet over the current screen, not as the turn screen
     expect(wrapper.classes()).to.not.include('mb-home--turn');
   });
+
+  // Quick peek from a task: the task bar carries the peek buttons, the navigation must not appear on top of it
+  it('shows the task bar with peek buttons in a task and opens the peek sheet over it', async () => {
+    const playerView = fakePlayerViewModel();
+    playerView.thisPlayer.tableau = [{name: 'Ecoline'} as typeof playerView.thisPlayer.tableau[number]];
+    playerView.waitingFor = {type: 'card', title: 'Select a card', buttonLabel: 'Play', cards: [], min: 1, max: 1} as any;
+    const wrapper = mountHome(playerView);
+
+    expect(wrapper.classes()).to.include('mb-home--turn');
+    expect(wrapper.find('.mb-taskbar').exists()).to.be.true;
+    expect(wrapper.find('.mb-nav').exists()).to.be.false;
+    expect(wrapper.findAll('.mb-peek-button')).to.have.length(2);
+
+    await wrapper.find('.mb-peek-button--players').trigger('click');
+    expect((wrapper.vm as unknown as {peek: string}).peek).to.eq('players');
+    expect(wrapper.find('.mb-peek-backdrop').exists()).to.be.true;
+    // The task stays the current screen behind the sheet
+    expect(wrapper.classes()).to.include('mb-home--turn');
+    expect(wrapper.find('.mb-nav').exists()).to.be.false;
+  });
 });

@@ -114,11 +114,6 @@
         </button>
       </div>
     </div>
-    <!-- The peeked screen is the regular, already mounted screen (v-show above), shown as a sheet: nothing is rendered twice -->
-    <template v-if="peek !== undefined">
-      <div class="mb-peek-backdrop" @click="closePeek"></div>
-      <MobilePeekHead :items="peekScreens" :active="peek" @select="peek = $event" @close="closePeek" />
-    </template>
     <MobileNav v-else :items="navItems" :active="screen" :handCount="cardsInHandCount" @navigate="navigate">
       <template #turn>
         <!-- While the turn sheet is open (incl. sliding in/out), its own button moves with it; this one stays invisible -->
@@ -126,6 +121,11 @@
           :acting="acting" :action-number="actionNumber" :actions-per-turn="actionsPerTurn" />
       </template>
     </MobileNav>
+    <!-- The peeked screen is the regular, already mounted screen (v-show above), shown as a sheet: nothing is rendered twice -->
+    <template v-if="peek !== undefined">
+      <div class="mb-peek-backdrop" @click="closePeek"></div>
+      <MobilePeekHead :items="peekScreens" :active="peek" @select="peek = $event" @close="closePeek" />
+    </template>
 
     <MobileCardZoom v-if="zoomedCard !== undefined" :count="zoomedCardList.length" :index="zoomedCardIndex" :origin="zoomedCardOrigin"
       :playable="zoomedCardPlayTile !== undefined" @close="zoomedCard = undefined" @play="playZoomedCard" @update:index="showZoomedCard">
