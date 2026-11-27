@@ -1,5 +1,5 @@
 import * as path from 'path';
-import {TRAINING_SHARE_DEFAULT_URL, TrainingShareMode} from '../../common/trainingShare/TrainingShareModel';
+import {TRAINING_SHARE_RECEIVER_URL, TrainingShareMode} from '../../common/trainingShare/TrainingShareModel';
 
 // The .env settings of the Export tab (common/admin/serverSettings.ts); read at every use, they take effect at once
 
@@ -15,8 +15,9 @@ export function trainingShareAnonymous(): boolean {
   return value !== 'false' && value !== '0';
 }
 
+// No .env key: the receiver is the same for every server, so the games reach the training
 export function trainingShareUrl(): string {
-  return process.env.TRAINING_SHARE_URL || TRAINING_SHARE_DEFAULT_URL;
+  return TRAINING_SHARE_RECEIVER_URL;
 }
 
 /**

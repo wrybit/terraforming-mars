@@ -8,8 +8,48 @@ import {decisionLogDirectory, trainingShareAnonymous, trainingShareMode, trainin
 const RETRY_INTERVAL_MS = 30 * 60 * 1000;
 const MAX_TRIES = 5;
 const UPLOAD_TIMEOUT_MS = 2 * 60 * 1000;
+const PROBE_TIMEOUT_MS = 15 * 1000;
 
 type Upload = (url: string, body: Buffer, key: string) => Promise<void>;
+type Probe = (url: string) => Promise<void>;
+
+/** Why fetch failed, e.g. ENOTFOUND or ECONNREFUSED: the admin sees whether name, firewall or time is the problem */
+function failureReason(error: unknown): string {
+  if (error instanceof Error && error.name === 'TimeoutError') {
+    return `no answer within ${PROBE_TIMEOUT_MS / 1000} s`;
+  }
+  const cause = error instanceof Error ? (error.cause as {code?: string, message?: string} | undefined) : undefined;
+  return cause?.code ?? cause?.message ?? (error instanceof Error ? error.message : String(error));
+}
+
+/**
+ * Test of the connection without sending a game: GET on the receiver, which answers with its format and version.
+ * Shows whether firewall, proxy or name resolution of this server let the uploads through.
+ */
+async function probeReceiver(url: string): Promise<void> {
+  const host = new URL(url).host;
+  let response: Response;
+  try {
+    response = await fetch(url, {method: 'GET', signal: AbortSignal.timeout(PROBE_TIMEOUT_MS)});
+  } catch (error) {
+    throw new Error(`${host} cannot be reached (${failureReason(error)}).`);
+  }
+  if (!response.ok) {
+    throw new Error(`${host} answered HTTP ${response.status}.`);
+  }
+  let answer: {format?: unknown, version?: unknown};
+  try {
+    answer = await response.json();
+  } catch {
+    throw new Error(`${host} answers, but not as a receiver.`);
+  }
+  if (answer?.format !== TRAINING_EXPORT_CONTRACT.format) {
+    throw new Error(`${host} answers, but not as a receiver.`);
+  }
+  if (answer.version !== TRAINING_EXPORT_CONTRACT.version) {
+    throw new Error(`The receiver takes version ${String(answer.version)}, this server sends version ${TRAINING_EXPORT_CONTRACT.version}: update the game.`);
+  }
+}
 
 /** POST of the packed game; the receiver answers 2xx when it stored the game, otherwise a text with the reason. */
 async function postUpload(url: string, body: Buffer, key: string): Promise<void> {
@@ -38,6 +78,7 @@ export class TrainingShare {
     private readonly upload: Upload = postUpload,
     private readonly build: (gameId: GameId, options: TrainingExportOptions) => Promise<BuiltTrainingExport> = buildTrainingExport,
     private readonly serverVersion: string = 'unknown',
+    private readonly probe: Probe = probeReceiver,
   ) {}
 
   public static getInstance(): TrainingShare {
@@ -72,6 +113,16 @@ export class TrainingShare {
       lastSharedAtMs: Math.max(0, ...Object.values(state?.shared ?? {})) || undefined,
       lastError: state?.lastError,
     };
+  }
+
+  /** Button "Test connection" in the Export tab: also while sharing is off, nothing of a game is sent. */
+  public async testReceiver(): Promise<TrainingShareResult> {
+    try {
+      await this.probe(trainingShareUrl());
+      return {ok: true};
+    } catch (error) {
+      return {ok: false, message: error instanceof Error ? error.message : String(error)};
+    }
   }
 
   /** End of a game (GameLoader.completeGame): with "automatic" it goes out right away. */

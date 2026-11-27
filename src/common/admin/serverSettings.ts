@@ -5,7 +5,6 @@
 import {COMMON_EXTENSIONS} from '../../genfiles/extensionsCommon';
 import {AI_LEVELS} from '../ai/AiLevel';
 import {DEFAULT_RUST_BOT_STRENGTH, RUST_BOT_STRENGTH_LIMITS, RUST_BOT_STRENGTH_SLIDERS, RustBotStrengthField, rustBotStrengthKey} from '../ai/rustBotStrength';
-import {TRAINING_SHARE_DEFAULT_URL} from '../trainingShare/TrainingShareModel';
 import {DEFAULT_FAVICON_COLOR, DEFAULT_FAVICON_ICON, FAVICON_COLORS, FAVICON_ICONS, FaviconOption, faviconImage} from './favicons';
 
 // image: an address (http… or an uploaded file, see ApiAdminServerLogo) with upload button and preview
@@ -167,8 +166,6 @@ const BASE_SETTINGS: ReadonlyArray<ServerSettingDefinition> = [
     description: 'Finished games with at least one human go to the AI training of this fork: every move, the decisions and the ratings of AI moves. Button per game: "Share" in the list of finished games. Default: every finished game. Takes effect after a restart.'},
   {key: 'TRAINING_SHARE_ANONYMOUS', group: 'Export', kind: 'toggle', defaultOn: true, live: true, label: 'Anonymous',
     description: 'Player names become "Player 1", "Player 2" …, the game name and the texts of ratings are left out. Game and player ids are always replaced, IP addresses and the address of this server are never part of it.'},
-  {key: 'TRAINING_SHARE_URL', group: 'Export', kind: 'text', label: 'Receiver', placeholder: TRAINING_SHARE_DEFAULT_URL,
-    description: 'Address the games are sent to. Empty: the receiver of this fork.'},
 
   {key: 'PORT', group: 'Technical', kind: 'number', label: 'Port', placeholder: '8080',
     description: 'Port the server listens on. In Docker it must stay 8080.'},

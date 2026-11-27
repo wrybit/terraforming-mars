@@ -80,8 +80,11 @@
             </div>
             <!-- Below the AI settings: what each AI program can play, so the engine is chosen knowingly -->
             <AiSupportOverview v-if="selectedGroup === AI_GROUP" />
-            <!-- Below the export settings: what was shared so far -->
-            <TrainingShareStatusCard v-if="selectedGroup === 'Export'" />
+            <!-- Below the export settings: the fixed receiver with its test, then what was shared so far -->
+            <template v-if="selectedGroup === 'Export'">
+              <TrainingShareReceiverRow />
+              <TrainingShareStatusCard />
+            </template>
           </template>
         </div>
       </div>
@@ -112,6 +115,7 @@ import ServerSettingGrid from '@/client/components/admin/ServerSettingGrid.vue';
 import AiSupportOverview from '@/client/components/admin/AiSupportOverview.vue';
 import AiLoadGraph from '@/client/components/admin/AiLoadGraph.vue';
 import TrainingShareStatusCard from '@/client/components/admin/TrainingShareStatusCard.vue';
+import TrainingShareReceiverRow from '@/client/components/admin/TrainingShareReceiverRow.vue';
 import ChatWordsPanel from '@/client/components/admin/ChatWordsPanel.vue';
 import PushPanel from '@/client/components/admin/push/PushPanel.vue';
 import {GridRowLimit} from '@/client/components/admin/ServerSettingGrid.vue';
@@ -168,7 +172,7 @@ function isOnValue(value: string | undefined): boolean {
 
 export default defineComponent({
   name: 'ServerSettingsPanel',
-  components: {TrainingShareStatusCard, LoadingSpinner, ServerSettingImageField, ServerSettingChoiceField, ServerSettingGrid, SegmentedControl, AiSupportOverview, AiLoadGraph, ChatWordsPanel, PushPanel},
+  components: {TrainingShareStatusCard, TrainingShareReceiverRow, LoadingSpinner, ServerSettingImageField, ServerSettingChoiceField, ServerSettingGrid, SegmentedControl, AiSupportOverview, AiLoadGraph, ChatWordsPanel, PushPanel},
   directives: {dockedTab: vDockedTab},
   props: {
     /** Show only this group, as a page of its own without tabs */
