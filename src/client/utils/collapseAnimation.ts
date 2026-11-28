@@ -39,11 +39,14 @@ function animate(element: Element, opening: boolean, done: () => void, from: Sli
   // Measured height includes padding and border
   target.style.boxSizing = 'border-box';
   target.style.overflow = 'hidden';
+  // In a column flex container min-height:auto would keep the item at its content height
+  target.style.minHeight = '0';
   const frames = [collapsedFrame(listGap(target), from), openFrame(target, from)];
   const animation = target.animate(opening ? frames : frames.reverse(), {duration: DURATION_MS, easing: ZOOM_EASING});
   animation.onfinish = () => {
     target.style.boxSizing = '';
     target.style.overflow = '';
+    target.style.minHeight = '';
     done();
   };
 }
