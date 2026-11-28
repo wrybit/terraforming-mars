@@ -1,5 +1,5 @@
 import {CardModel} from '@/common/models/CardModel';
-import {isObject, partition} from '@/common/utils/utils';
+import {partition} from '@/common/utils/utils';
 import {LocalStorageStore} from '@/client/utils/LocalStorageStore';
 import {ref} from 'vue';
 
@@ -11,18 +11,9 @@ export type CardOrder = {[cardName: string]: number};
 // TODO(kberg): Refresh upon load?
 const TTL_MS = 90 * 24 * 60 * 60 * 1000; // 90 days
 
-// TODO(2026-12-01): drop migrate (and the rewrite-forward support in LocalStorageStore)
 const store = new LocalStorageStore<CardOrder>({
   prefix: 'cardOrder',
   ttlMs: TTL_MS,
-  migrate: (raw) => {
-    try {
-      const parsed = JSON.parse(raw);
-      return (isObject(parsed)) ? parsed as CardOrder : undefined;
-    } catch {
-      return undefined;
-    }
-  },
 });
 
 // A counter makes the order reactive: whoever reads getCardOrder() while rendering (build, sell …)

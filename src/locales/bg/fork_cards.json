@@ -1728,5 +1728,9 @@
   "Requires 2 corruption. Decrease <opp>any</opp> M€ production 2 steps. Increase your M€ production 1 step for every unit of corruption you have.": "Изисква 2 корупция. Намалете <opp>което и да е</opp> производство на M€ с 2 стъпки. Увеличете производството на M€ си с 1 стъпка за всяка ваша единица корупция.",
   "Requires 1 corruption. Remove up to 2 resources <opp>from any card</opp>": "Изисква 1 корупция. Премахнете до 2 ресурса <opp>от която и да е карта</opp>",
   "Remove up to 1 corruption <opp>from another player</opp>. Reveal 2 cards from the deck until you reveal 2 event cards. Take them into hand and discard the rest.": "Премахнете до 1 корупция <opp>от друг играч</opp>. Разкривайте карти от тестето, докато разкриете 2 карти събития. Вземете ги в ръка и изхвърлете останалите.",
-  "Steal up to 4 M€, plus 1 extra M€ for each corruption resource you have, <opp>from any player</opp>.": "Откраднете до 4 M€ плюс 1 допълнителен M€ за всеки ваш ресурс корупция <opp>от който и да е играч</opp>."
+  "Steal up to 4 M€, plus 1 extra M€ for each corruption resource you have, <opp>from any player</opp>.": "Откраднете до 4 M€ плюс 1 допълнителен M€ за всеки ваш ресурс корупция <opp>от който и да е играч</opp>.",
+  "Place the ocean first": "Първо поставете океана",
+  "Place the greenery first": "Първо поставете озеленяването",
+  "${0} could not place a greenery next to the ocean": "${0} не успя да постави озеленяване до океана",
+  "This ocean adds erosion tiles, which may leave no space for the greenery. Placing the greenery first gives up its bonus for being next to the new ocean": "Този океан добавя плочки ерозия, които може да не оставят място за озеленяването. Ако първо поставите озеленяването, губите бонуса му за съседство с новия океан"
 }

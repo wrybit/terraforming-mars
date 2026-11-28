@@ -534,5 +534,9 @@
   "Requires 2 corruption. Decrease <opp>any</opp> M€ production 2 steps. Increase your M€ production 1 step for every unit of corruption you have.": "Vaatii 2 korruptiota. Vähennä <opp>jonkun</opp> M€-tuotantoa 2 askelta. Lisää M€-tuotantoasi 1 askel jokaista korruptio-yksikköäsi kohti.",
   "Requires 1 corruption. Remove up to 2 resources <opp>from any card</opp>": "Vaatii 1 korruption. Poista enintään 2 resurssia <opp>miltä tahansa kortilta</opp>",
   "Remove up to 1 corruption <opp>from another player</opp>. Reveal 2 cards from the deck until you reveal 2 event cards. Take them into hand and discard the rest.": "Poista enintään 1 korruptio <opp>toiselta pelaajalta</opp>. Paljasta 2 korttia pakasta kunnes paljastat 2 tapahtumakorttia. Ota ne käteen ja hylkää loput.",
-  "Steal up to 4 M€, plus 1 extra M€ for each corruption resource you have, <opp>from any player</opp>.": "Varasta enintään 4 M€, plus 1 ylimääräinen M€ jokaista korruptioresurssiasi kohti, <opp>keneltä tahansa pelaajalta</opp>."
+  "Steal up to 4 M€, plus 1 extra M€ for each corruption resource you have, <opp>from any player</opp>.": "Varasta enintään 4 M€, plus 1 ylimääräinen M€ jokaista korruptioresurssiasi kohti, <opp>keneltä tahansa pelaajalta</opp>.",
+  "Place the ocean first": "Aseta meri ensin",
+  "Place the greenery first": "Aseta viheralue ensin",
+  "${0} could not place a greenery next to the ocean": "${0} ei voinut asettaa viheraluetta meren viereen",
+  "This ocean adds erosion tiles, which may leave no space for the greenery. Placing the greenery first gives up its bonus for being next to the new ocean": "Tämä meri lisää eroosiolaattoja, jolloin viheralueelle ei ehkä jää tilaa. Jos asetat viheralueen ensin, menetät sen bonuksen uuden meren vieressä olemisesta"
 }

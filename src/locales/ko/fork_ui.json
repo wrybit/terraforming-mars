@@ -1694,5 +1694,7 @@
   "Bonus at": "보너스 지점",
   "max. ${0}": "최대 ${0}",
   "protected": "보호됨",
-  "Replay of game ${0} not possible: the game is not saved on this server.": "게임 ${0} 리플레이 불가: 이 서버에 게임이 저장되어 있지 않습니다."
+  "Replay of game ${0} not possible: the game is not saved on this server.": "게임 ${0} 리플레이 불가: 이 서버에 게임이 저장되어 있지 않습니다.",
+  "Reduced effects on phones": "휴대폰에서 효과 줄이기",
+  "Smoother on older phones: no frosted glass, large shadows or animations.": "오래된 휴대폰에서 더 부드럽게: 반투명 유리, 큰 그림자, 애니메이션 없음."
 }

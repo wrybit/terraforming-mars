@@ -1624,5 +1624,7 @@
   "Bonus at": "Bónusz itt:",
   "max. ${0}": "legfeljebb ${0}",
   "protected": "védett",
-  "Replay of game ${0} not possible: the game is not saved on this server.": "A(z) ${0} játszma visszajátszása nem lehetséges: a játszma nincs elmentve ezen a szerveren."
+  "Replay of game ${0} not possible: the game is not saved on this server.": "A(z) ${0} játszma visszajátszása nem lehetséges: a játszma nincs elmentve ezen a szerveren.",
+  "Reduced effects on phones": "Csökkentett effektek telefonon",
+  "Smoother on older phones: no frosted glass, large shadows or animations.": "Gördülékenyebb régebbi telefonokon: nincs matt üveg, nagy árnyék és animáció."
 }

@@ -2426,5 +2426,7 @@
   "Bonus at": "奖励于",
   "max. ${0}": "最多 ${0}",
   "protected": "受保护",
-  "Replay of game ${0} not possible: the game is not saved on this server.": "无法回放对局 ${0}：此服务器未保存该对局。"
+  "Replay of game ${0} not possible: the game is not saved on this server.": "无法回放对局 ${0}：此服务器未保存该对局。",
+  "Reduced effects on phones": "手机上减少特效",
+  "Smoother on older phones: no frosted glass, large shadows or animations.": "在旧手机上更流畅：没有毛玻璃、大阴影和动画。"
 }

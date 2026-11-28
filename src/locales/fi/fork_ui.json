@@ -1440,5 +1440,7 @@
   "Bonus at": "Bonus kohdassa",
   "max. ${0}": "enint. ${0}",
   "protected": "suojattu",
-  "Replay of game ${0} not possible: the game is not saved on this server.": "Pelin ${0} uusinta ei ole mahdollinen: peliä ei ole tallennettu tälle palvelimelle."
+  "Replay of game ${0} not possible: the game is not saved on this server.": "Pelin ${0} uusinta ei ole mahdollinen: peliä ei ole tallennettu tälle palvelimelle.",
+  "Reduced effects on phones": "Kevennetyt tehosteet puhelimessa",
+  "Smoother on older phones: no frosted glass, large shadows or animations.": "Sujuvampi vanhemmissa puhelimissa: ei huurrelasia, suuria varjoja eikä animaatioita."
 }

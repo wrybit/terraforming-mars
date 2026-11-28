@@ -2390,5 +2390,7 @@
   "Bonus at": "Бонус при",
   "max. ${0}": "макс. ${0}",
   "protected": "защитено",
-  "Replay of game ${0} not possible: the game is not saved on this server.": "Повторение на игра ${0} не е възможно: играта не е запазена на този сървър."
+  "Replay of game ${0} not possible: the game is not saved on this server.": "Повторение на игра ${0} не е възможно: играта не е запазена на този сървър.",
+  "Reduced effects on phones": "Намалени ефекти на телефона",
+  "Smoother on older phones: no frosted glass, large shadows or animations.": "По-плавно на по-стари телефони: без матово стъкло, големи сенки и анимации."
 }

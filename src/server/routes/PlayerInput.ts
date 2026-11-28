@@ -122,7 +122,7 @@ export class PlayerInput extends Handler {
       if (this.isRespondingTooQuickly(responseInterval)) {
         throw new AppError(RESPONDING_TOO_QUICKLY, "You're responding a little too quickly.");
       }
-      const entity = JSON.parse(body);
+      const entity = JSON.parse(body) as InputResponse;
       validateRunId(entity);
       validateRequestId(player, entity);
 
@@ -179,23 +179,28 @@ export class PlayerInput extends Handler {
     return responseInterval < this.minResponseIntervalMs;
   }
 }
-function validateRunId(entity: any) {
-  if (entity.runId !== undefined && runId !== undefined) {
-    if (entity.runId !== runId) {
+// Fields the client sends next to the response itself; removed before the response is processed.
+type SideChannel = {runId?: string, requestId?: string};
+
+function validateRunId(entity: InputResponse) {
+  const sidechannel = entity as unknown as SideChannel;
+  if (sidechannel.runId !== undefined && runId !== undefined) {
+    if (sidechannel.runId !== runId) {
       throw new AppError(INVALID_RUN_ID, 'The server has restarted. Click OK to refresh this page.');
     }
   }
   // Clearing this out to be compatible with the input response processors.
-  delete entity.runId;
+  delete sidechannel.runId;
 }
 
 // Rejects a response sent for an input the player has since moved past, e.g. from a page
-// that never got the reply to its previous response.
-function validateRequestId(player: IPlayer, entity: any) {
-  if (entity.requestId !== undefined && entity.requestId !== player.requestId) {
+// that never got the reply to its previous response. A response without a request id is
+// rejected too (upstream 5a7c6934f): every client sends the id it was given.
+function validateRequestId(player: IPlayer, entity: InputResponse) {
+  const sidechannel = entity as unknown as SideChannel;
+  if (sidechannel.requestId !== player.requestId) {
     throw new AppError(INVALID_REQUEST_ID, 'This page is out of date. Click OK to refresh it.');
   }
   // Clearing this out to be compatible with the input response processors.
-  delete entity.requestId;
+  delete sidechannel.requestId;
 }
-

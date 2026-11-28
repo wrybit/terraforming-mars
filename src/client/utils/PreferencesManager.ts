@@ -1,5 +1,6 @@
 import {reactive} from 'vue';
 import {safeLocalStorage} from '@/client/utils/SafeLocalStorage';
+import {isKnownSlowDevice} from '@/client/utils/slowDevice';
 
 export type Preferences = {
   learner_mode: boolean,
@@ -13,6 +14,8 @@ export type Preferences = {
   show_award_details: boolean,
   hide_top_bar: boolean,
   remove_background: boolean,
+  // Mobile view without frosted glass, large shadows and animations (reduced_effects.less)
+  reduced_effects: boolean,
   hide_active_cards: boolean,
   hide_automated_cards: boolean,
   hide_event_cards: boolean,
@@ -39,6 +42,13 @@ export type Preference = keyof Preferences;
 // 'hide_animated_sidebar' (coloured sidebar on one's turn – the sidebar became the icon group without a background)
 const REMOVED_PREFERENCES: ReadonlyArray<string> = ['small_cards', 'magnify_cards', 'hide_animated_sidebar'];
 
+// Reduced effects from the start: asked for by the system (less motion) or a device known to be slow
+// (slowDevice.ts); a choice of the person in the settings always wins
+function prefersReducedMotion(): boolean {
+  return typeof window !== 'undefined' && typeof window.matchMedia === 'function' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
 // The fork's defaults: apply to everyone who has never changed a setting themselves
 const defaults: Preferences = {
   learner_mode: true,
@@ -57,6 +67,7 @@ const defaults: Preferences = {
   show_award_details: true,
   hide_top_bar: false,
   remove_background: false,
+  reduced_effects: prefersReducedMotion() || isKnownSlowDevice(),
   hide_active_cards: false,
   hide_automated_cards: false,
   hide_event_cards: false,
@@ -114,6 +125,18 @@ export class PreferencesManager {
   // set preferences through the fields themselves.
   values(): Readonly<Preferences> {
     return this._values;
+  }
+
+  /** True when the person chose this setting on this device; automatic defaults must not override that choice. */
+  isChosen(name: Preference): boolean {
+    return safeLocalStorage.getItem(name) !== null;
+  }
+
+  /** Changes a default for this page view without storing it as a choice (e.g. reduced effects on a slow phone). */
+  setDefault(name: Preference, val: boolean): void {
+    if (name !== 'lang' && !this.isChosen(name)) {
+      this._values[name] = val;
+    }
   }
 
   set(name: Preference, val: string | boolean, setOnChange = false): void {

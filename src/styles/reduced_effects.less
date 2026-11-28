@@ -1,0 +1,86 @@
+// Setting "Reduced effects on phones" (class on <body> from preferenceClasses.ts, only in the mobile view).
+// Older phones struggle with GPU work: blurred glass over the full-screen photo, large soft shadows and
+// endless animations are recomposited on every scroll frame. Content, layout and meaning stay the same.
+
+@reduced-effects-background: #0e1016;
+@reduced-effects-bar: #12151e; // @mb-surface without transparency
+@reduced-effects-footer: #0c0e14; // .mb-footer-glass() without transparency
+
+// Indicators that say "something is working" keep moving, otherwise they would look frozen
+@reduced-effects-keep-moving: ~".loading-spinner-ring, .lobby-game-spinner, .replay-button__spinner, .log-ai-thinking-spinner, .log-ai-thinking-dots span, .log-row-research-dots i, .loading-bar, .start-screen-preloader *";
+
+html.tm-mobile .preferences_reduced_effects {
+  // Plain surface instead of the galaxy photo with its live colour filter
+  .app-background {
+    background: @reduced-effects-background;
+
+    .app-background__picture {
+      display: none;
+    }
+  }
+
+  // Frosted glass: the surfaces keep their (semi-opaque) colour, only the blur behind them goes
+  *,
+  *::before,
+  *::after {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+
+  // Without the blur the translucent bars would let card text shine through: the same colours, but opaque
+  .mb-nav,
+  .mb-top,
+  .mb-task-head,
+  .mb-taskbar,
+  .mb-zoom-controls,
+  .log-generations {
+    background-color: @reduced-effects-bar !important;
+  }
+
+  .card-impact,
+  .payments_form,
+  .or-tab-footer {
+    background-color: @reduced-effects-footer !important;
+  }
+
+  // Decorative text and drop shadows; cards keep theirs (contrast of numbers on card art)
+  *:not(.card-container, .card-container *),
+  *:not(.card-container, .card-container *)::before,
+  *:not(.card-container, .card-container *)::after {
+    text-shadow: none !important;
+  }
+
+  *:not(img, .card-container, .card-container *) {
+    filter: none !important;
+  }
+
+  // Large soft shadows of the fixed bars, sheets and floating buttons; a line separates them instead.
+  // Box shadows used as rings (selection, accents) stay untouched.
+  .mb-top {
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+  }
+
+  .mb-taskbar,
+  .mb-task-head,
+  .mb-sheet-panel,
+  .mb-peek-head,
+  .or-tab-footer {
+    box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.1) !important;
+  }
+
+  .mb-screen .btn {
+    box-shadow: none !important;
+  }
+
+  // Animations and transitions finish at once instead of being switched off: end events still fire,
+  // so elements that remove themselves afterwards (ripples, flashes) do not linger
+  *:not(@{reduced-effects-keep-moving}),
+  *:not(@{reduced-effects-keep-moving})::before,
+  *:not(@{reduced-effects-keep-moving})::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+  }
+}

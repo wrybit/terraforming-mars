@@ -534,5 +534,9 @@
   "Requires 2 corruption. Decrease <opp>any</opp> M€ production 2 steps. Increase your M€ production 1 step for every unit of corruption you have.": "Vereist 2 corruptie. Verlaag <opp>een willekeurige</opp> M€-productie met 2. Verhoog je M€-productie met 1 voor elke eenheid corruptie die je hebt.",
   "Requires 1 corruption. Remove up to 2 resources <opp>from any card</opp>": "Vereist 1 corruptie. Verwijder maximaal 2 grondstoffen <opp>van een willekeurige kaart</opp>.",
   "Remove up to 1 corruption <opp>from another player</opp>. Reveal 2 cards from the deck until you reveal 2 event cards. Take them into hand and discard the rest.": "Verwijder maximaal 1 corruptie <opp>van een andere speler</opp>. Onthul kaarten van de stapel totdat je 2 gebeurteniskaarten hebt onthuld. Neem die op hand en leg de rest af.",
-  "Steal up to 4 M€, plus 1 extra M€ for each corruption resource you have, <opp>from any player</opp>.": "Steel maximaal 4 M€, plus 1 extra M€ voor elke corruptiegrondstof die je hebt, <opp>van een willekeurige speler</opp>."
+  "Steal up to 4 M€, plus 1 extra M€ for each corruption resource you have, <opp>from any player</opp>.": "Steel maximaal 4 M€, plus 1 extra M€ voor elke corruptiegrondstof die je hebt, <opp>van een willekeurige speler</opp>.",
+  "Place the ocean first": "Eerst de oceaan plaatsen",
+  "Place the greenery first": "Eerst de groentegel plaatsen",
+  "${0} could not place a greenery next to the ocean": "${0} kon geen groentegel naast de oceaan plaatsen",
+  "This ocean adds erosion tiles, which may leave no space for the greenery. Placing the greenery first gives up its bonus for being next to the new ocean": "Deze oceaan voegt erosietegels toe, waardoor er mogelijk geen plek overblijft voor de groentegel. Wie de groentegel eerst plaatst, mist de bonus voor het liggen naast de nieuwe oceaan"
 }

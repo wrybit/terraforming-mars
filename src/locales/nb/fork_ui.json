@@ -1805,5 +1805,7 @@
   "Bonus at": "Bonus ved",
   "max. ${0}": "maks. ${0}",
   "protected": "beskyttet",
-  "Replay of game ${0} not possible: the game is not saved on this server.": "Reprise av spill ${0} er ikke mulig: spillet er ikke lagret på denne serveren."
+  "Replay of game ${0} not possible: the game is not saved on this server.": "Reprise av spill ${0} er ikke mulig: spillet er ikke lagret på denne serveren.",
+  "Reduced effects on phones": "Reduserte effekter på mobil",
+  "Smoother on older phones: no frosted glass, large shadows or animations.": "Jevnere på eldre mobiler: uten frostet glass, store skygger og animasjoner."
 }

@@ -2063,5 +2063,7 @@
   "Bonus at": "Bonus bij",
   "max. ${0}": "maximaal ${0}",
   "protected": "beschermd",
-  "Replay of game ${0} not possible: the game is not saved on this server.": "Herhaling van spel ${0} niet mogelijk: het spel is niet op deze server opgeslagen."
+  "Replay of game ${0} not possible: the game is not saved on this server.": "Herhaling van spel ${0} niet mogelijk: het spel is niet op deze server opgeslagen.",
+  "Reduced effects on phones": "Minder effecten op de telefoon",
+  "Smoother on older phones: no frosted glass, large shadows or animations.": "Soepeler op oudere telefoons: geen matglas, grote schaduwen of animaties."
 }

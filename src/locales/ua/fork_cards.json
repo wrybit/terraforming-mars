@@ -494,5 +494,9 @@
   "Requires 2 corruption. Decrease <opp>any</opp> M€ production 2 steps. Increase your M€ production 1 step for every unit of corruption you have.": "Вимагає 2 одиниці корупції. Зменште <opp>будь-яке</opp> виробництво M€ на 2. Збільште ваше виробництво M€ на 1 за кожну одиницю корупції, яку у вас є.",
   "Requires 1 corruption. Remove up to 2 resources <opp>from any card</opp>": "Вимагає 1 корупцію. Видаліть до 2 ресурсів <opp>з будь-якої карти</opp>.",
   "Remove up to 1 corruption <opp>from another player</opp>. Reveal 2 cards from the deck until you reveal 2 event cards. Take them into hand and discard the rest.": "Видаліть до 1 корупції <opp>в іншого гравця</opp>. Відкривайте карти з колоди, поки не відкриєте 2 карти подій. Візьміть їх у руку та відкиньте решту.",
-  "Steal up to 4 M€, plus 1 extra M€ for each corruption resource you have, <opp>from any player</opp>.": "Вкрадіть до 4 M€, плюс 1 додатковий M€ за кожну корупцію, яку ви маєте, <opp>у будь-якого гравця</opp>."
+  "Steal up to 4 M€, plus 1 extra M€ for each corruption resource you have, <opp>from any player</opp>.": "Вкрадіть до 4 M€, плюс 1 додатковий M€ за кожну корупцію, яку ви маєте, <opp>у будь-якого гравця</opp>.",
+  "Place the ocean first": "Спочатку розмістити океан",
+  "Place the greenery first": "Спочатку розмістити ліс",
+  "${0} could not place a greenery next to the ocean": "${0} не вдалося розмістити ліс поруч з океаном",
+  "This ocean adds erosion tiles, which may leave no space for the greenery. Placing the greenery first gives up its bonus for being next to the new ocean": "Цей океан додає тайли ерозії, через які може не залишитися місця для лісу. Якщо спочатку розмістити ліс, бонус за сусідство з новим океаном втрачається"
 }

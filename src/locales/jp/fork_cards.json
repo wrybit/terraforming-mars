@@ -781,5 +781,9 @@
   "Requires 2 corruption. Decrease <opp>any</opp> M€ production 2 steps. Increase your M€ production 1 step for every unit of corruption you have.": "条件：汚職2つ以上. <opp>プレイヤー1人</opp>のMC産出-2. 汚職の数分、MC産出+1.",
   "Requires 1 corruption. Remove up to 2 resources <opp>from any card</opp>": "条件：1汚職以上. <opp>任意のカードから</opp>最大2リソース除去",
   "Remove up to 1 corruption <opp>from another player</opp>. Reveal 2 cards from the deck until you reveal 2 event cards. Take them into hand and discard the rest.": "<opp>他のプレイヤー1人から</opp>最大1汚職を除去. イベントカードが2枚出るまで山札を公開する. それらを手札に加え、残りは捨て札にする.",
-  "Steal up to 4 M€, plus 1 extra M€ for each corruption resource you have, <opp>from any player</opp>.": "<opp>プレイヤー1人から</opp>最大4 M€と、自分の汚職リソース1つ毎に追加で1 M€を盗む."
+  "Steal up to 4 M€, plus 1 extra M€ for each corruption resource you have, <opp>from any player</opp>.": "<opp>プレイヤー1人から</opp>最大4 M€と、自分の汚職リソース1つ毎に追加で1 M€を盗む.",
+  "Place the ocean first": "先に海洋を配置",
+  "Place the greenery first": "先に緑地を配置",
+  "${0} could not place a greenery next to the ocean": "${0}は海洋の隣に緑地を配置できなかった",
+  "This ocean adds erosion tiles, which may leave no space for the greenery. Placing the greenery first gives up its bonus for being next to the new ocean": "この海洋は浸食タイルを追加するため、緑地を置く場所が残らない可能性がある。先に緑地を配置すると、新しい海洋に隣接するボーナスを得られない"
 }

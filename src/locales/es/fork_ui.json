@@ -2717,5 +2717,7 @@
   "Bonus at": "Bonificación en",
   "max. ${0}": "máx. ${0}",
   "protected": "protegido",
-  "Replay of game ${0} not possible: the game is not saved on this server.": "No se puede repetir la partida ${0}: la partida no está guardada en este servidor."
+  "Replay of game ${0} not possible: the game is not saved on this server.": "No se puede repetir la partida ${0}: la partida no está guardada en este servidor.",
+  "Reduced effects on phones": "Efectos reducidos en el móvil",
+  "Smoother on older phones: no frosted glass, large shadows or animations.": "Más fluido en móviles antiguos: sin vidrio esmerilado, sombras grandes ni animaciones."
 }

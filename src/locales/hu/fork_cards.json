@@ -619,5 +619,9 @@
   "Requires 2 corruption. Decrease <opp>any</opp> M€ production 2 steps. Increase your M€ production 1 step for every unit of corruption you have.": "Kijátszási feltétel: legalább 2 korrupció. Csökkentsd <opp>bárki</opp> M€-termelését 2 értékkel! Növeld a M€-termelésed annyi értékkel, amennyi a korrupciód!",
   "Requires 1 corruption. Remove up to 2 resources <opp>from any card</opp>": "Kijátszási feltétel: 1 korrupció. Távolíts el legfeljebb 2 erőforrást <opp>bármelyik kártyáról</opp>!",
   "Remove up to 1 corruption <opp>from another player</opp>. Reveal 2 cards from the deck until you reveal 2 event cards. Take them into hand and discard the rest.": "Távolíts el legfeljebb 1 korrupciót <opp>egy másik játékostól</opp>. Csapj fel kártyákat a pakliból, amíg 2 eseménykártyát nem fedsz fel. Vedd ezeket a kezedbe, a többit dobd el.",
-  "Steal up to 4 M€, plus 1 extra M€ for each corruption resource you have, <opp>from any player</opp>.": "Lopj legfeljebb 4 M€-t, plusz 1 extra M€-t minden korrupció erőforrásod után, <opp>valamelyik játékostól</opp>."
+  "Steal up to 4 M€, plus 1 extra M€ for each corruption resource you have, <opp>from any player</opp>.": "Lopj legfeljebb 4 M€-t, plusz 1 extra M€-t minden korrupció erőforrásod után, <opp>valamelyik játékostól</opp>.",
+  "Place the ocean first": "Előbb az óceánt helyezd le",
+  "Place the greenery first": "Előbb a növényzetet helyezd le",
+  "${0} could not place a greenery next to the ocean": "${0} nem tudott növényzetet lehelyezni az óceán mellé",
+  "This ocean adds erosion tiles, which may leave no space for the greenery. Placing the greenery first gives up its bonus for being next to the new ocean": "Ez az óceán eróziós lapkákat ad hozzá, így lehet, hogy nem marad hely a növényzetnek. Ha előbb a növényzetet helyezed le, elveszíted az új óceán melletti bónuszát"
 }

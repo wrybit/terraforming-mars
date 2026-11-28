@@ -1816,5 +1816,7 @@
   "Bonus at": "ボーナス地点",
   "max. ${0}": "最大 ${0}",
   "protected": "保護",
-  "Replay of game ${0} not possible: the game is not saved on this server.": "ゲーム ${0} のリプレイはできません：このサーバーにゲームが保存されていません。"
+  "Replay of game ${0} not possible: the game is not saved on this server.": "ゲーム ${0} のリプレイはできません：このサーバーにゲームが保存されていません。",
+  "Reduced effects on phones": "スマホで効果を減らす",
+  "Smoother on older phones: no frosted glass, large shadows or animations.": "古いスマホでもなめらかに：すりガラス、大きな影、アニメーションなし。"
 }

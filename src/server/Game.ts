@@ -746,6 +746,7 @@ export class Game implements IGame, Logger {
 
   private playerHasPickedCorporationCard(player: IPlayer, corporationCard: ICorporationCard): void {
     player.pickedCorporationCard = corporationCard;
+    // Timer could be previously enabled, enabling twice is reentrant safe
     player.timer.enable();
     const players = this.playersInGenerationOrder;
     if (players.every((p) => p.pickedCorporationCard !== undefined)) {
@@ -1615,7 +1616,7 @@ export class Game implements IGame, Logger {
     case SpaceBonus.SCIENCE:
       this.defer(new AddResourcesToCard(player, CardResource.SCIENCE, {count: count}));
       break;
-    case SpaceBonus.TEMPERATURE_4MC:
+    case SpaceBonus.TEMPERATURE:
       if (this.getTemperature() < this.max.temperature) {
         this.defer(new SelectPaymentDeferred(
           player,

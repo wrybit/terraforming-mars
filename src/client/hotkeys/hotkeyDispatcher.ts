@@ -315,7 +315,8 @@ export function installHotkeys(): void {
   // Digits follow every change of the page (tab switched, cards filtered …); adding our own caps triggers one more
   // pass that changes nothing
   new MutationObserver((records) => {
-    if (!records.every(isIgnoredAttributeChange)) {
+    // Without hotkeys (phone, tablet) there are no digits to place; the watch below clears them once on switch
+    if (hotkeysAvailable.value && !records.every(isIgnoredAttributeChange)) {
       scheduleNumbers();
     }
   }).observe(document.body, {

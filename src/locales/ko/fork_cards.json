@@ -1073,5 +1073,9 @@
   "Requires 2 corruption. Decrease <opp>any</opp> M€ production 2 steps. Increase your M€ production 1 step for every unit of corruption you have.": "조건: 부패 2 이상. <opp>아무 1명</opp>의 M€ 생산력 2 감소. 보유한 부패 1당 M€ 생산력 1 증가.",
   "Requires 1 corruption. Remove up to 2 resources <opp>from any card</opp>": "조건: 부패 1 이상. <opp>아무 카드에서</opp> 자원을 최대 2개 제거",
   "Remove up to 1 corruption <opp>from another player</opp>. Reveal 2 cards from the deck until you reveal 2 event cards. Take them into hand and discard the rest.": "<opp>다른 플레이어 1명</opp>의 부패를 최대 1 제거. 사건 카드 2장이 나올 때까지 덱에서 카드를 공개. 그 2장을 손에 가져오고 나머지는 버림.",
-  "Steal up to 4 M€, plus 1 extra M€ for each corruption resource you have, <opp>from any player</opp>.": "<opp>아무 1명에게서</opp> 최대 4 M€, 그리고 보유한 부패 자원 1개당 1 M€를 추가로 훔침."
+  "Steal up to 4 M€, plus 1 extra M€ for each corruption resource you have, <opp>from any player</opp>.": "<opp>아무 1명에게서</opp> 최대 4 M€, 그리고 보유한 부패 자원 1개당 1 M€를 추가로 훔침.",
+  "Place the ocean first": "해양 먼저 배치",
+  "Place the greenery first": "녹지 먼저 배치",
+  "${0} could not place a greenery next to the ocean": "${0}은(는) 해양 옆에 녹지를 배치할 수 없었습니다",
+  "This ocean adds erosion tiles, which may leave no space for the greenery. Placing the greenery first gives up its bonus for being next to the new ocean": "이 해양은 침식 타일을 추가하므로 녹지를 놓을 공간이 남지 않을 수 있습니다. 녹지를 먼저 배치하면 새 해양에 인접한 보너스를 받지 못합니다"
 }

@@ -2238,5 +2238,7 @@
   "Bonus at": "Premia przy",
   "max. ${0}": "maks. ${0}",
   "protected": "chronione",
-  "Replay of game ${0} not possible: the game is not saved on this server.": "Powtórka gry ${0} niemożliwa: gra nie jest zapisana na tym serwerze."
+  "Replay of game ${0} not possible: the game is not saved on this server.": "Powtórka gry ${0} niemożliwa: gra nie jest zapisana na tym serwerze.",
+  "Reduced effects on phones": "Ograniczone efekty na telefonie",
+  "Smoother on older phones: no frosted glass, large shadows or animations.": "Płynniej na starszych telefonach: bez matowego szkła, dużych cieni i animacji."
 }

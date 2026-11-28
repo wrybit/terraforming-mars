@@ -188,6 +188,14 @@ function setStyles(element: HTMLElement, styles: Partial<Record<StyleProperty, s
   }
 }
 
+// classList.add/toggle write the class attribute even when nothing changes (DOM spec), which wakes the
+// MutationObserver below and schedules the next pass: an endless loop in every frame. Only write on change.
+function setClass(element: HTMLElement, name: string, on: boolean): void {
+  if (element.classList.contains(name) !== on) {
+    element.classList.toggle(name, on);
+  }
+}
+
 function fit(element: HTMLElement, rule: FitRule): void {
   const list = element.closest<HTMLElement>(CONTAINER_SELECTOR);
   // offsetWidth/-Height ignore transform: these are the natural dimensions
@@ -210,10 +218,10 @@ function fit(element: HTMLElement, rule: FitRule): void {
       grid.style.setProperty('--mb-grid-columns', String(columns));
     }
   }
-  element.classList.add(FITTED_CLASS);
+  setClass(element, FITTED_CLASS, true);
   // Cropped = planet without ring (MARS_CROP); a section larger than the element (RING_FRAME) crops nothing
   const clips = rule.crop !== undefined && crop.left >= 0 && crop.top >= 0 && crop.left + crop.width <= width && crop.top + crop.height <= height;
-  element.classList.toggle(CROPPED_CLASS, clips);
+  setClass(element, CROPPED_CLASS, clips);
   setStyles(element, {
     transformOrigin: '0 0',
     transform: `translate(${-crop.left * scale}px, ${-crop.top * scale}px) scale(${scale.toFixed(4)})`,
