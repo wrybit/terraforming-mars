@@ -89,6 +89,14 @@
   backdrop-filter: blur(8px);
 }
 
+// Frosted glass of the bottom stack in a turn (effect preview, payment area, task bar): one look for all three,
+// separated only by lines, so the stack reads as one piece and the cards behind it stay calm
+.mb-footer-glass() {
+  background: rgba(12, 14, 20, 0.78);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  backdrop-filter: blur(16px) saturate(140%);
+}
+
 html.tm-mobile {
   // Sidebar space and desktop hints are dropped
   .main-container {
@@ -1823,6 +1831,10 @@ html.tm-mobile {
     background: transparent !important;
     border: 0 !important;
     box-shadow: none !important;
+    // No blur of its own: it would make the footer the backdrop root and the glass of its parts
+    // (.mb-footer-glass) would only see the empty footer instead of the cards behind it
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
 
     &:empty {
       display: none !important;
@@ -1857,20 +1869,23 @@ html.tm-mobile {
       margin: 0 !important;
     }
 
-    // Effect preview (card_impact.less) like the payment area: edge to edge, one column, its own surface
-    .card-impact {
-      grid-template-columns: minmax(0, 1fr);
-      // Column footer: flex-basis would set the height and override the slide animation (collapseAnimation.ts)
+    // Effect preview (card_impact.less) like the payment area: edge to edge, one column, same glass
+    .card-impact-frame {
+      // Column footer: flex-basis would set the height
       flex: none;
-      // Only the sides: top/bottom stay free for the slide animation, which closes the gap via margin-top
+      // Only the sides: the bottom margin closes the gap to the payment area
       margin-right: -12px !important;
       margin-left: -@mb-footer-left !important;
       // Flush with the payment area: covers the footer gap (10px) so no see-through strip remains
       margin-bottom: -10px;
+    }
+
+    .card-impact {
+      grid-template-columns: minmax(0, 1fr);
       padding: 10px 12px 8px;
       border-top: 1px solid @mb-line;
       border-bottom: 0;
-      background: @mb-surface;
+      .mb-footer-glass();
     }
 
     // Payment area edge to edge across the full width (footer starts right of "Back")
@@ -1880,7 +1895,7 @@ html.tm-mobile {
       border-radius: 0;
       border: 0;
       border-top: 1px solid @mb-line;
-      background: @mb-surface-raised;
+      .mb-footer-glass();
     }
 
     // Standalone payment (SelectPayment, e.g. a card action) brings its own button inside the form. Next to the
@@ -2021,6 +2036,11 @@ html.tm-mobile {
     border-top: 1px solid @mb-line;
     .mb-bar-surface();
     box-shadow: @mb-bar-shadow-up;
+  }
+
+  // In a turn the task bar is the bottom part of the stack with payment area and effect preview: same glass
+  .mb-home--turn .mb-taskbar {
+    .mb-footer-glass();
   }
 
   .mb-nav {
@@ -2273,7 +2293,7 @@ html.tm-mobile {
     }
 
     .payments_form,
-    .card-impact {
+    .card-impact-frame {
       margin-right: -@mb-peek-space !important;
     }
 

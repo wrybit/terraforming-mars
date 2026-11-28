@@ -2519,7 +2519,6 @@
   "Pause playback": "Pausa",
   "Step forward": "Passo avanti",
   "Course of the game": "Andamento della partita",
-  "Replay of game ${0} not possible: its start is not saved on this server.": "Replay della partita ${0} non possibile: il suo stato iniziale non è salvato su questo server.",
   "Replay of game ${0} not possible: the game is not finished yet.": "Replay della partita ${0} non possibile: la partita non è ancora finita.",
   "Replay of game ${0} could not be loaded (server error ${1}). Please try again later.": "Impossibile caricare il replay della partita ${0} (errore del server ${1}). Riprova più tardi.",
   "Replay of game ${0} could not be loaded: no connection to the server. Please check the connection and try again.": "Impossibile caricare il replay della partita ${0}: nessuna connessione al server. Controlla la connessione e riprova.",
@@ -2700,5 +2699,6 @@
   "ever played": "giocati in totale",
   "Bonus at": "Bonus a",
   "max. ${0}": "massimo ${0}",
-  "protected": "protetto"
+  "protected": "protetto",
+  "Replay of game ${0} not possible: the game is not saved on this server.": "Replay della partita ${0} non possibile: la partita non è salvata su questo server."
 }

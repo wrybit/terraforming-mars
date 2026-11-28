@@ -3,19 +3,47 @@
 @card-impact-text: #ece9e2;
 @card-impact-muted: #a4a9b6;
 
-.or-tab-footer > .card-impact {
+// Frame around the block: stays in place while the footer slides (footerRevealAnimation.ts) and cuts the
+// block off at its bottom edge, so it comes out from behind the payment area
+.or-tab-footer > .card-impact-frame {
   order: -1;
   flex: 1 0 100%;
   margin: 0;
+  overflow: hidden;
+  // Behind the other parts of the footer, never over the payment area or the buttons
+  z-index: -1;
+}
+
+// Own stacking context, so the frame's negative z-index stays above the footer's surface
+.or-tab-footer:has(> .card-impact-frame) {
+  isolation: isolate;
+}
+
+// The divider is the frame's bottom edge: the frame stays in place while the block slides, so the line marks
+// exactly the edge the block comes out from. Desktop only (the phone has its own lines)
+html:not(.tm-mobile) .or-tab-footer > .card-impact-frame {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .card-impact {
+  // Anchor for the fading copy of the old lines when the card changes
+  position: relative;
   display: grid;
   // Desktop: two columns; the gap between the columns is clearly larger than within a line (law of proximity)
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 6px 56px;
   padding-bottom: 10px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+// Copy of the old lines during the cross-fade (CardImpactPanel.vue): same grid, on top of the new lines
+.card-impact-ghost {
+  position: absolute;
+  inset: 0 0 auto;
+  display: grid;
+  grid-template-columns: inherit;
+  gap: inherit;
+  padding: inherit;
+  pointer-events: none;
 }
 
 @container tab-footer (max-width: 640px) {

@@ -2052,7 +2052,6 @@
   "Pause playback": "Wstrzymaj",
   "Step forward": "Krok naprzód",
   "Course of the game": "Przebieg gry",
-  "Replay of game ${0} not possible: its start is not saved on this server.": "Powtórka gry ${0} niemożliwa: jej stan początkowy nie jest zapisany na tym serwerze.",
   "Replay of game ${0} not possible: the game is not finished yet.": "Powtórka gry ${0} niemożliwa: gra jeszcze się nie zakończyła.",
   "Replay of game ${0} could not be loaded (server error ${1}). Please try again later.": "Nie udało się wczytać powtórki gry ${0} (błąd serwera ${1}). Spróbuj ponownie później.",
   "Replay of game ${0} could not be loaded: no connection to the server. Please check the connection and try again.": "Nie udało się wczytać powtórki gry ${0}: brak połączenia z serwerem. Sprawdź połączenie i spróbuj ponownie.",
@@ -2238,5 +2237,6 @@
   "ever played": "zagrane łącznie",
   "Bonus at": "Premia przy",
   "max. ${0}": "maks. ${0}",
-  "protected": "chronione"
+  "protected": "chronione",
+  "Replay of game ${0} not possible: the game is not saved on this server.": "Powtórka gry ${0} niemożliwa: gra nie jest zapisana na tym serwerze."
 }

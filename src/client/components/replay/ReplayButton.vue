@@ -33,7 +33,7 @@ const error = ref<string | undefined>(undefined);
 // Says which game and why, so the reader knows what to do
 function errorText(status: number): string {
   if (status === statusCode.notFound) {
-    return translateTextWithParams('Replay of game ${0} not possible: its start is not saved on this server.', [props.gameId]);
+    return translateTextWithParams('Replay of game ${0} not possible: the game is not saved on this server.', [props.gameId]);
   }
   if (status === statusCode.badRequest) {
     return translateTextWithParams('Replay of game ${0} not possible: the game is not finished yet.', [props.gameId]);
