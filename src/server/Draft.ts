@@ -195,6 +195,14 @@ export abstract class Draft {
       return;
     }
 
+    // The first pick of the initial draft starts the clocks (upstream #8757): until then the
+    // timers were off for the whole initial draft and only started with the corporation choice.
+    if (this.type === 'initial' && this.game.initialDraftIteration === 1 && this.game.draftRound === 1) {
+      for (const p of this.game.players) {
+        p.timer.enable();
+      }
+    }
+
     // Picks are final now: each player reads what they took and what they passed on
     for (const p of this.game.players) {
       this.logPick(p);
