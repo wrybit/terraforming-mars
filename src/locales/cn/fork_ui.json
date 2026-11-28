@@ -2256,7 +2256,7 @@
   "Pause playback": "暂停",
   "Step forward": "前进一步",
   "Course of the game": "对局进程",
-  "Replay of game ${0} not possible: its start is not saved on this server.": "无法回放对局 ${0}：此服务器未保存其初始状态。",
+  "Replay of game ${0} not possible: the game is not saved on this server.": "无法回放对局 ${0}：此服务器未保存该对局。",
   "Replay of game ${0} not possible: the game is not finished yet.": "无法回放对局 ${0}：对局尚未结束。",
   "Replay of game ${0} could not be loaded (server error ${1}). Please try again later.": "无法加载对局 ${0} 的回放（服务器错误 ${1}）。请稍后再试。",
   "Replay of game ${0} could not be loaded: no connection to the server. Please check the connection and try again.": "无法加载对局 ${0} 的回放：无法连接服务器。请检查网络连接后重试。",

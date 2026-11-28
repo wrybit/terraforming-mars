@@ -1454,7 +1454,7 @@
   "Pause playback": "Szünet",
   "Step forward": "Egy lépés előre",
   "Course of the game": "A játék menete",
-  "Replay of game ${0} not possible: its start is not saved on this server.": "A(z) ${0} játszma visszajátszása nem lehetséges: a kezdőállapota nincs elmentve ezen a szerveren.",
+  "Replay of game ${0} not possible: the game is not saved on this server.": "A(z) ${0} játszma visszajátszása nem lehetséges: a játszma nincs elmentve ezen a szerveren.",
   "Replay of game ${0} not possible: the game is not finished yet.": "A(z) ${0} játszma visszajátszása nem lehetséges: a játszma még nem ért véget.",
   "Replay of game ${0} could not be loaded (server error ${1}). Please try again later.": "A(z) ${0} játszma visszajátszását nem sikerült betölteni (szerverhiba: ${1}). Próbáld újra később.",
   "Replay of game ${0} could not be loaded: no connection to the server. Please check the connection and try again.": "A(z) ${0} játszma visszajátszását nem sikerült betölteni: nincs kapcsolat a szerverrel. Ellenőrizd a kapcsolatot, és próbáld újra.",

@@ -2143,7 +2143,7 @@
   "Pause playback": "Пауза",
   "Step forward": "Шаг вперёд",
   "Course of the game": "Ход игры",
-  "Replay of game ${0} not possible: its start is not saved on this server.": "Повтор игры ${0} невозможен: её начальное состояние не сохранено на этом сервере.",
+  "Replay of game ${0} not possible: the game is not saved on this server.": "Повтор игры ${0} невозможен: игра не сохранена на этом сервере.",
   "Replay of game ${0} not possible: the game is not finished yet.": "Повтор игры ${0} невозможен: игра ещё не завершена.",
   "Replay of game ${0} could not be loaded (server error ${1}). Please try again later.": "Не удалось загрузить повтор игры ${0} (ошибка сервера ${1}). Попробуйте позже.",
   "Replay of game ${0} could not be loaded: no connection to the server. Please check the connection and try again.": "Не удалось загрузить повтор игры ${0}: нет связи с сервером. Проверьте соединение и попробуйте снова.",

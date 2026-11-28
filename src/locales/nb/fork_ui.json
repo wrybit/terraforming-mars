@@ -1638,7 +1638,7 @@
   "Pause playback": "Sett på pause",
   "Step forward": "Ett steg fram",
   "Course of the game": "Spillforløp",
-  "Replay of game ${0} not possible: its start is not saved on this server.": "Reprise av spill ${0} er ikke mulig: startstillingen er ikke lagret på denne serveren.",
+  "Replay of game ${0} not possible: the game is not saved on this server.": "Reprise av spill ${0} er ikke mulig: spillet er ikke lagret på denne serveren.",
   "Replay of game ${0} not possible: the game is not finished yet.": "Reprise av spill ${0} er ikke mulig: spillet er ikke ferdig ennå.",
   "Replay of game ${0} could not be loaded (server error ${1}). Please try again later.": "Reprisen av spill ${0} kunne ikke lastes (serverfeil ${1}). Prøv igjen senere.",
   "Replay of game ${0} could not be loaded: no connection to the server. Please check the connection and try again.": "Reprisen av spill ${0} kunne ikke lastes: ingen forbindelse til serveren. Sjekk forbindelsen og prøv igjen.",

@@ -4,6 +4,7 @@ import {MockResponse} from './HttpMocks';
 import {RouteTestScaffolding} from './RouteTestScaffolding';
 import {testGame} from '../TestGame';
 import {statusCode} from '../../src/common/http/statusCode';
+import {Phase} from '../../src/common/Phase';
 
 describe('ApiReplay', () => {
   let scaffolding: RouteTestScaffolding;
@@ -34,5 +35,16 @@ describe('ApiReplay', () => {
     await scaffolding.get(ApiReplay.INSTANCE, res);
     expect(res.statusCode).eq(statusCode.badRequest);
     expect(res.content).contains('not finished');
+  });
+
+  // Importierte/kopierte Partien haben keinen Save 0 – das Replay startet dann vom Ende statt abzubrechen
+  it('replays a finished game without saved start', async () => {
+    const [game, player] = testGame(2);
+    game.phase = Phase.END;
+    await scaffolding.ctx.gameLoader.add(game);
+    scaffolding.url = '/api/replay?id=' + player.id;
+    await scaffolding.get(ApiReplay.INSTANCE, res);
+    expect(res.statusCode).eq(statusCode.ok);
+    expect(JSON.parse(res.content).players).has.length(2);
   });
 });

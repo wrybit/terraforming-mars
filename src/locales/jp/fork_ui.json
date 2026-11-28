@@ -1646,7 +1646,7 @@
   "Pause playback": "一時停止",
   "Step forward": "1手進む",
   "Course of the game": "対局の経過",
-  "Replay of game ${0} not possible: its start is not saved on this server.": "ゲーム ${0} のリプレイはできません：このサーバーには開始時の状態が保存されていません。",
+  "Replay of game ${0} not possible: the game is not saved on this server.": "ゲーム ${0} のリプレイはできません：このサーバーにゲームが保存されていません。",
   "Replay of game ${0} not possible: the game is not finished yet.": "ゲーム ${0} のリプレイはできません：ゲームはまだ終了していません。",
   "Replay of game ${0} could not be loaded (server error ${1}). Please try again later.": "ゲーム ${0} のリプレイを読み込めませんでした（サーバーエラー ${1}）。後でもう一度お試しください。",
   "Replay of game ${0} could not be loaded: no connection to the server. Please check the connection and try again.": "ゲーム ${0} のリプレイを読み込めませんでした：サーバーに接続できません。接続を確認してもう一度お試しください。",

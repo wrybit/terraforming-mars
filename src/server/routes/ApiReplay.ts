@@ -8,8 +8,9 @@ import {Database} from '../database/Database';
 import {Phase} from '../../common/Phase';
 import {replaySource} from '../replay/replaySource';
 import {SerializedGame} from '../SerializedGame';
+import {GameId} from '../../common/Types';
 
-// Raw material of a replay for the results page: start and end of a finished game. Nothing extra is stored,
+// Raw material of a replay for the results page: start and end of a finished game (start = earliest save). Nothing extra is stored,
 // the client reconstructs every step from the log (replay/reconstructReplay.ts).
 export class ApiReplay extends Handler {
   public static readonly INSTANCE = new ApiReplay();
@@ -26,12 +27,25 @@ export class ApiReplay extends Handler {
     if (game.phase !== Phase.END) {
       throw RouteError.badRequest(`game ${game.id} is not finished yet`);
     }
-    let start: SerializedGame;
-    try {
-      start = await Database.getInstance().getGameVersion(game.id, 0);
-    } catch {
-      throw RouteError.notFound(`start of game ${game.id} is not saved on this server`);
+    const end = game.serialize();
+    // Ohne gespeicherten Start (importiert/kopiert) dient das Ende als Start: replaySource nimmt dann die Werte,
+    // mit denen jede Partie beginnt – ungenauer, aber das Replay bleibt möglich
+    const start = await firstSave(game.id) ?? end;
+    responses.writeJson(res, ctx, replaySource(start, end, game.standardProjects.map((card) => card.name)));
+  }
+}
+
+// Frühester Spielstand der Partie. Importierte oder kopierte Partien beginnen nicht bei Save 0, sondern bei ihrer
+// mitgebrachten Save-Nummer – daher die kleinste vorhandene statt fest 0
+async function firstSave(gameId: GameId): Promise<SerializedGame | undefined> {
+  const database = Database.getInstance();
+  try {
+    const saveIds = await database.getSaveIds(gameId);
+    if (saveIds.length === 0) {
+      return undefined;
     }
-    responses.writeJson(res, ctx, replaySource(start, game.serialize(), game.standardProjects.map((card) => card.name)));
+    return await database.getGameVersion(gameId, Math.min(...saveIds));
+  } catch {
+    return undefined;
   }
 }
