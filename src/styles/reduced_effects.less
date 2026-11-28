@@ -3,6 +3,8 @@
 // endless animations are recomposited on every scroll frame. Content, layout and meaning stay the same.
 
 @reduced-effects-background: #0e1016;
+@reduced-effects-bar: #12151e; // @mb-surface without transparency
+@reduced-effects-footer: #0c0e14; // .mb-footer-glass() without transparency
 
 // Indicators that say "something is working" keep moving, otherwise they would look frozen
 @reduced-effects-keep-moving: ~".loading-spinner-ring, .lobby-game-spinner, .replay-button__spinner, .log-ai-thinking-spinner, .log-ai-thinking-dots span, .log-row-research-dots i, .loading-bar, .start-screen-preloader *";
@@ -23,6 +25,22 @@ html.tm-mobile.tm-reduced-effects {
   *::after {
     -webkit-backdrop-filter: none !important;
     backdrop-filter: none !important;
+  }
+
+  // Without the blur the translucent bars would let card text shine through: the same colours, but opaque
+  .mb-nav,
+  .mb-top,
+  .mb-task-head,
+  .mb-taskbar,
+  .mb-zoom-controls,
+  .log-generations {
+    background-color: @reduced-effects-bar !important;
+  }
+
+  .card-impact,
+  .payments_form,
+  .or-tab-footer {
+    background-color: @reduced-effects-footer !important;
   }
 
   // Decorative text and drop shadows; cards keep theirs (contrast of numbers on card art)
