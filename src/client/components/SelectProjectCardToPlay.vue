@@ -50,7 +50,7 @@
          Rises in when a card with such info is selected, stays while switching between such cards
          and slides out for a card without -->
     <TabPanelFooterSlot v-if="showPaymentSection">
-      <Transition :css="false" @enter="riseEnter" @leave="riseLeave">
+      <Transition :css="false" @enter="revealEnter" @leave="revealLeave">
         <CardImpactPanel v-if="hasImpact" :impact="card?.impact" />
       </Transition>
     </TabPanelFooterSlot>
@@ -87,7 +87,7 @@ import WarningsComponent from '@/client/components/WarningsComponent.vue';
 import PaymentForm from '@/client/components/PaymentForm.vue';
 import TabPanelFooterSlot from '@/client/components/TabPanelFooterSlot.vue';
 import CardImpactPanel from '@/client/components/cardImpact/CardImpactPanel.vue';
-import {riseEnter, riseLeave} from '@/client/utils/collapseAnimation';
+import {revealEnter, revealLeave} from '@/client/utils/footerRevealAnimation';
 import {Ledger} from '@/client/components/PaymentLedger';
 import {choiceBlockClass, choiceBlockStyle} from '@/client/components/choiceBlock';
 import HandSortControl from '@/client/components/HandSortControl.vue';
@@ -274,8 +274,8 @@ export default defineComponent({
     this.updateAvailableUnits();
   },
   methods: {
-    riseEnter,
-    riseLeave,
+    revealEnter,
+    revealLeave,
     resetCardFilter,
     visibilityOf(card: CardModel): CardVisibility {
       return this.isHandSelection ? cardVisibility(card, handCardFilter, this.filterContext) : 'shown';
