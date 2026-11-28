@@ -280,7 +280,7 @@ export class ApiCreateGame extends Handler {
     let game: IGame;
     if (gameOptions.clonedGamedId !== undefined && !gameOptions.clonedGamedId.startsWith('#')) {
       const serialized = await Database.getInstance().getGameVersion(gameOptions.clonedGamedId, 0);
-      game = Cloner.clone(gameId, players, firstPlayerIdx, serialized);
+      game = Cloner.clone(gameId, spectatorId, players, firstPlayerIdx, serialized);
     } else {
       const seed = Math.random();
       const name = typeof gameReq.name === 'string' ? gameReq.name.trim().slice(0, GAME_NAME_MAX_LENGTH) : undefined;
