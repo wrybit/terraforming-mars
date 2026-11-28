@@ -14,6 +14,7 @@ import {AwardName} from '@/common/ma/AwardName';
 import {getCard} from '@/client/cards/ClientCardManifest';
 import {GenerationLog} from '@/client/utils/fetchLogs';
 import {ReplayPlayerState, ReplayState} from './reconstructReplay';
+import {overlayGame, overlayPlayer, replayTrackView} from './replayTrackOverlay';
 
 // Turns a reconstructed state into the models of the normal game view (PlayersOverview, Mars, log, hand cards),
 // so the replay shows the game exactly as it looked. Starts from the final view of the results page and replaces
@@ -90,16 +91,17 @@ function gameModel(final: GameModel, state: ReplayState, source: ReplaySourceMod
 }
 
 /** The view of one moment of the replay, seen by the chosen player (their hand cards, their private log lines). */
-export function replayViewModel(final: ViewModel, source: ReplaySourceModel, state: ReplayState, perspective: Color, last: boolean): PlayerViewModel {
+export function replayViewModel(final: ViewModel, source: ReplaySourceModel, state: ReplayState, perspective: Color, last: boolean, line: number): PlayerViewModel {
+  const track = replayTrackView(source, line);
   const players = final.players.map((finalPlayer) => {
     const index = source.players.findIndex((player) => player.color === finalPlayer.color);
-    return index < 0 ? finalPlayer : playerModel(finalPlayer, state, state.players[index], state.generation, last);
+    return overlayPlayer(index < 0 ? finalPlayer : playerModel(finalPlayer, state, state.players[index], state.generation, last), track);
   });
   const thisPlayer = players.find((player) => player.color === perspective) ?? players[0];
   const own = state.players[source.players.findIndex((player) => player.color === thisPlayer.color)];
   return {
     ...final,
-    game: gameModel(final.game, state, source, last),
+    game: overlayGame(gameModel(final.game, state, source, last), track),
     players,
     color: thisPlayer.color,
     thisPlayer,

@@ -16,6 +16,7 @@ import {recordDeletedGames, DeletedGameEntry} from './deletedGamesLog';
 import {GameDeletionReason} from '../../common/models/GameDeletionModel';
 import {isUsableDaysSetting} from './utils';
 import {notifyGameGone} from './gameGone';
+import {recordReplayTrack} from '../replay/recordReplayTrack';
 
 const metrics = {
   initialize: new prometheus.Gauge({
@@ -264,6 +265,7 @@ export class GameLoader implements IGameLoader {
 
   public async completeGame(game: IGame) {
     const database = Database.getInstance();
+    recordReplayTrack(game);
     await database.saveGame(game);
     try {
       this.mark(game.id);
@@ -281,6 +283,7 @@ export class GameLoader implements IGameLoader {
     if (this.purgedGames.includes(game.id)) {
       throw new Error('This game no longer exists');
     }
+    recordReplayTrack(game);
     return Database.getInstance().saveGame(game);
   }
 

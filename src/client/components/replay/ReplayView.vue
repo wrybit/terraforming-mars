@@ -135,7 +135,7 @@ const last = computed(() => current.value === props.steps.length - 1);
 // Parts that stay the same between steps keep their objects (replayReuse.ts): only what changed renders anew
 let previousView: unknown;
 let previousStream: unknown;
-const viewModel = computed(() => previousView = reuseUnchanged(previousView, replayViewModel(props.final, props.source, state.value, perspective.value, last.value)));
+const viewModel = computed(() => previousView = reuseUnchanged(previousView, replayViewModel(props.final, props.source, state.value, perspective.value, last.value, step.value.state)));
 const stream = computed(() => previousStream = reuseUnchanged(previousStream, replayLogStream(props.source, step.value.state, perspective.value)));
 // The action tabs show what comes next: the menu of the next step's actor as it was before that step, with its
 // action open and marked – so one sees the choice before its result. Steps without an action (generation start …)

@@ -9,6 +9,7 @@ import {PlayerId, GameId, SpectatorId, SpaceId} from '../common/Types';
 import {GameOptions} from './game/GameOptions';
 import {AresData} from '../common/ares/AresData';
 import {LogMessage} from '../common/logs/LogMessage';
+import {ReplayTrackEntry} from '../common/replay/ReplayTrack';
 import {SerializedBoard} from './boards/SerializedBoard';
 import {SerializedMoonData} from './moon/SerializedMoonData';
 import {SerializedPathfindersData} from './pathfinders/SerializedPathfindersData';
@@ -43,6 +44,8 @@ export type SerializedGame = {
     gameAge: number;
     aiDecisionCount?: number;
     gameLog: Array<LogMessage>;
+    /** Missing in games saved before the replay track existed */
+    replayTrack?: Array<ReplayTrackEntry>;
     gameOptions: GameOptions;
     generation: number;
     globalsPerGeneration: Array<Partial<Record<GlobalParameter, number>>>;

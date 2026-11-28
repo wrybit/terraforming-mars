@@ -21,6 +21,7 @@ import {Tile} from './Tile';
 import {LogMessageBuilder} from './logs/LogMessageBuilder';
 import {LogHelper} from './LogHelper';
 import {LogMessage} from '../common/logs/LogMessage';
+import {ReplayTrackEntry} from '../common/replay/ReplayTrack';
 import {milestoneManifest} from './milestones/Milestones';
 import {awardManifest} from './awards/Awards';
 import {PartyHooks} from './turmoil/parties/PartyHooks';
@@ -128,6 +129,7 @@ export class Game implements IGame, Logger {
   // Number of AI decisions so far: running part of the decision id ("<gameId>:<n>"), kept with the game
   public aiDecisionCount: number = 0;
   public gameLog: Array<LogMessage> = createGameLog();
+  public replayTrack: Array<ReplayTrackEntry> = [];
   public undoCount: number = 0; // Each undo increases it
   public inputsThisRound = 0;
   public resettable: boolean = false;
@@ -542,6 +544,7 @@ export class Game implements IGame, Logger {
       gameAge: this.gameAge,
       aiDecisionCount: this.aiDecisionCount,
       gameLog: this.gameLog,
+      replayTrack: this.replayTrack,
       gameOptions: this.gameOptions,
       generation: this.generation,
       globalsPerGeneration: this.globalsPerGeneration,
@@ -1930,6 +1933,7 @@ export class Game implements IGame, Logger {
     game.gameAge = d.gameAge;
     game.aiDecisionCount = d.aiDecisionCount ?? 0;
     game.gameLog = d.gameLog;
+    game.replayTrack = d.replayTrack ?? [];
     // Games saved before the field existed: the newest log line comes closest to the last move
     game.lastActivityTime = new Date(d.lastActivityTimeMs ?? d.gameLog.at(-1)?.timestamp ?? d.createdTimeMs);
     game.generation = d.generation;
