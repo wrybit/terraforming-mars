@@ -4,6 +4,7 @@ import {LogMessageData} from '../logs/LogMessageData';
 import {LogMessageType} from '../logs/LogMessageType';
 import {SpaceId} from '../Types';
 import {TileType} from '../TileType';
+import {ReplayTrackEntry} from '../replay/ReplayTrack';
 
 // What a replay is reconstructed from (api/replay): the start and the end of a finished game plus its whole log.
 // Players are named by colour only: player ids would let anyone take over a seat, so they never leave the server.
@@ -52,4 +53,8 @@ export type ReplaySourceModel = {
   log: ReadonlyArray<ReplaySourceMessage>,
   // Standard projects of this game (with its expansions), for the action tabs of the replay
   standardProjects?: ReadonlyArray<CardName>,
+  // What changed at each save (common/replay/ReplayTrack.ts); older games: only their start, if it is known
+  track?: ReadonlyArray<ReplayTrackEntry>,
+  // The track covers the whole game: it decides everything it holds. Otherwise the log decides what it can tell.
+  trackComplete?: boolean,
 };

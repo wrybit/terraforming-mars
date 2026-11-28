@@ -7,6 +7,7 @@ import {RouteError} from './RouteError';
 import {Database} from '../database/Database';
 import {Phase} from '../../common/Phase';
 import {replaySource} from '../replay/replaySource';
+import {replayTrackForSource} from '../replay/replayTrackForSource';
 import {SerializedGame} from '../SerializedGame';
 import {GameId, ParticipantId} from '../../common/Types';
 import {Game} from '../Game';
@@ -44,7 +45,9 @@ export class ApiReplay extends Handler {
 }
 
 function writeReplay(res: Response, ctx: Context, start: SerializedGame, end: IGame): void {
-  responses.writeJson(res, ctx, replaySource(start, end.serialize(), end.standardProjects.map((card) => card.name)));
+  const serialized = end.serialize();
+  const track = replayTrackForSource(start, serialized);
+  responses.writeJson(res, ctx, replaySource(start, serialized, end.standardProjects.map((card) => card.name), track));
 }
 
 // First extension that knows the game; only finished games, as for those from the database

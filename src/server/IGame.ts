@@ -10,6 +10,7 @@ import {IMilestone} from './milestones/IMilestone';
 import {Space} from './boards/Space';
 import {LogMessageBuilder} from './logs/LogMessageBuilder';
 import {LogMessage} from '../common/logs/LogMessage';
+import {ReplayTrackEntry} from '../common/replay/ReplayTrack';
 import {Phase} from '../common/Phase';
 import {IPlayer} from './IPlayer';
 import {PlayerId, GameId, SpectatorId, SpaceId, isGameId} from '../common/Types';
@@ -70,6 +71,8 @@ export interface IGame extends Logger {
   /** Number of AI decisions so far: running part of the decision id ("<gameId>:<n>"). */
   aiDecisionCount: number;
   gameLog: Array<LogMessage>;
+  /** What changed at each save, for the replay (common/replay/ReplayTrack.ts) */
+  replayTrack: Array<ReplayTrackEntry>;
   undoCount: number; // Each undo increases it
   inputsThisRound: number;
   resettable: boolean;
