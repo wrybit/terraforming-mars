@@ -99,6 +99,44 @@ describe('SelectProjectCardToPlay', () => {
     expect(wrapper.findAll('.choice-section-title')).has.length(2);
   });
 
+  it('keeps the card impact block while switching between cards with impact and removes it for a card without', async () => {
+    const impact: CardModel['impact'] = [{basis: {type: 'card', card: CardName.ANTS}, gains: [{resource: 'vp', amount: 1}]}];
+    const wrapper = mount(SelectProjectCardToPlay, {
+      ...globalConfig,
+      props: {
+        playerView: asComplete<PlayerViewModel>({
+          cardsInHand: [],
+          id: 'p-impact',
+          thisPlayer: {steel: 0, titanium: 0, steelValue: 2, titaniumValue: 3, tableau: []},
+        }),
+        playerinput: asComplete<SelectProjectCardToPlayModel>({
+          type: 'projectCard',
+          title: 'Play project card',
+          cards: [
+            {name: CardName.ANTS, calculatedCost: 0, reserveUnits: Units.EMPTY, impact},
+            {name: CardName.BIRDS, calculatedCost: 0, reserveUnits: Units.EMPTY, impact},
+            {name: CardName.ADVANCED_ALLOYS, calculatedCost: 0, reserveUnits: Units.EMPTY, impact: []},
+          ],
+          paymentOptions: {},
+          buttonLabel: 'Save',
+        }),
+        onsave: () => {},
+        showsave: true,
+        showtitle: false,
+      },
+    });
+    const block = wrapper.find('.card-impact');
+    expect(block.exists()).is.true;
+
+    await wrapper.setData({cardName: CardName.BIRDS});
+    // Same element: the block stays, only its content changes (no slide out and in again)
+    expect(wrapper.find('.card-impact').element).eq(block.element);
+
+    await wrapper.setData({cardName: CardName.ADVANCED_ALLOYS});
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find('.card-impact').exists()).is.false;
+  });
+
   it('using heat', async () => {
     // Birds will cost 10. Player has 7M€ and will use 3 of the 4 available heat units.
     const wrapper = setupCardForPurchase(
