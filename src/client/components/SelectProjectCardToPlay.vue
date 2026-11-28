@@ -46,9 +46,13 @@
       </label>
     </template>
 
-    <!-- What the selected card changes beyond its printed effects, in the footer above the payment area -->
-    <TabPanelFooterSlot v-if="showPaymentSection && card?.impact !== undefined">
-      <CardImpactPanel :impact="card.impact" />
+    <!-- What the selected card changes beyond its printed effects, in the footer above the payment area.
+         Rises in when a card with such info is selected, stays while switching between such cards
+         and slides out for a card without -->
+    <TabPanelFooterSlot v-if="showPaymentSection">
+      <Transition :css="false" @enter="riseEnter" @leave="riseLeave">
+        <CardImpactPanel v-if="hasImpact" :impact="card?.impact" />
+      </Transition>
     </TabPanelFooterSlot>
     <PaymentForm
       v-if="showPaymentSection"
@@ -83,6 +87,7 @@ import WarningsComponent from '@/client/components/WarningsComponent.vue';
 import PaymentForm from '@/client/components/PaymentForm.vue';
 import TabPanelFooterSlot from '@/client/components/TabPanelFooterSlot.vue';
 import CardImpactPanel from '@/client/components/cardImpact/CardImpactPanel.vue';
+import {riseEnter, riseLeave} from '@/client/utils/collapseAnimation';
 import {Ledger} from '@/client/components/PaymentLedger';
 import {choiceBlockClass, choiceBlockStyle} from '@/client/components/choiceBlock';
 import HandSortControl from '@/client/components/HandSortControl.vue';
@@ -209,6 +214,9 @@ export default defineComponent({
     showPaymentSection(): boolean {
       return this.card !== undefined && this.card.isDisabled !== true;
     },
+    hasImpact(): boolean {
+      return (this.card?.impact?.length ?? 0) > 0;
+    },
     canUseTitaniumRegularly(): boolean {
       return this.tags.includes(Tag.SPACE) ||
           this.playerView.thisPlayer.lastCardPlayed === CardName.LAST_RESORT_INGENUITY;
@@ -266,6 +274,8 @@ export default defineComponent({
     this.updateAvailableUnits();
   },
   methods: {
+    riseEnter,
+    riseLeave,
     resetCardFilter,
     visibilityOf(card: CardModel): CardVisibility {
       return this.isHandSelection ? cardVisibility(card, handCardFilter, this.filterContext) : 'shown';
