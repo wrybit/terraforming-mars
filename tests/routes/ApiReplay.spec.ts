@@ -37,7 +37,7 @@ describe('ApiReplay', () => {
     expect(res.content).contains('not finished');
   });
 
-  // Importierte/kopierte Partien haben keinen Save 0 – das Replay startet dann vom Ende statt abzubrechen
+  // Imported or copied games have no save 0 – the replay then starts from the end instead of failing
   it('replays a finished game without saved start', async () => {
     const [game, player] = testGame(2);
     game.phase = Phase.END;
