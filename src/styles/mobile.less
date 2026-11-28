@@ -1865,6 +1865,8 @@ html.tm-mobile {
       // Only the sides: top/bottom stay free for the slide animation, which closes the gap via margin-top
       margin-right: -12px !important;
       margin-left: -@mb-footer-left !important;
+      // Flush with the payment area: covers the footer gap (10px) so no see-through strip remains
+      margin-bottom: -10px;
       padding: 10px 12px 8px;
       border-top: 1px solid @mb-line;
       border-bottom: 0;
