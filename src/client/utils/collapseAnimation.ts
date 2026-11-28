@@ -11,17 +11,22 @@ type Frame = Record<string, string | number>;
 // slides out from behind the area below it (no fade: its top edge rises, the area below covers the rest)
 type SlideFrom = 'above' | 'behind';
 
+// The list gap is closed on the side facing the neighbour: above for list entries, below for a block
+// sitting on top of the area it slides out from (absolute, so a block that already overlaps the gap works too)
 function collapsedFrame(gapPx: number, from: SlideFrom): Frame {
-  const frame: Frame = {height: '0px', paddingTop: '0px', paddingBottom: '0px', borderTopWidth: '0px', borderBottomWidth: '0px',
-    marginTop: `-${gapPx}px`};
-  return from === 'above' ? {...frame, opacity: 0, transform: 'translateY(-8px) scale(0.98)'} : frame;
+  const frame: Frame = {height: '0px', paddingTop: '0px', paddingBottom: '0px', borderTopWidth: '0px', borderBottomWidth: '0px'};
+  return from === 'above' ?
+    {...frame, marginTop: `-${gapPx}px`, opacity: 0, transform: 'translateY(-8px) scale(0.98)'} :
+    {...frame, marginBottom: `-${gapPx}px`};
 }
 
 function openFrame(element: HTMLElement, from: SlideFrom): Frame {
   const style = getComputedStyle(element);
   const frame: Frame = {height: `${element.getBoundingClientRect().height}px`, paddingTop: style.paddingTop, paddingBottom: style.paddingBottom,
-    borderTopWidth: style.borderTopWidth, borderBottomWidth: style.borderBottomWidth, marginTop: '0px'};
-  return from === 'above' ? {...frame, opacity: 1, transform: 'none'} : frame;
+    borderTopWidth: style.borderTopWidth, borderBottomWidth: style.borderBottomWidth};
+  return from === 'above' ?
+    {...frame, marginTop: '0px', opacity: 1, transform: 'none'} :
+    {...frame, marginBottom: style.marginBottom};
 }
 
 // Gap of the surrounding flex/grid list: closing it too keeps the end position exact
