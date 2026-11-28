@@ -141,6 +141,13 @@ describe('Stats components', () => {
     expect(headers[5].classes()).to.include('stats-table-unsortable');
   });
 
+  it('StatsGameList puts extra columns right after the date', () => {
+    const extraColumns = [{key: 'origin', label: 'Origin', text: true, value: () => 'elsewhere'}];
+    const wrapper = mount(StatsGameList, {...config, props: {games, extraColumns}});
+    expect(wrapper.findAll('th').map((header) => header.text().replace(/[▲▼]/g, '').trim()).slice(0, 3)).deep.eq(['Date', 'Origin', 'Players']);
+    expect(wrapper.findAll('tbody tr')[0].findAll('td')[1].text()).eq('elsewhere');
+  });
+
   it('StatsGameList shows the setup of each game as chips', () => {
     const wrapper = mount(StatsGameList, {...config, props: {games}});
     const chipTexts = (row: number) => wrapper.findAll('tbody tr')[row].findAll('.create-game-summary-chip')

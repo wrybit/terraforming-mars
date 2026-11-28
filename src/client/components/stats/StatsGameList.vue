@@ -54,10 +54,12 @@ export default defineComponent({
     games: {type: Array as PropType<ReadonlyArray<StatsGame>>, required: true},
     // Game ID → players the detail page is about; the others recede
     highlighted: {type: Map as PropType<Map<string, Array<string>>>, required: false},
+    // More columns right after the date, e.g. the sending server of games another server shared
+    extraColumns: {type: Array as PropType<ReadonlyArray<StatsColumn>>, default: () => []},
   },
   computed: {
     columns(): ReadonlyArray<StatsColumn> {
-      return COLUMNS;
+      return this.extraColumns.length === 0 ? COLUMNS : [COLUMNS[0], ...this.extraColumns, ...COLUMNS.slice(1)];
     },
   },
   methods: {
