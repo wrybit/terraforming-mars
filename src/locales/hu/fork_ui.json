@@ -1624,5 +1624,7 @@
   "ever played": "összesen kijátszva",
   "Bonus at": "Bónusz itt:",
   "max. ${0}": "legfeljebb ${0}",
-  "protected": "védett"
+  "protected": "védett",
+  "Reduced effects on phones": "Csökkentett effektek telefonon",
+  "Smoother on older phones: no frosted glass, large shadows or animations.": "Gördülékenyebb régebbi telefonokon: nincs matt üveg, nagy árnyék és animáció."
 }

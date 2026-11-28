@@ -1805,5 +1805,7 @@
   "ever played": "spilt totalt",
   "Bonus at": "Bonus ved",
   "max. ${0}": "maks. ${0}",
-  "protected": "beskyttet"
+  "protected": "beskyttet",
+  "Reduced effects on phones": "Reduserte effekter på mobil",
+  "Smoother on older phones: no frosted glass, large shadows or animations.": "Jevnere på eldre mobiler: uten frostet glass, store skygger og animasjoner."
 }

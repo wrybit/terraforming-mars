@@ -2390,5 +2390,7 @@
   "ever played": "изиграни общо",
   "Bonus at": "Бонус при",
   "max. ${0}": "макс. ${0}",
-  "protected": "защитено"
+  "protected": "защитено",
+  "Reduced effects on phones": "Намалени ефекти на телефона",
+  "Smoother on older phones: no frosted glass, large shadows or animations.": "По-плавно на по-стари телефони: без матово стъкло, големи сенки и анимации."
 }

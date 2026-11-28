@@ -67,6 +67,7 @@ export const PREFERENCE_GROUPS: ReadonlyArray<PreferenceGroup> = [
     switches: [
       {preference: 'hide_awards_and_milestones', label: 'Hide awards and milestones'},
       {preference: 'remove_background', label: 'Remove background image'},
+      {preference: 'reduced_effects', label: 'Reduced effects on phones', hint: 'Smoother on older phones: no frosted glass, large shadows or animations.'},
       {preference: 'symbol_overlay', label: 'Symbol Overlay', hint: 'Add symbols on top of player colors.'},
     ],
   },

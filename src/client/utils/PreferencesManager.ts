@@ -13,6 +13,8 @@ export type Preferences = {
   show_award_details: boolean,
   hide_top_bar: boolean,
   remove_background: boolean,
+  // Mobile view without frosted glass, large shadows and animations (reducedEffects.ts)
+  reduced_effects: boolean,
   hide_active_cards: boolean,
   hide_automated_cards: boolean,
   hide_event_cards: boolean,
@@ -39,6 +41,12 @@ export type Preference = keyof Preferences;
 // 'hide_animated_sidebar' (coloured sidebar on one's turn – the sidebar became the icon group without a background)
 const REMOVED_PREFERENCES: ReadonlyArray<string> = ['small_cards', 'magnify_cards', 'hide_animated_sidebar'];
 
+// Whoever asked the system for less motion gets the reduced effects from the start (can still switch them off)
+function prefersReducedMotion(): boolean {
+  return typeof window !== 'undefined' && typeof window.matchMedia === 'function' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
 // The fork's defaults: apply to everyone who has never changed a setting themselves
 const defaults: Preferences = {
   learner_mode: true,
@@ -57,6 +65,7 @@ const defaults: Preferences = {
   show_award_details: true,
   hide_top_bar: false,
   remove_background: false,
+  reduced_effects: prefersReducedMotion(),
   hide_active_cards: false,
   hide_automated_cards: false,
   hide_event_cards: false,

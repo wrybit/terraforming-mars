@@ -2700,5 +2700,7 @@
   "ever played": "giocati in totale",
   "Bonus at": "Bonus a",
   "max. ${0}": "massimo ${0}",
-  "protected": "protetto"
+  "protected": "protetto",
+  "Reduced effects on phones": "Effetti ridotti sul telefono",
+  "Smoother on older phones: no frosted glass, large shadows or animations.": "Più fluido sui telefoni meno recenti: niente vetro smerigliato, ombre grandi o animazioni."
 }

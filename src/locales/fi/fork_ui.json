@@ -1440,5 +1440,7 @@
   "ever played": "pelattu yhteensä",
   "Bonus at": "Bonus kohdassa",
   "max. ${0}": "enint. ${0}",
-  "protected": "suojattu"
+  "protected": "suojattu",
+  "Reduced effects on phones": "Kevennetyt tehosteet puhelimessa",
+  "Smoother on older phones: no frosted glass, large shadows or animations.": "Sujuvampi vanhemmissa puhelimissa: ei huurrelasia, suuria varjoja eikä animaatioita."
 }

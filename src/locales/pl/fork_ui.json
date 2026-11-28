@@ -2238,5 +2238,7 @@
   "ever played": "zagrane łącznie",
   "Bonus at": "Premia przy",
   "max. ${0}": "maks. ${0}",
-  "protected": "chronione"
+  "protected": "chronione",
+  "Reduced effects on phones": "Ograniczone efekty na telefonie",
+  "Smoother on older phones: no frosted glass, large shadows or animations.": "Płynniej na starszych telefonach: bez matowego szkła, dużych cieni i animacji."
 }

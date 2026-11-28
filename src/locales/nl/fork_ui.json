@@ -2063,5 +2063,7 @@
   "ever played": "in totaal gespeeld",
   "Bonus at": "Bonus bij",
   "max. ${0}": "maximaal ${0}",
-  "protected": "beschermd"
+  "protected": "beschermd",
+  "Reduced effects on phones": "Minder effecten op de telefoon",
+  "Smoother on older phones: no frosted glass, large shadows or animations.": "Soepeler op oudere telefoons: geen matglas, grote schaduwen of animaties."
 }

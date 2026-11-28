@@ -1816,5 +1816,7 @@
   "ever played": "累計プレイ",
   "Bonus at": "ボーナス地点",
   "max. ${0}": "最大 ${0}",
-  "protected": "保護"
+  "protected": "保護",
+  "Reduced effects on phones": "スマホで効果を減らす",
+  "Smoother on older phones: no frosted glass, large shadows or animations.": "古いスマホでもなめらかに：すりガラス、大きな影、アニメーションなし。"
 }
