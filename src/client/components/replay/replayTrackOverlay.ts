@@ -19,7 +19,8 @@ export function replayTrackView(source: ReplaySourceModel, line: number): Replay
   if (track.length === 0) {
     return undefined;
   }
-  return {state: replayTrackAt(track, line + 1), complete: source.trackComplete === true};
+  // The first entry is the start of the game: it holds for the lines before the first save too
+  return {state: replayTrackAt(track, Math.max(line + 1, track[0].line)), complete: source.trackComplete === true};
 }
 
 export function overlayGame(model: GameModel, view: ReplayTrackView | undefined): GameModel {

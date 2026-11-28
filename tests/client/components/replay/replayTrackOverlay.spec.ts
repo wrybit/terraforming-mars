@@ -36,6 +36,11 @@ describe('replayTrackOverlay', () => {
     expect(overlayPlayer(finalPlayer, after).fleetSize).eq(2);
   });
 
+  it('shows the start before the first save', () => {
+    const late = {...source(true), track: source(true).track!.map((entry, index) => ({...entry, line: index === 0 ? 3 : entry.line}))};
+    expect(overlayGame(finalGame, replayTrackView(late, 0)).venusScaleLevel).eq(0);
+  });
+
   it('leaves what the log tells to the log with only the start of an older game', () => {
     const view = replayTrackView(source(false), 4);
     const game = overlayGame(finalGame, view);
