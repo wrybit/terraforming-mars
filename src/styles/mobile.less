@@ -1860,7 +1860,9 @@ html.tm-mobile {
     // Effect preview (card_impact.less) like the payment area: edge to edge, one column, its own surface
     .card-impact {
       grid-template-columns: minmax(0, 1fr);
-      margin: 0 -12px 0 -@mb-footer-left !important;
+      // Only the sides: top/bottom stay free for the slide animation (collapseAnimation.ts closes the gap via margin-top)
+      margin-right: -12px !important;
+      margin-left: -@mb-footer-left !important;
       padding: 10px 12px 8px;
       border-top: 1px solid @mb-line;
       border-bottom: 0;
