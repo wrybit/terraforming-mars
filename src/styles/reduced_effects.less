@@ -1,4 +1,4 @@
-// Setting "Reduced effects on phones" (reducedEffects.ts sets the class on <html>, only in the mobile view).
+// Setting "Reduced effects on phones" (class on <body> from preferenceClasses.ts, only in the mobile view).
 // Older phones struggle with GPU work: blurred glass over the full-screen photo, large soft shadows and
 // endless animations are recomposited on every scroll frame. Content, layout and meaning stay the same.
 
@@ -9,7 +9,7 @@
 // Indicators that say "something is working" keep moving, otherwise they would look frozen
 @reduced-effects-keep-moving: ~".loading-spinner-ring, .lobby-game-spinner, .replay-button__spinner, .log-ai-thinking-spinner, .log-ai-thinking-dots span, .log-row-research-dots i, .loading-bar, .start-screen-preloader *";
 
-html.tm-mobile.tm-reduced-effects {
+html.tm-mobile .preferences_reduced_effects {
   // Plain surface instead of the galaxy photo with its live colour filter
   .app-background {
     background: @reduced-effects-background;

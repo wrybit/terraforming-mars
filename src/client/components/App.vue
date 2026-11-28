@@ -117,7 +117,7 @@ import {hasShowModal, showModal, windowHasHTMLDialogElement} from './HTMLDialogE
 
 import dialogPolyfill from 'dialog-polyfill';
 import {initMobileLayout, mobileLayout} from '@/client/utils/mobileLayout';
-import {startReducedEffects} from '@/client/utils/reducedEffects';
+import {startPreferenceClasses} from '@/client/utils/preferenceClasses';
 import RotateHint from '@/client/components/RotateHint.vue';
 import AppBackground from '@/client/components/AppBackground.vue';
 import ServerUpdateOverlay from '@/client/components/common/ServerUpdateOverlay.vue';
@@ -373,7 +373,7 @@ export default defineComponent({
   },
   created() {
     initMobileLayout();
-    startReducedEffects();
+    startPreferenceClasses();
     // Keyboard shortcuts: own keys from this device, then the listener and the key caps (hotkeyDispatcher.ts)
     loadHotkeys();
     startHotkeyAvailability();

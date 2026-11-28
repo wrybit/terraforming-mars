@@ -1,5 +1,5 @@
 <template>
-  <DialogFrame :title="$t('Settings')" :width="760" class="preferences-dialog" :data="syncPreferences()" @close="okClicked">
+  <DialogFrame :title="$t('Settings')" :width="760" class="preferences-dialog" @close="okClicked">
     <template #icon>
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 2.5l1.6 2.3 2.8-.6.6 2.8 2.3 1.6-1.1 2.6 1.1 2.6-2.3 1.6-.6 2.8-2.8-.6L12 21.5l-1.6-2.3-2.8.6-.6-2.8-2.3-1.6L5.8 12 4.7 9.4 7 7.8l.6-2.8 2.8.6z" /><path d="M12 8.6l2.9 1.7v3.4L12 15.4l-2.9-1.7v-3.4z" /></svg>
     </template>
@@ -90,18 +90,6 @@ export default defineComponent({
     showBugDialog() {
       this.typedRefs.bugDialog.show();
     },
-    setBoolPreferencesCSS(
-      target: HTMLElement,
-      val: boolean,
-      name: Preference,
-    ): void {
-      const cssClassSuffix = name;
-      if (val) {
-        target.classList.add('preferences_' + cssClassSuffix);
-      } else {
-        target.classList.remove('preferences_' + cssClassSuffix);
-      }
-    },
     updatePreferences(): void {
       const pushBefore = JSON.stringify(pushSwitches(this.preferencesManager.values()));
       for (const k of Object.keys(this.preferencesManager.values()) as Array<Preference>) {
@@ -111,23 +99,6 @@ export default defineComponent({
       // A push switch changed: the server learns it at once (the subscription carries the switched-off kinds)
       if (JSON.stringify(pushSwitches(this.preferencesManager.values())) !== pushBefore) {
         void subscribeLobbyPush();
-      }
-    },
-    syncPreferences(): void {
-      const target = document.getElementById('ts-preferences-target');
-      if (!target) {
-        return;
-      }
-
-      for (const k of Object.keys(this.prefs) as Array<Preference>) {
-        if (k === 'lang') {
-          continue;
-        }
-        this.setBoolPreferencesCSS(target, this.prefs[k], k);
-      }
-
-      if (!target.classList.contains('language-' + this.prefs.lang)) {
-        target.classList.add('language-' + this.prefs.lang);
       }
     },
     okClicked(): void {
